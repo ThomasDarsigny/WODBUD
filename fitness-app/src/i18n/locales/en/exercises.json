@@ -1,0 +1,30 @@
+{
+  "title": "Exercises",
+  "add": "Add exercise",
+  "search": "Search exercise",
+  "fields": {
+    "name": "Exercise name",
+    "description": "Description",
+    "video": "Demonstration video",
+    "category": "Category",
+    "primary_muscle": "Primary muscle",
+    "secondary_muscles": "Secondary muscles",
+    "body_region": "Body region"
+  },
+  "categories": {
+    "strength": "Strength",
+    "cardio": "Cardio",
+    "mobility": "Mobility"
+  },
+  "body_regions": {
+    "upper": "Upper body",
+    "lower": "Lower body",
+    "full": "Full body"
+  },
+  "alerts": {
+    "muscle_primary": "⚠️ Primary muscle already trained in this session",
+    "muscle_secondary": "Secondary muscle already used",
+    "rest_48h": "This muscle was trained less than 48 hours ago",
+    "cardio_conflict": "Cardio conflict — same body region as previous exercise"
+  }
+}

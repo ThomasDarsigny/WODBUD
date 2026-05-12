@@ -1,0 +1,17 @@
+{
+  "title": "Workouts",
+  "new": "New workout",
+  "fields": {
+    "name": "Session name",
+    "theme": "Theme",
+    "exercises": "Exercises"
+  },
+  "reminders": {
+    "theme_inactive": "You haven't done a {{theme}} session in {{days}} days"
+  },
+  "session": {
+    "start": "Start session",
+    "finish": "Finish session",
+    "duration": "Duration: {{duration}}"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "app_name": "FitnessApp",
+  "nav": {
+    "exercises": "Exercises",
+    "workouts": "Workouts",
+    "history": "History",
+    "settings": "Settings"
+  },
+  "actions": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "confirm": "Confirm",
+    "back": "Back"
+  },
+  "language": {
+    "label": "Language",
+    "fr": "Français",
+    "en": "English",
+    "es": "Español"
+  },
+  "errors": {
+    "generic": "An error occurred",
+    "network": "Connection problem"
+  }
+}

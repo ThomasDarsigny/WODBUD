@@ -1,0 +1,17 @@
+{
+  "title": "Entrenamientos",
+  "new": "Nuevo entrenamiento",
+  "fields": {
+    "name": "Nombre de la sesión",
+    "theme": "Tema",
+    "exercises": "Ejercicios"
+  },
+  "reminders": {
+    "theme_inactive": "No has hecho una sesión de {{theme}} desde hace {{days}} días"
+  },
+  "session": {
+    "start": "Iniciar sesión",
+    "finish": "Terminar sesión",
+    "duration": "Duración: {{duration}}"
+  }
+}

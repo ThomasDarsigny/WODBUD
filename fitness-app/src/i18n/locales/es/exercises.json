@@ -1,0 +1,30 @@
+{
+  "title": "Ejercicios",
+  "add": "Agregar ejercicio",
+  "search": "Buscar ejercicio",
+  "fields": {
+    "name": "Nombre del ejercicio",
+    "description": "Descripción",
+    "video": "Video demostrativo",
+    "category": "Categoría",
+    "primary_muscle": "Músculo principal",
+    "secondary_muscles": "Músculos secundarios",
+    "body_region": "Región corporal"
+  },
+  "categories": {
+    "strength": "Fuerza",
+    "cardio": "Cardio",
+    "mobility": "Movilidad"
+  },
+  "body_regions": {
+    "upper": "Parte superior del cuerpo",
+    "lower": "Parte inferior del cuerpo",
+    "full": "Cuerpo completo"
+  },
+  "alerts": {
+    "muscle_primary": "⚠️ Músculo principal ya entrenado en esta sesión",
+    "muscle_secondary": "Músculo secundario ya utilizado",
+    "rest_48h": "Este músculo fue entrenado hace menos de 48 horas",
+    "cardio_conflict": "Conflicto cardio — misma región corporal que el ejercicio anterior"
+  }
+}
