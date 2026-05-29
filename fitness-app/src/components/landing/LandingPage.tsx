@@ -112,7 +112,7 @@ export default function LandingPage() {
         <div className={s.heroGrid} aria-hidden="true" />
         <div className={s.heroGlow} aria-hidden="true" />
 
-        <p className={s.tag}>Pour entraineurs CrossFit et box de fitness</p>
+        <p className={s.tag}>Pour entraineurs fitness</p>
 
         <h1 className={s.heroTitle}>
           Lance ta programmation
