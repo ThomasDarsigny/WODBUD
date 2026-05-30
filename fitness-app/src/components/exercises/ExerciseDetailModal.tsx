@@ -1,0 +1,277 @@
+import type { CSSProperties } from 'react'
+import type { Exercise } from '../../types'
+import { CATEGORY_LABELS, MUSCLE_GROUP_LABELS } from '../../types'
+
+interface Props {
+  exercise: Exercise
+  onClose: () => void
+  onAddToWorkout?: (exercise: Exercise) => void
+  onEdit?: (exercise: Exercise) => void
+  onDelete?: (exercise: Exercise) => void
+  inWorkoutBuilder?: boolean
+}
+
+export default function ExerciseDetailModal({
+  exercise,
+  onClose,
+  onAddToWorkout,
+  onEdit,
+  onDelete,
+  inWorkoutBuilder = false
+}: Props) {
+  return (
+    <div
+      style={{
+        position: 'fixed',
+        inset: 0,
+        zIndex: 200,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: 'rgba(0,0,0,0.85)',
+        backdropFilter: 'blur(4px)'
+      }}
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose()
+      }}
+    >
+      <div
+        style={{
+          background: 'var(--dark)',
+          border: '1px solid var(--border)',
+          width: '100%',
+          maxWidth: 620,
+          maxHeight: '90vh',
+          overflow: 'auto'
+        }}
+      >
+        <div
+          style={{
+            padding: '1.5rem 2rem',
+            borderBottom: '1px solid var(--border)',
+            display: 'flex',
+            alignItems: 'flex-start',
+            justifyContent: 'space-between',
+            gap: '1rem'
+          }}
+        >
+          <div>
+            <div
+              style={{
+                fontFamily: 'var(--font-d)',
+                fontSize: '0.7rem',
+                letterSpacing: '0.25em',
+                textTransform: 'uppercase',
+                color: 'var(--orange)',
+                marginBottom: '0.35rem'
+              }}
+            >
+              {CATEGORY_LABELS[exercise.category]}
+            </div>
+            <h2
+              style={{
+                fontFamily: 'var(--font-d)',
+                fontSize: '1.75rem',
+                fontWeight: 900,
+                textTransform: 'uppercase',
+                letterSpacing: '0.04em',
+                lineHeight: 1
+              }}
+            >
+              {exercise.name}
+            </h2>
+          </div>
+          <button
+            onClick={onClose}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: 'var(--muted)',
+              cursor: 'pointer',
+              fontSize: '1.2rem',
+              flexShrink: 0,
+              lineHeight: 1
+            }}
+          >
+            ✕
+          </button>
+        </div>
+
+        {exercise.video_url ? (
+          <video
+            src={exercise.video_url}
+            controls
+            style={{ width: '100%', maxHeight: 320, background: '#000', display: 'block' }}
+          />
+        ) : (
+          <div
+            style={{
+              width: '100%',
+              height: 180,
+              background: 'var(--black)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexDirection: 'column',
+              gap: '0.5rem'
+            }}
+          >
+            <span style={{ fontSize: '2.5rem', opacity: 0.2 }}>🎥</span>
+            <p
+              style={{
+                fontFamily: 'var(--font-d)',
+                fontSize: '0.75rem',
+                letterSpacing: '0.15em',
+                textTransform: 'uppercase',
+                color: 'var(--muted)'
+              }}
+            >
+              Aucune video disponible
+            </p>
+          </div>
+        )}
+
+        <div
+          style={{
+            padding: '1.5rem 2rem',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '1.25rem'
+          }}
+        >
+          <div>
+            <p style={labelStyle}>Muscles sollicites</p>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', marginTop: '0.4rem' }}>
+              <span
+                style={{
+                  ...tagStyle,
+                  background: 'rgba(255,77,0,0.15)',
+                  color: 'var(--orange)',
+                  border: '1px solid rgba(255,77,0,0.35)'
+                }}
+              >
+                ● {MUSCLE_GROUP_LABELS[exercise.primary_muscle]}
+              </span>
+              {exercise.secondary_muscles.map((m) => (
+                <span
+                  key={m}
+                  style={{ ...tagStyle, color: 'var(--muted)', border: '1px solid var(--border)' }}
+                >
+                  {MUSCLE_GROUP_LABELS[m]}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {exercise.description && (
+            <div>
+              <p style={labelStyle}>Consignes techniques</p>
+              <p
+                style={{
+                  fontSize: '0.92rem',
+                  color: 'var(--muted)',
+                  lineHeight: 1.75,
+                  marginTop: '0.4rem'
+                }}
+              >
+                {exercise.description}
+              </p>
+            </div>
+          )}
+
+          <div
+            style={{
+              display: 'flex',
+              gap: '0.75rem',
+              flexWrap: 'wrap',
+              paddingTop: '0.5rem',
+              borderTop: '1px solid var(--border)'
+            }}
+          >
+            {inWorkoutBuilder && onAddToWorkout && (
+              <button
+                onClick={() => {
+                  onAddToWorkout(exercise)
+                  onClose()
+                }}
+                style={{ ...btnStyle, background: 'var(--orange)', color: 'var(--black)', flex: 1 }}
+              >
+                + Ajouter a l'entrainement
+              </button>
+            )}
+            {!inWorkoutBuilder && (
+              <>
+                {onEdit && (
+                  <button
+                    onClick={() => {
+                      onEdit(exercise)
+                      onClose()
+                    }}
+                    style={{
+                      ...btnStyle,
+                      border: '1px solid var(--border)',
+                      color: 'var(--white)',
+                      background: 'transparent'
+                    }}
+                  >
+                    Modifier
+                  </button>
+                )}
+                {onDelete && (
+                  <button
+                    onClick={() => {
+                      if (
+                        window.confirm(
+                          `Supprimer "${exercise.name}" ? Cette action est irreversible.`
+                        )
+                      ) {
+                        onDelete(exercise)
+                        onClose()
+                      }
+                    }}
+                    style={{
+                      ...btnStyle,
+                      border: '1px solid rgba(255,60,60,0.3)',
+                      color: '#ff5555',
+                      background: 'transparent'
+                    }}
+                  >
+                    Supprimer
+                  </button>
+                )}
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+const labelStyle: CSSProperties = {
+  fontFamily: 'var(--font-d)',
+  fontSize: '0.7rem',
+  letterSpacing: '0.22em',
+  textTransform: 'uppercase',
+  color: 'var(--muted)'
+}
+
+const tagStyle: CSSProperties = {
+  fontFamily: 'var(--font-d)',
+  fontSize: '0.72rem',
+  letterSpacing: '0.1em',
+  textTransform: 'uppercase',
+  padding: '0.25rem 0.6rem'
+}
+
+const btnStyle: CSSProperties = {
+  fontFamily: 'var(--font-d)',
+  fontWeight: 700,
+  fontSize: '0.85rem',
+  letterSpacing: '0.1em',
+  textTransform: 'uppercase',
+  padding: '0.65rem 1.25rem',
+  border: 'none',
+  cursor: 'pointer',
+  transition: 'opacity 0.15s'
+}

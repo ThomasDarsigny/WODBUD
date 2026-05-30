@@ -103,7 +103,10 @@ export default function LandingPage() {
             </a>
           </li>
           <li>
-            <Link to="/signup" className={s.btnNav}>Essai 1 mois gratuit</Link>
+            <Link to="/entraineur_dashboard" className={s.navLink}>Dashboard</Link>
+          </li>
+          <li>
+            <Link to="/entraineur_dashboard" className={s.btnNav}>Acceder au dashboard</Link>
           </li>
         </ul>
       </nav>
@@ -127,8 +130,8 @@ export default function LandingPage() {
         </p>
 
         <div className={s.ctaRow}>
-          <Link to="/signup" className={s.btnPrimary}>
-            Essayer gratuitement 1 mois
+          <Link to="/entraineur_dashboard" className={s.btnPrimary}>
+            Ouvrir le dashboard coach
           </Link>
           <a href="#demo" className={s.btnGhost}>
             Voir une demo
