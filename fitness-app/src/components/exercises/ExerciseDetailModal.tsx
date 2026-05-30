@@ -5,7 +5,7 @@ import { CATEGORY_LABELS, MUSCLE_GROUP_LABELS } from '../../types'
 interface Props {
   exercise: Exercise
   onClose: () => void
-  onAddToWorkout?: (exercise: Exercise) => void
+  onAddToWorkout?: (exercise: Exercise) => Promise<boolean> | boolean
   onEdit?: (exercise: Exercise) => void
   onDelete?: (exercise: Exercise) => void
   inWorkoutBuilder?: boolean
@@ -190,9 +190,9 @@ export default function ExerciseDetailModal({
           >
             {inWorkoutBuilder && onAddToWorkout && (
               <button
-                onClick={() => {
-                  onAddToWorkout(exercise)
-                  onClose()
+                onClick={async () => {
+                  const added = await onAddToWorkout(exercise)
+                  if (added !== false) onClose()
                 }}
                 style={{ ...btnStyle, background: 'var(--orange)', color: 'var(--black)', flex: 1 }}
               >

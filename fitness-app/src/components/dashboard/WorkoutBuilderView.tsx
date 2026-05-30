@@ -31,6 +31,11 @@ export default function WorkoutBuilderView() {
   const [search, setSearch] = useState('')
   const [pickerExercise, setPickerExercise] = useState<Exercise | undefined>()
   const [savedSuccess, setSavedSuccess] = useState(false)
+  const [restOverridePrompt, setRestOverridePrompt] = useState<{
+    exercise: Exercise
+    message: string
+    hoursRemaining?: number
+  } | null>(null)
 
   useEffect(() => {
     if (exercises.length === 0) fetchExercises()
@@ -51,6 +56,49 @@ export default function WorkoutBuilderView() {
       // handled by store error state
     }
   }
+
+  async function handleAddFromPicker(ex: Exercise): Promise<boolean> {
+    const firstTry = await addExercise(ex)
+    if (firstTry.added) return true
+
+    if (firstTry.requiresOverride && firstTry.warningMessage) {
+      setRestOverridePrompt({
+        exercise: ex,
+        message: firstTry.warningMessage,
+        hoursRemaining: firstTry.hoursRemaining
+      })
+      return false
+    }
+
+    return false
+  }
+
+  async function confirmOverrideAdd() {
+    if (!restOverridePrompt) return
+    const forcedTry = await addExercise(restOverridePrompt.exercise, { force: true })
+    setRestOverridePrompt(null)
+    if (forcedTry.added) setPickerExercise(undefined)
+  }
+
+  const riskLevel =
+    restOverridePrompt?.hoursRemaining !== undefined
+      ? restOverridePrompt.hoursRemaining >= 24
+        ? 'eleve'
+        : restOverridePrompt.hoursRemaining >= 12
+          ? 'moyen'
+          : 'modere'
+      : null
+
+  const riskColor = riskLevel === 'eleve' ? '#ef4444' : riskLevel === 'moyen' ? '#f59e0b' : '#eab308'
+
+  const riskText =
+    riskLevel === 'eleve'
+      ? 'Risque eleve de surcharge musculaire'
+      : riskLevel === 'moyen'
+        ? 'Risque moyen de surcharge musculaire'
+        : riskLevel === 'modere'
+          ? 'Risque modere de surcharge musculaire'
+          : ''
 
   return (
     <div
@@ -368,12 +416,149 @@ export default function WorkoutBuilderView() {
         <ExerciseDetailModal
           exercise={pickerExercise}
           onClose={() => setPickerExercise(undefined)}
-          onAddToWorkout={(ex) => {
-            addExercise(ex)
-            setPickerExercise(undefined)
-          }}
+          onAddToWorkout={handleAddFromPicker}
           inWorkoutBuilder
         />
+      )}
+
+      {restOverridePrompt && (
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 250,
+            background: 'rgba(0,0,0,0.82)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '1rem'
+          }}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setRestOverridePrompt(null)
+          }}
+        >
+          <div
+            style={{
+              width: '100%',
+              maxWidth: 560,
+              background: 'var(--dark)',
+              border: '1px solid rgba(245,158,11,0.45)',
+              boxShadow: '0 18px 60px rgba(0,0,0,0.5)'
+            }}
+          >
+            <div
+              style={{
+                padding: '1rem 1.25rem',
+                borderBottom: '1px solid rgba(245,158,11,0.35)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between'
+              }}
+            >
+              <p
+                style={{
+                  fontFamily: 'var(--font-d)',
+                  fontSize: '0.75rem',
+                  letterSpacing: '0.14em',
+                  textTransform: 'uppercase',
+                  color: '#f59e0b',
+                  fontWeight: 800
+                }}
+              >
+                Alerte recuperation 48h
+              </p>
+              <button
+                onClick={() => setRestOverridePrompt(null)}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: 'var(--muted)',
+                  cursor: 'pointer',
+                  fontSize: '1rem'
+                }}
+              >
+                ✕
+              </button>
+            </div>
+
+            <div style={{ padding: '1rem 1.25rem 1.1rem' }}>
+              <p
+                style={{
+                  color: 'var(--muted)',
+                  lineHeight: 1.6,
+                  fontFamily: 'var(--font-b)',
+                  fontSize: '0.9rem'
+                }}
+              >
+                {restOverridePrompt.message}
+              </p>
+
+              {riskLevel && (
+                <div
+                  style={{
+                    marginTop: '0.85rem',
+                    padding: '0.55rem 0.7rem',
+                    border: `1px solid ${riskColor}55`,
+                    background: `${riskColor}22`,
+                    color: riskColor,
+                    fontFamily: 'var(--font-d)',
+                    fontSize: '0.72rem',
+                    fontWeight: 800,
+                    letterSpacing: '0.1em',
+                    textTransform: 'uppercase'
+                  }}
+                >
+                  {riskText}
+                </div>
+              )}
+            </div>
+
+            <div
+              style={{
+                padding: '0.9rem 1.25rem 1.1rem',
+                borderTop: '1px solid var(--border)',
+                display: 'flex',
+                gap: '0.6rem',
+                justifyContent: 'flex-end'
+              }}
+            >
+              <button
+                onClick={() => setRestOverridePrompt(null)}
+                style={{
+                  fontFamily: 'var(--font-d)',
+                  fontWeight: 700,
+                  fontSize: '0.75rem',
+                  letterSpacing: '0.1em',
+                  textTransform: 'uppercase',
+                  padding: '0.55rem 0.9rem',
+                  background: 'transparent',
+                  border: '1px solid var(--border)',
+                  color: 'var(--muted)',
+                  cursor: 'pointer'
+                }}
+              >
+                Annuler
+              </button>
+              <button
+                onClick={confirmOverrideAdd}
+                style={{
+                  fontFamily: 'var(--font-d)',
+                  fontWeight: 800,
+                  fontSize: '0.75rem',
+                  letterSpacing: '0.1em',
+                  textTransform: 'uppercase',
+                  padding: '0.55rem 0.9rem',
+                  background: '#f59e0b',
+                  border: '1px solid rgba(245,158,11,0.45)',
+                  color: 'var(--black)',
+                  cursor: 'pointer'
+                }}
+              >
+                Ajouter quand meme
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   )

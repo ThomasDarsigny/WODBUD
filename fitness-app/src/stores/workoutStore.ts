@@ -11,6 +11,7 @@ import type {
   ExerciseCategory,
   MuscleGroup
 } from '../types'
+import { MUSCLE_GROUP_LABELS } from '../types'
 
 type WorkoutRow = {
   id: string
@@ -19,6 +20,123 @@ type WorkoutRow = {
   duration_minutes?: number
   notes?: string
   created_at: string
+}
+
+type RecentWorkoutRow = {
+  id: string
+  created_at: string
+}
+
+type WorkoutExerciseRow = {
+  workout_id: string
+  exercise_id: string
+}
+
+type ExerciseMusclePrimaryRow = {
+  exercise_id: string
+}
+
+const MS_48H = 48 * 60 * 60 * 1000
+
+async function getPrimaryMuscleRestBlock(primaryMuscle: MuscleGroup): Promise<{
+  blocked: boolean
+  hoursRemaining: number
+  lastWorkoutAt: string | null
+  recommendedAt: string | null
+}> {
+  const cutoffDate = new Date(Date.now() - MS_48H).toISOString()
+
+  const { data: workoutsData, error: workoutsError } = await (supabase as any)
+    .from('workouts')
+    .select('id, created_at')
+    .gte('created_at', cutoffDate)
+    .order('created_at', { ascending: false })
+
+  if (workoutsError) throw workoutsError
+
+  const recentWorkouts = (workoutsData ?? []) as RecentWorkoutRow[]
+  if (recentWorkouts.length === 0) {
+    return { blocked: false, hoursRemaining: 0, lastWorkoutAt: null, recommendedAt: null }
+  }
+
+  const recentWorkoutIds = recentWorkouts.map((w) => w.id)
+
+  const { data: workoutExercisesData, error: workoutExercisesError } = await (supabase as any)
+    .from('workout_exercises')
+    .select('workout_id, exercise_id')
+    .in('workout_id', recentWorkoutIds)
+
+  if (workoutExercisesError) throw workoutExercisesError
+
+  const workoutExercises = (workoutExercisesData ?? []) as WorkoutExerciseRow[]
+  if (workoutExercises.length === 0) {
+    return { blocked: false, hoursRemaining: 0, lastWorkoutAt: null, recommendedAt: null }
+  }
+
+  const exerciseIds = Array.from(new Set(workoutExercises.map((row) => row.exercise_id)))
+
+  const { data: primaryMusclesData, error: primaryMusclesError } = await (supabase as any)
+    .from('exercise_muscles')
+    .select('exercise_id')
+    .eq('muscle_group', primaryMuscle)
+    .eq('is_primary', true)
+    .in('exercise_id', exerciseIds)
+
+  if (primaryMusclesError) throw primaryMusclesError
+
+  const matchedPrimaryMuscles = (primaryMusclesData ?? []) as ExerciseMusclePrimaryRow[]
+  if (matchedPrimaryMuscles.length === 0) {
+    return { blocked: false, hoursRemaining: 0, lastWorkoutAt: null, recommendedAt: null }
+  }
+
+  const matchedExerciseIds = new Set(matchedPrimaryMuscles.map((row) => row.exercise_id))
+  const workoutDateMap = new Map(recentWorkouts.map((w) => [w.id, new Date(w.created_at).getTime()]))
+
+  let latestTimestamp = 0
+  for (const row of workoutExercises) {
+    if (!matchedExerciseIds.has(row.exercise_id)) continue
+    const ts = workoutDateMap.get(row.workout_id)
+    if (ts && ts > latestTimestamp) latestTimestamp = ts
+  }
+
+  if (!latestTimestamp) {
+    return { blocked: false, hoursRemaining: 0, lastWorkoutAt: null, recommendedAt: null }
+  }
+
+  const elapsed = Date.now() - latestTimestamp
+  if (elapsed >= MS_48H) {
+    return {
+      blocked: false,
+      hoursRemaining: 0,
+      lastWorkoutAt: new Date(latestTimestamp).toISOString(),
+      recommendedAt: new Date(latestTimestamp + MS_48H).toISOString()
+    }
+  }
+
+  const remainingMs = MS_48H - elapsed
+  return {
+    blocked: true,
+    hoursRemaining: Math.ceil(remainingMs / (60 * 60 * 1000)),
+    lastWorkoutAt: new Date(latestTimestamp).toISOString(),
+    recommendedAt: new Date(latestTimestamp + MS_48H).toISOString()
+  }
+}
+
+type AddExerciseResult = {
+  added: boolean
+  requiresOverride?: boolean
+  warningMessage?: string
+  hoursRemaining?: number
+}
+
+function formatHumanDateTime(dateIso: string): string {
+  return new Date(dateIso).toLocaleString('fr-CA', {
+    weekday: 'long',
+    day: '2-digit',
+    month: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit'
+  })
 }
 
 interface WorkoutBuilderState {
@@ -35,7 +153,7 @@ interface WorkoutBuilderState {
   setMethod: (method: WorkoutMethod) => void
   setDuration: (min: number | undefined) => void
   setNotes: (notes: string) => void
-  addExercise: (exercise: Exercise) => void
+  addExercise: (exercise: Exercise, options?: { force?: boolean }) => Promise<AddExerciseResult>
   removeExercise: (id: string) => void
   updateExerciseConfig: (
     id: string,
@@ -82,18 +200,46 @@ export const useWorkoutStore = create<WorkoutBuilderState>((set, get) => ({
   setDuration: (durationMinutes) => set({ durationMinutes }),
   setNotes: (notes) => set({ notes }),
 
-  addExercise: (exercise) => {
-    const exercises = [
-      ...get().exercises,
-      {
-        id: uuid(),
-        exercise,
-        position: get().exercises.length + 1,
-        sets: 3,
-        reps: '10'
+  addExercise: async (exercise, options) => {
+    try {
+      const restBlock = await getPrimaryMuscleRestBlock(exercise.primary_muscle)
+
+      if (restBlock.blocked && !options?.force) {
+        const lastText = restBlock.lastWorkoutAt
+          ? formatHumanDateTime(restBlock.lastWorkoutAt)
+          : 'recemment'
+        const recommendedText = restBlock.recommendedAt
+          ? formatHumanDateTime(restBlock.recommendedAt)
+          : `dans environ ${restBlock.hoursRemaining}h`
+        const warningMessage = `Alerte 48h: ${MUSCLE_GROUP_LABELS[exercise.primary_muscle]} deja travaille ${lastText}. Reprise conseillee a partir de ${recommendedText} (reste ~${restBlock.hoursRemaining}h).`
+        set({
+          error: warningMessage
+        })
+        return {
+          added: false,
+          requiresOverride: true,
+          warningMessage,
+          hoursRemaining: restBlock.hoursRemaining
+        }
       }
-    ]
-    set({ exercises, muscleAlerts: computeMuscleAlerts(exercises) })
+
+      const exercises = [
+        ...get().exercises,
+        {
+          id: uuid(),
+          exercise,
+          position: get().exercises.length + 1,
+          sets: 3,
+          reps: '10'
+        }
+      ]
+      set({ exercises, muscleAlerts: computeMuscleAlerts(exercises), error: null })
+      return { added: true }
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Erreur inconnue'
+      set({ error: `Impossible de verifier la regle 48h: ${message}` })
+      return { added: false }
+    }
   },
 
   removeExercise: (id) => {
