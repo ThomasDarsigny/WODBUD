@@ -49,6 +49,7 @@ export default defineConfig({
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
         navigateFallback: '/index.html',
+        disableDevLogs: true,
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/.*\.supabase\.co\/storage/,
@@ -60,22 +61,11 @@ export default defineConfig({
                 maxAgeSeconds: 60 * 60 * 24 * 30  // 30 jours
               }
             }
-          },
-          {
-            urlPattern: /^https:\/\/.*\.supabase\.co\/rest/,
-            handler: 'NetworkFirst',       // données → réseau d'abord
-            options: {
-              cacheName: 'supabase-api',
-              expiration: {
-                maxEntries: 50,
-                maxAgeSeconds: 60 * 60 * 24  // 1 jour
-              }
-            }
           }
         ]
       },
       devOptions: {
-        enabled: true   // PWA active en dev pour tester le service worker
+        enabled: false   // pas de service worker en dev pour éviter les interceptions et logs Workbox
       }
     })
   ]

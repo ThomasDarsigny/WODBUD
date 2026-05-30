@@ -1,10 +1,16 @@
+import { useEffect, useState } from 'react'
+import type { ReactNode } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import LandingPage from './pages/LandingPage'
 import LoginPage from './pages/LoginPage'
 import SignupPage from './pages/SignupPage'
 import DashboardLayout from './components/dashboard/DashboardLayout'
+import AdminDashboardView from './components/dashboard/AdminDashboardView'
 import ExercisesView from './components/dashboard/ExercisesView'
 import WorkoutBuilderView from './components/dashboard/WorkoutBuilderView'
+import { supabase } from './lib/supabase'
+import { clearAuthSessionCookies, syncAuthSessionCookies } from './lib/authSessionCookies'
+import { isCurrentUserAdmin } from './lib/access'
 
 function AiView() {
   return <ComingSoon label="Assistant IA" icon="🤖" />
@@ -42,7 +48,146 @@ function ComingSoon({ label, icon }: { label: string; icon: string }) {
   )
 }
 
+function ProtectedRoute({ children, adminOnly = false }: { children: ReactNode; adminOnly?: boolean }) {
+  const [loading, setLoading] = useState(true)
+  const [authenticated, setAuthenticated] = useState(false)
+  const [admin, setAdmin] = useState(false)
+
+  useEffect(() => {
+    let mounted = true
+
+    const bootstrap = async () => {
+      const {
+        data: { session }
+      } = await supabase.auth.getSession()
+
+      if (!mounted) return
+      setAuthenticated(Boolean(session))
+      setAdmin(session ? await isCurrentUserAdmin() : false)
+      setLoading(false)
+    }
+
+    bootstrap()
+
+    const {
+      data: { subscription }
+    } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      if (!mounted) return
+      setAuthenticated(Boolean(session))
+      setAdmin(session ? await isCurrentUserAdmin() : false)
+      setLoading(false)
+    })
+
+    return () => {
+      mounted = false
+      subscription.unsubscribe()
+    }
+  }, [])
+
+  if (loading) {
+    return (
+      <div
+        style={{
+          minHeight: '100vh',
+          display: 'grid',
+          placeItems: 'center',
+          background: '#0a0a0a',
+          color: '#9f9890'
+        }}
+      >
+        Verification de session...
+      </div>
+    )
+  }
+
+  if (!authenticated) {
+    return <Navigate to="/login" replace />
+  }
+
+  if (adminOnly && !admin) {
+    return <Navigate to="/dashboard/exercises" replace />
+  }
+
+  return <>{children}</>
+}
+
+function DashboardHomeRedirect() {
+  const [target, setTarget] = useState<string | null>(null)
+
+  useEffect(() => {
+    let mounted = true
+
+    const resolveTarget = async () => {
+      const {
+        data: { session }
+      } = await supabase.auth.getSession()
+
+      if (!mounted) return
+      setTarget(session && (await isCurrentUserAdmin()) ? '/dashboard/admin' : '/dashboard/exercises')
+    }
+
+    resolveTarget()
+
+    return () => {
+      mounted = false
+    }
+  }, [])
+
+  if (!target) {
+    return (
+      <div
+        style={{
+          minHeight: '100vh',
+          display: 'grid',
+          placeItems: 'center',
+          background: '#0a0a0a',
+          color: '#9f9890'
+        }}
+      >
+        Redirection...
+      </div>
+    )
+  }
+
+  return <Navigate to={target} replace />
+}
+
 function App() {
+  useEffect(() => {
+    let mounted = true
+
+    const bootstrapCookies = async () => {
+      const {
+        data: { session }
+      } = await supabase.auth.getSession()
+
+      if (!mounted) return
+
+      if (session) {
+        await syncAuthSessionCookies(session)
+      } else {
+        await clearAuthSessionCookies()
+      }
+    }
+
+    bootstrapCookies()
+
+    const {
+      data: { subscription }
+    } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      if (session) {
+        await syncAuthSessionCookies(session)
+      } else {
+        await clearAuthSessionCookies()
+      }
+    })
+
+    return () => {
+      mounted = false
+      subscription.unsubscribe()
+    }
+  }, [])
+
   return (
     <BrowserRouter>
       <Routes>
@@ -53,47 +198,71 @@ function App() {
 
         <Route
           path="/entraineur_dashboard"
-          element={<Navigate to="/dashboard/exercises" replace />}
+          element={
+            <ProtectedRoute>
+              <DashboardHomeRedirect />
+            </ProtectedRoute>
+          }
         />
 
         <Route
           path="/dashboard"
           element={
-            <DashboardLayout>
-              <Navigate to="/dashboard/exercises" replace />
-            </DashboardLayout>
+            <ProtectedRoute>
+              <DashboardLayout>
+                <DashboardHomeRedirect />
+              </DashboardLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard/admin"
+          element={
+            <ProtectedRoute adminOnly>
+              <DashboardLayout>
+                <AdminDashboardView />
+              </DashboardLayout>
+            </ProtectedRoute>
           }
         />
         <Route
           path="/dashboard/exercises"
           element={
-            <DashboardLayout>
-              <ExercisesView />
-            </DashboardLayout>
+            <ProtectedRoute>
+              <DashboardLayout>
+                <ExercisesView />
+              </DashboardLayout>
+            </ProtectedRoute>
           }
         />
         <Route
           path="/dashboard/workout"
           element={
-            <DashboardLayout>
-              <WorkoutBuilderView />
-            </DashboardLayout>
+            <ProtectedRoute>
+              <DashboardLayout>
+                <WorkoutBuilderView />
+              </DashboardLayout>
+            </ProtectedRoute>
           }
         />
         <Route
           path="/dashboard/ai"
           element={
-            <DashboardLayout>
-              <AiView />
-            </DashboardLayout>
+            <ProtectedRoute>
+              <DashboardLayout>
+                <AiView />
+              </DashboardLayout>
+            </ProtectedRoute>
           }
         />
         <Route
           path="/dashboard/vote"
           element={
-            <DashboardLayout>
-              <VoteView />
-            </DashboardLayout>
+            <ProtectedRoute>
+              <DashboardLayout>
+                <VoteView />
+              </DashboardLayout>
+            </ProtectedRoute>
           }
         />
 

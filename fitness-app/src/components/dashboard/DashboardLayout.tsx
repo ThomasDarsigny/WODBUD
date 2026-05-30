@@ -1,6 +1,9 @@
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { supabase } from '../../lib/supabase'
+import { clearAuthSessionCookies } from '../../lib/authSessionCookies'
+import { isCurrentUserAdmin } from '../../lib/access'
 
 type NavItem = {
   id: string
@@ -12,6 +15,7 @@ type NavItem = {
 }
 
 const NAV_ITEMS: NavItem[] = [
+  { id: 'admin', label: 'Dashboard Admin', icon: '🛠️', path: '/dashboard/admin' },
   { id: 'exercises', label: 'Exercices', icon: '🏋️', path: '/dashboard/exercises' },
   {
     id: 'workout',
@@ -43,7 +47,45 @@ interface Props {
 
 export default function DashboardLayout({ children }: Props) {
   const location = useLocation()
+  const navigate = useNavigate()
   const [collapsed, setCollapsed] = useState(false)
+  const [isAdmin, setIsAdmin] = useState(false)
+
+  useEffect(() => {
+    let mounted = true
+
+    const loadUserRole = async () => {
+      const {
+        data: { session }
+      } = await supabase.auth.getSession()
+      if (!mounted) return
+      setIsAdmin(session ? await isCurrentUserAdmin() : false)
+    }
+
+    loadUserRole()
+
+    const {
+      data: { subscription }
+    } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      if (!mounted) return
+      setIsAdmin(session ? await isCurrentUserAdmin() : false)
+    })
+
+    return () => {
+      mounted = false
+      subscription.unsubscribe()
+    }
+  }, [])
+
+  const navItems = useMemo(() => {
+    return NAV_ITEMS.filter((item) => (item.id === 'admin' ? isAdmin : true))
+  }, [isAdmin])
+
+  async function handleLogout() {
+    await supabase.auth.signOut()
+    await clearAuthSessionCookies()
+    navigate('/login')
+  }
 
   return (
     <div
@@ -111,7 +153,7 @@ export default function DashboardLayout({ children }: Props) {
         </div>
 
         <nav style={{ flex: 1, padding: '1rem 0' }}>
-          {NAV_ITEMS.map((item) => {
+          {navItems.map((item) => {
             const active = location.pathname === item.path
             return (
               <div key={item.id} style={{ position: 'relative' }}>
@@ -241,6 +283,7 @@ export default function DashboardLayout({ children }: Props) {
                 Coach
               </div>
               <button
+                onClick={handleLogout}
                 style={{
                   background: 'none',
                   border: 'none',

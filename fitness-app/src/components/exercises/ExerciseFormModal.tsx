@@ -12,6 +12,29 @@ interface Props {
 const MUSCLE_OPTIONS = Object.entries(MUSCLE_GROUP_LABELS) as [MuscleGroup, string][]
 const CATEGORY_OPTIONS = Object.entries(CATEGORY_LABELS) as [ExerciseCategory, string][]
 
+function extractErrorMessage(err: unknown): string {
+  if (err instanceof Error && err.message) return err.message
+
+  if (typeof err === 'object' && err !== null) {
+    const maybeError = err as Record<string, unknown>
+    const candidates = [
+      maybeError.message,
+      maybeError.error,
+      maybeError.error_description,
+      maybeError.details,
+      maybeError.hint
+    ]
+
+    for (const value of candidates) {
+      if (typeof value === 'string' && value.trim().length > 0) {
+        return value
+      }
+    }
+  }
+
+  return 'Erreur inconnue'
+}
+
 export default function ExerciseFormModal({ exercise, onClose }: Props) {
   const { createExercise, updateExercise } = useExerciseStore()
   const isEdit = !!exercise
@@ -83,7 +106,7 @@ export default function ExerciseFormModal({ exercise, onClose }: Props) {
       }
       onClose()
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Erreur inconnue')
+      setError(extractErrorMessage(err))
     } finally {
       setUploading(false)
     }

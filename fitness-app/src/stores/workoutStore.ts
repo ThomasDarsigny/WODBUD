@@ -36,6 +36,10 @@ type ExerciseMusclePrimaryRow = {
   exercise_id: string
 }
 
+type MuscleGroupLookupRow = {
+  id: string
+}
+
 const MS_48H = 48 * 60 * 60 * 1000
 
 async function getPrimaryMuscleRestBlock(primaryMuscle: MuscleGroup): Promise<{
@@ -44,6 +48,18 @@ async function getPrimaryMuscleRestBlock(primaryMuscle: MuscleGroup): Promise<{
   lastWorkoutAt: string | null
   recommendedAt: string | null
 }> {
+  const { data: muscleData, error: muscleError } = await (supabase as any)
+    .from('muscle_groups')
+    .select('id')
+    .eq('name_key', primaryMuscle)
+    .single()
+
+  if (muscleError) throw muscleError
+  const muscleGroupId = (muscleData as MuscleGroupLookupRow | null)?.id
+  if (!muscleGroupId) {
+    return { blocked: false, hoursRemaining: 0, lastWorkoutAt: null, recommendedAt: null }
+  }
+
   const cutoffDate = new Date(Date.now() - MS_48H).toISOString()
 
   const { data: workoutsData, error: workoutsError } = await (supabase as any)
@@ -78,8 +94,8 @@ async function getPrimaryMuscleRestBlock(primaryMuscle: MuscleGroup): Promise<{
   const { data: primaryMusclesData, error: primaryMusclesError } = await (supabase as any)
     .from('exercise_muscles')
     .select('exercise_id')
-    .eq('muscle_group', primaryMuscle)
-    .eq('is_primary', true)
+    .eq('muscle_group_id', muscleGroupId)
+    .eq('role', 'primary')
     .in('exercise_id', exerciseIds)
 
   if (primaryMusclesError) throw primaryMusclesError

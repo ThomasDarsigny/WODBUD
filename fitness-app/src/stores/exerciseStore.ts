@@ -4,8 +4,14 @@ import { uploadVideoToR2 } from '../lib/r2'
 import type { Exercise, ExerciseInsert, ExerciseUpdate, MuscleGroup } from '../types'
 
 type ExerciseMuscleRow = {
-  muscle_group: MuscleGroup
-  is_primary: boolean
+  muscle_group_id: string
+  role: string
+  muscle_groups?: { name_key: MuscleGroup } | Array<{ name_key: MuscleGroup }> | null
+}
+
+type MuscleGroupRow = {
+  id: string
+  name_key: MuscleGroup
 }
 
 type ExerciseRow = {
@@ -29,6 +35,80 @@ interface ExerciseState {
   deleteExercise: (id: string) => Promise<void>
 }
 
+function extractErrorMessage(err: unknown): string {
+  if (err instanceof Error && err.message) {
+    if (err.message.toLowerCase().includes('auth session missing')) {
+      return 'Session manquante: reconnecte-toi pour creer ou modifier un exercice.'
+    }
+    return err.message
+  }
+
+  if (typeof err === 'object' && err !== null) {
+    const maybeError = err as Record<string, unknown>
+    const candidates = [
+      maybeError.message,
+      maybeError.error,
+      maybeError.error_description,
+      maybeError.details,
+      maybeError.hint
+    ]
+
+    for (const value of candidates) {
+      if (typeof value === 'string' && value.trim().length > 0) {
+        if (value.toLowerCase().includes('auth session missing')) {
+          return 'Session manquante: reconnecte-toi pour creer ou modifier un exercice.'
+        }
+        return value
+      }
+    }
+  }
+
+  return 'Erreur inconnue'
+}
+
+async function getCurrentUserId(): Promise<string> {
+  const {
+    data: { user },
+    error
+  } = await supabase.auth.getUser()
+
+  if (error) throw error
+  if (!user?.id) {
+    throw new Error("Session invalide: reconnecte-toi pour creer un exercice.")
+  }
+
+  return user.id
+}
+
+async function loadMuscleGroupMaps(): Promise<{
+  idByKey: Map<MuscleGroup, string>
+  keyById: Map<string, MuscleGroup>
+}> {
+  const { data, error } = await (supabase as any).from('muscle_groups').select('id, name_key')
+  if (error) throw error
+
+  const rows = (data ?? []) as MuscleGroupRow[]
+  const idByKey = new Map<MuscleGroup, string>()
+  const keyById = new Map<string, MuscleGroup>()
+
+  for (const row of rows) {
+    idByKey.set(row.name_key, row.id)
+    keyById.set(row.id, row.name_key)
+  }
+
+  return { idByKey, keyById }
+}
+
+function extractNameKey(
+  muscleGroups: ExerciseMuscleRow['muscle_groups']
+): MuscleGroup | undefined {
+  if (!muscleGroups) return undefined
+  if (Array.isArray(muscleGroups)) {
+    return muscleGroups[0]?.name_key
+  }
+  return muscleGroups.name_key
+}
+
 export const useExerciseStore = create<ExerciseState>((set, get) => ({
   exercises: [],
   loading: false,
@@ -37,9 +117,11 @@ export const useExerciseStore = create<ExerciseState>((set, get) => ({
   fetchExercises: async () => {
     set({ loading: true, error: null })
     try {
+      const { keyById } = await loadMuscleGroupMaps()
+
       const { data, error } = await (supabase as any)
         .from('exercises')
-        .select('*, exercise_muscles(muscle_group, is_primary)')
+        .select('*, exercise_muscles(muscle_group_id, role, muscle_groups(name_key))')
         .order('name', { ascending: true })
 
       if (error) throw error
@@ -49,12 +131,20 @@ export const useExerciseStore = create<ExerciseState>((set, get) => ({
         name: row.name,
         description: row.description ?? '',
         category: row.category,
-        primary_muscle:
-          row.exercise_muscles?.find((m) => m.is_primary)?.muscle_group ?? 'core',
+        primary_muscle: (() => {
+          const primaryRow = row.exercise_muscles?.find((m) => m.role === 'primary')
+          const fromJoin = extractNameKey(primaryRow?.muscle_groups)
+          if (fromJoin) return fromJoin
+          const fromId = primaryRow?.muscle_group_id
+            ? keyById.get(primaryRow.muscle_group_id)
+            : undefined
+          return fromId ?? 'core'
+        })(),
         secondary_muscles:
           row.exercise_muscles
-            ?.filter((m) => !m.is_primary)
-            .map((m) => m.muscle_group) ?? [],
+            ?.filter((m) => m.role === 'secondary')
+            .map((m) => extractNameKey(m.muscle_groups) ?? keyById.get(m.muscle_group_id))
+            .filter((m): m is MuscleGroup => Boolean(m)) ?? [],
         video_url: row.video_url ?? null,
         video_path: null,
         created_at: row.created_at,
@@ -63,33 +153,42 @@ export const useExerciseStore = create<ExerciseState>((set, get) => ({
 
       set({ exercises, loading: false })
     } catch (err: unknown) {
-      set({ error: err instanceof Error ? err.message : 'Erreur inconnue', loading: false })
+      set({ error: extractErrorMessage(err), loading: false })
     }
   },
 
   createExercise: async (data, videoFile) => {
     set({ loading: true, error: null })
     try {
+      const userId = await getCurrentUserId()
+      const { idByKey } = await loadMuscleGroupMaps()
+
       const { data: row, error } = await (supabase as any)
         .from('exercises')
         .insert({
           name: data.name,
           description: data.description,
-          category: data.category
+          category: data.category,
+          created_by: userId
         })
         .select()
         .single()
 
       if (error) throw error
 
+      const primaryMuscleId = idByKey.get(data.primary_muscle)
+      if (!primaryMuscleId) {
+        throw new Error(`Muscle principal introuvable: ${data.primary_muscle}`)
+      }
+
       const muscleRows = [
-        { exercise_id: row.id, muscle_group: data.primary_muscle, is_primary: true },
+        { exercise_id: row.id, muscle_group_id: primaryMuscleId, role: 'primary' },
         ...data.secondary_muscles.map((mg) => ({
           exercise_id: row.id,
-          muscle_group: mg,
-          is_primary: false
+          muscle_group_id: idByKey.get(mg),
+          role: 'secondary'
         }))
-      ]
+      ].filter((row) => Boolean(row.muscle_group_id))
       const { error: muscleError } = await (supabase as any)
         .from('exercise_muscles')
         .insert(muscleRows)
@@ -121,7 +220,7 @@ export const useExerciseStore = create<ExerciseState>((set, get) => ({
       }))
       return exercise
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Erreur inconnue'
+      const message = extractErrorMessage(err)
       set({ error: message, loading: false })
       throw err
     }
@@ -130,6 +229,8 @@ export const useExerciseStore = create<ExerciseState>((set, get) => ({
   updateExercise: async (id, data, videoFile) => {
     set({ loading: true, error: null })
     try {
+      const { idByKey } = await loadMuscleGroupMaps()
+
       const current = get().exercises.find((e) => e.id === id)
       if (!current) throw new Error('Exercise not found')
 
@@ -161,10 +262,19 @@ export const useExerciseStore = create<ExerciseState>((set, get) => ({
 
         const primary = data.primary_muscle ?? current.primary_muscle
         const secondary = data.secondary_muscles ?? current.secondary_muscles
+        const primaryMuscleId = idByKey.get(primary)
+        if (!primaryMuscleId) {
+          throw new Error(`Muscle principal introuvable: ${primary}`)
+        }
+
         const muscleRows = [
-          { exercise_id: id, muscle_group: primary, is_primary: true },
-          ...secondary.map((mg) => ({ exercise_id: id, muscle_group: mg, is_primary: false }))
-        ]
+          { exercise_id: id, muscle_group_id: primaryMuscleId, role: 'primary' },
+          ...secondary.map((mg) => ({
+            exercise_id: id,
+            muscle_group_id: idByKey.get(mg),
+            role: 'secondary'
+          }))
+        ].filter((row) => Boolean(row.muscle_group_id))
         const { error: me } = await (supabase as any)
           .from('exercise_muscles')
           .insert(muscleRows)
@@ -180,7 +290,7 @@ export const useExerciseStore = create<ExerciseState>((set, get) => ({
         loading: false
       }))
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Erreur inconnue'
+      const message = extractErrorMessage(err)
       set({ error: message, loading: false })
       throw err
     }
@@ -197,7 +307,7 @@ export const useExerciseStore = create<ExerciseState>((set, get) => ({
         loading: false
       }))
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Erreur inconnue'
+      const message = extractErrorMessage(err)
       set({ error: message, loading: false })
       throw err
     }
