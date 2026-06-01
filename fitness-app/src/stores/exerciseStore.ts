@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import { supabase } from '../lib/supabase'
 import { uploadVideoToR2 } from '../lib/r2'
 import type { Exercise, ExerciseInsert, ExerciseUpdate, MuscleGroup } from '../types'
+import { LOWER_MUSCLES, UPPER_MUSCLES } from '../types'
 
 type ExerciseMuscleRow = {
   muscle_group_id: string
@@ -109,6 +110,12 @@ function extractNameKey(
   return muscleGroups.name_key
 }
 
+function getBodyRegionFromPrimaryMuscle(primaryMuscle: MuscleGroup): 'upper' | 'lower' | 'full' {
+  if (UPPER_MUSCLES.includes(primaryMuscle)) return 'upper'
+  if (LOWER_MUSCLES.includes(primaryMuscle)) return 'lower'
+  return 'full'
+}
+
 export const useExerciseStore = create<ExerciseState>((set, get) => ({
   exercises: [],
   loading: false,
@@ -169,6 +176,7 @@ export const useExerciseStore = create<ExerciseState>((set, get) => ({
           name: data.name,
           description: data.description,
           category: data.category,
+          body_region: getBodyRegionFromPrimaryMuscle(data.primary_muscle),
           created_by: userId
         })
         .select()
@@ -247,6 +255,9 @@ export const useExerciseStore = create<ExerciseState>((set, get) => ({
       if (data.name) updatePayload.name = data.name
       if (data.description !== undefined) updatePayload.description = data.description
       if (data.category) updatePayload.category = data.category
+      if (data.primary_muscle) {
+        updatePayload.body_region = getBodyRegionFromPrimaryMuscle(data.primary_muscle)
+      }
       if (videoFile) {
         updatePayload.video_url = video_url
       }
