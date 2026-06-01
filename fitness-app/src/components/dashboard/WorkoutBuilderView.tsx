@@ -35,6 +35,11 @@ export default function WorkoutBuilderView() {
     exercise: Exercise
     message: string
     hoursRemaining?: number
+    forceCardioSequence?: boolean
+  } | null>(null)
+  const [cardioOverridePrompt, setCardioOverridePrompt] = useState<{
+    exercise: Exercise
+    message: string
   } | null>(null)
 
   useEffect(() => {
@@ -61,11 +66,20 @@ export default function WorkoutBuilderView() {
     const firstTry = await addExercise(ex)
     if (firstTry.added) return true
 
-    if (firstTry.requiresOverride && firstTry.warningMessage) {
+    if (firstTry.requiresCardioSequenceOverride && firstTry.cardioSequenceMessage) {
+      setCardioOverridePrompt({
+        exercise: ex,
+        message: firstTry.cardioSequenceMessage
+      })
+      return false
+    }
+
+    if (firstTry.requiresRestOverride && firstTry.restWarningMessage) {
       setRestOverridePrompt({
         exercise: ex,
-        message: firstTry.warningMessage,
-        hoursRemaining: firstTry.hoursRemaining
+        message: firstTry.restWarningMessage,
+        hoursRemaining: firstTry.hoursRemaining,
+        forceCardioSequence: false
       })
       return false
     }
@@ -75,9 +89,37 @@ export default function WorkoutBuilderView() {
 
   async function confirmOverrideAdd() {
     if (!restOverridePrompt) return
-    const forcedTry = await addExercise(restOverridePrompt.exercise, { force: true })
+    const forcedTry = await addExercise(restOverridePrompt.exercise, {
+      forceRest: true,
+      forceCardioSequence: restOverridePrompt.forceCardioSequence
+    })
     setRestOverridePrompt(null)
     if (forcedTry.added) setPickerExercise(undefined)
+  }
+
+  async function confirmCardioOverrideAdd() {
+    if (!cardioOverridePrompt) return
+
+    const forcedTry = await addExercise(cardioOverridePrompt.exercise, {
+      forceCardioSequence: true
+    })
+
+    if (forcedTry.added) {
+      setCardioOverridePrompt(null)
+      setPickerExercise(undefined)
+      return
+    }
+
+    if (forcedTry.requiresRestOverride && forcedTry.restWarningMessage) {
+      setRestOverridePrompt({
+        exercise: cardioOverridePrompt.exercise,
+        message: forcedTry.restWarningMessage,
+        hoursRemaining: forcedTry.hoursRemaining,
+        forceCardioSequence: true
+      })
+    }
+
+    setCardioOverridePrompt(null)
   }
 
   const riskLevel =
@@ -419,6 +461,127 @@ export default function WorkoutBuilderView() {
           onAddToWorkout={handleAddFromPicker}
           inWorkoutBuilder
         />
+      )}
+
+      {cardioOverridePrompt && (
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 255,
+            background: 'rgba(0,0,0,0.82)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '1rem'
+          }}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setCardioOverridePrompt(null)
+          }}
+        >
+          <div
+            style={{
+              width: '100%',
+              maxWidth: 560,
+              background: 'var(--dark)',
+              border: '1px solid rgba(255,77,0,0.45)',
+              boxShadow: '0 18px 60px rgba(0,0,0,0.5)'
+            }}
+          >
+            <div
+              style={{
+                padding: '1rem 1.25rem',
+                borderBottom: '1px solid rgba(255,77,0,0.35)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between'
+              }}
+            >
+              <p
+                style={{
+                  fontFamily: 'var(--font-d)',
+                  fontSize: '0.75rem',
+                  letterSpacing: '0.14em',
+                  textTransform: 'uppercase',
+                  color: 'var(--orange)',
+                  fontWeight: 800
+                }}
+              >
+                Alternance cardio
+              </p>
+              <button
+                onClick={() => setCardioOverridePrompt(null)}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: 'var(--muted)',
+                  cursor: 'pointer',
+                  fontSize: '1rem'
+                }}
+              >
+                ✕
+              </button>
+            </div>
+
+            <div style={{ padding: '1rem 1.25rem 1.1rem' }}>
+              <p
+                style={{
+                  color: 'var(--muted)',
+                  lineHeight: 1.6,
+                  fontFamily: 'var(--font-b)',
+                  fontSize: '0.9rem'
+                }}
+              >
+                {cardioOverridePrompt.message}
+              </p>
+            </div>
+
+            <div
+              style={{
+                padding: '0.9rem 1.25rem 1.1rem',
+                borderTop: '1px solid var(--border)',
+                display: 'flex',
+                gap: '0.6rem',
+                justifyContent: 'flex-end'
+              }}
+            >
+              <button
+                onClick={() => setCardioOverridePrompt(null)}
+                style={{
+                  fontFamily: 'var(--font-d)',
+                  fontWeight: 700,
+                  fontSize: '0.75rem',
+                  letterSpacing: '0.1em',
+                  textTransform: 'uppercase',
+                  padding: '0.55rem 0.9rem',
+                  background: 'transparent',
+                  border: '1px solid var(--border)',
+                  color: 'var(--muted)',
+                  cursor: 'pointer'
+                }}
+              >
+                Annuler
+              </button>
+              <button
+                onClick={confirmCardioOverrideAdd}
+                style={{
+                  fontFamily: 'var(--font-d)',
+                  fontWeight: 800,
+                  fontSize: '0.75rem',
+                  letterSpacing: '0.1em',
+                  textTransform: 'uppercase',
+                  padding: '0.55rem 0.9rem',
+                  background: 'var(--orange)',
+                  border: '1px solid rgba(255,77,0,0.45)',
+                  color: 'var(--black)',
+                  cursor: 'pointer'
+                }}
+              >
+                Ajouter quand meme
+              </button>
+            </div>
+          </div>
+        </div>
       )}
 
       {restOverridePrompt && (

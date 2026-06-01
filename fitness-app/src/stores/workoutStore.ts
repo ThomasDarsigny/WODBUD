@@ -11,7 +11,7 @@ import type {
   ExerciseCategory,
   MuscleGroup
 } from '../types'
-import { MUSCLE_GROUP_LABELS } from '../types'
+import { CARDIO_MUSCLES, LOWER_MUSCLES, MUSCLE_GROUP_LABELS, UPPER_MUSCLES } from '../types'
 
 type WorkoutRow = {
   id: string
@@ -140,9 +140,22 @@ async function getPrimaryMuscleRestBlock(primaryMuscle: MuscleGroup): Promise<{
 
 type AddExerciseResult = {
   added: boolean
-  requiresOverride?: boolean
-  warningMessage?: string
+  requiresRestOverride?: boolean
+  restWarningMessage?: string
   hoursRemaining?: number
+  requiresCardioSequenceOverride?: boolean
+  cardioSequenceMessage?: string
+}
+
+type AddExerciseOptions = {
+  forceRest?: boolean
+  forceCardioSequence?: boolean
+}
+
+function getMuscleZone(muscle: MuscleGroup): 'upper' | 'lower' | null {
+  if (UPPER_MUSCLES.includes(muscle)) return 'upper'
+  if (LOWER_MUSCLES.includes(muscle)) return 'lower'
+  return null
 }
 
 function formatHumanDateTime(dateIso: string): string {
@@ -169,7 +182,7 @@ interface WorkoutBuilderState {
   setMethod: (method: WorkoutMethod) => void
   setDuration: (min: number | undefined) => void
   setNotes: (notes: string) => void
-  addExercise: (exercise: Exercise, options?: { force?: boolean }) => Promise<AddExerciseResult>
+  addExercise: (exercise: Exercise, options?: AddExerciseOptions) => Promise<AddExerciseResult>
   removeExercise: (id: string) => void
   updateExerciseConfig: (
     id: string,
@@ -218,9 +231,36 @@ export const useWorkoutStore = create<WorkoutBuilderState>((set, get) => ({
 
   addExercise: async (exercise, options) => {
     try {
+      const currentExercises = get().exercises
+      const previousExercise = currentExercises[currentExercises.length - 1]?.exercise
+
+      if (
+        exercise.category === 'cardio' &&
+        CARDIO_MUSCLES.includes(exercise.primary_muscle) &&
+        previousExercise
+      ) {
+        const previousZone = getMuscleZone(previousExercise.primary_muscle)
+
+        if (previousZone && !options?.forceCardioSequence) {
+          const expectedCardio = previousZone === 'lower' ? 'cardio_upper' : 'cardio_lower'
+          if (exercise.primary_muscle !== expectedCardio) {
+            const previousZoneLabel = previousZone === 'lower' ? 'bas du corps' : 'haut du corps'
+            const expectedCardioLabel = MUSCLE_GROUP_LABELS[expectedCardio]
+            const cardioSequenceMessage = `On vient de solliciter le ${previousZoneLabel} avec "${previousExercise.name}". Pour alterner les zones, on recommande ${expectedCardioLabel}. Voulez-vous vraiment ajouter "${exercise.name}" meme si on vient de faire cette partie du corps ?`
+
+            set({ error: cardioSequenceMessage })
+            return {
+              added: false,
+              requiresCardioSequenceOverride: true,
+              cardioSequenceMessage
+            }
+          }
+        }
+      }
+
       const restBlock = await getPrimaryMuscleRestBlock(exercise.primary_muscle)
 
-      if (restBlock.blocked && !options?.force) {
+      if (restBlock.blocked && !options?.forceRest) {
         const lastText = restBlock.lastWorkoutAt
           ? formatHumanDateTime(restBlock.lastWorkoutAt)
           : 'recemment'
@@ -233,18 +273,18 @@ export const useWorkoutStore = create<WorkoutBuilderState>((set, get) => ({
         })
         return {
           added: false,
-          requiresOverride: true,
-          warningMessage,
+          requiresRestOverride: true,
+          restWarningMessage: warningMessage,
           hoursRemaining: restBlock.hoursRemaining
         }
       }
 
       const exercises = [
-        ...get().exercises,
+        ...currentExercises,
         {
           id: uuid(),
           exercise,
-          position: get().exercises.length + 1,
+          position: currentExercises.length + 1,
           sets: 3,
           reps: '10'
         }
