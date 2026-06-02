@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import i18n from '../i18n'
 import { supabase } from '../lib/supabase'
 import { uploadVideoToR2 } from '../lib/r2'
 import type { Exercise, ExerciseInsert, ExerciseUpdate, MuscleGroup } from '../types'
@@ -39,7 +40,7 @@ interface ExerciseState {
 function extractErrorMessage(err: unknown): string {
   if (err instanceof Error && err.message) {
     if (err.message.toLowerCase().includes('auth session missing')) {
-      return 'Session manquante: reconnecte-toi pour creer ou modifier un exercice.'
+      return i18n.t('errors.auth_session_missing_exercise', { ns: 'exercises' })
     }
     return err.message
   }
@@ -57,14 +58,14 @@ function extractErrorMessage(err: unknown): string {
     for (const value of candidates) {
       if (typeof value === 'string' && value.trim().length > 0) {
         if (value.toLowerCase().includes('auth session missing')) {
-          return 'Session manquante: reconnecte-toi pour creer ou modifier un exercice.'
+          return i18n.t('errors.auth_session_missing_exercise', { ns: 'exercises' })
         }
         return value
       }
     }
   }
 
-  return 'Erreur inconnue'
+  return i18n.t('errors.generic', { ns: 'common' })
 }
 
 async function getCurrentUserId(): Promise<string> {
@@ -75,7 +76,7 @@ async function getCurrentUserId(): Promise<string> {
 
   if (error) throw error
   if (!user?.id) {
-    throw new Error("Session invalide: reconnecte-toi pour creer un exercice.")
+    throw new Error(i18n.t('errors.invalid_session_reconnect', { ns: 'exercises' }))
   }
 
   return user.id
@@ -186,7 +187,12 @@ export const useExerciseStore = create<ExerciseState>((set, get) => ({
 
       const primaryMuscleId = idByKey.get(data.primary_muscle)
       if (!primaryMuscleId) {
-        throw new Error(`Muscle principal introuvable: ${data.primary_muscle}`)
+        throw new Error(
+          i18n.t('errors.primary_muscle_not_found', {
+            ns: 'exercises',
+            muscle: data.primary_muscle
+          })
+        )
       }
 
       const muscleRows = [
@@ -275,7 +281,12 @@ export const useExerciseStore = create<ExerciseState>((set, get) => ({
         const secondary = data.secondary_muscles ?? current.secondary_muscles
         const primaryMuscleId = idByKey.get(primary)
         if (!primaryMuscleId) {
-          throw new Error(`Muscle principal introuvable: ${primary}`)
+          throw new Error(
+            i18n.t('errors.primary_muscle_not_found', {
+              ns: 'exercises',
+              muscle: primary
+            })
+          )
         }
 
         const muscleRows = [

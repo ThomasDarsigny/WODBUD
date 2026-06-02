@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from 'react'
 import type { CSSProperties, FormEvent, ReactNode } from 'react'
+import { useTranslation } from 'react-i18next'
 import type { Exercise, ExerciseCategory, ExerciseInsert, MuscleGroup } from '../../types'
-import { CATEGORY_LABELS, MUSCLE_GROUP_LABELS } from '../../types'
+import { CATEGORY_I18N_KEYS, MUSCLE_GROUP_I18N_KEYS } from '../../types'
 import { useExerciseStore } from '../../stores/exerciseStore'
 
 interface Props {
@@ -9,10 +10,10 @@ interface Props {
   onClose: () => void
 }
 
-const MUSCLE_OPTIONS = Object.entries(MUSCLE_GROUP_LABELS) as [MuscleGroup, string][]
-const CATEGORY_OPTIONS = Object.entries(CATEGORY_LABELS) as [ExerciseCategory, string][]
+const MUSCLE_OPTIONS = Object.entries(MUSCLE_GROUP_I18N_KEYS) as [MuscleGroup, string][]
+const CATEGORY_OPTIONS = Object.entries(CATEGORY_I18N_KEYS) as [ExerciseCategory, string][]
 
-function extractErrorMessage(err: unknown): string {
+function extractErrorMessage(err: unknown, fallbackMessage: string): string {
   if (err instanceof Error && err.message) return err.message
 
   if (typeof err === 'object' && err !== null) {
@@ -32,10 +33,11 @@ function extractErrorMessage(err: unknown): string {
     }
   }
 
-  return 'Erreur inconnue'
+  return fallbackMessage
 }
 
 export default function ExerciseFormModal({ exercise, onClose }: Props) {
+  const { t } = useTranslation(['exercises', 'common'])
   const { createExercise, updateExercise } = useExerciseStore()
   const isEdit = !!exercise
 
@@ -60,11 +62,11 @@ export default function ExerciseFormModal({ exercise, onClose }: Props) {
 
   function handleVideoSelect(file: File) {
     if (!file.type.startsWith('video/')) {
-      setError('Fichier video requis (MP4, MOV, WebM)')
+      setError(t('form.video_required_error', { ns: 'exercises' }))
       return
     }
     if (file.size > 200 * 1024 * 1024) {
-      setError('Taille max : 200 MB')
+      setError(t('form.video_size_error', { ns: 'exercises' }))
       return
     }
     const url = URL.createObjectURL(file)
@@ -84,7 +86,7 @@ export default function ExerciseFormModal({ exercise, onClose }: Props) {
     e.preventDefault()
     setError(null)
     if (!name.trim()) {
-      setError('Le nom est requis')
+      setError(t('form.name_required', { ns: 'exercises' }))
       return
     }
 
@@ -106,7 +108,7 @@ export default function ExerciseFormModal({ exercise, onClose }: Props) {
       }
       onClose()
     } catch (err: unknown) {
-      setError(extractErrorMessage(err))
+      setError(extractErrorMessage(err, t('errors.generic', { ns: 'common' })))
     } finally {
       setUploading(false)
     }
@@ -157,7 +159,7 @@ export default function ExerciseFormModal({ exercise, onClose }: Props) {
               letterSpacing: '0.08em'
             }}
           >
-            {isEdit ? "Modifier l'exercice" : 'Nouvel exercice'}
+            {isEdit ? t('form.edit_title', { ns: 'exercises' }) : t('form.create_title', { ns: 'exercises' })}
           </h2>
           <button
             onClick={onClose}
@@ -183,41 +185,41 @@ export default function ExerciseFormModal({ exercise, onClose }: Props) {
             gap: '1.25rem'
           }}
         >
-          <Field label="Nom de l'exercice *">
+          <Field label={`${t('fields.name', { ns: 'exercises' })} *`}>
             <input
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder='Ex: Snatch, Thruster, Box Jump...'
+              placeholder={t('form.name_placeholder', { ns: 'exercises' })}
               required
               style={inputStyle}
             />
           </Field>
 
-          <Field label='Description / Consignes techniques'>
+          <Field label={t('fields.instructions', { ns: 'exercises' })}>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder='Points cles de technique, cues coaching...'
+              placeholder={t('form.description_placeholder', { ns: 'exercises' })}
               rows={3}
               style={{ ...inputStyle, resize: 'vertical', fontFamily: 'var(--font-b)' }}
             />
           </Field>
 
-          <Field label='Categorie'>
+          <Field label={t('fields.category', { ns: 'exercises' })}>
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value as ExerciseCategory)}
               style={inputStyle}
             >
-              {CATEGORY_OPTIONS.map(([val, label]) => (
+              {CATEGORY_OPTIONS.map(([val, key]) => (
                 <option key={val} value={val}>
-                  {label}
+                  {t(key, { ns: 'common' })}
                 </option>
               ))}
             </select>
           </Field>
 
-          <Field label='Muscle principal *'>
+          <Field label={`${t('fields.primary_muscle', { ns: 'exercises' })} *`}>
             <select
               value={primaryMuscle}
               onChange={(e) => {
@@ -227,17 +229,17 @@ export default function ExerciseFormModal({ exercise, onClose }: Props) {
               }}
               style={inputStyle}
             >
-              {MUSCLE_OPTIONS.map(([val, label]) => (
+              {MUSCLE_OPTIONS.map(([val, key]) => (
                 <option key={val} value={val}>
-                  {label}
+                  {t(key, { ns: 'common' })}
                 </option>
               ))}
             </select>
           </Field>
 
-          <Field label='Muscles secondaires'>
+          <Field label={t('fields.secondary_muscles', { ns: 'exercises' })}>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
-              {MUSCLE_OPTIONS.filter(([val]) => val !== primaryMuscle).map(([val, label]) => {
+              {MUSCLE_OPTIONS.filter(([val]) => val !== primaryMuscle).map(([val, key]) => {
                 const selected = secondaryMuscles.includes(val)
                 return (
                   <button
@@ -257,14 +259,14 @@ export default function ExerciseFormModal({ exercise, onClose }: Props) {
                       transition: 'all 0.15s'
                     }}
                   >
-                    {label}
+                    {t(key, { ns: 'common' })}
                   </button>
                 )
               })}
             </div>
           </Field>
 
-          <Field label='Video demonstration'>
+          <Field label={t('fields.video', { ns: 'exercises' })}>
             <div
               onDragOver={(e) => {
                 e.preventDefault()
@@ -301,7 +303,7 @@ export default function ExerciseFormModal({ exercise, onClose }: Props) {
                     style={{ maxWidth: '100%', maxHeight: 200, marginBottom: '0.75rem' }}
                   />
                   <p style={{ color: 'var(--muted)', fontSize: '0.8rem' }}>
-                    Clique pour remplacer la video
+                    {t('form.video_replace', { ns: 'exercises' })}
                   </p>
                 </div>
               ) : (
@@ -316,10 +318,10 @@ export default function ExerciseFormModal({ exercise, onClose }: Props) {
                       color: 'var(--muted)'
                     }}
                   >
-                    Glisse une video ou clique pour selectionner
+                    {t('form.video_dropzone', { ns: 'exercises' })}
                   </p>
                   <p style={{ fontSize: '0.75rem', color: 'var(--muted)', marginTop: '0.4rem' }}>
-                    MP4, MOV, WebM - max 200 MB
+                    {t('form.video_requirements', { ns: 'exercises' })}
                   </p>
                 </div>
               )}
@@ -368,7 +370,7 @@ export default function ExerciseFormModal({ exercise, onClose }: Props) {
                 color: 'var(--muted)'
               }}
             >
-              Annuler
+              {t('actions.cancel', { ns: 'common' })}
             </button>
             <button
               type='submit'
@@ -380,7 +382,11 @@ export default function ExerciseFormModal({ exercise, onClose }: Props) {
                 cursor: uploading ? 'wait' : 'pointer'
               }}
             >
-              {uploading ? 'Enregistrement...' : isEdit ? 'Mettre a jour' : "Creer l'exercice"}
+              {uploading
+                ? t('form.saving', { ns: 'exercises' })
+                : isEdit
+                  ? t('form.save_edit', { ns: 'exercises' })
+                  : t('form.save_new', { ns: 'exercises' })}
             </button>
           </div>
         </form>

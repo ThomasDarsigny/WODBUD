@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { v4 as uuid } from 'uuid'
+import i18n from '../i18n'
 import { supabase } from '../lib/supabase'
 import { computeMuscleAlerts } from '../lib/muscleAlerts'
 import type {
@@ -11,7 +12,7 @@ import type {
   ExerciseCategory,
   MuscleGroup
 } from '../types'
-import { CARDIO_MUSCLES, LOWER_MUSCLES, MUSCLE_GROUP_LABELS, UPPER_MUSCLES } from '../types'
+import { CARDIO_MUSCLES, LOWER_MUSCLES, MUSCLE_GROUP_I18N_KEYS, UPPER_MUSCLES } from '../types'
 
 type WorkoutRow = {
   id: string
@@ -159,7 +160,10 @@ function getMuscleZone(muscle: MuscleGroup): 'upper' | 'lower' | null {
 }
 
 function formatHumanDateTime(dateIso: string): string {
-  return new Date(dateIso).toLocaleString('fr-CA', {
+  const lang = i18n.language?.split('-')[0] ?? 'fr'
+  const locale = lang === 'en' ? 'en-CA' : lang === 'es' ? 'es-ES' : 'fr-CA'
+
+  return new Date(dateIso).toLocaleString(locale, {
     weekday: 'long',
     day: '2-digit',
     month: '2-digit',
@@ -244,9 +248,17 @@ export const useWorkoutStore = create<WorkoutBuilderState>((set, get) => ({
         if (previousZone && !options?.forceCardioSequence) {
           const expectedCardio = previousZone === 'lower' ? 'cardio_upper' : 'cardio_lower'
           if (exercise.primary_muscle !== expectedCardio) {
-            const previousZoneLabel = previousZone === 'lower' ? 'bas du corps' : 'haut du corps'
-            const expectedCardioLabel = MUSCLE_GROUP_LABELS[expectedCardio]
-            const cardioSequenceMessage = `On vient de solliciter le ${previousZoneLabel} avec "${previousExercise.name}". Pour alterner les zones, on recommande ${expectedCardioLabel}. Voulez-vous vraiment ajouter "${exercise.name}" meme si on vient de faire cette partie du corps ?`
+            const previousZoneLabel = i18n.t(`labels.zones.${previousZone}`, { ns: 'common' })
+            const expectedCardioLabel = i18n.t(MUSCLE_GROUP_I18N_KEYS[expectedCardio], {
+              ns: 'common'
+            })
+            const cardioSequenceMessage = i18n.t('builder.cardio_sequence_message', {
+              ns: 'workouts',
+              previousZone: previousZoneLabel,
+              previousExercise: previousExercise.name,
+              expectedCardio: expectedCardioLabel,
+              exercise: exercise.name
+            })
 
             set({ error: cardioSequenceMessage })
             return {
@@ -263,11 +275,20 @@ export const useWorkoutStore = create<WorkoutBuilderState>((set, get) => ({
       if (restBlock.blocked && !options?.forceRest) {
         const lastText = restBlock.lastWorkoutAt
           ? formatHumanDateTime(restBlock.lastWorkoutAt)
-          : 'recemment'
+          : i18n.t('builder.recently', { ns: 'workouts' })
         const recommendedText = restBlock.recommendedAt
           ? formatHumanDateTime(restBlock.recommendedAt)
-          : `dans environ ${restBlock.hoursRemaining}h`
-        const warningMessage = `Alerte 48h: ${MUSCLE_GROUP_LABELS[exercise.primary_muscle]} deja travaille ${lastText}. Reprise conseillee a partir de ${recommendedText} (reste ~${restBlock.hoursRemaining}h).`
+          : i18n.t('builder.in_about_hours', {
+              ns: 'workouts',
+              hours: restBlock.hoursRemaining
+            })
+        const warningMessage = i18n.t('builder.rest48_warning_message', {
+          ns: 'workouts',
+          muscle: i18n.t(MUSCLE_GROUP_I18N_KEYS[exercise.primary_muscle], { ns: 'common' }),
+          lastText,
+          recommendedText,
+          hoursRemaining: restBlock.hoursRemaining
+        })
         set({
           error: warningMessage
         })
@@ -292,8 +313,13 @@ export const useWorkoutStore = create<WorkoutBuilderState>((set, get) => ({
       set({ exercises, muscleAlerts: computeMuscleAlerts(exercises), error: null })
       return { added: true }
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Erreur inconnue'
-      set({ error: `Impossible de verifier la regle 48h: ${message}` })
+      const message = err instanceof Error ? err.message : i18n.t('errors.generic', { ns: 'common' })
+      set({
+        error: i18n.t('errors.rule48_check_failed', {
+          ns: 'workouts',
+          message
+        })
+      })
       return { added: false }
     }
   },
@@ -314,8 +340,8 @@ export const useWorkoutStore = create<WorkoutBuilderState>((set, get) => ({
 
   saveWorkout: async () => {
     const { name, method, durationMinutes, notes, exercises } = get()
-    if (!name.trim()) throw new Error("Le nom de l'entrainement est requis")
-    if (exercises.length === 0) throw new Error('Ajoute au moins un exercice')
+    if (!name.trim()) throw new Error(i18n.t('errors.workout_name_required', { ns: 'workouts' }))
+    if (exercises.length === 0) throw new Error(i18n.t('errors.add_at_least_one_exercise', { ns: 'workouts' }))
 
     set({ loadingSave: true, error: null })
     try {
@@ -359,7 +385,7 @@ export const useWorkoutStore = create<WorkoutBuilderState>((set, get) => ({
         ...DEFAULT_DRAFT
       }))
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Erreur inconnue'
+      const message = err instanceof Error ? err.message : i18n.t('errors.generic', { ns: 'common' })
       set({ error: message, loadingSave: false })
       throw err
     }
@@ -387,7 +413,7 @@ export const useWorkoutStore = create<WorkoutBuilderState>((set, get) => ({
 
       set({ savedWorkouts: lightweight })
     } catch (err: unknown) {
-      set({ error: err instanceof Error ? err.message : 'Erreur inconnue' })
+      set({ error: err instanceof Error ? err.message : i18n.t('errors.generic', { ns: 'common' }) })
     }
   }
 }))

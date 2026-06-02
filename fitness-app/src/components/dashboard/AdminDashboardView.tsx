@@ -1,11 +1,13 @@
 import { useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useExerciseStore } from '../../stores/exerciseStore'
 import type { Exercise } from '../../types'
-import { CATEGORY_LABELS, MUSCLE_GROUP_LABELS } from '../../types'
+import { CATEGORY_I18N_KEYS, MUSCLE_GROUP_I18N_KEYS } from '../../types'
 import ExerciseFormModal from '../exercises/ExerciseFormModal'
 import ExerciseDetailModal from '../exercises/ExerciseDetailModal'
 
 export default function AdminDashboardView() {
+  const { t } = useTranslation(['exercises', 'common'])
   const { exercises, loading, error, fetchExercises, deleteExercise } = useExerciseStore()
 
   const [search, setSearch] = useState('')
@@ -31,7 +33,7 @@ export default function AdminDashboardView() {
       return (
         e.name.toLowerCase().includes(q) ||
         e.description.toLowerCase().includes(q) ||
-        MUSCLE_GROUP_LABELS[e.primary_muscle].toLowerCase().includes(q)
+        t(MUSCLE_GROUP_I18N_KEYS[e.primary_muscle], { ns: 'common' }).toLowerCase().includes(q)
       )
     })
 
@@ -42,7 +44,7 @@ export default function AdminDashboardView() {
       if (scoreA !== scoreB) return scoreB - scoreA
       return a.name.localeCompare(b.name)
     })
-  }, [exercises, search])
+  }, [exercises, search, t])
 
   async function handleDelete(exercise: Exercise) {
     await deleteExercise(exercise.id)
@@ -76,7 +78,7 @@ export default function AdminDashboardView() {
               marginBottom: '0.35rem'
             }}
           >
-            Backoffice
+            {t('admin.backoffice', { ns: 'exercises' })}
           </p>
           <h1
             style={{
@@ -88,10 +90,10 @@ export default function AdminDashboardView() {
               letterSpacing: '0.03em'
             }}
           >
-            Dashboard Admin
+            {t('admin.title', { ns: 'exercises' })}
           </h1>
           <p style={{ color: 'var(--muted)', marginTop: '0.45rem' }}>
-            Gerer les descriptions et videos de tous les exercices.
+            {t('admin.subtitle', { ns: 'exercises' })}
           </p>
         </div>
 
@@ -113,7 +115,7 @@ export default function AdminDashboardView() {
             cursor: 'pointer'
           }}
         >
-          + Ajouter un exercice
+          + {t('add', { ns: 'exercises' })}
         </button>
       </div>
 
@@ -125,11 +127,11 @@ export default function AdminDashboardView() {
           marginBottom: '1.25rem'
         }}
       >
-        <StatCard label='Exercices total' value={String(total)} />
-        <StatCard label='Avec video' value={`${withVideo}/${total || 0}`} />
-        <StatCard label='Avec description' value={`${withDescription}/${total || 0}`} />
+        <StatCard label={t('admin.total', { ns: 'exercises' })} value={String(total)} />
+        <StatCard label={t('admin.with_video', { ns: 'exercises' })} value={`${withVideo}/${total || 0}`} />
+        <StatCard label={t('admin.with_description', { ns: 'exercises' })} value={`${withDescription}/${total || 0}`} />
         <StatCard
-          label='A completer'
+          label={t('admin.to_complete', { ns: 'exercises' })}
           value={String(total - Math.min(withVideo, withDescription))}
           emphasize
         />
@@ -147,7 +149,7 @@ export default function AdminDashboardView() {
         <input
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder='Rechercher nom, muscle, description...'
+          placeholder={t('admin.search_placeholder', { ns: 'exercises' })}
           style={{
             flex: 1,
             minWidth: 260,
@@ -175,13 +177,13 @@ export default function AdminDashboardView() {
             textTransform: 'uppercase'
           }}
         >
-          Chargement...
+          {t('loading', { ns: 'exercises' })}
         </div>
       ) : (
         <div style={{ border: '1px solid var(--border)', background: 'var(--dark)' }}>
           {filtered.length === 0 ? (
             <div style={{ padding: '2.3rem 1rem', textAlign: 'center', color: 'var(--muted)' }}>
-              Aucun exercice trouve.
+              {t('admin.empty', { ns: 'exercises' })}
             </div>
           ) : (
             filtered.map((exercise) => {
@@ -224,23 +226,23 @@ export default function AdminDashboardView() {
                           color: 'var(--orange)'
                         }}
                       >
-                        {CATEGORY_LABELS[exercise.category]}
+                        {t(CATEGORY_I18N_KEYS[exercise.category], { ns: 'common' })}
                       </span>
                     </div>
 
                     <div style={{ marginTop: '0.28rem', display: 'flex', gap: '0.35rem', flexWrap: 'wrap' }}>
-                      <Chip ok={!missingDescription} label={missingDescription ? 'Description manquante' : 'Description OK'} />
-                      <Chip ok={!missingVideo} label={missingVideo ? 'Video manquante' : 'Video OK'} />
-                      <Chip ok label={MUSCLE_GROUP_LABELS[exercise.primary_muscle]} subtle />
+                      <Chip ok={!missingDescription} label={missingDescription ? t('admin.missing_description', { ns: 'exercises' }) : t('admin.description_ok', { ns: 'exercises' })} />
+                      <Chip ok={!missingVideo} label={missingVideo ? t('admin.missing_video', { ns: 'exercises' }) : t('admin.video_ok', { ns: 'exercises' })} />
+                      <Chip ok label={t(MUSCLE_GROUP_I18N_KEYS[exercise.primary_muscle], { ns: 'common' })} subtle />
                     </div>
                   </div>
 
                   <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
                     <button onClick={() => setDetailExercise(exercise)} style={ghostBtnStyle}>
-                      Voir
+                      {t('admin.view', { ns: 'exercises' })}
                     </button>
                     <button onClick={() => openEdit(exercise)} style={actionBtnStyle}>
-                      Completer
+                      {t('admin.complete', { ns: 'exercises' })}
                     </button>
                   </div>
                 </div>

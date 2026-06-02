@@ -1,7 +1,12 @@
 {
   "title": "Exercises",
+  "all": "All",
   "add": "Add exercise",
   "search": "Search exercise",
+  "new": "New exercise",
+  "empty": "No exercises",
+  "empty_filtered": "No results",
+  "loading": "Loading...",
   "fields": {
     "name": "Exercise name",
     "description": "Description",
@@ -9,7 +14,10 @@
     "category": "Category",
     "primary_muscle": "Primary muscle",
     "secondary_muscles": "Secondary muscles",
-    "body_region": "Body region"
+    "body_region": "Body region",
+    "notes": "Notes",
+    "weight_intensity": "Weight / Intensity",
+    "instructions": "Instructions"
   },
   "categories": {
     "strength": "Strength",
@@ -26,5 +34,49 @@
     "muscle_secondary": "Secondary muscle already used",
     "rest_48h": "This muscle was trained less than 48 hours ago",
     "cardio_conflict": "Cardio conflict — same body region as previous exercise"
+  },
+  "form": {
+    "create_title": "New exercise",
+    "edit_title": "Edit exercise",
+    "name_required": "Name is required",
+    "name_placeholder": "Ex: Snatch, Thruster, Box Jump...",
+    "description_placeholder": "Technical cues, coaching notes...",
+    "video_dropzone": "Drag a video or click to select",
+    "video_replace": "Click to replace video",
+    "video_requirements": "MP4, MOV, WebM - max 200 MB",
+    "video_required_error": "Video file required (MP4, MOV, WebM)",
+    "video_size_error": "Max size: 200 MB",
+    "save_new": "Create exercise",
+    "save_edit": "Update",
+    "saving": "Saving..."
+  },
+  "admin": {
+    "title": "Admin dashboard",
+    "backoffice": "Backoffice",
+    "subtitle": "Manage descriptions and videos for all exercises.",
+    "total": "Total exercises",
+    "with_video": "With video",
+    "with_description": "With description",
+    "to_complete": "To complete",
+    "search_placeholder": "Search name, muscle, description...",
+    "missing_description": "Missing description",
+    "missing_video": "Missing video",
+    "description_ok": "Description OK",
+    "video_ok": "Video OK",
+    "complete": "Complete",
+    "view": "View",
+    "empty": "No exercises found."
+  },
+  "detail": {
+    "no_video": "No video available",
+    "muscles_targeted": "Targeted muscles",
+    "tech_instructions": "Technical instructions",
+    "add_to_workout": "Add to workout",
+    "delete_confirm": "Delete \"{{name}}\"? This action cannot be undone."
+  },
+  "errors": {
+    "auth_session_missing_exercise": "Missing session: sign in again to create or edit an exercise.",
+    "invalid_session_reconnect": "Invalid session: sign in again to create an exercise.",
+    "primary_muscle_not_found": "Primary muscle not found: {{muscle}}"
   }
 }

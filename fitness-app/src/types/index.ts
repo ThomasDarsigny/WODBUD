@@ -14,6 +14,22 @@ export type MuscleGroup =
   | 'cardio_upper'
   | 'cardio_lower'
 
+export const MUSCLE_GROUP_I18N_KEYS: Record<MuscleGroup, string> = {
+  chest: 'labels.muscles.chest',
+  back: 'labels.muscles.back',
+  shoulders: 'labels.muscles.shoulders',
+  biceps: 'labels.muscles.biceps',
+  triceps: 'labels.muscles.triceps',
+  forearms: 'labels.muscles.forearms',
+  core: 'labels.muscles.core',
+  glutes: 'labels.muscles.glutes',
+  quads: 'labels.muscles.quads',
+  hamstrings: 'labels.muscles.hamstrings',
+  calves: 'labels.muscles.calves',
+  cardio_upper: 'labels.muscles.cardio_upper',
+  cardio_lower: 'labels.muscles.cardio_lower'
+}
+
 export const MUSCLE_GROUP_LABELS: Record<MuscleGroup, string> = {
   chest: 'Pectoraux',
   back: 'Dos',
@@ -57,6 +73,15 @@ export type ExerciseCategory =
   | 'mobility'
   | 'accessory'
 
+export const CATEGORY_I18N_KEYS: Record<ExerciseCategory, string> = {
+  strength: 'labels.categories.strength',
+  olympic: 'labels.categories.olympic',
+  gymnastics: 'labels.categories.gymnastics',
+  cardio: 'labels.categories.cardio',
+  mobility: 'labels.categories.mobility',
+  accessory: 'labels.categories.accessory'
+}
+
 export const CATEGORY_LABELS: Record<ExerciseCategory, string> = {
   strength: 'Force',
   olympic: 'Halterophilie',
@@ -92,6 +117,16 @@ export type WorkoutMethod =
   | 'strength'
   | 'tabata'
   | 'custom'
+
+export const METHOD_I18N_KEYS: Record<WorkoutMethod, string> = {
+  amrap: 'labels.methods.amrap',
+  emom: 'labels.methods.emom',
+  for_time: 'labels.methods.for_time',
+  rounds: 'labels.methods.rounds',
+  strength: 'labels.methods.strength',
+  tabata: 'labels.methods.tabata',
+  custom: 'labels.methods.custom'
+}
 
 export const METHOD_LABELS: Record<WorkoutMethod, string> = {
   amrap: 'AMRAP',

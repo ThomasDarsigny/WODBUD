@@ -4,7 +4,10 @@
     "exercises": "Exercises",
     "workouts": "Workouts",
     "history": "History",
-    "settings": "Settings"
+    "settings": "Settings",
+    "admin": "Admin dashboard",
+    "ai": "AI assistant",
+    "vote": "Create a poll"
   },
   "actions": {
     "save": "Save",
@@ -13,13 +16,220 @@
     "edit": "Edit",
     "add": "Add",
     "confirm": "Confirm",
-    "back": "Back"
+    "back": "Back",
+    "close": "Close",
+    "view": "View",
+    "reset": "Reset",
+    "complete": "Complete",
+    "logout": "Log out"
   },
   "language": {
     "label": "Language",
     "fr": "Français",
     "en": "English",
     "es": "Español"
+  },
+  "auth": {
+    "login": "Log in",
+    "signup": "Sign up",
+    "email": "Email",
+    "password": "Password",
+    "forgot_password": "Forgot password",
+    "no_account": "No account?",
+    "have_account": "Already have an account?"
+  },
+  "auth_ui": {
+    "login_subtitle": "Log in with your email or Google account.",
+    "login_loading": "Signing in...",
+    "login_submit": "Log in",
+    "google_redirect": "Redirecting to Google...",
+    "continue_google": "Continue with Google",
+    "create_account": "Create an account",
+    "back_home": "Back to home",
+    "password_mismatch": "Passwords do not match.",
+    "signup_success": "Account created. Check your email to confirm your signup if needed.",
+    "signup_subtitle": "Create your account with email or Google.",
+    "confirm_password": "Confirm password",
+    "signup_loading": "Creating account...",
+    "signup_submit": "Create my account",
+    "have_account_action": "I already have an account"
+  },
+  "landing": {
+    "nav": {
+      "features": "Features",
+      "how": "How it works",
+      "demo": "Demo",
+      "dashboard": "Dashboard",
+      "access_dashboard": "Open dashboard"
+    },
+    "hero": {
+      "tag": "For fitness coaches",
+      "title_line1": "Launch your programming",
+      "title_em": "free for 30 days.",
+      "subtitle": "Build your group workouts in minutes. Exercise library, programming methods, videos, and AI suggestions - all in one place, no credit card required.",
+      "open_dashboard": "Open coach dashboard",
+      "watch_demo": "Watch a demo",
+      "no_card": "No credit card"
+    },
+    "ticker": [
+      "Exercise library",
+      "Group programming",
+      "AMRAP · EMOM · For Time methods",
+      "AI suggestions",
+      "PDF export",
+      "Exercise videos",
+      "Training rules",
+      "CrossFit · Weightlifting · Gymnastics"
+    ],
+    "problem": {
+      "without_label": "Current problem",
+      "without_title": "Without ForgeX",
+      "without_items": [
+        "Scattered spreadsheets that are hard to maintain",
+        "No visual reference for technical exercises",
+        "Time-consuming and repetitive programming",
+        "No consistency in training methods",
+        "Exporting and sharing programs is a hassle",
+        "Reinventing the wheel every cycle"
+      ],
+      "with_label": "With the platform",
+      "with_title": "With ForgeX",
+      "with_items": [
+        "Everything centralized in one interface",
+        "Videos linked directly to each exercise",
+        "AI suggests adapted workouts",
+        "Structured methods (AMRAP, EMOM, Rounds...)",
+        "Professional PDF generated in one click",
+        "Reusable workout library cycle after cycle"
+      ]
+    },
+    "features_tag": "Features",
+    "features_title_line1": "Everything a",
+    "features_title_line2": "CrossFit coach needs",
+    "features": [
+      {
+        "icon": "📚",
+        "title": "Exercise library",
+        "desc": "A large exercise database by category - weightlifting, gymnastics, cardio, strength. Each movement is linked to a reference video."
+      },
+      {
+        "icon": "⚙️",
+        "title": "Workout builder",
+        "desc": "Choose your exercises, apply a training method (AMRAP, EMOM, For Time, Rounds...) and configure session rules in a few clicks."
+      },
+      {
+        "icon": "🤖",
+        "title": "AI suggestions",
+        "desc": "AI analyzes your programming and suggests variations, progressions, or exercise combinations aligned with your goals.",
+        "badge": "Powered by Anthropic API"
+      },
+      {
+        "icon": "🎥",
+        "title": "Reference videos",
+        "desc": "Attach a video to every exercise in your library. Athletes can see the expected technique before each WOD."
+      },
+      {
+        "icon": "📄",
+        "title": "PDF export",
+        "desc": "Generate a clean professional workout sheet in one click. Perfect for in-box display or sharing with your group."
+      },
+      {
+        "icon": "📱",
+        "title": "Mobile-first PWA",
+        "desc": "Install the app directly on your phone. Fast access on the gym floor, even with limited connectivity."
+      }
+    ],
+    "workflow_tag": "Workflow",
+    "workflow_title": "How it works",
+    "steps": [
+      {
+        "num": "01",
+        "title": "Build your library",
+        "desc": "Add your exercises with descriptions, muscle groups, and reference videos. Reusable forever."
+      },
+      {
+        "num": "02",
+        "title": "Create your workout",
+        "desc": "Select your exercises, choose a method (AMRAP, EMOM...) and configure session rules."
+      },
+      {
+        "num": "03",
+        "title": "Refine with AI",
+        "desc": "Ask AI for suggestions to vary, progress, or balance your training load."
+      },
+      {
+        "num": "04",
+        "title": "Export and share",
+        "desc": "Generate the PDF and share the session with your group. Display it in your box or send it directly."
+      }
+    ],
+    "demo": {
+      "tag": "ForgeX demo",
+      "title_line1": "Book a demo",
+      "title_line2": "of the platform",
+      "subtitle": "Discover how ForgeX speeds up WOD creation, structures your cycles, and simplifies sharing with your athletes. We show practical use cases adapted to your context.",
+      "book": "Book a demo",
+      "view_features": "See features",
+      "perks_label": "Demo perks",
+      "perks": [
+        "Personalized session for your box",
+        "Live Q&A",
+        "Real programming use cases",
+        "Quick-start plan",
+        "Product roadmap preview"
+      ]
+    },
+    "footer": {
+      "copy": "© 2026 ForgeX - Platform in active development",
+      "privacy": "Privacy",
+      "contact": "Contact",
+      "links_label": "Footer links"
+    }
+  },
+  "labels": {
+    "categories": {
+      "strength": "Strength",
+      "olympic": "Weightlifting",
+      "gymnastics": "Gymnastics",
+      "cardio": "Cardio",
+      "mobility": "Mobility",
+      "accessory": "Accessory"
+    },
+    "muscles": {
+      "chest": "Chest",
+      "back": "Back",
+      "shoulders": "Shoulders",
+      "biceps": "Biceps",
+      "triceps": "Triceps",
+      "forearms": "Forearms",
+      "core": "Core",
+      "glutes": "Glutes",
+      "quads": "Quadriceps",
+      "hamstrings": "Hamstrings",
+      "calves": "Calves",
+      "cardio_upper": "Cardio - Upper body",
+      "cardio_lower": "Cardio - Lower body"
+    },
+    "methods": {
+      "amrap": "AMRAP",
+      "emom": "EMOM",
+      "for_time": "For Time",
+      "rounds": "Rounds",
+      "strength": "Strength / Load",
+      "tabata": "Tabata",
+      "custom": "Custom"
+    },
+    "zones": {
+      "upper": "upper body",
+      "lower": "lower body"
+    }
+  },
+  "status": {
+    "loading": "Loading...",
+    "soon": "Coming soon",
+    "no_results": "No results",
+    "session_check": "Checking session...",
+    "redirect": "Redirecting..."
   },
   "errors": {
     "generic": "An error occurred",

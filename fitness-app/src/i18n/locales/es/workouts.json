@@ -1,10 +1,48 @@
 {
   "title": "Entrenamientos",
   "new": "Nuevo entrenamiento",
+  "loading": "Cargando...",
+  "empty": "Sin entrenamientos",
   "fields": {
     "name": "Nombre de la sesión",
     "theme": "Tema",
-    "exercises": "Ejercicios"
+    "exercises": "Ejercicios",
+    "notes": "Notas",
+    "instructions": "Instrucciones",
+    "method": "Método",
+    "duration": "Duración",
+    "duration_unit_min": "min",
+    "sets": "Series",
+    "reps": "Repeticiones",
+    "weight": "Carga",
+    "weight_intensity": "Carga / Intensidad",
+    "rest": "Descanso"
+  },
+  "builder": {
+    "library": "Biblioteca",
+    "choose_exercise": "Elegir un ejercicio",
+    "search_placeholder": "Buscar...",
+    "filter_category": "Filtrar por categoría",
+    "filter_muscle": "Filtrar por músculo",
+    "clear_filters": "Limpiar filtros",
+    "workout_section": "Entrenamiento",
+    "name_placeholder": "Nombre de la sesión...",
+    "empty_state": "Haz clic en un ejercicio para agregarlo",
+    "notes_placeholder": "Notas, instrucciones para el grupo...",
+    "reset": "Restablecer",
+    "save": "Guardar sesión",
+    "saving": "Guardando...",
+    "saved": "✓ Guardado!",
+    "import_pdf": "Importar PDF",
+    "pdf_loaded": "PDF cargado: {{name}}",
+    "already_added": "Agregado",
+    "view": "+ Ver",
+    "override_cancel": "Cancelar",
+    "override_confirm": "Agregar de todos modos",
+    "cardio_sequence_message": "Acabas de trabajar el {{previousZone}} con \"{{previousExercise}}\". Para alternar zonas, recomendamos {{expectedCardio}}. ¿Quieres agregar \"{{exercise}}\" igualmente aunque esa zona se entrenó hace poco?",
+    "rest48_warning_message": "Alerta de 48h: {{muscle}} se trabajó {{lastText}}. Se recomienda retomarlo a partir de {{recommendedText}} (quedan aprox. {{hoursRemaining}}h).",
+    "recently": "hace poco",
+    "in_about_hours": "en unas {{hours}}h"
   },
   "reminders": {
     "theme_inactive": "No has hecho una sesión de {{theme}} desde hace {{days}} días"
@@ -13,5 +51,19 @@
     "start": "Iniciar sesión",
     "finish": "Terminar sesión",
     "duration": "Duración: {{duration}}"
+  },
+  "alerts": {
+    "cardio_title": "Alternancia de cardio",
+    "rest48_title": "Alerta de recuperación 48h",
+    "risk_high": "Riesgo alto de sobrecarga muscular",
+    "risk_medium": "Riesgo medio de sobrecarga muscular",
+    "risk_moderate": "Riesgo moderado de sobrecarga muscular",
+    "primary_repeated": "Músculo principal repetido {{count}}x",
+    "secondary_repeated": "Músculo secundario repetido {{count}}x"
+  },
+  "errors": {
+    "rule48_check_failed": "No se pudo verificar la regla de 48h: {{message}}",
+    "workout_name_required": "El nombre del entrenamiento es obligatorio",
+    "add_at_least_one_exercise": "Agrega al menos un ejercicio"
   }
 }

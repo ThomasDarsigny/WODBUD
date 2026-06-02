@@ -1,10 +1,48 @@
 {
   "title": "Entraînements",
   "new": "Nouvel entraînement",
+  "loading": "Chargement...",
+  "empty": "Aucun entraînement",
   "fields": {
     "name": "Nom de la séance",
     "theme": "Thématique",
-    "exercises": "Exercices"
+    "exercises": "Exercices",
+    "notes": "Notes",
+    "instructions": "Instructions",
+    "method": "Méthode",
+    "duration": "Durée",
+    "duration_unit_min": "min",
+    "sets": "Séries",
+    "reps": "Reps",
+    "weight": "Charge",
+    "weight_intensity": "Charge / Intensité",
+    "rest": "Repos"
+  },
+  "builder": {
+    "library": "Bibliothèque",
+    "choose_exercise": "Choisir un exercice",
+    "search_placeholder": "Rechercher...",
+    "filter_category": "Filtrer par catégorie",
+    "filter_muscle": "Filtrer par muscle",
+    "clear_filters": "Effacer les filtres",
+    "workout_section": "Entraînement",
+    "name_placeholder": "Nom de la séance...",
+    "empty_state": "Clique sur un exercice pour l'ajouter",
+    "notes_placeholder": "Notes, instructions pour le groupe...",
+    "reset": "Réinitialiser",
+    "save": "Sauvegarder la séance",
+    "saving": "Enregistrement...",
+    "saved": "✓ Enregistré !",
+    "import_pdf": "Importer le PDF",
+    "pdf_loaded": "PDF chargé : {{name}}",
+    "already_added": "Ajouté",
+    "view": "+ Voir",
+    "override_cancel": "Annuler",
+    "override_confirm": "Ajouter quand même",
+    "cardio_sequence_message": "On vient de solliciter le {{previousZone}} avec \"{{previousExercise}}\". Pour alterner les zones, on recommande {{expectedCardio}}. Veux-tu vraiment ajouter \"{{exercise}}\" même si cette zone vient d'être travaillée ?",
+    "rest48_warning_message": "Alerte 48h : {{muscle}} déjà travaillé {{lastText}}. Reprise conseillée à partir de {{recommendedText}} (reste environ {{hoursRemaining}}h).",
+    "recently": "récemment",
+    "in_about_hours": "dans environ {{hours}}h"
   },
   "reminders": {
     "theme_inactive": "Tu n'as pas fait de séance {{theme}} depuis {{days}} jours"
@@ -13,5 +51,19 @@
     "start": "Démarrer la séance",
     "finish": "Terminer la séance",
     "duration": "Durée : {{duration}}"
+  },
+  "alerts": {
+    "cardio_title": "Alternance cardio",
+    "rest48_title": "Alerte récupération 48h",
+    "risk_high": "Risque élevé de surcharge musculaire",
+    "risk_medium": "Risque moyen de surcharge musculaire",
+    "risk_moderate": "Risque modéré de surcharge musculaire",
+    "primary_repeated": "Muscle principal répété {{count}}x",
+    "secondary_repeated": "Muscle secondaire répété {{count}}x"
+  },
+  "errors": {
+    "rule48_check_failed": "Impossible de vérifier la règle 48h : {{message}}",
+    "workout_name_required": "Le nom de l'entraînement est requis",
+    "add_at_least_one_exercise": "Ajoute au moins un exercice"
   }
 }

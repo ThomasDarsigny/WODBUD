@@ -1,13 +1,15 @@
 import { useEffect, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { supabase } from '../../lib/supabase'
 import { clearAuthSessionCookies } from '../../lib/authSessionCookies'
 import { isCurrentUserAdmin } from '../../lib/access'
 
 type NavItem = {
   id: string
-  label: string
+  labelKey: string
+  ns?: 'common' | 'workouts'
   icon: string
   path: string
   disabled?: boolean
@@ -15,17 +17,18 @@ type NavItem = {
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { id: 'admin', label: 'Dashboard Admin', icon: '🛠️', path: '/dashboard/admin' },
-  { id: 'exercises', label: 'Exercices', icon: '🏋️', path: '/dashboard/exercises' },
+  { id: 'admin', labelKey: 'nav.admin', icon: '🛠️', path: '/dashboard/admin' },
+  { id: 'exercises', labelKey: 'nav.exercises', icon: '🏋️', path: '/dashboard/exercises' },
   {
     id: 'workout',
-    label: 'Creer un entrainement',
+    labelKey: 'new',
+    ns: 'workouts',
     icon: '⚡',
     path: '/dashboard/workout'
   },
   {
     id: 'ai',
-    label: 'Assistant IA',
+    labelKey: 'nav.ai',
     icon: '🤖',
     path: '/dashboard/ai',
     disabled: true,
@@ -33,7 +36,7 @@ const NAV_ITEMS: NavItem[] = [
   },
   {
     id: 'vote',
-    label: 'Creer un vote',
+    labelKey: 'nav.vote',
     icon: '🗳️',
     path: '/dashboard/vote',
     disabled: true,
@@ -46,6 +49,7 @@ interface Props {
 }
 
 export default function DashboardLayout({ children }: Props) {
+  const { t } = useTranslation(['common', 'workouts'])
   const location = useLocation()
   const navigate = useNavigate()
   const [collapsed, setCollapsed] = useState(false)
@@ -180,7 +184,7 @@ export default function DashboardLayout({ children }: Props) {
                             textTransform: 'uppercase'
                           }}
                         >
-                          {item.label}
+                          {item.ns === 'workouts' ? t(item.labelKey, { ns: 'workouts' }) : t(item.labelKey)}
                         </span>
                         {item.soon && (
                           <span
@@ -195,7 +199,7 @@ export default function DashboardLayout({ children }: Props) {
                               padding: '0.1rem 0.35rem'
                             }}
                           >
-                            Bientot
+                            {t('status.soon')}
                           </span>
                         )}
                       </>
@@ -229,7 +233,7 @@ export default function DashboardLayout({ children }: Props) {
                           textTransform: 'uppercase'
                         }}
                       >
-                        {item.label}
+                        {item.ns === 'workouts' ? t(item.labelKey, { ns: 'workouts' }) : t(item.labelKey)}
                       </span>
                     )}
                   </Link>
@@ -294,7 +298,7 @@ export default function DashboardLayout({ children }: Props) {
                   fontFamily: 'var(--font-b)'
                 }}
               >
-                Deconnexion
+                {t('actions.logout')}
               </button>
             </div>
           )}

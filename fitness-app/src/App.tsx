@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import type { ReactNode } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import LandingPage from './pages/LandingPage'
 import LoginPage from './pages/LoginPage'
 import SignupPage from './pages/SignupPage'
@@ -13,14 +14,15 @@ import { clearAuthSessionCookies, syncAuthSessionCookies } from './lib/authSessi
 import { isCurrentUserAdmin } from './lib/access'
 
 function AiView() {
-  return <ComingSoon label="Assistant IA" icon="🤖" />
+  return <ComingSoon labelKey="nav.ai" icon="🤖" />
 }
 
 function VoteView() {
-  return <ComingSoon label="Creer un vote" icon="🗳️" />
+  return <ComingSoon labelKey="nav.vote" icon="🗳️" />
 }
 
-function ComingSoon({ label, icon }: { label: string; icon: string }) {
+function ComingSoon({ labelKey, icon }: { labelKey: string; icon: string }) {
+  const { t } = useTranslation('common')
   return (
     <div
       style={{
@@ -42,13 +44,14 @@ function ComingSoon({ label, icon }: { label: string; icon: string }) {
           textTransform: 'uppercase'
         }}
       >
-        {label} - Bientot disponible
+        {t(labelKey)} - {t('status.soon')}
       </p>
     </div>
   )
 }
 
 function ProtectedRoute({ children, adminOnly = false }: { children: ReactNode; adminOnly?: boolean }) {
+  const { t } = useTranslation('common')
   const [loading, setLoading] = useState(true)
   const [authenticated, setAuthenticated] = useState(false)
   const [admin, setAdmin] = useState(false)
@@ -95,7 +98,7 @@ function ProtectedRoute({ children, adminOnly = false }: { children: ReactNode; 
           color: '#9f9890'
         }}
       >
-        Verification de session...
+        {t('status.session_check')}
       </div>
     )
   }
@@ -112,6 +115,7 @@ function ProtectedRoute({ children, adminOnly = false }: { children: ReactNode; 
 }
 
 function DashboardHomeRedirect() {
+  const { t } = useTranslation('common')
   const [target, setTarget] = useState<string | null>(null)
 
   useEffect(() => {
@@ -144,7 +148,7 @@ function DashboardHomeRedirect() {
           color: '#9f9890'
         }}
       >
-        Redirection...
+        {t('status.redirect')}
       </div>
     )
   }

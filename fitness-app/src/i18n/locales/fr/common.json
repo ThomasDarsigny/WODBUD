@@ -4,7 +4,10 @@
     "exercises": "Exercices",
     "workouts": "Entraînements",
     "history": "Historique",
-    "settings": "Paramètres"
+    "settings": "Paramètres",
+    "admin": "Dashboard admin",
+    "ai": "Assistant IA",
+    "vote": "Créer un vote"
   },
   "actions": {
     "save": "Enregistrer",
@@ -13,13 +16,220 @@
     "edit": "Modifier",
     "add": "Ajouter",
     "confirm": "Confirmer",
-    "back": "Retour"
+    "back": "Retour",
+    "close": "Fermer",
+    "view": "Voir",
+    "reset": "Réinitialiser",
+    "complete": "Compléter",
+    "logout": "Déconnexion"
   },
   "language": {
     "label": "Langue",
     "fr": "Français",
     "en": "English",
     "es": "Español"
+  },
+  "auth": {
+    "login": "Connexion",
+    "signup": "Inscription",
+    "email": "Courriel",
+    "password": "Mot de passe",
+    "forgot_password": "Mot de passe oublié",
+    "no_account": "Pas de compte ?",
+    "have_account": "Déjà un compte ?"
+  },
+  "auth_ui": {
+    "login_subtitle": "Connecte-toi avec ton email ou ton compte Google.",
+    "login_loading": "Connexion en cours...",
+    "login_submit": "Se connecter",
+    "google_redirect": "Redirection vers Google...",
+    "continue_google": "Continuer avec Google",
+    "create_account": "Créer un compte",
+    "back_home": "Retour à l'accueil",
+    "password_mismatch": "Les mots de passe ne correspondent pas.",
+    "signup_success": "Compte créé. Vérifie ton email pour confirmer ton inscription si nécessaire.",
+    "signup_subtitle": "Crée ton compte avec ton email ou Google.",
+    "confirm_password": "Confirmer le mot de passe",
+    "signup_loading": "Création du compte...",
+    "signup_submit": "Créer mon compte",
+    "have_account_action": "J'ai déjà un compte"
+  },
+  "landing": {
+    "nav": {
+      "features": "Fonctionnalités",
+      "how": "Comment ça marche",
+      "demo": "Démo",
+      "dashboard": "Dashboard",
+      "access_dashboard": "Accéder au dashboard"
+    },
+    "hero": {
+      "tag": "Pour entraîneurs fitness",
+      "title_line1": "Lance ta programmation",
+      "title_em": "gratuitement pendant 30 jours.",
+      "subtitle": "Construis tes entraînements de groupe en quelques minutes. Base d'exercices complète, méthodes de programmation, vidéos et suggestions IA - tout au même endroit, sans carte de crédit.",
+      "open_dashboard": "Ouvrir le dashboard coach",
+      "watch_demo": "Voir une démo",
+      "no_card": "Sans carte de crédit"
+    },
+    "ticker": [
+      "Bibliothèque d'exercices",
+      "Programmation de groupe",
+      "Méthodes AMRAP · EMOM · For Time",
+      "Suggestions IA",
+      "Export PDF",
+      "Vidéos d'exercices",
+      "Règles d'entraînement",
+      "CrossFit · Haltérophilie · Gymnastics"
+    ],
+    "problem": {
+      "without_label": "Le problème actuel",
+      "without_title": "Sans ForgeX",
+      "without_items": [
+        "Feuilles Excel dispersées et difficiles à maintenir",
+        "Pas de référence visuelle pour les exercices techniques",
+        "Programmation chronophage et répétitive",
+        "Aucune cohérence dans les méthodes d'entraînement",
+        "Export et partage du programme = galère",
+        "Réinventer la roue à chaque cycle"
+      ],
+      "with_label": "Avec la plateforme",
+      "with_title": "Avec ForgeX",
+      "with_items": [
+        "Tout centralisé dans une seule interface",
+        "Vidéos liées directement à chaque exercice",
+        "L'IA suggère des entraînements adaptés",
+        "Méthodes structurées (AMRAP, EMOM, Rounds...)",
+        "PDF professionnel généré en un clic",
+        "Bibliothèque réutilisable d'une séance à l'autre"
+      ]
+    },
+    "features_tag": "Fonctionnalités",
+    "features_title_line1": "Tout ce qu'un coach",
+    "features_title_line2": "CrossFit a besoin",
+    "features": [
+      {
+        "icon": "📚",
+        "title": "Bibliothèque d'exercices",
+        "desc": "Une large base de données d'exercices catégorisés - haltérophilie, gymnastics, cardio, force. Chaque mouvement est lié à une vidéo de référence pour la technique."
+      },
+      {
+        "icon": "⚙️",
+        "title": "Constructeur de séances",
+        "desc": "Choisis tes exercices, applique une méthode d'entraînement (AMRAP, EMOM, For Time, Rounds...) et configure les règles de la séance en quelques clics."
+      },
+      {
+        "icon": "🤖",
+        "title": "Suggestions IA",
+        "desc": "L'intelligence artificielle analyse ta programmation et propose des variations, des progressions ou des combinaisons d'exercices cohérentes avec tes objectifs.",
+        "badge": "Alimenté par l'API Anthropic"
+      },
+      {
+        "icon": "🎥",
+        "title": "Vidéos de référence",
+        "desc": "Associe une vidéo à chaque exercice de ta bibliothèque. Tes athlètes voient exactement la technique attendue avant chaque WOD."
+      },
+      {
+        "icon": "📄",
+        "title": "Export PDF",
+        "desc": "Génère une fiche d'entraînement propre et professionnelle en un clic. Idéal pour l'afficher en box ou l'envoyer à ton groupe."
+      },
+      {
+        "icon": "📱",
+        "title": "PWA mobile-first",
+        "desc": "Installe l'app directement sur ton téléphone. Accès rapide sur le plancher de la box, même sans connexion internet."
+      }
+    ],
+    "workflow_tag": "Flux de travail",
+    "workflow_title": "Comment ça marche",
+    "steps": [
+      {
+        "num": "01",
+        "title": "Construis ta bibliothèque",
+        "desc": "Ajoute tes exercices avec descriptions, groupes musculaires et vidéos de référence. Réutilisable à l'infini."
+      },
+      {
+        "num": "02",
+        "title": "Crée ton entraînement",
+        "desc": "Sélectionne tes exercices, choisis une méthode (AMRAP, EMOM...) et configure les règles de la séance."
+      },
+      {
+        "num": "03",
+        "title": "Affine avec l'IA",
+        "desc": "Demande des suggestions à l'IA pour varier, progresser ou équilibrer la charge de ton programme."
+      },
+      {
+        "num": "04",
+        "title": "Exporte et partage",
+        "desc": "Génère le PDF et partage la séance avec ton groupe. Affiche-le en box ou envoie-le directement."
+      }
+    ],
+    "demo": {
+      "tag": "Démo ForgeX",
+      "title_line1": "Réserve une démo",
+      "title_line2": "de la plateforme",
+      "subtitle": "Découvre comment ForgeX accélère la création de WODs, structure tes cycles et facilite le partage avec tes athlètes. On te montre des cas concrets adaptés à ton contexte.",
+      "book": "Réserver une démo",
+      "view_features": "Voir les fonctionnalités",
+      "perks_label": "Avantages démo",
+      "perks": [
+        "Session personnalisée pour ta box",
+        "Questions répondues en direct",
+        "Cas concrets de programmation",
+        "Plan de démarrage rapide",
+        "Aperçu de la roadmap produit"
+      ]
+    },
+    "footer": {
+      "copy": "© 2026 ForgeX - Plateforme en développement actif",
+      "privacy": "Confidentialité",
+      "contact": "Contact",
+      "links_label": "Liens de bas de page"
+    }
+  },
+  "labels": {
+    "categories": {
+      "strength": "Force",
+      "olympic": "Haltérophilie",
+      "gymnastics": "Gymnastique",
+      "cardio": "Cardio",
+      "mobility": "Mobilité",
+      "accessory": "Accessoire"
+    },
+    "muscles": {
+      "chest": "Pectoraux",
+      "back": "Dos",
+      "shoulders": "Épaules",
+      "biceps": "Biceps",
+      "triceps": "Triceps",
+      "forearms": "Avant-bras",
+      "core": "Abdominaux / Core",
+      "glutes": "Fessiers",
+      "quads": "Quadriceps",
+      "hamstrings": "Ischio-jambiers",
+      "calves": "Mollets",
+      "cardio_upper": "Cardio - Haut du corps",
+      "cardio_lower": "Cardio - Bas du corps"
+    },
+    "methods": {
+      "amrap": "AMRAP",
+      "emom": "EMOM",
+      "for_time": "For Time",
+      "rounds": "Rounds",
+      "strength": "Force / Charge",
+      "tabata": "Tabata",
+      "custom": "Personnalisé"
+    },
+    "zones": {
+      "upper": "haut du corps",
+      "lower": "bas du corps"
+    }
+  },
+  "status": {
+    "loading": "Chargement...",
+    "soon": "Bientôt disponible",
+    "no_results": "Aucun résultat",
+    "session_check": "Vérification de session...",
+    "redirect": "Redirection..."
   },
   "errors": {
     "generic": "Une erreur est survenue",
