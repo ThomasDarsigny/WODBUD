@@ -42,17 +42,65 @@ type MuscleGroupLookupRow = {
 
 const MS_48H = 48 * 60 * 60 * 1000
 
+function extractErrorMessage(err: unknown): string {
+  if (err instanceof Error && err.message) {
+    return err.message
+  }
+
+  if (typeof err === 'object' && err !== null) {
+    const maybeError = err as Record<string, unknown>
+    const candidates = [
+      maybeError.message,
+      maybeError.error,
+      maybeError.error_description,
+      maybeError.details,
+      maybeError.hint
+    ]
+
+    for (const value of candidates) {
+      if (typeof value === 'string' && value.trim().length > 0) {
+        return value
+      }
+    }
+  }
+
+  return 'Erreur inconnue'
+}
+
+async function getCurrentUserId(): Promise<string> {
+  const {
+    data: { user },
+    error
+  } = await supabase.auth.getUser()
+
+  if (error) throw error
+  if (!user?.id) {
+    throw new Error("Session invalide: reconnecte-toi pour sauvegarder l'entrainement.")
+  }
+
+  return user.id
+}
+
+function getMuscleLookupKeys(primaryMuscle: MuscleGroup): string[] {
+  if (primaryMuscle === 'core') return ['core', 'abs']
+  if (primaryMuscle === 'quads') return ['quads', 'quadriceps']
+  return [primaryMuscle]
+}
+
 async function getPrimaryMuscleRestBlock(primaryMuscle: MuscleGroup): Promise<{
   blocked: boolean
   hoursRemaining: number
   lastWorkoutAt: string | null
   recommendedAt: string | null
 }> {
+  const muscleLookupKeys = getMuscleLookupKeys(primaryMuscle)
+
   const { data: muscleData, error: muscleError } = await (supabase as any)
     .from('muscle_groups')
     .select('id')
-    .eq('name_key', primaryMuscle)
-    .single()
+    .in('name_key', muscleLookupKeys)
+    .limit(1)
+    .maybeSingle()
 
   if (muscleError) throw muscleError
   const muscleGroupId = (muscleData as MuscleGroupLookupRow | null)?.id
@@ -198,7 +246,7 @@ const DEFAULT_DRAFT: Pick<
   'name' | 'method' | 'durationMinutes' | 'notes' | 'exercises' | 'muscleAlerts'
 > = {
   name: '',
-  method: 'amrap',
+  method: 'custom',
   durationMinutes: undefined,
   notes: '',
   exercises: [],
@@ -286,13 +334,13 @@ export const useWorkoutStore = create<WorkoutBuilderState>((set, get) => ({
           exercise,
           position: currentExercises.length + 1,
           sets: 3,
-          reps: '10'
+          reps: 10
         }
       ]
       set({ exercises, muscleAlerts: computeMuscleAlerts(exercises), error: null })
       return { added: true }
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Erreur inconnue'
+      const message = extractErrorMessage(err)
       set({ error: `Impossible de verifier la regle 48h: ${message}` })
       return { added: false }
     }
@@ -319,9 +367,11 @@ export const useWorkoutStore = create<WorkoutBuilderState>((set, get) => ({
 
     set({ loadingSave: true, error: null })
     try {
+      const userId = await getCurrentUserId()
+
       const { data: workoutRow, error } = await (supabase as any)
         .from('workouts')
-        .insert({ name, method, duration_minutes: durationMinutes, notes })
+        .insert({ name, method, duration_minutes: durationMinutes, notes, created_by: userId })
         .select()
         .single()
 
@@ -359,7 +409,7 @@ export const useWorkoutStore = create<WorkoutBuilderState>((set, get) => ({
         ...DEFAULT_DRAFT
       }))
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Erreur inconnue'
+      const message = extractErrorMessage(err)
       set({ error: message, loadingSave: false })
       throw err
     }
@@ -387,7 +437,7 @@ export const useWorkoutStore = create<WorkoutBuilderState>((set, get) => ({
 
       set({ savedWorkouts: lightweight })
     } catch (err: unknown) {
-      set({ error: err instanceof Error ? err.message : 'Erreur inconnue' })
+      set({ error: extractErrorMessage(err) })
     }
   }
 }))
