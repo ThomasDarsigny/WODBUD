@@ -1,7 +1,12 @@
 {
   "title": "Ejercicios",
+  "all": "Todos",
   "add": "Agregar ejercicio",
   "search": "Buscar ejercicio",
+  "new": "Nuevo ejercicio",
+  "empty": "Sin ejercicios",
+  "empty_filtered": "Sin resultados",
+  "loading": "Cargando...",
   "fields": {
     "name": "Nombre del ejercicio",
     "description": "Descripción",
@@ -9,7 +14,10 @@
     "category": "Categoría",
     "primary_muscle": "Músculo principal",
     "secondary_muscles": "Músculos secundarios",
-    "body_region": "Región corporal"
+    "body_region": "Región corporal",
+    "notes": "Notas",
+    "weight_intensity": "Carga / Intensidad",
+    "instructions": "Instrucciones"
   },
   "categories": {
     "strength": "Fuerza",
@@ -26,5 +34,49 @@
     "muscle_secondary": "Músculo secundario ya utilizado",
     "rest_48h": "Este músculo fue entrenado hace menos de 48 horas",
     "cardio_conflict": "Conflicto cardio — misma región corporal que el ejercicio anterior"
+  },
+  "form": {
+    "create_title": "Nuevo ejercicio",
+    "edit_title": "Editar ejercicio",
+    "name_required": "El nombre es obligatorio",
+    "name_placeholder": "Ej: Snatch, Thruster, Box Jump...",
+    "description_placeholder": "Puntos técnicos clave, notas de coaching...",
+    "video_dropzone": "Arrastra un video o haz clic para seleccionar",
+    "video_replace": "Haz clic para reemplazar el video",
+    "video_requirements": "MP4, MOV, WebM - máx 200 MB",
+    "video_required_error": "Se requiere un archivo de video (MP4, MOV, WebM)",
+    "video_size_error": "Tamaño máximo: 200 MB",
+    "save_new": "Crear ejercicio",
+    "save_edit": "Actualizar",
+    "saving": "Guardando..."
+  },
+  "admin": {
+    "title": "Panel de administración",
+    "backoffice": "Backoffice",
+    "subtitle": "Gestiona descripciones y videos de todos los ejercicios.",
+    "total": "Total de ejercicios",
+    "with_video": "Con video",
+    "with_description": "Con descripción",
+    "to_complete": "Por completar",
+    "search_placeholder": "Buscar nombre, músculo, descripción...",
+    "missing_description": "Descripción faltante",
+    "missing_video": "Video faltante",
+    "description_ok": "Descripción OK",
+    "video_ok": "Video OK",
+    "complete": "Completar",
+    "view": "Ver",
+    "empty": "No se encontraron ejercicios."
+  },
+  "detail": {
+    "no_video": "No hay video disponible",
+    "muscles_targeted": "Músculos trabajados",
+    "tech_instructions": "Indicaciones técnicas",
+    "add_to_workout": "Agregar al entrenamiento",
+    "delete_confirm": "¿Eliminar \"{{name}}\"? Esta acción no se puede deshacer."
+  },
+  "errors": {
+    "auth_session_missing_exercise": "Sesión faltante: vuelve a iniciar sesión para crear o editar un ejercicio.",
+    "invalid_session_reconnect": "Sesión inválida: vuelve a iniciar sesión para crear un ejercicio.",
+    "primary_muscle_not_found": "Músculo principal no encontrado: {{muscle}}"
   }
 }

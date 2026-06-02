@@ -1,8 +1,10 @@
 import { FormEvent, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { supabase } from '../lib/supabase'
 
 export default function SignupPage() {
+  const { t } = useTranslation('common')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -26,7 +28,7 @@ export default function SignupPage() {
     setNotice(null)
 
     if (password !== confirmPassword) {
-      setError('Les mots de passe ne correspondent pas.')
+      setError(t('auth_ui.password_mismatch'))
       return
     }
 
@@ -47,7 +49,7 @@ export default function SignupPage() {
       return
     }
 
-    setNotice('Compte cree. Verifie ton email pour confirmer ton inscription si necessaire.')
+    setNotice(t('auth_ui.signup_success'))
   }
 
   const handleGoogleSignup = async () => {
@@ -72,9 +74,9 @@ export default function SignupPage() {
   return (
     <main style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', background: '#0a0a0a', color: '#f0ebe4', padding: '2rem' }}>
       <section style={{ width: '100%', maxWidth: 560, border: '1px solid #252525', background: '#111111', padding: '2rem' }}>
-        <h1 style={{ marginTop: 0, marginBottom: '0.75rem' }}>Inscription</h1>
+        <h1 style={{ marginTop: 0, marginBottom: '0.75rem' }}>{t('auth.signup')}</h1>
         <p style={{ marginTop: 0, color: '#9f9890' }}>
-          Cree ton compte avec ton email ou Google.
+          {t('auth_ui.signup_subtitle')}
         </p>
 
         {error && (
@@ -91,7 +93,7 @@ export default function SignupPage() {
 
         <form onSubmit={handleEmailSignup} style={{ display: 'grid', gap: '0.9rem', marginTop: '1rem' }}>
           <label style={{ display: 'grid', gap: '0.4rem' }}>
-            <span>Email</span>
+            <span>{t('auth.email')}</span>
             <input
               type="email"
               required
@@ -103,7 +105,7 @@ export default function SignupPage() {
           </label>
 
           <label style={{ display: 'grid', gap: '0.4rem' }}>
-            <span>Mot de passe</span>
+            <span>{t('auth.password')}</span>
             <input
               type="password"
               required
@@ -116,7 +118,7 @@ export default function SignupPage() {
           </label>
 
           <label style={{ display: 'grid', gap: '0.4rem' }}>
-            <span>Confirmer le mot de passe</span>
+            <span>{t('auth_ui.confirm_password')}</span>
             <input
               type="password"
               required
@@ -133,7 +135,7 @@ export default function SignupPage() {
             disabled={isSubmitting || isGoogleLoading}
             style={{ border: 'none', padding: '0.78rem 0.9rem', background: '#ff4d00', color: '#100d0b', fontWeight: 700, cursor: 'pointer' }}
           >
-            {isSubmitting ? 'Creation du compte...' : 'Creer mon compte'}
+            {isSubmitting ? t('auth_ui.signup_loading') : t('auth_ui.signup_submit')}
           </button>
         </form>
 
@@ -145,16 +147,16 @@ export default function SignupPage() {
             disabled={isSubmitting || isGoogleLoading}
             style={{ border: '1px solid #3a3a3a', padding: '0.75rem 0.9rem', background: '#191919', color: '#f0ebe4', cursor: 'pointer' }}
           >
-            {isGoogleLoading ? 'Redirection vers Google...' : 'Continuer avec Google'}
+            {isGoogleLoading ? t('auth_ui.google_redirect') : t('auth_ui.continue_google')}
           </button>
         </div>
 
         <div style={{ marginTop: '1.25rem', display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
           <Link to="/login" style={{ color: '#ff4d00', textDecoration: 'none' }}>
-            J'ai deja un compte
+            {t('auth_ui.have_account_action')}
           </Link>
           <Link to="/" style={{ color: '#ff4d00', textDecoration: 'none' }}>
-            Retour a l'accueil
+            {t('auth_ui.back_home')}
           </Link>
         </div>
       </section>

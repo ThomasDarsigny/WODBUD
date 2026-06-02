@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react'
 import type { CSSProperties } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useExerciseStore } from '../../stores/exerciseStore'
 import { useWorkoutStore } from '../../stores/workoutStore'
 import type { Exercise, WorkoutExercise, MuscleAlert, WorkoutMethod } from '../../types'
-import { METHOD_LABELS, MUSCLE_GROUP_LABELS } from '../../types'
+import { METHOD_I18N_KEYS, MUSCLE_GROUP_I18N_KEYS } from '../../types'
 import ExerciseDetailModal from '../exercises/ExerciseDetailModal'
 
 export default function WorkoutBuilderView() {
+  const { t } = useTranslation(['workouts', 'common'])
   const { exercises, fetchExercises } = useExerciseStore()
   const {
     name,
@@ -49,7 +51,9 @@ export default function WorkoutBuilderView() {
   const filteredExercises = exercises.filter(
     (e) =>
       e.name.toLowerCase().includes(search.toLowerCase()) ||
-      MUSCLE_GROUP_LABELS[e.primary_muscle].toLowerCase().includes(search.toLowerCase())
+      t(MUSCLE_GROUP_I18N_KEYS[e.primary_muscle], { ns: 'common' })
+        .toLowerCase()
+        .includes(search.toLowerCase())
   )
 
   async function handleSave() {
@@ -135,11 +139,11 @@ export default function WorkoutBuilderView() {
 
   const riskText =
     riskLevel === 'eleve'
-      ? 'Risque eleve de surcharge musculaire'
+      ? t('alerts.risk_high', { ns: 'workouts' })
       : riskLevel === 'moyen'
-        ? 'Risque moyen de surcharge musculaire'
+        ? t('alerts.risk_medium', { ns: 'workouts' })
         : riskLevel === 'modere'
-          ? 'Risque modere de surcharge musculaire'
+          ? t('alerts.risk_moderate', { ns: 'workouts' })
           : ''
 
   return (
@@ -176,7 +180,7 @@ export default function WorkoutBuilderView() {
               marginBottom: '0.35rem'
             }}
           >
-            Bibliotheque
+            {t('builder.library', { ns: 'workouts' })}
           </p>
           <h2
             style={{
@@ -187,12 +191,12 @@ export default function WorkoutBuilderView() {
               marginBottom: '1rem'
             }}
           >
-            Choisir un exercice
+            {t('builder.choose_exercise', { ns: 'workouts' })}
           </h2>
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder='Rechercher...'
+            placeholder={t('builder.search_placeholder', { ns: 'workouts' })}
             style={{
               width: '100%',
               background: 'var(--black)',
@@ -219,7 +223,7 @@ export default function WorkoutBuilderView() {
                 fontSize: '0.85rem'
               }}
             >
-              Aucun resultat
+              {t('empty', { ns: 'workouts' })}
             </div>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
@@ -261,12 +265,12 @@ export default function WorkoutBuilderView() {
               marginBottom: '0.35rem'
             }}
           >
-            Entrainement
+            {t('builder.workout_section', { ns: 'workouts' })}
           </p>
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder='Nom de la seance...'
+            placeholder={t('builder.name_placeholder', { ns: 'workouts' })}
             style={{
               width: '100%',
               background: 'transparent',
@@ -286,21 +290,21 @@ export default function WorkoutBuilderView() {
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
             <div>
-              <label style={smallLabelStyle}>Methode</label>
+              <label style={smallLabelStyle}>{t('fields.method', { ns: 'workouts' })}</label>
               <select
                 value={method}
                 onChange={(e) => setMethod(e.target.value as WorkoutMethod)}
                 style={selectStyle}
               >
-                {Object.entries(METHOD_LABELS).map(([val, label]) => (
+                {Object.entries(METHOD_I18N_KEYS).map(([val, key]) => (
                   <option key={val} value={val}>
-                    {label}
+                    {t(key, { ns: 'common' })}
                   </option>
                 ))}
               </select>
             </div>
             <div>
-              <label style={smallLabelStyle}>Duree (min)</label>
+              <label style={smallLabelStyle}>{t('fields.duration', { ns: 'workouts' })} ({t('fields.duration_unit_min', { ns: 'workouts' })})</label>
               <input
                 type='number'
                 value={durationMinutes ?? ''}
@@ -344,7 +348,7 @@ export default function WorkoutBuilderView() {
                   textTransform: 'uppercase'
                 }}
               >
-                Clique sur un exercice pour l'ajouter
+                {t('builder.empty_state', { ns: 'workouts' })}
               </p>
             </div>
           ) : (
@@ -366,7 +370,7 @@ export default function WorkoutBuilderView() {
           <textarea
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
-            placeholder='Notes, instructions pour le groupe...'
+            placeholder={t('builder.notes_placeholder', { ns: 'workouts' })}
             rows={2}
             style={{
               width: '100%',
@@ -406,7 +410,7 @@ export default function WorkoutBuilderView() {
               cursor: 'pointer'
             }}
           >
-            Reinitialiser
+            {t('builder.reset', { ns: 'workouts' })}
           </button>
           <button
             onClick={handleSave}
@@ -431,10 +435,10 @@ export default function WorkoutBuilderView() {
             }}
           >
             {savedSuccess
-              ? '✓ Enregistre !'
+              ? t('builder.saved', { ns: 'workouts' })
               : loadingSave
-                ? 'Enregistrement...'
-                : 'Sauvegarder la seance'}
+                ? t('builder.saving', { ns: 'workouts' })
+                : t('builder.save', { ns: 'workouts' })}
           </button>
         </div>
 
@@ -507,7 +511,7 @@ export default function WorkoutBuilderView() {
                   fontWeight: 800
                 }}
               >
-                Alternance cardio
+                {t('alerts.cardio_title', { ns: 'workouts' })}
               </p>
               <button
                 onClick={() => setCardioOverridePrompt(null)}
@@ -560,7 +564,7 @@ export default function WorkoutBuilderView() {
                   cursor: 'pointer'
                 }}
               >
-                Annuler
+                {t('builder.override_cancel', { ns: 'workouts' })}
               </button>
               <button
                 onClick={confirmCardioOverrideAdd}
@@ -577,7 +581,7 @@ export default function WorkoutBuilderView() {
                   cursor: 'pointer'
                 }}
               >
-                Ajouter quand meme
+                {t('builder.override_confirm', { ns: 'workouts' })}
               </button>
             </div>
           </div>
@@ -628,7 +632,7 @@ export default function WorkoutBuilderView() {
                   fontWeight: 800
                 }}
               >
-                Alerte recuperation 48h
+                {t('alerts.rest48_title', { ns: 'workouts' })}
               </p>
               <button
                 onClick={() => setRestOverridePrompt(null)}
@@ -700,7 +704,7 @@ export default function WorkoutBuilderView() {
                   cursor: 'pointer'
                 }}
               >
-                Annuler
+                {t('builder.override_cancel', { ns: 'workouts' })}
               </button>
               <button
                 onClick={confirmOverrideAdd}
@@ -717,7 +721,7 @@ export default function WorkoutBuilderView() {
                   cursor: 'pointer'
                 }}
               >
-                Ajouter quand meme
+                {t('builder.override_confirm', { ns: 'workouts' })}
               </button>
             </div>
           </div>
@@ -736,6 +740,7 @@ function PickerExerciseRow({
   onClick: () => void
   alreadyAdded: boolean
 }) {
+  const { t } = useTranslation('workouts')
   const [hovered, setHovered] = useState(false)
   return (
     <button
@@ -806,7 +811,7 @@ function PickerExerciseRow({
             marginTop: '0.1rem'
           }}
         >
-          {MUSCLE_GROUP_LABELS[exercise.primary_muscle]}
+          {t(MUSCLE_GROUP_I18N_KEYS[exercise.primary_muscle], { ns: 'common' })}
         </p>
       </div>
 
@@ -820,7 +825,7 @@ function PickerExerciseRow({
           flexShrink: 0
         }}
       >
-        {alreadyAdded ? 'Ajoute' : '+ Voir'}
+        {alreadyAdded ? t('builder.already_added') : t('builder.view')}
       </span>
     </button>
   )
@@ -837,6 +842,7 @@ function WorkoutExerciseSlot({
   onRemove: () => void
   onUpdate: (config: Partial<Pick<WorkoutExercise, 'sets' | 'reps' | 'weight' | 'rest_seconds' | 'notes'>>) => void
 }) {
+  const { t } = useTranslation('workouts')
   const [expanded, setExpanded] = useState(false)
 
   const borderColor =
@@ -887,9 +893,9 @@ function WorkoutExerciseSlot({
               color: alert ? (alert.level === 'danger' ? '#ff4444' : '#f59e0b') : 'var(--muted)'
             }}
           >
-            {MUSCLE_GROUP_LABELS[we.exercise.primary_muscle]}
+            {t(MUSCLE_GROUP_I18N_KEYS[we.exercise.primary_muscle], { ns: 'common' })}
             {alert &&
-              ` · ⚠ ${alert.level === 'danger' ? 'Muscle surcharge' : 'Attention surcharge'}`}
+              ` · ⚠ ${alert.level === 'danger' ? t('alerts.risk_high') : t('alerts.risk_medium')}`}
           </p>
         </div>
 
@@ -897,7 +903,7 @@ function WorkoutExerciseSlot({
           type='text'
           value={we.reps ?? ''}
           onChange={(e) => onUpdate({ reps: e.target.value })}
-          placeholder='Reps'
+          placeholder={t('fields.reps')}
           style={{
             width: 52,
             background: 'var(--surface)',
@@ -910,14 +916,16 @@ function WorkoutExerciseSlot({
             outline: 'none'
           }}
         />
+
         <span style={{ color: 'var(--muted)', fontSize: '0.7rem' }}>×</span>
+
         <input
           type='number'
           value={we.sets ?? ''}
           onChange={(e) =>
             onUpdate({ sets: Number.parseInt(e.target.value, 10) || undefined })
           }
-          placeholder='Series'
+          placeholder={t('fields.sets')}
           min={1}
           style={{
             width: 44,
@@ -971,7 +979,7 @@ function WorkoutExerciseSlot({
           }}
         >
           <div>
-            <label style={smallLabelStyle}>Charge / Intensite</label>
+            <label style={smallLabelStyle}>{t('fields.weight_intensity')}</label>
             <input
               type='text'
               value={we.weight ?? ''}
@@ -981,7 +989,7 @@ function WorkoutExerciseSlot({
             />
           </div>
           <div>
-            <label style={smallLabelStyle}>Repos (secondes)</label>
+            <label style={smallLabelStyle}>{t('fields.rest')} (s)</label>
             <input
               type='number'
               value={we.rest_seconds ?? ''}
@@ -994,12 +1002,12 @@ function WorkoutExerciseSlot({
             />
           </div>
           <div style={{ gridColumn: '1 / -1' }}>
-            <label style={smallLabelStyle}>Notes</label>
+            <label style={smallLabelStyle}>{t('fields.notes')}</label>
             <input
               type='text'
               value={we.notes ?? ''}
               onChange={(e) => onUpdate({ notes: e.target.value })}
-              placeholder='Instructions specifiques...'
+              placeholder={t('fields.instructions')}
               style={miniInputStyle}
             />
           </div>
@@ -1010,6 +1018,7 @@ function WorkoutExerciseSlot({
 }
 
 function MuscleAlertBadge({ alert }: { alert: MuscleAlert }) {
+  const { t } = useTranslation('workouts')
   const isDanger = alert.level === 'danger'
   return (
     <div
@@ -1034,12 +1043,12 @@ function MuscleAlertBadge({ alert }: { alert: MuscleAlert }) {
           fontWeight: 700
         }}
       >
-        {MUSCLE_GROUP_LABELS[alert.muscle]}
+        {t(MUSCLE_GROUP_I18N_KEYS[alert.muscle], { ns: 'common' })}
       </span>
       <span style={{ color: 'var(--muted)', fontFamily: 'var(--font-b)' }}>
         {isDanger
-          ? `Muscle principal repete ${alert.count}x`
-          : `Muscle secondaire repete ${alert.count}x`}
+          ? t('alerts.primary_repeated', { count: alert.count })
+          : t('alerts.secondary_repeated', { count: alert.count })}
       </span>
     </div>
   )

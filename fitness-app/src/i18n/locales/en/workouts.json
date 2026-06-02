@@ -1,10 +1,48 @@
 {
   "title": "Workouts",
   "new": "New workout",
+  "loading": "Loading...",
+  "empty": "No workouts",
   "fields": {
     "name": "Session name",
     "theme": "Theme",
-    "exercises": "Exercises"
+    "exercises": "Exercises",
+    "notes": "Notes",
+    "instructions": "Instructions",
+    "method": "Method",
+    "duration": "Duration",
+    "duration_unit_min": "min",
+    "sets": "Sets",
+    "reps": "Reps",
+    "weight": "Weight",
+    "weight_intensity": "Weight / Intensity",
+    "rest": "Rest"
+  },
+  "builder": {
+    "library": "Library",
+    "choose_exercise": "Choose an exercise",
+    "search_placeholder": "Search...",
+    "filter_category": "Filter by category",
+    "filter_muscle": "Filter by muscle",
+    "clear_filters": "Clear filters",
+    "workout_section": "Workout",
+    "name_placeholder": "Session name...",
+    "empty_state": "Click an exercise to add it",
+    "notes_placeholder": "Notes, instructions for the group...",
+    "reset": "Reset",
+    "save": "Save session",
+    "saving": "Saving...",
+    "saved": "✓ Saved!",
+    "import_pdf": "Import PDF",
+    "pdf_loaded": "PDF loaded: {{name}}",
+    "already_added": "Added",
+    "view": "+ View",
+    "override_cancel": "Cancel",
+    "override_confirm": "Add anyway",
+    "cardio_sequence_message": "You just trained the {{previousZone}} with \"{{previousExercise}}\". To alternate zones, we recommend {{expectedCardio}}. Do you still want to add \"{{exercise}}\" even though this area was just trained?",
+    "rest48_warning_message": "48h alert: {{muscle}} was trained {{lastText}}. Recommended return starting {{recommendedText}} (about {{hoursRemaining}}h left).",
+    "recently": "recently",
+    "in_about_hours": "in about {{hours}}h"
   },
   "reminders": {
     "theme_inactive": "You haven't done a {{theme}} session in {{days}} days"
@@ -13,5 +51,19 @@
     "start": "Start session",
     "finish": "Finish session",
     "duration": "Duration: {{duration}}"
+  },
+  "alerts": {
+    "cardio_title": "Cardio alternation",
+    "rest48_title": "48h recovery alert",
+    "risk_high": "High risk of muscle overload",
+    "risk_medium": "Medium risk of muscle overload",
+    "risk_moderate": "Moderate risk of muscle overload",
+    "primary_repeated": "Primary muscle repeated {{count}}x",
+    "secondary_repeated": "Secondary muscle repeated {{count}}x"
+  },
+  "errors": {
+    "rule48_check_failed": "Unable to verify the 48h rule: {{message}}",
+    "workout_name_required": "Workout name is required",
+    "add_at_least_one_exercise": "Add at least one exercise"
   }
 }

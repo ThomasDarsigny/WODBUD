@@ -1,7 +1,12 @@
 {
   "title": "Exercices",
+  "all": "Tous",
   "add": "Ajouter un exercice",
   "search": "Rechercher un exercice",
+  "new": "Nouvel exercice",
+  "empty": "Aucun exercice",
+  "empty_filtered": "Aucun résultat",
+  "loading": "Chargement...",
   "fields": {
     "name": "Nom de l'exercice",
     "description": "Description",
@@ -9,7 +14,10 @@
     "category": "Catégorie",
     "primary_muscle": "Muscle principal",
     "secondary_muscles": "Muscles secondaires",
-    "body_region": "Zone corporelle"
+    "body_region": "Zone corporelle",
+    "notes": "Notes",
+    "weight_intensity": "Charge / Intensité",
+    "instructions": "Consignes"
   },
   "categories": {
     "strength": "Force",
@@ -26,5 +34,49 @@
     "muscle_secondary": "Muscle secondaire déjà utilisé",
     "rest_48h": "Ce muscle a été entraîné il y a moins de 48h",
     "cardio_conflict": "Conflit cardio — même zone corporelle que l'exercice précédent"
+  },
+  "form": {
+    "create_title": "Nouvel exercice",
+    "edit_title": "Modifier l'exercice",
+    "name_required": "Le nom est requis",
+    "name_placeholder": "Ex: Snatch, Thruster, Box Jump...",
+    "description_placeholder": "Points clés de technique, cues coaching...",
+    "video_dropzone": "Glisse une vidéo ou clique pour sélectionner",
+    "video_replace": "Clique pour remplacer la vidéo",
+    "video_requirements": "MP4, MOV, WebM - max 200 MB",
+    "video_required_error": "Fichier vidéo requis (MP4, MOV, WebM)",
+    "video_size_error": "Taille max : 200 MB",
+    "save_new": "Créer l'exercice",
+    "save_edit": "Mettre à jour",
+    "saving": "Enregistrement..."
+  },
+  "admin": {
+    "title": "Dashboard admin",
+    "backoffice": "Backoffice",
+    "subtitle": "Gérer les descriptions et vidéos de tous les exercices.",
+    "total": "Exercices total",
+    "with_video": "Avec vidéo",
+    "with_description": "Avec description",
+    "to_complete": "À compléter",
+    "search_placeholder": "Rechercher nom, muscle, description...",
+    "missing_description": "Description manquante",
+    "missing_video": "Vidéo manquante",
+    "description_ok": "Description OK",
+    "video_ok": "Vidéo OK",
+    "complete": "Compléter",
+    "view": "Voir",
+    "empty": "Aucun exercice trouvé."
+  },
+  "detail": {
+    "no_video": "Aucune vidéo disponible",
+    "muscles_targeted": "Muscles sollicités",
+    "tech_instructions": "Consignes techniques",
+    "add_to_workout": "Ajouter à l'entraînement",
+    "delete_confirm": "Supprimer \"{{name}}\" ? Cette action est irréversible."
+  },
+  "errors": {
+    "auth_session_missing_exercise": "Session manquante : reconnecte-toi pour créer ou modifier un exercice.",
+    "invalid_session_reconnect": "Session invalide : reconnecte-toi pour créer un exercice.",
+    "primary_muscle_not_found": "Muscle principal introuvable : {{muscle}}"
   }
 }

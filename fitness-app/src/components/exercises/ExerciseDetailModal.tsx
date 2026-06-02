@@ -1,6 +1,7 @@
 import type { CSSProperties } from 'react'
+import { useTranslation } from 'react-i18next'
 import type { Exercise } from '../../types'
-import { CATEGORY_LABELS, MUSCLE_GROUP_LABELS } from '../../types'
+import { CATEGORY_I18N_KEYS, MUSCLE_GROUP_I18N_KEYS } from '../../types'
 
 interface Props {
   exercise: Exercise
@@ -19,6 +20,8 @@ export default function ExerciseDetailModal({
   onDelete,
   inWorkoutBuilder = false
 }: Props) {
+  const { t } = useTranslation(['exercises', 'common'])
+
   return (
     <div
       style={{
@@ -66,7 +69,7 @@ export default function ExerciseDetailModal({
                 marginBottom: '0.35rem'
               }}
             >
-              {CATEGORY_LABELS[exercise.category]}
+              {t(CATEGORY_I18N_KEYS[exercise.category], { ns: 'common' })}
             </div>
             <h2
               style={{
@@ -126,7 +129,7 @@ export default function ExerciseDetailModal({
                 color: 'var(--muted)'
               }}
             >
-              Aucune video disponible
+              {t('detail.no_video', { ns: 'exercises' })}
             </p>
           </div>
         )}
@@ -140,7 +143,7 @@ export default function ExerciseDetailModal({
           }}
         >
           <div>
-            <p style={labelStyle}>Muscles sollicites</p>
+            <p style={labelStyle}>{t('detail.muscles_targeted', { ns: 'exercises' })}</p>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', marginTop: '0.4rem' }}>
               <span
                 style={{
@@ -150,14 +153,14 @@ export default function ExerciseDetailModal({
                   border: '1px solid rgba(255,77,0,0.35)'
                 }}
               >
-                ● {MUSCLE_GROUP_LABELS[exercise.primary_muscle]}
+                ● {t(MUSCLE_GROUP_I18N_KEYS[exercise.primary_muscle], { ns: 'common' })}
               </span>
               {exercise.secondary_muscles.map((m) => (
                 <span
                   key={m}
                   style={{ ...tagStyle, color: 'var(--muted)', border: '1px solid var(--border)' }}
                 >
-                  {MUSCLE_GROUP_LABELS[m]}
+                  {t(MUSCLE_GROUP_I18N_KEYS[m], { ns: 'common' })}
                 </span>
               ))}
             </div>
@@ -165,7 +168,7 @@ export default function ExerciseDetailModal({
 
           {exercise.description && (
             <div>
-              <p style={labelStyle}>Consignes techniques</p>
+              <p style={labelStyle}>{t('detail.tech_instructions', { ns: 'exercises' })}</p>
               <p
                 style={{
                   fontSize: '0.92rem',
@@ -196,7 +199,7 @@ export default function ExerciseDetailModal({
                 }}
                 style={{ ...btnStyle, background: 'var(--orange)', color: 'var(--black)', flex: 1 }}
               >
-                + Ajouter a l'entrainement
+                + {t('detail.add_to_workout', { ns: 'exercises' })}
               </button>
             )}
             {!inWorkoutBuilder && (
@@ -214,7 +217,7 @@ export default function ExerciseDetailModal({
                       background: 'transparent'
                     }}
                   >
-                    Modifier
+                    {t('actions.edit', { ns: 'common' })}
                   </button>
                 )}
                 {onDelete && (
@@ -222,7 +225,7 @@ export default function ExerciseDetailModal({
                     onClick={() => {
                       if (
                         window.confirm(
-                          `Supprimer "${exercise.name}" ? Cette action est irreversible.`
+                          t('detail.delete_confirm', { ns: 'exercises', name: exercise.name })
                         )
                       ) {
                         onDelete(exercise)
@@ -236,7 +239,7 @@ export default function ExerciseDetailModal({
                       background: 'transparent'
                     }}
                   >
-                    Supprimer
+                    {t('actions.delete', { ns: 'common' })}
                   </button>
                 )}
               </>

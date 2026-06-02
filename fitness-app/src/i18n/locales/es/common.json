@@ -4,7 +4,10 @@
     "exercises": "Ejercicios",
     "workouts": "Entrenamientos",
     "history": "Historial",
-    "settings": "Configuración"
+    "settings": "Configuración",
+    "admin": "Panel de administración",
+    "ai": "Asistente IA",
+    "vote": "Crear una votación"
   },
   "actions": {
     "save": "Guardar",
@@ -13,7 +16,12 @@
     "edit": "Editar",
     "add": "Agregar",
     "confirm": "Confirmar",
-    "back": "Atrás"
+    "back": "Atrás",
+    "close": "Cerrar",
+    "view": "Ver",
+    "reset": "Restablecer",
+    "complete": "Completar",
+    "logout": "Cerrar sesión"
   },
   "language": {
     "label": "Idioma",
@@ -21,8 +29,335 @@
     "en": "English",
     "es": "Español"
   },
+  "auth": {
+    "login": "Iniciar sesión",
+    "signup": "Registrarse",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "forgot_password": "Olvidé mi contraseña",
+    "no_account": "¿No tienes cuenta?",
+    "have_account": "¿Ya tienes cuenta?"
+  },
+  "auth_ui": {
+    "login_subtitle": "Inicia sesión con tu correo o con Google.",
+    "login_loading": "Iniciando sesión...",
+    "login_submit": "Iniciar sesión",
+    "google_redirect": "Redirigiendo a Google...",
+    "continue_google": "Continuar con Google",
+    "create_account": "Crear cuenta",
+    "back_home": "Volver al inicio",
+    "password_mismatch": "Las contraseñas no coinciden.",
+    "signup_success": "Cuenta creada. Revisa tu correo para confirmar el registro si es necesario.",
+    "signup_subtitle": "Crea tu cuenta con correo o Google.",
+    "confirm_password": "Confirmar contraseña",
+    "signup_loading": "Creando cuenta...",
+    "signup_submit": "Crear mi cuenta",
+    "have_account_action": "Ya tengo una cuenta"
+  },
+  "landing": {
+    "nav": {
+      "features": "Funcionalidades",
+      "how": "Cómo funciona",
+      "demo": "Demo",
+      "dashboard": "Dashboard",
+      "access_dashboard": "Acceder al dashboard"
+    },
+    "hero": {
+      "tag": "Para entrenadores fitness",
+      "title_line1": "Lanza tu programación",
+      "title_em": "gratis durante 30 días.",
+      "subtitle": "Construye tus entrenamientos de grupo en minutos. Biblioteca de ejercicios, métodos de programación, videos y sugerencias de IA - todo en un solo lugar, sin tarjeta de crédito.",
+      "open_dashboard": "Abrir dashboard coach",
+      "watch_demo": "Ver una demo",
+      "no_card": "Sin tarjeta de crédito"
+    },
+    "ticker": [
+      "Biblioteca de ejercicios",
+      "Programación de grupo",
+      "Métodos AMRAP · EMOM · For Time",
+      "Sugerencias de IA",
+      "Exportación PDF",
+      "Videos de ejercicios",
+      "Reglas de entrenamiento",
+      "CrossFit · Halterofilia · Gymnastics"
+    ],
+    "problem": {
+      "without_label": "El problema actual",
+      "without_title": "Sin ForgeX",
+      "without_items": [
+        "Hojas de cálculo dispersas y difíciles de mantener",
+        "Sin referencia visual para ejercicios técnicos",
+        "Programación lenta y repetitiva",
+        "Sin coherencia en los métodos de entrenamiento",
+        "Exportar y compartir el programa es un dolor",
+        "Reinventar la rueda en cada ciclo"
+      ],
+      "with_label": "Con la plataforma",
+      "with_title": "Con ForgeX",
+      "with_items": [
+        "Todo centralizado en una sola interfaz",
+        "Videos vinculados directamente a cada ejercicio",
+        "La IA sugiere entrenamientos adaptados",
+        "Métodos estructurados (AMRAP, EMOM, Rounds...)",
+        "PDF profesional generado en un clic",
+        "Biblioteca reutilizable de una sesión a otra"
+      ]
+    },
+    "features_tag": "Funcionalidades",
+    "features_title_line1": "Todo lo que un",
+    "features_title_line2": "coach CrossFit necesita",
+    "features": [
+      {
+        "icon": "📚",
+        "title": "Biblioteca de ejercicios",
+        "desc": "Una gran base de datos de ejercicios por categoría - halterofilia, gymnastics, cardio, fuerza. Cada movimiento está vinculado a un video de referencia."
+      },
+      {
+        "icon": "⚙️",
+        "title": "Constructor de sesiones",
+        "desc": "Elige tus ejercicios, aplica un método de entrenamiento (AMRAP, EMOM, For Time, Rounds...) y configura las reglas de la sesión en pocos clics."
+      },
+      {
+        "icon": "🤖",
+        "title": "Sugerencias IA",
+        "desc": "La IA analiza tu programación y propone variaciones, progresiones o combinaciones de ejercicios coherentes con tus objetivos.",
+        "badge": "Impulsado por la API de Anthropic"
+      },
+      {
+        "icon": "🎥",
+        "title": "Videos de referencia",
+        "desc": "Asocia un video a cada ejercicio de tu biblioteca. Tus atletas ven exactamente la técnica esperada antes de cada WOD."
+      },
+      {
+        "icon": "📄",
+        "title": "Exportación PDF",
+        "desc": "Genera una ficha de entrenamiento profesional en un clic. Ideal para mostrarla en box o compartirla con tu grupo."
+      },
+      {
+        "icon": "📱",
+        "title": "PWA mobile-first",
+        "desc": "Instala la app directamente en tu teléfono. Acceso rápido en el box, incluso sin conexión estable."
+      }
+    ],
+    "workflow_tag": "Flujo de trabajo",
+    "workflow_title": "Cómo funciona",
+    "steps": [
+      {
+        "num": "01",
+        "title": "Construye tu biblioteca",
+        "desc": "Agrega ejercicios con descripciones, grupos musculares y videos de referencia. Reutilizable para siempre."
+      },
+      {
+        "num": "02",
+        "title": "Crea tu entrenamiento",
+        "desc": "Selecciona ejercicios, elige un método (AMRAP, EMOM...) y configura las reglas de la sesión."
+      },
+      {
+        "num": "03",
+        "title": "Ajusta con IA",
+        "desc": "Pide sugerencias a la IA para variar, progresar o equilibrar la carga de tu programa."
+      },
+      {
+        "num": "04",
+        "title": "Exporta y comparte",
+        "desc": "Genera el PDF y comparte la sesión con tu grupo. Muéstralo en tu box o envíalo directamente."
+      }
+    ],
+    "demo": {
+      "tag": "Demo ForgeX",
+      "title_line1": "Reserva una demo",
+      "title_line2": "de la plataforma",
+      "subtitle": "Descubre cómo ForgeX acelera la creación de WODs, estructura tus ciclos y facilita compartir con tus atletas. Te mostramos casos concretos adaptados a tu contexto.",
+      "book": "Reservar una demo",
+      "view_features": "Ver funcionalidades",
+      "perks_label": "Ventajas de la demo",
+      "perks": [
+        "Sesión personalizada para tu box",
+        "Preguntas respondidas en directo",
+        "Casos reales de programación",
+        "Plan de arranque rápido",
+        "Vista previa de la roadmap del producto"
+      ]
+    },
+    "footer": {
+      "copy": "© 2026 ForgeX - Plataforma en desarrollo activo",
+      "privacy": "Privacidad",
+      "contact": "Contacto",
+      "links_label": "Enlaces del pie"
+    }
+  },
+  "labels": {
+    "categories": {
+      "strength": "Fuerza",
+      "olympic": "Halterofilia",
+      "gymnastics": "Gimnasia",
+      "cardio": "Cardio",
+      "mobility": "Movilidad",
+      "accessory": "Accesorio"
+    },
+    "muscles": {
+      "chest": "Pectorales",
+      "back": "Espalda",
+      "shoulders": "Hombros",
+      "biceps": "Bíceps",
+      "triceps": "Tríceps",
+      "forearms": "Antebrazos",
+      "core": "Core",
+      "glutes": "Glúteos",
+      "quads": "Cuádriceps",
+      "hamstrings": "Isquiotibiales",
+      "calves": "Pantorrillas",
+      "cardio_upper": "Cardio - Tren superior",
+      "cardio_lower": "Cardio - Tren inferior"
+    },
+    "methods": {
+      "amrap": "AMRAP",
+      "emom": "EMOM",
+      "for_time": "For Time",
+      "rounds": "Rondas",
+      "strength": "Fuerza / Carga",
+      "tabata": "Tabata",
+      "custom": "Personalizado"
+    },
+    "zones": {
+      "upper": "tren superior",
+      "lower": "tren inferior"
+    }
+  },
+  "status": {
+    "loading": "Cargando...",
+    "soon": "Próximamente",
+    "no_results": "Sin resultados",
+    "session_check": "Verificando sesión...",
+    "redirect": "Redirigiendo..."
+  },
   "errors": {
     "generic": "Ocurrió un error",
     "network": "Problema de conexión"
+  },
+  "landing": {
+    "nav": {
+      "features": "Funciones",
+      "how": "Cómo funciona",
+      "demo": "Demo",
+      "dashboard": "Panel",
+      "access_dashboard": "Acceder"
+    },
+    "hero": {
+      "tag": "Plataforma CrossFit Pro",
+      "title_line1": "Entrena a tus atletas",
+      "title_em": "Sin Límites",
+      "subtitle": "La plataforma todo en uno para entrenadores de CrossFit. Crea tus WODs, sigue el progreso de tus atletas y gestiona tu box en unos clics.",
+      "open_dashboard": "Abrir panel",
+      "watch_demo": "Ver demo",
+      "no_card": "Gratis — sin tarjeta requerida"
+    },
+    "hero_stats": {
+      "athletes_label": "Atletas activos",
+      "workouts_label": "WODs creados",
+      "coaches_label": "Entrenadores certificados"
+    },
+    "ticker": ["WOD Builder", "Seguimiento de rendimiento", "Gestión de atletas", "Programación semanal", "Historial completo", "Multi-box"],
+    "problem": {
+      "without_label": "Sin ForgeX",
+      "without_title": "Caos y tiempo perdido",
+      "without_items": [
+        "WODs escritos en papel o en Excel",
+        "Seguimiento de progreso imposible de gestionar",
+        "Comunicación dispersa con los atletas",
+        "Sin visibilidad del rendimiento"
+      ],
+      "with_label": "Con ForgeX",
+      "with_title": "Todo centralizado, todo bajo control",
+      "with_items": [
+        "WODs creados en 2 minutos, compartidos al instante",
+        "Seguimiento automático de PRs y progreso",
+        "Comunicación directa en la app",
+        "Paneles en tiempo real"
+      ]
+    },
+    "features_tag": "Funciones",
+    "features_title_line1": "Todo lo que un entrenador",
+    "features_title_line2": "de CrossFit necesita",
+    "features": [
+      {
+        "icon": "⚡",
+        "title": "WOD Builder",
+        "desc": "Crea entrenamientos en segundos con nuestra interfaz intuitiva. Arrastra y suelta ejercicios y genera tu WOD del día.",
+        "badge": "Popular"
+      },
+      {
+        "icon": "📊",
+        "title": "Seguimiento del rendimiento",
+        "desc": "Visualiza el progreso de cada atleta en una línea de tiempo. Detecta mesetas, celebra los PRs."
+      },
+      {
+        "icon": "🏋️",
+        "title": "Biblioteca de ejercicios",
+        "desc": "Accede a más de 500 ejercicios de CrossFit con descripciones y videos. Crea tus propios movimientos personalizados."
+      },
+      {
+        "icon": "📅",
+        "title": "Programación",
+        "desc": "Planifica tus ciclos de entrenamiento en 4, 8 o 12 semanas. Equilibra movimientos e intensidades automáticamente."
+      },
+      {
+        "icon": "👥",
+        "title": "Gestión multi-box",
+        "desc": "Gestiona varios boxes desde un solo panel. Asigna entrenadores, controla asistencia, gestiona suscripciones."
+      },
+      {
+        "icon": "🔥",
+        "title": "Análisis avanzado",
+        "desc": "Informes detallados sobre asistencia, rendimiento y progreso. Exporta tus datos a CSV.",
+        "badge": "Nuevo"
+      }
+    ],
+    "workflow_tag": "Cómo funciona",
+    "workflow_title": "Listo en 4 pasos simples",
+    "steps": [
+      {
+        "num": "01",
+        "title": "Crea tu box",
+        "desc": "Configura tu box en minutos. Importa atletas vía CSV o invítalos por email."
+      },
+      {
+        "num": "02",
+        "title": "Construye tus WODs",
+        "desc": "Usa nuestra biblioteca o crea tus propios ejercicios. El WOD builder genera automáticamente el formato."
+      },
+      {
+        "num": "03",
+        "title": "Comparte y entrena",
+        "desc": "Publica tus WODs con un clic. Los atletas reciben una notificación y ven el programa desde su teléfono."
+      },
+      {
+        "num": "04",
+        "title": "Sigue el progreso",
+        "desc": "Analiza el rendimiento en tiempo real. Cada atleta registra sus puntuaciones, tú lo visualizas todo."
+      }
+    ],
+    "demo": {
+      "tag": "Acceso anticipado",
+      "title_line1": "Únete a los entrenadores",
+      "title_line2": "que entrenan mejor",
+      "subtitle": "ForgeX está en acceso anticipado. Reserva una demo gratuita de 30 minutos y descubre cómo transformar la gestión de tu box.",
+      "book": "Reservar una demo",
+      "view_features": "Ver funciones",
+      "perks_label": "Ventajas incluidas",
+      "perks": [
+        "Demo personalizada 1 a 1",
+        "Configuración asistida",
+        "3 meses gratis al inicio",
+        "Soporte prioritario",
+        "Acceso a nuevas funciones"
+      ]
+    },
+    "footer": {
+      "copy": "© 2025 ForgeX. Todos los derechos reservados.",
+      "links_label": "Enlaces legales",
+      "privacy": "Privacidad",
+      "contact": "Contacto"
+    }
   }
 }

@@ -1,8 +1,10 @@
 import { FormEvent, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { supabase } from '../lib/supabase'
 
 export default function LoginPage() {
+  const { t } = useTranslation('common')
   const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -60,9 +62,9 @@ export default function LoginPage() {
   return (
     <main style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', background: '#0a0a0a', color: '#f0ebe4', padding: '2rem' }}>
       <section style={{ width: '100%', maxWidth: 560, border: '1px solid #252525', background: '#111111', padding: '2rem' }}>
-        <h1 style={{ marginTop: 0, marginBottom: '0.75rem' }}>Connexion</h1>
+        <h1 style={{ marginTop: 0, marginBottom: '0.75rem' }}>{t('auth.login')}</h1>
         <p style={{ marginTop: 0, color: '#9f9890' }}>
-          Connecte-toi avec ton email ou ton compte Google.
+          {t('auth_ui.login_subtitle')}
         </p>
 
         {error && (
@@ -73,7 +75,7 @@ export default function LoginPage() {
 
         <form onSubmit={handleEmailLogin} style={{ display: 'grid', gap: '0.9rem', marginTop: '1rem' }}>
           <label style={{ display: 'grid', gap: '0.4rem' }}>
-            <span>Email</span>
+            <span>{t('auth.email')}</span>
             <input
               type="email"
               required
@@ -85,7 +87,7 @@ export default function LoginPage() {
           </label>
 
           <label style={{ display: 'grid', gap: '0.4rem' }}>
-            <span>Mot de passe</span>
+            <span>{t('auth.password')}</span>
             <input
               type="password"
               required
@@ -101,7 +103,7 @@ export default function LoginPage() {
             disabled={isSubmitting || isGoogleLoading}
             style={{ border: 'none', padding: '0.78rem 0.9rem', background: '#ff4d00', color: '#100d0b', fontWeight: 700, cursor: 'pointer' }}
           >
-            {isSubmitting ? 'Connexion en cours...' : 'Se connecter'}
+            {isSubmitting ? t('auth_ui.login_loading') : t('auth_ui.login_submit')}
           </button>
         </form>
 
@@ -113,16 +115,16 @@ export default function LoginPage() {
             disabled={isSubmitting || isGoogleLoading}
             style={{ border: '1px solid #3a3a3a', padding: '0.75rem 0.9rem', background: '#191919', color: '#f0ebe4', cursor: 'pointer' }}
           >
-            {isGoogleLoading ? 'Redirection vers Google...' : 'Continuer avec Google'}
+            {isGoogleLoading ? t('auth_ui.google_redirect') : t('auth_ui.continue_google')}
           </button>
         </div>
 
         <div style={{ marginTop: '1.25rem', display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
           <Link to="/signup" style={{ color: '#ff4d00', textDecoration: 'none' }}>
-            Creer un compte
+            {t('auth_ui.create_account')}
           </Link>
           <Link to="/" style={{ color: '#ff4d00', textDecoration: 'none' }}>
-            Retour a l'accueil
+            {t('auth_ui.back_home')}
           </Link>
         </div>
       </section>

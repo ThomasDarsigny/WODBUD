@@ -1,13 +1,15 @@
 import { useState, useEffect, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useExerciseStore } from '../../stores/exerciseStore'
 import type { Exercise, ExerciseCategory } from '../../types'
-import { CATEGORY_LABELS, MUSCLE_GROUP_LABELS } from '../../types'
+import { CATEGORY_I18N_KEYS, MUSCLE_GROUP_I18N_KEYS } from '../../types'
 import ExerciseFormModal from '../exercises/ExerciseFormModal'
 import ExerciseDetailModal from '../exercises/ExerciseDetailModal'
 
 type FilterCategory = ExerciseCategory | 'all'
 
 export default function ExercisesView() {
+  const { t } = useTranslation(['exercises', 'common'])
   const { exercises, loading, fetchExercises, deleteExercise } = useExerciseStore()
 
   const [search, setSearch] = useState('')
@@ -26,11 +28,11 @@ export default function ExercisesView() {
       const matchSearch =
         e.name.toLowerCase().includes(q) ||
         e.description.toLowerCase().includes(q) ||
-        MUSCLE_GROUP_LABELS[e.primary_muscle].toLowerCase().includes(q)
+        t(MUSCLE_GROUP_I18N_KEYS[e.primary_muscle], { ns: 'common' }).toLowerCase().includes(q)
       const matchCat = categoryFilter === 'all' || e.category === categoryFilter
       return matchSearch && matchCat
     })
-  }, [exercises, search, categoryFilter])
+  }, [exercises, search, categoryFilter, t])
 
   function handleEdit(exercise: Exercise) {
     setEditingExercise(exercise)
@@ -43,7 +45,7 @@ export default function ExercisesView() {
 
   const categories: FilterCategory[] = [
     'all',
-    ...(Object.keys(CATEGORY_LABELS) as ExerciseCategory[])
+    ...(Object.keys(CATEGORY_I18N_KEYS) as ExerciseCategory[])
   ]
 
   return (
@@ -69,7 +71,7 @@ export default function ExercisesView() {
               marginBottom: '0.4rem'
             }}
           >
-            Bibliotheque
+            {t('builder.library', { ns: 'workouts' })}
           </p>
           <h1
             style={{
@@ -81,7 +83,7 @@ export default function ExercisesView() {
               letterSpacing: '0.02em'
             }}
           >
-            Exercices
+            {t('title', { ns: 'exercises' })}
             <span
               style={{
                 fontFamily: 'var(--font-d)',
@@ -113,7 +115,7 @@ export default function ExercisesView() {
             cursor: 'pointer'
           }}
         >
-          + Nouvel exercice
+          + {t('new', { ns: 'exercises' })}
         </button>
       </div>
 
@@ -142,7 +144,7 @@ export default function ExercisesView() {
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder='Rechercher un exercice ou muscle...'
+            placeholder={t('search', { ns: 'exercises' })}
             style={{
               width: '100%',
               background: 'var(--dark)',
@@ -174,7 +176,7 @@ export default function ExercisesView() {
                 transition: 'all 0.15s'
               }}
             >
-              {cat === 'all' ? 'Tous' : CATEGORY_LABELS[cat]}
+              {cat === 'all' ? t('all', { ns: 'exercises' }) : t(CATEGORY_I18N_KEYS[cat], { ns: 'common' })}
             </button>
           ))}
         </div>
@@ -193,7 +195,7 @@ export default function ExercisesView() {
             textTransform: 'uppercase'
           }}
         >
-          Chargement...
+          {t('loading', { ns: 'exercises' })}
         </div>
       ) : filtered.length === 0 ? (
         <div style={{ textAlign: 'center', padding: '4rem 2rem', color: 'var(--muted)' }}>
@@ -207,8 +209,8 @@ export default function ExercisesView() {
             }}
           >
             {search || categoryFilter !== 'all'
-              ? 'Aucun resultat'
-              : 'Aucun exercice - cree le premier !'}
+              ? t('empty_filtered', { ns: 'exercises' })
+              : t('empty', { ns: 'exercises' })}
           </p>
         </div>
       ) : (
@@ -253,6 +255,7 @@ export default function ExercisesView() {
 }
 
 function ExerciseCard({ exercise, onClick }: { exercise: Exercise; onClick: () => void }) {
+  const { t } = useTranslation(['common'])
   const [hovered, setHovered] = useState(false)
 
   return (
@@ -322,7 +325,7 @@ function ExerciseCard({ exercise, onClick }: { exercise: Exercise; onClick: () =
           color: 'var(--orange)'
         }}
       >
-        {CATEGORY_LABELS[exercise.category]}
+        {t(CATEGORY_I18N_KEYS[exercise.category], { ns: 'common' })}
       </span>
 
       <h3
@@ -352,7 +355,7 @@ function ExerciseCard({ exercise, onClick }: { exercise: Exercise; onClick: () =
             padding: '0.15rem 0.5rem'
           }}
         >
-          {MUSCLE_GROUP_LABELS[exercise.primary_muscle]}
+          {t(MUSCLE_GROUP_I18N_KEYS[exercise.primary_muscle], { ns: 'common' })}
         </span>
         {exercise.secondary_muscles.slice(0, 2).map((m) => (
           <span
@@ -367,7 +370,7 @@ function ExerciseCard({ exercise, onClick }: { exercise: Exercise; onClick: () =
               padding: '0.15rem 0.4rem'
             }}
           >
-            {MUSCLE_GROUP_LABELS[m]}
+            {t(MUSCLE_GROUP_I18N_KEYS[m], { ns: 'common' })}
           </span>
         ))}
         {exercise.secondary_muscles.length > 2 && (
