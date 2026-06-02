@@ -27,6 +27,7 @@ const NAV_ITEMS: NavItem[] = [
     icon: '⚡',
     path: '/dashboard/workout'
   },
+  { id: 'classes', labelKey: 'nav.classes', icon: '📋', path: '/dashboard/classes' },
   {
     id: 'ai',
     labelKey: 'nav.ai',
@@ -84,7 +85,7 @@ export default function DashboardLayout({ children }: Props) {
   const navItems = useMemo(() => {
     return NAV_ITEMS.filter((item) => {
       if (item.id === 'admin') return isAdmin
-      if (item.id === 'ai' || item.id === 'vote') return !isAdmin
+      if (item.id === 'ai' || item.id === 'vote' || item.id === 'classes') return !isAdmin
       return true
     })
   }, [isAdmin])

@@ -177,3 +177,39 @@ export interface RestAlert {
   lastWorkoutDate: string
   hoursRemaining: number
 }
+
+// ─── Classes ──────────────────────────────────────────────────────────────────
+export interface Class {
+  id: string
+  name: string
+  description: string | null
+  schedule: string | null
+  coach_id: string
+  invite_token: string
+  created_at: string
+}
+
+export type ClassInsert = Pick<Class, 'name' | 'description' | 'schedule'>
+
+export interface ClassMember {
+  class_id: string
+  athlete_id: string
+  joined_at: string
+  profile?: { full_name: string | null }
+}
+
+// ─── Vote Sessions ────────────────────────────────────────────────────────────
+export type VoteSessionStatus = 'open' | 'closed'
+
+export interface VoteSession {
+  id: string
+  class_id: string
+  coach_id: string
+  title: string
+  exercise_options: string[]
+  status: VoteSessionStatus
+  deadline: string | null
+  created_at: string
+}
+
+export type VoteSessionInsert = Pick<VoteSession, 'class_id' | 'title' | 'exercise_options' | 'deadline'>

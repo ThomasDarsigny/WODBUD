@@ -10,6 +10,11 @@ import AdminDashboardView from './components/dashboard/AdminDashboardView'
 import ExercisesView from './components/dashboard/ExercisesView'
 import WorkoutBuilderView from './components/dashboard/WorkoutBuilderView'
 import VoteView from './components/dashboard/VoteView'
+import ClassesView from './components/dashboard/ClassesView'
+import AthleteDashboardLayout from './components/athlete/AthleteDashboardLayout'
+import AthleteHomeView from './components/athlete/AthleteHomeView'
+import AthleteVoteView from './components/athlete/AthleteVoteView'
+import JoinClassPage from './pages/JoinClassPage'
 import { supabase } from './lib/supabase'
 import { clearAuthSessionCookies, syncAuthSessionCookies } from './lib/authSessionCookies'
 import { isCurrentUserAdmin } from './lib/access'
@@ -263,6 +268,40 @@ function App() {
               <DashboardLayout>
                 <VoteView />
               </DashboardLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/dashboard/classes"
+          element={
+            <ProtectedRoute>
+              <DashboardLayout>
+                <ClassesView />
+              </DashboardLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route path="/join/:token" element={<JoinClassPage />} />
+
+        <Route
+          path="/athlete"
+          element={
+            <ProtectedRoute>
+              <AthleteDashboardLayout>
+                <AthleteHomeView />
+              </AthleteDashboardLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/athlete/vote/:sessionId"
+          element={
+            <ProtectedRoute>
+              <AthleteDashboardLayout>
+                <AthleteVoteView />
+              </AthleteDashboardLayout>
             </ProtectedRoute>
           }
         />
