@@ -4,6 +4,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { supabase } from '../../lib/supabase'
 import { clearAuthSessionCookies } from '../../lib/authSessionCookies'
 import { isCurrentUserAdmin } from '../../lib/access'
+import { useOnlineStatus } from '../../hooks/useOnlineStatus'
 
 type NavItem = {
   id: string
@@ -50,6 +51,7 @@ export default function DashboardLayout({ children }: Props) {
   const navigate = useNavigate()
   const [collapsed, setCollapsed] = useState(false)
   const [isAdmin, setIsAdmin] = useState(false)
+  const online = useOnlineStatus()
 
   useEffect(() => {
     let mounted = true
@@ -301,7 +303,30 @@ export default function DashboardLayout({ children }: Props) {
         </div>
       </aside>
 
-      <main style={{ flex: 1, overflow: 'auto', minWidth: 0 }}>{children}</main>
+      <main style={{ flex: 1, overflow: 'auto', minWidth: 0, display: 'flex', flexDirection: 'column' }}>
+        {!online && (
+          <div
+            style={{
+              background: 'rgba(255,77,0,0.12)',
+              borderBottom: '1px solid rgba(255,77,0,0.3)',
+              padding: '0.5rem 1.5rem',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              fontFamily: 'var(--font-d)',
+              fontSize: '0.78rem',
+              letterSpacing: '0.1em',
+              textTransform: 'uppercase',
+              color: 'var(--orange)',
+              flexShrink: 0
+            }}
+          >
+            <span style={{ fontSize: '0.9rem' }}>◌</span>
+            Mode hors-ligne — donnees en cache
+          </div>
+        )}
+        <div style={{ flex: 1, overflow: 'auto' }}>{children}</div>
+      </main>
     </div>
   )
 }

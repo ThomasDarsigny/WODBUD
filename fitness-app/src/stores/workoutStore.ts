@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { v4 as uuid } from 'uuid'
 import { supabase } from '../lib/supabase'
+import { saveToCache, loadFromCache } from '../lib/offlineCache'
 import { computeMuscleAlerts } from '../lib/muscleAlerts'
 import type {
   Exercise,
@@ -178,6 +179,7 @@ interface WorkoutBuilderState {
   savedWorkouts: Workout[]
   loadingSave: boolean
   error: string | null
+  workoutsFromCache: boolean
   setName: (name: string) => void
   setMethod: (method: WorkoutMethod) => void
   setDuration: (min: number | undefined) => void
@@ -223,6 +225,7 @@ export const useWorkoutStore = create<WorkoutBuilderState>((set, get) => ({
   savedWorkouts: [],
   loadingSave: false,
   error: null,
+  workoutsFromCache: false,
 
   setName: (name) => set({ name }),
   setMethod: (method) => set({ method }),
@@ -353,11 +356,11 @@ export const useWorkoutStore = create<WorkoutBuilderState>((set, get) => ({
         created_at: workoutRow.created_at
       }
 
-      set((s) => ({
-        savedWorkouts: [saved, ...s.savedWorkouts],
-        loadingSave: false,
-        ...DEFAULT_DRAFT
-      }))
+      set((s) => {
+        const updated = [saved, ...s.savedWorkouts]
+        saveToCache('workouts', updated)
+        return { savedWorkouts: updated, loadingSave: false, ...DEFAULT_DRAFT }
+      })
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Erreur inconnue'
       set({ error: message, loadingSave: false })
@@ -385,9 +388,15 @@ export const useWorkoutStore = create<WorkoutBuilderState>((set, get) => ({
         created_at: w.created_at
       }))
 
-      set({ savedWorkouts: lightweight })
+      saveToCache('workouts', lightweight)
+      set({ savedWorkouts: lightweight, workoutsFromCache: false })
     } catch (err: unknown) {
-      set({ error: err instanceof Error ? err.message : 'Erreur inconnue' })
+      const cached = loadFromCache('workouts')
+      if (cached && cached.length > 0) {
+        set({ savedWorkouts: cached, workoutsFromCache: true })
+      } else {
+        set({ error: err instanceof Error ? err.message : 'Erreur inconnue', workoutsFromCache: false })
+      }
     }
   }
 }))

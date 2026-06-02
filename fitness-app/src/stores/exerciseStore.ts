@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { supabase } from '../lib/supabase'
 import { uploadVideoToR2 } from '../lib/r2'
+import { saveToCache, loadFromCache } from '../lib/offlineCache'
 import type { Exercise, ExerciseInsert, ExerciseUpdate, MuscleGroup } from '../types'
 import { LOWER_MUSCLES, UPPER_MUSCLES } from '../types'
 
@@ -30,6 +31,7 @@ interface ExerciseState {
   exercises: Exercise[]
   loading: boolean
   error: string | null
+  isFromCache: boolean
   fetchExercises: () => Promise<void>
   createExercise: (data: ExerciseInsert, videoFile?: File) => Promise<Exercise>
   updateExercise: (id: string, data: ExerciseUpdate, videoFile?: File) => Promise<void>
@@ -120,6 +122,7 @@ export const useExerciseStore = create<ExerciseState>((set, get) => ({
   exercises: [],
   loading: false,
   error: null,
+  isFromCache: false,
 
   fetchExercises: async () => {
     set({ loading: true, error: null })
@@ -158,9 +161,15 @@ export const useExerciseStore = create<ExerciseState>((set, get) => ({
         updated_at: row.updated_at
       }))
 
-      set({ exercises, loading: false })
+      saveToCache('exercises', exercises)
+      set({ exercises, loading: false, isFromCache: false })
     } catch (err: unknown) {
-      set({ error: extractErrorMessage(err), loading: false })
+      const cached = loadFromCache('exercises')
+      if (cached && cached.length > 0) {
+        set({ exercises: cached, loading: false, error: null, isFromCache: true })
+      } else {
+        set({ error: extractErrorMessage(err), loading: false, isFromCache: false })
+      }
     }
   },
 
@@ -222,10 +231,11 @@ export const useExerciseStore = create<ExerciseState>((set, get) => ({
         updated_at: row.updated_at
       }
 
-      set((s) => ({
-        exercises: [...s.exercises, exercise].sort((a, b) => a.name.localeCompare(b.name)),
-        loading: false
-      }))
+      set((s) => {
+        const updated = [...s.exercises, exercise].sort((a, b) => a.name.localeCompare(b.name))
+        saveToCache('exercises', updated)
+        return { exercises: updated, loading: false }
+      })
       return exercise
     } catch (err: unknown) {
       const message = extractErrorMessage(err)
@@ -292,14 +302,15 @@ export const useExerciseStore = create<ExerciseState>((set, get) => ({
         if (me) throw me
       }
 
-      set((s) => ({
-        exercises: s.exercises.map((e) =>
+      set((s) => {
+        const updated = s.exercises.map((e) =>
           e.id === id
             ? { ...e, ...data, video_url, video_path: null, updated_at: new Date().toISOString() }
             : e
-        ),
-        loading: false
-      }))
+        )
+        saveToCache('exercises', updated)
+        return { exercises: updated, loading: false }
+      })
     } catch (err: unknown) {
       const message = extractErrorMessage(err)
       set({ error: message, loading: false })
@@ -313,10 +324,11 @@ export const useExerciseStore = create<ExerciseState>((set, get) => ({
       const { error } = await (supabase as any).from('exercises').delete().eq('id', id)
       if (error) throw error
 
-      set((s) => ({
-        exercises: s.exercises.filter((e) => e.id !== id),
-        loading: false
-      }))
+      set((s) => {
+        const updated = s.exercises.filter((e) => e.id !== id)
+        saveToCache('exercises', updated)
+        return { exercises: updated, loading: false }
+      })
     } catch (err: unknown) {
       const message = extractErrorMessage(err)
       set({ error: message, loading: false })

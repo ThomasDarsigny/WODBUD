@@ -52,8 +52,23 @@ export default defineConfig({
         disableDevLogs: true,
         runtimeCaching: [
           {
+            urlPattern: /^https:\/\/.*\.supabase\.co\/rest\/v1\//,
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'supabase-rest-v1',
+              networkTimeoutSeconds: 4,
+              expiration: {
+                maxEntries: 60,
+                maxAgeSeconds: 60 * 60 * 24 * 7   // 7 jours
+              },
+              cacheableResponse: {
+                statuses: [0, 200]
+              }
+            }
+          },
+          {
             urlPattern: /^https:\/\/.*\.supabase\.co\/storage/,
-            handler: 'CacheFirst',         // vidéos et images → cache d'abord
+            handler: 'CacheFirst',
             options: {
               cacheName: 'supabase-storage',
               expiration: {
