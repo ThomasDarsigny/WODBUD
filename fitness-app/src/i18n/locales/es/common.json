@@ -231,6 +231,19 @@
     "session_check": "Verificando sesión...",
     "redirect": "Redirigiendo..."
   },
+  "vote": {
+    "tag": "Selección del coach",
+    "title": "Votar por ejercicios",
+    "subtitle": "Selecciona los ejercicios que propones para el próximo WOD. Haz clic para seleccionar, vuelve a hacer clic para deseleccionar.",
+    "selected": "ejercicio(s) seleccionado(s)",
+    "none_selected": "Selecciona al menos un ejercicio",
+    "submit": "Enviar voto",
+    "submitting": "Enviando...",
+    "success_label": "Voto enviado",
+    "success_title": "¡Gracias por tu voto!",
+    "success_subtitle": "Propusiste {{count}} ejercicio(s) para el próximo WOD.",
+    "vote_again": "Nuevo voto"
+  },
   "errors": {
     "generic": "Ocurrió un error",
     "network": "Problema de conexión"

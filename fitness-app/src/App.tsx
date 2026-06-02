@@ -9,16 +9,13 @@ import DashboardLayout from './components/dashboard/DashboardLayout'
 import AdminDashboardView from './components/dashboard/AdminDashboardView'
 import ExercisesView from './components/dashboard/ExercisesView'
 import WorkoutBuilderView from './components/dashboard/WorkoutBuilderView'
+import VoteView from './components/dashboard/VoteView'
 import { supabase } from './lib/supabase'
 import { clearAuthSessionCookies, syncAuthSessionCookies } from './lib/authSessionCookies'
 import { isCurrentUserAdmin } from './lib/access'
 
 function AiView() {
   return <ComingSoon labelKey="nav.ai" icon="🤖" />
-}
-
-function VoteView() {
-  return <ComingSoon labelKey="nav.vote" icon="🗳️" />
 }
 
 function ComingSoon({ labelKey, icon }: { labelKey: string; icon: string }) {

@@ -231,6 +231,19 @@
     "session_check": "Checking session...",
     "redirect": "Redirecting..."
   },
+  "vote": {
+    "tag": "Coach selection",
+    "title": "Vote for exercises",
+    "subtitle": "Select the exercises you propose for the next WOD. Click to select, click again to deselect.",
+    "selected": "exercise(s) selected",
+    "none_selected": "Select at least one exercise",
+    "submit": "Submit vote",
+    "submitting": "Submitting...",
+    "success_label": "Vote submitted",
+    "success_title": "Thanks for your vote!",
+    "success_subtitle": "You proposed {{count}} exercise(s) for the next WOD.",
+    "vote_again": "New vote"
+  },
   "errors": {
     "generic": "An error occurred",
     "network": "Connection problem"

@@ -39,9 +39,7 @@ const NAV_ITEMS: NavItem[] = [
     id: 'vote',
     labelKey: 'nav.vote',
     icon: '🗳️',
-    path: '/dashboard/vote',
-    disabled: true,
-    soon: true
+    path: '/dashboard/vote'
   }
 ]
 
@@ -84,7 +82,11 @@ export default function DashboardLayout({ children }: Props) {
   }, [])
 
   const navItems = useMemo(() => {
-    return NAV_ITEMS.filter((item) => (item.id === 'admin' ? isAdmin : true))
+    return NAV_ITEMS.filter((item) => {
+      if (item.id === 'admin') return isAdmin
+      if (item.id === 'ai' || item.id === 'vote') return !isAdmin
+      return true
+    })
   }, [isAdmin])
 
   async function handleLogout() {
