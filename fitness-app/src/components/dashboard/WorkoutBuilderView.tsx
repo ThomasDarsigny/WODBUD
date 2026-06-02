@@ -1,16 +1,21 @@
-import { useState, useEffect, useRef } from 'react'
-import type { ChangeEvent, CSSProperties } from 'react'
+import { useState, useEffect } from 'react'
+import type { CSSProperties } from 'react'
+import { pdf } from '@react-pdf/renderer'
 import { useExerciseStore } from '../../stores/exerciseStore'
 import { useWorkoutStore } from '../../stores/workoutStore'
 import type { Exercise, WorkoutExercise, MuscleAlert, ExerciseCategory, MuscleGroup } from '../../types'
 import { CATEGORY_LABELS, MUSCLE_GROUP_LABELS } from '../../types'
 import ExerciseDetailModal from '../exercises/ExerciseDetailModal'
+import { WorkoutPdfFull } from '../pdf/workoutPDF'
+import { pdfFileName } from '../pdf/pdftokens'
 
 export default function WorkoutBuilderView() {
   const { exercises, fetchExercises } = useExerciseStore()
   const {
     name,
     notes,
+    method,
+    durationMinutes,
     exercises: workoutExercises,
     muscleAlerts,
     setName,
@@ -28,9 +33,8 @@ export default function WorkoutBuilderView() {
   const [selectedCategories, setSelectedCategories] = useState<ExerciseCategory[]>([])
   const [selectedMuscles, setSelectedMuscles] = useState<MuscleGroup[]>([])
   const [pickerExercise, setPickerExercise] = useState<Exercise | undefined>()
-  const [importedPdfName, setImportedPdfName] = useState<string | null>(null)
   const [savedSuccess, setSavedSuccess] = useState(false)
-  const pdfInputRef = useRef<HTMLInputElement>(null)
+  const [loadingPdf, setLoadingPdf] = useState(false)
   const [restOverridePrompt, setRestOverridePrompt] = useState<{
     exercise: Exercise
     message: string
@@ -86,32 +90,6 @@ export default function WorkoutBuilderView() {
     )
   }
 
-  function handlePdfImport(event: ChangeEvent<HTMLInputElement>) {
-    const file = event.target.files?.[0]
-    if (!file) return
-
-    const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')
-    if (!isPdf) {
-      setImportedPdfName(null)
-      event.target.value = ''
-      return
-    }
-
-    setImportedPdfName(file.name)
-
-    if (!name.trim()) {
-      const inferredName = file.name
-        .replace(/\.pdf$/i, '')
-        .replace(/[_-]+/g, ' ')
-        .trim()
-      if (inferredName) {
-        setName(inferredName)
-      }
-    }
-
-    event.target.value = ''
-  }
-
   async function handleSave() {
     try {
       await saveWorkout()
@@ -119,6 +97,33 @@ export default function WorkoutBuilderView() {
       setTimeout(() => setSavedSuccess(false), 3000)
     } catch {
       // handled by store error state
+    }
+  }
+
+  async function handleExportPdf() {
+    if (workoutExercises.length === 0 || !name.trim()) return
+    setLoadingPdf(true)
+    try {
+      const workout = {
+        id: 'preview',
+        name,
+        method,
+        duration_minutes: durationMinutes,
+        notes,
+        exercises: workoutExercises,
+        created_at: new Date().toISOString()
+      }
+      const blob = await pdf(
+        <WorkoutPdfFull workout={workout} theme='dark' qrDataUrls={{}} />
+      ).toBlob()
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = pdfFileName(name, 'complet', 'dark')
+      a.click()
+      URL.revokeObjectURL(url)
+    } finally {
+      setLoadingPdf(false)
     }
   }
 
@@ -364,33 +369,6 @@ export default function WorkoutBuilderView() {
           >
             Entrainement
           </p>
-          <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '0.6rem' }}>
-            <input
-              ref={pdfInputRef}
-              type='file'
-              accept='application/pdf,.pdf'
-              onChange={handlePdfImport}
-              style={{ display: 'none' }}
-            />
-            <button
-              type='button'
-              onClick={() => pdfInputRef.current?.click()}
-              style={{
-                fontFamily: 'var(--font-d)',
-                fontWeight: 700,
-                fontSize: '0.72rem',
-                letterSpacing: '0.08em',
-                textTransform: 'uppercase',
-                color: 'var(--orange)',
-                background: 'transparent',
-                border: '1px solid var(--border)',
-                padding: '0.45rem 0.7rem',
-                cursor: 'pointer'
-              }}
-            >
-              Importer le PDF
-            </button>
-          </div>
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -411,20 +389,6 @@ export default function WorkoutBuilderView() {
               marginBottom: 0
             }}
           />
-          {importedPdfName && (
-            <p
-              style={{
-                marginTop: '0.45rem',
-                fontFamily: 'var(--font-d)',
-                fontSize: '0.64rem',
-                letterSpacing: '0.08em',
-                textTransform: 'uppercase',
-                color: 'var(--muted)'
-              }}
-            >
-              PDF charge: {importedPdfName}
-            </p>
-          )}
         </div>
 
         {muscleAlerts.length > 0 && (
@@ -519,6 +483,24 @@ export default function WorkoutBuilderView() {
             }}
           >
             Reinitialiser
+          </button>
+          <button
+            onClick={handleExportPdf}
+            disabled={loadingPdf || workoutExercises.length === 0 || !name.trim()}
+            style={{
+              fontFamily: 'var(--font-d)',
+              fontWeight: 700,
+              fontSize: '0.8rem',
+              letterSpacing: '0.1em',
+              textTransform: 'uppercase',
+              padding: '0.6rem 1rem',
+              background: 'transparent',
+              border: '1px solid var(--border)',
+              color: loadingPdf || workoutExercises.length === 0 || !name.trim() ? 'var(--muted)' : 'var(--orange)',
+              cursor: loadingPdf ? 'wait' : 'pointer'
+            }}
+          >
+            {loadingPdf ? 'PDF...' : 'Exporter PDF'}
           </button>
           <button
             onClick={handleSave}
