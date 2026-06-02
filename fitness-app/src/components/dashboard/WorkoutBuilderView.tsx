@@ -12,10 +12,14 @@ export default function WorkoutBuilderView() {
   const { exercises, fetchExercises } = useExerciseStore()
   const {
     name,
+    method,
+    durationMinutes,
     notes,
     exercises: workoutExercises,
     muscleAlerts,
     setName,
+    setMethod,
+    setDuration,
     setNotes,
     addExercise,
     removeExercise,
@@ -1043,7 +1047,10 @@ function WorkoutExerciseSlot({
         <input
           type='text'
           value={we.reps ?? ''}
-          onChange={(e) => onUpdate({ reps: e.target.value })}
+          onChange={(e) => {
+            const parsed = Number.parseInt(e.target.value, 10)
+            onUpdate({ reps: Number.isNaN(parsed) ? undefined : parsed })
+          }}
           placeholder={t('fields.reps')}
           style={{
             width: 52,
@@ -1213,6 +1220,17 @@ const miniInputStyle: CSSProperties = {
   padding: '0.3rem 0.5rem',
   fontFamily: 'var(--font-b)',
   fontSize: '0.8rem',
+  outline: 'none'
+}
+
+const selectStyle: CSSProperties = {
+  width: '100%',
+  background: 'var(--black)',
+  border: '1px solid var(--border)',
+  color: 'var(--white)',
+  padding: '0.45rem 0.6rem',
+  fontFamily: 'var(--font-d)',
+  fontSize: '0.85rem',
   outline: 'none'
 }
 
