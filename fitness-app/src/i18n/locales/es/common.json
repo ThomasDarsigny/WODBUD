@@ -234,5 +234,130 @@
   "errors": {
     "generic": "Ocurrió un error",
     "network": "Problema de conexión"
+  },
+  "landing": {
+    "nav": {
+      "features": "Funciones",
+      "how": "Cómo funciona",
+      "demo": "Demo",
+      "dashboard": "Panel",
+      "access_dashboard": "Acceder"
+    },
+    "hero": {
+      "tag": "Plataforma CrossFit Pro",
+      "title_line1": "Entrena a tus atletas",
+      "title_em": "Sin Límites",
+      "subtitle": "La plataforma todo en uno para entrenadores de CrossFit. Crea tus WODs, sigue el progreso de tus atletas y gestiona tu box en unos clics.",
+      "open_dashboard": "Abrir panel",
+      "watch_demo": "Ver demo",
+      "no_card": "Gratis — sin tarjeta requerida"
+    },
+    "hero_stats": {
+      "athletes_label": "Atletas activos",
+      "workouts_label": "WODs creados",
+      "coaches_label": "Entrenadores certificados"
+    },
+    "ticker": ["WOD Builder", "Seguimiento de rendimiento", "Gestión de atletas", "Programación semanal", "Historial completo", "Multi-box"],
+    "problem": {
+      "without_label": "Sin ForgeX",
+      "without_title": "Caos y tiempo perdido",
+      "without_items": [
+        "WODs escritos en papel o en Excel",
+        "Seguimiento de progreso imposible de gestionar",
+        "Comunicación dispersa con los atletas",
+        "Sin visibilidad del rendimiento"
+      ],
+      "with_label": "Con ForgeX",
+      "with_title": "Todo centralizado, todo bajo control",
+      "with_items": [
+        "WODs creados en 2 minutos, compartidos al instante",
+        "Seguimiento automático de PRs y progreso",
+        "Comunicación directa en la app",
+        "Paneles en tiempo real"
+      ]
+    },
+    "features_tag": "Funciones",
+    "features_title_line1": "Todo lo que un entrenador",
+    "features_title_line2": "de CrossFit necesita",
+    "features": [
+      {
+        "icon": "⚡",
+        "title": "WOD Builder",
+        "desc": "Crea entrenamientos en segundos con nuestra interfaz intuitiva. Arrastra y suelta ejercicios y genera tu WOD del día.",
+        "badge": "Popular"
+      },
+      {
+        "icon": "📊",
+        "title": "Seguimiento del rendimiento",
+        "desc": "Visualiza el progreso de cada atleta en una línea de tiempo. Detecta mesetas, celebra los PRs."
+      },
+      {
+        "icon": "🏋️",
+        "title": "Biblioteca de ejercicios",
+        "desc": "Accede a más de 500 ejercicios de CrossFit con descripciones y videos. Crea tus propios movimientos personalizados."
+      },
+      {
+        "icon": "📅",
+        "title": "Programación",
+        "desc": "Planifica tus ciclos de entrenamiento en 4, 8 o 12 semanas. Equilibra movimientos e intensidades automáticamente."
+      },
+      {
+        "icon": "👥",
+        "title": "Gestión multi-box",
+        "desc": "Gestiona varios boxes desde un solo panel. Asigna entrenadores, controla asistencia, gestiona suscripciones."
+      },
+      {
+        "icon": "🔥",
+        "title": "Análisis avanzado",
+        "desc": "Informes detallados sobre asistencia, rendimiento y progreso. Exporta tus datos a CSV.",
+        "badge": "Nuevo"
+      }
+    ],
+    "workflow_tag": "Cómo funciona",
+    "workflow_title": "Listo en 4 pasos simples",
+    "steps": [
+      {
+        "num": "01",
+        "title": "Crea tu box",
+        "desc": "Configura tu box en minutos. Importa atletas vía CSV o invítalos por email."
+      },
+      {
+        "num": "02",
+        "title": "Construye tus WODs",
+        "desc": "Usa nuestra biblioteca o crea tus propios ejercicios. El WOD builder genera automáticamente el formato."
+      },
+      {
+        "num": "03",
+        "title": "Comparte y entrena",
+        "desc": "Publica tus WODs con un clic. Los atletas reciben una notificación y ven el programa desde su teléfono."
+      },
+      {
+        "num": "04",
+        "title": "Sigue el progreso",
+        "desc": "Analiza el rendimiento en tiempo real. Cada atleta registra sus puntuaciones, tú lo visualizas todo."
+      }
+    ],
+    "demo": {
+      "tag": "Acceso anticipado",
+      "title_line1": "Únete a los entrenadores",
+      "title_line2": "que entrenan mejor",
+      "subtitle": "ForgeX está en acceso anticipado. Reserva una demo gratuita de 30 minutos y descubre cómo transformar la gestión de tu box.",
+      "book": "Reservar una demo",
+      "view_features": "Ver funciones",
+      "perks_label": "Ventajas incluidas",
+      "perks": [
+        "Demo personalizada 1 a 1",
+        "Configuración asistida",
+        "3 meses gratis al inicio",
+        "Soporte prioritario",
+        "Acceso a nuevas funciones"
+      ]
+    },
+    "footer": {
+      "copy": "© 2025 ForgeX. Todos los derechos reservados.",
+      "links_label": "Enlaces legales",
+      "privacy": "Privacidad",
+      "contact": "Contacto"
+    }
   }
 }
