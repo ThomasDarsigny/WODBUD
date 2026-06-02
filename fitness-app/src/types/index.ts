@@ -143,7 +143,7 @@ export interface WorkoutExercise {
   exercise: Exercise
   position: number
   sets?: number
-  reps?: string
+  reps?: number
   weight?: string
   rest_seconds?: number
   notes?: string

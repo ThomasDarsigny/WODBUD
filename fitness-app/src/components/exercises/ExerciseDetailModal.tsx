@@ -1,4 +1,4 @@
-import type { CSSProperties } from 'react'
+import { useState, type CSSProperties } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Exercise } from '../../types'
 import { CATEGORY_I18N_KEYS, MUSCLE_GROUP_I18N_KEYS } from '../../types'
@@ -8,7 +8,7 @@ interface Props {
   onClose: () => void
   onAddToWorkout?: (exercise: Exercise) => Promise<boolean> | boolean
   onEdit?: (exercise: Exercise) => void
-  onDelete?: (exercise: Exercise) => void
+  onDelete?: (exercise: Exercise) => Promise<void> | void
   inWorkoutBuilder?: boolean
 }
 
@@ -21,6 +21,20 @@ export default function ExerciseDetailModal({
   inWorkoutBuilder = false
 }: Props) {
   const { t } = useTranslation(['exercises', 'common'])
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [deleting, setDeleting] = useState(false)
+
+  async function handleDeleteConfirm() {
+    if (!onDelete || deleting) return
+
+    setDeleting(true)
+    try {
+      await onDelete(exercise)
+      onClose()
+    } finally {
+      setDeleting(false)
+    }
+  }
 
   return (
     <div
@@ -222,21 +236,12 @@ export default function ExerciseDetailModal({
                 )}
                 {onDelete && (
                   <button
-                    onClick={() => {
-                      if (
-                        window.confirm(
-                          t('detail.delete_confirm', { ns: 'exercises', name: exercise.name })
-                        )
-                      ) {
-                        onDelete(exercise)
-                        onClose()
-                      }
-                    }}
+                    onClick={() => setShowDeleteConfirm((prev) => !prev)}
                     style={{
                       ...btnStyle,
                       border: '1px solid rgba(255,60,60,0.3)',
                       color: '#ff5555',
-                      background: 'transparent'
+                      background: showDeleteConfirm ? 'rgba(255,60,60,0.14)' : 'transparent'
                     }}
                   >
                     {t('actions.delete', { ns: 'common' })}
@@ -245,6 +250,63 @@ export default function ExerciseDetailModal({
               </>
             )}
           </div>
+
+          {onDelete && showDeleteConfirm && (
+            <div
+              style={{
+                marginTop: '0.4rem',
+                border: '1px solid rgba(255,60,60,0.35)',
+                background: 'rgba(255,60,60,0.08)',
+                padding: '0.9rem',
+                display: 'grid',
+                gap: '0.75rem'
+              }}
+            >
+              <p
+                style={{
+                  margin: 0,
+                  fontFamily: 'var(--font-d)',
+                  fontSize: '0.72rem',
+                  letterSpacing: '0.08em',
+                  textTransform: 'uppercase',
+                  color: '#ff8a8a'
+                }}
+              >
+                Confirmation requise
+              </p>
+              <p style={{ margin: 0, color: 'var(--white)', fontSize: '0.95rem', lineHeight: 1.6 }}>
+                Supprimer {exercise.name} ? Cette action est irreversible et retirera aussi ses liens
+                musculaires.
+              </p>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.6rem', flexWrap: 'wrap' }}>
+                <button
+                  onClick={() => setShowDeleteConfirm(false)}
+                  disabled={deleting}
+                  style={{
+                    ...btnStyle,
+                    border: '1px solid var(--border)',
+                    background: 'transparent',
+                    color: 'var(--muted)'
+                  }}
+                >
+                  Annuler
+                </button>
+                <button
+                  onClick={handleDeleteConfirm}
+                  disabled={deleting}
+                  style={{
+                    ...btnStyle,
+                    border: '1px solid rgba(255,60,60,0.5)',
+                    background: '#8d1f1f',
+                    color: '#fff1f1',
+                    opacity: deleting ? 0.65 : 1
+                  }}
+                >
+                  {deleting ? 'Suppression...' : 'Supprimer definitivement'}
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

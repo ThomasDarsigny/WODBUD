@@ -4,17 +4,17 @@ import { supabase } from '../lib/supabase'
 import { uploadVideoToR2 } from '../lib/r2'
 import { saveToCache, loadFromCache } from '../lib/offlineCache'
 import type { Exercise, ExerciseInsert, ExerciseUpdate, MuscleGroup } from '../types'
-import { LOWER_MUSCLES, UPPER_MUSCLES } from '../types'
+import { LOWER_MUSCLES, MUSCLE_GROUP_LABELS, UPPER_MUSCLES } from '../types'
 
 type ExerciseMuscleRow = {
   muscle_group_id: string
   role: string
-  muscle_groups?: { name_key: MuscleGroup } | Array<{ name_key: MuscleGroup }> | null
+  muscle_groups?: { name_key: string } | Array<{ name_key: string }> | null
 }
 
 type MuscleGroupRow = {
   id: string
-  name_key: MuscleGroup
+  name_key: string
 }
 
 type ExerciseRow = {
@@ -96,8 +96,11 @@ async function loadMuscleGroupMaps(): Promise<{
   const keyById = new Map<string, MuscleGroup>()
 
   for (const row of rows) {
-    idByKey.set(row.name_key, row.id)
-    keyById.set(row.id, row.name_key)
+    const appKey = toAppMuscleGroupKey(row.name_key)
+    if (!appKey) continue
+
+    idByKey.set(appKey, row.id)
+    keyById.set(row.id, appKey)
   }
 
   return { idByKey, keyById }
@@ -108,9 +111,40 @@ function extractNameKey(
 ): MuscleGroup | undefined {
   if (!muscleGroups) return undefined
   if (Array.isArray(muscleGroups)) {
-    return muscleGroups[0]?.name_key
+    return toAppMuscleGroupKey(muscleGroups[0]?.name_key)
   }
-  return muscleGroups.name_key
+  return toAppMuscleGroupKey(muscleGroups.name_key)
+}
+
+function toAppMuscleGroupKey(nameKey: string | null | undefined): MuscleGroup | undefined {
+  if (!nameKey) return undefined
+
+  if (nameKey === 'abs') return 'core'
+  if (nameKey === 'quadriceps') return 'quads'
+
+  if (nameKey in MUSCLE_GROUP_LABELS) {
+    return nameKey as MuscleGroup
+  }
+
+  return undefined
+}
+
+function resolveMuscleGroupId(
+  idByKey: Map<MuscleGroup, string>,
+  muscle: MuscleGroup
+): string | undefined {
+  const direct = idByKey.get(muscle)
+  if (direct) return direct
+
+  if (muscle === 'core') {
+    return idByKey.get('core')
+  }
+
+  if (muscle === 'quads') {
+    return idByKey.get('quads')
+  }
+
+  return undefined
 }
 
 function getBodyRegionFromPrimaryMuscle(primaryMuscle: MuscleGroup): 'upper' | 'lower' | 'full' {
@@ -194,7 +228,7 @@ export const useExerciseStore = create<ExerciseState>((set, get) => ({
 
       if (error) throw error
 
-      const primaryMuscleId = idByKey.get(data.primary_muscle)
+      const primaryMuscleId = resolveMuscleGroupId(idByKey, data.primary_muscle)
       if (!primaryMuscleId) {
         throw new Error(
           i18n.t('errors.primary_muscle_not_found', {
@@ -208,7 +242,7 @@ export const useExerciseStore = create<ExerciseState>((set, get) => ({
         { exercise_id: row.id, muscle_group_id: primaryMuscleId, role: 'primary' },
         ...data.secondary_muscles.map((mg) => ({
           exercise_id: row.id,
-          muscle_group_id: idByKey.get(mg),
+          muscle_group_id: resolveMuscleGroupId(idByKey, mg),
           role: 'secondary'
         }))
       ].filter((row) => Boolean(row.muscle_group_id))
@@ -289,7 +323,7 @@ export const useExerciseStore = create<ExerciseState>((set, get) => ({
 
         const primary = data.primary_muscle ?? current.primary_muscle
         const secondary = data.secondary_muscles ?? current.secondary_muscles
-        const primaryMuscleId = idByKey.get(primary)
+        const primaryMuscleId = resolveMuscleGroupId(idByKey, primary)
         if (!primaryMuscleId) {
           throw new Error(
             i18n.t('errors.primary_muscle_not_found', {
@@ -303,7 +337,7 @@ export const useExerciseStore = create<ExerciseState>((set, get) => ({
           { exercise_id: id, muscle_group_id: primaryMuscleId, role: 'primary' },
           ...secondary.map((mg) => ({
             exercise_id: id,
-            muscle_group_id: idByKey.get(mg),
+            muscle_group_id: resolveMuscleGroupId(idByKey, mg),
             role: 'secondary'
           }))
         ].filter((row) => Boolean(row.muscle_group_id))

@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react'
-import type { CSSProperties } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import type { ChangeEvent, CSSProperties } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useExerciseStore } from '../../stores/exerciseStore'
 import { useWorkoutStore } from '../../stores/workoutStore'
-import type { Exercise, WorkoutExercise, MuscleAlert, WorkoutMethod } from '../../types'
-import { METHOD_I18N_KEYS, MUSCLE_GROUP_I18N_KEYS } from '../../types'
+import type { Exercise, WorkoutExercise, MuscleAlert, WorkoutMethod, ExerciseCategory, MuscleGroup } from '../../types'
+import { METHOD_I18N_KEYS, MUSCLE_GROUP_I18N_KEYS, CATEGORY_LABELS, MUSCLE_GROUP_LABELS } from '../../types'
 import ExerciseDetailModal from '../exercises/ExerciseDetailModal'
 
 export default function WorkoutBuilderView() {
@@ -12,14 +12,10 @@ export default function WorkoutBuilderView() {
   const { exercises, fetchExercises } = useExerciseStore()
   const {
     name,
-    method,
-    durationMinutes,
     notes,
     exercises: workoutExercises,
     muscleAlerts,
     setName,
-    setMethod,
-    setDuration,
     setNotes,
     addExercise,
     removeExercise,
@@ -31,8 +27,12 @@ export default function WorkoutBuilderView() {
   } = useWorkoutStore()
 
   const [search, setSearch] = useState('')
+  const [selectedCategories, setSelectedCategories] = useState<ExerciseCategory[]>([])
+  const [selectedMuscles, setSelectedMuscles] = useState<MuscleGroup[]>([])
   const [pickerExercise, setPickerExercise] = useState<Exercise | undefined>()
+  const [importedPdfName, setImportedPdfName] = useState<string | null>(null)
   const [savedSuccess, setSavedSuccess] = useState(false)
+  const pdfInputRef = useRef<HTMLInputElement>(null)
   const [restOverridePrompt, setRestOverridePrompt] = useState<{
     exercise: Exercise
     message: string
@@ -48,13 +48,71 @@ export default function WorkoutBuilderView() {
     if (exercises.length === 0) fetchExercises()
   }, [exercises.length, fetchExercises])
 
-  const filteredExercises = exercises.filter(
-    (e) =>
-      e.name.toLowerCase().includes(search.toLowerCase()) ||
-      t(MUSCLE_GROUP_I18N_KEYS[e.primary_muscle], { ns: 'common' })
-        .toLowerCase()
-        .includes(search.toLowerCase())
-  )
+  const normalizedSearch = search.trim().toLowerCase()
+
+  const filteredExercises = exercises.filter((exercise) => {
+    const matchesSearch =
+      normalizedSearch.length === 0 ||
+      exercise.name.toLowerCase().includes(normalizedSearch) ||
+      CATEGORY_LABELS[exercise.category].toLowerCase().includes(normalizedSearch) ||
+      MUSCLE_GROUP_LABELS[exercise.primary_muscle].toLowerCase().includes(normalizedSearch) ||
+      exercise.secondary_muscles.some((muscle) =>
+        MUSCLE_GROUP_LABELS[muscle].toLowerCase().includes(normalizedSearch)
+      )
+
+    const matchesCategory =
+      selectedCategories.length === 0 || selectedCategories.includes(exercise.category)
+
+    const exerciseMuscles = [exercise.primary_muscle, ...exercise.secondary_muscles]
+    const matchesMuscle =
+      selectedMuscles.length === 0 || selectedMuscles.some((muscle) => exerciseMuscles.includes(muscle))
+
+    return matchesSearch && matchesCategory && matchesMuscle
+  })
+
+  const hasActiveFilters = selectedCategories.length > 0 || selectedMuscles.length > 0
+
+  function toggleCategory(category: ExerciseCategory) {
+    setSelectedCategories((current) =>
+      current.includes(category)
+        ? current.filter((value) => value !== category)
+        : [...current, category]
+    )
+  }
+
+  function toggleMuscle(muscle: MuscleGroup) {
+    setSelectedMuscles((current) =>
+      current.includes(muscle)
+        ? current.filter((value) => value !== muscle)
+        : [...current, muscle]
+    )
+  }
+
+  function handlePdfImport(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0]
+    if (!file) return
+
+    const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')
+    if (!isPdf) {
+      setImportedPdfName(null)
+      event.target.value = ''
+      return
+    }
+
+    setImportedPdfName(file.name)
+
+    if (!name.trim()) {
+      const inferredName = file.name
+        .replace(/\.pdf$/i, '')
+        .replace(/[_-]+/g, ' ')
+        .trim()
+      if (inferredName) {
+        setName(inferredName)
+      }
+    }
+
+    event.target.value = ''
+  }
 
   async function handleSave() {
     try {
@@ -208,6 +266,47 @@ export default function WorkoutBuilderView() {
               outline: 'none'
             }}
           />
+          <div style={{ marginTop: '1rem', display: 'grid', gap: '0.8rem' }}>
+            <div>
+              <div style={smallLabelStyle}>Filtrer par categorie</div>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.45rem', marginTop: '0.55rem' }}>
+                {Object.entries(CATEGORY_LABELS).map(([category, label]) => (
+                  <FilterChip
+                    key={category}
+                    active={selectedCategories.includes(category as ExerciseCategory)}
+                    onClick={() => toggleCategory(category as ExerciseCategory)}
+                    label={label}
+                  />
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <div style={smallLabelStyle}>Filtrer par muscle</div>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.45rem', marginTop: '0.55rem' }}>
+                {Object.entries(MUSCLE_GROUP_LABELS).map(([muscle, label]) => (
+                  <FilterChip
+                    key={muscle}
+                    active={selectedMuscles.includes(muscle as MuscleGroup)}
+                    onClick={() => toggleMuscle(muscle as MuscleGroup)}
+                    label={label}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {hasActiveFilters && (
+              <button
+                onClick={() => {
+                  setSelectedCategories([])
+                  setSelectedMuscles([])
+                }}
+                style={filterResetStyle}
+              >
+                Effacer les filtres
+              </button>
+            )}
+          </div>
         </div>
 
         <div style={{ flex: 1, overflowY: 'auto', padding: '0.75rem' }}>
@@ -267,6 +366,33 @@ export default function WorkoutBuilderView() {
           >
             {t('builder.workout_section', { ns: 'workouts' })}
           </p>
+          <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '0.6rem' }}>
+            <input
+              ref={pdfInputRef}
+              type='file'
+              accept='application/pdf,.pdf'
+              onChange={handlePdfImport}
+              style={{ display: 'none' }}
+            />
+            <button
+              type='button'
+              onClick={() => pdfInputRef.current?.click()}
+              style={{
+                fontFamily: 'var(--font-d)',
+                fontWeight: 700,
+                fontSize: '0.72rem',
+                letterSpacing: '0.08em',
+                textTransform: 'uppercase',
+                color: 'var(--orange)',
+                background: 'transparent',
+                border: '1px solid var(--border)',
+                padding: '0.45rem 0.7rem',
+                cursor: 'pointer'
+              }}
+            >
+              Importer le PDF
+            </button>
+          </div>
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -284,7 +410,7 @@ export default function WorkoutBuilderView() {
               textTransform: 'uppercase',
               letterSpacing: '0.04em',
               outline: 'none',
-              marginBottom: '1rem'
+              marginBottom: 0
             }}
           />
 
@@ -317,6 +443,21 @@ export default function WorkoutBuilderView() {
               />
             </div>
           </div>
+
+          {importedPdfName && (
+            <p
+              style={{
+                marginTop: '0.45rem',
+                fontFamily: 'var(--font-d)',
+                fontSize: '0.64rem',
+                letterSpacing: '0.08em',
+                textTransform: 'uppercase',
+                color: 'var(--muted)'
+              }}
+            >
+              PDF charge: {importedPdfName}
+            </p>
+          )}
         </div>
 
         {muscleAlerts.length > 0 && (
@@ -974,7 +1115,7 @@ function WorkoutExerciseSlot({
             padding: '0.5rem 0.75rem 0.75rem',
             borderTop: '1px solid var(--border)',
             display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
+            gridTemplateColumns: '1fr',
             gap: '0.5rem'
           }}
         >
@@ -1064,17 +1205,6 @@ const smallLabelStyle: CSSProperties = {
   marginBottom: '0.25rem'
 }
 
-const selectStyle: CSSProperties = {
-  width: '100%',
-  background: 'var(--black)',
-  border: '1px solid var(--border)',
-  color: 'var(--white)',
-  padding: '0.45rem 0.6rem',
-  fontFamily: 'var(--font-d)',
-  fontSize: '0.85rem',
-  outline: 'none'
-}
-
 const miniInputStyle: CSSProperties = {
   width: '100%',
   background: 'var(--surface)',
@@ -1084,4 +1214,47 @@ const miniInputStyle: CSSProperties = {
   fontFamily: 'var(--font-b)',
   fontSize: '0.8rem',
   outline: 'none'
+}
+
+const filterResetStyle: CSSProperties = {
+  fontFamily: 'var(--font-d)',
+  fontWeight: 700,
+  fontSize: '0.72rem',
+  letterSpacing: '0.08em',
+  textTransform: 'uppercase',
+  padding: '0.45rem 0.7rem',
+  border: '1px solid var(--border)',
+  background: 'transparent',
+  color: 'var(--muted)',
+  cursor: 'pointer',
+  justifySelf: 'start'
+}
+
+function FilterChip({
+  active,
+  onClick,
+  label
+}: {
+  active: boolean
+  onClick: () => void
+  label: string
+}) {
+  return (
+    <button
+      onClick={onClick}
+      style={{
+        fontFamily: 'var(--font-d)',
+        fontSize: '0.68rem',
+        letterSpacing: '0.08em',
+        textTransform: 'uppercase',
+        padding: '0.45rem 0.65rem',
+        border: `1px solid ${active ? 'rgba(255,77,0,0.45)' : 'var(--border)'}`,
+        background: active ? 'rgba(255,77,0,0.12)' : 'var(--black)',
+        color: active ? 'var(--orange)' : 'var(--muted)',
+        cursor: 'pointer'
+      }}
+    >
+      {label}
+    </button>
+  )
 }
