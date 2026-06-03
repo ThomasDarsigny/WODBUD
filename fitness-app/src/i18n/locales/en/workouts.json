@@ -32,7 +32,7 @@
     "reset": "Reset",
     "save": "Save session",
     "saving": "Saving...",
-    "saved": "✓ Saved!",
+    "saved": "Saved!",
     "import_pdf": "Import PDF",
     "pdf_loaded": "PDF loaded: {{name}}",
     "already_added": "Added",

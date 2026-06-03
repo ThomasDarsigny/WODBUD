@@ -109,33 +109,33 @@
     "features_title_line2": "CrossFit a besoin",
     "features": [
       {
-        "icon": "📚",
+        "icon": "LIB",
         "title": "Bibliothèque d'exercices",
         "desc": "Une large base de données d'exercices catégorisés - haltérophilie, gymnastics, cardio, force. Chaque mouvement est lié à une vidéo de référence pour la technique."
       },
       {
-        "icon": "⚙️",
+        "icon": "CFG",
         "title": "Constructeur de séances",
         "desc": "Choisis tes exercices, applique une méthode d'entraînement (AMRAP, EMOM, For Time, Rounds...) et configure les règles de la séance en quelques clics."
       },
       {
-        "icon": "🤖",
+        "icon": "AI",
         "title": "Suggestions IA",
         "desc": "L'intelligence artificielle analyse ta programmation et propose des variations, des progressions ou des combinaisons d'exercices cohérentes avec tes objectifs.",
         "badge": "Alimenté par l'API Anthropic"
       },
       {
-        "icon": "🎥",
+        "icon": "VID",
         "title": "Vidéos de référence",
         "desc": "Associe une vidéo à chaque exercice de ta bibliothèque. Tes athlètes voient exactement la technique attendue avant chaque WOD."
       },
       {
-        "icon": "📄",
+        "icon": "PDF",
         "title": "Export PDF",
         "desc": "Génère une fiche d'entraînement propre et professionnelle en un clic. Idéal pour l'afficher en box ou l'envoyer à ton groupe."
       },
       {
-        "icon": "📱",
+        "icon": "APP",
         "title": "PWA mobile-first",
         "desc": "Installe l'app directement sur ton téléphone. Accès rapide sur le plancher de la box, même sans connexion internet."
       }
@@ -352,33 +352,33 @@
     "features_title_line2": "CrossFit a besoin",
     "features": [
       {
-        "icon": "⚡",
+        "icon": "WOD",
         "title": "WOD Builder",
         "desc": "Créez vos entraînements en quelques secondes avec notre interface intuitive. Glissez-déposez les exercices et générez votre WOD du jour.",
         "badge": "Populaire"
       },
       {
-        "icon": "📊",
+        "icon": "KPI",
         "title": "Suivi des performances",
         "desc": "Visualisez les progrès de chaque athlète sur une frise chronologique. Détectez les plateaux, célébrez les PRs."
       },
       {
-        "icon": "🏋️",
+        "icon": "EX",
         "title": "Bibliothèque d'exercices",
         "desc": "Accédez à 500+ exercices CrossFit avec descriptions et vidéos. Créez vos propres mouvements personnalisés."
       },
       {
-        "icon": "📅",
+        "icon": "PLAN",
         "title": "Programmation",
         "desc": "Planifiez vos cycles sur 4, 8 ou 12 semaines. Balancez les mouvements et les intensités automatiquement."
       },
       {
-        "icon": "👥",
+        "icon": "TEAM",
         "title": "Gestion multi-box",
         "desc": "Gérez plusieurs boxes depuis un seul tableau de bord. Assignez des coachs, suivez les présences, gérez les abonnements."
       },
       {
-        "icon": "🔥",
+        "icon": "ANL",
         "title": "Analyse avancée",
         "desc": "Rapports détaillés sur l'assiduité, les performances et la progression. Exportez vos données en CSV.",
         "badge": "Nouveau"

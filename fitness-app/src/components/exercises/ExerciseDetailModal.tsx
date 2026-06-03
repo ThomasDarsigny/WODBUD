@@ -133,7 +133,7 @@ export default function ExerciseDetailModal({
               gap: '0.5rem'
             }}
           >
-            <span style={{ fontSize: '2.5rem', opacity: 0.2 }}>🎥</span>
+            <span style={{ fontSize: '2.5rem', opacity: 0.2 }}>VID</span>
             <p
               style={{
                 fontFamily: 'var(--font-d)',

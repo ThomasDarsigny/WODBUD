@@ -30,7 +30,7 @@
     "full": "Full body"
   },
   "alerts": {
-    "muscle_primary": "⚠️ Primary muscle already trained in this session",
+    "muscle_primary": "Primary muscle already trained in this session",
     "muscle_secondary": "Secondary muscle already used",
     "rest_48h": "This muscle was trained less than 48 hours ago",
     "cardio_conflict": "Cardio conflict — same body region as previous exercise"

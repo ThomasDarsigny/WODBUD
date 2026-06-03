@@ -26,13 +26,37 @@ interface ClassState {
   fetchOpenVoteSessions: () => Promise<VoteSession[]>
 }
 
+type SupabaseLikeError = {
+  message?: string
+  details?: string
+  hint?: string
+  code?: string
+}
+
+function getErrorMessage(err: unknown, fallback = 'Erreur'): string {
+  if (err instanceof Error) return err.message
+  if (typeof err === 'string') return err
+  if (err && typeof err === 'object') {
+    const e = err as SupabaseLikeError
+    const parts = [e.message, e.details, e.hint, e.code ? `code=${e.code}` : null].filter(Boolean)
+    if (parts.length > 0) return parts.join(' | ')
+  }
+  return fallback
+}
+
 async function getUserId(): Promise<string> {
   const { data: { user }, error } = await supabase.auth.getUser()
   if (error || !user) throw new Error('Non authentifié')
   return user.id
 }
 
-export const useClassStore = create<ClassState>((set, get) => ({
+function createInviteToken(): string {
+  // Avoid relying on a DB default for invite token generation.
+  const uuid = globalThis.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random()}`
+  return uuid.replace(/-/g, '')
+}
+
+export const useClassStore = create<ClassState>((set) => ({
   classes: [],
   members: {},
   voteSessions: {},
@@ -51,7 +75,7 @@ export const useClassStore = create<ClassState>((set, get) => ({
       if (error) throw error
       set({ classes: data ?? [], loading: false })
     } catch (err) {
-      set({ error: err instanceof Error ? err.message : 'Erreur', loading: false })
+      set({ error: getErrorMessage(err), loading: false })
     }
   },
 
@@ -61,15 +85,16 @@ export const useClassStore = create<ClassState>((set, get) => ({
       const userId = await getUserId()
       const { data: row, error } = await (supabase as any)
         .from('classes')
-        .insert({ ...data, coach_id: userId })
+        .insert({ ...data, coach_id: userId, invite_token: createInviteToken() })
         .select()
         .single()
       if (error) throw error
       set((s) => ({ classes: [row, ...s.classes], loading: false }))
       return row as Class
     } catch (err) {
-      set({ error: err instanceof Error ? err.message : 'Erreur', loading: false })
-      throw err
+      const message = getErrorMessage(err)
+      set({ error: `Impossible de creer le cours: ${message}`, loading: false })
+      throw new Error(`Impossible de creer le cours: ${message}`)
     }
   },
 
@@ -83,7 +108,7 @@ export const useClassStore = create<ClassState>((set, get) => ({
         loading: false
       }))
     } catch (err) {
-      set({ error: err instanceof Error ? err.message : 'Erreur', loading: false })
+      set({ error: getErrorMessage(err), loading: false })
       throw err
     }
   },
@@ -98,7 +123,7 @@ export const useClassStore = create<ClassState>((set, get) => ({
       if (error) throw error
       set((s) => ({ members: { ...s.members, [classId]: data ?? [] } }))
     } catch (err) {
-      set({ error: err instanceof Error ? err.message : 'Erreur' })
+      set({ error: getErrorMessage(err) })
     }
   },
 
@@ -117,7 +142,7 @@ export const useClassStore = create<ClassState>((set, get) => ({
         }
       }))
     } catch (err) {
-      set({ error: err instanceof Error ? err.message : 'Erreur' })
+      set({ error: getErrorMessage(err) })
       throw err
     }
   },
@@ -132,7 +157,7 @@ export const useClassStore = create<ClassState>((set, get) => ({
       if (error) throw error
       set((s) => ({ voteSessions: { ...s.voteSessions, [classId]: data ?? [] } }))
     } catch (err) {
-      set({ error: err instanceof Error ? err.message : 'Erreur' })
+      set({ error: getErrorMessage(err) })
     }
   },
 
@@ -154,7 +179,7 @@ export const useClassStore = create<ClassState>((set, get) => ({
       }))
       return session
     } catch (err) {
-      set({ error: err instanceof Error ? err.message : 'Erreur' })
+      set({ error: getErrorMessage(err) })
       throw err
     }
   },
@@ -193,7 +218,7 @@ export const useClassStore = create<ClassState>((set, get) => ({
       const classes = ((data ?? []) as any[]).map((row: any) => row.classes).filter(Boolean)
       set({ classes, loading: false })
     } catch (err) {
-      set({ error: err instanceof Error ? err.message : 'Erreur', loading: false })
+      set({ error: getErrorMessage(err), loading: false })
     }
   },
 

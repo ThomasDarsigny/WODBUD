@@ -70,7 +70,7 @@ export default function ClassesView() {
             </div>
           ) : classes.length === 0 ? (
             <div style={{ padding: '2rem 1.25rem', color: 'var(--muted)', fontSize: '0.85rem', textAlign: 'center' }}>
-              <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>📋</div>
+              <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>CLS</div>
               <p style={{ fontFamily: 'var(--font-d)', letterSpacing: '0.08em', textTransform: 'uppercase', fontSize: '0.75rem' }}>{t('classes.empty')}</p>
             </div>
           ) : (
@@ -121,7 +121,7 @@ export default function ClassesView() {
       <div style={{ flex: 1, overflow: 'auto', padding: '2rem' }}>
         {!selectedClass ? (
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'var(--muted)', gap: '1rem' }}>
-            <span style={{ fontSize: '3rem', opacity: 0.2 }}>📋</span>
+            <span style={{ fontSize: '3rem', opacity: 0.2 }}>CLS</span>
             <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.9rem', letterSpacing: '0.12em', textTransform: 'uppercase' }}>{t('classes.select_prompt')}</p>
           </div>
         ) : (
@@ -256,7 +256,7 @@ function MembersTab({ classId, members, onRemove }: {
   if (members.length === 0) {
     return (
       <div style={{ textAlign: 'center', padding: '3rem 1rem', color: 'var(--muted)' }}>
-        <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>👤</div>
+        <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>USR</div>
         <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.8rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>{t('classes.no_members')}</p>
       </div>
     )
@@ -307,7 +307,7 @@ function VotesTab({ sessions, exercises, onCreateVote, onCloseSession }: {
 
       {sessions.length === 0 ? (
         <div style={{ textAlign: 'center', padding: '3rem 1rem', color: 'var(--muted)' }}>
-          <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>🗳️</div>
+          <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>VOTE</div>
           <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.8rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>{t('classes.no_votes')}</p>
         </div>
       ) : (
@@ -504,7 +504,7 @@ function CreateVoteModal({ classId, exercises, onClose, onCreate }: {
                   }}
                 >
                   <span style={{ width: 18, height: 18, borderRadius: '50%', border: `2px solid ${isSelected ? 'var(--orange)' : 'var(--border)'}`, background: isSelected ? 'var(--orange)' : 'transparent', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.65rem', color: 'var(--black)' }}>
-                    {isSelected && '✓'}
+                    {isSelected && 'OK'}
                   </span>
                   <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.85rem', letterSpacing: '0.05em', textTransform: 'uppercase', color: isSelected ? 'var(--white)' : 'var(--muted)' }}>
                     {ex.name}

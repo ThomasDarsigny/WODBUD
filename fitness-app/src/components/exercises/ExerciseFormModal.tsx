@@ -308,7 +308,7 @@ export default function ExerciseFormModal({ exercise, onClose }: Props) {
                 </div>
               ) : (
                 <div>
-                  <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>🎥</div>
+                  <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>VID</div>
                   <p
                     style={{
                       fontFamily: 'var(--font-d)',

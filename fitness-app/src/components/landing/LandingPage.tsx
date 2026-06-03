@@ -119,23 +119,6 @@ export default function LandingPage() {
             </a>
             <span className={s.badgeFree}>{t('landing.hero.no_card')}</span>
           </div>
-
-          <div className={s.heroStats}>
-            <div className={s.statItem}>
-              <strong>500+</strong>
-              <span>{t('landing.hero_stats.athletes_label')}</span>
-            </div>
-            <div className={s.statDivider} aria-hidden="true" />
-            <div className={s.statItem}>
-              <strong>200+</strong>
-              <span>{t('landing.hero_stats.workouts_label')}</span>
-            </div>
-            <div className={s.statDivider} aria-hidden="true" />
-            <div className={s.statItem}>
-              <strong>50+</strong>
-              <span>{t('landing.hero_stats.coaches_label')}</span>
-            </div>
-          </div>
         </div>
 
         <div className={s.scrollHint} aria-hidden="true">
@@ -252,7 +235,7 @@ export default function LandingPage() {
           <div className={s.betaRight} aria-label={t('landing.demo.perks_label')}>
             {demoPerks.map((perk) => (
               <div key={perk} className={s.betaPoint}>
-                <span aria-hidden="true">✓</span>
+                <span aria-hidden="true">-</span>
                 {perk}
               </div>
             ))}

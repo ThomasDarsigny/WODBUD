@@ -109,33 +109,33 @@
     "features_title_line2": "CrossFit coach needs",
     "features": [
       {
-        "icon": "📚",
+        "icon": "LIB",
         "title": "Exercise library",
         "desc": "A large exercise database by category - weightlifting, gymnastics, cardio, strength. Each movement is linked to a reference video."
       },
       {
-        "icon": "⚙️",
+        "icon": "CFG",
         "title": "Workout builder",
         "desc": "Choose your exercises, apply a training method (AMRAP, EMOM, For Time, Rounds...) and configure session rules in a few clicks."
       },
       {
-        "icon": "🤖",
+        "icon": "AI",
         "title": "AI suggestions",
         "desc": "AI analyzes your programming and suggests variations, progressions, or exercise combinations aligned with your goals.",
         "badge": "Powered by Anthropic API"
       },
       {
-        "icon": "🎥",
+        "icon": "VID",
         "title": "Reference videos",
         "desc": "Attach a video to every exercise in your library. Athletes can see the expected technique before each WOD."
       },
       {
-        "icon": "📄",
+        "icon": "PDF",
         "title": "PDF export",
         "desc": "Generate a clean professional workout sheet in one click. Perfect for in-box display or sharing with your group."
       },
       {
-        "icon": "📱",
+        "icon": "APP",
         "title": "Mobile-first PWA",
         "desc": "Install the app directly on your phone. Fast access on the gym floor, even with limited connectivity."
       }
@@ -305,130 +305,5 @@
   "errors": {
     "generic": "An error occurred",
     "network": "Connection problem"
-  },
-  "landing": {
-    "nav": {
-      "features": "Features",
-      "how": "How it works",
-      "demo": "Demo",
-      "dashboard": "Dashboard",
-      "access_dashboard": "Get Access"
-    },
-    "hero": {
-      "tag": "Pro CrossFit Platform",
-      "title_line1": "Train your athletes",
-      "title_em": "Without Limits",
-      "subtitle": "The all-in-one platform for CrossFit coaches. Build your WODs, track athlete progress, and manage your box in a few clicks.",
-      "open_dashboard": "Open Dashboard",
-      "watch_demo": "Watch Demo",
-      "no_card": "Free — no card required"
-    },
-    "hero_stats": {
-      "athletes_label": "Active Athletes",
-      "workouts_label": "WODs Created",
-      "coaches_label": "Certified Coaches"
-    },
-    "ticker": ["WOD Builder", "Performance Tracking", "Athlete Management", "Weekly Programming", "Full History", "Multi-Box"],
-    "problem": {
-      "without_label": "Without ForgeX",
-      "without_title": "Chaos & wasted time",
-      "without_items": [
-        "WODs written on paper or in Excel",
-        "Progress tracking impossible to manage",
-        "Scattered communication with athletes",
-        "No visibility on performance"
-      ],
-      "with_label": "With ForgeX",
-      "with_title": "All centralized, all under control",
-      "with_items": [
-        "WODs created in 2 minutes, shared instantly",
-        "Automatic PR and progress tracking",
-        "Direct in-app communication",
-        "Real-time dashboards"
-      ]
-    },
-    "features_tag": "Features",
-    "features_title_line1": "Everything a CrossFit",
-    "features_title_line2": "coach needs",
-    "features": [
-      {
-        "icon": "⚡",
-        "title": "WOD Builder",
-        "desc": "Create workouts in seconds with our intuitive interface. Drag and drop exercises and generate your WOD of the day.",
-        "badge": "Popular"
-      },
-      {
-        "icon": "📊",
-        "title": "Performance Tracking",
-        "desc": "Visualize each athlete's progress on a timeline. Detect plateaus, celebrate PRs."
-      },
-      {
-        "icon": "🏋️",
-        "title": "Exercise Library",
-        "desc": "Access 500+ CrossFit exercises with descriptions and videos. Create your own custom movements."
-      },
-      {
-        "icon": "📅",
-        "title": "Programming",
-        "desc": "Plan your training cycles over 4, 8, or 12 weeks. Balance movements and intensities automatically."
-      },
-      {
-        "icon": "👥",
-        "title": "Multi-Box Management",
-        "desc": "Manage multiple boxes from one dashboard. Assign coaches, track attendance, manage subscriptions."
-      },
-      {
-        "icon": "🔥",
-        "title": "Advanced Analytics",
-        "desc": "Detailed reports on attendance, performance, and progress. Export your data to CSV.",
-        "badge": "New"
-      }
-    ],
-    "workflow_tag": "How it works",
-    "workflow_title": "Ready in 4 simple steps",
-    "steps": [
-      {
-        "num": "01",
-        "title": "Create your box",
-        "desc": "Set up your box in minutes. Import your athletes via CSV or invite them by email."
-      },
-      {
-        "num": "02",
-        "title": "Build your WODs",
-        "desc": "Use our library or create your own exercises. The WOD builder automatically generates the formatting."
-      },
-      {
-        "num": "03",
-        "title": "Share & train",
-        "desc": "Publish your WODs in one click. Athletes receive a notification and can view the program from their phone."
-      },
-      {
-        "num": "04",
-        "title": "Track progress",
-        "desc": "Analyze performance in real time. Each athlete records their scores, you visualize everything."
-      }
-    ],
-    "demo": {
-      "tag": "Early Access",
-      "title_line1": "Join the coaches",
-      "title_line2": "who train smarter",
-      "subtitle": "ForgeX is in early access. Book a free 30-minute demo and discover how to transform your box management.",
-      "book": "Book a Demo",
-      "view_features": "View Features",
-      "perks_label": "Included perks",
-      "perks": [
-        "Personalized 1-on-1 demo",
-        "Assisted setup",
-        "3 months free at launch",
-        "Priority support",
-        "Access to new features"
-      ]
-    },
-    "footer": {
-      "copy": "© 2025 ForgeX. All rights reserved.",
-      "links_label": "Legal links",
-      "privacy": "Privacy",
-      "contact": "Contact"
-    }
   }
 }

@@ -20,7 +20,7 @@ import { clearAuthSessionCookies, syncAuthSessionCookies } from './lib/authSessi
 import { isCurrentUserAdmin } from './lib/access'
 
 function AiView() {
-  return <ComingSoon labelKey="nav.ai" icon="🤖" />
+  return <ComingSoon labelKey="nav.ai" icon="AI" />
 }
 
 function ComingSoon({ labelKey, icon }: { labelKey: string; icon: string }) {

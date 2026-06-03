@@ -32,7 +32,7 @@
     "reset": "Réinitialiser",
     "save": "Sauvegarder la séance",
     "saving": "Enregistrement...",
-    "saved": "✓ Enregistré !",
+    "saved": "Enregistré !",
     "import_pdf": "Importer le PDF",
     "pdf_loaded": "PDF chargé : {{name}}",
     "already_added": "Ajouté",

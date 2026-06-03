@@ -484,7 +484,7 @@ export default function WorkoutBuilderView() {
         <div style={{ flex: 1, overflowY: 'auto', padding: '0.75rem 1rem' }}>
           {workoutExercises.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '3rem 1rem', color: 'var(--muted)' }}>
-              <div style={{ fontSize: '2.5rem', marginBottom: '0.75rem', opacity: 0.3 }}>⚡</div>
+              <div style={{ fontSize: '2.5rem', marginBottom: '0.75rem', opacity: 0.3 }}>WOD</div>
               <p
                 style={{
                   fontFamily: 'var(--font-d)',
@@ -926,7 +926,7 @@ function PickerExerciseRow({
             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
           />
         ) : (
-          <span style={{ fontSize: '1rem', opacity: 0.2 }}>🎥</span>
+          <span style={{ fontSize: '1rem', opacity: 0.2 }}>VID</span>
         )}
       </div>
 
@@ -1040,7 +1040,7 @@ function WorkoutExerciseSlot({
           >
             {t(MUSCLE_GROUP_I18N_KEYS[we.exercise.primary_muscle], { ns: 'common' })}
             {alert &&
-              ` · ⚠ ${alert.level === 'danger' ? t('alerts.risk_high') : t('alerts.risk_medium')}`}
+              ` · ${alert.level === 'danger' ? t('alerts.risk_high') : t('alerts.risk_medium')}`}
           </p>
         </div>
 
@@ -1180,7 +1180,7 @@ function MuscleAlertBadge({ alert }: { alert: MuscleAlert }) {
         fontSize: '0.75rem'
       }}
     >
-      <span style={{ color: isDanger ? '#ff4444' : '#f59e0b' }}>{isDanger ? '🔴' : '🟡'}</span>
+      <span style={{ color: isDanger ? '#ff4444' : '#f59e0b' }}>{isDanger ? 'HIGH' : 'MED'}</span>
       <span
         style={{
           fontFamily: 'var(--font-d)',

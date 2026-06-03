@@ -30,7 +30,7 @@
     "full": "Corps complet"
   },
   "alerts": {
-    "muscle_primary": "⚠️ Muscle principal déjà sollicité dans cette séance",
+    "muscle_primary": "Muscle principal déjà sollicité dans cette séance",
     "muscle_secondary": "Muscle secondaire déjà utilisé",
     "rest_48h": "Ce muscle a été entraîné il y a moins de 48h",
     "cardio_conflict": "Conflit cardio — même zone corporelle que l'exercice précédent"

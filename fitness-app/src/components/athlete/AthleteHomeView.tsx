@@ -47,7 +47,7 @@ export default function AthleteHomeView() {
 
       {/* Active votes */}
       <section style={{ marginBottom: '2.5rem' }}>
-        <SectionHeader icon="🗳️" title={t('athlete.section_votes')} />
+        <SectionHeader icon="VOTE" title={t('athlete.section_votes')} />
         {loadingSessions ? (
           <LoadingRow />
         ) : openSessions.length === 0 ? (
@@ -68,7 +68,7 @@ export default function AthleteHomeView() {
 
       {/* My classes */}
       <section>
-        <SectionHeader icon="📋" title={t('athlete.section_classes')} />
+        <SectionHeader icon="CLS" title={t('athlete.section_classes')} />
         {classes.length === 0 ? (
           <EmptyCard message={t('athlete.no_classes')} />
         ) : (

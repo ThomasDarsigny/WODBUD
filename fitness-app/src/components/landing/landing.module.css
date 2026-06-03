@@ -460,7 +460,7 @@
 }
 
 .solutionList li::before {
-  content: '✓';
+  content: '-';
   color: var(--orange);
   flex-shrink: 0;
 }

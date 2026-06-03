@@ -18,20 +18,20 @@ type NavItem = {
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { id: 'admin', labelKey: 'nav.admin', icon: '🛠️', path: '/dashboard/admin' },
-  { id: 'exercises', labelKey: 'nav.exercises', icon: '🏋️', path: '/dashboard/exercises' },
+  { id: 'admin', labelKey: 'nav.admin', icon: 'ADM', path: '/dashboard/admin' },
+  { id: 'exercises', labelKey: 'nav.exercises', icon: 'EX', path: '/dashboard/exercises' },
   {
     id: 'workout',
     labelKey: 'new',
     ns: 'workouts',
-    icon: '⚡',
+    icon: 'WOD',
     path: '/dashboard/workout'
   },
-  { id: 'classes', labelKey: 'nav.classes', icon: '📋', path: '/dashboard/classes' },
+  { id: 'classes', labelKey: 'nav.classes', icon: 'CLS', path: '/dashboard/classes' },
   {
     id: 'ai',
     labelKey: 'nav.ai',
-    icon: '🤖',
+    icon: 'AI',
     path: '/dashboard/ai',
     disabled: true,
     soon: true
@@ -39,7 +39,7 @@ const NAV_ITEMS: NavItem[] = [
   {
     id: 'vote',
     labelKey: 'nav.vote',
-    icon: '🗳️',
+    icon: 'VOTE',
     path: '/dashboard/vote'
   }
 ]

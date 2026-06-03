@@ -24,7 +24,7 @@ export default function AthleteDashboardLayout({ children }: Props) {
   }
 
   const navItems = [
-    { id: 'home', labelKey: 'athlete.nav_home', icon: '🏠', path: '/athlete' },
+    { id: 'home', labelKey: 'athlete.nav_home', icon: 'HOME', path: '/athlete' },
   ]
 
   return (

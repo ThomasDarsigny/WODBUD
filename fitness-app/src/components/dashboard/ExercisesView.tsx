@@ -139,7 +139,7 @@ export default function ExercisesView() {
               pointerEvents: 'none'
             }}
           >
-            🔍
+            F
           </span>
           <input
             value={search}
@@ -199,7 +199,7 @@ export default function ExercisesView() {
         </div>
       ) : filtered.length === 0 ? (
         <div style={{ textAlign: 'center', padding: '4rem 2rem', color: 'var(--muted)' }}>
-          <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🏋️</div>
+          <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>EX</div>
           <p
             style={{
               fontFamily: 'var(--font-d)',
@@ -296,7 +296,7 @@ function ExerciseCard({ exercise, onClick }: { exercise: Exercise; onClick: () =
             preload='metadata'
           />
         ) : (
-          <span style={{ fontSize: '2rem', opacity: 0.15 }}>🎥</span>
+          <span style={{ fontSize: '2rem', opacity: 0.15 }}>VID</span>
         )}
         {exercise.video_url && (
           <div
@@ -311,7 +311,7 @@ function ExerciseCard({ exercise, onClick }: { exercise: Exercise; onClick: () =
               transition: 'opacity 0.15s'
             }}
           >
-            <span style={{ fontSize: '1.75rem' }}>▶</span>
+            <span style={{ fontSize: '1.75rem' }}>PLAY</span>
           </div>
         )}
       </div>

@@ -248,7 +248,7 @@ export function WorkoutPdfFull({ workout, theme, qrDataUrls }: Props) {
 				<View style={s.titleBlock}>
 					<Text style={s.methodBadge}>{METHOD_LABELS[workout.method] ?? workout.method}</Text>
 					<Text style={s.workoutTitle}>{workoutTitle}</Text>
-					{workout.duration_minutes ? <Text style={s.duration}>⏱ {workout.duration_minutes} minutes</Text> : null}
+					{workout.duration_minutes ? <Text style={s.duration}>Duration: {workout.duration_minutes} minutes</Text> : null}
 					{workout.notes ? <Text style={s.notes}>{workout.notes}</Text> : null}
 				</View>
 

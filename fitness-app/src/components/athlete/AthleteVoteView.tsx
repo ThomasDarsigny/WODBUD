@@ -94,13 +94,13 @@ export default function AthleteVoteView() {
   }
 
   if (session.status === 'closed') {
-    return <CenteredMessage message={t('athlete.vote_closed')} icon="🔒" />
+    return <CenteredMessage message={t('athlete.vote_closed')} icon="LOCK" />
   }
 
   if (submitted) {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', minHeight: 400, gap: '1.5rem', padding: '2rem' }}>
-        <span style={{ fontSize: '3.5rem' }}>🗳️</span>
+        <span style={{ fontSize: '3.5rem' }}>VOTE</span>
         <div style={{ textAlign: 'center' }}>
           <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.72rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'var(--orange)', marginBottom: '0.5rem' }}>
             {t('vote.success_label')}
@@ -194,14 +194,14 @@ function VoteCard({ exercise, selected, onToggle }: { exercise: Exercise; select
     >
       {selected && (
         <div style={{ position: 'absolute', top: '0.6rem', right: '0.6rem', width: 22, height: 22, borderRadius: '50%', background: 'var(--orange)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', color: 'var(--black)', fontWeight: 700 }}>
-          ✓
+          OK
         </div>
       )}
       <div style={{ width: '100%', height: 100, background: 'var(--black)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', position: 'relative', marginBottom: '0.25rem' }}>
         {exercise.video_url ? (
           <video src={exercise.video_url} style={{ width: '100%', height: '100%', objectFit: 'cover' }} muted preload="metadata" />
         ) : (
-          <span style={{ fontSize: '2rem', opacity: 0.15 }}>🎥</span>
+          <span style={{ fontSize: '2rem', opacity: 0.15 }}>VID</span>
         )}
         {selected && <div style={{ position: 'absolute', inset: 0, background: 'rgba(255,77,0,0.18)', pointerEvents: 'none' }} />}
       </div>
@@ -218,7 +218,7 @@ function VoteCard({ exercise, selected, onToggle }: { exercise: Exercise; select
   )
 }
 
-function CenteredMessage({ message, icon = '🗳️' }: { message: string; icon?: string }) {
+function CenteredMessage({ message, icon = 'INFO' }: { message: string; icon?: string }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', minHeight: 300, gap: '1rem', color: 'var(--muted)' }}>
       <span style={{ fontSize: '2.5rem', opacity: 0.4 }}>{icon}</span>
