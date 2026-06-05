@@ -440,7 +440,7 @@ function CreateVoteModal({ classId, exercises, onClose, onCreate }: {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    if (!title.trim() || selected.size === 0) return
+    if (!title.trim() || selected.size === 0 || loading) return
     setLoading(true)
     setError(null)
     try {
@@ -452,6 +452,7 @@ function CreateVoteModal({ classId, exercises, onClose, onCreate }: {
       })
     } catch (err) {
       setError(err instanceof Error ? err.message : t('errors.generic'))
+    } finally {
       setLoading(false)
     }
   }

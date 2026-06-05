@@ -162,6 +162,9 @@ export const useClassStore = create<ClassState>((set) => ({
   },
 
   createVoteSession: async (data) => {
+    // Abort the request after 12 seconds to prevent infinite loading
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), 12000)
     try {
       const userId = await getUserId()
       const { data: row, error } = await (supabase as any)
@@ -169,7 +172,10 @@ export const useClassStore = create<ClassState>((set) => ({
         .insert({ ...data, coach_id: userId, status: 'open' })
         .select()
         .single()
+        .abortSignal(controller.signal)
+      clearTimeout(timeoutId)
       if (error) throw error
+      if (!row) throw new Error('Aucune donnée retournée après la création du vote')
       const session = row as VoteSession
       set((s) => ({
         voteSessions: {
@@ -179,8 +185,11 @@ export const useClassStore = create<ClassState>((set) => ({
       }))
       return session
     } catch (err) {
-      set({ error: getErrorMessage(err) })
-      throw err
+      clearTimeout(timeoutId)
+      const message = getErrorMessage(err)
+      set({ error: message })
+      // Always throw a real Error so the modal can display the message
+      throw new Error(message)
     }
   },
 
