@@ -15,27 +15,52 @@ export default function AthleteVoteView() {
   const [session, setSession] = useState<VoteSession | null>(null)
   const [loadingSession, setLoadingSession] = useState(true)
   const [selected, setSelected] = useState<Set<string>>(new Set())
+  const [previousVoteIds, setPreviousVoteIds] = useState<Set<string>>(new Set())
+  const [hasVoted, setHasVoted] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => { fetchExercises() }, [fetchExercises])
 
+  // Load session + existing vote in parallel
   useEffect(() => {
     if (!sessionId) return
     let mounted = true
     ;(async () => {
-      const { data, error } = await (supabase as any)
-        .from('vote_sessions')
-        .select('*')
-        .eq('id', sessionId)
-        .single()
+      const { data: { user } } = await supabase.auth.getUser()
+
+      const [sessionRes, voteRes] = await Promise.all([
+        (supabase as any)
+          .from('vote_sessions')
+          .select('*')
+          .eq('id', sessionId)
+          .single(),
+        user
+          ? (supabase as any)
+              .from('exercise_votes')
+              .select('exercise_id')
+              .eq('vote_session_id', sessionId)
+              .eq('user_id', user.id)
+          : Promise.resolve({ data: [], error: null })
+      ])
+
       if (!mounted) return
-      if (error || !data) {
+
+      if (sessionRes.error || !sessionRes.data) {
         setError(t('athlete.vote_not_found'))
       } else {
-        setSession(data as VoteSession)
+        setSession(sessionRes.data as VoteSession)
       }
+
+      // Pre-populate selection with existing votes
+      if (voteRes.data && voteRes.data.length > 0) {
+        const ids = new Set<string>((voteRes.data as { exercise_id: string }[]).map((r) => r.exercise_id))
+        setSelected(ids)
+        setPreviousVoteIds(ids)
+        setHasVoted(true)
+      }
+
       setLoadingSession(false)
     })()
     return () => { mounted = false }
@@ -57,6 +82,13 @@ export default function AthleteVoteView() {
     })
   }
 
+  // True if selection changed from previous vote
+  const selectionChanged = useMemo(() => {
+    if (selected.size !== previousVoteIds.size) return true
+    for (const id of selected) if (!previousVoteIds.has(id)) return true
+    return false
+  }, [selected, previousVoteIds])
+
   async function handleSubmit() {
     if (selected.size === 0 || !session) return
     setSubmitting(true)
@@ -65,18 +97,27 @@ export default function AthleteVoteView() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) throw new Error(t('errors.generic'))
 
+      // Delete existing votes for this session first (enables modification)
+      const { error: deleteError } = await (supabase as any)
+        .from('exercise_votes')
+        .delete()
+        .eq('user_id', user.id)
+        .eq('vote_session_id', session.id)
+      if (deleteError) throw deleteError
+
+      // Insert new selection
       const rows = Array.from(selected).map((exercise_id) => ({
         exercise_id,
         user_id: user.id,
-        workout_id: null,
         vote_session_id: session.id
       }))
-
       const { error: insertError } = await (supabase as any)
         .from('exercise_votes')
-        .upsert(rows, { onConflict: 'exercise_id,user_id,workout_id', ignoreDuplicates: true })
+        .insert(rows)
       if (insertError) throw insertError
 
+      setPreviousVoteIds(new Set(selected))
+      setHasVoted(true)
       setSubmitted(true)
     } catch (err) {
       setError(err instanceof Error ? err.message : t('errors.generic'))
@@ -85,17 +126,9 @@ export default function AthleteVoteView() {
     }
   }
 
-  if (loadingSession) {
-    return <CenteredMessage message={t('status.loading')} />
-  }
-
-  if (!session) {
-    return <CenteredMessage message={t('athlete.vote_not_found')} />
-  }
-
-  if (session.status === 'closed') {
-    return <CenteredMessage message={t('athlete.vote_closed')} icon="LOCK" />
-  }
+  if (loadingSession) return <CenteredMessage message={t('status.loading')} />
+  if (!session) return <CenteredMessage message={t('athlete.vote_not_found')} />
+  if (session.status === 'closed') return <CenteredMessage message={t('athlete.vote_closed')} icon="LOCK" />
 
   if (submitted) {
     return (
@@ -121,8 +154,12 @@ export default function AthleteVoteView() {
 
   return (
     <div style={{ padding: '2rem', paddingBottom: '7rem' }}>
+      {/* Header */}
       <div style={{ marginBottom: '2rem' }}>
-        <button onClick={() => navigate('/athlete')} style={{ background: 'none', border: 'none', color: 'var(--muted)', cursor: 'pointer', fontFamily: 'var(--font-d)', fontSize: '0.72rem', letterSpacing: '0.15em', textTransform: 'uppercase', padding: 0, marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+        <button
+          onClick={() => navigate('/athlete')}
+          style={{ background: 'none', border: 'none', color: 'var(--muted)', cursor: 'pointer', fontFamily: 'var(--font-d)', fontSize: '0.72rem', letterSpacing: '0.15em', textTransform: 'uppercase', padding: 0, marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}
+        >
           ← {t('actions.back')}
         </button>
         <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.72rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'var(--orange)', marginBottom: '0.4rem' }}>
@@ -141,12 +178,29 @@ export default function AthleteVoteView() {
         )}
       </div>
 
+      {/* Already voted banner */}
+      {hasVoted && (
+        <div style={{
+          display: 'flex', alignItems: 'center', gap: '0.75rem',
+          background: 'rgba(34,197,94,0.07)', border: '1px solid rgba(34,197,94,0.3)',
+          padding: '0.75rem 1rem', marginBottom: '1.25rem'
+        }}>
+          <span style={{ color: '#22c55e', fontFamily: 'var(--font-d)', fontSize: '0.75rem', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
+            ✓ {t('vote.already_voted')}
+          </span>
+          <span style={{ color: 'var(--muted)', fontSize: '0.82rem' }}>
+            — {t('vote.can_modify')}
+          </span>
+        </div>
+      )}
+
       {selected.size > 0 && (
         <div style={{ display: 'inline-block', fontFamily: 'var(--font-d)', fontSize: '0.78rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--orange)', border: '1px solid rgba(255,77,0,0.35)', background: 'rgba(255,77,0,0.07)', padding: '0.4rem 0.9rem', marginBottom: '1rem' }}>
           {selected.size} {t('vote.selected')}
         </div>
       )}
 
+      {/* Exercise grid */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '1px', background: 'var(--border)', border: '1px solid var(--border)' }}>
         {sessionExercises.map((exercise) => (
           <VoteCard
@@ -167,14 +221,24 @@ export default function AthleteVoteView() {
       {/* Sticky bottom bar */}
       <div style={{ position: 'fixed', bottom: 0, left: 220, right: 0, background: 'var(--dark)', borderTop: '1px solid var(--border)', padding: '1rem 2rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', zIndex: 100 }}>
         <div style={{ color: 'var(--muted)', fontFamily: 'var(--font-d)', fontSize: '0.82rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-          {selected.size === 0 ? t('vote.none_selected') : `${selected.size} ${t('vote.selected')}`}
+          {selected.size === 0
+            ? t('vote.none_selected')
+            : `${selected.size} ${t('vote.selected')}`}
         </div>
         <button
           onClick={handleSubmit}
-          disabled={selected.size === 0 || submitting}
-          style={{ ...actionBtnStyle, opacity: selected.size === 0 || submitting ? 0.5 : 1, cursor: selected.size === 0 ? 'not-allowed' : 'pointer' }}
+          disabled={selected.size === 0 || submitting || (hasVoted && !selectionChanged)}
+          style={{
+            ...actionBtnStyle,
+            opacity: (selected.size === 0 || submitting || (hasVoted && !selectionChanged)) ? 0.5 : 1,
+            cursor: selected.size === 0 ? 'not-allowed' : 'pointer'
+          }}
         >
-          {submitting ? t('vote.submitting') : t('vote.submit')}
+          {submitting
+            ? t('vote.submitting')
+            : hasVoted
+              ? t('vote.update')
+              : t('vote.submit')}
         </button>
       </div>
     </div>

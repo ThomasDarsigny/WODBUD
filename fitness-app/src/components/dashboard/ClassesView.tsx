@@ -10,7 +10,7 @@ const BASE_URL = window.location.origin
 
 export default function ClassesView() {
   const { t } = useTranslation(['common', 'exercises'])
-  const { classes, members, voteSessions, loading, fetchClasses, createClass, deleteClass, fetchMembers, removeMember, fetchVoteSessions, createVoteSession, closeVoteSession } = useClassStore()
+  const { classes, members, voteSessions, voteResults, loading, fetchClasses, createClass, deleteClass, fetchMembers, removeMember, fetchVoteSessions, createVoteSession, closeVoteSession, fetchVoteResults } = useClassStore()
   const { exercises, fetchExercises } = useExerciseStore()
 
   const [showCreateClass, setShowCreateClass] = useState(false)
@@ -206,8 +206,10 @@ export default function ClassesView() {
               <VotesTab
                 sessions={voteSessions[selectedClass.id] ?? []}
                 exercises={exercises}
+                voteResults={voteResults}
                 onCreateVote={() => setShowVoteModal(true)}
                 onCloseSession={closeVoteSession}
+                onFetchResults={fetchVoteResults}
               />
             )}
           </>
@@ -288,14 +290,24 @@ function MembersTab({ classId, members, onRemove }: {
   )
 }
 
-function VotesTab({ sessions, exercises, onCreateVote, onCloseSession }: {
+function VotesTab({ sessions, exercises, voteResults, onCreateVote, onCloseSession, onFetchResults }: {
   sessions: VoteSession[]
   exercises: import('../../types').Exercise[]
+  voteResults: Record<string, import('../../types').VoteResult[]>
   onCreateVote: () => void
   onCloseSession: (id: string) => Promise<void>
+  onFetchResults: (sessionId: string) => Promise<void>
 }) {
   const { t } = useTranslation(['common', 'exercises'])
   const exerciseMap = useMemo(() => new Map(exercises.map((e) => [e.id, e])), [exercises])
+
+  // Auto-fetch results for all visible sessions on mount
+  useEffect(() => {
+    for (const s of sessions) {
+      if (!voteResults[s.id]) onFetchResults(s.id)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sessions])
 
   return (
     <div>
@@ -311,49 +323,111 @@ function VotesTab({ sessions, exercises, onCreateVote, onCloseSession }: {
           <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.8rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>{t('classes.no_votes')}</p>
         </div>
       ) : (
-        sessions.map((session) => (
-          <div key={session.id} style={{ border: '1px solid var(--border)', background: 'var(--dark)', padding: '1rem', marginBottom: '0.75rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem' }}>
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.9rem', fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--white)', margin: 0 }}>
-                    {session.title}
-                  </p>
-                  <span style={{
-                    fontFamily: 'var(--font-d)', fontSize: '0.6rem', letterSpacing: '0.15em', textTransform: 'uppercase',
-                    color: session.status === 'open' ? '#22c55e' : 'var(--muted)',
-                    border: `1px solid ${session.status === 'open' ? 'rgba(34,197,94,0.35)' : 'var(--border)'}`,
-                    background: session.status === 'open' ? 'rgba(34,197,94,0.08)' : 'transparent',
-                    padding: '0.1rem 0.4rem'
-                  }}>
-                    {session.status === 'open' ? t('classes.vote_open') : t('classes.vote_closed')}
+        sessions.map((session) => {
+          const results = voteResults[session.id] ?? []
+          const totalVotes = results.reduce((sum, r) => sum + r.count, 0)
+          const maxCount = results[0]?.count ?? 0
+
+          return (
+            <div key={session.id} style={{ border: '1px solid var(--border)', background: 'var(--dark)', padding: '1rem', marginBottom: '0.75rem' }}>
+              {/* Header */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem' }}>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.9rem', fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--white)', margin: 0 }}>
+                      {session.title}
+                    </p>
+                    <span style={{
+                      fontFamily: 'var(--font-d)', fontSize: '0.6rem', letterSpacing: '0.15em', textTransform: 'uppercase',
+                      color: session.status === 'open' ? '#22c55e' : 'var(--muted)',
+                      border: `1px solid ${session.status === 'open' ? 'rgba(34,197,94,0.35)' : 'var(--border)'}`,
+                      background: session.status === 'open' ? 'rgba(34,197,94,0.08)' : 'transparent',
+                      padding: '0.1rem 0.4rem'
+                    }}>
+                      {session.status === 'open' ? t('classes.vote_open') : t('classes.vote_closed')}
+                    </span>
+                    {totalVotes > 0 && (
+                      <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--muted)', padding: '0.1rem 0.4rem' }}>
+                        {totalVotes} {t('classes.votes_total')}
+                      </span>
+                    )}
+                  </div>
+                  {session.deadline && (
+                    <p style={{ color: 'var(--muted)', fontSize: '0.75rem', margin: '0.2rem 0 0' }}>
+                      {t('classes.deadline')}: {new Date(session.deadline).toLocaleDateString()}
+                    </p>
+                  )}
+                </div>
+                <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                  <button onClick={() => onFetchResults(session.id)} style={{ ...ghostBtnStyle, fontSize: '0.62rem', padding: '0.35rem 0.65rem' }}>
+                    ↻
+                  </button>
+                  {session.status === 'open' && (
+                    <button onClick={() => onCloseSession(session.id)} style={{ ...ghostBtnStyle, fontSize: '0.65rem' }}>
+                      {t('classes.close_vote')}
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* Results bars */}
+              {results.length > 0 ? (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '0.75rem' }}>
+                  {results.map((r) => {
+                    const ex = exerciseMap.get(r.exercise_id)
+                    const pct = maxCount > 0 ? (r.count / maxCount) * 100 : 0
+                    const isWinner = r.count === maxCount && maxCount > 0
+                    return (
+                      <div key={r.exercise_id}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.2rem' }}>
+                          <span style={{
+                            fontFamily: 'var(--font-d)', fontSize: '0.72rem', letterSpacing: '0.06em',
+                            textTransform: 'uppercase',
+                            color: isWinner ? 'var(--white)' : 'var(--muted)'
+                          }}>
+                            {isWinner && '▶ '}{ex?.name ?? r.exercise_id.slice(0, 8)}
+                          </span>
+                          <span style={{
+                            fontFamily: 'var(--font-d)', fontSize: '0.72rem', letterSpacing: '0.1em',
+                            color: isWinner ? 'var(--orange)' : 'var(--muted)',
+                            fontWeight: isWinner ? 700 : 400
+                          }}>
+                            {r.count} {r.count === 1 ? t('classes.vote_singular') : t('classes.vote_plural')}
+                          </span>
+                        </div>
+                        <div style={{ height: 4, background: 'var(--black)', borderRadius: 2, overflow: 'hidden' }}>
+                          <div style={{
+                            height: '100%',
+                            width: `${pct}%`,
+                            background: isWinner ? 'var(--orange)' : 'rgba(255,77,0,0.35)',
+                            transition: 'width 0.4s ease',
+                            borderRadius: 2
+                          }} />
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              ) : (
+                /* No votes yet — show exercise options as chips */
+                <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
+                  {session.exercise_options.map((exId) => {
+                    const ex = exerciseMap.get(exId)
+                    if (!ex) return null
+                    return (
+                      <span key={exId} style={{ fontFamily: 'var(--font-d)', fontSize: '0.68rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--muted)', border: '1px solid var(--border)', padding: '0.2rem 0.5rem' }}>
+                        {ex.name}
+                      </span>
+                    )
+                  })}
+                  <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.65rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--muted)', opacity: 0.6, alignSelf: 'center' }}>
+                    — {t('classes.no_votes_yet')}
                   </span>
                 </div>
-                {session.deadline && (
-                  <p style={{ color: 'var(--muted)', fontSize: '0.75rem', margin: '0.2rem 0 0' }}>
-                    {t('classes.deadline')}: {new Date(session.deadline).toLocaleDateString()}
-                  </p>
-                )}
-              </div>
-              {session.status === 'open' && (
-                <button onClick={() => onCloseSession(session.id)} style={{ ...ghostBtnStyle, fontSize: '0.65rem' }}>
-                  {t('classes.close_vote')}
-                </button>
               )}
             </div>
-            <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
-              {session.exercise_options.map((exId) => {
-                const ex = exerciseMap.get(exId)
-                if (!ex) return null
-                return (
-                  <span key={exId} style={{ fontFamily: 'var(--font-d)', fontSize: '0.68rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--orange)', border: '1px solid rgba(255,77,0,0.25)', background: 'rgba(255,77,0,0.07)', padding: '0.2rem 0.5rem' }}>
-                    {ex.name}
-                  </span>
-                )
-              })}
-            </div>
-          </div>
-        ))
+          )
+        })
       )}
     </div>
   )

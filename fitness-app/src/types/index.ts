@@ -213,3 +213,9 @@ export interface VoteSession {
 }
 
 export type VoteSessionInsert = Pick<VoteSession, 'class_id' | 'title' | 'exercise_options' | 'deadline'>
+
+// ─── Vote Results ─────────────────────────────────────────────────────────────
+export interface VoteResult {
+  exercise_id: string
+  count: number
+}

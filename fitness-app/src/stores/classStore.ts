@@ -1,11 +1,13 @@
 import { create } from 'zustand'
 import { supabase } from '../lib/supabase'
-import type { Class, ClassInsert, ClassMember, VoteSession, VoteSessionInsert } from '../types'
+import type { Class, ClassInsert, ClassMember, VoteSession, VoteSessionInsert, VoteResult } from '../types'
 
 interface ClassState {
   classes: Class[]
-  members: Record<string, ClassMember[]>   // classId → members
-  voteSessions: Record<string, VoteSession[]> // classId → sessions
+  members: Record<string, ClassMember[]>      // classId → members
+  voteSessions: Record<string, VoteSession[]>  // classId → sessions
+  voteResults: Record<string, VoteResult[]>    // sessionId → [{exercise_id, count}]
+  userVotesBySession: Record<string, string[]> // sessionId → exerciseIds voted by current user
   loading: boolean
   error: string | null
 
@@ -19,11 +21,13 @@ interface ClassState {
   fetchVoteSessions: (classId: string) => Promise<void>
   createVoteSession: (data: VoteSessionInsert) => Promise<VoteSession>
   closeVoteSession: (sessionId: string) => Promise<void>
+  fetchVoteResults: (sessionId: string) => Promise<void>
 
   // Athlete side
   fetchMyClasses: () => Promise<void>
   joinClass: (token: string) => Promise<Class>
   fetchOpenVoteSessions: () => Promise<VoteSession[]>
+  fetchMyVotes: (sessionIds: string[]) => Promise<void>
 }
 
 type SupabaseLikeError = {
@@ -60,6 +64,8 @@ export const useClassStore = create<ClassState>((set) => ({
   classes: [],
   members: {},
   voteSessions: {},
+  voteResults: {},
+  userVotesBySession: {},
   loading: false,
   error: null,
 
@@ -215,6 +221,50 @@ export const useClassStore = create<ClassState>((set) => ({
     }
   },
 
+  // Fetch aggregated vote counts for a session (for coach results view)
+  fetchVoteResults: async (sessionId) => {
+    try {
+      const { data, error } = await (supabase as any)
+        .from('exercise_votes')
+        .select('exercise_id')
+        .eq('vote_session_id', sessionId)
+      if (error) throw error
+      const counts: Record<string, number> = {}
+      for (const row of (data ?? [])) {
+        counts[row.exercise_id] = (counts[row.exercise_id] ?? 0) + 1
+      }
+      const results: VoteResult[] = Object.entries(counts)
+        .map(([exercise_id, count]) => ({ exercise_id, count }))
+        .sort((a, b) => b.count - a.count)
+      set((s) => ({ voteResults: { ...s.voteResults, [sessionId]: results } }))
+    } catch (err) {
+      set({ error: getErrorMessage(err) })
+    }
+  },
+
+  // Fetch current user's votes across multiple sessions (for "already voted" display)
+  fetchMyVotes: async (sessionIds) => {
+    if (sessionIds.length === 0) return
+    try {
+      const userId = await getUserId()
+      const { data, error } = await (supabase as any)
+        .from('exercise_votes')
+        .select('exercise_id, vote_session_id')
+        .in('vote_session_id', sessionIds)
+        .eq('user_id', userId)
+      if (error) throw error
+      const bySession: Record<string, string[]> = {}
+      // Initialize all sessions as empty (so we know they were fetched)
+      for (const sid of sessionIds) bySession[sid] = []
+      for (const row of (data ?? [])) {
+        bySession[row.vote_session_id].push(row.exercise_id)
+      }
+      set((s) => ({ userVotesBySession: { ...s.userVotesBySession, ...bySession } }))
+    } catch {
+      // Non-critical — silently ignore
+    }
+  },
+
   fetchMyClasses: async () => {
     set({ loading: true, error: null })
     try {
@@ -256,6 +306,21 @@ export const useClassStore = create<ClassState>((set) => ({
       .eq('classes.class_members.athlete_id', userId)
       .order('created_at', { ascending: false })
     if (error) throw error
-    return (data ?? []) as VoteSession[]
+    const sessions = (data ?? []) as VoteSession[]
+    // Also pre-fetch which sessions the user has already voted in
+    if (sessions.length > 0) {
+      const { data: myVotes } = await (supabase as any)
+        .from('exercise_votes')
+        .select('exercise_id, vote_session_id')
+        .in('vote_session_id', sessions.map((s) => s.id))
+        .eq('user_id', userId)
+      const bySession: Record<string, string[]> = {}
+      for (const s of sessions) bySession[s.id] = []
+      for (const row of (myVotes ?? [])) {
+        bySession[row.vote_session_id]?.push(row.exercise_id)
+      }
+      set((s) => ({ userVotesBySession: { ...s.userVotesBySession, ...bySession } }))
+    }
+    return sessions
   }
 }))

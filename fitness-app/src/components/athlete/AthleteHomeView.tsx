@@ -5,6 +5,8 @@ import { useClassStore } from '../../stores/classStore'
 import { useExerciseStore } from '../../stores/exerciseStore'
 import type { VoteSession, Class } from '../../types'
 import { CATEGORY_I18N_KEYS, MUSCLE_GROUP_I18N_KEYS } from '../../types'
+void CATEGORY_I18N_KEYS
+void MUSCLE_GROUP_I18N_KEYS
 
 export default function AthleteHomeView() {
   const { t } = useTranslation(['common', 'exercises'])
@@ -15,7 +17,7 @@ export default function AthleteHomeView() {
   const [openSessions, setOpenSessions] = useState<(VoteSession & { class_name?: string })[]>([])
   const [loadingSessions, setLoadingSessions] = useState(true)
 
-  const { fetchOpenVoteSessions } = useClassStore()
+  const { fetchOpenVoteSessions, userVotesBySession } = useClassStore()
 
   useEffect(() => {
     fetchMyClasses()
@@ -59,6 +61,7 @@ export default function AthleteHomeView() {
                 key={session.id}
                 session={session}
                 exerciseMap={exerciseMap}
+                hasVoted={(userVotesBySession[session.id]?.length ?? 0) > 0}
                 onVote={() => navigate(`/athlete/vote/${session.id}`)}
               />
             ))}
@@ -109,18 +112,35 @@ function EmptyCard({ message }: { message: string }) {
   )
 }
 
-function VoteSessionCard({ session, exerciseMap, onVote }: {
+function VoteSessionCard({ session, exerciseMap, hasVoted, onVote }: {
   session: VoteSession & { class_name?: string }
   exerciseMap: Map<string, import('../../types').Exercise>
+  hasVoted: boolean
   onVote: () => void
 }) {
   const { t } = useTranslation(['common', 'exercises'])
   return (
-    <div style={{ border: '1px solid rgba(255,77,0,0.3)', background: 'rgba(255,77,0,0.05)', padding: '1.1rem 1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
+    <div style={{
+      border: `1px solid ${hasVoted ? 'rgba(34,197,94,0.3)' : 'rgba(255,77,0,0.3)'}`,
+      background: hasVoted ? 'rgba(34,197,94,0.04)' : 'rgba(255,77,0,0.05)',
+      padding: '1.1rem 1.25rem',
+      display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap'
+    }}>
       <div>
-        <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.92rem', fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--white)', margin: 0 }}>
-          {session.title}
-        </p>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.1rem' }}>
+          <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.92rem', fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--white)', margin: 0 }}>
+            {session.title}
+          </p>
+          {hasVoted && (
+            <span style={{
+              fontFamily: 'var(--font-d)', fontSize: '0.6rem', letterSpacing: '0.15em', textTransform: 'uppercase',
+              color: '#22c55e', border: '1px solid rgba(34,197,94,0.35)', background: 'rgba(34,197,94,0.08)',
+              padding: '0.1rem 0.4rem', flexShrink: 0
+            }}>
+              ✓ {t('vote.voted')}
+            </span>
+          )}
+        </div>
         <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap', marginTop: '0.5rem' }}>
           {session.exercise_options.slice(0, 5).map((exId) => {
             const ex = exerciseMap.get(exId)
@@ -143,9 +163,14 @@ function VoteSessionCard({ session, exerciseMap, onVote }: {
       </div>
       <button
         onClick={onVote}
-        style={{ fontFamily: 'var(--font-d)', fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--black)', background: 'var(--orange)', border: 'none', padding: '0.6rem 1.25rem', cursor: 'pointer', flexShrink: 0 }}
+        style={{
+          fontFamily: 'var(--font-d)', fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.1em',
+          textTransform: 'uppercase', color: 'var(--black)',
+          background: hasVoted ? 'rgba(34,197,94,0.85)' : 'var(--orange)',
+          border: 'none', padding: '0.6rem 1.25rem', cursor: 'pointer', flexShrink: 0
+        }}
       >
-        {t('athlete.vote_cta')}
+        {hasVoted ? t('vote.modify') : t('athlete.vote_cta')}
       </button>
     </div>
   )
@@ -167,6 +192,3 @@ function ClassCard({ cls }: { cls: Class }) {
   )
 }
 
-// suppress unused import warnings
-void CATEGORY_I18N_KEYS
-void MUSCLE_GROUP_I18N_KEYS
