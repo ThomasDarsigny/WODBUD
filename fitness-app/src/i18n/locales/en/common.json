@@ -109,33 +109,27 @@
     "features_title_line2": "CrossFit coach needs",
     "features": [
       {
-        "icon": "LIB",
         "title": "Exercise library",
         "desc": "A large exercise database by category - weightlifting, gymnastics, cardio, strength. Each movement is linked to a reference video."
       },
       {
-        "icon": "CFG",
         "title": "Workout builder",
         "desc": "Choose your exercises, apply a training method (AMRAP, EMOM, For Time, Rounds...) and configure session rules in a few clicks."
       },
       {
-        "icon": "AI",
         "title": "AI suggestions",
         "desc": "AI analyzes your programming and suggests variations, progressions, or exercise combinations aligned with your goals.",
         "badge": "Powered by Anthropic API"
       },
       {
-        "icon": "VID",
         "title": "Reference videos",
         "desc": "Attach a video to every exercise in your library. Athletes can see the expected technique before each WOD."
       },
       {
-        "icon": "PDF",
         "title": "PDF export",
         "desc": "Generate a clean professional workout sheet in one click. Perfect for in-box display or sharing with your group."
       },
       {
-        "icon": "APP",
         "title": "Mobile-first PWA",
         "desc": "Install the app directly on your phone. Fast access on the gym floor, even with limited connectivity."
       }
