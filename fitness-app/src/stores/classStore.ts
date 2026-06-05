@@ -224,11 +224,10 @@ export const useClassStore = create<ClassState>((set) => ({
 
   joinClass: async (token) => {
     const userId = await getUserId()
-    const { data: classRow, error: findError } = await (supabase as any)
-      .from('classes')
-      .select('*')
-      .eq('invite_token', token)
-      .single()
+    // Use SECURITY DEFINER RPC — direct SELECT is blocked by RLS for non-members
+    const { data: rows, error: findError } = await (supabase as any)
+      .rpc('get_class_by_invite_token', { p_token: token })
+    const classRow = rows?.[0] ?? null
     if (findError || !classRow) throw new Error('Lien d\'invitation invalide ou expiré')
 
     const { error: joinError } = await (supabase as any)
