@@ -207,6 +207,7 @@ export default function AthleteVoteView() {
             key={exercise.id}
             exercise={exercise}
             selected={selected.has(exercise.id)}
+            isConfirmedVote={previousVoteIds.has(exercise.id)}
             onToggle={() => toggleExercise(exercise.id)}
           />
         ))}
@@ -245,20 +246,31 @@ export default function AthleteVoteView() {
   )
 }
 
-function VoteCard({ exercise, selected, onToggle }: { exercise: Exercise; selected: boolean; onToggle: () => void }) {
+function VoteCard({ exercise, selected, isConfirmedVote, onToggle }: { exercise: Exercise; selected: boolean; isConfirmedVote: boolean; onToggle: () => void }) {
   const { t } = useTranslation('common')
   const [hovered, setHovered] = useState(false)
+
+  const accentColor = selected && isConfirmedVote ? '#22c55e' : 'var(--orange)'
+  const bgColor = selected && isConfirmedVote
+    ? 'rgba(34,197,94,0.08)'
+    : selected
+      ? 'rgba(255,77,0,0.08)'
+      : hovered ? 'var(--surface)' : 'var(--dark)'
+  const overlayColor = selected && isConfirmedVote
+    ? 'rgba(34,197,94,0.18)'
+    : 'rgba(255,77,0,0.18)'
 
   return (
     <button
       onClick={onToggle}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      style={{ background: selected ? 'rgba(255,77,0,0.08)' : hovered ? 'var(--surface)' : 'var(--dark)', border: 'none', outline: selected ? '2px solid var(--orange)' : '2px solid transparent', outlineOffset: '-2px', padding: '1.25rem 1.5rem', textAlign: 'left', cursor: 'pointer', transition: 'all 0.15s', display: 'flex', flexDirection: 'column', gap: '0.5rem', position: 'relative' }}
+      title={selected ? (isConfirmedVote ? t('vote.already_voted') : t('vote.selected')) : exercise.name}
+      style={{ background: bgColor, border: 'none', outline: selected ? `2px solid ${accentColor}` : '2px solid transparent', outlineOffset: '-2px', padding: '1.25rem 1.5rem', textAlign: 'left', cursor: 'pointer', transition: 'all 0.15s', display: 'flex', flexDirection: 'column', gap: '0.5rem', position: 'relative' }}
     >
       {selected && (
-        <div style={{ position: 'absolute', top: '0.6rem', right: '0.6rem', width: 22, height: 22, borderRadius: '50%', background: 'var(--orange)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', color: 'var(--black)', fontWeight: 700 }}>
-          OK
+        <div style={{ position: 'absolute', top: '0.6rem', right: '0.6rem', width: 22, height: 22, borderRadius: '50%', background: accentColor, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', color: 'var(--black)', fontWeight: 700 }}>
+          ✓
         </div>
       )}
       <div style={{ width: '100%', height: 100, background: 'var(--black)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', position: 'relative', marginBottom: '0.25rem' }}>
@@ -267,7 +279,7 @@ function VoteCard({ exercise, selected, onToggle }: { exercise: Exercise; select
         ) : (
           <span style={{ fontSize: '2rem', opacity: 0.15 }}>VID</span>
         )}
-        {selected && <div style={{ position: 'absolute', inset: 0, background: 'rgba(255,77,0,0.18)', pointerEvents: 'none' }} />}
+        {selected && <div style={{ position: 'absolute', inset: 0, background: overlayColor, pointerEvents: 'none' }} />}
       </div>
       <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.65rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--orange)', opacity: 0.8 }}>
         {t(CATEGORY_I18N_KEYS[exercise.category], { ns: 'common' })}

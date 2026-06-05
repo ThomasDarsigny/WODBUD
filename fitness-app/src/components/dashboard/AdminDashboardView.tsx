@@ -5,6 +5,7 @@ import type { Exercise } from '../../types'
 import { CATEGORY_I18N_KEYS, MUSCLE_GROUP_I18N_KEYS } from '../../types'
 import ExerciseFormModal from '../exercises/ExerciseFormModal'
 import ExerciseDetailModal from '../exercises/ExerciseDetailModal'
+import OcrImportSection from './OcrImportSection'
 
 export default function AdminDashboardView() {
   const { t } = useTranslation(['exercises', 'common'])
@@ -18,6 +19,11 @@ export default function AdminDashboardView() {
   useEffect(() => {
     fetchExercises()
   }, [fetchExercises])
+
+  const existingNames = useMemo(
+    () => new Set(exercises.map((e) => e.name.toLowerCase())),
+    [exercises]
+  )
 
   const total = exercises.length
   const withVideo = useMemo(() => exercises.filter((e) => !!e.video_url).length, [exercises])
@@ -118,6 +124,8 @@ export default function AdminDashboardView() {
           + {t('add', { ns: 'exercises' })}
         </button>
       </div>
+
+      <OcrImportSection existingNames={existingNames} />
 
       <div
         style={{

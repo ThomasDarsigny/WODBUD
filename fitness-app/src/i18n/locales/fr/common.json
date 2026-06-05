@@ -259,7 +259,12 @@
     "field_name": "Nom du cours",
     "field_schedule": "Horaire",
     "field_description": "Description",
-    "schedule_placeholder": "ex. Jeudi 19h00"
+    "schedule_placeholder": "ex. Jeudi 19h00",
+    "vote_singular": "vote",
+    "vote_plural": "votes",
+    "votes_total": "participant(s)",
+    "no_votes_yet": "Aucun vote pour l'instant",
+    "delete_vote": "Supprimer le vote"
   },
   "athlete": {
     "role_label": "Athlète",
@@ -300,7 +305,12 @@
     "success_label": "Vote envoyé",
     "success_title": "Merci pour ton vote !",
     "success_subtitle": "Tu as proposé {{count}} exercice(s) pour le prochain WOD.",
-    "vote_again": "Nouveau vote"
+    "vote_again": "Nouveau vote",
+    "voted": "Voté",
+    "modify": "Modifier mon vote",
+    "already_voted": "Tu as déjà voté",
+    "can_modify": "Tu peux modifier ta sélection",
+    "update": "Mettre à jour"
   },
   "errors": {
     "generic": "Une erreur est survenue",

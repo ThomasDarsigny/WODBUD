@@ -18,8 +18,12 @@ export default function AthleteDashboardLayout({ children }: Props) {
   const online = useOnlineStatus()
 
   async function handleLogout() {
-    await supabase.auth.signOut()
-    await clearAuthSessionCookies()
+    try {
+      await supabase.auth.signOut()
+    } catch { /* ignore */ }
+    try {
+      await clearAuthSessionCookies()
+    } catch { /* ignore */ }
     navigate('/login')
   }
 

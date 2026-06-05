@@ -21,6 +21,7 @@ interface ClassState {
   fetchVoteSessions: (classId: string) => Promise<void>
   createVoteSession: (data: VoteSessionInsert) => Promise<VoteSession>
   closeVoteSession: (sessionId: string) => Promise<void>
+  deleteVoteSession: (sessionId: string) => Promise<void>
   fetchVoteResults: (sessionId: string) => Promise<void>
 
   // Athlete side
@@ -217,6 +218,27 @@ export const useClassStore = create<ClassState>((set) => ({
       })
     } catch (err) {
       set({ error: err instanceof Error ? err.message : 'Erreur' })
+      throw err
+    }
+  },
+
+  deleteVoteSession: async (sessionId) => {
+    try {
+      // Delete all votes for this session first, then the session itself
+      await (supabase as any).from('exercise_votes').delete().eq('vote_session_id', sessionId)
+      const { error } = await (supabase as any).from('vote_sessions').delete().eq('id', sessionId)
+      if (error) throw error
+      set((s) => {
+        const updated = { ...s.voteSessions }
+        for (const classId of Object.keys(updated)) {
+          updated[classId] = updated[classId].filter((vs) => vs.id !== sessionId)
+        }
+        const results = { ...s.voteResults }
+        delete results[sessionId]
+        return { voteSessions: updated, voteResults: results }
+      })
+    } catch (err) {
+      set({ error: getErrorMessage(err) })
       throw err
     }
   },

@@ -85,7 +85,7 @@ export default function DashboardLayout({ children }: Props) {
   const navItems = useMemo(() => {
     return NAV_ITEMS.filter((item) => {
       if (item.id === 'admin') return isAdmin
-      if (item.id === 'ai' || item.id === 'vote' || item.id === 'classes') return !isAdmin
+      if (item.id === 'ai' || item.id === 'classes') return !isAdmin
       return true
     })
   }, [isAdmin])
