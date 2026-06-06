@@ -11,6 +11,7 @@ import ExercisesView from './components/dashboard/ExercisesView'
 import WorkoutBuilderView from './components/dashboard/WorkoutBuilderView'
 import VoteView from './components/dashboard/VoteView'
 import ClassesView from './components/dashboard/ClassesView'
+import AiCoachView from './components/dashboard/AiCoachView'
 import AthleteDashboardLayout from './components/athlete/AthleteDashboardLayout'
 import AthleteHomeView from './components/athlete/AthleteHomeView'
 import AthleteVoteView from './components/athlete/AthleteVoteView'
@@ -18,10 +19,6 @@ import JoinClassPage from './pages/JoinClassPage'
 import { supabase } from './lib/supabase'
 import { clearAuthSessionCookies, syncAuthSessionCookies } from './lib/authSessionCookies'
 import { isCurrentUserAdmin } from './lib/access'
-
-function AiView() {
-  return <ComingSoon labelKey="nav.ai" icon="AI" />
-}
 
 function ComingSoon({ labelKey, icon }: { labelKey: string; icon: string }) {
   const { t } = useTranslation('common')
@@ -256,7 +253,7 @@ function App() {
           element={
             <ProtectedRoute>
               <DashboardLayout>
-                <AiView />
+                <AiCoachView />
               </DashboardLayout>
             </ProtectedRoute>
           }

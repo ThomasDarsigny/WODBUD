@@ -32,9 +32,7 @@ const NAV_ITEMS: NavItem[] = [
     id: 'ai',
     labelKey: 'nav.ai',
     icon: 'AI',
-    path: '/dashboard/ai',
-    disabled: true,
-    soon: true
+    path: '/dashboard/ai'
   },
   {
     id: 'vote',
