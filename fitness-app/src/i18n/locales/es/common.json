@@ -8,7 +8,26 @@
     "admin": "Panel de administración",
     "ai": "Asistente IA",
     "vote": "Votos",
-    "classes": "Mis clases"
+    "classes": "Mis clases",
+    "library": "Biblioteca"
+  },
+  "library": {
+    "title": "Biblioteca de workouts",
+    "subtitle": "{{count}} workout(s) disponible(s)",
+    "search_placeholder": "Buscar por nombre o tipo…",
+    "all_types": "Todos",
+    "from_cache": "Datos en caché (sin conexión)",
+    "empty": "Aún no hay workouts.",
+    "no_results": "Ningún workout coincide con la búsqueda.",
+    "badge_template": "Plantilla",
+    "badge_mine": "Mi workout"
+  },
+  "vote_view": {
+    "title": "Todos los votos",
+    "subtitle": "{{open}} abierto(s) · {{total}} en total",
+    "empty": "Aún no hay votos. Crea uno desde una de tus clases.",
+    "go_to_classes": "Ir a mis clases",
+    "refresh": "Actualizar resultados"
   },
   "actions": {
     "save": "Guardar",

@@ -8,7 +8,26 @@
     "admin": "Admin dashboard",
     "ai": "AI assistant",
     "vote": "Votes",
-    "classes": "My classes"
+    "classes": "My classes",
+    "library": "Library"
+  },
+  "library": {
+    "title": "Workout library",
+    "subtitle": "{{count}} workout(s) available",
+    "search_placeholder": "Search by name or type…",
+    "all_types": "All",
+    "from_cache": "Cached data (offline)",
+    "empty": "No workouts yet.",
+    "no_results": "No workout matches your search.",
+    "badge_template": "Template",
+    "badge_mine": "My workout"
+  },
+  "vote_view": {
+    "title": "All votes",
+    "subtitle": "{{open}} open · {{total}} total",
+    "empty": "No votes yet. Create one from one of your classes.",
+    "go_to_classes": "Go to my classes",
+    "refresh": "Refresh results"
   },
   "actions": {
     "save": "Save",

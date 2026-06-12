@@ -157,6 +157,7 @@ export interface Workout {
   notes?: string
   exercises: WorkoutExercise[]
   created_at: string
+  created_by?: string | null
 }
 
 export type WorkoutInsert = Omit<Workout, 'id' | 'created_at'>
