@@ -22,6 +22,7 @@ type WorkoutRow = {
   duration_minutes?: number
   notes?: string
   created_at: string
+  created_by?: string | null
 }
 
 type RecentWorkoutRow = {
@@ -434,7 +435,8 @@ export const useWorkoutStore = create<WorkoutBuilderState>((set, get) => ({
         duration_minutes: durationMinutes,
         notes,
         exercises,
-        created_at: workoutRow.created_at
+        created_at: workoutRow.created_at,
+        created_by: userId
       }
 
       set((s) => {
@@ -455,7 +457,7 @@ export const useWorkoutStore = create<WorkoutBuilderState>((set, get) => ({
         .from('workouts')
         .select('*')
         .order('created_at', { ascending: false })
-        .limit(20)
+        .limit(200)
 
       if (error) throw error
 
@@ -466,7 +468,8 @@ export const useWorkoutStore = create<WorkoutBuilderState>((set, get) => ({
         duration_minutes: w.duration_minutes,
         notes: w.notes,
         exercises: [],
-        created_at: w.created_at
+        created_at: w.created_at,
+        created_by: w.created_by ?? null
       }))
 
       saveToCache('workouts', lightweight)

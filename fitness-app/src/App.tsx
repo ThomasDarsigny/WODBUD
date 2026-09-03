@@ -9,6 +9,7 @@ import DashboardLayout from './components/dashboard/DashboardLayout'
 import AdminDashboardView from './components/dashboard/AdminDashboardView'
 import ExercisesView from './components/dashboard/ExercisesView'
 import WorkoutBuilderView from './components/dashboard/WorkoutBuilderView'
+import WorkoutsLibraryView from './components/dashboard/WorkoutsLibraryView'
 import VoteView from './components/dashboard/VoteView'
 import ClassesView from './components/dashboard/ClassesView'
 import AiCoachView from './components/dashboard/AiCoachView'
@@ -246,6 +247,16 @@ function App() {
             <ProtectedRoute>
               <DashboardLayout>
                 <WorkoutBuilderView />
+              </DashboardLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard/workouts"
+          element={
+            <ProtectedRoute>
+              <DashboardLayout>
+                <WorkoutsLibraryView />
               </DashboardLayout>
             </ProtectedRoute>
           }

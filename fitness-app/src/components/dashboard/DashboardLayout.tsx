@@ -27,6 +27,7 @@ const NAV_ITEMS: NavItem[] = [
     icon: 'WOD',
     path: '/dashboard/workout'
   },
+  { id: 'library', labelKey: 'nav.library', icon: 'LIB', path: '/dashboard/workouts' },
   { id: 'classes', labelKey: 'nav.classes', icon: 'CLS', path: '/dashboard/classes' },
   {
     id: 'ai',

@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 import { useState, useEffect, useMemo, useRef } from 'react'
 import type { ChangeEvent, CSSProperties } from 'react'
+=======
+import { useState, useEffect } from 'react'
+import type { CSSProperties } from 'react'
+>>>>>>> 7c2da7a08c6a790c0ada6539ab73b45c9dca76be
 import { useTranslation } from 'react-i18next'
 import { useExerciseStore } from '../../stores/exerciseStore'
 import { useWorkoutStore } from '../../stores/workoutStore'
@@ -36,9 +41,7 @@ export default function WorkoutBuilderView() {
   const [selectedCategories, setSelectedCategories] = useState<ExerciseCategory[]>([])
   const [selectedMuscles, setSelectedMuscles] = useState<MuscleGroup[]>([])
   const [pickerExercise, setPickerExercise] = useState<Exercise | undefined>()
-  const [importedPdfName, setImportedPdfName] = useState<string | null>(null)
   const [savedSuccess, setSavedSuccess] = useState(false)
-  const pdfInputRef = useRef<HTMLInputElement>(null)
   const [restOverridePrompt, setRestOverridePrompt] = useState<{
     exercise: Exercise
     message: string
@@ -94,32 +97,6 @@ export default function WorkoutBuilderView() {
         ? current.filter((value) => value !== muscle)
         : [...current, muscle]
     )
-  }
-
-  function handlePdfImport(event: ChangeEvent<HTMLInputElement>) {
-    const file = event.target.files?.[0]
-    if (!file) return
-
-    const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')
-    if (!isPdf) {
-      setImportedPdfName(null)
-      event.target.value = ''
-      return
-    }
-
-    setImportedPdfName(file.name)
-
-    if (!name.trim()) {
-      const inferredName = file.name
-        .replace(/\.pdf$/i, '')
-        .replace(/[_-]+/g, ' ')
-        .trim()
-      if (inferredName) {
-        setName(inferredName)
-      }
-    }
-
-    event.target.value = ''
   }
 
   async function handleSave() {
@@ -374,33 +351,6 @@ export default function WorkoutBuilderView() {
           >
             {t('builder.workout_section', { ns: 'workouts' })}
           </p>
-          <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '0.6rem' }}>
-            <input
-              ref={pdfInputRef}
-              type='file'
-              accept='application/pdf,.pdf'
-              onChange={handlePdfImport}
-              style={{ display: 'none' }}
-            />
-            <button
-              type='button'
-              onClick={() => pdfInputRef.current?.click()}
-              style={{
-                fontFamily: 'var(--font-d)',
-                fontWeight: 700,
-                fontSize: '0.72rem',
-                letterSpacing: '0.08em',
-                textTransform: 'uppercase',
-                color: 'var(--orange)',
-                background: 'transparent',
-                border: '1px solid var(--border)',
-                padding: '0.45rem 0.7rem',
-                cursor: 'pointer'
-              }}
-            >
-              Importer le PDF
-            </button>
-          </div>
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -452,20 +402,6 @@ export default function WorkoutBuilderView() {
             </div>
           </div>
 
-          {importedPdfName && (
-            <p
-              style={{
-                marginTop: '0.45rem',
-                fontFamily: 'var(--font-d)',
-                fontSize: '0.64rem',
-                letterSpacing: '0.08em',
-                textTransform: 'uppercase',
-                color: 'var(--muted)'
-              }}
-            >
-              PDF charge: {importedPdfName}
-            </p>
-          )}
         </div>
 
         <div
