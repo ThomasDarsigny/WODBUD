@@ -1,8 +1,30 @@
 import { useState, useRef, useEffect } from 'react'
 import type { CSSProperties, FormEvent, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import type { Exercise, ExerciseCategory, ExerciseInsert, MuscleGroup } from '../../types'
-import { CATEGORY_I18N_KEYS, MUSCLE_GROUP_I18N_KEYS } from '../../types'
+import type {
+  BodyRegion,
+  Exercise,
+  ExerciseCategory,
+  ExerciseInsert,
+  MovementType,
+  MuscleGroup,
+  TrainingMethod
+} from '../../types'
+import {
+  BODY_REGIONS,
+  BODY_REGION_I18N_KEYS,
+  CATEGORY_I18N_KEYS,
+  CORE_MUSCLES,
+  LOWER_MUSCLES,
+  MOVEMENT_TYPES,
+  MOVEMENT_TYPE_COLORS,
+  MOVEMENT_TYPE_DESC_I18N_KEYS,
+  MOVEMENT_TYPE_I18N_KEYS,
+  MUSCLE_GROUP_I18N_KEYS,
+  TRAINING_METHODS,
+  TRAINING_METHOD_I18N_KEYS,
+  UPPER_MUSCLES
+} from '../../types'
 import { useExerciseStore } from '../../stores/exerciseStore'
 
 interface Props {
@@ -46,6 +68,14 @@ export default function ExerciseFormModal({ exercise, onClose }: Props) {
   const [category, setCategory] = useState<ExerciseCategory>(exercise?.category ?? 'strength')
   const [primaryMuscle, setPrimaryMuscle] = useState<MuscleGroup>(exercise?.primary_muscle ?? 'chest')
   const [secondaryMuscles, setSecondaryMuscles] = useState<MuscleGroup[]>(exercise?.secondary_muscles ?? [])
+  const [tertiaryMuscles, setTertiaryMuscles] = useState<MuscleGroup[]>(exercise?.tertiary_muscles ?? [])
+  const [movementType, setMovementType] = useState<MovementType | null>(exercise?.movement_type ?? null)
+  const [secondaryMovements, setSecondaryMovements] = useState<MovementType[]>(
+    exercise?.secondary_movements ?? []
+  )
+  const [methods, setMethods] = useState<TrainingMethod[]>(exercise?.methods ?? [])
+  const [bodyRegion, setBodyRegion] = useState<BodyRegion>(exercise?.body_region ?? 'upper')
+  const [regionTouched, setRegionTouched] = useState(Boolean(exercise))
   const [videoFile, setVideoFile] = useState<File | null>(null)
   const [videoPreview, setVideoPreview] = useState<string | null>(exercise?.video_url ?? null)
   const [uploading, setUploading] = useState(false)
@@ -77,9 +107,40 @@ export default function ExerciseFormModal({ exercise, onClose }: Props) {
 
   function toggleSecondary(muscle: MuscleGroup) {
     if (muscle === primaryMuscle) return
+    setTertiaryMuscles((prev) => prev.filter((m) => m !== muscle))
     setSecondaryMuscles((prev) =>
       prev.includes(muscle) ? prev.filter((m) => m !== muscle) : [...prev, muscle]
     )
+  }
+
+  function toggleTertiary(muscle: MuscleGroup) {
+    if (muscle === primaryMuscle) return
+    setSecondaryMuscles((prev) => prev.filter((m) => m !== muscle))
+    setTertiaryMuscles((prev) =>
+      prev.includes(muscle) ? prev.filter((m) => m !== muscle) : [...prev, muscle]
+    )
+  }
+
+  function toggleMethod(method: TrainingMethod) {
+    setMethods((prev) =>
+      prev.includes(method) ? prev.filter((m) => m !== method) : [...prev, method]
+    )
+  }
+
+  function toggleSecondaryMovement(mv: MovementType) {
+    if (mv === movementType) return
+    setSecondaryMovements((prev) =>
+      prev.includes(mv) ? prev.filter((m) => m !== mv) : [...prev, mv]
+    )
+  }
+
+  // Tant que le coach n'a pas touché au sélecteur, la région suit le muscle
+  // principal. Dès qu'il choisit, on ne l'écrase plus.
+  function regionFromMuscle(m: MuscleGroup): BodyRegion {
+    if (CORE_MUSCLES.includes(m)) return 'core'
+    if (UPPER_MUSCLES.includes(m)) return 'upper'
+    if (LOWER_MUSCLES.includes(m)) return 'lower'
+    return 'full'
   }
 
   async function handleSubmit(e: FormEvent) {
@@ -96,8 +157,15 @@ export default function ExerciseFormModal({ exercise, onClose }: Props) {
         name: name.trim(),
         description: description.trim(),
         category,
+        body_region: bodyRegion,
+        movement_type: movementType,
+        secondary_movements: secondaryMovements.filter((m) => m !== movementType),
+        methods,
         primary_muscle: primaryMuscle,
         secondary_muscles: secondaryMuscles.filter((m) => m !== primaryMuscle),
+        tertiary_muscles: tertiaryMuscles.filter(
+          (m) => m !== primaryMuscle && !secondaryMuscles.includes(m)
+        ),
         video_url: videoPreview && !videoPreview.startsWith('blob:') ? videoPreview : null
       }
 
@@ -219,6 +287,117 @@ export default function ExerciseFormModal({ exercise, onClose }: Props) {
             </select>
           </Field>
 
+          <Field label={t('fields.movement_type', { ns: 'exercises' })}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
+              {MOVEMENT_TYPES.map((mv) => {
+                const selected = movementType === mv
+                return (
+                  <button
+                    key={mv}
+                    type='button'
+                    title={t(MOVEMENT_TYPE_DESC_I18N_KEYS[mv], { ns: 'common' })}
+                    onClick={() => {
+                      setMovementType(selected ? null : mv)
+                      setSecondaryMovements((prev) => prev.filter((m) => m !== mv))
+                    }}
+                    style={{
+                      fontFamily: 'var(--font-d)',
+                      fontSize: '0.72rem',
+                      letterSpacing: '0.1em',
+                      textTransform: 'uppercase',
+                      padding: '0.35rem 0.8rem',
+                      border: `1px solid ${selected ? MOVEMENT_TYPE_COLORS[mv] : 'var(--border)'}`,
+                      background: selected ? MOVEMENT_TYPE_COLORS[mv] + '22' : 'transparent',
+                      color: selected ? MOVEMENT_TYPE_COLORS[mv] : 'var(--muted)',
+                      cursor: 'pointer',
+                      transition: 'all 0.15s'
+                    }}
+                  >
+                    {t(MOVEMENT_TYPE_I18N_KEYS[mv], { ns: 'common' })}
+                  </button>
+                )
+              })}
+            </div>
+            {movementType && (
+              <div style={{ marginTop: '0.6rem' }}>
+                <p style={{ fontSize: '0.7rem', color: 'var(--muted)', margin: '0 0 0.35rem' }}>
+                  {t(MOVEMENT_TYPE_DESC_I18N_KEYS[movementType], { ns: 'common' })}
+                </p>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem' }}>
+                  {MOVEMENT_TYPES.filter((mv) => mv !== movementType).map((mv) => {
+                    const selected = secondaryMovements.includes(mv)
+                    return (
+                      <button
+                        key={mv}
+                        type='button'
+                        onClick={() => toggleSecondaryMovement(mv)}
+                        style={{
+                          fontFamily: 'var(--font-d)',
+                          fontSize: '0.62rem',
+                          letterSpacing: '0.08em',
+                          textTransform: 'uppercase',
+                          padding: '0.2rem 0.55rem',
+                          border: `1px dashed ${selected ? MOVEMENT_TYPE_COLORS[mv] : 'var(--border)'}`,
+                          background: 'transparent',
+                          color: selected ? MOVEMENT_TYPE_COLORS[mv] : 'var(--muted)',
+                          cursor: 'pointer',
+                          opacity: selected ? 1 : 0.6
+                        }}
+                      >
+                        + {t(MOVEMENT_TYPE_I18N_KEYS[mv], { ns: 'common' })}
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+            )}
+          </Field>
+
+          <Field label={t('fields.methods', { ns: 'exercises' })}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
+              {TRAINING_METHODS.map((mk) => {
+                const selected = methods.includes(mk)
+                return (
+                  <button
+                    key={mk}
+                    type='button'
+                    onClick={() => toggleMethod(mk)}
+                    style={{
+                      fontFamily: 'var(--font-d)',
+                      fontSize: '0.7rem',
+                      letterSpacing: '0.08em',
+                      padding: '0.3rem 0.7rem',
+                      border: `1px solid ${selected ? 'var(--orange)' : 'var(--border)'}`,
+                      background: selected ? 'rgba(255,77,0,0.12)' : 'transparent',
+                      color: selected ? 'var(--orange)' : 'var(--muted)',
+                      cursor: 'pointer',
+                      transition: 'all 0.15s'
+                    }}
+                  >
+                    {t(TRAINING_METHOD_I18N_KEYS[mk], { ns: 'common' })}
+                  </button>
+                )
+              })}
+            </div>
+          </Field>
+
+          <Field label={t('fields.body_region', { ns: 'exercises' })}>
+            <select
+              value={bodyRegion}
+              onChange={(e) => {
+                setRegionTouched(true)
+                setBodyRegion(e.target.value as BodyRegion)
+              }}
+              style={inputStyle}
+            >
+              {BODY_REGIONS.map((r) => (
+                <option key={r} value={r}>
+                  {t(BODY_REGION_I18N_KEYS[r], { ns: 'common' })}
+                </option>
+              ))}
+            </select>
+          </Field>
+
           <Field label={`${t('fields.primary_muscle', { ns: 'exercises' })} *`}>
             <select
               value={primaryMuscle}
@@ -226,6 +405,8 @@ export default function ExerciseFormModal({ exercise, onClose }: Props) {
                 const value = e.target.value as MuscleGroup
                 setPrimaryMuscle(value)
                 setSecondaryMuscles((s) => s.filter((m) => m !== value))
+                setTertiaryMuscles((s) => s.filter((m) => m !== value))
+                if (!regionTouched) setBodyRegion(regionFromMuscle(value))
               }}
               style={inputStyle}
             >
@@ -255,6 +436,37 @@ export default function ExerciseFormModal({ exercise, onClose }: Props) {
                       border: `1px solid ${selected ? 'var(--orange)' : 'var(--border)'}`,
                       background: selected ? 'rgba(255,77,0,0.12)' : 'transparent',
                       color: selected ? 'var(--orange)' : 'var(--muted)',
+                      cursor: 'pointer',
+                      transition: 'all 0.15s'
+                    }}
+                  >
+                    {t(key, { ns: 'common' })}
+                  </button>
+                )
+              })}
+            </div>
+          </Field>
+
+          <Field label={t('fields.tertiary_muscles', { ns: 'exercises' })}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
+              {MUSCLE_OPTIONS.filter(
+                ([val]) => val !== primaryMuscle && !secondaryMuscles.includes(val)
+              ).map(([val, key]) => {
+                const selected = tertiaryMuscles.includes(val)
+                return (
+                  <button
+                    key={val}
+                    type='button'
+                    onClick={() => toggleTertiary(val)}
+                    style={{
+                      fontFamily: 'var(--font-d)',
+                      fontSize: '0.68rem',
+                      letterSpacing: '0.1em',
+                      textTransform: 'uppercase',
+                      padding: '0.25rem 0.6rem',
+                      border: `1px dashed ${selected ? '#a78bfa' : 'var(--border)'}`,
+                      background: selected ? 'rgba(167,139,250,0.12)' : 'transparent',
+                      color: selected ? '#a78bfa' : 'var(--muted)',
                       cursor: 'pointer',
                       transition: 'all 0.15s'
                     }}

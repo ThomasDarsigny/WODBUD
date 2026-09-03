@@ -39,7 +39,8 @@ const NAV_ITEMS: NavItem[] = [
     labelKey: 'nav.vote',
     icon: 'VOTE',
     path: '/dashboard/vote'
-  }
+  },
+  { id: 'settings', labelKey: 'nav.settings', icon: 'SET', path: '/dashboard/settings' }
 ]
 
 interface Props {

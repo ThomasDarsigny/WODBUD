@@ -20,7 +20,8 @@ const CATEGORY_LABELS: Record<ExerciseCategory, string> = {
 }
 const MUSCLE_SHORT: Record<MuscleGroup, string> = {
   chest: 'Pecto', back: 'Dos', shoulders: 'Épaules', biceps: 'Biceps',
-  triceps: 'Triceps', forearms: 'Avant-bras', core: 'Core', glutes: 'Fessiers',
+  triceps: 'Triceps', forearms: 'Avant-bras', core: 'Abdos', obliques: 'Obliques',
+  lower_back: 'Lombaires', glutes: 'Fessiers',
   quads: 'Quads', hamstrings: 'Ischios', calves: 'Mollets',
   cardio_upper: 'Cardio H.', cardio_lower: 'Cardio B.'
 }
@@ -175,8 +176,13 @@ export default function OcrImportSection({ existingNames }: Props) {
           name: row.name,
           description: row.description,
           category: row.category,
+          body_region: 'full',
+          movement_type: null,
+          secondary_movements: [],
+          methods: [],
           primary_muscle: row.primary_muscle,
           secondary_muscles: [],
+          tertiary_muscles: [],
           video_url: null,
           video_path: null
         })

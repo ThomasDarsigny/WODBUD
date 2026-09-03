@@ -1,6 +1,6 @@
 import { Document, Image, Link, Page, StyleSheet, Text, View } from '@react-pdf/renderer'
 import type { Workout } from '../../types'
-import { formatDate, METHOD_LABELS, MUSCLE_LABELS, tokens, type PdfTheme } from './pdftokens'
+import { formatDate, METHOD_LABELS, MUSCLE_LABELS, tokens, type PdfTheme } from './pdfTokens'
 
 interface Props {
 	workout: Workout & { title?: string }

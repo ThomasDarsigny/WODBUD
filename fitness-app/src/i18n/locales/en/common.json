@@ -203,7 +203,11 @@
       "hamstrings": "Hamstrings",
       "calves": "Calves",
       "cardio_upper": "Cardio - Upper body",
-      "cardio_lower": "Cardio - Lower body"
+      "cardio_lower": "Cardio - Lower body",
+      "obliques": "Obliques",
+      "lower_back": "Lower back",
+      "abs": "Abs",
+      "full_body": "Full body"
     },
     "methods": {
       "amrap": "AMRAP",
@@ -216,7 +220,43 @@
     },
     "zones": {
       "upper": "upper body",
-      "lower": "lower body"
+      "lower": "lower body",
+      "core": "core",
+      "full": "full body"
+    },
+    "movements": {
+      "pull": "Pull",
+      "push": "Push",
+      "stabilize": "Stabilize",
+      "carry": "Carry",
+      "climb": "Climb",
+      "unclassified": "Unclassified"
+    },
+    "movements_desc": {
+      "pull": "The load moves toward the body",
+      "push": "The load moves away from the body",
+      "stabilize": "Resist movement, hold a position",
+      "carry": "Move a load over a distance",
+      "climb": "Raise the body vertically"
+    },
+    "training_methods": {
+      "bodyweight": "Bodyweight",
+      "barbell": "Barbell",
+      "dumbbell": "Dumbbell",
+      "kettlebell": "Kettlebell",
+      "suspension_trx": "Suspension (TRX)",
+      "resistance_band": "Resistance bands",
+      "parallel_bar": "Parallel bars",
+      "sandbag": "Sandbag",
+      "wall_ball": "Wall ball",
+      "slam_ball": "Slam ball"
+    },
+    "load": {
+      "unused": "Not worked",
+      "under": "Under-stimulated",
+      "optimal": "Well worked",
+      "high": "Slight overload",
+      "overload": "Overload"
     }
   },
   "status": {
@@ -299,5 +339,45 @@
   "errors": {
     "generic": "An error occurred",
     "network": "Connection problem"
+  },
+  "mannequin": {
+    "title": "Muscles worked",
+    "front": "Front",
+    "back": "Back",
+    "legend": "Legend",
+    "no_data": "No exercise selected",
+    "no_mapping": "This exercise has no muscles mapped yet",
+    "sets": "sets",
+    "tap_hint": "Tap a muscle for details"
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Your account, your display, your language.",
+    "appearance": "Appearance",
+    "theme": "Theme",
+    "theme_light": "Light",
+    "theme_dark": "Dark",
+    "theme_auto": "System",
+    "theme_hint": "System mode follows your device settings and switches on its own.",
+    "language_hint": "Changes the language of the whole interface, immediately.",
+    "account": "Account",
+    "current_email": "Current email",
+    "new_email": "New email",
+    "change_email": "Change email",
+    "email_sent": "A confirmation link was sent. The change takes effect once you click it.",
+    "new_password": "New password",
+    "confirm_password": "Confirm password",
+    "change_password": "Change password",
+    "password_changed": "Password updated.",
+    "password_too_short": "Password must be at least 8 characters.",
+    "password_mismatch": "Passwords do not match.",
+    "saving": "Saving...",
+    "saved": "Saved",
+    "privacy": "Privacy",
+    "privacy_link": "Read the privacy policy",
+    "segment": "Portal",
+    "segment_individu": "Individual",
+    "segment_gym": "Gym (business)",
+    "segment_hint": "Changes what you see in the menu. You can switch back any time."
   }
 }

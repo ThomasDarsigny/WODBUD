@@ -1,8 +1,20 @@
 import { useState, useEffect, useMemo } from 'react'
+import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useExerciseStore } from '../../stores/exerciseStore'
 import type { Exercise, ExerciseCategory } from '../../types'
-import { CATEGORY_I18N_KEYS, MUSCLE_GROUP_I18N_KEYS } from '../../types'
+import {
+  BODY_REGIONS,
+  BODY_REGION_I18N_KEYS,
+  CATEGORY_I18N_KEYS,
+  MOVEMENT_TYPES,
+  MOVEMENT_TYPE_COLORS,
+  MOVEMENT_TYPE_I18N_KEYS,
+  MUSCLE_GROUP_I18N_KEYS,
+  TRAINING_METHODS,
+  TRAINING_METHOD_I18N_KEYS
+} from '../../types'
+import type { BodyRegion, MovementType, TrainingMethod } from '../../types'
 import ExerciseFormModal from '../exercises/ExerciseFormModal'
 import ExerciseDetailModal from '../exercises/ExerciseDetailModal'
 
@@ -14,6 +26,9 @@ export default function ExercisesView() {
 
   const [search, setSearch] = useState('')
   const [categoryFilter, setCategoryFilter] = useState<FilterCategory>('all')
+  const [movementFilter, setMovementFilter] = useState<MovementType | 'all'>('all')
+  const [methodFilter, setMethodFilter] = useState<TrainingMethod | 'all'>('all')
+  const [regionFilter, setRegionFilter] = useState<BodyRegion | 'all'>('all')
   const [showForm, setShowForm] = useState(false)
   const [editingExercise, setEditingExercise] = useState<Exercise | undefined>()
   const [detailExercise, setDetailExercise] = useState<Exercise | undefined>()
@@ -30,9 +45,22 @@ export default function ExercisesView() {
         e.description.toLowerCase().includes(q) ||
         t(MUSCLE_GROUP_I18N_KEYS[e.primary_muscle], { ns: 'common' }).toLowerCase().includes(q)
       const matchCat = categoryFilter === 'all' || e.category === categoryFilter
-      return matchSearch && matchCat
+      const matchMove =
+        movementFilter === 'all' ||
+        e.movement_type === movementFilter ||
+        (e.secondary_movements ?? []).includes(movementFilter)
+      const matchMethod = methodFilter === 'all' || (e.methods ?? []).includes(methodFilter)
+      const matchRegion = regionFilter === 'all' || e.body_region === regionFilter
+      return matchSearch && matchCat && matchMove && matchMethod && matchRegion
     })
-  }, [exercises, search, categoryFilter, t])
+  }, [exercises, search, categoryFilter, movementFilter, methodFilter, regionFilter, t])
+
+  const hasFilters =
+    Boolean(search) ||
+    categoryFilter !== 'all' ||
+    movementFilter !== 'all' ||
+    methodFilter !== 'all' ||
+    regionFilter !== 'all'
 
   function handleEdit(exercise: Exercise) {
     setEditingExercise(exercise)
@@ -180,6 +208,55 @@ export default function ExercisesView() {
             </button>
           ))}
         </div>
+
+        <FilterRow label={t('fields.filter_movement', { ns: 'exercises' })}>
+          <FilterChip
+            active={movementFilter === 'all'}
+            onClick={() => setMovementFilter('all')}
+            label={t('fields.all', { ns: 'exercises' })}
+          />
+          {MOVEMENT_TYPES.map((mv) => (
+            <FilterChip
+              key={mv}
+              active={movementFilter === mv}
+              accent={MOVEMENT_TYPE_COLORS[mv]}
+              onClick={() => setMovementFilter(movementFilter === mv ? 'all' : mv)}
+              label={t(MOVEMENT_TYPE_I18N_KEYS[mv], { ns: 'common' })}
+            />
+          ))}
+        </FilterRow>
+
+        <FilterRow label={t('fields.filter_method', { ns: 'exercises' })}>
+          <FilterChip
+            active={methodFilter === 'all'}
+            onClick={() => setMethodFilter('all')}
+            label={t('fields.all', { ns: 'exercises' })}
+          />
+          {TRAINING_METHODS.map((mk) => (
+            <FilterChip
+              key={mk}
+              active={methodFilter === mk}
+              onClick={() => setMethodFilter(methodFilter === mk ? 'all' : mk)}
+              label={t(TRAINING_METHOD_I18N_KEYS[mk], { ns: 'common' })}
+            />
+          ))}
+        </FilterRow>
+
+        <FilterRow label={t('fields.filter_region', { ns: 'exercises' })}>
+          <FilterChip
+            active={regionFilter === 'all'}
+            onClick={() => setRegionFilter('all')}
+            label={t('fields.all', { ns: 'exercises' })}
+          />
+          {BODY_REGIONS.map((r) => (
+            <FilterChip
+              key={r}
+              active={regionFilter === r}
+              onClick={() => setRegionFilter(regionFilter === r ? 'all' : r)}
+              label={t(BODY_REGION_I18N_KEYS[r], { ns: 'common' })}
+            />
+          ))}
+        </FilterRow>
       </div>
 
       {loading ? (
@@ -208,7 +285,7 @@ export default function ExercisesView() {
               textTransform: 'uppercase'
             }}
           >
-            {search || categoryFilter !== 'all'
+            {hasFilters
               ? t('empty_filtered', { ns: 'exercises' })
               : t('empty', { ns: 'exercises' })}
           </p>
@@ -379,6 +456,60 @@ function ExerciseCard({ exercise, onClick }: { exercise: Exercise; onClick: () =
           </span>
         )}
       </div>
+    </button>
+  )
+}
+
+function FilterRow({ label, children }: { label: string; children: ReactNode }) {
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', flexWrap: 'wrap' }}>
+      <span
+        style={{
+          fontFamily: 'var(--font-d)',
+          fontSize: '0.6rem',
+          letterSpacing: '0.14em',
+          textTransform: 'uppercase',
+          color: 'var(--muted)',
+          minWidth: '4.5rem'
+        }}
+      >
+        {label}
+      </span>
+      <div style={{ display: 'flex', gap: '0.35rem', flexWrap: 'wrap' }}>{children}</div>
+    </div>
+  )
+}
+
+function FilterChip({
+  label,
+  active,
+  accent,
+  onClick
+}: {
+  label: string
+  active: boolean
+  accent?: string
+  onClick: () => void
+}) {
+  const color = accent ?? 'var(--orange)'
+  return (
+    <button
+      type='button'
+      onClick={onClick}
+      style={{
+        fontFamily: 'var(--font-d)',
+        fontSize: '0.66rem',
+        letterSpacing: '0.08em',
+        textTransform: 'uppercase',
+        padding: '0.25rem 0.6rem',
+        border: `1px solid ${active ? color : 'var(--border)'}`,
+        background: active ? `${accent ? accent + '22' : 'rgba(255,77,0,0.1)'}` : 'transparent',
+        color: active ? color : 'var(--muted)',
+        cursor: 'pointer',
+        transition: 'all 0.15s'
+      }}
+    >
+      {label}
     </button>
   )
 }

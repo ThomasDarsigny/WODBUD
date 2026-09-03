@@ -209,7 +209,11 @@
       "hamstrings": "Ischio-jambiers",
       "calves": "Mollets",
       "cardio_upper": "Cardio - Haut du corps",
-      "cardio_lower": "Cardio - Bas du corps"
+      "cardio_lower": "Cardio - Bas du corps",
+      "obliques": "Obliques",
+      "lower_back": "Lombaires",
+      "abs": "Abdominaux",
+      "full_body": "Corps complet"
     },
     "methods": {
       "amrap": "AMRAP",
@@ -222,7 +226,43 @@
     },
     "zones": {
       "upper": "haut du corps",
-      "lower": "bas du corps"
+      "lower": "bas du corps",
+      "core": "ceinture abdominale",
+      "full": "corps complet"
+    },
+    "movements": {
+      "pull": "Tirer",
+      "push": "Pousser",
+      "stabilize": "Stabiliser",
+      "carry": "Transporter",
+      "climb": "Monter",
+      "unclassified": "Non classé"
+    },
+    "movements_desc": {
+      "pull": "La charge se rapproche du corps",
+      "push": "La charge s'éloigne du corps",
+      "stabilize": "Résister au mouvement, tenir une position",
+      "carry": "Déplacer une charge sur une distance",
+      "climb": "Élever le corps à la verticale"
+    },
+    "training_methods": {
+      "bodyweight": "Poids du corps",
+      "barbell": "Barre",
+      "dumbbell": "Haltères",
+      "kettlebell": "Kettlebell",
+      "suspension_trx": "Suspension (TRX)",
+      "resistance_band": "Élastiques",
+      "parallel_bar": "Barres parallèles",
+      "sandbag": "Sandbag",
+      "wall_ball": "Wall ball",
+      "slam_ball": "Slam ball"
+    },
+    "load": {
+      "unused": "Non sollicité",
+      "under": "Sous-stimulé",
+      "optimal": "Bien sollicité",
+      "high": "Légère surcharge",
+      "overload": "Surcharge"
     }
   },
   "status": {
@@ -315,5 +355,45 @@
   "errors": {
     "generic": "Une erreur est survenue",
     "network": "Problème de connexion"
+  },
+  "mannequin": {
+    "title": "Zones touchées",
+    "front": "Face",
+    "back": "Dos",
+    "legend": "Légende",
+    "no_data": "Aucun exercice sélectionné",
+    "no_mapping": "Cet exercice n’a pas encore de muscles associés",
+    "sets": "séries",
+    "tap_hint": "Touche un muscle pour le détail"
+  },
+  "settings": {
+    "title": "Paramètres",
+    "subtitle": "Ton compte, ton affichage, ta langue.",
+    "appearance": "Apparence",
+    "theme": "Thème",
+    "theme_light": "Clair",
+    "theme_dark": "Sombre",
+    "theme_auto": "Système",
+    "theme_hint": "Le mode Système suit les réglages de ton appareil et bascule tout seul.",
+    "language_hint": "Change la langue de toute l’interface, immédiatement.",
+    "account": "Compte",
+    "current_email": "Courriel actuel",
+    "new_email": "Nouveau courriel",
+    "change_email": "Changer le courriel",
+    "email_sent": "Un lien de confirmation a été envoyé. Le changement prend effet une fois le lien cliqué.",
+    "new_password": "Nouveau mot de passe",
+    "confirm_password": "Confirmer le mot de passe",
+    "change_password": "Changer le mot de passe",
+    "password_changed": "Mot de passe mis à jour.",
+    "password_too_short": "Le mot de passe doit faire au moins 8 caractères.",
+    "password_mismatch": "Les mots de passe ne correspondent pas.",
+    "saving": "Enregistrement...",
+    "saved": "Enregistré",
+    "privacy": "Confidentialité",
+    "privacy_link": "Lire la politique de confidentialité",
+    "segment": "Portail",
+    "segment_individu": "Particulier",
+    "segment_gym": "Gym (business)",
+    "segment_hint": "Change ce que tu vois dans le menu. Tu peux le rechanger n’importe quand."
   }
 }

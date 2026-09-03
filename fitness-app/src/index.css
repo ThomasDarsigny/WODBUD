@@ -60,3 +60,42 @@ option {
   outline: 1px solid var(--orange);
   outline-offset: 1px;
 }
+
+/* ─── Thème clair ────────────────────────────────────────────────
+   Les jetons gardent leurs noms (--black, --white) parce qu'ils sont
+   utilisés dans des styles inline partout dans l'app. On inverse
+   seulement leurs valeurs : --black = fond, --white = texte.
+   Renommer coûterait une passe sur ~7000 lignes pour zéro gain. */
+:root[data-theme='clair'] {
+  --black: #f6f4f1;
+  --dark: #ffffff;
+  --surface: #eceae5;
+  --border: #d9d5ce;
+  --orange: #d94400;
+  --orange-dim: #a83400;
+  --white: #16140f;
+  --muted: #6c665f;
+}
+
+/* Zones neutres du mannequin : un gris foncé sur fond noir, un gris
+   moyen sur fond clair — sinon les muscles au repos ressortent comme
+   des taches. */
+:root {
+  --mannequin-body: #2a2a2e;
+  --mannequin-idle: #3f3f46;
+  --mannequin-line: #0a0a0a;
+  --surf: rgba(255, 255, 255, 0.02);
+  --ink: #f0ebe4;
+}
+
+:root[data-theme='clair'] {
+  --mannequin-body: #d6d2ca;
+  --mannequin-idle: #c3beb5;
+  --mannequin-line: #f6f4f1;
+  --surf: rgba(0, 0, 0, 0.03);
+  --ink: #16140f;
+}
+
+:root[data-theme='clair'] body {
+  color-scheme: light;
+}

@@ -17,7 +17,15 @@
     "body_region": "Región corporal",
     "notes": "Notas",
     "weight_intensity": "Carga / Intensidad",
-    "instructions": "Instrucciones"
+    "instructions": "Instrucciones",
+    "movement_type": "Tipo de movimiento",
+    "secondary_movements": "Movimientos secundarios",
+    "methods": "Métodos / equipo",
+    "tertiary_muscles": "Estabilizadores (terciarios)",
+    "filter_movement": "Movimiento",
+    "filter_method": "Método",
+    "filter_region": "Región",
+    "all": "Todos"
   },
   "categories": {
     "strength": "Fuerza",

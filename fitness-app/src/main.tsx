@@ -4,6 +4,10 @@ import ReactDOM from 'react-dom/client'
 import { registerSW } from 'virtual:pwa-register'
 import App from './App'
 import './index.css'
+import { initTheme, readStoredTheme } from './lib/theme'
+
+// Avant le premier rendu : sinon l'écran flashe en sombre puis passe en clair.
+initTheme(readStoredTheme())
 
 if (import.meta.env.PROD) {
   const updateSW = registerSW({

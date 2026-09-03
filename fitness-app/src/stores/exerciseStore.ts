@@ -3,8 +3,16 @@ import i18n from '../i18n'
 import { supabase } from '../lib/supabase'
 import { uploadVideoToR2 } from '../lib/r2'
 import { saveToCache, loadFromCache } from '../lib/offlineCache'
-import type { Exercise, ExerciseInsert, ExerciseUpdate, MuscleGroup } from '../types'
-import { LOWER_MUSCLES, MUSCLE_GROUP_LABELS, UPPER_MUSCLES } from '../types'
+import type {
+  BodyRegion,
+  Exercise,
+  ExerciseInsert,
+  ExerciseUpdate,
+  MovementType,
+  MuscleGroup,
+  TrainingMethod
+} from '../types'
+import { CORE_MUSCLES, LOWER_MUSCLES, MUSCLE_GROUP_LABELS, UPPER_MUSCLES } from '../types'
 
 type ExerciseMuscleRow = {
   muscle_group_id: string
@@ -22,10 +30,14 @@ type ExerciseRow = {
   name: string
   description: string | null
   category: Exercise['category']
+  body_region: BodyRegion | null
+  movement_type: MovementType | null
+  secondary_movements: MovementType[] | null
   video_url: string | null
   created_at: string
   updated_at: string
   exercise_muscles?: ExerciseMuscleRow[]
+  exercise_methods?: Array<{ method_key: TrainingMethod }>
 }
 
 interface ExerciseState {
@@ -121,6 +133,8 @@ function toAppMuscleGroupKey(nameKey: string | null | undefined): MuscleGroup | 
 
   if (nameKey === 'abs') return 'core'
   if (nameKey === 'quadriceps') return 'quads'
+  if (nameKey === 'obliques') return 'obliques'
+  if (nameKey === 'lower_back') return 'lower_back'
 
   if (nameKey in MUSCLE_GROUP_LABELS) {
     return nameKey as MuscleGroup
@@ -140,6 +154,14 @@ function resolveMuscleGroupId(
     return idByKey.get('core')
   }
 
+  if (muscle === 'obliques') {
+    return idByKey.get('obliques')
+  }
+
+  if (muscle === 'lower_back') {
+    return idByKey.get('lower_back')
+  }
+
   if (muscle === 'quads') {
     return idByKey.get('quads')
   }
@@ -147,7 +169,8 @@ function resolveMuscleGroupId(
   return undefined
 }
 
-function getBodyRegionFromPrimaryMuscle(primaryMuscle: MuscleGroup): 'upper' | 'lower' | 'full' {
+function getBodyRegionFromPrimaryMuscle(primaryMuscle: MuscleGroup): BodyRegion {
+  if (CORE_MUSCLES.includes(primaryMuscle)) return 'core'
   if (UPPER_MUSCLES.includes(primaryMuscle)) return 'upper'
   if (LOWER_MUSCLES.includes(primaryMuscle)) return 'lower'
   return 'full'
@@ -166,7 +189,9 @@ export const useExerciseStore = create<ExerciseState>((set, get) => ({
 
       const { data, error } = await (supabase as any)
         .from('exercises')
-        .select('*, exercise_muscles(muscle_group_id, role, muscle_groups(name_key))')
+        .select(
+          '*, exercise_muscles(muscle_group_id, role, muscle_groups(name_key)), exercise_methods(method_key)'
+        )
         .order('name', { ascending: true })
 
       if (error) throw error
@@ -190,6 +215,15 @@ export const useExerciseStore = create<ExerciseState>((set, get) => ({
             ?.filter((m) => m.role === 'secondary')
             .map((m) => extractNameKey(m.muscle_groups) ?? keyById.get(m.muscle_group_id))
             .filter((m): m is MuscleGroup => Boolean(m)) ?? [],
+        tertiary_muscles:
+          row.exercise_muscles
+            ?.filter((m) => m.role === 'tertiary')
+            .map((m) => extractNameKey(m.muscle_groups) ?? keyById.get(m.muscle_group_id))
+            .filter((m): m is MuscleGroup => Boolean(m)) ?? [],
+        body_region: row.body_region ?? 'full',
+        movement_type: row.movement_type ?? null,
+        secondary_movements: row.secondary_movements ?? [],
+        methods: row.exercise_methods?.map((m) => m.method_key) ?? [],
         video_url: row.video_url ?? null,
         video_path: null,
         created_at: row.created_at,
@@ -220,7 +254,9 @@ export const useExerciseStore = create<ExerciseState>((set, get) => ({
           name: data.name,
           description: data.description,
           category: data.category,
-          body_region: getBodyRegionFromPrimaryMuscle(data.primary_muscle),
+          body_region: data.body_region ?? getBodyRegionFromPrimaryMuscle(data.primary_muscle),
+          movement_type: data.movement_type ?? null,
+          secondary_movements: data.secondary_movements ?? [],
           created_by: userId
         })
         .select()
@@ -244,12 +280,28 @@ export const useExerciseStore = create<ExerciseState>((set, get) => ({
           exercise_id: row.id,
           muscle_group_id: resolveMuscleGroupId(idByKey, mg),
           role: 'secondary'
+        })),
+        ...(data.tertiary_muscles ?? []).map((mg) => ({
+          exercise_id: row.id,
+          muscle_group_id: resolveMuscleGroupId(idByKey, mg),
+          role: 'tertiary'
         }))
       ].filter((row) => Boolean(row.muscle_group_id))
       const { error: muscleError } = await (supabase as any)
         .from('exercise_muscles')
         .insert(muscleRows)
       if (muscleError) throw muscleError
+
+      if (data.methods?.length) {
+        const { error: methodError } = await (supabase as any).from('exercise_methods').insert(
+          data.methods.map((key, i) => ({
+            exercise_id: row.id,
+            method_key: key,
+            is_primary: i === 0
+          }))
+        )
+        if (methodError) throw methodError
+      }
 
       let video_url: string | null = null
       if (videoFile) {
@@ -305,8 +357,14 @@ export const useExerciseStore = create<ExerciseState>((set, get) => ({
       if (data.name) updatePayload.name = data.name
       if (data.description !== undefined) updatePayload.description = data.description
       if (data.category) updatePayload.category = data.category
-      if (data.primary_muscle) {
+      if (data.body_region) {
+        updatePayload.body_region = data.body_region
+      } else if (data.primary_muscle) {
         updatePayload.body_region = getBodyRegionFromPrimaryMuscle(data.primary_muscle)
+      }
+      if (data.movement_type !== undefined) updatePayload.movement_type = data.movement_type
+      if (data.secondary_movements !== undefined) {
+        updatePayload.secondary_movements = data.secondary_movements
       }
       if (videoFile) {
         updatePayload.video_url = video_url
@@ -318,11 +376,26 @@ export const useExerciseStore = create<ExerciseState>((set, get) => ({
         .eq('id', id)
       if (error) throw error
 
-      if (data.primary_muscle || data.secondary_muscles) {
+      if (data.methods !== undefined) {
+        await (supabase as any).from('exercise_methods').delete().eq('exercise_id', id)
+        if (data.methods.length) {
+          const { error: methodError } = await (supabase as any).from('exercise_methods').insert(
+            data.methods.map((key, i) => ({
+              exercise_id: id,
+              method_key: key,
+              is_primary: i === 0
+            }))
+          )
+          if (methodError) throw methodError
+        }
+      }
+
+      if (data.primary_muscle || data.secondary_muscles || data.tertiary_muscles) {
         await (supabase as any).from('exercise_muscles').delete().eq('exercise_id', id)
 
         const primary = data.primary_muscle ?? current.primary_muscle
         const secondary = data.secondary_muscles ?? current.secondary_muscles
+        const tertiary = data.tertiary_muscles ?? current.tertiary_muscles ?? []
         const primaryMuscleId = resolveMuscleGroupId(idByKey, primary)
         if (!primaryMuscleId) {
           throw new Error(
@@ -339,6 +412,11 @@ export const useExerciseStore = create<ExerciseState>((set, get) => ({
             exercise_id: id,
             muscle_group_id: resolveMuscleGroupId(idByKey, mg),
             role: 'secondary'
+          })),
+          ...tertiary.map((mg) => ({
+            exercise_id: id,
+            muscle_group_id: resolveMuscleGroupId(idByKey, mg),
+            role: 'tertiary'
           }))
         ].filter((row) => Boolean(row.muscle_group_id))
         const { error: me } = await (supabase as any)

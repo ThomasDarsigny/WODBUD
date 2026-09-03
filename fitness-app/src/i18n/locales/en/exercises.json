@@ -17,7 +17,15 @@
     "body_region": "Body region",
     "notes": "Notes",
     "weight_intensity": "Weight / Intensity",
-    "instructions": "Instructions"
+    "instructions": "Instructions",
+    "movement_type": "Movement type",
+    "secondary_movements": "Secondary movements",
+    "methods": "Methods / equipment",
+    "tertiary_muscles": "Stabilizers (tertiary)",
+    "filter_movement": "Movement",
+    "filter_method": "Method",
+    "filter_region": "Region",
+    "all": "All"
   },
   "categories": {
     "strength": "Strength",

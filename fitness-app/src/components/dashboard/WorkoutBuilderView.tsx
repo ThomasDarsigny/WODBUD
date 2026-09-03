@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 import type { ChangeEvent, CSSProperties } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useExerciseStore } from '../../stores/exerciseStore'
@@ -6,6 +6,8 @@ import { useWorkoutStore } from '../../stores/workoutStore'
 import type { Exercise, WorkoutExercise, MuscleAlert, WorkoutMethod, ExerciseCategory, MuscleGroup } from '../../types'
 import { METHOD_I18N_KEYS, MUSCLE_GROUP_I18N_KEYS, CATEGORY_LABELS, MUSCLE_GROUP_LABELS } from '../../types'
 import ExerciseDetailModal from '../exercises/ExerciseDetailModal'
+import Mannequin2D from '../mannequin/Mannequin2D'
+import { computeMuscleLoads } from '../../lib/muscleLoad'
 
 export default function WorkoutBuilderView() {
   const { t } = useTranslation(['workouts', 'common'])
@@ -53,6 +55,8 @@ export default function WorkoutBuilderView() {
   }, [exercises.length, fetchExercises])
 
   const normalizedSearch = search.trim().toLowerCase()
+
+  const muscleLoads = useMemo(() => computeMuscleLoads(workoutExercises), [workoutExercises])
 
   const filteredExercises = exercises.filter((exercise) => {
     const matchesSearch =
@@ -461,6 +465,34 @@ export default function WorkoutBuilderView() {
             >
               PDF charge: {importedPdfName}
             </p>
+          )}
+        </div>
+
+        <div
+          style={{
+            padding: '1rem 1.5rem',
+            borderBottom: '1px solid var(--border)',
+            flexShrink: 0
+          }}
+        >
+          <p
+            style={{
+              fontFamily: 'var(--font-d)',
+              fontSize: '0.64rem',
+              letterSpacing: '0.14em',
+              textTransform: 'uppercase',
+              color: 'var(--muted)',
+              margin: '0 0 0.6rem'
+            }}
+          >
+            {t('mannequin.title', { ns: 'common' })}
+          </p>
+          {workoutExercises.length === 0 ? (
+            <p style={{ fontSize: '0.72rem', color: 'var(--muted)', margin: 0 }}>
+              {t('mannequin.no_data', { ns: 'common' })}
+            </p>
+          ) : (
+            <Mannequin2D loads={muscleLoads} height={300} bothViews />
           )}
         </div>
 

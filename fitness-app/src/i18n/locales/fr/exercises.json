@@ -17,7 +17,15 @@
     "body_region": "Zone corporelle",
     "notes": "Notes",
     "weight_intensity": "Charge / Intensité",
-    "instructions": "Consignes"
+    "instructions": "Consignes",
+    "movement_type": "Type de mouvement",
+    "secondary_movements": "Mouvements secondaires",
+    "methods": "Méthodes / équipement",
+    "tertiary_muscles": "Stabilisateurs (tertiaires)",
+    "filter_movement": "Mouvement",
+    "filter_method": "Méthode",
+    "filter_region": "Région",
+    "all": "Tous"
   },
   "categories": {
     "strength": "Force",

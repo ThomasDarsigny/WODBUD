@@ -12,6 +12,8 @@ import WorkoutBuilderView from './components/dashboard/WorkoutBuilderView'
 import VoteView from './components/dashboard/VoteView'
 import ClassesView from './components/dashboard/ClassesView'
 import AiCoachView from './components/dashboard/AiCoachView'
+import SettingsView from './components/dashboard/SettingsView'
+import PrivacyPolicyPage from './pages/PrivacyPolicyPage'
 import AthleteDashboardLayout from './components/athlete/AthleteDashboardLayout'
 import AthleteHomeView from './components/athlete/AthleteHomeView'
 import AthleteVoteView from './components/athlete/AthleteVoteView'
@@ -279,6 +281,20 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        <Route
+          path="/dashboard/settings"
+          element={
+            <ProtectedRoute>
+              <DashboardLayout>
+                <SettingsView />
+              </DashboardLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route path="/confidentialite" element={<PrivacyPolicyPage />} />
+        <Route path="/privacy" element={<PrivacyPolicyPage />} />
 
         <Route path="/join/:token" element={<JoinClassPage />} />
 
