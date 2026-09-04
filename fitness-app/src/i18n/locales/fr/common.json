@@ -11,7 +11,9 @@
     "classes": "Mes cours",
     "library": "Bibliothèque",
     "session": "Séance",
-    "rank": "Mon rang"
+    "rank": "Mon rang",
+    "open_menu": "Ouvrir le menu",
+    "close_menu": "Fermer le menu"
   },
   "library": {
     "title": "Bibliothèque de workouts",
@@ -234,7 +236,10 @@
       "obliques": "Obliques",
       "lower_back": "Lombaires",
       "abs": "Abdominaux",
-      "full_body": "Corps complet"
+      "full_body": "Corps complet",
+      "traps": "Trapèzes",
+      "adductors": "Adducteurs",
+      "tibialis": "Jambier antérieur"
     },
     "methods": {
       "amrap": "AMRAP",
@@ -421,7 +426,11 @@
     "segment": "Portail",
     "segment_individu": "Particulier",
     "segment_gym": "Gym (business)",
-    "segment_hint": "Change ce que tu vois dans le menu. Tu peux le rechanger n’importe quand."
+    "segment_hint": "Change ce que tu vois dans le menu. Tu peux le rechanger n’importe quand.",
+    "mannequin": "Mannequin",
+    "mannequin_male": "Masculin",
+    "mannequin_female": "Féminin",
+    "mannequin_hint": "Choisit la silhouette du mannequin musculaire. Gardé sur cet appareil seulement — c'est un réglage d'affichage, pas une donnée de ton profil."
   },
   "rank": {
     "tag": "Progression",

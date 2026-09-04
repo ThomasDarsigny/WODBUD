@@ -11,7 +11,9 @@
     "classes": "My classes",
     "library": "Library",
     "session": "Session",
-    "rank": "My rank"
+    "rank": "My rank",
+    "open_menu": "Open menu",
+    "close_menu": "Close menu"
   },
   "library": {
     "title": "Workout library",
@@ -228,7 +230,10 @@
       "obliques": "Obliques",
       "lower_back": "Lower back",
       "abs": "Abs",
-      "full_body": "Full body"
+      "full_body": "Full body",
+      "traps": "Traps",
+      "adductors": "Adductors",
+      "tibialis": "Tibialis anterior"
     },
     "methods": {
       "amrap": "AMRAP",
@@ -415,7 +420,11 @@
     "segment": "Portal",
     "segment_individu": "Individual",
     "segment_gym": "Gym (business)",
-    "segment_hint": "Changes what you see in the menu. You can switch back any time."
+    "segment_hint": "Changes what you see in the menu. You can switch back any time.",
+    "mannequin": "Body model",
+    "mannequin_male": "Male",
+    "mannequin_female": "Female",
+    "mannequin_hint": "Picks the muscle map silhouette. Kept on this device only — it is a display setting, not profile data."
   },
   "rank": {
     "tag": "Progress",

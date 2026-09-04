@@ -112,7 +112,7 @@ export default function AthleteVoteView() {
   if (!session) return <CenteredMessage message={t('athlete.vote_not_found')} />
   if (session.status === 'closed') {
     return (
-      <div style={{ padding: '2rem', maxWidth: 720 }}>
+      <div style={{ padding: 'var(--page-pad)', maxWidth: 720 }}>
         <BackButton onClick={() => navigate('/athlete')} label={t('actions.back')} />
         <h1 style={{ fontFamily: 'var(--font-d)', fontSize: '1.8rem', fontWeight: 900, textTransform: 'uppercase', margin: '0 0 0.5rem' }}>
           {session.title}
@@ -125,7 +125,7 @@ export default function AthleteVoteView() {
   }
 
   return (
-    <div style={{ padding: '2rem', paddingBottom: '7rem' }}>
+    <div style={{ padding: 'var(--page-pad)', paddingBottom: '7rem' }}>
       <div style={{ marginBottom: '2rem' }}>
         <BackButton onClick={() => navigate('/athlete')} label={t('actions.back')} />
         <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.72rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'var(--orange)', marginBottom: '0.4rem' }}>
@@ -183,7 +183,7 @@ export default function AthleteVoteView() {
         </div>
       )}
 
-      <div style={{ position: 'fixed', bottom: 0, left: 220, right: 0, background: 'var(--dark)', borderTop: '1px solid var(--border)', padding: '1rem 2rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', zIndex: 100, flexWrap: 'wrap' }}>
+      <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, background: 'var(--dark)', borderTop: '1px solid var(--border)', padding: '1rem 2rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', zIndex: 100, flexWrap: 'wrap' }}>
         <div style={{ color: 'var(--muted)', fontFamily: 'var(--font-d)', fontSize: '0.8rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
           {selectedOptionId ? t('vote.single_hint') : t('vote.none_selected')}
         </div>

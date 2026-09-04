@@ -29,7 +29,7 @@ export default function SessionRunnerView({ basePath }: Props) {
 
 function Shell({ tag, title, children }: { tag: string; title: string; children: ReactNode }) {
   return (
-    <div style={{ padding: '2rem', maxWidth: 880 }}>
+    <div style={{ padding: 'var(--page-pad)', maxWidth: 880 }}>
       <div style={{ marginBottom: '1.75rem' }}>
         <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.72rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'var(--orange)', marginBottom: '0.35rem' }}>
           {tag}

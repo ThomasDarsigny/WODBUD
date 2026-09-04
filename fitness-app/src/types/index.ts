@@ -2,6 +2,7 @@
 export type MuscleGroup =
   | 'chest'
   | 'back'
+  | 'traps'
   | 'shoulders'
   | 'biceps'
   | 'triceps'
@@ -12,13 +13,16 @@ export type MuscleGroup =
   | 'glutes'
   | 'quads'
   | 'hamstrings'
+  | 'adductors'
   | 'calves'
+  | 'tibialis'
   | 'cardio_upper'
   | 'cardio_lower'
 
 export const MUSCLE_GROUP_I18N_KEYS: Record<MuscleGroup, string> = {
   chest: 'labels.muscles.chest',
   back: 'labels.muscles.back',
+  traps: 'labels.muscles.traps',
   shoulders: 'labels.muscles.shoulders',
   biceps: 'labels.muscles.biceps',
   triceps: 'labels.muscles.triceps',
@@ -29,7 +33,9 @@ export const MUSCLE_GROUP_I18N_KEYS: Record<MuscleGroup, string> = {
   glutes: 'labels.muscles.glutes',
   quads: 'labels.muscles.quads',
   hamstrings: 'labels.muscles.hamstrings',
+  adductors: 'labels.muscles.adductors',
   calves: 'labels.muscles.calves',
+  tibialis: 'labels.muscles.tibialis',
   cardio_upper: 'labels.muscles.cardio_upper',
   cardio_lower: 'labels.muscles.cardio_lower'
 }
@@ -37,6 +43,7 @@ export const MUSCLE_GROUP_I18N_KEYS: Record<MuscleGroup, string> = {
 export const MUSCLE_GROUP_LABELS: Record<MuscleGroup, string> = {
   chest: 'Pectoraux',
   back: 'Dos',
+  traps: 'Trapezes',
   shoulders: 'Epaules',
   biceps: 'Biceps',
   triceps: 'Triceps',
@@ -47,7 +54,9 @@ export const MUSCLE_GROUP_LABELS: Record<MuscleGroup, string> = {
   glutes: 'Fessiers',
   quads: 'Quadriceps',
   hamstrings: 'Ischio-jambiers',
+  adductors: 'Adducteurs',
   calves: 'Mollets',
+  tibialis: 'Jambier anterieur',
   cardio_upper: 'Cardio - Haut du corps',
   cardio_lower: 'Cardio - Bas du corps'
 }
@@ -57,6 +66,7 @@ export const CORE_MUSCLES: MuscleGroup[] = ['core', 'obliques', 'lower_back']
 export const UPPER_MUSCLES: MuscleGroup[] = [
   'chest',
   'back',
+  'traps',
   'shoulders',
   'biceps',
   'triceps',
@@ -67,7 +77,9 @@ export const LOWER_MUSCLES: MuscleGroup[] = [
   'glutes',
   'quads',
   'hamstrings',
+  'adductors',
   'calves',
+  'tibialis',
   'cardio_lower'
 ]
 

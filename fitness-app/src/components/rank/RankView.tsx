@@ -31,14 +31,14 @@ export default function RankView() {
 
   if (loading && ranks.length === 0) {
     return (
-      <div style={{ padding: '2rem', color: 'var(--muted)', fontFamily: 'var(--font-d)', letterSpacing: '0.1em', textTransform: 'uppercase', fontSize: '0.8rem' }}>
+      <div style={{ padding: 'var(--page-pad)', color: 'var(--muted)', fontFamily: 'var(--font-d)', letterSpacing: '0.1em', textTransform: 'uppercase', fontSize: '0.8rem' }}>
         {t('rank.loading')}
       </div>
     )
   }
 
   return (
-    <div style={{ padding: '2rem', maxWidth: 880 }}>
+    <div style={{ padding: 'var(--page-pad)', maxWidth: 880 }}>
       <div style={{ marginBottom: '1.75rem' }}>
         <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.72rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'var(--orange)', marginBottom: '0.35rem' }}>
           {t('rank.tag')}

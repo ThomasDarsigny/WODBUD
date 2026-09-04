@@ -62,7 +62,7 @@ export default function AdminDashboardView() {
   }
 
   return (
-    <div style={{ padding: '2rem', minHeight: '100%' }}>
+    <div style={{ padding: 'var(--page-pad)', minHeight: '100%' }}>
       <div
         style={{
           display: 'flex',

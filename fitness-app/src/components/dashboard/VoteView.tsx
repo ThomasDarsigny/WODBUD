@@ -67,7 +67,7 @@ export default function VoteView() {
   const openCount = allSessions.filter((s) => s.status === 'open').length
 
   return (
-    <div style={{ padding: '2rem', minHeight: '100%' }}>
+    <div style={{ padding: 'var(--page-pad)', minHeight: '100%' }}>
       <div style={{ marginBottom: '1.5rem' }}>
         <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.72rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'var(--orange)', marginBottom: '0.35rem' }}>
           {t('nav.vote')}

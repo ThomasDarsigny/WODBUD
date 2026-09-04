@@ -11,7 +11,9 @@
     "classes": "Mis clases",
     "library": "Biblioteca",
     "session": "Sesión",
-    "rank": "Mi rango"
+    "rank": "Mi rango",
+    "open_menu": "Abrir el menú",
+    "close_menu": "Cerrar el menú"
   },
   "library": {
     "title": "Biblioteca de workouts",
@@ -234,7 +236,10 @@
       "obliques": "Oblicuos",
       "lower_back": "Lumbares",
       "abs": "Abdominales",
-      "full_body": "Cuerpo completo"
+      "full_body": "Cuerpo completo",
+      "traps": "Trapecios",
+      "adductors": "Aductores",
+      "tibialis": "Tibial anterior"
     },
     "methods": {
       "amrap": "AMRAP",
@@ -421,7 +426,11 @@
     "segment": "Portal",
     "segment_individu": "Particular",
     "segment_gym": "Gimnasio (negocio)",
-    "segment_hint": "Cambia lo que ves en el menú. Puedes volver cuando quieras."
+    "segment_hint": "Cambia lo que ves en el menú. Puedes volver cuando quieras.",
+    "mannequin": "Maniquí",
+    "mannequin_male": "Masculino",
+    "mannequin_female": "Femenino",
+    "mannequin_hint": "Elige la silueta del mapa muscular. Se guarda solo en este dispositivo — es un ajuste de visualización, no un dato de tu perfil."
   },
   "rank": {
     "tag": "Progresión",

@@ -119,7 +119,7 @@ export default function ClassesView() {
       </div>
 
       {/* Right panel — class detail */}
-      <div style={{ flex: 1, overflow: 'auto', padding: '2rem' }}>
+      <div style={{ flex: 1, overflow: 'auto', padding: 'var(--page-pad)' }}>
         {!selectedClass ? (
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'var(--muted)', gap: '1rem' }}>
             <span style={{ fontSize: '3rem', opacity: 0.2 }}>CLS</span>
@@ -601,7 +601,7 @@ function ModalOverlay({ children, onClose, wide = false }: { children: React.Rea
       onClick={(e) => { if (e.target === e.currentTarget) onClose() }}
       style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 200, padding: '1rem' }}
     >
-      <div style={{ background: 'var(--dark)', border: '1px solid var(--border)', padding: '2rem', width: '100%', maxWidth: wide ? 640 : 460, maxHeight: '90vh', overflowY: 'auto' }}>
+      <div style={{ background: 'var(--dark)', border: '1px solid var(--border)', padding: 'var(--page-pad)', width: '100%', maxWidth: wide ? 640 : 460, maxHeight: '90vh', overflowY: 'auto' }}>
         {children}
       </div>
     </div>

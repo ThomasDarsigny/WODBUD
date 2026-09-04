@@ -1,10 +1,10 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { LoadLevel, MuscleGroup, MuscleLoad } from '../../types'
 import { LOAD_LEVELS, LOAD_LEVEL_I18N_KEYS, MUSCLE_GROUP_I18N_KEYS } from '../../types'
 import { loadOf } from '../../lib/muscleLoad'
-import type { MannequinView } from './muscleMapPaths'
-import { MUSCLE_SHAPES, NEUTRAL_SHAPES } from './muscleMapPaths'
+import type { MannequinBody, MannequinView } from './bodyPaths'
+import { BODY_SHAPES, VIEW_BOXES } from './bodyPaths'
 
 /**
  * Cinq états, pas trois. Sans le gris, un muscle non travaillé serait vert
@@ -19,6 +19,31 @@ export const LOAD_COLORS: Record<LoadLevel, string> = {
   overload: '#ef4444'
 }
 
+const BODY_KEY = 'wodbud_mannequin_body'
+
+/**
+ * Silhouette affichée. Volontairement gardée en localStorage et pas sur
+ * `profiles` : c'est une préférence d'affichage, pas une donnée sur la
+ * personne. L'écrire en base reviendrait à stocker un genre présumé, avec la
+ * déclaration que ça implique dans la politique de confidentialité.
+ */
+export function readBodyPref(): MannequinBody {
+  try {
+    return localStorage.getItem(BODY_KEY) === 'female' ? 'female' : 'male'
+  } catch {
+    return 'male'
+  }
+}
+
+export function storeBodyPref(body: MannequinBody) {
+  try {
+    localStorage.setItem(BODY_KEY, body)
+    window.dispatchEvent(new CustomEvent('wodbud:mannequin-body'))
+  } catch {
+    // Mode privé : la préférence ne vit alors que le temps de la session.
+  }
+}
+
 interface Props {
   loads: MuscleLoad[]
   /** Hauteur du SVG en px. Le ratio est conservé. */
@@ -29,12 +54,14 @@ interface Props {
 }
 
 function BodySvg({
+  body,
   view,
   loads,
   height,
   selected,
   onSelect
 }: {
+  body: MannequinBody
   view: MannequinView
   loads: MuscleLoad[]
   height: number
@@ -42,35 +69,40 @@ function BodySvg({
   onSelect: (m: MuscleGroup) => void
 }) {
   const { t } = useTranslation('common')
+  const viewBox = VIEW_BOXES[body][view]
+  const [, , vw, vh] = viewBox.split(' ').map(Number)
 
   return (
     <svg
-      viewBox='0 0 200 400'
+      viewBox={viewBox}
       height={height}
-      width={height / 2}
+      width={(height * vw) / vh}
       role='img'
       aria-label={t('mannequin.title')}
       style={{ display: 'block', overflow: 'visible' }}
     >
-      {NEUTRAL_SHAPES[view].map((d, i) => (
-        <path key={`n${i}`} d={d} fill='var(--mannequin-body, #2a2a2e)' />
-      ))}
+      {BODY_SHAPES[body][view].map((shape, i) => {
+        // Tête, mains, genoux, adducteurs : jamais colorés, jamais cliquables.
+        if (shape.muscle === null) {
+          return <path key={`n${i}`} d={shape.d} fill='var(--mannequin-body, #2a2a2e)' />
+        }
 
-      {MUSCLE_SHAPES[view].map((shape, i) => {
         const load = loadOf(shape.muscle, loads)
         const level: LoadLevel = load?.level ?? 'unused'
         const isSelected = selected === shape.muscle
         const label = t(MUSCLE_GROUP_I18N_KEYS[shape.muscle])
+
         return (
           <path
-            key={`${view}-${shape.muscle}-${shape.side ?? ''}-${i}`}
+            key={`m${i}`}
             d={shape.d}
             fill={LOAD_COLORS[level]}
-            stroke={isSelected ? 'var(--ink, #fff)' : 'var(--mannequin-line, #111)'}
-            strokeWidth={isSelected ? 2 : 1}
-            opacity={level === 'unused' ? 0.85 : 1}
+            stroke={isSelected ? 'var(--white, #f0ebe4)' : 'var(--mannequin-seam, rgba(240,235,228,0.5))'}
+            strokeWidth={isSelected ? 5 : 2.5}
+            strokeLinejoin='round'
+            opacity={level === 'unused' ? 0.9 : 1}
             style={{ cursor: 'pointer', transition: 'fill 0.25s ease, stroke-width 0.15s' }}
-            onClick={() => onSelect(shape.muscle)}
+            onClick={() => onSelect(shape.muscle as MuscleGroup)}
           >
             <title>
               {label} — {t(LOAD_LEVEL_I18N_KEYS[level])}
@@ -87,6 +119,19 @@ export default function Mannequin2D({ loads, height = 340, bothViews = false, on
   const { t } = useTranslation('common')
   const [view, setView] = useState<MannequinView>('front')
   const [selected, setSelected] = useState<MuscleGroup | null>(null)
+  const [body, setBody] = useState<MannequinBody>(readBodyPref)
+
+  // La silhouette se change dans Paramètres : on écoute pour que le mannequin
+  // suive sans qu'il faille recharger la page.
+  useEffect(() => {
+    const sync = () => setBody(readBodyPref())
+    window.addEventListener('wodbud:mannequin-body', sync)
+    window.addEventListener('storage', sync)
+    return () => {
+      window.removeEventListener('wodbud:mannequin-body', sync)
+      window.removeEventListener('storage', sync)
+    }
+  }, [])
 
   const detail = useMemo(() => (selected ? loadOf(selected, loads) : undefined), [selected, loads])
 
@@ -109,10 +154,12 @@ export default function Mannequin2D({ loads, height = 340, bothViews = false, on
               style={{
                 flex: 1,
                 fontFamily: 'var(--font-d)',
-                fontSize: '0.7rem',
+                fontSize: '0.75rem',
+                fontWeight: 700,
                 letterSpacing: '0.12em',
                 textTransform: 'uppercase',
-                padding: '0.35rem 0.6rem',
+                minHeight: 38,
+                padding: '0.45rem 0.6rem',
                 border: `1px solid ${view === v ? 'var(--orange, #ff4d00)' : 'var(--border, #2a2a2a)'}`,
                 background: view === v ? 'rgba(255,77,0,0.12)' : 'transparent',
                 color: view === v ? 'var(--orange, #ff4d00)' : 'var(--muted, #8b8680)',
@@ -125,10 +172,10 @@ export default function Mannequin2D({ loads, height = 340, bothViews = false, on
         </div>
       )}
 
-      <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+      <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
         {views.map((v) => (
           <div key={v} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.3rem' }}>
-            <BodySvg view={v} loads={loads} height={height} selected={selected} onSelect={handleSelect} />
+            <BodySvg body={body} view={v} loads={loads} height={height} selected={selected} onSelect={handleSelect} />
             {bothViews && (
               <span
                 style={{
@@ -172,9 +219,9 @@ export default function Mannequin2D({ loads, height = 340, bothViews = false, on
         {LOAD_LEVELS.map((lvl) => (
           <span
             key={lvl}
-            style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.66rem', color: 'var(--muted, #8b8680)' }}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.7rem', color: 'var(--muted, #8b8680)' }}
           >
-            <span style={{ width: 10, height: 10, background: LOAD_COLORS[lvl], display: 'inline-block' }} />
+            <span style={{ width: 11, height: 11, background: LOAD_COLORS[lvl], display: 'inline-block' }} />
             {t(LOAD_LEVEL_I18N_KEYS[lvl])}
           </span>
         ))}

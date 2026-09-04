@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { supabase } from '../../lib/supabase'
 import type { TablesUpdate } from '../../lib/database.types'
+import type { MannequinBody } from '../mannequin/bodyPaths'
+import { readBodyPref, storeBodyPref } from '../mannequin/Mannequin2D'
 import { applyTheme, readStoredTheme, storeTheme } from '../../lib/theme'
 import type { ThemePref, UserSegment } from '../../types'
 
@@ -29,6 +31,7 @@ export default function SettingsView() {
 
   const [theme, setTheme] = useState<ThemePref>(readStoredTheme())
   const [segment, setSegment] = useState<UserSegment | null>(null)
+  const [mannequin, setMannequin] = useState<MannequinBody>(readBodyPref)
   const [currentEmail, setCurrentEmail] = useState('')
   const [newEmail, setNewEmail] = useState('')
   const [newPassword, setNewPassword] = useState('')
@@ -172,6 +175,19 @@ export default function SettingsView() {
           <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
             {SEGMENTS.map((sgm) => (
               <Chip key={sgm.value} active={segment === sgm.value} onClick={() => pickSegment(sgm.value)} label={t(sgm.key)} />
+            ))}
+          </div>
+        </Row>
+
+        <Row label={t('settings.mannequin')} hint={t('settings.mannequin_hint')}>
+          <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
+            {(['male', 'female'] as MannequinBody[]).map((b) => (
+              <Chip
+                key={b}
+                active={mannequin === b}
+                onClick={() => { setMannequin(b); storeBodyPref(b) }}
+                label={t(b === 'male' ? 'settings.mannequin_male' : 'settings.mannequin_female')}
+              />
             ))}
           </div>
         </Row>

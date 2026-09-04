@@ -19,10 +19,11 @@ const CATEGORY_LABELS: Record<ExerciseCategory, string> = {
   mobility: 'Mobilité', accessory: 'Accessoire'
 }
 const MUSCLE_SHORT: Record<MuscleGroup, string> = {
-  chest: 'Pecto', back: 'Dos', shoulders: 'Épaules', biceps: 'Biceps',
+  chest: 'Pecto', back: 'Dos', traps: 'Trapèzes', shoulders: 'Épaules', biceps: 'Biceps',
   triceps: 'Triceps', forearms: 'Avant-bras', core: 'Abdos', obliques: 'Obliques',
   lower_back: 'Lombaires', glutes: 'Fessiers',
-  quads: 'Quads', hamstrings: 'Ischios', calves: 'Mollets',
+  quads: 'Quads', hamstrings: 'Ischios', adductors: 'Adducteurs',
+  calves: 'Mollets', tibialis: 'Jambier',
   cardio_upper: 'Cardio H.', cardio_lower: 'Cardio B.'
 }
 
@@ -278,7 +279,7 @@ export default function OcrImportSection({ existingNames }: Props) {
               style={{
                 border: `2px dashed ${dragOver ? 'var(--orange)' : 'var(--border)'}`,
                 background: dragOver ? 'rgba(255,77,0,0.05)' : 'var(--black)',
-                padding: '2rem', textAlign: 'center', cursor: 'pointer',
+                padding: 'var(--page-pad)', textAlign: 'center', cursor: 'pointer',
                 transition: 'all 0.15s', marginBottom: '1rem'
               }}
             >

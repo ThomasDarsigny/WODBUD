@@ -21,9 +21,10 @@ export const REGLES = {
   /** Taille de chaque groupe. Miroir de muscle_groups.size_class. */
   sizeByMuscle: {
     chest: 'large', back: 'large', glutes: 'large', quads: 'large', hamstrings: 'large',
-    shoulders: 'medium', core: 'medium', lower_back: 'medium',
+    shoulders: 'medium', core: 'medium', lower_back: 'medium', traps: 'medium', adductors: 'medium',
     cardio_upper: 'medium', cardio_lower: 'medium',
-    biceps: 'small', triceps: 'small', forearms: 'small', obliques: 'small', calves: 'small'
+    biceps: 'small', triceps: 'small', forearms: 'small', obliques: 'small',
+    calves: 'small', tibialis: 'small'
   } as Record<MuscleGroup, string>,
 
   /** Seuils de bascule d'un état à l'autre, en ratio du plafond. */

@@ -38,7 +38,7 @@ export default function AthleteHomeView() {
   const exerciseMap = new Map(exercises.map((e) => [e.id, e]))
 
   return (
-    <div style={{ padding: '2rem', maxWidth: 900 }}>
+    <div style={{ padding: 'var(--page-pad)', maxWidth: 900 }}>
       <div style={{ marginBottom: '2.5rem' }}>
         <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.72rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'var(--orange)', marginBottom: '0.4rem' }}>
           {t('athlete.welcome_tag')}

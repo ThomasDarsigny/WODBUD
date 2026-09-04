@@ -54,7 +54,7 @@ export default function SharedRankPage() {
   const lang = i18n.language
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--black)', color: 'var(--white)', fontFamily: 'var(--font-b)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--black)', color: 'var(--white)', fontFamily: 'var(--font-b)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 'var(--page-pad)' }}>
       <Link to="/" style={{ fontFamily: 'var(--font-d)', fontWeight: 900, fontSize: '1.2rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--white)', textDecoration: 'none', marginBottom: '2.5rem' }}>
         WOD<span style={{ color: 'var(--orange)' }}>BUD</span>
       </Link>

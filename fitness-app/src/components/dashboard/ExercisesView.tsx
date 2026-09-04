@@ -17,6 +17,7 @@ import {
 import type { BodyRegion, MovementType, TrainingMethod } from '../../types'
 import ExerciseFormModal from '../exercises/ExerciseFormModal'
 import ExerciseDetailModal from '../exercises/ExerciseDetailModal'
+import { useIsMobile } from '../../hooks/useMediaQuery'
 
 type FilterCategory = ExerciseCategory | 'all'
 
@@ -55,12 +56,23 @@ export default function ExercisesView() {
     })
   }, [exercises, search, categoryFilter, movementFilter, methodFilter, regionFilter, t])
 
-  const hasFilters =
-    Boolean(search) ||
-    categoryFilter !== 'all' ||
-    movementFilter !== 'all' ||
-    methodFilter !== 'all' ||
-    regionFilter !== 'all'
+  // Un compteur plutôt qu'un booléen : le bouton doit dire combien de filtres
+  // sont posés, sinon on ouvre le panneau juste pour vérifier.
+  const activeFilterCount =
+    (categoryFilter !== 'all' ? 1 : 0) +
+    (movementFilter !== 'all' ? 1 : 0) +
+    (methodFilter !== 'all' ? 1 : 0) +
+    (regionFilter !== 'all' ? 1 : 0)
+
+  const hasFilters = Boolean(search) || activeFilterCount > 0
+
+  function resetFilters() {
+    setSearch('')
+    setCategoryFilter('all')
+    setMovementFilter('all')
+    setMethodFilter('all')
+    setRegionFilter('all')
+  }
 
   function handleEdit(exercise: Exercise) {
     setEditingExercise(exercise)
@@ -77,7 +89,7 @@ export default function ExercisesView() {
   ]
 
   return (
-    <div style={{ padding: '2rem', minHeight: '100%' }}>
+    <div style={{ padding: 'var(--page-pad)', minHeight: '100%' }}>
       <div
         style={{
           display: 'flex',
@@ -147,69 +159,26 @@ export default function ExercisesView() {
         </button>
       </div>
 
-      <div
-        style={{
-          display: 'flex',
-          gap: '1rem',
-          marginBottom: '1.5rem',
-          flexWrap: 'wrap',
-          alignItems: 'center'
-        }}
+      <FilterPanel
+        search={search}
+        onSearch={setSearch}
+        searchPlaceholder={t('search', { ns: 'exercises' })}
+        activeCount={activeFilterCount}
+        onReset={resetFilters}
+        resultCount={filtered.length}
       >
-        <div style={{ position: 'relative', flex: '1', minWidth: 240 }}>
-          <span
-            style={{
-              position: 'absolute',
-              left: '0.9rem',
-              top: '50%',
-              transform: 'translateY(-50%)',
-              color: 'var(--muted)',
-              pointerEvents: 'none'
-            }}
-          >
-            F
-          </span>
-          <input
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder={t('search', { ns: 'exercises' })}
-            style={{
-              width: '100%',
-              background: 'var(--dark)',
-              border: '1px solid var(--border)',
-              color: 'var(--white)',
-              padding: '0.6rem 0.9rem 0.6rem 2.5rem',
-              fontFamily: 'var(--font-b)',
-              fontSize: '0.9rem',
-              outline: 'none'
-            }}
-          />
-        </div>
-
-        <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
+        <FilterGroup label={t('fields.filter_category', { ns: 'exercises' })}>
           {categories.map((cat) => (
-            <button
+            <FilterChip
               key={cat}
+              active={categoryFilter === cat}
               onClick={() => setCategoryFilter(cat)}
-              style={{
-                fontFamily: 'var(--font-d)',
-                fontSize: '0.72rem',
-                letterSpacing: '0.1em',
-                textTransform: 'uppercase',
-                padding: '0.35rem 0.75rem',
-                border: `1px solid ${categoryFilter === cat ? 'var(--orange)' : 'var(--border)'}`,
-                background: categoryFilter === cat ? 'rgba(255,77,0,0.1)' : 'transparent',
-                color: categoryFilter === cat ? 'var(--orange)' : 'var(--muted)',
-                cursor: 'pointer',
-                transition: 'all 0.15s'
-              }}
-            >
-              {cat === 'all' ? t('all', { ns: 'exercises' }) : t(CATEGORY_I18N_KEYS[cat], { ns: 'common' })}
-            </button>
+              label={cat === 'all' ? t('all', { ns: 'exercises' }) : t(CATEGORY_I18N_KEYS[cat], { ns: 'common' })}
+            />
           ))}
-        </div>
+        </FilterGroup>
 
-        <FilterRow label={t('fields.filter_movement', { ns: 'exercises' })}>
+        <FilterGroup label={t('fields.filter_movement', { ns: 'exercises' })}>
           <FilterChip
             active={movementFilter === 'all'}
             onClick={() => setMovementFilter('all')}
@@ -224,9 +193,9 @@ export default function ExercisesView() {
               label={t(MOVEMENT_TYPE_I18N_KEYS[mv], { ns: 'common' })}
             />
           ))}
-        </FilterRow>
+        </FilterGroup>
 
-        <FilterRow label={t('fields.filter_method', { ns: 'exercises' })}>
+        <FilterGroup label={t('fields.filter_method', { ns: 'exercises' })}>
           <FilterChip
             active={methodFilter === 'all'}
             onClick={() => setMethodFilter('all')}
@@ -240,9 +209,9 @@ export default function ExercisesView() {
               label={t(TRAINING_METHOD_I18N_KEYS[mk], { ns: 'common' })}
             />
           ))}
-        </FilterRow>
+        </FilterGroup>
 
-        <FilterRow label={t('fields.filter_region', { ns: 'exercises' })}>
+        <FilterGroup label={t('fields.filter_region', { ns: 'exercises' })}>
           <FilterChip
             active={regionFilter === 'all'}
             onClick={() => setRegionFilter('all')}
@@ -256,8 +225,8 @@ export default function ExercisesView() {
               label={t(BODY_REGION_I18N_KEYS[r], { ns: 'common' })}
             />
           ))}
-        </FilterRow>
-      </div>
+        </FilterGroup>
+      </FilterPanel>
 
       {loading ? (
         <div
@@ -460,22 +429,161 @@ function ExerciseCard({ exercise, onClick }: { exercise: Exercise; onClick: () =
   )
 }
 
-function FilterRow({ label, children }: { label: string; children: ReactNode }) {
+/**
+ * Panneau de filtres.
+ *
+ * Repliable et fermé par défaut sur téléphone : quatre groupes de pastilles
+ * dépliés poussaient la liste d'exercices sous la ligne de flottaison. Le
+ * bouton porte le nombre de filtres actifs, donc on sait ce qui est posé sans
+ * avoir à ouvrir.
+ */
+function FilterPanel({
+  search,
+  onSearch,
+  searchPlaceholder,
+  activeCount,
+  onReset,
+  resultCount,
+  children
+}: {
+  search: string
+  onSearch: (v: string) => void
+  searchPlaceholder: string
+  activeCount: number
+  onReset: () => void
+  resultCount: number
+  children: ReactNode
+}) {
+  const { t } = useTranslation(['exercises', 'common'])
+  const isMobile = useIsMobile()
+  const [open, setOpen] = useState(!isMobile)
+
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', flexWrap: 'wrap' }}>
+    <div style={{ marginBottom: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+      <input
+        value={search}
+        onChange={(e) => onSearch(e.target.value)}
+        placeholder={searchPlaceholder}
+        style={{
+          width: '100%',
+          background: 'var(--dark)',
+          border: '1px solid var(--border)',
+          color: 'var(--white)',
+          padding: '0.8rem 1rem',
+          fontFamily: 'var(--font-b)',
+          fontSize: '1rem',
+          outline: 'none',
+          boxSizing: 'border-box'
+        }}
+      />
+
+      <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
+        <button
+          type='button'
+          onClick={() => setOpen((v) => !v)}
+          aria-expanded={open}
+          style={{
+            flex: '1 1 auto',
+            minHeight: 44,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '0.6rem',
+            fontFamily: 'var(--font-d)',
+            fontSize: '0.82rem',
+            fontWeight: 700,
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase',
+            padding: '0.6rem 1rem',
+            border: `1px solid ${activeCount > 0 ? 'var(--orange)' : 'var(--border)'}`,
+            background: activeCount > 0 ? 'rgba(255,77,0,0.08)' : 'var(--dark)',
+            color: activeCount > 0 ? 'var(--orange)' : 'var(--white)',
+            cursor: 'pointer'
+          }}
+        >
+          <span>
+            {t('fields.filters', { ns: 'exercises' })}
+            {activeCount > 0 ? ` (${activeCount})` : ''}
+          </span>
+          <span style={{ fontSize: '0.7rem' }}>{open ? '▲' : '▼'}</span>
+        </button>
+
+        {activeCount > 0 && (
+          <button
+            type='button'
+            onClick={onReset}
+            style={{
+              minHeight: 44,
+              fontFamily: 'var(--font-d)',
+              fontSize: '0.75rem',
+              fontWeight: 700,
+              letterSpacing: '0.1em',
+              textTransform: 'uppercase',
+              padding: '0.6rem 1rem',
+              border: '1px solid var(--border)',
+              background: 'transparent',
+              color: 'var(--muted)',
+              cursor: 'pointer',
+              whiteSpace: 'nowrap'
+            }}
+          >
+            {t('actions.reset', { ns: 'common' })}
+          </button>
+        )}
+      </div>
+
+      {open && (
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '1.1rem',
+            border: '1px solid var(--border)',
+            background: 'var(--dark)',
+            padding: '1.1rem'
+          }}
+        >
+          {children}
+        </div>
+      )}
+
+      <p
+        style={{
+          margin: 0,
+          fontFamily: 'var(--font-d)',
+          fontSize: '0.7rem',
+          letterSpacing: '0.1em',
+          textTransform: 'uppercase',
+          color: 'var(--muted)'
+        }}
+      >
+        {resultCount} {t('fields.results', { ns: 'exercises' })}
+      </p>
+    </div>
+  )
+}
+
+/**
+ * Le libellé passe AU-DESSUS des pastilles, pas à côté.
+ * Sur téléphone, un libellé de 4,5 rem à gauche laissait une colonne trop
+ * étroite : les pastilles se mettaient en escalier, une ou deux par ligne.
+ */
+function FilterGroup({ label, children }: { label: string; children: ReactNode }) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
       <span
         style={{
           fontFamily: 'var(--font-d)',
-          fontSize: '0.6rem',
-          letterSpacing: '0.14em',
+          fontSize: '0.68rem',
+          fontWeight: 700,
+          letterSpacing: '0.18em',
           textTransform: 'uppercase',
-          color: 'var(--muted)',
-          minWidth: '4.5rem'
+          color: 'var(--orange)'
         }}
       >
         {label}
       </span>
-      <div style={{ display: 'flex', gap: '0.35rem', flexWrap: 'wrap' }}>{children}</div>
+      <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>{children}</div>
     </div>
   )
 }
@@ -498,10 +606,13 @@ function FilterChip({
       onClick={onClick}
       style={{
         fontFamily: 'var(--font-d)',
-        fontSize: '0.66rem',
-        letterSpacing: '0.08em',
+        fontSize: '0.8rem',
+        fontWeight: 700,
+        letterSpacing: '0.06em',
         textTransform: 'uppercase',
-        padding: '0.25rem 0.6rem',
+        // 38 px de haut : sous ~36 px une pastille devient difficile à viser au pouce.
+        minHeight: 38,
+        padding: '0.5rem 0.85rem',
         border: `1px solid ${active ? color : 'var(--border)'}`,
         background: active ? `${accent ? accent + '22' : 'rgba(255,77,0,0.1)'}` : 'transparent',
         color: active ? color : 'var(--muted)',

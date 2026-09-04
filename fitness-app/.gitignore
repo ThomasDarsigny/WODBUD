@@ -33,3 +33,7 @@ dist-ssr
 
 #DB files
 .sql
+
+# Aperçus déposés par l'app Claude Desktop dans le dossier connecté.
+# Ce sont des fichiers jetables, pas du code source.
+Claude outputs/

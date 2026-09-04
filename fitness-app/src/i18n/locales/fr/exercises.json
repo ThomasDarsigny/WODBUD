@@ -25,7 +25,10 @@
     "filter_movement": "Mouvement",
     "filter_method": "Méthode",
     "filter_region": "Région",
-    "all": "Tous"
+    "all": "Tous",
+    "filters": "Filtres",
+    "results": "résultats",
+    "filter_category": "Catégorie"
   },
   "categories": {
     "strength": "Force",

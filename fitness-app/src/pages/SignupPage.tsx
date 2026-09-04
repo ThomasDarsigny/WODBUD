@@ -73,8 +73,8 @@ export default function SignupPage() {
   }
 
   return (
-    <main style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', background: '#0a0a0a', color: '#f0ebe4', padding: '2rem' }}>
-      <section style={{ width: '100%', maxWidth: 560, border: '1px solid #252525', background: '#111111', padding: '2rem' }}>
+    <main style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', background: '#0a0a0a', color: '#f0ebe4', padding: 'var(--page-pad)' }}>
+      <section style={{ width: '100%', maxWidth: 560, border: '1px solid #252525', background: '#111111', padding: 'var(--page-pad)' }}>
         <h1 style={{ marginTop: 0, marginBottom: '0.75rem' }}>{t('auth.signup')}</h1>
         <p style={{ marginTop: 0, color: '#9f9890' }}>
           {t('auth_ui.signup_subtitle')}

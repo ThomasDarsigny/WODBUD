@@ -108,12 +108,12 @@ export default function JoinClassPage() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--black)', color: 'var(--white)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '2rem', fontFamily: 'var(--font-b)' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--black)', color: 'var(--white)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 'var(--page-pad)', fontFamily: 'var(--font-b)' }}>
       <Link to="/" style={{ fontFamily: 'var(--font-d)', fontWeight: 900, fontSize: '1.4rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--white)', textDecoration: 'none', marginBottom: '2.5rem' }}>
         WOD<span style={{ color: 'var(--orange)' }}>BUD</span>
       </Link>
 
-      <div style={{ width: '100%', maxWidth: 420, border: '1px solid var(--border)', background: 'var(--dark)', padding: '2rem' }}>
+      <div style={{ width: '100%', maxWidth: 420, border: '1px solid var(--border)', background: 'var(--dark)', padding: 'var(--page-pad)' }}>
         {step === 'loading' && (
           <p style={{ textAlign: 'center', color: 'var(--muted)', fontFamily: 'var(--font-d)', fontSize: '0.85rem', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
             {t('status.loading')}

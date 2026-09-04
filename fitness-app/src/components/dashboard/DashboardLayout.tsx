@@ -8,6 +8,7 @@ import { isCurrentUserAdmin } from '../../lib/access'
 import { useOnlineStatus } from '../../hooks/useOnlineStatus'
 import ActiveSessionBar from '../session/ActiveSessionBar'
 import PortalOverlay from '../portal/PortalOverlay'
+import { useIsMobile } from '../../hooks/useMediaQuery'
 
 type NavItem = {
   id: string
@@ -30,7 +31,7 @@ const NAV_ITEMS: NavItem[] = [
     path: '/dashboard/workout'
   },
   { id: 'library', labelKey: 'nav.library', icon: 'LIB', path: '/dashboard/workouts' },
-  { id: 'session', labelKey: 'nav.session', icon: 'RUN', path: '/dashboard/session' },
+  { id: 'session', labelKey: 'nav.session', icon: '♥', path: '/dashboard/session' },
   { id: 'rank', labelKey: 'nav.rank', icon: 'RNK', path: '/dashboard/rank' },
   { id: 'classes', labelKey: 'nav.classes', icon: 'CLS', path: '/dashboard/classes' },
   {
@@ -57,7 +58,12 @@ export default function DashboardLayout({ children }: Props) {
   const location = useLocation()
   const navigate = useNavigate()
   const [collapsed, setCollapsed] = useState(false)
+  const [drawerOpen, setDrawerOpen] = useState(false)
   const [isAdmin, setIsAdmin] = useState(false)
+  const isMobile = useIsMobile()
+  // Dans le tiroir, on veut toujours les libellés : le mode réduit n'a de sens
+  // que sur une barre latérale permanente.
+  const rail = isMobile ? false : collapsed
   const online = useOnlineStatus()
 
   useEffect(() => {
@@ -110,29 +116,41 @@ export default function DashboardLayout({ children }: Props) {
         fontFamily: 'var(--font-b)'
       }}
     >
+      {/* Sur téléphone la barre latérale sort du flux et devient un tiroir :
+          240 px fixes, c'est les deux tiers d'un écran de 360 px. */}
       <aside
         style={{
-          width: collapsed ? '64px' : '240px',
+          width: isMobile ? '260px' : rail ? '64px' : '240px',
           flexShrink: 0,
           background: 'var(--dark)',
           borderRight: '1px solid var(--border)',
           display: 'flex',
           flexDirection: 'column',
-          transition: 'width 0.25s ease',
-          overflow: 'hidden'
+          transition: isMobile ? 'transform 0.25s ease' : 'width 0.25s ease',
+          overflow: 'hidden',
+          ...(isMobile
+            ? {
+                position: 'fixed' as const,
+                top: 0,
+                bottom: 0,
+                left: 0,
+                zIndex: 300,
+                transform: drawerOpen ? 'translateX(0)' : 'translateX(-100%)'
+              }
+            : null)
         }}
       >
         <div
           style={{
-            padding: collapsed ? '1.25rem 0' : '1.25rem 1.5rem',
+            padding: rail ? '1.25rem 0' : '1.25rem 1.5rem',
             borderBottom: '1px solid var(--border)',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: collapsed ? 'center' : 'space-between',
+            justifyContent: rail ? 'center' : 'space-between',
             gap: '0.5rem'
           }}
         >
-          {!collapsed && (
+          {!rail && (
             <Link
               to="/"
               style={{
@@ -149,19 +167,19 @@ export default function DashboardLayout({ children }: Props) {
             </Link>
           )}
           <button
-            onClick={() => setCollapsed(!collapsed)}
+            onClick={() => (isMobile ? setDrawerOpen(false) : setCollapsed(!collapsed))}
             style={{
               background: 'none',
               border: 'none',
               color: 'var(--muted)',
               cursor: 'pointer',
-              fontSize: '1rem',
-              padding: '0.25rem',
+              fontSize: isMobile ? '1.4rem' : '1rem',
+              padding: '0.25rem 0.5rem',
               lineHeight: 1
             }}
-            aria-label="Toggle sidebar"
+            aria-label={isMobile ? t('nav.close_menu') : 'Toggle sidebar'}
           >
-            {collapsed ? '›' : '‹'}
+            {isMobile ? '✕' : rail ? '›' : '‹'}
           </button>
         </div>
 
@@ -176,14 +194,14 @@ export default function DashboardLayout({ children }: Props) {
                       display: 'flex',
                       alignItems: 'center',
                       gap: '0.75rem',
-                      padding: collapsed ? '0.75rem 0' : '0.75rem 1.5rem',
-                      justifyContent: collapsed ? 'center' : 'flex-start',
+                      padding: rail ? '0.75rem 0' : '0.75rem 1.5rem',
+                      justifyContent: rail ? 'center' : 'flex-start',
                       opacity: 0.4,
                       cursor: 'not-allowed'
                     }}
                   >
                     <span style={{ fontSize: '1.1rem', flexShrink: 0 }}>{item.icon}</span>
-                    {!collapsed && (
+                    {!rail && (
                       <>
                         <span
                           style={{
@@ -217,12 +235,13 @@ export default function DashboardLayout({ children }: Props) {
                 ) : (
                   <Link
                     to={item.path}
+                    onClick={() => setDrawerOpen(false)}
                     style={{
                       display: 'flex',
                       alignItems: 'center',
                       gap: '0.75rem',
-                      padding: collapsed ? '0.75rem 0' : '0.75rem 1.5rem',
-                      justifyContent: collapsed ? 'center' : 'flex-start',
+                      padding: rail ? '0.75rem 0' : '0.75rem 1.5rem',
+                      justifyContent: rail ? 'center' : 'flex-start',
                       textDecoration: 'none',
                       color: active ? 'var(--white)' : 'var(--muted)',
                       background: active ? 'rgba(255,77,0,0.08)' : 'transparent',
@@ -233,7 +252,7 @@ export default function DashboardLayout({ children }: Props) {
                     }}
                   >
                     <span style={{ fontSize: '1.1rem', flexShrink: 0 }}>{item.icon}</span>
-                    {!collapsed && (
+                    {!rail && (
                       <span
                         style={{
                           fontFamily: 'var(--font-d)',
@@ -255,11 +274,11 @@ export default function DashboardLayout({ children }: Props) {
         <div
           style={{
             borderTop: '1px solid var(--border)',
-            padding: collapsed ? '1rem 0' : '1rem 1.5rem',
+            padding: rail ? '1rem 0' : '1rem 1.5rem',
             display: 'flex',
             alignItems: 'center',
             gap: '0.75rem',
-            justifyContent: collapsed ? 'center' : 'flex-start'
+            justifyContent: rail ? 'center' : 'flex-start'
           }}
         >
           <div
@@ -280,7 +299,7 @@ export default function DashboardLayout({ children }: Props) {
           >
             C
           </div>
-          {!collapsed && (
+          {!rail && (
             <div style={{ overflow: 'hidden' }}>
               <div
                 style={{
@@ -314,7 +333,61 @@ export default function DashboardLayout({ children }: Props) {
         </div>
       </aside>
 
+      {isMobile && drawerOpen && (
+        <div
+          onClick={() => setDrawerOpen(false)}
+          style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 250 }}
+        />
+      )}
+
       <main style={{ flex: 1, overflow: 'auto', minWidth: 0, display: 'flex', flexDirection: 'column' }}>
+        {isMobile && (
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.75rem',
+              padding: '0.6rem 1rem',
+              borderBottom: '1px solid var(--border)',
+              background: 'var(--dark)',
+              flexShrink: 0,
+              position: 'sticky',
+              top: 0,
+              zIndex: 100
+            }}
+          >
+            <button
+              onClick={() => setDrawerOpen(true)}
+              aria-label={t('nav.open_menu')}
+              style={{
+                background: 'none',
+                border: '1px solid var(--border)',
+                color: 'var(--white)',
+                cursor: 'pointer',
+                fontSize: '1.1rem',
+                lineHeight: 1,
+                padding: '0.5rem 0.7rem',
+                minHeight: 40
+              }}
+            >
+              ☰
+            </button>
+            <Link
+              to="/"
+              style={{
+                fontFamily: 'var(--font-d)',
+                fontWeight: 900,
+                fontSize: '1.05rem',
+                letterSpacing: '0.14em',
+                textTransform: 'uppercase',
+                color: 'var(--white)',
+                textDecoration: 'none'
+              }}
+            >
+              WOD<span style={{ color: 'var(--orange)' }}>BUD</span>
+            </Link>
+          </div>
+        )}
         {!online && (
           <div
             style={{

@@ -11,6 +11,19 @@
   --muted: #7a7570;
   --font-d: 'Barlow Condensed', sans-serif;
   --font-b: 'Barlow', sans-serif;
+
+  /* Marge intérieure des écrans. Les styles de l'app sont en ligne, donc
+     inatteignables par une media query : passer par une variable est le seul
+     moyen d'avoir une valeur qui change avec la largeur. */
+  --page-pad: 2rem;
+}
+
+@media (max-width: 768px) {
+  :root {
+    /* 2 rem de chaque côté sur un écran de 360 px, c'est 22 % de la largeur
+       perdue en marge. */
+    --page-pad: 1rem;
+  }
 }
 
 *,
