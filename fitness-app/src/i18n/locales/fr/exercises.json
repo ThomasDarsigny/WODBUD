@@ -88,8 +88,14 @@
   "errors": {
     "auth_session_missing_exercise": "Session manquante : reconnecte-toi pour créer ou modifier un exercice.",
     "invalid_session_reconnect": "Session invalide : reconnecte-toi pour créer un exercice.",
-    "primary_muscle_not_found": "Muscle principal introuvable : {{muscle}}"
+    "primary_muscle_not_found": "Muscle principal introuvable : {{muscle}}",
+    "video_storage_not_configured": "Le stockage vidéo (Cloudflare R2) n'est pas encore configuré.",
+    "video_admin_required": "Seul un compte admin peut téléverser une vidéo.",
+    "video_upload_network": "Le transfert vers le stockage a échoué. Si le problème persiste, vérifie la politique CORS du bucket R2."
   },
   "empty_hint": "Ajoute tes exercices une fois : ils servent ensuite dans tous tes workouts.",
-  "empty_filtered_hint": "Aucun exercice ne coche tous ces filtres. Enlèves-en un pour élargir."
+  "empty_filtered_hint": "Aucun exercice ne coche tous ces filtres. Enlèves-en un pour élargir.",
+  "warnings": {
+    "video_upload_skipped": "Exercice enregistré, mais la vidéo n'a pas été téléversée. {{reason}}"
+  }
 }

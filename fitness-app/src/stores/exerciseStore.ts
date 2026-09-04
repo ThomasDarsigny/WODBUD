@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import i18n from '../i18n'
 import { supabase } from '../lib/supabase'
-import { uploadVideoToR2 } from '../lib/r2'
+import { R2NotConfiguredError, deleteVideoFromR2, uploadVideoToR2 } from '../lib/r2'
 import { saveToCache, loadFromCache } from '../lib/offlineCache'
 import type { TablesUpdate } from '../lib/database.types'
 import type {
@@ -35,21 +35,67 @@ type ExerciseRow = {
   movement_type: MovementType | null
   secondary_movements: MovementType[] | null
   video_url: string | null
+  video_path: string | null
   created_at: string
   updated_at: string
   exercise_muscles?: ExerciseMuscleRow[]
   exercise_methods?: Array<{ method_key: TrainingMethod }>
 }
 
+/**
+ * Téléverse la vidéo et renvoie de quoi remplir `video_url` / `video_path`.
+ *
+ * Si le stockage n'est pas encore configuré, on ne fait PAS échouer l'opération :
+ * l'exercice que l'utilisateur vient de remplir vaut mieux que rien, et il
+ * pourra rattacher la vidéo plus tard. Toute autre panne remonte normalement.
+ */
+async function tryUploadVideo(
+  videoFile: File,
+  exerciseId: string
+): Promise<{ url: string; key: string } | { warning: string }> {
+  try {
+    const uploaded = await uploadVideoToR2(videoFile, exerciseId)
+    return { url: uploaded.url, key: uploaded.key }
+  } catch (err) {
+    if (err instanceof R2NotConfiguredError) {
+      return {
+        warning: i18n.t('warnings.video_upload_skipped', {
+          ns: 'exercises',
+          reason: err.message
+        })
+      }
+    }
+    throw err
+  }
+}
+
+/**
+ * Supprime un objet R2 sans faire échouer l'appelant : la ligne en base est
+ * déjà à jour, et une vidéo orpheline est un problème de ménage, pas de données.
+ */
+function discardVideo(key: string | null | undefined): void {
+  if (!key) return
+  void deleteVideoFromR2(key).catch((err: unknown) => {
+    console.warn('[r2] vidéo non supprimée, objet orphelin:', key, err)
+  })
+}
+
 interface ExerciseState {
   exercises: Exercise[]
   loading: boolean
   error: string | null
+  /**
+   * L'exercice a bien été enregistré mais sa vidéo n'a pas pu être téléversée.
+   * Séparé de `error` : rien n'a échoué du point de vue de l'exercice, et le
+   * formulaire s'est fermé — l'information doit survivre à sa fermeture.
+   */
+  videoWarning: string | null
   isFromCache: boolean
   fetchExercises: () => Promise<void>
   createExercise: (data: ExerciseInsert, videoFile?: File) => Promise<Exercise>
   updateExercise: (id: string, data: ExerciseUpdate, videoFile?: File) => Promise<void>
   deleteExercise: (id: string) => Promise<void>
+  dismissVideoWarning: () => void
 }
 
 function extractErrorMessage(err: unknown): string {
@@ -181,7 +227,10 @@ export const useExerciseStore = create<ExerciseState>((set, get) => ({
   exercises: [],
   loading: false,
   error: null,
+  videoWarning: null,
   isFromCache: false,
+
+  dismissVideoWarning: () => set({ videoWarning: null }),
 
   fetchExercises: async () => {
     set({ loading: true, error: null })
@@ -226,7 +275,7 @@ export const useExerciseStore = create<ExerciseState>((set, get) => ({
         secondary_movements: row.secondary_movements ?? [],
         methods: row.exercise_methods?.map((m) => m.method_key) ?? [],
         video_url: row.video_url ?? null,
-        video_path: null,
+        video_path: row.video_path ?? null,
         created_at: row.created_at,
         updated_at: row.updated_at
       }))
@@ -307,21 +356,29 @@ export const useExerciseStore = create<ExerciseState>((set, get) => ({
       }
 
       let video_url: string | null = null
-      if (videoFile) {
-        const uploaded = await uploadVideoToR2(videoFile, row.id)
-        video_url = uploaded.url
+      let video_path: string | null = null
+      let videoWarning: string | null = null
 
-        await supabase
-          .from('exercises')
-          .update({ video_url })
-          .eq('id', row.id)
+      if (videoFile) {
+        const uploaded = await tryUploadVideo(videoFile, row.id)
+        if ('warning' in uploaded) {
+          videoWarning = uploaded.warning
+        } else {
+          video_url = uploaded.url
+          video_path = uploaded.key
+
+          await supabase
+            .from('exercises')
+            .update({ video_url, video_path })
+            .eq('id', row.id)
+        }
       }
 
       const exercise: Exercise = {
         ...data,
         id: row.id,
         video_url,
-        video_path: null,
+        video_path,
         created_at: row.created_at,
         updated_at: row.updated_at
       }
@@ -329,7 +386,7 @@ export const useExerciseStore = create<ExerciseState>((set, get) => ({
       set((s) => {
         const updated = [...s.exercises, exercise].sort((a, b) => a.name.localeCompare(b.name))
         saveToCache('exercises', updated)
-        return { exercises: updated, loading: false }
+        return { exercises: updated, loading: false, videoWarning }
       })
       return exercise
     } catch (err: unknown) {
@@ -348,10 +405,22 @@ export const useExerciseStore = create<ExerciseState>((set, get) => ({
       if (!current) throw new Error('Exercise not found')
 
       let video_url = current.video_url
+      let video_path = current.video_path ?? null
+      let videoWarning: string | null = null
+
+      // Mémorisée avant l'écrasement : c'est l'objet à supprimer si le
+      // remplacement réussit. Sans ça, l'ancienne vidéo reste dans le bucket
+      // pour toujours, sans plus rien qui pointe dessus.
+      const previousKey = current.video_path ?? null
 
       if (videoFile) {
-        const uploaded = await uploadVideoToR2(videoFile, id)
-        video_url = uploaded.url
+        const uploaded = await tryUploadVideo(videoFile, id)
+        if ('warning' in uploaded) {
+          videoWarning = uploaded.warning
+        } else {
+          video_url = uploaded.url
+          video_path = uploaded.key
+        }
       }
 
       const updatePayload: TablesUpdate<'exercises'> = {
@@ -369,8 +438,9 @@ export const useExerciseStore = create<ExerciseState>((set, get) => ({
       if (data.secondary_movements !== undefined) {
         updatePayload.secondary_movements = data.secondary_movements
       }
-      if (videoFile) {
+      if (videoFile && video_path !== previousKey) {
         updatePayload.video_url = video_url
+        updatePayload.video_path = video_path
       }
 
       const { error } = await supabase
@@ -430,14 +500,18 @@ export const useExerciseStore = create<ExerciseState>((set, get) => ({
         if (me) throw me
       }
 
+      // La base pointe désormais sur la nouvelle vidéo : l'ancienne n'est plus
+      // référencée nulle part, on peut la libérer.
+      if (previousKey && previousKey !== video_path) discardVideo(previousKey)
+
       set((s) => {
         const updated = s.exercises.map((e) =>
           e.id === id
-            ? { ...e, ...data, video_url, video_path: null, updated_at: new Date().toISOString() }
+            ? { ...e, ...data, video_url, video_path, updated_at: new Date().toISOString() }
             : e
         )
         saveToCache('exercises', updated)
-        return { exercises: updated, loading: false }
+        return { exercises: updated, loading: false, videoWarning }
       })
     } catch (err: unknown) {
       const message = extractErrorMessage(err)
@@ -449,8 +523,13 @@ export const useExerciseStore = create<ExerciseState>((set, get) => ({
   deleteExercise: async (id) => {
     set({ loading: true, error: null })
     try {
+      // Relevée avant la suppression : après, plus rien ne dit où était la vidéo.
+      const videoKey = get().exercises.find((e) => e.id === id)?.video_path ?? null
+
       const { error } = await supabase.from('exercises').delete().eq('id', id)
       if (error) throw error
+
+      discardVideo(videoKey)
 
       set((s) => {
         const updated = s.exercises.filter((e) => e.id !== id)

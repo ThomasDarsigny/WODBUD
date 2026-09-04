@@ -25,7 +25,8 @@ type FilterCategory = ExerciseCategory | 'all'
 
 export default function ExercisesView() {
   const { t } = useTranslation(['exercises', 'common'])
-  const { exercises, loading, fetchExercises, deleteExercise } = useExerciseStore()
+  const { exercises, loading, fetchExercises, deleteExercise, videoWarning, dismissVideoWarning } =
+    useExerciseStore()
 
   const [search, setSearch] = useState('')
   const [categoryFilter, setCategoryFilter] = useState<FilterCategory>('all')
@@ -92,6 +93,49 @@ export default function ExercisesView() {
 
   return (
     <div style={{ padding: 'var(--page-pad)', minHeight: '100%' }}>
+      {/* L'exercice est enregistré mais sa vidéo ne l'est pas. Le formulaire
+          s'est déjà fermé, donc l'avertissement vit ici, pas dans la modale. */}
+      {videoWarning && (
+        <div
+          role="status"
+          style={{
+            display: 'flex',
+            alignItems: 'flex-start',
+            gap: '0.75rem',
+            border: '1px solid rgba(255, 77, 0, 0.35)',
+            background: 'rgba(255, 77, 0, 0.07)',
+            padding: '0.85rem 1rem',
+            marginBottom: '1.25rem'
+          }}
+        >
+          <span style={{ color: 'var(--orange)', flexShrink: 0, display: 'flex', marginTop: 2 }}>
+            <NavIcon name="video" size={18} />
+          </span>
+          <p style={{ margin: 0, flex: 1, fontSize: '0.86rem', lineHeight: 1.55 }}>
+            {videoWarning}
+          </p>
+          <button
+            onClick={dismissVideoWarning}
+            style={{
+              fontFamily: 'var(--font-d)',
+              fontSize: '0.7rem',
+              fontWeight: 700,
+              letterSpacing: '0.12em',
+              textTransform: 'uppercase',
+              background: 'transparent',
+              border: '1px solid var(--border)',
+              color: 'var(--muted)',
+              padding: '0.35rem 0.7rem',
+              minHeight: 32,
+              cursor: 'pointer',
+              flexShrink: 0
+            }}
+          >
+            {t('actions.close', { ns: 'common' })}
+          </button>
+        </div>
+      )}
+
       <div
         style={{
           display: 'flex',

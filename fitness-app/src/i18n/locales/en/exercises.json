@@ -88,8 +88,14 @@
   "errors": {
     "auth_session_missing_exercise": "Missing session: sign in again to create or edit an exercise.",
     "invalid_session_reconnect": "Invalid session: sign in again to create an exercise.",
-    "primary_muscle_not_found": "Primary muscle not found: {{muscle}}"
+    "primary_muscle_not_found": "Primary muscle not found: {{muscle}}",
+    "video_storage_not_configured": "Video storage (Cloudflare R2) isn't set up yet.",
+    "video_admin_required": "Only an admin account can upload a video.",
+    "video_upload_network": "The transfer to storage failed. If it keeps happening, check the R2 bucket's CORS policy."
   },
   "empty_hint": "Add your exercises once — they feed every workout you build after that.",
-  "empty_filtered_hint": "No exercise matches all these filters. Drop one to widen the search."
+  "empty_filtered_hint": "No exercise matches all these filters. Drop one to widen the search.",
+  "warnings": {
+    "video_upload_skipped": "Exercise saved, but the video wasn't uploaded. {{reason}}"
+  }
 }
