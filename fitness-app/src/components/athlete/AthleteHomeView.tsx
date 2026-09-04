@@ -26,7 +26,8 @@ export default function AthleteHomeView() {
 
   useEffect(() => {
     let mounted = true
-    setLoadingSessions(true)
+    // Pas de setLoadingSessions(true) synchrone ici : l'état initial vaut déjà
+    // `true`, et le remettre pendant l'effet déclenche un rendu en cascade.
     fetchOpenVoteSessions()
       .then((sessions) => { if (mounted) setOpenSessions(sessions) })
       .catch(() => {})

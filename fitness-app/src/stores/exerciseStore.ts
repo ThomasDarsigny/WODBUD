@@ -3,6 +3,7 @@ import i18n from '../i18n'
 import { supabase } from '../lib/supabase'
 import { uploadVideoToR2 } from '../lib/r2'
 import { saveToCache, loadFromCache } from '../lib/offlineCache'
+import type { TablesUpdate } from '../lib/database.types'
 import type {
   BodyRegion,
   Exercise,
@@ -100,7 +101,7 @@ async function loadMuscleGroupMaps(): Promise<{
   idByKey: Map<MuscleGroup, string>
   keyById: Map<string, MuscleGroup>
 }> {
-  const { data, error } = await (supabase as any).from('muscle_groups').select('id, name_key')
+  const { data, error } = await supabase.from('muscle_groups').select('id, name_key')
   if (error) throw error
 
   const rows = (data ?? []) as MuscleGroupRow[]
@@ -187,7 +188,7 @@ export const useExerciseStore = create<ExerciseState>((set, get) => ({
     try {
       const { keyById } = await loadMuscleGroupMaps()
 
-      const { data, error } = await (supabase as any)
+      const { data, error } = await supabase
         .from('exercises')
         .select(
           '*, exercise_muscles(muscle_group_id, role, muscle_groups(name_key)), exercise_methods(method_key)'
@@ -248,7 +249,7 @@ export const useExerciseStore = create<ExerciseState>((set, get) => ({
       const userId = await getCurrentUserId()
       const { idByKey } = await loadMuscleGroupMaps()
 
-      const { data: row, error } = await (supabase as any)
+      const { data: row, error } = await supabase
         .from('exercises')
         .insert({
           name: data.name,
@@ -286,14 +287,16 @@ export const useExerciseStore = create<ExerciseState>((set, get) => ({
           muscle_group_id: resolveMuscleGroupId(idByKey, mg),
           role: 'tertiary'
         }))
-      ].filter((row) => Boolean(row.muscle_group_id))
-      const { error: muscleError } = await (supabase as any)
+      ].filter((row): row is { exercise_id: string; muscle_group_id: string; role: string } =>
+        typeof row.muscle_group_id === 'string'
+      )
+      const { error: muscleError } = await supabase
         .from('exercise_muscles')
         .insert(muscleRows)
       if (muscleError) throw muscleError
 
       if (data.methods?.length) {
-        const { error: methodError } = await (supabase as any).from('exercise_methods').insert(
+        const { error: methodError } = await supabase.from('exercise_methods').insert(
           data.methods.map((key, i) => ({
             exercise_id: row.id,
             method_key: key,
@@ -308,7 +311,7 @@ export const useExerciseStore = create<ExerciseState>((set, get) => ({
         const uploaded = await uploadVideoToR2(videoFile, row.id)
         video_url = uploaded.url
 
-        await (supabase as any)
+        await supabase
           .from('exercises')
           .update({ video_url })
           .eq('id', row.id)
@@ -351,7 +354,7 @@ export const useExerciseStore = create<ExerciseState>((set, get) => ({
         video_url = uploaded.url
       }
 
-      const updatePayload: Record<string, unknown> = {
+      const updatePayload: TablesUpdate<'exercises'> = {
         updated_at: new Date().toISOString()
       }
       if (data.name) updatePayload.name = data.name
@@ -370,16 +373,16 @@ export const useExerciseStore = create<ExerciseState>((set, get) => ({
         updatePayload.video_url = video_url
       }
 
-      const { error } = await (supabase as any)
+      const { error } = await supabase
         .from('exercises')
         .update(updatePayload)
         .eq('id', id)
       if (error) throw error
 
       if (data.methods !== undefined) {
-        await (supabase as any).from('exercise_methods').delete().eq('exercise_id', id)
+        await supabase.from('exercise_methods').delete().eq('exercise_id', id)
         if (data.methods.length) {
-          const { error: methodError } = await (supabase as any).from('exercise_methods').insert(
+          const { error: methodError } = await supabase.from('exercise_methods').insert(
             data.methods.map((key, i) => ({
               exercise_id: id,
               method_key: key,
@@ -391,7 +394,7 @@ export const useExerciseStore = create<ExerciseState>((set, get) => ({
       }
 
       if (data.primary_muscle || data.secondary_muscles || data.tertiary_muscles) {
-        await (supabase as any).from('exercise_muscles').delete().eq('exercise_id', id)
+        await supabase.from('exercise_muscles').delete().eq('exercise_id', id)
 
         const primary = data.primary_muscle ?? current.primary_muscle
         const secondary = data.secondary_muscles ?? current.secondary_muscles
@@ -418,8 +421,10 @@ export const useExerciseStore = create<ExerciseState>((set, get) => ({
             muscle_group_id: resolveMuscleGroupId(idByKey, mg),
             role: 'tertiary'
           }))
-        ].filter((row) => Boolean(row.muscle_group_id))
-        const { error: me } = await (supabase as any)
+        ].filter((row): row is { exercise_id: string; muscle_group_id: string; role: string } =>
+          typeof row.muscle_group_id === 'string'
+        )
+        const { error: me } = await supabase
           .from('exercise_muscles')
           .insert(muscleRows)
         if (me) throw me
@@ -444,7 +449,7 @@ export const useExerciseStore = create<ExerciseState>((set, get) => ({
   deleteExercise: async (id) => {
     set({ loading: true, error: null })
     try {
-      const { error } = await (supabase as any).from('exercises').delete().eq('id', id)
+      const { error } = await supabase.from('exercises').delete().eq('id', id)
       if (error) throw error
 
       set((s) => {

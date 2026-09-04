@@ -4,6 +4,8 @@ import { useTranslation } from 'react-i18next'
 import { useClassStore } from '../../stores/classStore'
 import { useExerciseStore } from '../../stores/exerciseStore'
 import type { Class, VoteSession } from '../../types'
+import VoteResultsBars from '../vote/VoteResultsBars'
+import ConfirmButton from '../ui/ConfirmButton'
 import { CATEGORY_I18N_KEYS, MUSCLE_GROUP_I18N_KEYS } from '../../types'
 
 const BASE_URL = window.location.origin
@@ -38,7 +40,6 @@ export default function ClassesView() {
   }
 
   async function handleDeleteClass(cls: Class) {
-    if (!confirm(`Supprimer "${cls.name}" ? Tous les membres et votes seront perdus.`)) return
     await deleteClass(cls.id)
     if (selectedClass?.id === cls.id) setSelectedClass(null)
   }
@@ -139,9 +140,9 @@ export default function ClassesView() {
                   <p style={{ color: 'var(--muted)', marginTop: '0.25rem', fontSize: '0.88rem' }}>{selectedClass.description}</p>
                 )}
               </div>
-              <button onClick={() => handleDeleteClass(selectedClass)} style={ghostBtnStyle}>
+              <ConfirmButton onConfirm={() => handleDeleteClass(selectedClass)} style={ghostBtnStyle}>
                 {t('actions.delete')}
-              </button>
+              </ConfirmButton>
             </div>
 
             {/* Invite section */}
@@ -205,7 +206,6 @@ export default function ClassesView() {
             {activeTab === 'votes' && (
               <VotesTab
                 sessions={voteSessions[selectedClass.id] ?? []}
-                exercises={exercises}
                 voteResults={voteResults}
                 onCreateVote={() => setShowVoteModal(true)}
                 onCloseSession={closeVoteSession}
@@ -293,9 +293,8 @@ function MembersTab({ classId, members, onRemove }: {
 
 const VOTES_VISIBLE_DEFAULT = 3
 
-function VotesTab({ sessions, exercises, voteResults, onCreateVote, onCloseSession, onDeleteSession, onFetchResults }: {
+function VotesTab({ sessions, voteResults, onCreateVote, onCloseSession, onDeleteSession, onFetchResults }: {
   sessions: VoteSession[]
-  exercises: import('../../types').Exercise[]
   voteResults: Record<string, import('../../types').VoteResult[]>
   onCreateVote: () => void
   onCloseSession: (id: string) => Promise<void>
@@ -303,7 +302,6 @@ function VotesTab({ sessions, exercises, voteResults, onCreateVote, onCloseSessi
   onFetchResults: (sessionId: string) => Promise<void>
 }) {
   const { t } = useTranslation(['common', 'exercises'])
-  const exerciseMap = useMemo(() => new Map(exercises.map((e) => [e.id, e])), [exercises])
   const [showAll, setShowAll] = useState(false)
 
   // Auto-fetch results for all visible sessions on mount
@@ -318,7 +316,6 @@ function VotesTab({ sessions, exercises, voteResults, onCreateVote, onCloseSessi
   const hiddenCount = sessions.length - VOTES_VISIBLE_DEFAULT
 
   async function handleDelete(session: VoteSession) {
-    if (!confirm(`Supprimer le vote "${session.title}" ? Tous les votes des athlètes seront perdus.`)) return
     await onDeleteSession(session.id)
   }
 
@@ -339,8 +336,7 @@ function VotesTab({ sessions, exercises, voteResults, onCreateVote, onCloseSessi
         <>
           {visibleSessions.map((session) => {
             const results = voteResults[session.id] ?? []
-            const totalVotes = results.reduce((sum, r) => sum + r.count, 0)
-            const maxCount = results[0]?.count ?? 0
+            const totalVotes = results.reduce((sum, r) => sum + r.votes, 0)
 
             return (
               <div key={session.id} style={{ border: '1px solid var(--border)', background: 'var(--dark)', padding: '1rem', marginBottom: '0.75rem' }}>
@@ -389,71 +385,18 @@ function VotesTab({ sessions, exercises, voteResults, onCreateVote, onCloseSessi
                         {t('classes.close_vote')}
                       </button>
                     )}
-                    <button
-                      onClick={() => handleDelete(session)}
+                    <ConfirmButton
+                      onConfirm={() => handleDelete(session)}
                       title={t('classes.delete_vote')}
                       style={{ ...ghostBtnStyle, fontSize: '0.65rem', color: 'rgba(255,77,0,0.8)', borderColor: 'rgba(255,77,0,0.35)' }}
                     >
                       ✕
-                    </button>
+                    </ConfirmButton>
                   </div>
                 </div>
 
                 {/* Results bars */}
-                {results.length > 0 ? (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '0.75rem' }}>
-                    {results.map((r) => {
-                      const ex = exerciseMap.get(r.exercise_id)
-                      const pct = maxCount > 0 ? (r.count / maxCount) * 100 : 0
-                      const isWinner = r.count === maxCount && maxCount > 0
-                      return (
-                        <div key={r.exercise_id}>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.2rem' }}>
-                            <span style={{
-                              fontFamily: 'var(--font-d)', fontSize: '0.72rem', letterSpacing: '0.06em',
-                              textTransform: 'uppercase',
-                              color: isWinner ? '#22c55e' : 'var(--muted)'
-                            }}>
-                              {isWinner && '▶ '}{ex?.name ?? r.exercise_id.slice(0, 8)}
-                            </span>
-                            <span style={{
-                              fontFamily: 'var(--font-d)', fontSize: '0.72rem', letterSpacing: '0.1em',
-                              color: isWinner ? '#22c55e' : 'var(--muted)',
-                              fontWeight: isWinner ? 700 : 400
-                            }}>
-                              {r.count} {r.count === 1 ? t('classes.vote_singular') : t('classes.vote_plural')}
-                            </span>
-                          </div>
-                          <div style={{ height: 4, background: 'var(--black)', borderRadius: 2, overflow: 'hidden' }}>
-                            <div style={{
-                              height: '100%',
-                              width: `${pct}%`,
-                              background: isWinner ? '#22c55e' : 'rgba(34,197,94,0.3)',
-                              transition: 'width 0.4s ease',
-                              borderRadius: 2
-                            }} />
-                          </div>
-                        </div>
-                      )
-                    })}
-                  </div>
-                ) : (
-                  /* No votes yet — show exercise options as chips */
-                  <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
-                    {session.exercise_options.map((exId) => {
-                      const ex = exerciseMap.get(exId)
-                      if (!ex) return null
-                      return (
-                        <span key={exId} style={{ fontFamily: 'var(--font-d)', fontSize: '0.68rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--muted)', border: '1px solid var(--border)', padding: '0.2rem 0.5rem' }}>
-                          {ex.name}
-                        </span>
-                      )
-                    })}
-                    <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.65rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--muted)', opacity: 0.6, alignSelf: 'center' }}>
-                      — {t('classes.no_votes_yet')}
-                    </span>
-                  </div>
-                )}
+                <VoteResultsBars results={results} emptyLabel={t('classes.no_votes_yet')} />
               </div>
             )
           })}

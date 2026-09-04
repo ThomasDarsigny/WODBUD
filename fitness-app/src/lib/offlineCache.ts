@@ -12,7 +12,10 @@ type CacheValue = { exercises: Exercise[]; workouts: Workout[] }
 export function saveToCache<K extends CacheKey>(key: K, data: CacheValue[K]): void {
   try {
     localStorage.setItem(KEYS[key], JSON.stringify(data))
-  } catch {}
+  } catch {
+    // Quota plein ou mode privé : le cache hors-ligne est un bonus, jamais
+    // une condition de fonctionnement. On abandonne silencieusement.
+  }
 }
 
 export function loadFromCache<K extends CacheKey>(key: K): CacheValue[K] | null {

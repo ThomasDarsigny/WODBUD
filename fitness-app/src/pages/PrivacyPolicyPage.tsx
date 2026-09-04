@@ -77,9 +77,11 @@ SECTIONS.push(
     p: [
       'Nous faisons appel à des fournisseurs pour héberger et faire fonctionner l’application. Ils agissent pour notre compte, selon nos instructions, et n’ont pas le droit d’utiliser vos renseignements à leurs propres fins.',
       [
-        'Supabase — base de données, authentification et stockage. Hébergement : [À COMPLÉTER : région exacte de ton projet Supabase].',
+        'Supabase — base de données, authentification et stockage. Hébergement : région us-west-2 (Oregon, États-Unis).',
         'Vercel — hébergement et distribution de l’application web.',
-        'Cloudflare R2 — stockage des vidéos de démonstration.'
+        'Cloudflare R2 — stockage des vidéos de démonstration.',
+        'Anthropic — l’assistant SonIA. Votre question et l’historique récent de la conversation sont transmis pour générer la réponse. Aucun identifiant de compte, aucun nom et aucune donnée de profil n’accompagnent la demande. N’y écrivez pas de renseignements personnels ou médicaux.',
+        'Google — reconnaissance de texte lorsque vous importez la photo d’un programme papier. L’image est transmise pour en extraire le texte.'
       ],
       'Si vous êtes membre d’un gym, votre coach voit votre nom, votre présence, vos résultats d’entraînement et vos votes pour les cours auxquels vous appartenez. Il ne voit ni votre poids corporel, ni votre journal alimentaire, ni vos séances faites en solo hors du gym.',
       'Les autres membres de votre classe voient votre nom et vos résultats affichés au tableau de la classe.'

@@ -3,6 +3,7 @@ import type { CSSProperties, ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { supabase } from '../../lib/supabase'
+import type { TablesUpdate } from '../../lib/database.types'
 import { applyTheme, readStoredTheme, storeTheme } from '../../lib/theme'
 import type { ThemePref, UserSegment } from '../../types'
 
@@ -42,7 +43,7 @@ export default function SettingsView() {
       if (!mounted || !data.user) return
       setCurrentEmail(data.user.email ?? '')
 
-      const { data: profile } = await (supabase as any)
+      const { data: profile } = await supabase
         .from('profiles')
         .select('theme_pref, language, segment')
         .eq('id', data.user.id)
@@ -65,10 +66,10 @@ export default function SettingsView() {
     }
   }, [i18n])
 
-  async function persist(patch: Record<string, unknown>) {
+  async function persist(patch: TablesUpdate<'profiles'>) {
     const { data } = await supabase.auth.getUser()
     if (!data.user) return
-    await (supabase as any).from('profiles').update(patch).eq('id', data.user.id)
+    await supabase.from('profiles').update(patch).eq('id', data.user.id)
   }
 
   function pickTheme(value: ThemePref) {

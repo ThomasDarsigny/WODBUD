@@ -51,7 +51,7 @@ export default function LandingPage() {
     <div className={s.root}>
       <nav className={`${s.nav} ${scrolled ? s.navScrolled : ''}`}>
         <Link to="/" className={s.logo}>
-          FORGE<span>X</span>
+          WOD<span>BUD</span>
         </Link>
         <ul className={s.navLinks}>
           <li>
@@ -223,7 +223,7 @@ export default function LandingPage() {
             </h2>
             <p>{t('landing.demo.subtitle')}</p>
             <div className={s.betaButtons}>
-              <a href="mailto:demo@forgex.app" className={s.btnPrimary}>
+              <a href="mailto:demo@wodbud.com" className={s.btnPrimary}>
                 {t('landing.demo.book')}
               </a>
               <a href="#features" className={s.btnGhost}>
@@ -245,7 +245,7 @@ export default function LandingPage() {
 
       <footer className={s.footer}>
         <Link to="/" className={s.logo}>
-          FORGE<span>X</span>
+          WOD<span>BUD</span>
         </Link>
         <p className={s.footerCopy}>{t('landing.footer.copy')}</p>
         <nav className={s.footerLinks} aria-label={t('landing.footer.links_label')}>

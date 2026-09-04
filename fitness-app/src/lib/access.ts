@@ -8,7 +8,7 @@ export async function isCurrentUserAdmin(): Promise<boolean> {
 
 	if (userError || !user?.id) return false
 
-	const { data, error } = await (supabase as any)
+	const { data, error } = await supabase
 		.from('admin_users')
 		.select('user_id')
 		.eq('user_id', user.id)

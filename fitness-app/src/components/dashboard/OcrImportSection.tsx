@@ -2,7 +2,7 @@ import { useRef, useState } from 'react'
 import { useExerciseStore } from '../../stores/exerciseStore'
 import type { ExerciseCategory, MuscleGroup } from '../../types'
 
-const GEMINI_KEY = (import.meta as any).env.VITE_GEMINI_API_KEY as string | undefined
+const GEMINI_KEY = import.meta.env.VITE_GEMINI_API_KEY as string | undefined
 const GEMINI_URL =
   'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent'
 
@@ -78,7 +78,8 @@ async function callGemini(key: string, base64: string, mimeType: string): Promis
   })
   if (!res.ok) {
     const err = await res.json().catch(() => ({}))
-    throw new Error((err as any)?.error?.message ?? `Erreur API Gemini (${res.status})`)
+    const detail = (err as { error?: { message?: string } })?.error?.message
+    throw new Error(detail ?? `Erreur API Gemini (${res.status})`)
   }
   const data = await res.json()
   const text: string = data?.candidates?.[0]?.content?.parts?.[0]?.text ?? '[]'

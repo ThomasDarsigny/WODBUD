@@ -1,5 +1,5 @@
 {
-  "app_name": "FitnessApp",
+  "app_name": "WODBUD",
   "nav": {
     "exercises": "Exercises",
     "workouts": "Workouts",
@@ -9,7 +9,9 @@
     "ai": "AI assistant",
     "vote": "Votes",
     "classes": "My classes",
-    "library": "Library"
+    "library": "Library",
+    "session": "Session",
+    "rank": "My rank"
   },
   "library": {
     "title": "Workout library",
@@ -103,7 +105,7 @@
     ],
     "problem": {
       "without_label": "Current problem",
-      "without_title": "Without ForgeX",
+      "without_title": "Without WODBUD",
       "without_items": [
         "Scattered spreadsheets that are hard to maintain",
         "No visual reference for technical exercises",
@@ -113,7 +115,7 @@
         "Reinventing the wheel every cycle"
       ],
       "with_label": "With the platform",
-      "with_title": "With ForgeX",
+      "with_title": "With WODBUD",
       "with_items": [
         "Everything centralized in one interface",
         "Videos linked directly to each exercise",
@@ -178,10 +180,10 @@
       }
     ],
     "demo": {
-      "tag": "ForgeX demo",
+      "tag": "WODBUD demo",
       "title_line1": "Book a demo",
       "title_line2": "of the platform",
-      "subtitle": "Discover how ForgeX speeds up WOD creation, structures your cycles, and simplifies sharing with your athletes. We show practical use cases adapted to your context.",
+      "subtitle": "Discover how WODBUD speeds up WOD creation, structures your cycles, and simplifies sharing with your athletes. We show practical use cases adapted to your context.",
       "book": "Book a demo",
       "view_features": "See features",
       "perks_label": "Demo perks",
@@ -194,7 +196,7 @@
       ]
     },
     "footer": {
-      "copy": "© 2026 ForgeX - Platform in active development",
+      "copy": "© 2026 WODBUD - Platform in active development",
       "privacy": "Privacy",
       "contact": "Contact",
       "links_label": "Footer links"
@@ -312,7 +314,12 @@
     "field_name": "Class name",
     "field_schedule": "Schedule",
     "field_description": "Description",
-    "schedule_placeholder": "e.g. Thursday 7pm"
+    "schedule_placeholder": "e.g. Thursday 7pm",
+    "vote_singular": "vote",
+    "vote_plural": "votes",
+    "votes_total": "participant(s)",
+    "no_votes_yet": "No votes yet",
+    "delete_vote": "Delete vote"
   },
   "athlete": {
     "role_label": "Athlete",
@@ -345,19 +352,30 @@
   "vote": {
     "tag": "Coach selection",
     "title": "Vote for exercises",
-    "subtitle": "Select the exercises you propose for the next WOD. Click to select, click again to deselect.",
-    "selected": "exercise(s) selected",
-    "none_selected": "Select at least one exercise",
+    "subtitle": "Pick the exercise you want for the next WOD. One choice — you can change it while the vote is open.",
+    "selected": "selected",
+    "none_selected": "Pick an option",
     "submit": "Submit vote",
-    "submitting": "Submitting...",
-    "success_label": "Vote submitted",
-    "success_title": "Thanks for your vote!",
-    "success_subtitle": "You proposed {{count}} exercise(s) for the next WOD.",
-    "vote_again": "New vote"
+    "submitting": "Sending...",
+    "success_label": "Vote sent",
+    "success_title": "Thanks for voting!",
+    "success_subtitle": "Your choice is recorded.",
+    "vote_again": "New vote",
+    "voted": "Voted",
+    "modify": "Change my vote",
+    "already_voted": "You already voted",
+    "can_modify": "You can change your choice",
+    "update": "Update",
+    "single_hint": "One choice per vote.",
+    "results_title": "Live results",
+    "your_choice": "Your choice",
+    "change": "Change my vote",
+    "no_options": "No options for this vote"
   },
   "errors": {
     "generic": "An error occurred",
-    "network": "Connection problem"
+    "network": "Connection problem",
+    "not_authenticated": "Session expired — please log in again."
   },
   "mannequin": {
     "title": "Muscles worked",
@@ -398,5 +416,57 @@
     "segment_individu": "Individual",
     "segment_gym": "Gym (business)",
     "segment_hint": "Changes what you see in the menu. You can switch back any time."
+  },
+  "rank": {
+    "tag": "Progress",
+    "title": "My rank",
+    "loading": "Loading rank...",
+    "total_minutes": "Active minutes",
+    "current_streak": "Current streak",
+    "longest_streak": "Best streak",
+    "days": "{{count}} d",
+    "next": "Next rank",
+    "remaining": "{{amount}} to go",
+    "max": "Top rank reached",
+    "ladder": "The ladder",
+    "locked": "Locked",
+    "reached": "Reached",
+    "from": "from {{amount}}",
+    "share_title": "Share my rank",
+    "share_hint": "The public link only shows your display name, rank, minutes and streak. No other profile data is exposed.",
+    "share_create": "Create link",
+    "share_copy": "Copy",
+    "share_copied": "Copied",
+    "share_revoke": "Revoke link",
+    "share_revoked": "Link revoked",
+    "shared_title": "WODBUD rank",
+    "shared_not_found": "This share link is no longer valid.",
+    "shared_cta": "Discover WODBUD",
+    "anonymous": "WODBUD athlete",
+    "empty_hint": "Finish a timed session to start banking minutes."
+  },
+  "ai": {
+    "name": "SonIA",
+    "speak": "Listen",
+    "stop": "Stop",
+    "subtitle": "Ask anything about exercises and training sessions",
+    "intro": "Your coaching assistant. It knows every exercise in your library and can help you build sessions.",
+    "placeholder": "Ask about exercises or sessions...",
+    "send": "Send",
+    "suggestions": [
+      "Suggest a full body session for beginners",
+      "Which exercises target the hamstrings?",
+      "Build a 20-minute AMRAP WOD",
+      "Shoulder mobility exercises"
+    ]
+  },
+  "portal": {
+    "title": "What brings you here?",
+    "subtitle": "We tailor the menu to how you use WODBUD. Changeable anytime in Settings.",
+    "individu_title": "For myself",
+    "individu_desc": "I train on my own and track my own sessions.",
+    "gym_title": "For my gym",
+    "gym_desc": "I run classes, athletes and build WODs.",
+    "later": "Later"
   }
 }

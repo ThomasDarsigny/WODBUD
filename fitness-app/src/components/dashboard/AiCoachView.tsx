@@ -1,19 +1,16 @@
 import { useEffect, useRef, useState } from 'react'
+import type { KeyboardEvent as ReactKeyboardEvent } from 'react'
+import { useTranslation } from 'react-i18next'
 import { supabase } from '../../lib/supabase'
+import SpeakButton from '../ai/SpeakButton'
 
 interface Message {
   role: 'user' | 'assistant'
   content: string
 }
 
-const SUGGESTIONS = [
-  'Propose une séance full body pour débutants',
-  'Quels exercices pour travailler les ischio-jambiers ?',
-  'Crée un WOD AMRAP de 20 minutes',
-  'Exercices de mobilité pour les épaules',
-]
-
 export default function AiCoachView() {
+  const { t } = useTranslation('common')
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
@@ -50,15 +47,15 @@ export default function AiCoachView() {
       if (data?.error) throw new Error(data.error)
 
       setMessages((prev) => [...prev, { role: 'assistant', content: data.content }])
-    } catch (err: any) {
-      setError(err.message ?? 'Une erreur est survenue.')
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Une erreur est survenue.')
     } finally {
       setLoading(false)
       inputRef.current?.focus()
     }
   }
 
-  function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+  function handleKeyDown(e: ReactKeyboardEvent<HTMLTextAreaElement>) {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
       send(input)
@@ -99,11 +96,11 @@ export default function AiCoachView() {
               margin: 0
             }}
           >
-            Coach IA
+            {t('ai.name')}
           </h1>
         </div>
         <p style={{ color: 'var(--muted)', fontSize: '0.82rem', marginTop: '0.4rem', marginBottom: 0 }}>
-          Pose tes questions sur les exercices et séances d'entraînement
+          {t('ai.subtitle')}
         </p>
       </div>
 
@@ -151,11 +148,11 @@ export default function AiCoachView() {
                   lineHeight: 1.6
                 }}
               >
-                Ton assistant coach. Il connaît tous les exercices de ta bibliothèque et peut t'aider à construire des séances.
+                {t('ai.intro')}
               </p>
             </div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', justifyContent: 'center', maxWidth: '480px' }}>
-              {SUGGESTIONS.map((s) => (
+              {(t('ai.suggestions', { returnObjects: true }) as string[]).map((s) => (
                 <button
                   key={s}
                   onClick={() => send(s)}
@@ -212,7 +209,9 @@ export default function AiCoachView() {
               {msg.role === 'assistant' && (
                 <span
                   style={{
-                    display: 'block',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
                     fontFamily: 'var(--font-d)',
                     fontSize: '0.65rem',
                     letterSpacing: '0.15em',
@@ -221,7 +220,8 @@ export default function AiCoachView() {
                     marginBottom: '0.5rem'
                   }}
                 >
-                  Coach IA
+                  {t('ai.name')}
+                  <SpeakButton text={msg.content} />
                 </span>
               )}
               {msg.content}
@@ -302,7 +302,7 @@ export default function AiCoachView() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Pose une question sur les exercices ou séances..."
+            placeholder={t('ai.placeholder')}
             disabled={loading}
             rows={1}
             style={{
@@ -341,7 +341,7 @@ export default function AiCoachView() {
               flexShrink: 0
             }}
           >
-            {loading ? '...' : 'Envoyer'}
+            {loading ? '...' : t('ai.send')}
           </button>
         </div>
         <p style={{ color: 'var(--muted)', fontSize: '0.72rem', marginTop: '0.4rem', marginBottom: 0 }}>

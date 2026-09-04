@@ -6,6 +6,8 @@ import { supabase } from '../../lib/supabase'
 import { clearAuthSessionCookies } from '../../lib/authSessionCookies'
 import { isCurrentUserAdmin } from '../../lib/access'
 import { useOnlineStatus } from '../../hooks/useOnlineStatus'
+import ActiveSessionBar from '../session/ActiveSessionBar'
+import PortalOverlay from '../portal/PortalOverlay'
 
 type NavItem = {
   id: string
@@ -28,6 +30,8 @@ const NAV_ITEMS: NavItem[] = [
     path: '/dashboard/workout'
   },
   { id: 'library', labelKey: 'nav.library', icon: 'LIB', path: '/dashboard/workouts' },
+  { id: 'session', labelKey: 'nav.session', icon: 'RUN', path: '/dashboard/session' },
+  { id: 'rank', labelKey: 'nav.rank', icon: 'RNK', path: '/dashboard/rank' },
   { id: 'classes', labelKey: 'nav.classes', icon: 'CLS', path: '/dashboard/classes' },
   {
     id: 'ai',
@@ -141,7 +145,7 @@ export default function DashboardLayout({ children }: Props) {
                 textDecoration: 'none'
               }}
             >
-              FORGE<span style={{ color: 'var(--orange)' }}>X</span>
+              WOD<span style={{ color: 'var(--orange)' }}>BUD</span>
             </Link>
           )}
           <button
@@ -332,8 +336,11 @@ export default function DashboardLayout({ children }: Props) {
             Mode hors-ligne — donnees en cache
           </div>
         )}
+        <ActiveSessionBar basePath="/dashboard" />
         <div style={{ flex: 1, overflow: 'auto' }}>{children}</div>
       </main>
+
+      <PortalOverlay />
     </div>
   )
 }

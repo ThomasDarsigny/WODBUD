@@ -5,6 +5,8 @@ import { useState } from 'react'
 import { supabase } from '../../lib/supabase'
 import { clearAuthSessionCookies } from '../../lib/authSessionCookies'
 import { useOnlineStatus } from '../../hooks/useOnlineStatus'
+import ActiveSessionBar from '../session/ActiveSessionBar'
+import PortalOverlay from '../portal/PortalOverlay'
 
 interface Props {
   children: ReactNode
@@ -29,6 +31,8 @@ export default function AthleteDashboardLayout({ children }: Props) {
 
   const navItems = [
     { id: 'home', labelKey: 'athlete.nav_home', icon: 'HOME', path: '/athlete' },
+    { id: 'session', labelKey: 'nav.session', icon: 'RUN', path: '/athlete/session' },
+    { id: 'rank', labelKey: 'nav.rank', icon: 'RNK', path: '/athlete/rank' },
   ]
 
   return (
@@ -37,7 +41,7 @@ export default function AthleteDashboardLayout({ children }: Props) {
         <div style={{ padding: collapsed ? '1.25rem 0' : '1.25rem 1.5rem', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: collapsed ? 'center' : 'space-between', gap: '0.5rem' }}>
           {!collapsed && (
             <Link to="/" style={{ fontFamily: 'var(--font-d)', fontWeight: 900, fontSize: '1.2rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--white)', textDecoration: 'none' }}>
-              FORGE<span style={{ color: 'var(--orange)' }}>X</span>
+              WOD<span style={{ color: 'var(--orange)' }}>BUD</span>
             </Link>
           )}
           <button onClick={() => setCollapsed(!collapsed)} style={{ background: 'none', border: 'none', color: 'var(--muted)', cursor: 'pointer', fontSize: '1rem', padding: '0.25rem', lineHeight: 1 }} aria-label="Toggle sidebar">
@@ -97,8 +101,11 @@ export default function AthleteDashboardLayout({ children }: Props) {
             Mode hors-ligne — données en cache
           </div>
         )}
+        <ActiveSessionBar basePath="/athlete" />
         <div style={{ flex: 1, overflow: 'auto' }}>{children}</div>
       </main>
+
+      <PortalOverlay />
     </div>
   )
 }

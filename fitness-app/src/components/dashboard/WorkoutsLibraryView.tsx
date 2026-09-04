@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useWorkoutStore } from '../../stores/workoutStore'
+import { useSessionStore } from '../../stores/sessionStore'
 import { supabase } from '../../lib/supabase'
 import type { WorkoutMethod } from '../../types'
 import { METHOD_I18N_KEYS } from '../../types'
@@ -8,6 +10,8 @@ import { METHOD_I18N_KEYS } from '../../types'
 export default function WorkoutsLibraryView() {
   const { t } = useTranslation(['common', 'workouts'])
   const { savedWorkouts, fetchWorkouts, workoutsFromCache, error } = useWorkoutStore()
+  const startSession = useSessionStore((s) => s.startSession)
+  const navigate = useNavigate()
 
   const [currentUserId, setCurrentUserId] = useState<string | null>(null)
   const [search, setSearch] = useState('')
@@ -126,6 +130,20 @@ export default function WorkoutsLibraryView() {
                 <p style={{ color: 'var(--muted)', fontSize: '0.68rem', margin: 0, opacity: 0.7 }}>
                   {new Date(w.created_at).toLocaleDateString()}
                 </p>
+
+                <button
+                  onClick={() => {
+                    startSession(w.id, w.name)
+                    navigate('/dashboard/session')
+                  }}
+                  style={{
+                    marginTop: 'auto', fontFamily: 'var(--font-d)', fontSize: '0.72rem', fontWeight: 700,
+                    letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--black)',
+                    background: 'var(--orange)', border: 'none', padding: '0.5rem 0.9rem', cursor: 'pointer'
+                  }}
+                >
+                  ▶ {t('session.start', { ns: 'workouts' })}
+                </button>
               </div>
             )
           })}

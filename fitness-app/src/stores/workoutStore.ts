@@ -15,9 +15,11 @@ import type {
 } from '../types'
 import { CARDIO_MUSCLES, LOWER_MUSCLES, MUSCLE_GROUP_I18N_KEYS, UPPER_MUSCLES } from '../types'
 
+// La colonne en base s'appelle `title`; le type métier de l'app utilise `name`.
+// La conversion se fait ici, au seul endroit qui parle à PostgREST.
 type WorkoutRow = {
   id: string
-  name: string
+  title: string
   method: WorkoutMethod
   duration_minutes?: number
   notes?: string
@@ -44,31 +46,6 @@ type MuscleGroupLookupRow = {
 }
 
 const MS_48H = 48 * 60 * 60 * 1000
-
-function extractErrorMessage(err: unknown): string {
-  if (err instanceof Error && err.message) {
-    return err.message
-  }
-
-  if (typeof err === 'object' && err !== null) {
-    const maybeError = err as Record<string, unknown>
-    const candidates = [
-      maybeError.message,
-      maybeError.error,
-      maybeError.error_description,
-      maybeError.details,
-      maybeError.hint
-    ]
-
-    for (const value of candidates) {
-      if (typeof value === 'string' && value.trim().length > 0) {
-        return value
-      }
-    }
-  }
-
-  return 'Erreur inconnue'
-}
 
 async function getCurrentUserId(): Promise<string> {
   const {
@@ -98,7 +75,7 @@ async function getPrimaryMuscleRestBlock(primaryMuscle: MuscleGroup): Promise<{
 }> {
   const muscleLookupKeys = getMuscleLookupKeys(primaryMuscle)
 
-  const { data: muscleData, error: muscleError } = await (supabase as any)
+  const { data: muscleData, error: muscleError } = await supabase
     .from('muscle_groups')
     .select('id')
     .in('name_key', muscleLookupKeys)
@@ -113,7 +90,7 @@ async function getPrimaryMuscleRestBlock(primaryMuscle: MuscleGroup): Promise<{
 
   const cutoffDate = new Date(Date.now() - MS_48H).toISOString()
 
-  const { data: workoutsData, error: workoutsError } = await (supabase as any)
+  const { data: workoutsData, error: workoutsError } = await supabase
     .from('workouts')
     .select('id, created_at')
     .gte('created_at', cutoffDate)
@@ -128,7 +105,7 @@ async function getPrimaryMuscleRestBlock(primaryMuscle: MuscleGroup): Promise<{
 
   const recentWorkoutIds = recentWorkouts.map((w) => w.id)
 
-  const { data: workoutExercisesData, error: workoutExercisesError } = await (supabase as any)
+  const { data: workoutExercisesData, error: workoutExercisesError } = await supabase
     .from('workout_exercises')
     .select('workout_id, exercise_id')
     .in('workout_id', recentWorkoutIds)
@@ -142,7 +119,7 @@ async function getPrimaryMuscleRestBlock(primaryMuscle: MuscleGroup): Promise<{
 
   const exerciseIds = Array.from(new Set(workoutExercises.map((row) => row.exercise_id)))
 
-  const { data: primaryMusclesData, error: primaryMusclesError } = await (supabase as any)
+  const { data: primaryMusclesData, error: primaryMusclesError } = await supabase
     .from('exercise_muscles')
     .select('exercise_id')
     .eq('muscle_group_id', muscleGroupId)
@@ -404,9 +381,9 @@ export const useWorkoutStore = create<WorkoutBuilderState>((set, get) => ({
     try {
       const userId = await getCurrentUserId()
 
-      const { data: workoutRow, error } = await (supabase as any)
+      const { data: workoutRow, error } = await supabase
         .from('workouts')
-        .insert({ name, method, duration_minutes: durationMinutes, notes, created_by: userId })
+        .insert({ title: name, method, duration_minutes: durationMinutes, notes, created_by: userId })
         .select()
         .single()
 
@@ -417,13 +394,16 @@ export const useWorkoutStore = create<WorkoutBuilderState>((set, get) => ({
         exercise_id: we.exercise.id,
         position: we.position,
         sets: we.sets,
-        reps: we.reps,
+        // La colonne `reps` est un `text` en base — elle doit pouvoir contenir
+        // « 10-12 » ou « AMRAP ». Le constructeur saisit un nombre : on le
+        // convertit ici plutôt que d'envoyer un JSON number dans une colonne texte.
+        reps: we.reps != null ? String(we.reps) : null,
         weight: we.weight,
         rest_seconds: we.rest_seconds,
         notes: we.notes
       }))
 
-      const { error: exError } = await (supabase as any)
+      const { error: exError } = await supabase
         .from('workout_exercises')
         .insert(exerciseRows)
       if (exError) throw exError
@@ -453,7 +433,7 @@ export const useWorkoutStore = create<WorkoutBuilderState>((set, get) => ({
 
   fetchWorkouts: async () => {
     try {
-      const { data, error } = await (supabase as any)
+      const { data, error } = await supabase
         .from('workouts')
         .select('*')
         .order('created_at', { ascending: false })
@@ -463,7 +443,7 @@ export const useWorkoutStore = create<WorkoutBuilderState>((set, get) => ({
 
       const lightweight = ((data ?? []) as WorkoutRow[]).map((w) => ({
         id: w.id,
-        name: w.name,
+        name: w.title,
         method: w.method,
         duration_minutes: w.duration_minutes,
         notes: w.notes,

@@ -227,10 +227,31 @@ export interface VoteSession {
 
 export type VoteSessionInsert = Pick<VoteSession, 'class_id' | 'title' | 'exercise_options' | 'deadline'>
 
-// ─── Vote Results ─────────────────────────────────────────────────────────────
+// ─── Vote Options & Results ───────────────────────────────────────────────────
+// Une option de vote est une ligne de `vote_options`. Sa couleur est dérivée de
+// sa position par un trigger en base : le client ne l'envoie jamais, il la lit.
+export interface VoteOption {
+  id: string
+  vote_session_id: string
+  exercise_id: string | null
+  label: string | null
+  color: string
+  position: number
+}
+
+// Reflet exact de la vue `vote_results` : libellé, couleur, décompte,
+// pourcentage et « en tête » sortent d'une seule requête, déjà agrégés.
+// `percentage` arrive en chaîne — PostgREST sérialise les `numeric` ainsi.
 export interface VoteResult {
-  exercise_id: string
-  count: number
+  vote_session_id: string
+  vote_option_id: string
+  position: number
+  label: string
+  color: string
+  exercise_id: string | null
+  votes: number
+  percentage: number
+  is_leading: boolean
 }
 // ─── Body Regions ─────────────────────────────────────────────────────────────
 // 'core' est une vraie région, pas un sous-ensemble de 'full'. Sans elle,

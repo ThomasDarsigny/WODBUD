@@ -1,10 +1,5 @@
-<<<<<<< HEAD
-import { useState, useEffect, useMemo, useRef } from 'react'
-import type { ChangeEvent, CSSProperties } from 'react'
-=======
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import type { CSSProperties } from 'react'
->>>>>>> 7c2da7a08c6a790c0ada6539ab73b45c9dca76be
 import { useTranslation } from 'react-i18next'
 import { useExerciseStore } from '../../stores/exerciseStore'
 import { useWorkoutStore } from '../../stores/workoutStore'

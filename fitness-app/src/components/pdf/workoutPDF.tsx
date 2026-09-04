@@ -232,12 +232,12 @@ export function WorkoutPdfFull({ workout, theme, qrDataUrls }: Props) {
 	const workoutTitle = workout.title ?? workout.name
 
 	return (
-		<Document title={workoutTitle} author="ForgeX" subject="Séance d'entraînement">
+		<Document title={workoutTitle} author="WODBUD" subject="Séance d'entraînement">
 			<Page size="A4" style={s.page}>
 				<View style={s.header}>
 					<View style={s.logoBox}>
 						<Text style={s.logoText}>
-							FORGE<Text style={s.logoAccent}>X</Text>
+							WOD<Text style={s.logoAccent}>BUD</Text>
 						</Text>
 					</View>
 					<View style={s.headerMeta}>
@@ -351,7 +351,7 @@ export function WorkoutPdfFull({ workout, theme, qrDataUrls }: Props) {
 
 				<View style={s.footer} fixed>
 					<Text style={s.footerText}>
-						Généré par <Text style={s.footerBrand}>FORGEX</Text> · {formatDate()}
+						Généré par <Text style={s.footerBrand}>WODBUD</Text> · {formatDate()}
 					</Text>
 					<Text
 						style={s.footerText}

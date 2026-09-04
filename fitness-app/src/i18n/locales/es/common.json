@@ -1,5 +1,5 @@
 {
-  "app_name": "FitnessApp",
+  "app_name": "WODBUD",
   "nav": {
     "exercises": "Ejercicios",
     "workouts": "Entrenamientos",
@@ -9,7 +9,9 @@
     "ai": "Asistente IA",
     "vote": "Votos",
     "classes": "Mis clases",
-    "library": "Biblioteca"
+    "library": "Biblioteca",
+    "session": "Sesión",
+    "rank": "Mi rango"
   },
   "library": {
     "title": "Biblioteca de workouts",
@@ -105,7 +107,7 @@
       "Multi-box"
     ],
     "problem": {
-      "without_label": "Sin ForgeX",
+      "without_label": "Sin WODBUD",
       "without_title": "Caos y tiempo perdido",
       "without_items": [
         "WODs escritos en papel o en Excel",
@@ -113,7 +115,7 @@
         "Comunicación dispersa con los atletas",
         "Sin visibilidad del rendimiento"
       ],
-      "with_label": "Con ForgeX",
+      "with_label": "Con WODBUD",
       "with_title": "Todo centralizado, todo bajo control",
       "with_items": [
         "WODs creados en 2 minutos, compartidos al instante",
@@ -187,7 +189,7 @@
       "tag": "Acceso anticipado",
       "title_line1": "Únete a los entrenadores",
       "title_line2": "que entrenan mejor",
-      "subtitle": "ForgeX está en acceso anticipado. Reserva una demo gratuita de 30 minutos y descubre cómo transformar la gestión de tu box.",
+      "subtitle": "WODBUD está en acceso anticipado. Reserva una demo gratuita de 30 minutos y descubre cómo transformar la gestión de tu box.",
       "book": "Reservar una demo",
       "view_features": "Ver funciones",
       "perks_label": "Ventajas incluidas",
@@ -200,7 +202,7 @@
       ]
     },
     "footer": {
-      "copy": "© 2025 ForgeX. Todos los derechos reservados.",
+      "copy": "© 2026 WODBUD. Todos los derechos reservados.",
       "links_label": "Enlaces legales",
       "privacy": "Privacidad",
       "contact": "Contacto"
@@ -318,7 +320,12 @@
     "field_name": "Nombre de la clase",
     "field_schedule": "Horario",
     "field_description": "Descripción",
-    "schedule_placeholder": "ej. Jueves 19h00"
+    "schedule_placeholder": "ej. Jueves 19h00",
+    "vote_singular": "voto",
+    "vote_plural": "votos",
+    "votes_total": "participante(s)",
+    "no_votes_yet": "Ningún voto por ahora",
+    "delete_vote": "Eliminar el voto"
   },
   "athlete": {
     "role_label": "Atleta",
@@ -350,20 +357,31 @@
   },
   "vote": {
     "tag": "Selección del coach",
-    "title": "Votar por ejercicios",
-    "subtitle": "Selecciona los ejercicios que propones para el próximo WOD. Haz clic para seleccionar, vuelve a hacer clic para deseleccionar.",
-    "selected": "ejercicio(s) seleccionado(s)",
-    "none_selected": "Selecciona al menos un ejercicio",
-    "submit": "Enviar voto",
+    "title": "Votar por los ejercicios",
+    "subtitle": "Elige el ejercicio que propones para el próximo WOD. Una sola opción — puedes cambiarla mientras el voto esté abierto.",
+    "selected": "seleccionado",
+    "none_selected": "Elige una opción",
+    "submit": "Enviar el voto",
     "submitting": "Enviando...",
     "success_label": "Voto enviado",
-    "success_title": "¡Gracias por tu voto!",
-    "success_subtitle": "Propusiste {{count}} ejercicio(s) para el próximo WOD.",
-    "vote_again": "Nuevo voto"
+    "success_title": "¡Gracias por votar!",
+    "success_subtitle": "Tu elección está registrada.",
+    "vote_again": "Nuevo voto",
+    "voted": "Votado",
+    "modify": "Cambiar mi voto",
+    "already_voted": "Ya has votado",
+    "can_modify": "Puedes cambiar tu elección",
+    "update": "Actualizar",
+    "single_hint": "Una sola opción por voto.",
+    "results_title": "Resultados en vivo",
+    "your_choice": "Tu elección",
+    "change": "Cambiar mi voto",
+    "no_options": "Ninguna opción para este voto"
   },
   "errors": {
     "generic": "Ocurrió un error",
-    "network": "Problema de conexión"
+    "network": "Problema de conexión",
+    "not_authenticated": "Sesión expirada — vuelve a iniciar sesión."
   },
   "mannequin": {
     "title": "Zonas trabajadas",
@@ -404,5 +422,57 @@
     "segment_individu": "Particular",
     "segment_gym": "Gimnasio (negocio)",
     "segment_hint": "Cambia lo que ves en el menú. Puedes volver cuando quieras."
+  },
+  "rank": {
+    "tag": "Progresión",
+    "title": "Mi rango",
+    "loading": "Cargando rango...",
+    "total_minutes": "Minutos activos",
+    "current_streak": "Racha actual",
+    "longest_streak": "Mejor racha",
+    "days": "{{count}} d",
+    "next": "Siguiente rango",
+    "remaining": "Faltan {{amount}}",
+    "max": "Rango máximo alcanzado",
+    "ladder": "La escala",
+    "locked": "Bloqueado",
+    "reached": "Alcanzado",
+    "from": "desde {{amount}}",
+    "share_title": "Compartir mi rango",
+    "share_hint": "El enlace público solo muestra tu nombre, rango, minutos y racha. Ningún otro dato de tu perfil queda expuesto.",
+    "share_create": "Crear enlace",
+    "share_copy": "Copiar",
+    "share_copied": "Copiado",
+    "share_revoke": "Revocar enlace",
+    "share_revoked": "Enlace revocado",
+    "shared_title": "Rango WODBUD",
+    "shared_not_found": "Este enlace ya no es válido.",
+    "shared_cta": "Descubrir WODBUD",
+    "anonymous": "Atleta WODBUD",
+    "empty_hint": "Termina una sesión cronometrada para empezar a acumular minutos."
+  },
+  "ai": {
+    "name": "SonIA",
+    "speak": "Escuchar",
+    "stop": "Detener",
+    "subtitle": "Pregunta lo que quieras sobre ejercicios y sesiones de entrenamiento",
+    "intro": "Tu asistente de coaching. Conoce todos los ejercicios de tu biblioteca y puede ayudarte a construir sesiones.",
+    "placeholder": "Pregunta sobre ejercicios o sesiones...",
+    "send": "Enviar",
+    "suggestions": [
+      "Propón una sesión full body para principiantes",
+      "¿Qué ejercicios trabajan los isquiotibiales?",
+      "Crea un WOD AMRAP de 20 minutos",
+      "Ejercicios de movilidad para los hombros"
+    ]
+  },
+  "portal": {
+    "title": "¿Qué te trae por aquí?",
+    "subtitle": "Adaptamos el menú a tu uso. Puedes cambiarlo cuando quieras en Ajustes.",
+    "individu_title": "Para mí",
+    "individu_desc": "Entreno solo y sigo mis propias sesiones.",
+    "gym_title": "Para mi gimnasio",
+    "gym_desc": "Gestiono clases, atletas y creo WODs.",
+    "later": "Más tarde"
   }
 }

@@ -25,8 +25,17 @@ export default function JoinClassPage() {
   const [formError, setFormError] = useState('')
 
   useEffect(() => {
-    if (!token) { setStep('error'); setErrorMsg(t('join.invalid_link')); return }
     let mounted = true
+    // Le cas « pas de jeton » passe par la file de microtâches plutôt que par
+    // un setState synchrone dans l'effet, qui provoquait un rendu en cascade.
+    if (!token) {
+      queueMicrotask(() => {
+        if (!mounted) return
+        setStep('error')
+        setErrorMsg(t('join.invalid_link'))
+      })
+      return () => { mounted = false }
+    }
     ;(async () => {
       // Fetch class info without auth (public read won't work due to RLS, use service approach)
       // We'll show a generic join page and validate the token on submit
@@ -101,7 +110,7 @@ export default function JoinClassPage() {
   return (
     <div style={{ minHeight: '100vh', background: 'var(--black)', color: 'var(--white)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '2rem', fontFamily: 'var(--font-b)' }}>
       <Link to="/" style={{ fontFamily: 'var(--font-d)', fontWeight: 900, fontSize: '1.4rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--white)', textDecoration: 'none', marginBottom: '2.5rem' }}>
-        FORGE<span style={{ color: 'var(--orange)' }}>X</span>
+        WOD<span style={{ color: 'var(--orange)' }}>BUD</span>
       </Link>
 
       <div style={{ width: '100%', maxWidth: 420, border: '1px solid var(--border)', background: 'var(--dark)', padding: '2rem' }}>

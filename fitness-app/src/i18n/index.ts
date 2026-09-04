@@ -36,7 +36,7 @@ i18n
     detection: {
       order: ['localStorage', 'navigator'],
       caches: ['localStorage'],
-      lookupLocalStorage: 'fitnessapp_lang'
+      lookupLocalStorage: 'wodbud_lang'
     }
   })
 

@@ -17,9 +17,9 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'icons/*.png'], //todo: ajouter les icônes manquantes (favicon.io)
       manifest: {
-        name: 'FitnessApp',
-        short_name: 'Fitness',
-        description: 'Gestion intelligente des entraînements',
+        name: 'WODBUD',
+        short_name: 'WODBUD',
+        description: 'WODBUD - creation de WODs, suivi des charges musculaires et gestion de box',
         theme_color: '#0a0a0a',
         background_color: '#0a0a0a',
         display: 'standalone',

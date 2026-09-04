@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import type { ReactNode } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
@@ -6,51 +6,31 @@ import LandingPage from './pages/LandingPage'
 import LoginPage from './pages/LoginPage'
 import SignupPage from './pages/SignupPage'
 import DashboardLayout from './components/dashboard/DashboardLayout'
-import AdminDashboardView from './components/dashboard/AdminDashboardView'
-import ExercisesView from './components/dashboard/ExercisesView'
-import WorkoutBuilderView from './components/dashboard/WorkoutBuilderView'
-import WorkoutsLibraryView from './components/dashboard/WorkoutsLibraryView'
-import VoteView from './components/dashboard/VoteView'
-import ClassesView from './components/dashboard/ClassesView'
-import AiCoachView from './components/dashboard/AiCoachView'
-import SettingsView from './components/dashboard/SettingsView'
-import PrivacyPolicyPage from './pages/PrivacyPolicyPage'
 import AthleteDashboardLayout from './components/athlete/AthleteDashboardLayout'
-import AthleteHomeView from './components/athlete/AthleteHomeView'
-import AthleteVoteView from './components/athlete/AthleteVoteView'
-import JoinClassPage from './pages/JoinClassPage'
 import { supabase } from './lib/supabase'
 import { clearAuthSessionCookies, syncAuthSessionCookies } from './lib/authSessionCookies'
 import { isCurrentUserAdmin } from './lib/access'
 
-function ComingSoon({ labelKey, icon }: { labelKey: string; icon: string }) {
-  const { t } = useTranslation('common')
-  return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: '100%',
-        gap: '1rem',
-        color: 'var(--muted)'
-      }}
-    >
-      <span style={{ fontSize: '3rem', opacity: 0.3 }}>{icon}</span>
-      <p
-        style={{
-          fontFamily: 'var(--font-d)',
-          fontSize: '1rem',
-          letterSpacing: '0.15em',
-          textTransform: 'uppercase'
-        }}
-      >
-        {t(labelKey)} - {t('status.soon')}
-      </p>
-    </div>
-  )
-}
+// Écrans chargés à la demande. La page d'accueil et l'authentification
+// restent dans le bundle initial : ce sont elles qui décident du premier
+// rendu et du référencement. Tout le reste vit derrière un login, donc son
+// chargement peut attendre le clic.
+const AdminDashboardView = lazy(() => import('./components/dashboard/AdminDashboardView'))
+const ExercisesView = lazy(() => import('./components/dashboard/ExercisesView'))
+const WorkoutBuilderView = lazy(() => import('./components/dashboard/WorkoutBuilderView'))
+const WorkoutsLibraryView = lazy(() => import('./components/dashboard/WorkoutsLibraryView'))
+const VoteView = lazy(() => import('./components/dashboard/VoteView'))
+const ClassesView = lazy(() => import('./components/dashboard/ClassesView'))
+const AiCoachView = lazy(() => import('./components/dashboard/AiCoachView'))
+const SettingsView = lazy(() => import('./components/dashboard/SettingsView'))
+const SessionRunnerView = lazy(() => import('./components/session/SessionRunnerView'))
+const RankView = lazy(() => import('./components/rank/RankView'))
+const PrivacyPolicyPage = lazy(() => import('./pages/PrivacyPolicyPage'))
+const SharedRankPage = lazy(() => import('./pages/SharedRankPage'))
+const AthleteHomeView = lazy(() => import('./components/athlete/AthleteHomeView'))
+const AthleteVoteView = lazy(() => import('./components/athlete/AthleteVoteView'))
+const JoinClassPage = lazy(() => import('./pages/JoinClassPage'))
+import { useSessionStore } from './stores/sessionStore'
 
 function ProtectedRoute({ children, adminOnly = false }: { children: ReactNode; adminOnly?: boolean }) {
   const { t } = useTranslation('common')
@@ -158,7 +138,21 @@ function DashboardHomeRedirect() {
   return <Navigate to={target} replace />
 }
 
+function RouteFallback() {
+  return (
+    <div style={{ minHeight: '100vh', background: 'var(--black)', color: 'var(--muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-d)', fontSize: '0.8rem', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
+      WODBUD
+    </div>
+  )
+}
+
 function App() {
+  // Une séance interrompue par un rechargement ou une relance de la PWA
+  // reprend là où elle était : le chrono vit dans localStorage.
+  useEffect(() => {
+    useSessionStore.getState().restore()
+  }, [])
+
   useEffect(() => {
     let mounted = true
 
@@ -196,6 +190,7 @@ function App() {
 
   return (
     <BrowserRouter>
+      <Suspense fallback={<RouteFallback />}>
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/landing" element={<LandingPage />} />
@@ -304,10 +299,34 @@ function App() {
           }
         />
 
+        <Route
+          path="/dashboard/rank"
+          element={
+            <ProtectedRoute>
+              <DashboardLayout>
+                <RankView />
+              </DashboardLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/dashboard/session"
+          element={
+            <ProtectedRoute>
+              <DashboardLayout>
+                <SessionRunnerView basePath="/dashboard" />
+              </DashboardLayout>
+            </ProtectedRoute>
+          }
+        />
+
         <Route path="/confidentialite" element={<PrivacyPolicyPage />} />
         <Route path="/privacy" element={<PrivacyPolicyPage />} />
 
         <Route path="/join/:token" element={<JoinClassPage />} />
+        <Route path="/rang/:token" element={<SharedRankPage />} />
+        <Route path="/rank/:token" element={<SharedRankPage />} />
 
         <Route
           path="/athlete"
@@ -315,6 +334,27 @@ function App() {
             <ProtectedRoute>
               <AthleteDashboardLayout>
                 <AthleteHomeView />
+              </AthleteDashboardLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/athlete/rank"
+          element={
+            <ProtectedRoute>
+              <AthleteDashboardLayout>
+                <RankView />
+              </AthleteDashboardLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/athlete/session"
+          element={
+            <ProtectedRoute>
+              <AthleteDashboardLayout>
+                <SessionRunnerView basePath="/athlete" />
               </AthleteDashboardLayout>
             </ProtectedRoute>
           }
@@ -332,6 +372,7 @@ function App() {
 
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
+      </Suspense>
     </BrowserRouter>
   )
 }

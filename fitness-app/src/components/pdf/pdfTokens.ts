@@ -61,5 +61,5 @@ export function pdfFileName(title: string, variant: 'complet' | 'abrege', theme:
 		.replace(/\s+/g, '-')
 		.replace(/[^a-z0-9-]/g, '')
 
-	return `forgex-${slug}-${variant}-${theme}.pdf`
+	return `wodbud-${slug}-${variant}-${theme}.pdf`
 }

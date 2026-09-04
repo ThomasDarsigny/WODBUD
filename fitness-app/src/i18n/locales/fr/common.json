@@ -1,5 +1,5 @@
 {
-  "app_name": "FitnessApp",
+  "app_name": "WODBUD",
   "nav": {
     "exercises": "Exercices",
     "workouts": "Entraînements",
@@ -9,7 +9,9 @@
     "ai": "Assistant IA",
     "vote": "Votes",
     "classes": "Mes cours",
-    "library": "Bibliothèque"
+    "library": "Bibliothèque",
+    "session": "Séance",
+    "rank": "Mon rang"
   },
   "library": {
     "title": "Bibliothèque de workouts",
@@ -103,7 +105,7 @@
     ],
     "problem": {
       "without_label": "Le problème actuel",
-      "without_title": "Sans ForgeX",
+      "without_title": "Sans WODBUD",
       "without_items": [
         "Feuilles Excel dispersées et difficiles à maintenir",
         "Pas de référence visuelle pour les exercices techniques",
@@ -113,7 +115,7 @@
         "Réinventer la roue à chaque cycle"
       ],
       "with_label": "Avec la plateforme",
-      "with_title": "Avec ForgeX",
+      "with_title": "Avec WODBUD",
       "with_items": [
         "Tout centralisé dans une seule interface",
         "Vidéos liées directement à chaque exercice",
@@ -184,10 +186,10 @@
       }
     ],
     "demo": {
-      "tag": "Démo ForgeX",
+      "tag": "Démo WODBUD",
       "title_line1": "Réserve une démo",
       "title_line2": "de la plateforme",
-      "subtitle": "Découvre comment ForgeX accélère la création de WODs, structure tes cycles et facilite le partage avec tes athlètes. On te montre des cas concrets adaptés à ton contexte.",
+      "subtitle": "Découvre comment WODBUD accélère la création de WODs, structure tes cycles et facilite le partage avec tes athlètes. On te montre des cas concrets adaptés à ton contexte.",
       "book": "Réserver une démo",
       "view_features": "Voir les fonctionnalités",
       "perks_label": "Avantages démo",
@@ -200,7 +202,7 @@
       ]
     },
     "footer": {
-      "copy": "© 2026 ForgeX - Plateforme en développement actif",
+      "copy": "© 2026 WODBUD - Plateforme en développement actif",
       "privacy": "Confidentialité",
       "contact": "Contact",
       "links_label": "Liens de bas de page"
@@ -356,24 +358,30 @@
   "vote": {
     "tag": "Sélection du coach",
     "title": "Voter pour les exercices",
-    "subtitle": "Sélectionne les exercices que tu proposes pour le prochain WOD. Clique pour sélectionner, recliquer pour désélectionner.",
-    "selected": "exercice(s) sélectionné(s)",
-    "none_selected": "Sélectionne au moins un exercice",
+    "subtitle": "Choisis l'exercice que tu proposes pour le prochain WOD. Un seul choix — tu peux le changer tant que le vote est ouvert.",
+    "selected": "sélectionné",
+    "none_selected": "Choisis une option",
     "submit": "Soumettre le vote",
     "submitting": "Envoi en cours...",
     "success_label": "Vote envoyé",
     "success_title": "Merci pour ton vote !",
-    "success_subtitle": "Tu as proposé {{count}} exercice(s) pour le prochain WOD.",
+    "success_subtitle": "Ton choix est enregistré.",
     "vote_again": "Nouveau vote",
     "voted": "Voté",
     "modify": "Modifier mon vote",
     "already_voted": "Tu as déjà voté",
-    "can_modify": "Tu peux modifier ta sélection",
-    "update": "Mettre à jour"
+    "can_modify": "Tu peux changer ton choix",
+    "update": "Mettre à jour",
+    "single_hint": "Un seul choix par vote.",
+    "results_title": "Résultats en direct",
+    "your_choice": "Ton choix",
+    "change": "Changer mon vote",
+    "no_options": "Aucune option pour ce vote"
   },
   "errors": {
     "generic": "Une erreur est survenue",
-    "network": "Problème de connexion"
+    "network": "Problème de connexion",
+    "not_authenticated": "Session expirée — reconnecte-toi."
   },
   "mannequin": {
     "title": "Zones touchées",
@@ -414,5 +422,57 @@
     "segment_individu": "Particulier",
     "segment_gym": "Gym (business)",
     "segment_hint": "Change ce que tu vois dans le menu. Tu peux le rechanger n’importe quand."
+  },
+  "rank": {
+    "tag": "Progression",
+    "title": "Mon rang",
+    "loading": "Chargement du rang...",
+    "total_minutes": "Minutes actives",
+    "current_streak": "Série en cours",
+    "longest_streak": "Meilleure série",
+    "days": "{{count}} j",
+    "next": "Prochain rang",
+    "remaining": "Encore {{amount}}",
+    "max": "Rang maximal atteint",
+    "ladder": "L'échelle",
+    "locked": "Verrouillé",
+    "reached": "Atteint",
+    "from": "dès {{amount}}",
+    "share_title": "Partager mon rang",
+    "share_hint": "Le lien public ne montre que ton nom affiché, ton rang, tes minutes et ta série. Aucune autre donnée de ton profil n'est exposée.",
+    "share_create": "Créer le lien",
+    "share_copy": "Copier",
+    "share_copied": "Copié",
+    "share_revoke": "Révoquer le lien",
+    "share_revoked": "Lien révoqué",
+    "shared_title": "Rang WODBUD",
+    "shared_not_found": "Ce lien de partage n'est plus valide.",
+    "shared_cta": "Découvrir WODBUD",
+    "anonymous": "Athlète WODBUD",
+    "empty_hint": "Termine une séance chronométrée pour commencer à accumuler des minutes."
+  },
+  "ai": {
+    "name": "SonIA",
+    "speak": "Écouter",
+    "stop": "Arrêter",
+    "subtitle": "Pose tes questions sur les exercices et séances d'entraînement",
+    "intro": "Ton assistant coach. Il connaît tous les exercices de ta bibliothèque et peut t'aider à construire des séances.",
+    "placeholder": "Pose une question sur les exercices ou séances...",
+    "send": "Envoyer",
+    "suggestions": [
+      "Propose une séance full body pour débutants",
+      "Quels exercices pour travailler les ischio-jambiers ?",
+      "Crée un WOD AMRAP de 20 minutes",
+      "Exercices de mobilité pour les épaules"
+    ]
+  },
+  "portal": {
+    "title": "Tu es ici pour quoi ?",
+    "subtitle": "On adapte le menu à ton usage. Modifiable n'importe quand dans Paramètres.",
+    "individu_title": "Pour moi",
+    "individu_desc": "Je m'entraîne seul et je suis mes propres séances.",
+    "gym_title": "Pour mon gym",
+    "gym_desc": "Je gère des cours, des athlètes et je monte des WODs.",
+    "later": "Plus tard"
   }
 }
