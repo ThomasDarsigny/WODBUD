@@ -89,5 +89,7 @@
     "auth_session_missing_exercise": "Sesión faltante: vuelve a iniciar sesión para crear o editar un ejercicio.",
     "invalid_session_reconnect": "Sesión inválida: vuelve a iniciar sesión para crear un ejercicio.",
     "primary_muscle_not_found": "Músculo principal no encontrado: {{muscle}}"
-  }
+  },
+  "empty_hint": "Añade tus ejercicios una vez: luego alimentan todos tus workouts.",
+  "empty_filtered_hint": "Ningún ejercicio cumple todos estos filtros. Quita uno para ampliar."
 }

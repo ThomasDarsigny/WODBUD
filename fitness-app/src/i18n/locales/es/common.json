@@ -24,14 +24,17 @@
     "empty": "Aún no hay workouts.",
     "no_results": "Ningún workout coincide con la búsqueda.",
     "badge_template": "Plantilla",
-    "badge_mine": "Mi workout"
+    "badge_mine": "Mi workout",
+    "empty_hint": "Crea tu primera sesión en el constructor y vuelve aquí para repetirla.",
+    "no_results_hint": "Prueba otra palabra clave o quita el filtro de tipo."
   },
   "vote_view": {
     "title": "Todos los votos",
     "subtitle": "{{open}} abierto(s) · {{total}} en total",
     "empty": "Aún no hay votos. Crea uno desde una de tus clases.",
     "go_to_classes": "Ir a mis clases",
-    "refresh": "Actualizar resultados"
+    "refresh": "Actualizar resultados",
+    "empty_hint": "Las votaciones nacen en una clase: tus atletas eligen el WOD del día."
   },
   "actions": {
     "save": "Guardar",
@@ -330,7 +333,10 @@
     "vote_plural": "votos",
     "votes_total": "participante(s)",
     "no_votes_yet": "Ningún voto por ahora",
-    "delete_vote": "Eliminar el voto"
+    "delete_vote": "Eliminar el voto",
+    "empty_hint": "Crea una clase para invitar a tus atletas, lanzar votaciones y seguir su asistencia.",
+    "no_members_hint": "Comparte el enlace de invitación o el código QR de arriba para que se unan.",
+    "no_votes_hint": "Lanza una votación: tus atletas eligen entre los ejercicios que propongas."
   },
   "athlete": {
     "role_label": "Atleta",
@@ -344,7 +350,9 @@
     "vote_cta": "Votar",
     "back_home": "Volver al inicio",
     "vote_not_found": "Voto no encontrado o expirado",
-    "vote_closed": "Esta votación está cerrada"
+    "vote_closed": "Esta votación está cerrada",
+    "no_votes_hint": "En cuanto tu coach abra una votación, aparecerá aquí.",
+    "no_classes_hint": "Pide el enlace de invitación a tu coach para unirte a su clase."
   },
   "join": {
     "invalid_link": "Enlace de invitación inválido",

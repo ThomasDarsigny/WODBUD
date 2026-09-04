@@ -133,6 +133,62 @@
   object-fit: cover;
   object-position: center 30%;
   z-index: 0;
+  /* On ne montre la video qu'une fois decodee : sinon on voit un flash noir
+     par-dessus le backdrop pendant le chargement. */
+  opacity: 0;
+  transition: opacity 900ms ease;
+}
+
+.heroVideoReady {
+  opacity: 1;
+}
+
+/* ---------- HERO BACKDROP ----------
+   Toujours rendu, sous la video. C'est ce que voit l'utilisateur quand il n'y
+   a pas de footage, quand le fichier est absent, ou pendant le chargement. */
+.heroBackdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  background:
+    radial-gradient(115% 85% at 76% 16%, rgba(255, 77, 0, 0.17) 0%, transparent 58%),
+    radial-gradient(85% 65% at 94% 90%, rgba(255, 77, 0, 0.09) 0%, transparent 60%),
+    linear-gradient(158deg, #15120f 0%, var(--black) 52%, #0c0b0a 100%);
+}
+
+/* Anneaux concentriques : motif de disques olympiques vus de face. */
+.heroBackdrop::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: -12%;
+  width: min(50rem, 88vw);
+  aspect-ratio: 1;
+  transform: translateY(-50%);
+  border-radius: 50%;
+  background: repeating-radial-gradient(
+    circle at center,
+    rgba(255, 77, 0, 0.085) 0 1px,
+    transparent 1px 3.1rem
+  );
+  -webkit-mask-image: radial-gradient(circle at center, #000 26%, transparent 70%);
+  mask-image: radial-gradient(circle at center, #000 26%, transparent 70%);
+  animation: heroDrift 26s ease-in-out infinite;
+}
+
+/* Balayage lent, comme une barre qui passe devant une source de lumiere. */
+.heroBackdrop::after {
+  content: '';
+  position: absolute;
+  inset: -25% -45%;
+  background: linear-gradient(
+    102deg,
+    transparent 41%,
+    rgba(255, 77, 0, 0.06) 50%,
+    transparent 59%
+  );
+  animation: heroSweep 15s linear infinite;
 }
 
 .heroOverlay {
@@ -774,6 +830,27 @@
 }
 
 /* ---------- KEYFRAMES ---------- */
+@keyframes heroDrift {
+  0%,
+  100% {
+    transform: translateY(-50%) scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translateY(-52%) scale(1.05);
+    opacity: 1;
+  }
+}
+
+@keyframes heroSweep {
+  0% {
+    transform: translateX(-30%);
+  }
+  100% {
+    transform: translateX(30%);
+  }
+}
+
 @keyframes fadeUp {
   from {
     opacity: 0;
@@ -935,5 +1012,25 @@
 
   .footer {
     padding: 1.5rem 1.25rem;
+  }
+}
+
+/* ---------- MOUVEMENT REDUIT ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .heroBackdrop::before,
+  .heroBackdrop::after,
+  .scrollHintLine,
+  .tickerInner {
+    animation: none;
+  }
+
+  .heroVideo {
+    transition: none;
+  }
+
+  :global([data-reveal]) {
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
 }

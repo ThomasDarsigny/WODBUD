@@ -1,5 +1,6 @@
 import { useState, type CSSProperties } from 'react'
 import { useTranslation } from 'react-i18next'
+import NavIcon from '../navigation/NavIcon'
 import type { Exercise } from '../../types'
 import { CATEGORY_I18N_KEYS, MUSCLE_GROUP_I18N_KEYS } from '../../types'
 
@@ -133,7 +134,7 @@ export default function ExerciseDetailModal({
               gap: '0.5rem'
             }}
           >
-            <span style={{ fontSize: '2.5rem', opacity: 0.2 }}>VID</span>
+            <span style={{ opacity: 0.25, display: 'flex' }}><NavIcon name="video" size={38} /></span>
             <p
               style={{
                 fontFamily: 'var(--font-d)',

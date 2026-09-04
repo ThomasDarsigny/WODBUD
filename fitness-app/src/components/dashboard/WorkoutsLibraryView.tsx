@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import EmptyState from '../ui/EmptyState'
 import { useWorkoutStore } from '../../stores/workoutStore'
 import { useSessionStore } from '../../stores/sessionStore'
 import { supabase } from '../../lib/supabase'
@@ -88,9 +89,11 @@ export default function WorkoutsLibraryView() {
       )}
 
       {filtered.length === 0 ? (
-        <div style={{ border: '1px solid var(--border)', background: 'var(--dark)', padding: '2.3rem 1rem', textAlign: 'center', color: 'var(--muted)' }}>
-          {savedWorkouts.length === 0 ? t('library.empty') : t('library.no_results')}
-        </div>
+        <EmptyState
+          icon={savedWorkouts.length === 0 ? 'library' : 'search'}
+          title={savedWorkouts.length === 0 ? t('library.empty') : t('library.no_results')}
+          hint={savedWorkouts.length === 0 ? t('library.empty_hint') : t('library.no_results_hint')}
+        />
       ) : (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '0.75rem' }}>
           {filtered.map((w) => {

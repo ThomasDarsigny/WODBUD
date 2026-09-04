@@ -8,6 +8,8 @@ import { useOnlineStatus } from '../../hooks/useOnlineStatus'
 import ActiveSessionBar from '../session/ActiveSessionBar'
 import PortalOverlay from '../portal/PortalOverlay'
 import { useIsMobile } from '../../hooks/useMediaQuery'
+import NavIcon from '../navigation/NavIcon'
+import type { NavIconName } from '../navigation/NavIcon'
 
 interface Props {
   children: ReactNode
@@ -33,10 +35,10 @@ export default function AthleteDashboardLayout({ children }: Props) {
     navigate('/login')
   }
 
-  const navItems = [
-    { id: 'home', labelKey: 'athlete.nav_home', icon: 'HOME', path: '/athlete' },
-    { id: 'session', labelKey: 'nav.session', icon: '♥', path: '/athlete/session' },
-    { id: 'rank', labelKey: 'nav.rank', icon: 'RNK', path: '/athlete/rank' },
+  const navItems: Array<{ id: string; labelKey: string; icon: NavIconName; path: string }> = [
+    { id: 'home', labelKey: 'athlete.nav_home', icon: 'home', path: '/athlete' },
+    { id: 'session', labelKey: 'nav.session', icon: 'session', path: '/athlete/session' },
+    { id: 'rank', labelKey: 'nav.rank', icon: 'rank', path: '/athlete/rank' },
   ]
 
   return (
@@ -86,7 +88,7 @@ export default function AthleteDashboardLayout({ children }: Props) {
                 onClick={() => setDrawerOpen(false)}
                 style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: rail ? '0.75rem 0' : '0.75rem 1.5rem', justifyContent: rail ? 'center' : 'flex-start', textDecoration: 'none', color: active ? 'var(--white)' : 'var(--muted)', background: active ? 'rgba(255,77,0,0.08)' : 'transparent', borderLeft: active ? '2px solid var(--orange)' : '2px solid transparent', transition: 'all 0.15s' }}
               >
-                <span style={{ fontSize: '1.1rem', flexShrink: 0 }}>{item.icon}</span>
+                <NavIcon name={item.icon} />
                 {!rail && (
                   <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.88rem', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
                     {t(item.labelKey)}

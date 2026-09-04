@@ -1,6 +1,8 @@
 import { useState, useEffect, useMemo } from 'react'
 import type { CSSProperties } from 'react'
 import { useTranslation } from 'react-i18next'
+import NavIcon from '../navigation/NavIcon'
+import EmptyState from '../ui/EmptyState'
 import { useExerciseStore } from '../../stores/exerciseStore'
 import { useWorkoutStore } from '../../stores/workoutStore'
 import type { Exercise, WorkoutExercise, MuscleAlert, WorkoutMethod, ExerciseCategory, MuscleGroup } from '../../types'
@@ -446,19 +448,12 @@ export default function WorkoutBuilderView() {
 
         <div style={{ flex: 1, overflowY: 'auto', padding: '0.75rem 1rem' }}>
           {workoutExercises.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '3rem 1rem', color: 'var(--muted)' }}>
-              <div style={{ fontSize: '2.5rem', marginBottom: '0.75rem', opacity: 0.3 }}>WOD</div>
-              <p
-                style={{
-                  fontFamily: 'var(--font-d)',
-                  fontSize: '0.82rem',
-                  letterSpacing: '0.15em',
-                  textTransform: 'uppercase'
-                }}
-              >
-                {t('builder.empty_state', { ns: 'workouts' })}
-              </p>
-            </div>
+            <EmptyState
+              compact
+              icon="workout"
+              title={t('builder.empty_state', { ns: 'workouts' })}
+              hint={t('empty_hint', { ns: 'workouts' })}
+            />
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
               {workoutExercises.map((we) => (
@@ -889,7 +884,7 @@ function PickerExerciseRow({
             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
           />
         ) : (
-          <span style={{ fontSize: '1rem', opacity: 0.2 }}>VID</span>
+          <span style={{ opacity: 0.25, display: 'flex' }}><NavIcon name="video" size={16} /></span>
         )}
       </div>
 

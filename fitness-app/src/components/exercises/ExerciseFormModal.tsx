@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import type { CSSProperties, FormEvent, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
+import NavIcon from '../navigation/NavIcon'
 import type {
   BodyRegion,
   Exercise,
@@ -520,7 +521,9 @@ export default function ExerciseFormModal({ exercise, onClose }: Props) {
                 </div>
               ) : (
                 <div>
-                  <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>VID</div>
+                  <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '0.6rem', color: 'var(--muted)' }}>
+                    <NavIcon name="video" size={30} />
+                  </div>
                   <p
                     style={{
                       fontFamily: 'var(--font-d)',

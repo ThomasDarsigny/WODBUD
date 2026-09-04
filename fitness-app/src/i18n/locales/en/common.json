@@ -24,14 +24,17 @@
     "empty": "No workouts yet.",
     "no_results": "No workout matches your search.",
     "badge_template": "Template",
-    "badge_mine": "My workout"
+    "badge_mine": "My workout",
+    "empty_hint": "Build your first workout in the builder, then find it here to run it again.",
+    "no_results_hint": "Try another keyword, or clear the type filter."
   },
   "vote_view": {
     "title": "All votes",
     "subtitle": "{{open}} open · {{total}} total",
     "empty": "No votes yet. Create one from one of your classes.",
     "go_to_classes": "Go to my classes",
-    "refresh": "Refresh results"
+    "refresh": "Refresh results",
+    "empty_hint": "Votes start from a class: your athletes pick the WOD of the day."
   },
   "actions": {
     "save": "Save",
@@ -324,7 +327,10 @@
     "vote_plural": "votes",
     "votes_total": "participant(s)",
     "no_votes_yet": "No votes yet",
-    "delete_vote": "Delete vote"
+    "delete_vote": "Delete vote",
+    "empty_hint": "Create a class to invite your athletes, run votes and track attendance.",
+    "no_members_hint": "Share the invite link or the QR code above so they can join.",
+    "no_votes_hint": "Start a vote: your athletes pick from the exercises you offer."
   },
   "athlete": {
     "role_label": "Athlete",
@@ -338,7 +344,9 @@
     "vote_cta": "Vote",
     "back_home": "Back to home",
     "vote_not_found": "Vote not found or expired",
-    "vote_closed": "This vote is now closed"
+    "vote_closed": "This vote is now closed",
+    "no_votes_hint": "As soon as your coach opens a vote, it shows up here.",
+    "no_classes_hint": "Ask your coach for the invite link to join their class."
   },
   "join": {
     "invalid_link": "Invalid invite link",

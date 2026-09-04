@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import NavIcon from '../navigation/NavIcon'
 import { supabase } from '../../lib/supabase'
 import { useClassStore } from '../../stores/classStore'
 import { useExerciseStore } from '../../stores/exerciseStore'
@@ -245,7 +246,7 @@ function VoteCard({ option, exercise, selected, confirmed, onSelect }: {
         {exercise?.video_url ? (
           <video src={exercise.video_url} style={{ width: '100%', height: '100%', objectFit: 'cover' }} muted preload="metadata" />
         ) : (
-          <span style={{ fontSize: '1.6rem', opacity: 0.15 }}>VID</span>
+          <span style={{ opacity: 0.2, display: 'flex' }}><NavIcon name="video" size={26} /></span>
         )}
         {selected && <div style={{ position: 'absolute', inset: 0, background: `${option.color}2e`, pointerEvents: 'none' }} />}
       </div>

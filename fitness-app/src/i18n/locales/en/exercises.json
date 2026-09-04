@@ -89,5 +89,7 @@
     "auth_session_missing_exercise": "Missing session: sign in again to create or edit an exercise.",
     "invalid_session_reconnect": "Invalid session: sign in again to create an exercise.",
     "primary_muscle_not_found": "Primary muscle not found: {{muscle}}"
-  }
+  },
+  "empty_hint": "Add your exercises once — they feed every workout you build after that.",
+  "empty_filtered_hint": "No exercise matches all these filters. Drop one to widen the search."
 }

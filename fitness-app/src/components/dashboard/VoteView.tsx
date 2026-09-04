@@ -5,6 +5,7 @@ import { useClassStore } from '../../stores/classStore'
 import type { VoteSession } from '../../types'
 import VoteResultsBars from '../vote/VoteResultsBars'
 import ConfirmButton from '../ui/ConfirmButton'
+import EmptyState from '../ui/EmptyState'
 
 type SessionWithClass = VoteSession & { className: string }
 
@@ -81,15 +82,16 @@ export default function VoteView() {
       </div>
 
       {allSessions.length === 0 ? (
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '4rem 1rem', color: 'var(--muted)', gap: '1rem' }}>
-          <span style={{ fontSize: '2.5rem', opacity: 0.25 }}>VOTE</span>
-          <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.9rem', letterSpacing: '0.12em', textTransform: 'uppercase', textAlign: 'center' }}>
-            {t('vote_view.empty')}
-          </p>
-          <button onClick={() => navigate('/dashboard/classes')} style={actionBtnStyle}>
-            {t('vote_view.go_to_classes')}
-          </button>
-        </div>
+        <EmptyState
+          icon="vote"
+          title={t('vote_view.empty')}
+          hint={t('vote_view.empty_hint')}
+          action={
+            <button onClick={() => navigate('/dashboard/classes')} style={actionBtnStyle}>
+              {t('vote_view.go_to_classes')}
+            </button>
+          }
+        />
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
           {allSessions.map((session) => {

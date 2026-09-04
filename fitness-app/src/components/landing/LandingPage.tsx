@@ -1,10 +1,8 @@
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useEffect, useState } from 'react'
+import HeroMedia from './HeroMedia'
 import s from './landing.module.css'
-
-const HERO_VIDEO_HD = 'https://videos.pexels.com/video-files/4164422/4164422-hd_1920_1080_25fps.mp4'
-const HERO_VIDEO_SD = 'https://videos.pexels.com/video-files/4164422/4164422-sd_640_360_25fps.mp4'
 
 export default function LandingPage() {
   const { t } = useTranslation('common')
@@ -83,18 +81,7 @@ export default function LandingPage() {
       </nav>
 
       <section className={s.hero}>
-        <video
-          className={s.heroVideo}
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          aria-hidden="true"
-        >
-          <source src={HERO_VIDEO_HD} type="video/mp4" />
-          <source src={HERO_VIDEO_SD} type="video/mp4" />
-        </video>
+        <HeroMedia />
         <div className={s.heroOverlay} aria-hidden="true" />
         <div className={s.heroGrid} aria-hidden="true" />
         <div className={s.heroGlow} aria-hidden="true" />

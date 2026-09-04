@@ -105,5 +105,6 @@
     "rule48_check_failed": "Impossible de vérifier la règle 48h : {{message}}",
     "workout_name_required": "Le nom de l'entraînement est requis",
     "add_at_least_one_exercise": "Ajoute au moins un exercice"
-  }
+  },
+  "empty_hint": "Construis ta première séance : choisis des exercices, ajoute les reps, enregistre."
 }

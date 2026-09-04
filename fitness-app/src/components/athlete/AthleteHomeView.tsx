@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import NavIcon, { type NavIconName } from '../navigation/NavIcon'
+import EmptyState from '../ui/EmptyState'
 import { useClassStore } from '../../stores/classStore'
 import { useExerciseStore } from '../../stores/exerciseStore'
 import type { VoteSession, Class } from '../../types'
@@ -50,11 +52,11 @@ export default function AthleteHomeView() {
 
       {/* Active votes */}
       <section style={{ marginBottom: '2.5rem' }}>
-        <SectionHeader icon="VOTE" title={t('athlete.section_votes')} />
+        <SectionHeader icon="vote" title={t('athlete.section_votes')} />
         {loadingSessions ? (
           <LoadingRow />
         ) : openSessions.length === 0 ? (
-          <EmptyCard message={t('athlete.no_votes')} />
+          <EmptyState compact icon="vote" title={t('athlete.no_votes')} hint={t('athlete.no_votes_hint')} />
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
             {openSessions.map((session) => (
@@ -72,9 +74,9 @@ export default function AthleteHomeView() {
 
       {/* My classes */}
       <section>
-        <SectionHeader icon="CLS" title={t('athlete.section_classes')} />
+        <SectionHeader icon="classes" title={t('athlete.section_classes')} />
         {classes.length === 0 ? (
-          <EmptyCard message={t('athlete.no_classes')} />
+          <EmptyState compact icon="classes" title={t('athlete.no_classes')} hint={t('athlete.no_classes_hint')} />
         ) : (
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: '0.75rem' }}>
             {classes.map((cls) => <ClassCard key={cls.id} cls={cls} />)}
@@ -85,10 +87,12 @@ export default function AthleteHomeView() {
   )
 }
 
-function SectionHeader({ icon, title }: { icon: string; title: string }) {
+function SectionHeader({ icon, title }: { icon: NavIconName; title: string }) {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
-      <span style={{ fontSize: '1.1rem' }}>{icon}</span>
+    <div style={{ display: 'flex', alignItems: 'center', gap: '0.55rem', marginBottom: '1rem' }}>
+      <span style={{ color: 'var(--orange)', display: 'flex' }}>
+        <NavIcon name={icon} size={19} />
+      </span>
       <h2 style={{ fontFamily: 'var(--font-d)', fontSize: '1rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', margin: 0 }}>
         {title}
       </h2>
@@ -101,14 +105,6 @@ function LoadingRow() {
   return (
     <div style={{ padding: '1.5rem', color: 'var(--muted)', fontFamily: 'var(--font-d)', fontSize: '0.78rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
       {t('status.loading')}
-    </div>
-  )
-}
-
-function EmptyCard({ message }: { message: string }) {
-  return (
-    <div style={{ padding: '1.5rem', border: '1px solid var(--border)', background: 'var(--dark)', color: 'var(--muted)', fontFamily: 'var(--font-d)', fontSize: '0.8rem', letterSpacing: '0.08em', textTransform: 'uppercase', textAlign: 'center' }}>
-      {message}
     </div>
   )
 }

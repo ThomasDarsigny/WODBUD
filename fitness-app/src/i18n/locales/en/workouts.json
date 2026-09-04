@@ -105,5 +105,6 @@
     "rule48_check_failed": "Unable to verify the 48h rule: {{message}}",
     "workout_name_required": "Workout name is required",
     "add_at_least_one_exercise": "Add at least one exercise"
-  }
+  },
+  "empty_hint": "Build your first session: pick exercises, add the reps, save."
 }

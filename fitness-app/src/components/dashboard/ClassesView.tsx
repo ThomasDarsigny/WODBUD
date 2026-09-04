@@ -6,6 +6,8 @@ import { useExerciseStore } from '../../stores/exerciseStore'
 import type { Class, VoteSession } from '../../types'
 import VoteResultsBars from '../vote/VoteResultsBars'
 import ConfirmButton from '../ui/ConfirmButton'
+import EmptyState from '../ui/EmptyState'
+import NavIcon from '../navigation/NavIcon'
 import { CATEGORY_I18N_KEYS, MUSCLE_GROUP_I18N_KEYS } from '../../types'
 
 const BASE_URL = window.location.origin
@@ -70,9 +72,13 @@ export default function ClassesView() {
               {t('status.loading')}
             </div>
           ) : classes.length === 0 ? (
-            <div style={{ padding: '2rem 1.25rem', color: 'var(--muted)', fontSize: '0.85rem', textAlign: 'center' }}>
-              <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>CLS</div>
-              <p style={{ fontFamily: 'var(--font-d)', letterSpacing: '0.08em', textTransform: 'uppercase', fontSize: '0.75rem' }}>{t('classes.empty')}</p>
+            <div style={{ padding: '1rem' }}>
+              <EmptyState
+                compact
+                icon="classes"
+                title={t('classes.empty')}
+                hint={t('classes.empty_hint')}
+              />
             </div>
           ) : (
             classes.map((cls) => {
@@ -122,7 +128,7 @@ export default function ClassesView() {
       <div style={{ flex: 1, overflow: 'auto', padding: 'var(--page-pad)' }}>
         {!selectedClass ? (
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'var(--muted)', gap: '1rem' }}>
-            <span style={{ fontSize: '3rem', opacity: 0.2 }}>CLS</span>
+            <span style={{ opacity: 0.3, display: 'flex' }}><NavIcon name="classes" size={46} /></span>
             <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.9rem', letterSpacing: '0.12em', textTransform: 'uppercase' }}>{t('classes.select_prompt')}</p>
           </div>
         ) : (
@@ -258,10 +264,12 @@ function MembersTab({ classId, members, onRemove }: {
 
   if (members.length === 0) {
     return (
-      <div style={{ textAlign: 'center', padding: '3rem 1rem', color: 'var(--muted)' }}>
-        <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>USR</div>
-        <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.8rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>{t('classes.no_members')}</p>
-      </div>
+      <EmptyState
+        compact
+        icon="classes"
+        title={t('classes.no_members')}
+        hint={t('classes.no_members_hint')}
+      />
     )
   }
 
@@ -328,10 +336,12 @@ function VotesTab({ sessions, voteResults, onCreateVote, onCloseSession, onDelet
       </div>
 
       {sessions.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: '3rem 1rem', color: 'var(--muted)' }}>
-          <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>VOTE</div>
-          <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.8rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>{t('classes.no_votes')}</p>
-        </div>
+        <EmptyState
+          compact
+          icon="vote"
+          title={t('classes.no_votes')}
+          hint={t('classes.no_votes_hint')}
+        />
       ) : (
         <>
           {visibleSessions.map((session) => {

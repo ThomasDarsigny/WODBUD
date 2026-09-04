@@ -9,44 +9,30 @@ import { useOnlineStatus } from '../../hooks/useOnlineStatus'
 import ActiveSessionBar from '../session/ActiveSessionBar'
 import PortalOverlay from '../portal/PortalOverlay'
 import { useIsMobile } from '../../hooks/useMediaQuery'
+import NavIcon from '../navigation/NavIcon'
+import type { NavIconName } from '../navigation/NavIcon'
 
 type NavItem = {
   id: string
   labelKey: string
   ns?: 'common' | 'workouts'
-  icon: string
+  icon: NavIconName
   path: string
   disabled?: boolean
   soon?: boolean
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { id: 'admin', labelKey: 'nav.admin', icon: 'ADM', path: '/dashboard/admin' },
-  { id: 'exercises', labelKey: 'nav.exercises', icon: 'EX', path: '/dashboard/exercises' },
-  {
-    id: 'workout',
-    labelKey: 'new',
-    ns: 'workouts',
-    icon: 'WOD',
-    path: '/dashboard/workout'
-  },
-  { id: 'library', labelKey: 'nav.library', icon: 'LIB', path: '/dashboard/workouts' },
-  { id: 'session', labelKey: 'nav.session', icon: '♥', path: '/dashboard/session' },
-  { id: 'rank', labelKey: 'nav.rank', icon: 'RNK', path: '/dashboard/rank' },
-  { id: 'classes', labelKey: 'nav.classes', icon: 'CLS', path: '/dashboard/classes' },
-  {
-    id: 'ai',
-    labelKey: 'nav.ai',
-    icon: 'AI',
-    path: '/dashboard/ai'
-  },
-  {
-    id: 'vote',
-    labelKey: 'nav.vote',
-    icon: 'VOTE',
-    path: '/dashboard/vote'
-  },
-  { id: 'settings', labelKey: 'nav.settings', icon: 'SET', path: '/dashboard/settings' }
+  { id: 'admin', labelKey: 'nav.admin', icon: 'admin', path: '/dashboard/admin' },
+  { id: 'exercises', labelKey: 'nav.exercises', icon: 'exercises', path: '/dashboard/exercises' },
+  { id: 'workout', labelKey: 'new', ns: 'workouts', icon: 'workout', path: '/dashboard/workout' },
+  { id: 'library', labelKey: 'nav.library', icon: 'library', path: '/dashboard/workouts' },
+  { id: 'session', labelKey: 'nav.session', icon: 'session', path: '/dashboard/session' },
+  { id: 'rank', labelKey: 'nav.rank', icon: 'rank', path: '/dashboard/rank' },
+  { id: 'classes', labelKey: 'nav.classes', icon: 'classes', path: '/dashboard/classes' },
+  { id: 'ai', labelKey: 'nav.ai', icon: 'ai', path: '/dashboard/ai' },
+  { id: 'vote', labelKey: 'nav.vote', icon: 'vote', path: '/dashboard/vote' },
+  { id: 'settings', labelKey: 'nav.settings', icon: 'settings', path: '/dashboard/settings' }
 ]
 
 interface Props {
@@ -200,7 +186,7 @@ export default function DashboardLayout({ children }: Props) {
                       cursor: 'not-allowed'
                     }}
                   >
-                    <span style={{ fontSize: '1.1rem', flexShrink: 0 }}>{item.icon}</span>
+                    <NavIcon name={item.icon} />
                     {!rail && (
                       <>
                         <span
@@ -251,7 +237,7 @@ export default function DashboardLayout({ children }: Props) {
                       transition: 'all 0.15s'
                     }}
                   >
-                    <span style={{ fontSize: '1.1rem', flexShrink: 0 }}>{item.icon}</span>
+                    <NavIcon name={item.icon} />
                     {!rail && (
                       <span
                         style={{

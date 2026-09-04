@@ -24,14 +24,17 @@
     "empty": "Aucun workout pour le moment.",
     "no_results": "Aucun workout ne correspond à la recherche.",
     "badge_template": "Modèle",
-    "badge_mine": "Mon workout"
+    "badge_mine": "Mon workout",
+    "empty_hint": "Crée ta première séance dans le constructeur, puis retrouve-la ici pour la relancer.",
+    "no_results_hint": "Essaie un autre mot-clé, ou enlève le filtre de type."
   },
   "vote_view": {
     "title": "Tous les votes",
     "subtitle": "{{open}} ouvert(s) · {{total}} au total",
     "empty": "Aucun vote pour le moment. Crée un vote depuis un de tes cours.",
     "go_to_classes": "Aller à mes cours",
-    "refresh": "Rafraîchir les résultats"
+    "refresh": "Rafraîchir les résultats",
+    "empty_hint": "Un vote se crée depuis un cours : tes athlètes choisissent le WOD du jour."
   },
   "actions": {
     "save": "Enregistrer",
@@ -330,7 +333,10 @@
     "vote_plural": "votes",
     "votes_total": "participant(s)",
     "no_votes_yet": "Aucun vote pour l'instant",
-    "delete_vote": "Supprimer le vote"
+    "delete_vote": "Supprimer le vote",
+    "empty_hint": "Crée un cours pour inviter tes athlètes, lancer des votes et suivre leur présence.",
+    "no_members_hint": "Partage le lien d'invitation ou le QR code ci-dessus pour qu'ils rejoignent.",
+    "no_votes_hint": "Lance un vote : tes athlètes choisissent parmi les exercices que tu proposes."
   },
   "athlete": {
     "role_label": "Athlète",
@@ -344,7 +350,9 @@
     "vote_cta": "Voter",
     "back_home": "Retour à l'accueil",
     "vote_not_found": "Vote introuvable ou expiré",
-    "vote_closed": "Ce vote est maintenant fermé"
+    "vote_closed": "Ce vote est maintenant fermé",
+    "no_votes_hint": "Dès que ton coach ouvre un vote, il apparaît ici.",
+    "no_classes_hint": "Demande le lien d'invitation à ton coach pour rejoindre son cours."
   },
   "join": {
     "invalid_link": "Lien d'invitation invalide",

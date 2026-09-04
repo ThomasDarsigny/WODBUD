@@ -89,5 +89,7 @@
     "auth_session_missing_exercise": "Session manquante : reconnecte-toi pour créer ou modifier un exercice.",
     "invalid_session_reconnect": "Session invalide : reconnecte-toi pour créer un exercice.",
     "primary_muscle_not_found": "Muscle principal introuvable : {{muscle}}"
-  }
+  },
+  "empty_hint": "Ajoute tes exercices une fois : ils servent ensuite dans tous tes workouts.",
+  "empty_filtered_hint": "Aucun exercice ne coche tous ces filtres. Enlèves-en un pour élargir."
 }

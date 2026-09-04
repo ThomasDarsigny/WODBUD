@@ -1,6 +1,8 @@
 import { useState, useEffect, useMemo } from 'react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
+import EmptyState from '../ui/EmptyState'
+import NavIcon from '../navigation/NavIcon'
 import { useExerciseStore } from '../../stores/exerciseStore'
 import type { Exercise, ExerciseCategory } from '../../types'
 import {
@@ -244,21 +246,26 @@ export default function ExercisesView() {
           {t('loading', { ns: 'exercises' })}
         </div>
       ) : filtered.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: '4rem 2rem', color: 'var(--muted)' }}>
-          <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>EX</div>
-          <p
-            style={{
-              fontFamily: 'var(--font-d)',
-              fontSize: '1rem',
-              letterSpacing: '0.1em',
-              textTransform: 'uppercase'
-            }}
-          >
-            {hasFilters
+        <EmptyState
+          icon={hasFilters ? 'search' : 'exercises'}
+          title={
+            hasFilters
               ? t('empty_filtered', { ns: 'exercises' })
-              : t('empty', { ns: 'exercises' })}
-          </p>
-        </div>
+              : t('empty', { ns: 'exercises' })
+          }
+          hint={
+            hasFilters
+              ? t('empty_filtered_hint', { ns: 'exercises' })
+              : t('empty_hint', { ns: 'exercises' })
+          }
+          action={
+            hasFilters ? (
+              <button onClick={resetFilters} style={emptyActionStyle}>
+                {t('actions.reset', { ns: 'common' })}
+              </button>
+            ) : undefined
+          }
+        />
       ) : (
         <div
           style={{
@@ -342,7 +349,7 @@ function ExerciseCard({ exercise, onClick }: { exercise: Exercise; onClick: () =
             preload='metadata'
           />
         ) : (
-          <span style={{ fontSize: '2rem', opacity: 0.15 }}>VID</span>
+          <span style={{ opacity: 0.2, display: 'flex' }}><NavIcon name="video" size={32} /></span>
         )}
         {exercise.video_url && (
           <div
@@ -357,7 +364,7 @@ function ExerciseCard({ exercise, onClick }: { exercise: Exercise; onClick: () =
               transition: 'opacity 0.15s'
             }}
           >
-            <span style={{ fontSize: '1.75rem' }}>PLAY</span>
+            <span style={{ color: 'var(--white)', display: 'flex' }}><NavIcon name="play" size={34} strokeWidth={1.5} /></span>
           </div>
         )}
       </div>
@@ -624,3 +631,18 @@ function FilterChip({
     </button>
   )
 }
+
+const emptyActionStyle = {
+  fontFamily: 'var(--font-d)',
+  fontSize: '0.75rem',
+  fontWeight: 700,
+  letterSpacing: '0.1em',
+  textTransform: 'uppercase',
+  color: 'var(--black)',
+  background: 'var(--orange)',
+  border: 'none',
+  padding: '0.6rem 1.1rem',
+  minHeight: 40,
+  cursor: 'pointer',
+  whiteSpace: 'nowrap'
+} as const
