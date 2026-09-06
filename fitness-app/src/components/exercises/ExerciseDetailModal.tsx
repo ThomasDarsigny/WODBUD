@@ -1,8 +1,9 @@
-import { useState, type CSSProperties } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import NavIcon from '../navigation/NavIcon'
 import type { Exercise } from '../../types'
 import { CATEGORY_I18N_KEYS, MUSCLE_GROUP_I18N_KEYS } from '../../types'
+import { label as labelStyle, badgeBase as tagStyle, btnBase as btnStyle } from '../../styles/ui'
 
 interface Props {
   exercise: Exercise
@@ -77,7 +78,7 @@ export default function ExerciseDetailModal({
             <div
               style={{
                 fontFamily: 'var(--font-d)',
-                fontSize: '0.7rem',
+                fontSize: '0.6875rem',
                 letterSpacing: '0.25em',
                 textTransform: 'uppercase',
                 color: 'var(--orange)',
@@ -106,7 +107,7 @@ export default function ExerciseDetailModal({
               border: 'none',
               color: 'var(--muted)',
               cursor: 'pointer',
-              fontSize: '1.2rem',
+              fontSize: '1.25rem',
               flexShrink: 0,
               lineHeight: 1
             }}
@@ -138,7 +139,7 @@ export default function ExerciseDetailModal({
             <p
               style={{
                 fontFamily: 'var(--font-d)',
-                fontSize: '0.75rem',
+                fontSize: '0.6875rem',
                 letterSpacing: '0.15em',
                 textTransform: 'uppercase',
                 color: 'var(--muted)'
@@ -186,7 +187,7 @@ export default function ExerciseDetailModal({
               <p style={labelStyle}>{t('detail.tech_instructions', { ns: 'exercises' })}</p>
               <p
                 style={{
-                  fontSize: '0.92rem',
+                  fontSize: '0.9375rem',
                   color: 'var(--muted)',
                   lineHeight: 1.75,
                   marginTop: '0.4rem'
@@ -267,7 +268,7 @@ export default function ExerciseDetailModal({
                 style={{
                   margin: 0,
                   fontFamily: 'var(--font-d)',
-                  fontSize: '0.72rem',
+                  fontSize: '0.6875rem',
                   letterSpacing: '0.08em',
                   textTransform: 'uppercase',
                   color: '#ff8a8a'
@@ -275,7 +276,7 @@ export default function ExerciseDetailModal({
               >
                 Confirmation requise
               </p>
-              <p style={{ margin: 0, color: 'var(--white)', fontSize: '0.95rem', lineHeight: 1.6 }}>
+              <p style={{ margin: 0, color: 'var(--white)', fontSize: '0.9375rem', lineHeight: 1.6 }}>
                 Supprimer {exercise.name} ? Cette action est irreversible et retirera aussi ses liens
                 musculaires.
               </p>
@@ -290,7 +291,7 @@ export default function ExerciseDetailModal({
                     color: 'var(--muted)'
                   }}
                 >
-                  Annuler
+                  {t('actions.cancel', { ns: 'common' })}
                 </button>
                 <button
                   onClick={handleDeleteConfirm}
@@ -303,7 +304,9 @@ export default function ExerciseDetailModal({
                     opacity: deleting ? 0.65 : 1
                   }}
                 >
-                  {deleting ? 'Suppression...' : 'Supprimer definitivement'}
+                  {deleting
+                    ? t('detail.deleting', { ns: 'exercises' })
+                    : t('detail.delete_confirm_action', { ns: 'exercises' })}
                 </button>
               </div>
             </div>
@@ -314,30 +317,3 @@ export default function ExerciseDetailModal({
   )
 }
 
-const labelStyle: CSSProperties = {
-  fontFamily: 'var(--font-d)',
-  fontSize: '0.7rem',
-  letterSpacing: '0.22em',
-  textTransform: 'uppercase',
-  color: 'var(--muted)'
-}
-
-const tagStyle: CSSProperties = {
-  fontFamily: 'var(--font-d)',
-  fontSize: '0.72rem',
-  letterSpacing: '0.1em',
-  textTransform: 'uppercase',
-  padding: '0.25rem 0.6rem'
-}
-
-const btnStyle: CSSProperties = {
-  fontFamily: 'var(--font-d)',
-  fontWeight: 700,
-  fontSize: '0.85rem',
-  letterSpacing: '0.1em',
-  textTransform: 'uppercase',
-  padding: '0.65rem 1.25rem',
-  border: 'none',
-  cursor: 'pointer',
-  transition: 'opacity 0.15s'
-}

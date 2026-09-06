@@ -9,6 +9,8 @@ import ConfirmButton from '../ui/ConfirmButton'
 import EmptyState from '../ui/EmptyState'
 import NavIcon from '../navigation/NavIcon'
 import { CATEGORY_I18N_KEYS, MUSCLE_GROUP_I18N_KEYS } from '../../types'
+import { btnPrimary as actionBtnStyle, btnSecondary as ghostBtnStyle, field as inputStyle, textarea as textareaStyle } from '../../styles/ui'
+import Skeleton from '../ui/Skeleton'
 
 const BASE_URL = window.location.origin
 
@@ -58,18 +60,18 @@ export default function ClassesView() {
         background: 'var(--dark)'
       }}>
         <div style={{ padding: '1.5rem 1.25rem 1rem', borderBottom: '1px solid var(--border)' }}>
-          <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.68rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'var(--orange)', marginBottom: '0.3rem' }}>
+          <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'var(--orange)', marginBottom: '0.3rem' }}>
             {t('classes.tag')}
           </p>
-          <h2 style={{ fontFamily: 'var(--font-d)', fontSize: '1.4rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.03em', margin: 0 }}>
+          <h2 style={{ fontFamily: 'var(--font-d)', fontSize: '1.75rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.03em', margin: 0 }}>
             {t('classes.title')}
           </h2>
         </div>
 
         <div style={{ flex: 1, overflowY: 'auto' }}>
           {loading && classes.length === 0 ? (
-            <div style={{ padding: '2rem 1.25rem', color: 'var(--muted)', fontFamily: 'var(--font-d)', fontSize: '0.8rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-              {t('status.loading')}
+            <div style={{ padding: 'var(--s4) var(--s5)' }}>
+              <Skeleton height={44} lines={4} />
             </div>
           ) : classes.length === 0 ? (
             <div style={{ padding: '1rem' }}>
@@ -100,11 +102,11 @@ export default function ClassesView() {
                     transition: 'all 0.15s'
                   }}
                 >
-                  <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.88rem', fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', color: active ? 'var(--white)' : 'var(--muted)', margin: 0 }}>
+                  <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.9375rem', fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', color: active ? 'var(--white)' : 'var(--muted)', margin: 0 }}>
                     {cls.name}
                   </p>
                   {cls.schedule && (
-                    <p style={{ fontFamily: 'var(--font-b)', fontSize: '0.75rem', color: 'var(--muted)', margin: '0.2rem 0 0', opacity: 0.7 }}>
+                    <p style={{ fontFamily: 'var(--font-b)', fontSize: '0.8125rem', color: 'var(--muted)', margin: '0.2rem 0 0', opacity: 0.7 }}>
                       {cls.schedule}
                     </p>
                   )}
@@ -117,7 +119,7 @@ export default function ClassesView() {
         <div style={{ padding: '1rem 1.25rem', borderTop: '1px solid var(--border)' }}>
           <button
             onClick={() => setShowCreateClass(true)}
-            style={{ width: '100%', fontFamily: 'var(--font-d)', fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--black)', background: 'var(--orange)', border: 'none', padding: '0.65rem', cursor: 'pointer' }}
+            style={{ width: '100%', fontFamily: 'var(--font-d)', fontSize: '0.6875rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--black)', background: 'var(--orange)', border: 'none', padding: '0.65rem', cursor: 'pointer' }}
           >
             + {t('classes.create')}
           </button>
@@ -129,21 +131,21 @@ export default function ClassesView() {
         {!selectedClass ? (
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'var(--muted)', gap: '1rem' }}>
             <span style={{ opacity: 0.3, display: 'flex' }}><NavIcon name="classes" size={46} /></span>
-            <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.9rem', letterSpacing: '0.12em', textTransform: 'uppercase' }}>{t('classes.select_prompt')}</p>
+            <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.9375rem', letterSpacing: '0.12em', textTransform: 'uppercase' }}>{t('classes.select_prompt')}</p>
           </div>
         ) : (
           <>
             {/* Header */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
               <div>
-                <h1 style={{ fontFamily: 'var(--font-d)', fontSize: '2rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.03em', margin: 0 }}>
+                <h1 style={{ fontFamily: 'var(--font-d)', fontSize: '1.75rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.03em', margin: 0 }}>
                   {selectedClass.name}
                 </h1>
                 {selectedClass.schedule && (
-                  <p style={{ color: 'var(--muted)', marginTop: '0.25rem', fontSize: '0.9rem' }}>{selectedClass.schedule}</p>
+                  <p style={{ color: 'var(--muted)', marginTop: '0.25rem', fontSize: '0.9375rem' }}>{selectedClass.schedule}</p>
                 )}
                 {selectedClass.description && (
-                  <p style={{ color: 'var(--muted)', marginTop: '0.25rem', fontSize: '0.88rem' }}>{selectedClass.description}</p>
+                  <p style={{ color: 'var(--muted)', marginTop: '0.25rem', fontSize: '0.9375rem' }}>{selectedClass.description}</p>
                 )}
               </div>
               <ConfirmButton onConfirm={() => handleDeleteClass(selectedClass)} style={ghostBtnStyle}>
@@ -153,11 +155,11 @@ export default function ClassesView() {
 
             {/* Invite section */}
             <div style={{ background: 'var(--dark)', border: '1px solid var(--border)', padding: '1.25rem', marginBottom: '1.5rem' }}>
-              <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.68rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--orange)', marginBottom: '0.75rem' }}>
+              <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--orange)', marginBottom: '0.75rem' }}>
                 {t('classes.invite_label')}
               </p>
               <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', alignItems: 'center', marginBottom: '0.75rem' }}>
-                <code style={{ flex: 1, minWidth: 0, background: 'var(--black)', border: '1px solid var(--border)', padding: '0.5rem 0.75rem', fontSize: '0.78rem', color: 'var(--muted)', fontFamily: 'monospace', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                <code style={{ flex: 1, minWidth: 0, background: 'var(--black)', border: '1px solid var(--border)', padding: '0.5rem 0.75rem', fontSize: '0.8125rem', color: 'var(--muted)', fontFamily: 'monospace', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                   {inviteUrl}
                 </code>
                 <button onClick={() => navigator.clipboard.writeText(inviteUrl)} style={actionBtnStyle}>
@@ -182,7 +184,7 @@ export default function ClassesView() {
                   onClick={() => setActiveTab(tab)}
                   style={{
                     fontFamily: 'var(--font-d)',
-                    fontSize: '0.8rem',
+                    fontSize: '0.8125rem',
                     letterSpacing: '0.12em',
                     textTransform: 'uppercase',
                     padding: '0.65rem 1.25rem',
@@ -278,19 +280,19 @@ function MembersTab({ classId, members, onRemove }: {
       {members.map((m) => (
         <div key={m.athlete_id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.75rem 1rem', borderBottom: '1px solid var(--border)' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-            <div style={{ width: 30, height: 30, borderRadius: '50%', background: 'var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-d)', fontSize: '0.8rem', color: 'var(--muted)' }}>
+            <div style={{ width: 30, height: 30, borderRadius: '50%', background: 'var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-d)', fontSize: '0.8125rem', color: 'var(--muted)' }}>
               {(m.profile?.full_name?.[0] ?? '?').toUpperCase()}
             </div>
             <div>
-              <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.85rem', letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--white)', margin: 0 }}>
+              <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.8125rem', letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--white)', margin: 0 }}>
                 {m.profile?.full_name ?? t('classes.unknown_athlete')}
               </p>
-              <p style={{ color: 'var(--muted)', fontSize: '0.72rem', margin: 0 }}>
+              <p style={{ color: 'var(--muted)', fontSize: '0.8125rem', margin: 0 }}>
                 {new Date(m.joined_at).toLocaleDateString()}
               </p>
             </div>
           </div>
-          <button onClick={() => onRemove(m.athlete_id)} style={{ ...ghostBtnStyle, fontSize: '0.65rem' }}>
+          <button onClick={() => onRemove(m.athlete_id)} style={{ ...ghostBtnStyle, fontSize: '0.6875rem' }}>
             {t('actions.delete')}
           </button>
         </div>
@@ -354,11 +356,11 @@ function VotesTab({ sessions, voteResults, onCreateVote, onCloseSession, onDelet
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem' }}>
                   <div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                      <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.9rem', fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--white)', margin: 0 }}>
+                      <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.9375rem', fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--white)', margin: 0 }}>
                         {session.title}
                       </p>
                       <span style={{
-                        fontFamily: 'var(--font-d)', fontSize: '0.6rem', letterSpacing: '0.15em', textTransform: 'uppercase',
+                        fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.15em', textTransform: 'uppercase',
                         color: session.status === 'open' ? '#22c55e' : 'var(--muted)',
                         border: `1px solid ${session.status === 'open' ? 'rgba(34,197,94,0.35)' : 'var(--border)'}`,
                         background: session.status === 'open' ? 'rgba(34,197,94,0.08)' : 'transparent',
@@ -367,13 +369,13 @@ function VotesTab({ sessions, voteResults, onCreateVote, onCloseSession, onDelet
                         {session.status === 'open' ? t('classes.vote_open') : t('classes.vote_closed')}
                       </span>
                       {totalVotes > 0 && (
-                        <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--muted)', padding: '0.1rem 0.4rem' }}>
+                        <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--muted)', padding: '0.1rem 0.4rem' }}>
                           {totalVotes} {t('classes.votes_total')}
                         </span>
                       )}
                     </div>
                     {session.deadline && (
-                      <p style={{ color: 'var(--muted)', fontSize: '0.75rem', margin: '0.2rem 0 0' }}>
+                      <p style={{ color: 'var(--muted)', fontSize: '0.8125rem', margin: '0.2rem 0 0' }}>
                         {t('classes.deadline')}: {new Date(session.deadline).toLocaleDateString()}
                       </p>
                     )}
@@ -382,7 +384,7 @@ function VotesTab({ sessions, voteResults, onCreateVote, onCloseSession, onDelet
                     <button
                       onClick={() => onFetchResults(session.id)}
                       title="Rafraîchir les résultats"
-                      style={{ ...ghostBtnStyle, fontSize: '0.62rem', padding: '0.35rem 0.65rem' }}
+                      style={{ ...ghostBtnStyle, fontSize: '0.6875rem', padding: '0.35rem 0.65rem' }}
                     >
                       ↻
                     </button>
@@ -390,7 +392,7 @@ function VotesTab({ sessions, voteResults, onCreateVote, onCloseSession, onDelet
                       <button
                         onClick={() => onCloseSession(session.id)}
                         title="Clôturer ce vote — les athlètes ne pourront plus voter"
-                        style={{ ...ghostBtnStyle, fontSize: '0.65rem' }}
+                        style={{ ...ghostBtnStyle, fontSize: '0.6875rem' }}
                       >
                         {t('classes.close_vote')}
                       </button>
@@ -398,7 +400,7 @@ function VotesTab({ sessions, voteResults, onCreateVote, onCloseSession, onDelet
                     <ConfirmButton
                       onConfirm={() => handleDelete(session)}
                       title={t('classes.delete_vote')}
-                      style={{ ...ghostBtnStyle, fontSize: '0.65rem', color: 'rgba(255,77,0,0.8)', borderColor: 'rgba(255,77,0,0.35)' }}
+                      style={{ ...ghostBtnStyle, fontSize: '0.6875rem', color: 'rgba(255,77,0,0.8)', borderColor: 'rgba(255,77,0,0.35)' }}
                     >
                       ✕
                     </ConfirmButton>
@@ -459,7 +461,7 @@ function CreateClassModal({ onClose, onCreate }: {
 
   return (
     <ModalOverlay onClose={onClose}>
-      <h2 style={{ fontFamily: 'var(--font-d)', fontSize: '1.4rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.04em', margin: '0 0 1.5rem' }}>
+      <h2 style={{ fontFamily: 'var(--font-d)', fontSize: '1.75rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.04em', margin: '0 0 1.5rem' }}>
         {t('classes.create')}
       </h2>
       <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
@@ -470,9 +472,9 @@ function CreateClassModal({ onClose, onCreate }: {
           <input value={schedule} onChange={(e) => setSchedule(e.target.value)} placeholder={t('classes.schedule_placeholder')} style={inputStyle} />
         </Field>
         <Field label={t('classes.field_description')}>
-          <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={2} style={{ ...inputStyle, resize: 'vertical' }} />
+          <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={2} style={textareaStyle} />
         </Field>
-        {error && <p style={{ color: 'var(--orange)', fontSize: '0.82rem', margin: 0 }}>{error}</p>}
+        {error && <p style={{ color: 'var(--orange)', fontSize: '0.8125rem', margin: 0 }}>{error}</p>}
         <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-end', marginTop: '0.5rem' }}>
           <button type="button" onClick={onClose} style={ghostBtnStyle}>{t('actions.cancel')}</button>
           <button type="submit" disabled={!name.trim() || loading} style={{ ...actionBtnStyle, opacity: !name.trim() || loading ? 0.6 : 1 }}>
@@ -533,7 +535,7 @@ function CreateVoteModal({ classId, exercises, onClose, onCreate }: {
 
   return (
     <ModalOverlay onClose={onClose} wide>
-      <h2 style={{ fontFamily: 'var(--font-d)', fontSize: '1.4rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.04em', margin: '0 0 1.25rem' }}>
+      <h2 style={{ fontFamily: 'var(--font-d)', fontSize: '1.75rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.04em', margin: '0 0 1.25rem' }}>
         {t('classes.create_vote')}
       </h2>
       <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
@@ -547,7 +549,7 @@ function CreateVoteModal({ classId, exercises, onClose, onCreate }: {
         </div>
 
         <div>
-          <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.68rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '0.5rem' }}>
+          <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '0.5rem' }}>
             {t('classes.pick_exercises')} {selected.size > 0 && <span style={{ color: 'var(--orange)' }}>({selected.size})</span>}
           </p>
           <input
@@ -578,13 +580,13 @@ function CreateVoteModal({ classId, exercises, onClose, onCreate }: {
                     transition: 'background 0.1s'
                   }}
                 >
-                  <span style={{ width: 18, height: 18, borderRadius: '50%', border: `2px solid ${isSelected ? 'var(--orange)' : 'var(--border)'}`, background: isSelected ? 'var(--orange)' : 'transparent', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.65rem', color: 'var(--black)' }}>
+                  <span style={{ width: 18, height: 18, borderRadius: '50%', border: `2px solid ${isSelected ? 'var(--orange)' : 'var(--border)'}`, background: isSelected ? 'var(--orange)' : 'transparent', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.6875rem', color: 'var(--black)' }}>
                     {isSelected && 'OK'}
                   </span>
-                  <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.85rem', letterSpacing: '0.05em', textTransform: 'uppercase', color: isSelected ? 'var(--white)' : 'var(--muted)' }}>
+                  <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.8125rem', letterSpacing: '0.05em', textTransform: 'uppercase', color: isSelected ? 'var(--white)' : 'var(--muted)' }}>
                     {ex.name}
                   </span>
-                  <span style={{ marginLeft: 'auto', fontFamily: 'var(--font-d)', fontSize: '0.62rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--orange)', opacity: 0.7 }}>
+                  <span style={{ marginLeft: 'auto', fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--orange)', opacity: 0.7 }}>
                     {t(CATEGORY_I18N_KEYS[ex.category], { ns: 'common' })}
                   </span>
                 </button>
@@ -593,7 +595,7 @@ function CreateVoteModal({ classId, exercises, onClose, onCreate }: {
           </div>
         </div>
 
-        {error && <p style={{ color: 'var(--orange)', fontSize: '0.82rem', margin: 0 }}>{error}</p>}
+        {error && <p style={{ color: 'var(--orange)', fontSize: '0.8125rem', margin: 0 }}>{error}</p>}
         <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-end' }}>
           <button type="button" onClick={onClose} style={ghostBtnStyle}>{t('actions.cancel')}</button>
           <button type="submit" disabled={!title.trim() || selected.size === 0 || loading} style={{ ...actionBtnStyle, opacity: !title.trim() || selected.size === 0 || loading ? 0.6 : 1 }}>
@@ -621,7 +623,7 @@ function ModalOverlay({ children, onClose, wide = false }: { children: React.Rea
 function Field({ label, children, required }: { label: string; children: React.ReactNode; required?: boolean }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
-      <label style={{ fontFamily: 'var(--font-d)', fontSize: '0.68rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--muted)' }}>
+      <label style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--muted)' }}>
         {label}{required && <span style={{ color: 'var(--orange)' }}> *</span>}
       </label>
       {children}
@@ -630,46 +632,6 @@ function Field({ label, children, required }: { label: string; children: React.R
 }
 
 // ─── Shared styles ────────────────────────────────────────────────────────────
-
-const actionBtnStyle = {
-  fontFamily: 'var(--font-d)',
-  fontSize: '0.75rem',
-  fontWeight: 700,
-  letterSpacing: '0.1em',
-  textTransform: 'uppercase',
-  color: 'var(--black)',
-  background: 'var(--orange)',
-  border: 'none',
-  padding: '0.5rem 0.9rem',
-  cursor: 'pointer',
-  whiteSpace: 'nowrap'
-} as const
-
-const ghostBtnStyle = {
-  fontFamily: 'var(--font-d)',
-  fontSize: '0.75rem',
-  fontWeight: 700,
-  letterSpacing: '0.1em',
-  textTransform: 'uppercase',
-  color: 'var(--muted)',
-  background: 'transparent',
-  border: '1px solid var(--border)',
-  padding: '0.5rem 0.9rem',
-  cursor: 'pointer',
-  whiteSpace: 'nowrap'
-} as const
-
-const inputStyle = {
-  width: '100%',
-  background: 'var(--black)',
-  border: '1px solid var(--border)',
-  color: 'var(--white)',
-  padding: '0.6rem 0.8rem',
-  fontFamily: 'var(--font-b)',
-  fontSize: '0.9rem',
-  outline: 'none',
-  boxSizing: 'border-box'
-} as const
 
 // Imported for MUSCLE_GROUP_I18N_KEYS usage in CreateVoteModal
 void MUSCLE_GROUP_I18N_KEYS

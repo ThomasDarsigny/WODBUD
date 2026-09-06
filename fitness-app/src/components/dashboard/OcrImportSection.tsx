@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 import { useExerciseStore } from '../../stores/exerciseStore'
 import type { ExerciseCategory, MuscleGroup } from '../../types'
+import { btnPrimary as actionBtnStyle, btnSecondary as ghostBtnStyle, fieldCompact as inlineInputStyle, fieldCompact as inlineSelectStyle } from '../../styles/ui'
 
 const GEMINI_KEY = import.meta.env.VITE_GEMINI_API_KEY as string | undefined
 const GEMINI_URL =
@@ -239,19 +240,19 @@ export default function OcrImportSection({ existingNames }: Props) {
         }}
       >
         <span style={{
-          fontFamily: 'var(--font-d)', fontSize: '0.6rem', letterSpacing: '0.18em',
+          fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.18em',
           textTransform: 'uppercase', color: 'var(--black)', background: 'var(--orange)',
           padding: '0.2rem 0.5rem', flexShrink: 0
         }}>
           OCR
         </span>
         <span style={{
-          fontFamily: 'var(--font-d)', fontSize: '0.82rem', fontWeight: 700,
+          fontFamily: 'var(--font-d)', fontSize: '0.8125rem', fontWeight: 700,
           letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--white)'
         }}>
           Import rapide — Photos de feuilles d'entraînement
         </span>
-        <span style={{ marginLeft: 'auto', fontFamily: 'var(--font-d)', fontSize: '0.72rem', color: 'var(--muted)', letterSpacing: '0.1em' }}>
+        <span style={{ marginLeft: 'auto', fontFamily: 'var(--font-d)', fontSize: '0.8125rem', color: 'var(--muted)', letterSpacing: '0.1em' }}>
           Gemini Flash · {open ? '▲' : '▼'}
         </span>
       </button>
@@ -260,7 +261,7 @@ export default function OcrImportSection({ existingNames }: Props) {
         <div style={{ borderTop: '1px solid var(--border)', padding: '1.25rem' }}>
           {/* API key warning */}
           {!GEMINI_KEY && (
-            <div style={{ marginBottom: '1rem', padding: '0.65rem 0.9rem', background: 'rgba(245,158,11,0.08)', border: '1px solid rgba(245,158,11,0.35)', color: '#f59e0b', fontFamily: 'var(--font-d)', fontSize: '0.72rem', letterSpacing: '0.08em' }}>
+            <div style={{ marginBottom: '1rem', padding: '0.65rem 0.9rem', background: 'rgba(245,158,11,0.08)', border: '1px solid rgba(245,158,11,0.35)', color: '#f59e0b', fontFamily: 'var(--font-d)', fontSize: '0.8125rem', letterSpacing: '0.08em' }}>
               ⚠ Clé API manquante — ajoute <code style={{ background: 'rgba(0,0,0,0.4)', padding: '0.1rem 0.3rem' }}>VITE_GEMINI_API_KEY=ta_clé</code> dans <code style={{ background: 'rgba(0,0,0,0.4)', padding: '0.1rem 0.3rem' }}>.env.local</code> et relance le serveur.
             </div>
           )}
@@ -283,10 +284,10 @@ export default function OcrImportSection({ existingNames }: Props) {
                 transition: 'all 0.15s', marginBottom: '1rem'
               }}
             >
-              <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.78rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--muted)', margin: 0 }}>
+              <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--muted)', margin: 0 }}>
                 Dépose tes photos ici ou clique pour sélectionner
               </p>
-              <p style={{ color: 'var(--muted)', fontSize: '0.72rem', marginTop: '0.4rem', opacity: 0.6 }}>
+              <p style={{ color: 'var(--muted)', fontSize: '0.8125rem', marginTop: '0.4rem', opacity: 0.6 }}>
                 JPG · PNG · WEBP — Feuilles d'entraînement des 6 dernières années
               </p>
             </div>
@@ -305,20 +306,20 @@ export default function OcrImportSection({ existingNames }: Props) {
             <div style={{ marginBottom: '1rem' }}>
               {files.map((f) => (
                 <div key={f.name} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.4rem 0.6rem', background: 'var(--black)', border: '1px solid var(--border)', marginBottom: '0.3rem' }}>
-                  <span style={{ fontFamily: 'var(--font-b)', fontSize: '0.8rem', color: 'var(--muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  <span style={{ fontFamily: 'var(--font-b)', fontSize: '0.8125rem', color: 'var(--muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                     {f.name}
                   </span>
-                  <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.62rem', color: 'var(--muted)', marginLeft: '0.5rem', flexShrink: 0 }}>
+                  <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', color: 'var(--muted)', marginLeft: '0.5rem', flexShrink: 0 }}>
                     {(f.size / 1024).toFixed(0)} KB
                   </span>
-                  <button onClick={() => removeFile(f.name)} style={{ background: 'none', border: 'none', color: 'var(--muted)', cursor: 'pointer', fontSize: '0.85rem', padding: '0 0.25rem', marginLeft: '0.5rem', flexShrink: 0 }}>
+                  <button onClick={() => removeFile(f.name)} style={{ background: 'none', border: 'none', color: 'var(--muted)', cursor: 'pointer', fontSize: '0.8125rem', padding: '0 0.25rem', marginLeft: '0.5rem', flexShrink: 0 }}>
                     ✕
                   </button>
                 </div>
               ))}
               <button
                 onClick={() => inputRef.current?.click()}
-                style={{ ...ghostBtnStyle, fontSize: '0.65rem', marginTop: '0.3rem' }}
+                style={{ ...ghostBtnStyle, fontSize: '0.6875rem', marginTop: '0.3rem' }}
               >
                 + Ajouter d'autres images
               </button>
@@ -336,7 +337,7 @@ export default function OcrImportSection({ existingNames }: Props) {
                 {processing ? '...' : `Analyser ${files.length} image${files.length > 1 ? 's' : ''} avec Gemini`}
               </button>
               {processing && (
-                <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.7rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--muted)' }}>
+                <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--muted)' }}>
                   {processingMsg}
                 </span>
               )}
@@ -344,7 +345,7 @@ export default function OcrImportSection({ existingNames }: Props) {
           )}
 
           {error && (
-            <div style={{ marginTop: '0.75rem', padding: '0.6rem 0.9rem', background: 'rgba(255,77,0,0.08)', border: '1px solid rgba(255,77,0,0.3)', color: 'var(--orange)', fontSize: '0.82rem' }}>
+            <div style={{ marginTop: '0.75rem', padding: '0.6rem 0.9rem', background: 'rgba(255,77,0,0.08)', border: '1px solid rgba(255,77,0,0.3)', color: 'var(--orange)', fontSize: '0.8125rem' }}>
               {error}
             </div>
           )}
@@ -354,27 +355,27 @@ export default function OcrImportSection({ existingNames }: Props) {
             <div style={{ marginTop: '0.5rem' }}>
               {/* Summary chips */}
               <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '0.75rem', alignItems: 'center' }}>
-                <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.65rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#22c55e', border: '1px solid rgba(34,197,94,0.35)', padding: '0.15rem 0.45rem' }}>
+                <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#22c55e', border: '1px solid rgba(34,197,94,0.35)', padding: '0.15rem 0.45rem' }}>
                   {rows.length} exercices extraits
                 </span>
                 {dupeCount > 0 && (
-                  <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.65rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#f59e0b', border: '1px solid rgba(245,158,11,0.35)', padding: '0.15rem 0.45rem' }}>
+                  <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#f59e0b', border: '1px solid rgba(245,158,11,0.35)', padding: '0.15rem 0.45rem' }}>
                     {dupeCount} déjà existants
                   </span>
                 )}
                 {doneCount > 0 && (
-                  <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.65rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#22c55e', border: '1px solid rgba(34,197,94,0.35)', padding: '0.15rem 0.45rem' }}>
+                  <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#22c55e', border: '1px solid rgba(34,197,94,0.35)', padding: '0.15rem 0.45rem' }}>
                     ✓ {doneCount} importés
                   </span>
                 )}
                 {errorCount > 0 && (
-                  <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.65rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--orange)', border: '1px solid rgba(255,77,0,0.35)', padding: '0.15rem 0.45rem' }}>
+                  <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--orange)', border: '1px solid rgba(255,77,0,0.35)', padding: '0.15rem 0.45rem' }}>
                     ✕ {errorCount} erreurs
                   </span>
                 )}
                 <button
                   onClick={() => { setRows([]); setFiles([]) }}
-                  style={{ ...ghostBtnStyle, fontSize: '0.62rem', marginLeft: 'auto' }}
+                  style={{ ...ghostBtnStyle, fontSize: '0.6875rem', marginLeft: 'auto' }}
                 >
                   Réinitialiser
                 </button>
@@ -383,7 +384,7 @@ export default function OcrImportSection({ existingNames }: Props) {
               {/* Column headers */}
               <div style={{ display: 'grid', gridTemplateColumns: '28px minmax(0,2fr) 90px 110px minmax(0,2fr) 52px', gap: '0', background: 'var(--black)', borderBottom: '1px solid var(--border)', padding: '0.4rem 0.6rem' }}>
                 {['', 'Nom', 'Catégorie', 'Muscle', 'Description', ''].map((h, i) => (
-                  <span key={i} style={{ fontFamily: 'var(--font-d)', fontSize: '0.6rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--muted)' }}>{h}</span>
+                  <span key={i} style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--muted)' }}>{h}</span>
                 ))}
               </div>
 
@@ -460,12 +461,12 @@ export default function OcrImportSection({ existingNames }: Props) {
                         value={row.description}
                         onChange={(e) => updateRow(row.uid, 'description', e.target.value)}
                         disabled={!isEditable || !row.selected}
-                        style={{ ...inlineInputStyle, fontSize: '0.72rem' }}
+                        style={{ ...inlineInputStyle, fontSize: '0.8125rem' }}
                       />
 
                       {/* Status */}
                       <span style={{
-                        fontFamily: 'var(--font-d)', fontSize: '0.58rem', letterSpacing: '0.1em',
+                        fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.1em',
                         textTransform: 'uppercase', color: statusColor, textAlign: 'right'
                       }}>
                         {row.status === 'done' ? '✓'
@@ -488,14 +489,14 @@ export default function OcrImportSection({ existingNames }: Props) {
                   >
                     {importing ? 'Import en cours...' : `Importer ${selectedCount} exercice${selectedCount !== 1 ? 's' : ''}`}
                   </button>
-                  <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.65rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--muted)' }}>
+                  <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--muted)' }}>
                     {rows.filter((r) => r.status === 'duplicate').length > 0 && 'Les doublons sont décochés automatiquement.'}
                   </span>
                 </div>
               )}
 
               {allImported && (
-                <div style={{ marginTop: '0.75rem', padding: '0.65rem 0.9rem', background: 'rgba(34,197,94,0.07)', border: '1px solid rgba(34,197,94,0.3)', color: '#22c55e', fontFamily: 'var(--font-d)', fontSize: '0.72rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+                <div style={{ marginTop: '0.75rem', padding: '0.65rem 0.9rem', background: 'rgba(34,197,94,0.07)', border: '1px solid rgba(34,197,94,0.3)', color: '#22c55e', fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
                   ✓ Import terminé — {doneCount} exercice{doneCount !== 1 ? 's' : ''} ajouté{doneCount !== 1 ? 's' : ''} à la bibliothèque.
                 </div>
               )}
@@ -507,56 +508,3 @@ export default function OcrImportSection({ existingNames }: Props) {
   )
 }
 
-const actionBtnStyle = {
-  fontFamily: 'var(--font-d)',
-  fontSize: '0.78rem',
-  fontWeight: 700,
-  letterSpacing: '0.1em',
-  textTransform: 'uppercase',
-  color: 'var(--black)',
-  background: 'var(--orange)',
-  border: 'none',
-  padding: '0.6rem 1.1rem',
-  cursor: 'pointer',
-  whiteSpace: 'nowrap'
-} as const
-
-const ghostBtnStyle = {
-  fontFamily: 'var(--font-d)',
-  fontSize: '0.72rem',
-  fontWeight: 700,
-  letterSpacing: '0.1em',
-  textTransform: 'uppercase',
-  color: 'var(--muted)',
-  background: 'transparent',
-  border: '1px solid var(--border)',
-  padding: '0.45rem 0.75rem',
-  cursor: 'pointer',
-  whiteSpace: 'nowrap'
-} as const
-
-const inlineInputStyle = {
-  background: 'transparent',
-  border: 'none',
-  borderBottom: '1px solid transparent',
-  color: 'var(--white)',
-  fontFamily: 'var(--font-b)',
-  fontSize: '0.8rem',
-  padding: '0.15rem 0.25rem',
-  width: '100%',
-  outline: 'none',
-  transition: 'border-color 0.1s'
-} as const
-
-const inlineSelectStyle = {
-  background: 'var(--black)',
-  border: '1px solid var(--border)',
-  color: 'var(--white)',
-  fontFamily: 'var(--font-d)',
-  fontSize: '0.65rem',
-  padding: '0.2rem 0.3rem',
-  width: '100%',
-  outline: 'none',
-  cursor: 'pointer',
-  letterSpacing: '0.05em'
-} as const

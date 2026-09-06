@@ -6,6 +6,7 @@ import type { VoteSession } from '../../types'
 import VoteResultsBars from '../vote/VoteResultsBars'
 import ConfirmButton from '../ui/ConfirmButton'
 import EmptyState from '../ui/EmptyState'
+import { btnPrimary as actionBtnStyle, btnSecondary as ghostBtnStyle } from '../../styles/ui'
 
 type SessionWithClass = VoteSession & { className: string }
 
@@ -70,10 +71,10 @@ export default function VoteView() {
   return (
     <div style={{ padding: 'var(--page-pad)', minHeight: '100%' }}>
       <div style={{ marginBottom: '1.5rem' }}>
-        <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.72rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'var(--orange)', marginBottom: '0.35rem' }}>
+        <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'var(--orange)', marginBottom: '0.35rem' }}>
           {t('nav.vote')}
         </p>
-        <h1 style={{ fontFamily: 'var(--font-d)', fontSize: '2.05rem', fontWeight: 900, textTransform: 'uppercase', lineHeight: 1.05, letterSpacing: '0.03em', margin: 0 }}>
+        <h1 style={{ fontFamily: 'var(--font-d)', fontSize: '1.75rem', fontWeight: 900, textTransform: 'uppercase', lineHeight: 1.05, letterSpacing: '0.03em', margin: 0 }}>
           {t('vote_view.title')}
         </h1>
         <p style={{ color: 'var(--muted)', marginTop: '0.45rem' }}>
@@ -103,11 +104,11 @@ export default function VoteView() {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem', gap: '0.5rem', flexWrap: 'wrap' }}>
                   <div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
-                      <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.9rem', fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--white)', margin: 0 }}>
+                      <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.9375rem', fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--white)', margin: 0 }}>
                         {session.title}
                       </p>
                       <span style={{
-                        fontFamily: 'var(--font-d)', fontSize: '0.6rem', letterSpacing: '0.15em', textTransform: 'uppercase',
+                        fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.15em', textTransform: 'uppercase',
                         color: session.status === 'open' ? '#22c55e' : 'var(--muted)',
                         border: `1px solid ${session.status === 'open' ? 'rgba(34,197,94,0.35)' : 'var(--border)'}`,
                         background: session.status === 'open' ? 'rgba(34,197,94,0.08)' : 'transparent',
@@ -116,34 +117,34 @@ export default function VoteView() {
                         {session.status === 'open' ? t('classes.vote_open') : t('classes.vote_closed')}
                       </span>
                       {totalVotes > 0 && (
-                        <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--muted)', padding: '0.1rem 0.4rem' }}>
+                        <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--muted)', padding: '0.1rem 0.4rem' }}>
                           {totalVotes} {t('classes.votes_total')}
                         </span>
                       )}
                     </div>
                     <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', marginTop: '0.2rem' }}>
                       {session.className && (
-                        <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.68rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--orange)' }}>
+                        <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--orange)' }}>
                           {session.className}
                         </span>
                       )}
                       {session.deadline && (
-                        <span style={{ color: 'var(--muted)', fontSize: '0.72rem' }}>
+                        <span style={{ color: 'var(--muted)', fontSize: '0.8125rem' }}>
                           {t('classes.deadline')}: {new Date(session.deadline).toLocaleDateString()}
                         </span>
                       )}
                     </div>
                   </div>
                   <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                    <button onClick={() => fetchVoteResults(session.id)} title={t('vote_view.refresh')} style={{ ...ghostBtnStyle, fontSize: '0.62rem', padding: '0.35rem 0.65rem' }}>
+                    <button onClick={() => fetchVoteResults(session.id)} title={t('vote_view.refresh')} style={{ ...ghostBtnStyle, fontSize: '0.6875rem', padding: '0.35rem 0.65rem' }}>
                       ↻
                     </button>
                     {session.status === 'open' && (
-                      <button onClick={() => closeVoteSession(session.id)} style={{ ...ghostBtnStyle, fontSize: '0.65rem' }}>
+                      <button onClick={() => closeVoteSession(session.id)} style={{ ...ghostBtnStyle, fontSize: '0.6875rem' }}>
                         {t('classes.close_vote')}
                       </button>
                     )}
-                    <ConfirmButton onConfirm={() => handleDelete(session)} title={t('classes.delete_vote')} style={{ ...ghostBtnStyle, fontSize: '0.65rem', color: 'rgba(255,77,0,0.8)', borderColor: 'rgba(255,77,0,0.35)' }}>
+                    <ConfirmButton onConfirm={() => handleDelete(session)} title={t('classes.delete_vote')} style={{ ...ghostBtnStyle, fontSize: '0.6875rem', color: 'rgba(255,77,0,0.8)', borderColor: 'rgba(255,77,0,0.35)' }}>
                       ✕
                     </ConfirmButton>
                   </div>
@@ -159,30 +160,3 @@ export default function VoteView() {
   )
 }
 
-const actionBtnStyle = {
-  fontFamily: 'var(--font-d)',
-  fontSize: '0.75rem',
-  fontWeight: 700,
-  letterSpacing: '0.1em',
-  textTransform: 'uppercase',
-  color: 'var(--black)',
-  background: 'var(--orange)',
-  border: 'none',
-  padding: '0.5rem 0.9rem',
-  cursor: 'pointer',
-  whiteSpace: 'nowrap'
-} as const
-
-const ghostBtnStyle = {
-  fontFamily: 'var(--font-d)',
-  fontSize: '0.75rem',
-  fontWeight: 700,
-  letterSpacing: '0.1em',
-  textTransform: 'uppercase',
-  color: 'var(--muted)',
-  background: 'transparent',
-  border: '1px solid var(--border)',
-  padding: '0.5rem 0.9rem',
-  cursor: 'pointer',
-  whiteSpace: 'nowrap'
-} as const

@@ -76,8 +76,8 @@ function ProtectedRoute({ children, adminOnly = false }: { children: ReactNode; 
           minHeight: '100vh',
           display: 'grid',
           placeItems: 'center',
-          background: '#0a0a0a',
-          color: '#9f9890'
+          background: 'var(--black)',
+          color: 'var(--muted)'
         }}
       >
         {t('status.session_check')}
@@ -126,8 +126,8 @@ function DashboardHomeRedirect() {
           minHeight: '100vh',
           display: 'grid',
           placeItems: 'center',
-          background: '#0a0a0a',
-          color: '#9f9890'
+          background: 'var(--black)',
+          color: 'var(--muted)'
         }}
       >
         {t('status.redirect')}
@@ -140,7 +140,7 @@ function DashboardHomeRedirect() {
 
 function RouteFallback() {
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--black)', color: 'var(--muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-d)', fontSize: '0.8rem', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--black)', color: 'var(--muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-d)', fontSize: '0.8125rem', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
       WODBUD
     </div>
   )

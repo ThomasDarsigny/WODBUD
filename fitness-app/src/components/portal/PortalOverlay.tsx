@@ -81,13 +81,13 @@ export default function PortalOverlay() {
       }}
     >
       <div style={{ maxWidth: 720, width: '100%' }}>
-        <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.7rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'var(--orange)', margin: '0 0 0.5rem', textAlign: 'center' }}>
+        <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'var(--orange)', margin: '0 0 0.5rem', textAlign: 'center' }}>
           WODBUD
         </p>
         <h2 style={{ fontFamily: 'var(--font-d)', fontSize: 'clamp(1.6rem, 5vw, 2.3rem)', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.02em', margin: '0 0 0.6rem', textAlign: 'center', color: 'var(--white)' }}>
           {t('portal.title')}
         </h2>
-        <p style={{ color: 'var(--muted)', textAlign: 'center', margin: '0 0 2rem', fontSize: '0.92rem' }}>
+        <p style={{ color: 'var(--muted)', textAlign: 'center', margin: '0 0 2rem', fontSize: '0.9375rem' }}>
           {t('portal.subtitle')}
         </p>
 
@@ -111,7 +111,7 @@ export default function PortalOverlay() {
         <div style={{ textAlign: 'center', marginTop: '1.5rem' }}>
           <button
             onClick={defer}
-            style={{ background: 'none', border: 'none', color: 'var(--muted)', cursor: 'pointer', fontFamily: 'var(--font-d)', fontSize: '0.7rem', letterSpacing: '0.15em', textTransform: 'uppercase', padding: '0.4rem' }}
+            style={{ background: 'none', border: 'none', color: 'var(--muted)', cursor: 'pointer', fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.15em', textTransform: 'uppercase', padding: '0.4rem' }}
           >
             {t('portal.later')}
           </button>
@@ -144,13 +144,13 @@ function ChoiceCard({ icon, title, description, onClick, disabled }: {
         opacity: disabled ? 0.6 : 1, transition: 'all 0.15s'
       }}
     >
-      <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.62rem', letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--orange)' }}>
+      <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--orange)' }}>
         {icon}
       </span>
-      <span style={{ fontFamily: 'var(--font-d)', fontSize: '1.15rem', fontWeight: 900, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+      <span style={{ fontFamily: 'var(--font-d)', fontSize: '1.25rem', fontWeight: 900, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
         {title}
       </span>
-      <span style={{ color: 'var(--muted)', fontSize: '0.86rem', lineHeight: 1.5 }}>
+      <span style={{ color: 'var(--muted)', fontSize: '0.8125rem', lineHeight: 1.5 }}>
         {description}
       </span>
     </button>

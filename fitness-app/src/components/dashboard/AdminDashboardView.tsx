@@ -6,6 +6,8 @@ import { CATEGORY_I18N_KEYS, MUSCLE_GROUP_I18N_KEYS } from '../../types'
 import ExerciseFormModal from '../exercises/ExerciseFormModal'
 import ExerciseDetailModal from '../exercises/ExerciseDetailModal'
 import OcrImportSection from './OcrImportSection'
+import { btnPrimary as actionBtnStyle, btnSecondary as ghostBtnStyle } from '../../styles/ui'
+import Skeleton from '../ui/Skeleton'
 
 export default function AdminDashboardView() {
   const { t } = useTranslation(['exercises', 'common'])
@@ -77,7 +79,7 @@ export default function AdminDashboardView() {
           <p
             style={{
               fontFamily: 'var(--font-d)',
-              fontSize: '0.72rem',
+              fontSize: '0.6875rem',
               letterSpacing: '0.28em',
               textTransform: 'uppercase',
               color: 'var(--orange)',
@@ -89,7 +91,7 @@ export default function AdminDashboardView() {
           <h1
             style={{
               fontFamily: 'var(--font-d)',
-              fontSize: '2.05rem',
+              fontSize: '1.75rem',
               fontWeight: 900,
               textTransform: 'uppercase',
               lineHeight: 1.05,
@@ -111,7 +113,7 @@ export default function AdminDashboardView() {
           style={{
             fontFamily: 'var(--font-d)',
             fontWeight: 700,
-            fontSize: '0.85rem',
+            fontSize: '0.8125rem',
             letterSpacing: '0.12em',
             textTransform: 'uppercase',
             color: 'var(--black)',
@@ -166,7 +168,7 @@ export default function AdminDashboardView() {
             color: 'var(--white)',
             padding: '0.65rem 0.9rem',
             fontFamily: 'var(--font-b)',
-            fontSize: '0.9rem',
+            fontSize: '0.9375rem',
             outline: 'none'
           }}
         />
@@ -175,17 +177,12 @@ export default function AdminDashboardView() {
       {loading ? (
         <div
           style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: 220,
-            color: 'var(--muted)',
-            fontFamily: 'var(--font-d)',
-            letterSpacing: '0.14em',
-            textTransform: 'uppercase'
+            border: '1px solid var(--border)',
+            background: 'var(--dark)',
+            padding: 'var(--s4)'
           }}
         >
-          {t('loading', { ns: 'exercises' })}
+          <Skeleton height={40} lines={5} />
         </div>
       ) : (
         <div style={{ border: '1px solid var(--border)', background: 'var(--dark)' }}>
@@ -215,7 +212,7 @@ export default function AdminDashboardView() {
                       <p
                         style={{
                           fontFamily: 'var(--font-d)',
-                          fontSize: '0.86rem',
+                          fontSize: '1.25rem',
                           fontWeight: 800,
                           letterSpacing: '0.06em',
                           textTransform: 'uppercase',
@@ -228,7 +225,7 @@ export default function AdminDashboardView() {
                       <span
                         style={{
                           fontFamily: 'var(--font-d)',
-                          fontSize: '0.62rem',
+                          fontSize: '0.6875rem',
                           letterSpacing: '0.12em',
                           textTransform: 'uppercase',
                           color: 'var(--orange)'
@@ -268,7 +265,7 @@ export default function AdminDashboardView() {
             background: 'rgba(255,77,0,0.1)',
             border: '1px solid rgba(255,77,0,0.3)',
             color: 'var(--orange)',
-            fontSize: '0.85rem'
+            fontSize: '0.8125rem'
           }}
         >
           {error}
@@ -309,7 +306,7 @@ function StatCard({ label, value, emphasize = false }: { label: string; value: s
       <p
         style={{
           fontFamily: 'var(--font-d)',
-          fontSize: '0.66rem',
+          fontSize: '0.6875rem',
           letterSpacing: '0.14em',
           textTransform: 'uppercase',
           color: 'var(--muted)',
@@ -321,8 +318,9 @@ function StatCard({ label, value, emphasize = false }: { label: string; value: s
       <p
         style={{
           fontFamily: 'var(--font-d)',
-          fontSize: '1.4rem',
+          fontSize: '1.75rem',
           fontWeight: 900,
+          fontVariantNumeric: 'tabular-nums',
           letterSpacing: '0.02em',
           color: emphasize ? 'var(--orange)' : 'var(--white)',
           margin: 0
@@ -351,7 +349,7 @@ function Chip({
     <span
       style={{
         fontFamily: 'var(--font-d)',
-        fontSize: '0.62rem',
+        fontSize: '0.6875rem',
         letterSpacing: '0.09em',
         textTransform: 'uppercase',
         color,
@@ -365,28 +363,3 @@ function Chip({
   )
 }
 
-const actionBtnStyle = {
-  fontFamily: 'var(--font-d)',
-  fontSize: '0.7rem',
-  fontWeight: 700,
-  letterSpacing: '0.1em',
-  textTransform: 'uppercase',
-  color: 'var(--black)',
-  background: 'var(--orange)',
-  border: 'none',
-  padding: '0.4rem 0.55rem',
-  cursor: 'pointer'
-} as const
-
-const ghostBtnStyle = {
-  fontFamily: 'var(--font-d)',
-  fontSize: '0.7rem',
-  fontWeight: 700,
-  letterSpacing: '0.1em',
-  textTransform: 'uppercase',
-  color: 'var(--muted)',
-  background: 'transparent',
-  border: '1px solid var(--border)',
-  padding: '0.4rem 0.55rem',
-  cursor: 'pointer'
-} as const

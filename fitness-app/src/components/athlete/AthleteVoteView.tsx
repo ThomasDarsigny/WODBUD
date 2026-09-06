@@ -9,6 +9,7 @@ import { useExerciseStore } from '../../stores/exerciseStore'
 import type { Exercise, VoteOption, VoteSession } from '../../types'
 import { CATEGORY_I18N_KEYS, MUSCLE_GROUP_I18N_KEYS } from '../../types'
 import VoteResultsBars from '../vote/VoteResultsBars'
+import { btnPrimary as actionBtnStyle } from '../../styles/ui'
 
 /**
  * Vote de l'athlète — un seul choix par séance.
@@ -115,7 +116,7 @@ export default function AthleteVoteView() {
     return (
       <div style={{ padding: 'var(--page-pad)', maxWidth: 720 }}>
         <BackButton onClick={() => navigate('/athlete')} label={t('actions.back')} />
-        <h1 style={{ fontFamily: 'var(--font-d)', fontSize: '1.8rem', fontWeight: 900, textTransform: 'uppercase', margin: '0 0 0.5rem' }}>
+        <h1 style={{ fontFamily: 'var(--font-d)', fontSize: '1.75rem', fontWeight: 900, textTransform: 'uppercase', margin: '0 0 0.5rem' }}>
           {session.title}
         </h1>
         <p style={{ color: 'var(--muted)', marginBottom: '1.5rem' }}>{t('athlete.vote_closed')}</p>
@@ -129,17 +130,17 @@ export default function AthleteVoteView() {
     <div style={{ padding: 'var(--page-pad)', paddingBottom: '7rem' }}>
       <div style={{ marginBottom: '2rem' }}>
         <BackButton onClick={() => navigate('/athlete')} label={t('actions.back')} />
-        <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.72rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'var(--orange)', marginBottom: '0.4rem' }}>
+        <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'var(--orange)', marginBottom: '0.4rem' }}>
           {t('vote.tag')}
         </p>
-        <h1 style={{ fontFamily: 'var(--font-d)', fontSize: '2rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.02em', margin: 0 }}>
+        <h1 style={{ fontFamily: 'var(--font-d)', fontSize: '1.75rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.02em', margin: 0 }}>
           {session.title}
         </h1>
-        <p style={{ color: 'var(--muted)', marginTop: '0.5rem', fontSize: '0.9rem' }}>
+        <p style={{ color: 'var(--muted)', marginTop: '0.5rem', fontSize: '0.9375rem' }}>
           {t('vote.subtitle')}
         </p>
         {session.deadline && (
-          <p style={{ color: 'var(--muted)', fontSize: '0.8rem', marginTop: '0.25rem' }}>
+          <p style={{ color: 'var(--muted)', fontSize: '0.8125rem', marginTop: '0.25rem' }}>
             {t('classes.deadline')}: {new Date(session.deadline).toLocaleDateString()}
           </p>
         )}
@@ -147,10 +148,10 @@ export default function AthleteVoteView() {
 
       {confirmedOptionId && (
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap', background: 'rgba(34,197,94,0.07)', border: '1px solid rgba(34,197,94,0.3)', padding: '0.75rem 1rem', marginBottom: '1.25rem' }}>
-          <span style={{ color: '#22c55e', fontFamily: 'var(--font-d)', fontSize: '0.75rem', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
+          <span style={{ color: '#22c55e', fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
             ✓ {t('vote.already_voted')}
           </span>
-          <span style={{ color: 'var(--muted)', fontSize: '0.82rem' }}>— {t('vote.can_modify')}</span>
+          <span style={{ color: 'var(--muted)', fontSize: '0.8125rem' }}>— {t('vote.can_modify')}</span>
         </div>
       )}
 
@@ -179,13 +180,13 @@ export default function AthleteVoteView() {
       )}
 
       {error && (
-        <div style={{ marginTop: '1rem', padding: '0.65rem 0.9rem', background: 'rgba(255,77,0,0.1)', border: '1px solid rgba(255,77,0,0.3)', color: 'var(--orange)', fontSize: '0.85rem' }}>
+        <div style={{ marginTop: '1rem', padding: '0.65rem 0.9rem', background: 'rgba(255,77,0,0.1)', border: '1px solid rgba(255,77,0,0.3)', color: 'var(--orange)', fontSize: '0.8125rem' }}>
           {error}
         </div>
       )}
 
       <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, background: 'var(--dark)', borderTop: '1px solid var(--border)', padding: '1rem 2rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', zIndex: 100, flexWrap: 'wrap' }}>
-        <div style={{ color: 'var(--muted)', fontFamily: 'var(--font-d)', fontSize: '0.8rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+        <div style={{ color: 'var(--muted)', fontFamily: 'var(--font-d)', fontSize: '0.8125rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
           {selectedOptionId ? t('vote.single_hint') : t('vote.none_selected')}
         </div>
         <button
@@ -232,11 +233,11 @@ function VoteCard({ option, exercise, selected, confirmed, onSelect }: {
           retrouve dans les barres de résultats. */}
       <span style={{ display: 'flex', alignItems: 'center', gap: '0.55rem' }}>
         <span style={{ width: 14, height: 14, background: option.color, flexShrink: 0, borderRadius: '50%' }} />
-        <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--muted)' }}>
+        <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--muted)' }}>
           {exercise ? t(CATEGORY_I18N_KEYS[exercise.category]) : `#${option.position}`}
         </span>
         {confirmed && (
-          <span style={{ marginLeft: 'auto', fontFamily: 'var(--font-d)', fontSize: '0.58rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#22c55e', border: '1px solid rgba(34,197,94,0.35)', padding: '0.08rem 0.35rem' }}>
+          <span style={{ marginLeft: 'auto', fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#22c55e', border: '1px solid rgba(34,197,94,0.35)', padding: '0.08rem 0.35rem' }}>
             ✓ {t('vote.your_choice')}
           </span>
         )}
@@ -251,12 +252,12 @@ function VoteCard({ option, exercise, selected, confirmed, onSelect }: {
         {selected && <div style={{ position: 'absolute', inset: 0, background: `${option.color}2e`, pointerEvents: 'none' }} />}
       </div>
 
-      <h3 style={{ fontFamily: 'var(--font-d)', fontSize: '0.95rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', margin: 0 }}>
+      <h3 style={{ fontFamily: 'var(--font-d)', fontSize: '0.9375rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', margin: 0 }}>
         {name}
       </h3>
 
       {exercise && (
-        <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.62rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: option.color, border: `1px solid ${option.color}59`, padding: '0.14rem 0.45rem', alignSelf: 'flex-start' }}>
+        <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: option.color, border: `1px solid ${option.color}59`, padding: '0.14rem 0.45rem', alignSelf: 'flex-start' }}>
           {t(MUSCLE_GROUP_I18N_KEYS[exercise.primary_muscle])}
         </span>
       )}
@@ -266,7 +267,7 @@ function VoteCard({ option, exercise, selected, confirmed, onSelect }: {
 
 function SectionTitle({ children }: { children: ReactNode }) {
   return (
-    <h2 style={{ fontFamily: 'var(--font-d)', fontSize: '0.85rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', margin: '0 0 0.9rem' }}>
+    <h2 style={{ fontFamily: 'var(--font-d)', fontSize: '0.8125rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', margin: '0 0 0.9rem' }}>
       {children}
     </h2>
   )
@@ -276,7 +277,7 @@ function BackButton({ onClick, label }: { onClick: () => void; label: string }) 
   return (
     <button
       onClick={onClick}
-      style={{ background: 'none', border: 'none', color: 'var(--muted)', cursor: 'pointer', fontFamily: 'var(--font-d)', fontSize: '0.72rem', letterSpacing: '0.15em', textTransform: 'uppercase', padding: 0, marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}
+      style={{ background: 'none', border: 'none', color: 'var(--muted)', cursor: 'pointer', fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.15em', textTransform: 'uppercase', padding: 0, marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}
     >
       ← {label}
     </button>
@@ -287,20 +288,8 @@ function CenteredMessage({ message, icon = 'INFO' }: { message: string; icon?: s
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', minHeight: 300, gap: '1rem', color: 'var(--muted)' }}>
       <span style={{ fontSize: '2.5rem', opacity: 0.4 }}>{icon}</span>
-      <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.9rem', letterSpacing: '0.12em', textTransform: 'uppercase' }}>{message}</p>
+      <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.9375rem', letterSpacing: '0.12em', textTransform: 'uppercase' }}>{message}</p>
     </div>
   )
 }
 
-const actionBtnStyle = {
-  fontFamily: 'var(--font-d)',
-  fontSize: '0.85rem',
-  fontWeight: 700,
-  letterSpacing: '0.12em',
-  textTransform: 'uppercase',
-  color: 'var(--black)',
-  background: 'var(--orange)',
-  border: 'none',
-  padding: '0.75rem 2rem',
-  cursor: 'pointer'
-} as const

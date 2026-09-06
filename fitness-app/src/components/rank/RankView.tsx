@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useRankStore } from '../../stores/rankStore'
 import { computeProgress, formatMinutes, rankDisplay, rankMotto } from '../../lib/ranks'
 import RankBadge from './RankBadge'
+import { field } from '../../styles/ui'
 
 export default function RankView() {
   const { t, i18n } = useTranslation(['common'])
@@ -31,7 +32,7 @@ export default function RankView() {
 
   if (loading && ranks.length === 0) {
     return (
-      <div style={{ padding: 'var(--page-pad)', color: 'var(--muted)', fontFamily: 'var(--font-d)', letterSpacing: '0.1em', textTransform: 'uppercase', fontSize: '0.8rem' }}>
+      <div style={{ padding: 'var(--page-pad)', color: 'var(--muted)', fontFamily: 'var(--font-d)', letterSpacing: '0.1em', textTransform: 'uppercase', fontSize: '0.8125rem' }}>
         {t('rank.loading')}
       </div>
     )
@@ -40,10 +41,10 @@ export default function RankView() {
   return (
     <div style={{ padding: 'var(--page-pad)', maxWidth: 880 }}>
       <div style={{ marginBottom: '1.75rem' }}>
-        <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.72rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'var(--orange)', marginBottom: '0.35rem' }}>
+        <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'var(--orange)', marginBottom: '0.35rem' }}>
           {t('rank.tag')}
         </p>
-        <h1 style={{ fontFamily: 'var(--font-d)', fontSize: '2.05rem', fontWeight: 900, textTransform: 'uppercase', lineHeight: 1.05, letterSpacing: '0.03em', margin: 0 }}>
+        <h1 style={{ fontFamily: 'var(--font-d)', fontSize: '1.75rem', fontWeight: 900, textTransform: 'uppercase', lineHeight: 1.05, letterSpacing: '0.03em', margin: 0 }}>
           {t('rank.title')}
         </h1>
       </div>
@@ -68,10 +69,10 @@ export default function RankView() {
           {progress.next ? (
             <>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '0.4rem', gap: '0.5rem', flexWrap: 'wrap' }}>
-                <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.68rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--muted)' }}>
+                <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--muted)' }}>
                   {t('rank.next')} — {rankDisplay(progress.next, lang)}
                 </span>
-                <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.68rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--orange)' }}>
+                <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--orange)' }}>
                   {t('rank.remaining', { amount: formatMinutes(progress.remaining) })}
                 </span>
               </div>
@@ -85,13 +86,13 @@ export default function RankView() {
               </div>
             </>
           ) : (
-            <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.8rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--orange)', margin: 0 }}>
+            <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.8125rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--orange)', margin: 0 }}>
               ★ {t('rank.max')}
             </p>
           )}
 
           {minutes === 0 && (
-            <p style={{ color: 'var(--muted)', fontSize: '0.82rem', marginTop: '0.9rem', marginBottom: 0 }}>
+            <p style={{ color: 'var(--muted)', fontSize: '0.8125rem', marginTop: '0.9rem', marginBottom: 0 }}>
               {t('rank.empty_hint')}
             </p>
           )}
@@ -100,7 +101,7 @@ export default function RankView() {
 
       {/* Échelle complète */}
       <div style={{ border: '1px solid var(--border)', background: 'var(--dark)', padding: '1.5rem', marginBottom: '1.25rem' }}>
-        <h2 style={{ fontFamily: 'var(--font-d)', fontSize: '0.9rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', margin: '0 0 1.2rem' }}>
+        <h2 style={{ fontFamily: 'var(--font-d)', fontSize: '0.9375rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', margin: '0 0 1.2rem' }}>
           {t('rank.ladder')}
         </h2>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
@@ -119,10 +120,10 @@ export default function RankView() {
                 }}
               >
                 <span style={{ width: 22, height: 22, flexShrink: 0, border: `2px solid ${reached ? r.color : 'var(--border)'}`, background: reached ? `${r.color}33` : 'transparent', display: 'inline-block', clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)' }} />
-                <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.85rem', fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase', color: reached ? r.color : 'var(--muted)' }}>
+                <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.8125rem', fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase', color: reached ? r.color : 'var(--muted)' }}>
                   {rankDisplay(r, lang)}
                 </span>
-                <span style={{ marginLeft: 'auto', fontFamily: 'var(--font-d)', fontSize: '0.68rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--muted)', flexShrink: 0 }}>
+                <span style={{ marginLeft: 'auto', fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--muted)', flexShrink: 0 }}>
                   {reached ? t('rank.reached') : t('rank.from', { amount: formatMinutes(r.min_minutes) })}
                 </span>
               </div>
@@ -133,10 +134,10 @@ export default function RankView() {
 
       {/* Partage */}
       <div style={{ border: '1px solid var(--border)', background: 'var(--dark)', padding: '1.5rem' }}>
-        <h2 style={{ fontFamily: 'var(--font-d)', fontSize: '0.9rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', margin: '0 0 0.6rem' }}>
+        <h2 style={{ fontFamily: 'var(--font-d)', fontSize: '0.9375rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', margin: '0 0 0.6rem' }}>
           {t('rank.share_title')}
         </h2>
-        <p style={{ color: 'var(--muted)', fontSize: '0.83rem', margin: '0 0 1.1rem', lineHeight: 1.5 }}>
+        <p style={{ color: 'var(--muted)', fontSize: '0.8125rem', margin: '0 0 1.1rem', lineHeight: 1.5 }}>
           {t('rank.share_hint')}
         </p>
 
@@ -146,7 +147,7 @@ export default function RankView() {
               readOnly
               value={shareUrl}
               onFocus={(e) => e.currentTarget.select()}
-              style={{ width: '100%', background: 'var(--black)', border: '1px solid var(--border)', color: 'var(--white)', padding: '0.6rem 0.85rem', fontFamily: 'var(--font-b)', fontSize: '0.85rem', outline: 'none', boxSizing: 'border-box', marginBottom: '0.7rem' }}
+              style={{ ...field, marginBottom: 'var(--s3)' }}
             />
             <div style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap' }}>
               <SmallButton onClick={handleCopy} variant="primary">
@@ -165,7 +166,7 @@ export default function RankView() {
       </div>
 
       {error && (
-        <div style={{ marginTop: '0.9rem', padding: '0.65rem 0.9rem', background: 'rgba(255,77,0,0.1)', border: '1px solid rgba(255,77,0,0.3)', color: 'var(--orange)', fontSize: '0.85rem' }}>
+        <div style={{ marginTop: '0.9rem', padding: '0.65rem 0.9rem', background: 'rgba(255,77,0,0.1)', border: '1px solid rgba(255,77,0,0.3)', color: 'var(--orange)', fontSize: '0.8125rem' }}>
           {error}
         </div>
       )}
@@ -176,10 +177,10 @@ export default function RankView() {
 function StatBlock({ value, label }: { value: string; label: string }) {
   return (
     <div style={{ border: '1px solid var(--border)', padding: '0.55rem 0.85rem', minWidth: 96 }}>
-      <div style={{ fontFamily: 'var(--font-d)', fontSize: '1.15rem', fontWeight: 900, color: 'var(--white)', lineHeight: 1.1 }}>
+      <div style={{ fontFamily: 'var(--font-d)', fontSize: '1.25rem', fontWeight: 900, color: 'var(--white)', lineHeight: 1.1, fontVariantNumeric: 'tabular-nums' }}>
         {value}
       </div>
-      <div style={{ fontFamily: 'var(--font-d)', fontSize: '0.6rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--muted)', marginTop: '0.15rem' }}>
+      <div style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--muted)', marginTop: '0.15rem' }}>
         {label}
       </div>
     </div>
@@ -200,7 +201,7 @@ function SmallButton({ children, onClick, variant, disabled }: {
       onClick={onClick}
       disabled={disabled}
       style={{
-        fontFamily: 'var(--font-d)', fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.1em',
+        fontFamily: 'var(--font-d)', fontSize: '0.6875rem', fontWeight: 700, letterSpacing: '0.1em',
         textTransform: 'uppercase', padding: '0.6rem 1.1rem',
         cursor: disabled ? 'not-allowed' : 'pointer', opacity: disabled ? 0.55 : 1, ...palette
       }}

@@ -76,7 +76,7 @@ export default function AiCoachView() {
           <span
             style={{
               fontFamily: 'var(--font-d)',
-              fontSize: '0.7rem',
+              fontSize: '0.6875rem',
               letterSpacing: '0.2em',
               textTransform: 'uppercase',
               color: 'var(--orange)',
@@ -90,7 +90,7 @@ export default function AiCoachView() {
           <h1
             style={{
               fontFamily: 'var(--font-d)',
-              fontSize: '1.1rem',
+              fontSize: '1rem',
               letterSpacing: '0.1em',
               textTransform: 'uppercase',
               margin: 0
@@ -99,7 +99,7 @@ export default function AiCoachView() {
             {t('ai.name')}
           </h1>
         </div>
-        <p style={{ color: 'var(--muted)', fontSize: '0.82rem', marginTop: '0.4rem', marginBottom: 0 }}>
+        <p style={{ color: 'var(--muted)', fontSize: '0.8125rem', marginTop: '0.4rem', marginBottom: 0 }}>
           {t('ai.subtitle')}
         </p>
       </div>
@@ -142,7 +142,7 @@ export default function AiCoachView() {
               <p
                 style={{
                   color: 'var(--muted)',
-                  fontSize: '0.9rem',
+                  fontSize: '0.9375rem',
                   maxWidth: '360px',
                   textAlign: 'center',
                   lineHeight: 1.6
@@ -163,7 +163,7 @@ export default function AiCoachView() {
                     padding: '0.5rem 0.85rem',
                     cursor: 'pointer',
                     fontFamily: 'var(--font-b)',
-                    fontSize: '0.78rem',
+                    fontSize: '0.8125rem',
                     transition: 'all 0.15s'
                   }}
                   onMouseEnter={(e) => {
@@ -199,7 +199,7 @@ export default function AiCoachView() {
                     ? 'rgba(255,77,0,0.12)'
                     : 'var(--dark)',
                 border: `1px solid ${msg.role === 'user' ? 'rgba(255,77,0,0.3)' : 'var(--border)'}`,
-                fontSize: '0.88rem',
+                fontSize: '0.9375rem',
                 lineHeight: 1.65,
                 color: 'var(--white)',
                 whiteSpace: 'pre-wrap',
@@ -213,7 +213,7 @@ export default function AiCoachView() {
                     alignItems: 'center',
                     gap: '0.5rem',
                     fontFamily: 'var(--font-d)',
-                    fontSize: '0.65rem',
+                    fontSize: '0.6875rem',
                     letterSpacing: '0.15em',
                     textTransform: 'uppercase',
                     color: 'var(--orange)',
@@ -266,7 +266,7 @@ export default function AiCoachView() {
               background: 'rgba(255,50,50,0.08)',
               border: '1px solid rgba(255,50,50,0.3)',
               color: '#ff6b6b',
-              fontSize: '0.82rem'
+              fontSize: '0.8125rem'
             }}
           >
             {error}
@@ -312,7 +312,7 @@ export default function AiCoachView() {
               outline: 'none',
               color: 'var(--white)',
               fontFamily: 'var(--font-b)',
-              fontSize: '0.88rem',
+              fontSize: '0.9375rem',
               resize: 'none',
               lineHeight: 1.5,
               maxHeight: '120px',
@@ -334,7 +334,7 @@ export default function AiCoachView() {
               cursor: input.trim() && !loading ? 'pointer' : 'not-allowed',
               padding: '0.5rem 1rem',
               fontFamily: 'var(--font-d)',
-              fontSize: '0.75rem',
+              fontSize: '0.6875rem',
               letterSpacing: '0.1em',
               textTransform: 'uppercase',
               transition: 'all 0.15s',
@@ -344,7 +344,7 @@ export default function AiCoachView() {
             {loading ? '...' : t('ai.send')}
           </button>
         </div>
-        <p style={{ color: 'var(--muted)', fontSize: '0.72rem', marginTop: '0.4rem', marginBottom: 0 }}>
+        <p style={{ color: 'var(--muted)', fontSize: '0.8125rem', marginTop: '0.4rem', marginBottom: 0 }}>
           Entrée pour envoyer · Maj+Entrée pour nouvelle ligne
         </p>
       </div>

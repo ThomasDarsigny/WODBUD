@@ -304,7 +304,7 @@ export const MOVEMENT_TYPE_DESC_I18N_KEYS: Record<MovementType, string> = {
 
 export const MOVEMENT_TYPE_COLORS: Record<MovementType, string> = {
   pull: '#38bdf8',
-  push: '#ff4d00',
+  push: '#ff5a1f',
   stabilize: '#a78bfa',
   carry: '#facc15',
   climb: '#34d399'

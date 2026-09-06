@@ -35,7 +35,7 @@ export default function ActiveSessionBar({ basePath }: { basePath: string }) {
         display: 'flex', alignItems: 'center', gap: '0.6rem', flexShrink: 0,
         background: 'rgba(255,77,0,0.12)', borderBottom: '1px solid rgba(255,77,0,0.3)',
         padding: '0.5rem 1.5rem', textDecoration: 'none',
-        fontFamily: 'var(--font-d)', fontSize: '0.78rem', letterSpacing: '0.1em',
+        fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.1em',
         textTransform: 'uppercase', color: 'var(--orange)'
       }}
     >

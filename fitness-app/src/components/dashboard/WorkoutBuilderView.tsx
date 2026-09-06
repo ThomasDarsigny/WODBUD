@@ -1,5 +1,4 @@
 import { useState, useEffect, useMemo } from 'react'
-import type { CSSProperties } from 'react'
 import { useTranslation } from 'react-i18next'
 import NavIcon from '../navigation/NavIcon'
 import EmptyState from '../ui/EmptyState'
@@ -10,6 +9,7 @@ import { METHOD_I18N_KEYS, MUSCLE_GROUP_I18N_KEYS, CATEGORY_LABELS, MUSCLE_GROUP
 import ExerciseDetailModal from '../exercises/ExerciseDetailModal'
 import Mannequin2D from '../mannequin/Mannequin2D'
 import { computeMuscleLoads } from '../../lib/muscleLoad'
+import { label as smallLabelStyle, fieldCompact as miniInputStyle, field as selectStyle, btnSmall as filterResetStyle, textarea as textareaStyle } from '../../styles/ui'
 
 export default function WorkoutBuilderView() {
   const { t } = useTranslation(['workouts', 'common'])
@@ -213,7 +213,7 @@ export default function WorkoutBuilderView() {
           <p
             style={{
               fontFamily: 'var(--font-d)',
-              fontSize: '0.7rem',
+              fontSize: '0.6875rem',
               letterSpacing: '0.28em',
               textTransform: 'uppercase',
               color: 'var(--orange)',
@@ -225,7 +225,7 @@ export default function WorkoutBuilderView() {
           <h2
             style={{
               fontFamily: 'var(--font-d)',
-              fontSize: '1.6rem',
+              fontSize: '1.75rem',
               fontWeight: 900,
               textTransform: 'uppercase',
               marginBottom: '1rem'
@@ -244,7 +244,7 @@ export default function WorkoutBuilderView() {
               color: 'var(--white)',
               padding: '0.6rem 0.9rem',
               fontFamily: 'var(--font-b)',
-              fontSize: '0.9rem',
+              fontSize: '0.9375rem',
               outline: 'none'
             }}
           />
@@ -301,7 +301,7 @@ export default function WorkoutBuilderView() {
                 fontFamily: 'var(--font-d)',
                 letterSpacing: '0.1em',
                 textTransform: 'uppercase',
-                fontSize: '0.85rem'
+                fontSize: '0.8125rem'
               }}
             >
               {t('empty', { ns: 'workouts' })}
@@ -339,7 +339,7 @@ export default function WorkoutBuilderView() {
           <p
             style={{
               fontFamily: 'var(--font-d)',
-              fontSize: '0.7rem',
+              fontSize: '0.6875rem',
               letterSpacing: '0.28em',
               textTransform: 'uppercase',
               color: 'var(--orange)',
@@ -360,7 +360,7 @@ export default function WorkoutBuilderView() {
               color: 'var(--white)',
               padding: '0.3rem 0',
               fontFamily: 'var(--font-d)',
-              fontSize: '1.4rem',
+              fontSize: '1.75rem',
               fontWeight: 900,
               textTransform: 'uppercase',
               letterSpacing: '0.04em',
@@ -411,7 +411,7 @@ export default function WorkoutBuilderView() {
           <p
             style={{
               fontFamily: 'var(--font-d)',
-              fontSize: '0.64rem',
+              fontSize: '0.6875rem',
               letterSpacing: '0.14em',
               textTransform: 'uppercase',
               color: 'var(--muted)',
@@ -421,7 +421,7 @@ export default function WorkoutBuilderView() {
             {t('mannequin.title', { ns: 'common' })}
           </p>
           {workoutExercises.length === 0 ? (
-            <p style={{ fontSize: '0.72rem', color: 'var(--muted)', margin: 0 }}>
+            <p style={{ fontSize: '0.8125rem', color: 'var(--muted)', margin: 0 }}>
               {t('mannequin.no_data', { ns: 'common' })}
             </p>
           ) : (
@@ -475,17 +475,7 @@ export default function WorkoutBuilderView() {
             onChange={(e) => setNotes(e.target.value)}
             placeholder={t('builder.notes_placeholder', { ns: 'workouts' })}
             rows={2}
-            style={{
-              width: '100%',
-              background: 'var(--black)',
-              border: '1px solid var(--border)',
-              color: 'var(--muted)',
-              padding: '0.6rem 0.75rem',
-              fontFamily: 'var(--font-b)',
-              fontSize: '0.82rem',
-              outline: 'none',
-              resize: 'none'
-            }}
+            style={{ ...textareaStyle, minHeight: 72, resize: 'none' }}
           />
         </div>
 
@@ -503,7 +493,7 @@ export default function WorkoutBuilderView() {
             style={{
               fontFamily: 'var(--font-d)',
               fontWeight: 700,
-              fontSize: '0.8rem',
+              fontSize: '0.8125rem',
               letterSpacing: '0.1em',
               textTransform: 'uppercase',
               padding: '0.6rem 1rem',
@@ -522,7 +512,7 @@ export default function WorkoutBuilderView() {
               flex: 1,
               fontFamily: 'var(--font-d)',
               fontWeight: 700,
-              fontSize: '0.88rem',
+              fontSize: '0.9375rem',
               letterSpacing: '0.1em',
               textTransform: 'uppercase',
               padding: '0.65rem 1rem',
@@ -552,7 +542,7 @@ export default function WorkoutBuilderView() {
               background: 'rgba(255,77,0,0.1)',
               borderTop: '1px solid rgba(255,77,0,0.2)',
               color: 'var(--orange)',
-              fontSize: '0.8rem',
+              fontSize: '0.8125rem',
               fontFamily: 'var(--font-b)'
             }}
           >
@@ -607,7 +597,7 @@ export default function WorkoutBuilderView() {
               <p
                 style={{
                   fontFamily: 'var(--font-d)',
-                  fontSize: '0.75rem',
+                  fontSize: '0.6875rem',
                   letterSpacing: '0.14em',
                   textTransform: 'uppercase',
                   color: 'var(--orange)',
@@ -636,7 +626,7 @@ export default function WorkoutBuilderView() {
                   color: 'var(--muted)',
                   lineHeight: 1.6,
                   fontFamily: 'var(--font-b)',
-                  fontSize: '0.9rem'
+                  fontSize: '0.9375rem'
                 }}
               >
                 {cardioOverridePrompt.message}
@@ -657,7 +647,7 @@ export default function WorkoutBuilderView() {
                 style={{
                   fontFamily: 'var(--font-d)',
                   fontWeight: 700,
-                  fontSize: '0.75rem',
+                  fontSize: '0.6875rem',
                   letterSpacing: '0.1em',
                   textTransform: 'uppercase',
                   padding: '0.55rem 0.9rem',
@@ -674,7 +664,7 @@ export default function WorkoutBuilderView() {
                 style={{
                   fontFamily: 'var(--font-d)',
                   fontWeight: 800,
-                  fontSize: '0.75rem',
+                  fontSize: '0.6875rem',
                   letterSpacing: '0.1em',
                   textTransform: 'uppercase',
                   padding: '0.55rem 0.9rem',
@@ -728,7 +718,7 @@ export default function WorkoutBuilderView() {
               <p
                 style={{
                   fontFamily: 'var(--font-d)',
-                  fontSize: '0.75rem',
+                  fontSize: '0.6875rem',
                   letterSpacing: '0.14em',
                   textTransform: 'uppercase',
                   color: '#f59e0b',
@@ -757,7 +747,7 @@ export default function WorkoutBuilderView() {
                   color: 'var(--muted)',
                   lineHeight: 1.6,
                   fontFamily: 'var(--font-b)',
-                  fontSize: '0.9rem'
+                  fontSize: '0.9375rem'
                 }}
               >
                 {restOverridePrompt.message}
@@ -772,7 +762,7 @@ export default function WorkoutBuilderView() {
                     background: `${riskColor}22`,
                     color: riskColor,
                     fontFamily: 'var(--font-d)',
-                    fontSize: '0.72rem',
+                    fontSize: '0.6875rem',
                     fontWeight: 800,
                     letterSpacing: '0.1em',
                     textTransform: 'uppercase'
@@ -797,7 +787,7 @@ export default function WorkoutBuilderView() {
                 style={{
                   fontFamily: 'var(--font-d)',
                   fontWeight: 700,
-                  fontSize: '0.75rem',
+                  fontSize: '0.6875rem',
                   letterSpacing: '0.1em',
                   textTransform: 'uppercase',
                   padding: '0.55rem 0.9rem',
@@ -814,7 +804,7 @@ export default function WorkoutBuilderView() {
                 style={{
                   fontFamily: 'var(--font-d)',
                   fontWeight: 800,
-                  fontSize: '0.75rem',
+                  fontSize: '0.6875rem',
                   letterSpacing: '0.1em',
                   textTransform: 'uppercase',
                   padding: '0.55rem 0.9rem',
@@ -892,7 +882,7 @@ function PickerExerciseRow({
         <p
           style={{
             fontFamily: 'var(--font-d)',
-            fontSize: '0.9rem',
+            fontSize: '0.9375rem',
             fontWeight: 700,
             textTransform: 'uppercase',
             letterSpacing: '0.04em',
@@ -907,7 +897,7 @@ function PickerExerciseRow({
         <p
           style={{
             fontFamily: 'var(--font-d)',
-            fontSize: '0.65rem',
+            fontSize: '0.6875rem',
             letterSpacing: '0.1em',
             textTransform: 'uppercase',
             color: 'var(--orange)',
@@ -921,7 +911,7 @@ function PickerExerciseRow({
       <span
         style={{
           fontFamily: 'var(--font-d)',
-          fontSize: '0.7rem',
+          fontSize: '0.6875rem',
           letterSpacing: '0.08em',
           textTransform: 'uppercase',
           color: alreadyAdded ? 'var(--muted)' : 'var(--orange)',
@@ -961,7 +951,7 @@ function WorkoutExerciseSlot({
         <span
           style={{
             fontFamily: 'var(--font-d)',
-            fontSize: '0.9rem',
+            fontSize: '0.9375rem',
             fontWeight: 700,
             color: 'var(--orange)',
             minWidth: '1.5rem',
@@ -975,7 +965,7 @@ function WorkoutExerciseSlot({
           <p
             style={{
               fontFamily: 'var(--font-d)',
-              fontSize: '0.88rem',
+              fontSize: '0.9375rem',
               fontWeight: 700,
               textTransform: 'uppercase',
               letterSpacing: '0.04em',
@@ -990,7 +980,7 @@ function WorkoutExerciseSlot({
           <p
             style={{
               fontFamily: 'var(--font-d)',
-              fontSize: '0.62rem',
+              fontSize: '0.6875rem',
               letterSpacing: '0.1em',
               textTransform: 'uppercase',
               color: alert ? (alert.level === 'danger' ? '#ff4444' : '#f59e0b') : 'var(--muted)'
@@ -1017,13 +1007,13 @@ function WorkoutExerciseSlot({
             color: 'var(--white)',
             padding: '0.25rem 0.4rem',
             fontFamily: 'var(--font-b)',
-            fontSize: '0.8rem',
+            fontSize: '0.8125rem',
             textAlign: 'center',
             outline: 'none'
           }}
         />
 
-        <span style={{ color: 'var(--muted)', fontSize: '0.7rem' }}>×</span>
+        <span style={{ color: 'var(--muted)', fontSize: '0.8125rem' }}>×</span>
 
         <input
           type='number'
@@ -1040,7 +1030,7 @@ function WorkoutExerciseSlot({
             color: 'var(--white)',
             padding: '0.25rem 0.4rem',
             fontFamily: 'var(--font-b)',
-            fontSize: '0.8rem',
+            fontSize: '0.8125rem',
             textAlign: 'center',
             outline: 'none'
           }}
@@ -1053,7 +1043,7 @@ function WorkoutExerciseSlot({
             border: 'none',
             color: 'var(--muted)',
             cursor: 'pointer',
-            fontSize: '0.75rem',
+            fontSize: '0.8125rem',
             padding: '0.2rem 0.4rem'
           }}
         >
@@ -1066,7 +1056,7 @@ function WorkoutExerciseSlot({
             border: 'none',
             color: 'var(--muted)',
             cursor: 'pointer',
-            fontSize: '0.85rem',
+            fontSize: '0.8125rem',
             padding: '0.2rem 0.4rem'
           }}
         >
@@ -1135,14 +1125,14 @@ function MuscleAlertBadge({ alert }: { alert: MuscleAlert }) {
         padding: '0.35rem 0.75rem',
         background: isDanger ? 'rgba(255,68,68,0.1)' : 'rgba(245,158,11,0.1)',
         border: `1px solid ${isDanger ? 'rgba(255,68,68,0.3)' : 'rgba(245,158,11,0.3)'}`,
-        fontSize: '0.75rem'
+        fontSize: '0.8125rem'
       }}
     >
       <span style={{ color: isDanger ? '#ff4444' : '#f59e0b' }}>{isDanger ? 'HIGH' : 'MED'}</span>
       <span
         style={{
           fontFamily: 'var(--font-d)',
-          fontSize: '0.7rem',
+          fontSize: '0.6875rem',
           letterSpacing: '0.1em',
           textTransform: 'uppercase',
           color: isDanger ? '#ff4444' : '#f59e0b',
@@ -1160,52 +1150,6 @@ function MuscleAlertBadge({ alert }: { alert: MuscleAlert }) {
   )
 }
 
-const smallLabelStyle: CSSProperties = {
-  fontFamily: 'var(--font-d)',
-  fontSize: '0.62rem',
-  letterSpacing: '0.2em',
-  textTransform: 'uppercase',
-  color: 'var(--muted)',
-  display: 'block',
-  marginBottom: '0.25rem'
-}
-
-const miniInputStyle: CSSProperties = {
-  width: '100%',
-  background: 'var(--surface)',
-  border: '1px solid var(--border)',
-  color: 'var(--white)',
-  padding: '0.3rem 0.5rem',
-  fontFamily: 'var(--font-b)',
-  fontSize: '0.8rem',
-  outline: 'none'
-}
-
-const selectStyle: CSSProperties = {
-  width: '100%',
-  background: 'var(--black)',
-  border: '1px solid var(--border)',
-  color: 'var(--white)',
-  padding: '0.45rem 0.6rem',
-  fontFamily: 'var(--font-d)',
-  fontSize: '0.85rem',
-  outline: 'none'
-}
-
-const filterResetStyle: CSSProperties = {
-  fontFamily: 'var(--font-d)',
-  fontWeight: 700,
-  fontSize: '0.72rem',
-  letterSpacing: '0.08em',
-  textTransform: 'uppercase',
-  padding: '0.45rem 0.7rem',
-  border: '1px solid var(--border)',
-  background: 'transparent',
-  color: 'var(--muted)',
-  cursor: 'pointer',
-  justifySelf: 'start'
-}
-
 function FilterChip({
   active,
   onClick,
@@ -1220,7 +1164,7 @@ function FilterChip({
       onClick={onClick}
       style={{
         fontFamily: 'var(--font-d)',
-        fontSize: '0.68rem',
+        fontSize: '0.6875rem',
         letterSpacing: '0.08em',
         textTransform: 'uppercase',
         padding: '0.45rem 0.65rem',

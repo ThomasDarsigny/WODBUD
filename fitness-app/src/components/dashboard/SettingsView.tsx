@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import type { CSSProperties, ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { supabase } from '../../lib/supabase'
@@ -8,6 +8,7 @@ import type { MannequinBody } from '../mannequin/bodyPaths'
 import { readBodyPref, storeBodyPref } from '../mannequin/Mannequin2D'
 import { applyTheme, readStoredTheme, storeTheme } from '../../lib/theme'
 import type { ThemePref, UserSegment } from '../../types'
+import { field as inputStyle, btnAccent as buttonStyle } from '../../styles/ui'
 
 const LANGS: Array<{ code: string; key: string }> = [
   { code: 'fr', key: 'language.fr' },
@@ -129,10 +130,10 @@ export default function SettingsView() {
   return (
     <div style={{ padding: '1.5rem', maxWidth: 720, display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
       <header>
-        <h1 style={{ fontFamily: 'var(--font-d)', fontSize: '1.6rem', letterSpacing: '0.08em', textTransform: 'uppercase', margin: 0 }}>
+        <h1 style={{ fontFamily: 'var(--font-d)', fontSize: '1.25rem', letterSpacing: '0.08em', textTransform: 'uppercase', margin: 0 }}>
           {t('settings.title')}
         </h1>
-        <p style={{ color: 'var(--muted)', fontSize: '0.85rem', margin: '0.25rem 0 0' }}>{t('settings.subtitle')}</p>
+        <p style={{ color: 'var(--muted)', fontSize: '0.8125rem', margin: '0.25rem 0 0' }}>{t('settings.subtitle')}</p>
       </header>
 
       {notice && (
@@ -142,7 +143,7 @@ export default function SettingsView() {
             border: `1px solid ${notice.kind === 'ok' ? '#4ade80' : '#ef4444'}`,
             color: notice.kind === 'ok' ? '#4ade80' : '#ef4444',
             padding: '0.6rem 0.8rem',
-            fontSize: '0.8rem'
+            fontSize: '0.8125rem'
           }}
         >
           {notice.text}
@@ -195,7 +196,7 @@ export default function SettingsView() {
 
       <Section title={t('settings.account')}>
         <Row label={t('settings.current_email')}>
-          <p style={{ margin: 0, fontSize: '0.9rem' }}>{currentEmail || '—'}</p>
+          <p style={{ margin: 0, fontSize: '0.9375rem' }}>{currentEmail || '—'}</p>
         </Row>
 
         <Row label={t('settings.new_email')}>
@@ -239,35 +240,12 @@ export default function SettingsView() {
       </Section>
 
       <Section title={t('settings.privacy')}>
-        <Link to='/confidentialite' style={{ color: 'var(--orange)', fontSize: '0.85rem' }}>
+        <Link to='/confidentialite' style={{ color: 'var(--orange)', fontSize: '0.8125rem' }}>
           {t('settings.privacy_link')}
         </Link>
       </Section>
     </div>
   )
-}
-
-const inputStyle: CSSProperties = {
-  background: 'var(--dark)',
-  border: '1px solid var(--border)',
-  color: 'var(--white)',
-  padding: '0.5rem 0.7rem',
-  fontSize: '0.88rem',
-  fontFamily: 'var(--font-b)',
-  minWidth: '15rem',
-  outline: 'none'
-}
-
-const buttonStyle: CSSProperties = {
-  background: 'transparent',
-  border: '1px solid var(--orange)',
-  color: 'var(--orange)',
-  padding: '0.5rem 0.9rem',
-  fontFamily: 'var(--font-d)',
-  fontSize: '0.72rem',
-  letterSpacing: '0.12em',
-  textTransform: 'uppercase',
-  cursor: 'pointer'
 }
 
 function Section({ title, children }: { title: string; children: ReactNode }) {
@@ -276,7 +254,7 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
       <h2
         style={{
           fontFamily: 'var(--font-d)',
-          fontSize: '0.72rem',
+          fontSize: '0.6875rem',
           letterSpacing: '0.16em',
           textTransform: 'uppercase',
           color: 'var(--muted)',
@@ -293,9 +271,9 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
 function Row({ label, hint, children }: { label: string; hint?: string; children: ReactNode }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
-      <span style={{ fontSize: '0.8rem', fontWeight: 600 }}>{label}</span>
+      <span style={{ fontSize: '0.8125rem', fontWeight: 600 }}>{label}</span>
       {children}
-      {hint && <span style={{ fontSize: '0.7rem', color: 'var(--muted)' }}>{hint}</span>}
+      {hint && <span style={{ fontSize: '0.8125rem', color: 'var(--muted)' }}>{hint}</span>}
     </div>
   )
 }
@@ -307,7 +285,7 @@ function Chip({ label, active, onClick }: { label: string; active: boolean; onCl
       onClick={onClick}
       style={{
         fontFamily: 'var(--font-d)',
-        fontSize: '0.72rem',
+        fontSize: '0.6875rem',
         letterSpacing: '0.1em',
         textTransform: 'uppercase',
         padding: '0.35rem 0.8rem',

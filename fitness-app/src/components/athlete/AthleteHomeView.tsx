@@ -7,6 +7,7 @@ import { useClassStore } from '../../stores/classStore'
 import { useExerciseStore } from '../../stores/exerciseStore'
 import type { VoteSession, Class } from '../../types'
 import { CATEGORY_I18N_KEYS, MUSCLE_GROUP_I18N_KEYS } from '../../types'
+import Skeleton from '../ui/Skeleton'
 void CATEGORY_I18N_KEYS
 void MUSCLE_GROUP_I18N_KEYS
 
@@ -42,10 +43,10 @@ export default function AthleteHomeView() {
   return (
     <div style={{ padding: 'var(--page-pad)', maxWidth: 900 }}>
       <div style={{ marginBottom: '2.5rem' }}>
-        <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.72rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'var(--orange)', marginBottom: '0.4rem' }}>
+        <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'var(--orange)', marginBottom: '0.4rem' }}>
           {t('athlete.welcome_tag')}
         </p>
-        <h1 style={{ fontFamily: 'var(--font-d)', fontSize: '2.2rem', fontWeight: 900, textTransform: 'uppercase', lineHeight: 1, letterSpacing: '0.02em', margin: 0 }}>
+        <h1 style={{ fontFamily: 'var(--font-d)', fontSize: '1.75rem', fontWeight: 900, textTransform: 'uppercase', lineHeight: 1, letterSpacing: '0.02em', margin: 0 }}>
           {t('athlete.welcome_title')}
         </h1>
       </div>
@@ -101,10 +102,9 @@ function SectionHeader({ icon, title }: { icon: NavIconName; title: string }) {
 }
 
 function LoadingRow() {
-  const { t } = useTranslation('common')
   return (
-    <div style={{ padding: '1.5rem', color: 'var(--muted)', fontFamily: 'var(--font-d)', fontSize: '0.78rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-      {t('status.loading')}
+    <div style={{ padding: 'var(--s4) 0' }}>
+      <Skeleton height={72} lines={2} />
     </div>
   )
 }
@@ -125,12 +125,12 @@ function VoteSessionCard({ session, exerciseMap, hasVoted, onVote }: {
     }}>
       <div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.1rem' }}>
-          <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.92rem', fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--white)', margin: 0 }}>
+          <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.9375rem', fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--white)', margin: 0 }}>
             {session.title}
           </p>
           {hasVoted && (
             <span style={{
-              fontFamily: 'var(--font-d)', fontSize: '0.6rem', letterSpacing: '0.15em', textTransform: 'uppercase',
+              fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.15em', textTransform: 'uppercase',
               color: '#22c55e', border: '1px solid rgba(34,197,94,0.35)', background: 'rgba(34,197,94,0.08)',
               padding: '0.1rem 0.4rem', flexShrink: 0
             }}>
@@ -143,17 +143,17 @@ function VoteSessionCard({ session, exerciseMap, hasVoted, onVote }: {
             const ex = exerciseMap.get(exId)
             if (!ex) return null
             return (
-              <span key={exId} style={{ fontFamily: 'var(--font-d)', fontSize: '0.65rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--orange)', border: '1px solid rgba(255,77,0,0.25)', padding: '0.15rem 0.45rem' }}>
+              <span key={exId} style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--orange)', border: '1px solid rgba(255,77,0,0.25)', padding: '0.15rem 0.45rem' }}>
                 {ex.name}
               </span>
             )
           })}
           {session.exercise_options.length > 5 && (
-            <span style={{ fontSize: '0.72rem', color: 'var(--muted)' }}>+{session.exercise_options.length - 5}</span>
+            <span style={{ fontSize: '0.8125rem', color: 'var(--muted)' }}>+{session.exercise_options.length - 5}</span>
           )}
         </div>
         {session.deadline && (
-          <p style={{ color: 'var(--muted)', fontSize: '0.72rem', marginTop: '0.4rem' }}>
+          <p style={{ color: 'var(--muted)', fontSize: '0.8125rem', marginTop: '0.4rem' }}>
             {t('classes.deadline')}: {new Date(session.deadline).toLocaleDateString()}
           </p>
         )}
@@ -161,7 +161,7 @@ function VoteSessionCard({ session, exerciseMap, hasVoted, onVote }: {
       <button
         onClick={onVote}
         style={{
-          fontFamily: 'var(--font-d)', fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.1em',
+          fontFamily: 'var(--font-d)', fontSize: '0.6875rem', fontWeight: 700, letterSpacing: '0.1em',
           textTransform: 'uppercase', color: 'var(--black)',
           background: hasVoted ? 'rgba(34,197,94,0.85)' : 'var(--orange)',
           border: 'none', padding: '0.6rem 1.25rem', cursor: 'pointer', flexShrink: 0
@@ -176,14 +176,14 @@ function VoteSessionCard({ session, exerciseMap, hasVoted, onVote }: {
 function ClassCard({ cls }: { cls: Class }) {
   return (
     <div style={{ border: '1px solid var(--border)', background: 'var(--dark)', padding: '1rem 1.25rem' }}>
-      <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.88rem', fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--white)', margin: 0 }}>
+      <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.9375rem', fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--white)', margin: 0 }}>
         {cls.name}
       </p>
       {cls.schedule && (
-        <p style={{ color: 'var(--muted)', fontSize: '0.78rem', marginTop: '0.3rem' }}>{cls.schedule}</p>
+        <p style={{ color: 'var(--muted)', fontSize: '0.8125rem', marginTop: '0.3rem' }}>{cls.schedule}</p>
       )}
       {cls.description && (
-        <p style={{ color: 'var(--muted)', fontSize: '0.8rem', marginTop: '0.3rem' }}>{cls.description}</p>
+        <p style={{ color: 'var(--muted)', fontSize: '0.8125rem', marginTop: '0.3rem' }}>{cls.description}</p>
       )}
     </div>
   )

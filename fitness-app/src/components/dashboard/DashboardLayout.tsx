@@ -142,7 +142,7 @@ export default function DashboardLayout({ children }: Props) {
               style={{
                 fontFamily: 'var(--font-d)',
                 fontWeight: 900,
-                fontSize: '1.2rem',
+                fontSize: '1.25rem',
                 letterSpacing: '0.15em',
                 textTransform: 'uppercase',
                 color: 'var(--white)',
@@ -192,7 +192,7 @@ export default function DashboardLayout({ children }: Props) {
                         <span
                           style={{
                             fontFamily: 'var(--font-d)',
-                            fontSize: '0.88rem',
+                            fontSize: '0.9375rem',
                             letterSpacing: '0.06em',
                             textTransform: 'uppercase'
                           }}
@@ -204,7 +204,7 @@ export default function DashboardLayout({ children }: Props) {
                             style={{
                               marginLeft: 'auto',
                               fontFamily: 'var(--font-d)',
-                              fontSize: '0.6rem',
+                              fontSize: '0.6875rem',
                               letterSpacing: '0.15em',
                               textTransform: 'uppercase',
                               color: 'var(--orange)',
@@ -242,7 +242,7 @@ export default function DashboardLayout({ children }: Props) {
                       <span
                         style={{
                           fontFamily: 'var(--font-d)',
-                          fontSize: '0.88rem',
+                          fontSize: '0.9375rem',
                           letterSpacing: '0.06em',
                           textTransform: 'uppercase'
                         }}
@@ -278,7 +278,7 @@ export default function DashboardLayout({ children }: Props) {
               justifyContent: 'center',
               fontFamily: 'var(--font-d)',
               fontWeight: 700,
-              fontSize: '0.9rem',
+              fontSize: '0.9375rem',
               color: 'var(--black)',
               flexShrink: 0
             }}
@@ -290,7 +290,7 @@ export default function DashboardLayout({ children }: Props) {
               <div
                 style={{
                   fontFamily: 'var(--font-d)',
-                  fontSize: '0.82rem',
+                  fontSize: '0.8125rem',
                   letterSpacing: '0.06em',
                   textTransform: 'uppercase',
                   whiteSpace: 'nowrap',
@@ -307,7 +307,7 @@ export default function DashboardLayout({ children }: Props) {
                   border: 'none',
                   color: 'var(--muted)',
                   cursor: 'pointer',
-                  fontSize: '0.75rem',
+                  fontSize: '0.8125rem',
                   padding: 0,
                   fontFamily: 'var(--font-b)'
                 }}
@@ -350,10 +350,10 @@ export default function DashboardLayout({ children }: Props) {
                 border: '1px solid var(--border)',
                 color: 'var(--white)',
                 cursor: 'pointer',
-                fontSize: '1.1rem',
+                fontSize: '1rem',
                 lineHeight: 1,
                 padding: '0.5rem 0.7rem',
-                minHeight: 40
+                minHeight: 44
               }}
             >
               ☰
@@ -363,7 +363,7 @@ export default function DashboardLayout({ children }: Props) {
               style={{
                 fontFamily: 'var(--font-d)',
                 fontWeight: 900,
-                fontSize: '1.05rem',
+                fontSize: '1.25rem',
                 letterSpacing: '0.14em',
                 textTransform: 'uppercase',
                 color: 'var(--white)',
@@ -384,14 +384,14 @@ export default function DashboardLayout({ children }: Props) {
               alignItems: 'center',
               gap: '0.5rem',
               fontFamily: 'var(--font-d)',
-              fontSize: '0.78rem',
+              fontSize: '0.6875rem',
               letterSpacing: '0.1em',
               textTransform: 'uppercase',
               color: 'var(--orange)',
               flexShrink: 0
             }}
           >
-            <span style={{ fontSize: '0.9rem' }}>◌</span>
+            <span style={{ fontSize: '0.9375rem' }}>◌</span>
             Mode hors-ligne — donnees en cache
           </div>
         )}

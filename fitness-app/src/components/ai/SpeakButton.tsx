@@ -50,7 +50,7 @@ export default function SpeakButton({ text }: { text: string }) {
         color: speaking ? 'var(--orange)' : 'var(--muted)',
         cursor: 'pointer',
         fontFamily: 'var(--font-d)',
-        fontSize: '0.6rem',
+        fontSize: '0.6875rem',
         letterSpacing: '0.14em',
         textTransform: 'uppercase',
         padding: '0.18rem 0.5rem',

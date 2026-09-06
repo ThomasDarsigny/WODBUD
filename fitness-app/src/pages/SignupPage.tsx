@@ -17,9 +17,9 @@ export default function SignupPage() {
   const baseInputStyle = {
     width: '100%',
     boxSizing: 'border-box' as const,
-    border: '1px solid #2f2f2f',
-    background: '#171717',
-    color: '#f0ebe4',
+    border: '1px solid var(--line-fn)',
+    background: 'var(--black)',
+    color: 'var(--white)',
     padding: '0.75rem 0.9rem'
   }
 
@@ -73,21 +73,21 @@ export default function SignupPage() {
   }
 
   return (
-    <main style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', background: '#0a0a0a', color: '#f0ebe4', padding: 'var(--page-pad)' }}>
-      <section style={{ width: '100%', maxWidth: 560, border: '1px solid #252525', background: '#111111', padding: 'var(--page-pad)' }}>
+    <main style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', background: 'var(--black)', color: 'var(--white)', padding: 'var(--page-pad)' }}>
+      <section style={{ width: '100%', maxWidth: 560, border: '1px solid var(--border)', background: 'var(--dark)', padding: 'var(--page-pad)' }}>
         <h1 style={{ marginTop: 0, marginBottom: '0.75rem' }}>{t('auth.signup')}</h1>
-        <p style={{ marginTop: 0, color: '#9f9890' }}>
+        <p style={{ marginTop: 0, color: 'var(--muted)' }}>
           {t('auth_ui.signup_subtitle')}
         </p>
 
         {error && (
-          <p style={{ border: '1px solid #5c1f1f', background: '#2b1212', color: '#ffc2c2', padding: '0.7rem 0.85rem', margin: '1rem 0' }}>
+          <p style={{ border: '1px solid #6b2422', background: '#2a1513', color: '#ffc7bf', padding: '0.7rem 0.85rem', margin: '1rem 0' }}>
             {error}
           </p>
         )}
 
         {notice && (
-          <p style={{ border: '1px solid #1f5c2a', background: '#122b17', color: '#bff5c9', padding: '0.7rem 0.85rem', margin: '1rem 0' }}>
+          <p style={{ border: '1px solid #235c33', background: '#13291a', color: '#c3f2cd', padding: '0.7rem 0.85rem', margin: '1rem 0' }}>
             {notice}
           </p>
         )}
@@ -134,29 +134,29 @@ export default function SignupPage() {
           <button
             type="submit"
             disabled={isSubmitting || isGoogleLoading}
-            style={{ border: 'none', padding: '0.78rem 0.9rem', background: '#ff4d00', color: '#100d0b', fontWeight: 700, cursor: 'pointer' }}
+            style={{ border: 'none', padding: '0.78rem 0.9rem', background: 'var(--orange)', color: 'var(--black)', fontWeight: 700, cursor: 'pointer' }}
           >
             {isSubmitting ? t('auth_ui.signup_loading') : t('auth_ui.signup_submit')}
           </button>
         </form>
 
         <div style={{ display: 'grid', gap: '0.9rem', marginTop: '1rem' }}>
-          <div style={{ height: 1, background: '#2a2a2a' }} />
+          <div style={{ height: 1, background: 'var(--border)' }} />
           <button
             type="button"
             onClick={handleGoogleSignup}
             disabled={isSubmitting || isGoogleLoading}
-            style={{ border: '1px solid #3a3a3a', padding: '0.75rem 0.9rem', background: '#191919', color: '#f0ebe4', cursor: 'pointer' }}
+            style={{ border: '1px solid var(--line-fn)', padding: '0.75rem 0.9rem', background: 'var(--surface)', color: 'var(--white)', cursor: 'pointer' }}
           >
             {isGoogleLoading ? t('auth_ui.google_redirect') : t('auth_ui.continue_google')}
           </button>
         </div>
 
         <div style={{ marginTop: '1.25rem', display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-          <Link to="/login" style={{ color: '#ff4d00', textDecoration: 'none' }}>
+          <Link to="/login" style={{ color: 'var(--orange)', textDecoration: 'none' }}>
             {t('auth_ui.have_account_action')}
           </Link>
-          <Link to="/" style={{ color: '#ff4d00', textDecoration: 'none' }}>
+          <Link to="/" style={{ color: 'var(--orange)', textDecoration: 'none' }}>
             {t('auth_ui.back_home')}
           </Link>
         </div>

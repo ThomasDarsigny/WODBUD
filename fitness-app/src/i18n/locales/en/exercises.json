@@ -83,7 +83,9 @@
     "muscles_targeted": "Targeted muscles",
     "tech_instructions": "Technical instructions",
     "add_to_workout": "Add to workout",
-    "delete_confirm": "Delete \"{{name}}\"? This action cannot be undone."
+    "delete_confirm": "Delete \"{{name}}\"? This action cannot be undone.",
+    "delete_confirm_action": "Delete permanently",
+    "deleting": "Deleting…"
   },
   "errors": {
     "auth_session_missing_exercise": "Missing session: sign in again to create or edit an exercise.",

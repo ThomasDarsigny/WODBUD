@@ -83,7 +83,9 @@
     "muscles_targeted": "Músculos trabajados",
     "tech_instructions": "Indicaciones técnicas",
     "add_to_workout": "Agregar al entrenamiento",
-    "delete_confirm": "¿Eliminar \"{{name}}\"? Esta acción no se puede deshacer."
+    "delete_confirm": "¿Eliminar \"{{name}}\"? Esta acción no se puede deshacer.",
+    "delete_confirm_action": "Eliminar definitivamente",
+    "deleting": "Eliminando…"
   },
   "errors": {
     "auth_session_missing_exercise": "Sesión faltante: vuelve a iniciar sesión para crear o editar un ejercicio.",

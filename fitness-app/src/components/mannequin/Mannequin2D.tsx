@@ -12,7 +12,7 @@ import { BODY_SHAPES, VIEW_BOXES } from './bodyPaths'
  * « bien dosé » de « à peine effleuré ».
  */
 export const LOAD_COLORS: Record<LoadLevel, string> = {
-  unused: 'var(--mannequin-idle, #3f3f46)',
+  unused: 'var(--mannequin-idle, #423c36)',
   under: '#38bdf8',
   optimal: '#4ade80',
   high: '#facc15',
@@ -84,7 +84,7 @@ function BodySvg({
       {BODY_SHAPES[body][view].map((shape, i) => {
         // Tête, mains, genoux, adducteurs : jamais colorés, jamais cliquables.
         if (shape.muscle === null) {
-          return <path key={`n${i}`} d={shape.d} fill='var(--mannequin-body, #2a2a2e)' />
+          return <path key={`n${i}`} d={shape.d} fill='var(--mannequin-body, #2b2724)' />
         }
 
         const load = loadOf(shape.muscle, loads)
@@ -97,7 +97,7 @@ function BodySvg({
             key={`m${i}`}
             d={shape.d}
             fill={LOAD_COLORS[level]}
-            stroke={isSelected ? 'var(--white, #f0ebe4)' : 'var(--mannequin-seam, rgba(240,235,228,0.5))'}
+            stroke={isSelected ? 'var(--white, #f2ede6)' : 'var(--mannequin-seam, rgba(242,237,230,0.5))'}
             strokeWidth={isSelected ? 5 : 2.5}
             strokeLinejoin='round'
             opacity={level === 'unused' ? 0.9 : 1}
@@ -154,15 +154,15 @@ export default function Mannequin2D({ loads, height = 340, bothViews = false, on
               style={{
                 flex: 1,
                 fontFamily: 'var(--font-d)',
-                fontSize: '0.75rem',
+                fontSize: '0.6875rem',
                 fontWeight: 700,
                 letterSpacing: '0.12em',
                 textTransform: 'uppercase',
-                minHeight: 38,
+                minHeight: 44,
                 padding: '0.45rem 0.6rem',
-                border: `1px solid ${view === v ? 'var(--orange, #ff4d00)' : 'var(--border, #2a2a2a)'}`,
-                background: view === v ? 'rgba(255,77,0,0.12)' : 'transparent',
-                color: view === v ? 'var(--orange, #ff4d00)' : 'var(--muted, #8b8680)',
+                border: `1px solid ${view === v ? 'var(--orange, #ff5a1f)' : 'var(--border, #2e2a26)'}`,
+                background: view === v ? 'rgba(255,90,31,0.12)' : 'transparent',
+                color: view === v ? 'var(--orange, #ff5a1f)' : 'var(--muted, #9d958a)',
                 cursor: 'pointer'
               }}
             >
@@ -180,10 +180,10 @@ export default function Mannequin2D({ loads, height = 340, bothViews = false, on
               <span
                 style={{
                   fontFamily: 'var(--font-d)',
-                  fontSize: '0.62rem',
+                  fontSize: '0.6875rem',
                   letterSpacing: '0.14em',
                   textTransform: 'uppercase',
-                  color: 'var(--muted, #8b8680)'
+                  color: 'var(--muted, #9d958a)'
                 }}
               >
                 {t(v === 'front' ? 'mannequin.front' : 'mannequin.back')}
@@ -202,12 +202,12 @@ export default function Mannequin2D({ loads, height = 340, bothViews = false, on
           }}
         >
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: '0.5rem' }}>
-            <strong style={{ fontSize: '0.85rem' }}>{t(MUSCLE_GROUP_I18N_KEYS[selected])}</strong>
-            <span style={{ fontSize: '0.75rem', color: LOAD_COLORS[detail?.level ?? 'unused'] }}>
+            <strong style={{ fontSize: '0.8125rem' }}>{t(MUSCLE_GROUP_I18N_KEYS[selected])}</strong>
+            <span style={{ fontSize: '0.8125rem', color: LOAD_COLORS[detail?.level ?? 'unused'] }}>
               {t(LOAD_LEVEL_I18N_KEYS[detail?.level ?? 'unused'])}
             </span>
           </div>
-          <p style={{ margin: '0.3rem 0 0', fontSize: '0.72rem', color: 'var(--muted, #8b8680)' }}>
+          <p style={{ margin: '0.3rem 0 0', fontSize: '0.8125rem', color: 'var(--muted, #9d958a)' }}>
             {detail && detail.sets > 0
               ? `${detail.sets} ${t('mannequin.sets')} · ${detail.exerciseNames.join(', ')}`
               : t('mannequin.no_mapping')}
@@ -219,7 +219,7 @@ export default function Mannequin2D({ loads, height = 340, bothViews = false, on
         {LOAD_LEVELS.map((lvl) => (
           <span
             key={lvl}
-            style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.7rem', color: 'var(--muted, #8b8680)' }}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8125rem', color: 'var(--muted, #9d958a)' }}
           >
             <span style={{ width: 11, height: 11, background: LOAD_COLORS[lvl], display: 'inline-block' }} />
             {t(LOAD_LEVEL_I18N_KEYS[lvl])}

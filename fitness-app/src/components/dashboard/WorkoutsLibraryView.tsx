@@ -40,10 +40,10 @@ export default function WorkoutsLibraryView() {
   return (
     <div style={{ padding: 'var(--page-pad)', minHeight: '100%' }}>
       <div style={{ marginBottom: '1.5rem' }}>
-        <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.72rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'var(--orange)', marginBottom: '0.35rem' }}>
+        <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'var(--orange)', marginBottom: '0.35rem' }}>
           {t('nav.library')}
         </p>
-        <h1 style={{ fontFamily: 'var(--font-d)', fontSize: '2.05rem', fontWeight: 900, textTransform: 'uppercase', lineHeight: 1.05, letterSpacing: '0.03em', margin: 0 }}>
+        <h1 style={{ fontFamily: 'var(--font-d)', fontSize: '1.75rem', fontWeight: 900, textTransform: 'uppercase', lineHeight: 1.05, letterSpacing: '0.03em', margin: 0 }}>
           {t('library.title')}
         </h1>
         <p style={{ color: 'var(--muted)', marginTop: '0.45rem' }}>
@@ -64,7 +64,7 @@ export default function WorkoutsLibraryView() {
             color: 'var(--white)',
             padding: '0.65rem 0.9rem',
             fontFamily: 'var(--font-b)',
-            fontSize: '0.9rem',
+            fontSize: '0.9375rem',
             outline: 'none',
             boxSizing: 'border-box'
           }}
@@ -83,7 +83,7 @@ export default function WorkoutsLibraryView() {
       </div>
 
       {workoutsFromCache && (
-        <p style={{ color: 'var(--muted)', fontSize: '0.78rem', marginBottom: '0.75rem', fontFamily: 'var(--font-d)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+        <p style={{ color: 'var(--muted)', fontSize: '0.6875rem', marginBottom: '0.75rem', fontFamily: 'var(--font-d)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
           ◌ {t('library.from_cache')}
         </p>
       )}
@@ -101,11 +101,11 @@ export default function WorkoutsLibraryView() {
             return (
               <div key={w.id} style={{ border: '1px solid var(--border)', background: 'var(--dark)', padding: '1rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '0.5rem' }}>
-                  <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.95rem', fontWeight: 800, letterSpacing: '0.04em', textTransform: 'uppercase', color: 'var(--white)', margin: 0 }}>
+                  <p style={{ fontFamily: 'var(--font-d)', fontSize: '1.25rem', fontWeight: 800, letterSpacing: '0.04em', textTransform: 'uppercase', color: 'var(--white)', margin: 0 }}>
                     {w.name}
                   </p>
                   <span style={{
-                    fontFamily: 'var(--font-d)', fontSize: '0.58rem', letterSpacing: '0.12em', textTransform: 'uppercase',
+                    fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase',
                     color: isTemplate ? 'var(--orange)' : 'var(--muted)',
                     border: `1px solid ${isTemplate ? 'rgba(255,77,0,0.35)' : 'var(--border)'}`,
                     background: isTemplate ? 'rgba(255,77,0,0.08)' : 'transparent',
@@ -116,21 +116,21 @@ export default function WorkoutsLibraryView() {
                 </div>
 
                 <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
-                  <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.62rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--orange)', border: '1px solid var(--border)', padding: '0.16rem 0.43rem' }}>
+                  <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--orange)', border: '1px solid var(--border)', padding: '0.16rem 0.43rem' }}>
                     {t(METHOD_I18N_KEYS[w.method], { ns: 'common' })}
                   </span>
                   {w.duration_minutes ? (
-                    <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.62rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--muted)', border: '1px solid var(--border)', padding: '0.16rem 0.43rem' }}>
+                    <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--muted)', border: '1px solid var(--border)', padding: '0.16rem 0.43rem' }}>
                       {w.duration_minutes} {t('fields.duration_unit_min', { ns: 'workouts' })}
                     </span>
                   ) : null}
                 </div>
 
                 {w.notes ? (
-                  <p style={{ color: 'var(--muted)', fontSize: '0.82rem', margin: 0, lineHeight: 1.4 }}>{w.notes}</p>
+                  <p style={{ color: 'var(--muted)', fontSize: '0.8125rem', margin: 0, lineHeight: 1.4 }}>{w.notes}</p>
                 ) : null}
 
-                <p style={{ color: 'var(--muted)', fontSize: '0.68rem', margin: 0, opacity: 0.7 }}>
+                <p style={{ color: 'var(--muted)', fontSize: '0.8125rem', margin: 0, opacity: 0.7 }}>
                   {new Date(w.created_at).toLocaleDateString()}
                 </p>
 
@@ -140,7 +140,7 @@ export default function WorkoutsLibraryView() {
                     navigate('/dashboard/session')
                   }}
                   style={{
-                    marginTop: 'auto', fontFamily: 'var(--font-d)', fontSize: '0.72rem', fontWeight: 700,
+                    marginTop: 'auto', fontFamily: 'var(--font-d)', fontSize: '0.6875rem', fontWeight: 700,
                     letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--black)',
                     background: 'var(--orange)', border: 'none', padding: '0.5rem 0.9rem', cursor: 'pointer'
                   }}
@@ -154,7 +154,7 @@ export default function WorkoutsLibraryView() {
       )}
 
       {error && !workoutsFromCache && (
-        <div style={{ marginTop: '0.9rem', padding: '0.65rem 0.9rem', background: 'rgba(255,77,0,0.1)', border: '1px solid rgba(255,77,0,0.3)', color: 'var(--orange)', fontSize: '0.85rem' }}>
+        <div style={{ marginTop: '0.9rem', padding: '0.65rem 0.9rem', background: 'rgba(255,77,0,0.1)', border: '1px solid rgba(255,77,0,0.3)', color: 'var(--orange)', fontSize: '0.8125rem' }}>
           {error}
         </div>
       )}
@@ -168,7 +168,7 @@ function FilterChip({ label, active, onClick }: { label: string; active: boolean
       onClick={onClick}
       style={{
         fontFamily: 'var(--font-d)',
-        fontSize: '0.66rem',
+        fontSize: '0.6875rem',
         fontWeight: 700,
         letterSpacing: '0.1em',
         textTransform: 'uppercase',

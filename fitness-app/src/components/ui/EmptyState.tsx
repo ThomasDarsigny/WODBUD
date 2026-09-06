@@ -72,7 +72,7 @@ export default function EmptyState({ icon, title, hint, action, compact = false 
           style={{
             margin: 0,
             color: 'var(--muted)',
-            fontSize: '0.85rem',
+            fontSize: '0.8125rem',
             lineHeight: 1.6,
             maxWidth: '40ch'
           }}

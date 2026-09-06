@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
-import type { CSSProperties, FormEvent, ReactNode } from 'react'
+import type { FormEvent, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import NavIcon from '../navigation/NavIcon'
 import type {
@@ -27,6 +27,7 @@ import {
   UPPER_MUSCLES
 } from '../../types'
 import { useExerciseStore } from '../../stores/exerciseStore'
+import { field as inputStyle, btnBase as btnStyle, textarea as textareaStyle } from '../../styles/ui'
 
 interface Props {
   exercise?: Exercise
@@ -222,7 +223,7 @@ export default function ExerciseFormModal({ exercise, onClose }: Props) {
           <h2
             style={{
               fontFamily: 'var(--font-d)',
-              fontSize: '1.4rem',
+              fontSize: '1.75rem',
               fontWeight: 900,
               textTransform: 'uppercase',
               letterSpacing: '0.08em'
@@ -270,7 +271,7 @@ export default function ExerciseFormModal({ exercise, onClose }: Props) {
               onChange={(e) => setDescription(e.target.value)}
               placeholder={t('form.description_placeholder', { ns: 'exercises' })}
               rows={3}
-              style={{ ...inputStyle, resize: 'vertical', fontFamily: 'var(--font-b)' }}
+              style={textareaStyle}
             />
           </Field>
 
@@ -303,7 +304,7 @@ export default function ExerciseFormModal({ exercise, onClose }: Props) {
                     }}
                     style={{
                       fontFamily: 'var(--font-d)',
-                      fontSize: '0.72rem',
+                      fontSize: '0.6875rem',
                       letterSpacing: '0.1em',
                       textTransform: 'uppercase',
                       padding: '0.35rem 0.8rem',
@@ -321,7 +322,7 @@ export default function ExerciseFormModal({ exercise, onClose }: Props) {
             </div>
             {movementType && (
               <div style={{ marginTop: '0.6rem' }}>
-                <p style={{ fontSize: '0.7rem', color: 'var(--muted)', margin: '0 0 0.35rem' }}>
+                <p style={{ fontSize: '0.8125rem', color: 'var(--muted)', margin: '0 0 0.35rem' }}>
                   {t(MOVEMENT_TYPE_DESC_I18N_KEYS[movementType], { ns: 'common' })}
                 </p>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem' }}>
@@ -334,7 +335,7 @@ export default function ExerciseFormModal({ exercise, onClose }: Props) {
                         onClick={() => toggleSecondaryMovement(mv)}
                         style={{
                           fontFamily: 'var(--font-d)',
-                          fontSize: '0.62rem',
+                          fontSize: '0.6875rem',
                           letterSpacing: '0.08em',
                           textTransform: 'uppercase',
                           padding: '0.2rem 0.55rem',
@@ -365,7 +366,7 @@ export default function ExerciseFormModal({ exercise, onClose }: Props) {
                     onClick={() => toggleMethod(mk)}
                     style={{
                       fontFamily: 'var(--font-d)',
-                      fontSize: '0.7rem',
+                      fontSize: '0.8125rem',
                       letterSpacing: '0.08em',
                       padding: '0.3rem 0.7rem',
                       border: `1px solid ${selected ? 'var(--orange)' : 'var(--border)'}`,
@@ -430,7 +431,7 @@ export default function ExerciseFormModal({ exercise, onClose }: Props) {
                     onClick={() => toggleSecondary(val)}
                     style={{
                       fontFamily: 'var(--font-d)',
-                      fontSize: '0.72rem',
+                      fontSize: '0.6875rem',
                       letterSpacing: '0.1em',
                       textTransform: 'uppercase',
                       padding: '0.3rem 0.7rem',
@@ -461,7 +462,7 @@ export default function ExerciseFormModal({ exercise, onClose }: Props) {
                     onClick={() => toggleTertiary(val)}
                     style={{
                       fontFamily: 'var(--font-d)',
-                      fontSize: '0.68rem',
+                      fontSize: '0.6875rem',
                       letterSpacing: '0.1em',
                       textTransform: 'uppercase',
                       padding: '0.25rem 0.6rem',
@@ -515,7 +516,7 @@ export default function ExerciseFormModal({ exercise, onClose }: Props) {
                     controls
                     style={{ maxWidth: '100%', maxHeight: 200, marginBottom: '0.75rem' }}
                   />
-                  <p style={{ color: 'var(--muted)', fontSize: '0.8rem' }}>
+                  <p style={{ color: 'var(--muted)', fontSize: '0.8125rem' }}>
                     {t('form.video_replace', { ns: 'exercises' })}
                   </p>
                 </div>
@@ -527,7 +528,7 @@ export default function ExerciseFormModal({ exercise, onClose }: Props) {
                   <p
                     style={{
                       fontFamily: 'var(--font-d)',
-                      fontSize: '0.85rem',
+                      fontSize: '0.8125rem',
                       letterSpacing: '0.1em',
                       textTransform: 'uppercase',
                       color: 'var(--muted)'
@@ -535,7 +536,7 @@ export default function ExerciseFormModal({ exercise, onClose }: Props) {
                   >
                     {t('form.video_dropzone', { ns: 'exercises' })}
                   </p>
-                  <p style={{ fontSize: '0.75rem', color: 'var(--muted)', marginTop: '0.4rem' }}>
+                  <p style={{ fontSize: '0.8125rem', color: 'var(--muted)', marginTop: '0.4rem' }}>
                     {t('form.video_requirements', { ns: 'exercises' })}
                   </p>
                 </div>
@@ -560,7 +561,7 @@ export default function ExerciseFormModal({ exercise, onClose }: Props) {
                 border: '1px solid rgba(255,77,0,0.3)',
                 padding: '0.75rem 1rem',
                 color: 'var(--orange)',
-                fontSize: '0.85rem'
+                fontSize: '0.8125rem'
               }}
             >
               {error}
@@ -616,7 +617,7 @@ function Field({ label, children }: { label: string; children: ReactNode }) {
       <label
         style={{
           fontFamily: 'var(--font-d)',
-          fontSize: '0.75rem',
+          fontSize: '0.6875rem',
           letterSpacing: '0.2em',
           textTransform: 'uppercase',
           color: 'var(--muted)'
@@ -629,25 +630,3 @@ function Field({ label, children }: { label: string; children: ReactNode }) {
   )
 }
 
-const inputStyle: CSSProperties = {
-  background: 'var(--black)',
-  border: '1px solid var(--border)',
-  color: 'var(--white)',
-  padding: '0.6rem 0.9rem',
-  fontFamily: 'var(--font-b)',
-  fontSize: '0.9rem',
-  width: '100%',
-  outline: 'none'
-}
-
-const btnStyle: CSSProperties = {
-  fontFamily: 'var(--font-d)',
-  fontWeight: 700,
-  fontSize: '0.88rem',
-  letterSpacing: '0.12em',
-  textTransform: 'uppercase',
-  padding: '0.65rem 1.5rem',
-  border: 'none',
-  cursor: 'pointer',
-  transition: 'opacity 0.15s'
-}

@@ -162,7 +162,7 @@ function renderChunk(chunk: string | string[], i: number) {
     return (
       <ul key={i} style={{ margin: '0 0 0.9rem', paddingLeft: '1.1rem', display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
         {chunk.map((li, j) => (
-          <li key={j} style={{ fontSize: '0.92rem', lineHeight: 1.65 }}>
+          <li key={j} style={{ fontSize: '0.9375rem', lineHeight: 1.65 }}>
             {highlight(li)}
           </li>
         ))}
@@ -170,7 +170,7 @@ function renderChunk(chunk: string | string[], i: number) {
     )
   }
   return (
-    <p key={i} style={{ margin: '0 0 0.9rem', fontSize: '0.95rem', lineHeight: 1.7 }}>
+    <p key={i} style={{ margin: '0 0 0.9rem', fontSize: '0.9375rem', lineHeight: 1.7 }}>
       {highlight(chunk)}
     </p>
   )
@@ -201,7 +201,7 @@ export default function PrivacyPolicyPage() {
           to='/'
           style={{
             fontFamily: 'var(--font-d)',
-            fontSize: '0.7rem',
+            fontSize: '0.6875rem',
             letterSpacing: '0.14em',
             textTransform: 'uppercase',
             color: 'var(--muted)',
@@ -214,7 +214,7 @@ export default function PrivacyPolicyPage() {
         <h1
           style={{
             fontFamily: 'var(--font-d)',
-            fontSize: '2.1rem',
+            fontSize: '1.75rem',
             letterSpacing: '0.04em',
             textTransform: 'uppercase',
             margin: '1.25rem 0 0.4rem'
@@ -222,7 +222,7 @@ export default function PrivacyPolicyPage() {
         >
           Politique de confidentialité
         </h1>
-        <p style={{ color: 'var(--muted)', fontSize: '0.82rem', margin: '0 0 2rem' }}>
+        <p style={{ color: 'var(--muted)', fontSize: '0.8125rem', margin: '0 0 2rem' }}>
           Dernière mise à jour : {DERNIERE_MAJ} · Loi 25 (Québec) et LPRPDE (Canada)
         </p>
 
@@ -231,7 +231,7 @@ export default function PrivacyPolicyPage() {
             <h2
               style={{
                 fontFamily: 'var(--font-d)',
-                fontSize: '1.05rem',
+                fontSize: '1rem',
                 letterSpacing: '0.06em',
                 textTransform: 'uppercase',
                 margin: '0 0 0.7rem',
@@ -245,7 +245,7 @@ export default function PrivacyPolicyPage() {
           </section>
         ))}
 
-        <p style={{ color: 'var(--muted)', fontSize: '0.78rem', lineHeight: 1.6, borderTop: '1px solid var(--border)', paddingTop: '1rem' }}>
+        <p style={{ color: 'var(--muted)', fontSize: '0.8125rem', lineHeight: 1.6, borderTop: '1px solid var(--border)', paddingTop: '1rem' }}>
           Ce document a été rédigé à partir des obligations de la Loi 25 et de la LPRPDE et des données
           réellement collectées par WODBUD. Il ne constitue pas un avis juridique. Faites-le relire par un
           conseiller juridique avant la mise en ligne, et remplissez les blocs surlignés.

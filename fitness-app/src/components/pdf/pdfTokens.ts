@@ -3,29 +3,29 @@ import { METHOD_LABELS as WORKOUT_METHOD_LABELS, MUSCLE_GROUP_LABELS } from '../
 export type PdfTheme = 'dark' | 'light'
 
 export const DARK = {
-	bg: '#0a0a0a',
-	surface: '#1a1a1a',
-	border: '#2a2a2a',
-	orange: '#FF4D00',
-	white: '#F0EBE4',
-	muted: '#7a7570',
-	text: '#F0EBE4',
-	textMuted: '#7a7570',
-	headerBg: '#111111',
-	rowAlt: '#141414',
+	bg: '#0d0c0b',
+	surface: '#201d1a',
+	border: '#2e2a26',
+	orange: '#FF5A1F',
+	white: '#F2EDE6',
+	muted: '#9d958a',
+	text: '#F2EDE6',
+	textMuted: '#9d958a',
+	headerBg: '#161412',
+	rowAlt: '#1a1715',
 }
 
 export const LIGHT = {
 	bg: '#FFFFFF',
-	surface: '#F7F6F4',
-	border: '#E0DDD9',
-	orange: '#FF4D00',
+	surface: '#EFECE6',
+	border: '#DDD8D0',
+	orange: '#FF5A1F',
 	white: '#FFFFFF',
-	muted: '#888880',
-	text: '#111111',
-	textMuted: '#666660',
-	headerBg: '#111111',
-	rowAlt: '#F7F6F4',
+	muted: '#5f5a53',
+	text: '#17150f',
+	textMuted: '#5f5a53',
+	headerBg: '#161412',
+	rowAlt: '#EFECE6',
 }
 
 export function tokens(theme: PdfTheme) {

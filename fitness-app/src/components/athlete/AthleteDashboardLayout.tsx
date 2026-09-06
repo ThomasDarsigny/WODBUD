@@ -57,7 +57,7 @@ export default function AthleteDashboardLayout({ children }: Props) {
       }}>
         <div style={{ padding: rail ? '1.25rem 0' : '1.25rem 1.5rem', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: rail ? 'center' : 'space-between', gap: '0.5rem' }}>
           {!rail && (
-            <Link to="/" style={{ fontFamily: 'var(--font-d)', fontWeight: 900, fontSize: '1.2rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--white)', textDecoration: 'none' }}>
+            <Link to="/" style={{ fontFamily: 'var(--font-d)', fontWeight: 900, fontSize: '1.25rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--white)', textDecoration: 'none' }}>
               WOD<span style={{ color: 'var(--orange)' }}>BUD</span>
             </Link>
           )}
@@ -72,7 +72,7 @@ export default function AthleteDashboardLayout({ children }: Props) {
 
         {!rail && (
           <div style={{ padding: '0.6rem 1.5rem 0.4rem', borderBottom: '1px solid var(--border)' }}>
-            <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--orange)', border: '1px solid rgba(255,77,0,0.3)', padding: '0.1rem 0.4rem' }}>
+            <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--orange)', border: '1px solid rgba(255,77,0,0.3)', padding: '0.1rem 0.4rem' }}>
               {t('athlete.role_label')}
             </span>
           </div>
@@ -90,7 +90,7 @@ export default function AthleteDashboardLayout({ children }: Props) {
               >
                 <NavIcon name={item.icon} />
                 {!rail && (
-                  <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.88rem', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+                  <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.9375rem', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
                     {t(item.labelKey)}
                   </span>
                 )}
@@ -100,15 +100,15 @@ export default function AthleteDashboardLayout({ children }: Props) {
         </nav>
 
         <div style={{ borderTop: '1px solid var(--border)', padding: rail ? '1rem 0' : '1rem 1.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem', justifyContent: rail ? 'center' : 'flex-start' }}>
-          <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-d)', fontWeight: 700, fontSize: '0.9rem', color: 'var(--white)', flexShrink: 0 }}>
+          <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-d)', fontWeight: 700, fontSize: '0.9375rem', color: 'var(--white)', flexShrink: 0 }}>
             A
           </div>
           {!rail && (
             <div style={{ overflow: 'hidden' }}>
-              <div style={{ fontFamily: 'var(--font-d)', fontSize: '0.82rem', letterSpacing: '0.06em', textTransform: 'uppercase', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              <div style={{ fontFamily: 'var(--font-d)', fontSize: '0.8125rem', letterSpacing: '0.06em', textTransform: 'uppercase', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                 {t('athlete.role_label')}
               </div>
-              <button onClick={handleLogout} style={{ background: 'none', border: 'none', color: 'var(--muted)', cursor: 'pointer', fontSize: '0.75rem', padding: 0, fontFamily: 'var(--font-b)' }}>
+              <button onClick={handleLogout} style={{ background: 'none', border: 'none', color: 'var(--muted)', cursor: 'pointer', fontSize: '0.8125rem', padding: 0, fontFamily: 'var(--font-b)' }}>
                 {t('actions.logout')}
               </button>
             </div>
@@ -126,18 +126,18 @@ export default function AthleteDashboardLayout({ children }: Props) {
             <button
               onClick={() => setDrawerOpen(true)}
               aria-label={t('nav.open_menu')}
-              style={{ background: 'none', border: '1px solid var(--border)', color: 'var(--white)', cursor: 'pointer', fontSize: '1.1rem', lineHeight: 1, padding: '0.5rem 0.7rem', minHeight: 40 }}
+              style={{ background: 'none', border: '1px solid var(--border)', color: 'var(--white)', cursor: 'pointer', fontSize: '1rem', lineHeight: 1, padding: '0.5rem 0.7rem', minHeight: 44 }}
             >
               ☰
             </button>
-            <Link to="/" style={{ fontFamily: 'var(--font-d)', fontWeight: 900, fontSize: '1.05rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--white)', textDecoration: 'none' }}>
+            <Link to="/" style={{ fontFamily: 'var(--font-d)', fontWeight: 900, fontSize: '1.25rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--white)', textDecoration: 'none' }}>
               WOD<span style={{ color: 'var(--orange)' }}>BUD</span>
             </Link>
           </div>
         )}
         {!online && (
-          <div style={{ background: 'rgba(255,77,0,0.12)', borderBottom: '1px solid rgba(255,77,0,0.3)', padding: '0.5rem 1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem', fontFamily: 'var(--font-d)', fontSize: '0.78rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--orange)', flexShrink: 0 }}>
-            <span style={{ fontSize: '0.9rem' }}>◌</span>
+          <div style={{ background: 'rgba(255,77,0,0.12)', borderBottom: '1px solid rgba(255,77,0,0.3)', padding: '0.5rem 1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem', fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--orange)', flexShrink: 0 }}>
+            <span style={{ fontSize: '0.9375rem' }}>◌</span>
             Mode hors-ligne — données en cache
           </div>
         )}

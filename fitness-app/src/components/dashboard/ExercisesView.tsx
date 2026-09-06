@@ -20,6 +20,8 @@ import type { BodyRegion, MovementType, TrainingMethod } from '../../types'
 import ExerciseFormModal from '../exercises/ExerciseFormModal'
 import ExerciseDetailModal from '../exercises/ExerciseDetailModal'
 import { useIsMobile } from '../../hooks/useMediaQuery'
+import { btnPrimary as emptyActionStyle } from '../../styles/ui'
+import { SkeletonCards } from '../ui/Skeleton'
 
 type FilterCategory = ExerciseCategory | 'all'
 
@@ -111,14 +113,14 @@ export default function ExercisesView() {
           <span style={{ color: 'var(--orange)', flexShrink: 0, display: 'flex', marginTop: 2 }}>
             <NavIcon name="video" size={18} />
           </span>
-          <p style={{ margin: 0, flex: 1, fontSize: '0.86rem', lineHeight: 1.55 }}>
+          <p style={{ margin: 0, flex: 1, fontSize: '0.8125rem', lineHeight: 1.55 }}>
             {videoWarning}
           </p>
           <button
             onClick={dismissVideoWarning}
             style={{
               fontFamily: 'var(--font-d)',
-              fontSize: '0.7rem',
+              fontSize: '0.6875rem',
               fontWeight: 700,
               letterSpacing: '0.12em',
               textTransform: 'uppercase',
@@ -126,7 +128,7 @@ export default function ExercisesView() {
               border: '1px solid var(--border)',
               color: 'var(--muted)',
               padding: '0.35rem 0.7rem',
-              minHeight: 32,
+              minHeight: 44,
               cursor: 'pointer',
               flexShrink: 0
             }}
@@ -150,7 +152,7 @@ export default function ExercisesView() {
           <p
             style={{
               fontFamily: 'var(--font-d)',
-              fontSize: '0.72rem',
+              fontSize: '0.6875rem',
               letterSpacing: '0.28em',
               textTransform: 'uppercase',
               color: 'var(--orange)',
@@ -162,7 +164,7 @@ export default function ExercisesView() {
           <h1
             style={{
               fontFamily: 'var(--font-d)',
-              fontSize: '2.2rem',
+              fontSize: '1.75rem',
               fontWeight: 900,
               textTransform: 'uppercase',
               lineHeight: 1,
@@ -191,7 +193,7 @@ export default function ExercisesView() {
           style={{
             fontFamily: 'var(--font-d)',
             fontWeight: 700,
-            fontSize: '0.88rem',
+            fontSize: '0.9375rem',
             letterSpacing: '0.12em',
             textTransform: 'uppercase',
             color: 'var(--black)',
@@ -275,20 +277,7 @@ export default function ExercisesView() {
       </FilterPanel>
 
       {loading ? (
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: 200,
-            color: 'var(--muted)',
-            fontFamily: 'var(--font-d)',
-            letterSpacing: '0.15em',
-            textTransform: 'uppercase'
-          }}
-        >
-          {t('loading', { ns: 'exercises' })}
-        </div>
+        <SkeletonCards count={8} />
       ) : filtered.length === 0 ? (
         <EmptyState
           icon={hasFilters ? 'search' : 'exercises'}
@@ -416,7 +405,7 @@ function ExerciseCard({ exercise, onClick }: { exercise: Exercise; onClick: () =
       <span
         style={{
           fontFamily: 'var(--font-d)',
-          fontSize: '0.65rem',
+          fontSize: '0.6875rem',
           letterSpacing: '0.2em',
           textTransform: 'uppercase',
           color: 'var(--orange)'
@@ -428,7 +417,7 @@ function ExerciseCard({ exercise, onClick }: { exercise: Exercise; onClick: () =
       <h3
         style={{
           fontFamily: 'var(--font-d)',
-          fontSize: '1.05rem',
+          fontSize: '1rem',
           fontWeight: 700,
           textTransform: 'uppercase',
           letterSpacing: '0.04em',
@@ -443,7 +432,7 @@ function ExerciseCard({ exercise, onClick }: { exercise: Exercise; onClick: () =
         <span
           style={{
             fontFamily: 'var(--font-d)',
-            fontSize: '0.68rem',
+            fontSize: '0.6875rem',
             letterSpacing: '0.1em',
             textTransform: 'uppercase',
             color: 'var(--orange)',
@@ -459,7 +448,7 @@ function ExerciseCard({ exercise, onClick }: { exercise: Exercise; onClick: () =
             key={m}
             style={{
               fontFamily: 'var(--font-d)',
-              fontSize: '0.65rem',
+              fontSize: '0.6875rem',
               letterSpacing: '0.08em',
               textTransform: 'uppercase',
               color: 'var(--muted)',
@@ -471,7 +460,7 @@ function ExerciseCard({ exercise, onClick }: { exercise: Exercise; onClick: () =
           </span>
         ))}
         {exercise.secondary_muscles.length > 2 && (
-          <span style={{ fontSize: '0.7rem', color: 'var(--muted)' }}>
+          <span style={{ fontSize: '0.8125rem', color: 'var(--muted)' }}>
             +{exercise.secondary_muscles.length - 2}
           </span>
         )}
@@ -541,7 +530,7 @@ function FilterPanel({
             justifyContent: 'space-between',
             gap: '0.6rem',
             fontFamily: 'var(--font-d)',
-            fontSize: '0.82rem',
+            fontSize: '0.8125rem',
             fontWeight: 700,
             letterSpacing: '0.1em',
             textTransform: 'uppercase',
@@ -556,7 +545,7 @@ function FilterPanel({
             {t('fields.filters', { ns: 'exercises' })}
             {activeCount > 0 ? ` (${activeCount})` : ''}
           </span>
-          <span style={{ fontSize: '0.7rem' }}>{open ? '▲' : '▼'}</span>
+          <span style={{ fontSize: '0.8125rem' }}>{open ? '▲' : '▼'}</span>
         </button>
 
         {activeCount > 0 && (
@@ -566,7 +555,7 @@ function FilterPanel({
             style={{
               minHeight: 44,
               fontFamily: 'var(--font-d)',
-              fontSize: '0.75rem',
+              fontSize: '0.6875rem',
               fontWeight: 700,
               letterSpacing: '0.1em',
               textTransform: 'uppercase',
@@ -602,7 +591,7 @@ function FilterPanel({
         style={{
           margin: 0,
           fontFamily: 'var(--font-d)',
-          fontSize: '0.7rem',
+          fontSize: '0.6875rem',
           letterSpacing: '0.1em',
           textTransform: 'uppercase',
           color: 'var(--muted)'
@@ -625,7 +614,7 @@ function FilterGroup({ label, children }: { label: string; children: ReactNode }
       <span
         style={{
           fontFamily: 'var(--font-d)',
-          fontSize: '0.68rem',
+          fontSize: '0.6875rem',
           fontWeight: 700,
           letterSpacing: '0.18em',
           textTransform: 'uppercase',
@@ -657,12 +646,12 @@ function FilterChip({
       onClick={onClick}
       style={{
         fontFamily: 'var(--font-d)',
-        fontSize: '0.8rem',
+        fontSize: '0.8125rem',
         fontWeight: 700,
         letterSpacing: '0.06em',
         textTransform: 'uppercase',
         // 38 px de haut : sous ~36 px une pastille devient difficile à viser au pouce.
-        minHeight: 38,
+        minHeight: 44,
         padding: '0.5rem 0.85rem',
         border: `1px solid ${active ? color : 'var(--border)'}`,
         background: active ? `${accent ? accent + '22' : 'rgba(255,77,0,0.1)'}` : 'transparent',
@@ -676,17 +665,3 @@ function FilterChip({
   )
 }
 
-const emptyActionStyle = {
-  fontFamily: 'var(--font-d)',
-  fontSize: '0.75rem',
-  fontWeight: 700,
-  letterSpacing: '0.1em',
-  textTransform: 'uppercase',
-  color: 'var(--black)',
-  background: 'var(--orange)',
-  border: 'none',
-  padding: '0.6rem 1.1rem',
-  minHeight: 40,
-  cursor: 'pointer',
-  whiteSpace: 'nowrap'
-} as const

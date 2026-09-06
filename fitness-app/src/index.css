@@ -1,16 +1,50 @@
 @import "tailwindcss";
 
 :root {
-  --black: #0a0a0a;
-  --dark: #111111;
-  --surface: #1a1a1a;
-  --border: #252525;
-  --orange: #ff4d00;
-  --orange-dim: #cc3d00;
-  --white: #f0ebe4;
-  --muted: #7a7570;
+  /* Neutres CHAUDS. Les anciens étaient neutres (#111, #1a1a1a) alors que le
+     texte est chaud (#f0ebe4) : ce décalage donnait une impression de sale.
+     Les noms ne changent pas — ils sont câblés dans 742 styles en ligne. */
+  --black: #0d0c0b;
+  --dark: #161412;
+  --surface: #201d1a;
+  --border: #2e2a26;
+  --orange: #ff5a1f;
+  --orange-dim: #c43f10;
+  --white: #f2ede6;
+  /* 4,14:1 avant, 6,21:1 maintenant sur une carte. Le minimum AA est 4,5. */
+  --muted: #9d958a;
+
+  /* Bordure qui PORTE DU SENS : champs, boutons secondaires, cases à cocher.
+     3,26:1 — au-dessus du seuil de 3:1 pour un composant d'interface.
+     --border reste pour les séparateurs décoratifs, non soumis à ce seuil. */
+  --line-fn: #6f6659;
+
   --font-d: 'Barlow Condensed', sans-serif;
   --font-b: 'Barlow', sans-serif;
+
+  /* ── Échelle typographique : 7 crans au lieu de 40 tailles ──────────
+     Règle : les capitales espacées appartiennent à --t-label et au display.
+     Au-delà de trois mots, casse normale. */
+  --t-display: clamp(2.5rem, 6vw, 3.5rem);
+  --t-h1: 1.75rem;
+  --t-h2: 1.25rem;
+  --t-lg: 1rem;
+  --t-body: 0.9375rem;
+  --t-sm: 0.8125rem;
+  --t-label: 0.6875rem;
+
+  /* ── Espacement : base 4 px, 7 pas au lieu de 102 valeurs ──────────── */
+  --s1: 0.25rem;
+  --s2: 0.5rem;
+  --s3: 0.75rem;
+  --s4: 1rem;
+  --s5: 1.5rem;
+  --s6: 2rem;
+  --s7: 3rem;
+
+  /* ── Mouvement : une durée, une courbe, pour toute l'app ───────────── */
+  --t-fast: 120ms;
+  --ease: cubic-bezier(0.2, 0, 0.2, 1);
 
   /* Marge intérieure des écrans. Les styles de l'app sont en ligne, donc
      inatteignables par une media query : passer par une variable est le seul
@@ -38,6 +72,9 @@ body {
   background: var(--black);
   color: var(--white);
   font-family: var(--font-b);
+  /* 12,8 px avant. L'app se consulte au téléphone, en salle, en mouvement :
+     c'est le changement le plus rentable du système. */
+  font-size: var(--t-body);
   overflow-x: hidden;
   line-height: 1.6;
   scrollbar-width: thin;
@@ -70,8 +107,8 @@ option {
 }
 
 *:focus-visible {
-  outline: 1px solid var(--orange);
-  outline-offset: 1px;
+  outline: 2px solid var(--orange);
+  outline-offset: 2px;
 }
 
 /* ─── Thème clair ────────────────────────────────────────────────
@@ -80,35 +117,96 @@ option {
    seulement leurs valeurs : --black = fond, --white = texte.
    Renommer coûterait une passe sur ~7000 lignes pour zéro gain. */
 :root[data-theme='clair'] {
-  --black: #f6f4f1;
+  --black: #faf8f5;
   --dark: #ffffff;
-  --surface: #eceae5;
-  --border: #d9d5ce;
-  --orange: #d94400;
-  --orange-dim: #a83400;
-  --white: #16140f;
-  --muted: #6c665f;
+  --surface: #efece6;
+  --border: #ddd8d0;
+  /* #d94400 tombait à 4,00:1 — sous le seuil AA. 5,03:1 maintenant. */
+  --orange: #c23c00;
+  --orange-dim: #8f2c00;
+  --white: #17150f;
+  --muted: #5f5a53;
+  --line-fn: #9a9287;
 }
 
 /* Zones neutres du mannequin : un gris foncé sur fond noir, un gris
    moyen sur fond clair — sinon les muscles au repos ressortent comme
    des taches. */
 :root {
-  --mannequin-body: #2a2a2e;
-  --mannequin-idle: #3f3f46;
-  --mannequin-line: #0a0a0a;
-  --surf: rgba(255, 255, 255, 0.02);
-  --ink: #f0ebe4;
+  --mannequin-body: #2b2724;
+  --mannequin-idle: #423c36;
+  --mannequin-line: #0d0c0b;
+  --surf: rgba(255, 255, 255, 0.025);
+  --ink: #f2ede6;
 }
 
 :root[data-theme='clair'] {
-  --mannequin-body: #d6d2ca;
-  --mannequin-idle: #c3beb5;
-  --mannequin-line: #f6f4f1;
-  --surf: rgba(0, 0, 0, 0.03);
-  --ink: #16140f;
+  --mannequin-body: #dcd7ce;
+  --mannequin-idle: #c7c1b7;
+  --mannequin-line: #faf8f5;
+  --surf: rgba(0, 0, 0, 0.035);
+  --ink: #17150f;
 }
 
 :root[data-theme='clair'] body {
   color-scheme: light;
+}
+
+/* ─── Cibles tactiles ────────────────────────────────────────────
+   Plancher pour tout ce qui se touche. Les styles en ligne l'emportent
+   sur cette règle, donc elle ne rattrape que les éléments sans hauteur
+   explicite — les autres sont corrigés à la source.
+   Cases à cocher et boutons radio exclus : 44 px les rendrait énormes. */
+button,
+[role='button'],
+select,
+textarea,
+input:not([type='checkbox']):not([type='radio']) {
+  min-height: 44px;
+}
+
+/* ─── Libellé ────────────────────────────────────────────────────
+   Le seul endroit où les capitales espacées sont légitimes, avec le
+   display. Passer une classe plutôt que retaper cinq propriétés est
+   ce qui empêchera les 233 majuscules de revenir. */
+.label {
+  font-family: var(--font-d);
+  font-size: var(--t-label);
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ─── Chiffres alignés ───────────────────────────────────────────
+   Chrono, classements, séries : sans ça les chiffres dansent d'une
+   frame à l'autre parce que le 1 est plus étroit que le 8. */
+.tnum,
+time {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ─── Mouvement réduit ───────────────────────────────────────────
+   Respecte le réglage système plutôt que d'imposer les animations. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ─── Squelettes de chargement ───────────────────────────────────
+   Un balayage plutôt qu'une pulsation : sur un fond presque noir, une
+   variation d'opacité ne se voit pas, un reflet qui traverse se lit. */
+@keyframes wodbud-skeleton {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }

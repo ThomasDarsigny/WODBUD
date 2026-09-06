@@ -6,6 +6,7 @@ import { MAX_LOGGED_MINUTES, useSessionStore } from '../../stores/sessionStore'
 import { useWorkoutStore } from '../../stores/workoutStore'
 import { activeMs, formatClock, isRunning, wallClockMs } from '../../lib/sessionTimer'
 import { METHOD_I18N_KEYS } from '../../types'
+import { field as inputStyle, textarea as textareaStyle } from '../../styles/ui'
 
 interface Props {
   /** '/dashboard' côté coach, '/athlete' côté athlète. */
@@ -31,10 +32,10 @@ function Shell({ tag, title, children }: { tag: string; title: string; children:
   return (
     <div style={{ padding: 'var(--page-pad)', maxWidth: 880 }}>
       <div style={{ marginBottom: '1.75rem' }}>
-        <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.72rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'var(--orange)', marginBottom: '0.35rem' }}>
+        <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'var(--orange)', marginBottom: '0.35rem' }}>
           {tag}
         </p>
-        <h1 style={{ fontFamily: 'var(--font-d)', fontSize: '2.05rem', fontWeight: 900, textTransform: 'uppercase', lineHeight: 1.05, letterSpacing: '0.03em', margin: 0 }}>
+        <h1 style={{ fontFamily: 'var(--font-d)', fontSize: '1.75rem', fontWeight: 900, textTransform: 'uppercase', lineHeight: 1.05, letterSpacing: '0.03em', margin: 0 }}>
           {title}
         </h1>
       </div>
@@ -68,20 +69,20 @@ function SessionPicker() {
           padding: '1.15rem 1.25rem', marginBottom: '1.75rem', color: 'var(--white)'
         }}
       >
-        <span style={{ display: 'block', fontFamily: 'var(--font-d)', fontSize: '1rem', fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--orange)' }}>
+        <span style={{ display: 'block', fontFamily: 'var(--font-d)', fontSize: '1.25rem', fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--orange)' }}>
           ▶ {t('session.free_session')}
         </span>
-        <span style={{ display: 'block', color: 'var(--muted)', fontSize: '0.82rem', marginTop: '0.3rem' }}>
+        <span style={{ display: 'block', color: 'var(--muted)', fontSize: '0.8125rem', marginTop: '0.3rem' }}>
           {t('session.free_session_hint')}
         </span>
       </button>
 
-      <h2 style={{ fontFamily: 'var(--font-d)', fontSize: '0.95rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', margin: '0 0 0.9rem' }}>
+      <h2 style={{ fontFamily: 'var(--font-d)', fontSize: '0.9375rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', margin: '0 0 0.9rem' }}>
         {t('session.choose_workout')}
       </h2>
 
       {savedWorkouts.length === 0 ? (
-        <div style={{ padding: '1.5rem', border: '1px solid var(--border)', background: 'var(--dark)', color: 'var(--muted)', textAlign: 'center', fontFamily: 'var(--font-d)', fontSize: '0.8rem', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+        <div style={{ padding: '1.5rem', border: '1px solid var(--border)', background: 'var(--dark)', color: 'var(--muted)', textAlign: 'center', fontFamily: 'var(--font-d)', fontSize: '0.8125rem', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
           {t('session.no_workouts')}
         </div>
       ) : (
@@ -95,15 +96,15 @@ function SessionPicker() {
                 border: '1px solid var(--border)', background: 'var(--dark)', padding: '0.95rem 1rem'
               }}
             >
-              <span style={{ display: 'block', fontFamily: 'var(--font-d)', fontSize: '0.92rem', fontWeight: 800, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+              <span style={{ display: 'block', fontFamily: 'var(--font-d)', fontSize: '1.25rem', fontWeight: 800, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
                 {w.name}
               </span>
               <span style={{ display: 'flex', gap: '0.4rem', marginTop: '0.5rem', flexWrap: 'wrap' }}>
-                <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.62rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--orange)', border: '1px solid var(--border)', padding: '0.16rem 0.43rem' }}>
+                <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--orange)', border: '1px solid var(--border)', padding: '0.16rem 0.43rem' }}>
                   {t(METHOD_I18N_KEYS[w.method], { ns: 'common' })}
                 </span>
                 {w.duration_minutes ? (
-                  <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.62rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--muted)', border: '1px solid var(--border)', padding: '0.16rem 0.43rem' }}>
+                  <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--muted)', border: '1px solid var(--border)', padding: '0.16rem 0.43rem' }}>
                     {w.duration_minutes} {t('fields.duration_unit_min')}
                   </span>
                 ) : null}
@@ -158,10 +159,10 @@ function QuickLogPanel() {
 
   return (
     <div style={{ border: '1px solid var(--border)', background: 'var(--dark)', padding: '1.25rem', marginBottom: '1.75rem' }}>
-      <h2 style={{ fontFamily: 'var(--font-d)', fontSize: '0.9rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', margin: '0 0 0.4rem' }}>
+      <h2 style={{ fontFamily: 'var(--font-d)', fontSize: '0.9375rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', margin: '0 0 0.4rem' }}>
         {t('session.log_title')}
       </h2>
-      <p style={{ color: 'var(--muted)', fontSize: '0.83rem', margin: '0 0 1.1rem', lineHeight: 1.5 }}>
+      <p style={{ color: 'var(--muted)', fontSize: '0.8125rem', margin: '0 0 1.1rem', lineHeight: 1.5 }}>
         {t('session.log_subtitle')}
       </p>
 
@@ -201,12 +202,12 @@ function QuickLogPanel() {
         </ActionButton>
       </div>
 
-      <p style={{ color: 'var(--muted)', fontSize: '0.78rem', margin: '0.85rem 0 0', opacity: 0.8 }}>
+      <p style={{ color: 'var(--muted)', fontSize: '0.8125rem', margin: '0.85rem 0 0', opacity: 0.8 }}>
         {t('session.log_hint')}
       </p>
 
       {localError && (
-        <div style={{ marginTop: '0.8rem', padding: '0.6rem 0.85rem', background: 'rgba(255,77,0,0.1)', border: '1px solid rgba(255,77,0,0.3)', color: 'var(--orange)', fontSize: '0.85rem' }}>
+        <div style={{ marginTop: '0.8rem', padding: '0.6rem 0.85rem', background: 'rgba(255,77,0,0.1)', border: '1px solid rgba(255,77,0,0.3)', color: 'var(--orange)', fontSize: '0.8125rem' }}>
           {localError}
         </div>
       )}
@@ -216,7 +217,7 @@ function QuickLogPanel() {
 
 function FieldLabel({ children }: { children: ReactNode }) {
   return (
-    <label style={{ display: 'block', fontFamily: 'var(--font-d)', fontSize: '0.66rem', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '0.35rem' }}>
+    <label style={{ display: 'block', fontFamily: 'var(--font-d)', fontSize: '0.6875rem', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '0.35rem' }}>
       {children}
     </label>
   )
@@ -227,7 +228,7 @@ function Chip({ label, active, onClick }: { label: string; active: boolean; onCl
     <button
       onClick={onClick}
       style={{
-        fontFamily: 'var(--font-d)', fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.08em',
+        fontFamily: 'var(--font-d)', fontSize: '0.6875rem', fontWeight: 700, letterSpacing: '0.08em',
         textTransform: 'uppercase',
         color: active ? 'var(--black)' : 'var(--muted)',
         background: active ? 'var(--orange)' : 'transparent',
@@ -239,18 +240,6 @@ function Chip({ label, active, onClick }: { label: string; active: boolean; onCl
     </button>
   )
 }
-
-const inputStyle = {
-  width: '100%',
-  background: 'var(--black)',
-  border: '1px solid var(--border)',
-  color: 'var(--white)',
-  padding: '0.6rem 0.8rem',
-  fontFamily: 'var(--font-b)',
-  fontSize: '0.9rem',
-  outline: 'none',
-  boxSizing: 'border-box'
-} as const
 
 /* ── Chrono en cours ────────────────────────────────────────────────────── */
 
@@ -296,10 +285,10 @@ function RunnerPanel() {
     <>
       <div style={{ border: `1px solid ${running ? 'rgba(255,77,0,0.35)' : 'var(--border)'}`, background: running ? 'rgba(255,77,0,0.05)' : 'var(--dark)', padding: '1.5rem', marginBottom: '1.25rem' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: '1rem', flexWrap: 'wrap' }}>
-          <p style={{ fontFamily: 'var(--font-d)', fontSize: '1rem', fontWeight: 800, letterSpacing: '0.06em', textTransform: 'uppercase', margin: 0, color: 'var(--white)' }}>
+          <p style={{ fontFamily: 'var(--font-d)', fontSize: '1.25rem', fontWeight: 800, letterSpacing: '0.06em', textTransform: 'uppercase', margin: 0, color: 'var(--white)' }}>
             {workoutName}
           </p>
-          <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.62rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: running ? 'var(--orange)' : 'var(--muted)', border: `1px solid ${running ? 'rgba(255,77,0,0.4)' : 'var(--border)'}`, padding: '0.14rem 0.5rem' }}>
+          <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: running ? 'var(--orange)' : 'var(--muted)', border: `1px solid ${running ? 'rgba(255,77,0,0.4)' : 'var(--border)'}`, padding: '0.14rem 0.5rem' }}>
             {running ? `● ${t('session.running')}` : `❚❚ ${t('session.paused')}`}
           </span>
         </div>
@@ -307,17 +296,17 @@ function RunnerPanel() {
         <div style={{ fontFamily: 'var(--font-d)', fontSize: 'clamp(3rem, 13vw, 5.5rem)', fontWeight: 900, lineHeight: 1, letterSpacing: '0.02em', color: running ? 'var(--white)' : 'var(--muted)', margin: '0.9rem 0 0.2rem', fontVariantNumeric: 'tabular-nums' }}>
           {formatClock(active)}
         </div>
-        <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.66rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--muted)', margin: 0 }}>
+        <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--muted)', margin: 0 }}>
           {t('session.active_time')} · {t('session.wall_time')} {formatClock(wall)}
         </p>
 
         {!running && (
-          <p style={{ color: 'var(--muted)', fontSize: '0.8rem', marginTop: '0.8rem', marginBottom: 0 }}>
+          <p style={{ color: 'var(--muted)', fontSize: '0.8125rem', marginTop: '0.8rem', marginBottom: 0 }}>
             {t('session.paused_note')}
           </p>
         )}
         {active < 30000 && (
-          <p style={{ color: 'var(--muted)', fontSize: '0.78rem', marginTop: '0.8rem', marginBottom: 0, opacity: 0.8 }}>
+          <p style={{ color: 'var(--muted)', fontSize: '0.8125rem', marginTop: '0.8rem', marginBottom: 0, opacity: 0.8 }}>
             {t('session.zero_warning')}
           </p>
         )}
@@ -337,7 +326,7 @@ function RunnerPanel() {
           </ActionButton>
         </div>
         {confirmDiscard && (
-          <p style={{ color: 'var(--muted)', fontSize: '0.78rem', marginTop: '0.6rem', marginBottom: 0 }}>
+          <p style={{ color: 'var(--muted)', fontSize: '0.8125rem', marginTop: '0.6rem', marginBottom: 0 }}>
             {t('session.discard_hint')}
           </p>
         )}
@@ -346,10 +335,10 @@ function RunnerPanel() {
       {items.length > 0 && (
         <div style={{ border: '1px solid var(--border)', background: 'var(--dark)', padding: '1.25rem', marginBottom: '1.25rem' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '0.9rem' }}>
-            <h2 style={{ fontFamily: 'var(--font-d)', fontSize: '0.9rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', margin: 0 }}>
+            <h2 style={{ fontFamily: 'var(--font-d)', fontSize: '0.9375rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', margin: 0 }}>
               {t('session.checklist')}
             </h2>
-            <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.7rem', letterSpacing: '0.1em', color: 'var(--muted)' }}>
+            <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.8125rem', letterSpacing: '0.1em', color: 'var(--muted)' }}>
               {t('session.checklist_progress', { done: doneCount, total: items.length })}
             </span>
           </div>
@@ -374,14 +363,14 @@ function RunnerPanel() {
                     color: done ? 'var(--muted)' : 'var(--white)'
                   }}
                 >
-                  <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.9rem', color: done ? '#22c55e' : 'var(--muted)', flexShrink: 0 }}>
+                  <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.9375rem', color: done ? '#22c55e' : 'var(--muted)', flexShrink: 0 }}>
                     {done ? '✓' : '○'}
                   </span>
-                  <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.85rem', letterSpacing: '0.05em', textTransform: 'uppercase', textDecoration: done ? 'line-through' : 'none' }}>
+                  <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.8125rem', letterSpacing: '0.05em', textTransform: 'uppercase', textDecoration: done ? 'line-through' : 'none' }}>
                     {item.name}
                   </span>
                   {detail && (
-                    <span style={{ marginLeft: 'auto', color: 'var(--muted)', fontSize: '0.76rem', flexShrink: 0 }}>
+                    <span style={{ marginLeft: 'auto', color: 'var(--muted)', fontSize: '0.8125rem', flexShrink: 0 }}>
                       {detail}
                     </span>
                   )}
@@ -393,7 +382,7 @@ function RunnerPanel() {
       )}
 
       <div style={{ border: '1px solid var(--border)', background: 'var(--dark)', padding: '1.25rem' }}>
-        <label style={{ display: 'block', fontFamily: 'var(--font-d)', fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '0.6rem' }}>
+        <label style={{ display: 'block', fontFamily: 'var(--font-d)', fontSize: '0.6875rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '0.6rem' }}>
           {t('session.notes_label')}
         </label>
         <textarea
@@ -401,12 +390,12 @@ function RunnerPanel() {
           onChange={(e) => setNotes(e.target.value)}
           placeholder={t('session.notes_placeholder')}
           rows={3}
-          style={{ width: '100%', background: 'var(--black)', border: '1px solid var(--border)', color: 'var(--white)', padding: '0.65rem 0.9rem', fontFamily: 'var(--font-b)', fontSize: '0.9rem', outline: 'none', boxSizing: 'border-box', resize: 'vertical' }}
+          style={textareaStyle}
         />
       </div>
 
       {error && (
-        <div style={{ marginTop: '0.9rem', padding: '0.65rem 0.9rem', background: 'rgba(255,77,0,0.1)', border: '1px solid rgba(255,77,0,0.3)', color: 'var(--orange)', fontSize: '0.85rem' }}>
+        <div style={{ marginTop: '0.9rem', padding: '0.65rem 0.9rem', background: 'rgba(255,77,0,0.1)', border: '1px solid rgba(255,77,0,0.3)', color: 'var(--orange)', fontSize: '0.8125rem' }}>
           {error}
         </div>
       )}
@@ -448,7 +437,7 @@ function SummaryPanel({ basePath }: { basePath: string }) {
 
 function Stat({ label }: { label: string }) {
   return (
-    <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.7rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--muted)', border: '1px solid var(--border)', padding: '0.25rem 0.6rem' }}>
+    <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--muted)', border: '1px solid var(--border)', padding: '0.25rem 0.6rem' }}>
       {label}
     </span>
   )
@@ -471,7 +460,7 @@ function ActionButton({ children, onClick, variant, disabled }: {
       onClick={onClick}
       disabled={disabled}
       style={{
-        fontFamily: 'var(--font-d)', fontSize: '0.8rem', fontWeight: 700, letterSpacing: '0.1em',
+        fontFamily: 'var(--font-d)', fontSize: '0.8125rem', fontWeight: 700, letterSpacing: '0.1em',
         textTransform: 'uppercase', padding: '0.7rem 1.3rem',
         cursor: disabled ? 'not-allowed' : 'pointer', opacity: disabled ? 0.55 : 1,
         ...palette

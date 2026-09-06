@@ -20,7 +20,7 @@ export default function VoteResultsBars({ results, emptyLabel }: {
 
   if (results.length === 0) {
     return (
-      <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.68rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--muted)', opacity: 0.7, margin: 0 }}>
+      <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--muted)', opacity: 0.7, margin: 0 }}>
         — {emptyLabel}
       </p>
     )
@@ -32,7 +32,7 @@ export default function VoteResultsBars({ results, emptyLabel }: {
         <div key={r.vote_option_id}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.22rem', gap: '0.5rem' }}>
             <span style={{
-              fontFamily: 'var(--font-d)', fontSize: '0.73rem', letterSpacing: '0.06em',
+              fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.06em',
               textTransform: 'uppercase',
               color: r.is_leading ? r.color : 'var(--muted)',
               fontWeight: r.is_leading ? 700 : 400,
@@ -41,7 +41,7 @@ export default function VoteResultsBars({ results, emptyLabel }: {
               {r.is_leading && '▶ '}{r.label}
             </span>
             <span style={{
-              fontFamily: 'var(--font-d)', fontSize: '0.72rem', letterSpacing: '0.08em',
+              fontFamily: 'var(--font-d)', fontSize: '0.8125rem', letterSpacing: '0.08em',
               color: r.is_leading ? r.color : 'var(--muted)',
               fontWeight: r.is_leading ? 700 : 400, flexShrink: 0, whiteSpace: 'nowrap'
             }}>
