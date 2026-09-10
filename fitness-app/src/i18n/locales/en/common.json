@@ -485,5 +485,24 @@
     "gym_title": "For my gym",
     "gym_desc": "I run classes, athletes and build WODs.",
     "later": "Later"
+  },
+  "badges": {
+    "title": "My badges",
+    "unlocked_count": "badges unlocked",
+    "newly_unlocked_one": "New badge unlocked!",
+    "newly_unlocked_other": "{{count}} new badges unlocked!",
+    "soon": "Coming soon",
+    "empty": "No badges in the catalogue",
+    "empty_hint": "The catalogue loads from the database. Try again in a moment.",
+    "family": {
+      "assiduite": "Consistency",
+      "volume": "Volume",
+      "endurance": "Endurance",
+      "horaires": "Timing",
+      "variete": "Variety",
+      "communaute": "Community",
+      "coach": "Coach side",
+      "suivi": "Not measurable yet"
+    }
   }
 }

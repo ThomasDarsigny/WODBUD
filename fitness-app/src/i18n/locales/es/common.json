@@ -491,5 +491,24 @@
     "gym_title": "Para mi gimnasio",
     "gym_desc": "Gestiono clases, atletas y creo WODs.",
     "later": "Más tarde"
+  },
+  "badges": {
+    "title": "Mis insignias",
+    "unlocked_count": "insignias desbloqueadas",
+    "newly_unlocked_one": "¡Nueva insignia desbloqueada!",
+    "newly_unlocked_other": "¡{{count}} nuevas insignias desbloqueadas!",
+    "soon": "Próximamente",
+    "empty": "No hay insignias en el catálogo",
+    "empty_hint": "El catálogo se carga desde la base de datos. Inténtalo en un momento.",
+    "family": {
+      "assiduite": "Constancia",
+      "volume": "Volumen",
+      "endurance": "Resistencia",
+      "horaires": "Horarios",
+      "variete": "Variedad",
+      "communaute": "Comunidad",
+      "coach": "Lado coach",
+      "suivi": "Aún no medible"
+    }
   }
 }

@@ -5,6 +5,7 @@ import { useRankStore } from '../../stores/rankStore'
 import { computeProgress, formatMinutes, rankDisplay, rankMotto } from '../../lib/ranks'
 import RankBadge from './RankBadge'
 import { field } from '../../styles/ui'
+import BadgeGrid from '../badges/BadgeGrid'
 
 export default function RankView() {
   const { t, i18n } = useTranslation(['common'])
@@ -130,6 +131,16 @@ export default function RankView() {
             )
           })}
         </div>
+      </div>
+
+      {/* Badges — les rangs mesurent le temps cumulé, les badges des faits
+          ponctuels. Les deux vivent sur la page « progression », mais restent
+          visuellement distincts : hexagone pour le rang, jeton pour le badge. */}
+      <div style={{ border: '1px solid var(--border)', background: 'var(--dark)', padding: '1.5rem', marginBottom: '1.25rem' }}>
+        <h2 style={{ fontFamily: 'var(--font-d)', fontSize: '0.9375rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', margin: '0 0 1.2rem' }}>
+          {t('badges.title')}
+        </h2>
+        <BadgeGrid />
       </div>
 
       {/* Partage */}

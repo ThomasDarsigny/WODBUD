@@ -331,6 +331,51 @@ export type Database = {
         Update: { created_at?: string; log_date?: string; unit?: string; weight?: number }
         Relationships: []
       }
+      badges: {
+        Row: {
+          available: boolean
+          condition_en: string
+          condition_es: string
+          condition_fr: string
+          display_en: string
+          display_es: string
+          display_fr: string
+          family: string
+          icon: string
+          key: string
+          position: number
+          threshold: number | null
+        }
+        Insert: {
+          available?: boolean
+          condition_en: string
+          condition_es: string
+          condition_fr: string
+          display_en: string
+          display_es: string
+          display_fr: string
+          family: string
+          icon: string
+          key: string
+          position: number
+          threshold?: number | null
+        }
+        Update: {
+          available?: boolean
+          condition_en?: string
+          condition_es?: string
+          condition_fr?: string
+          display_en?: string
+          display_es?: string
+          display_fr?: string
+          family?: string
+          icon?: string
+          key?: string
+          position?: number
+          threshold?: number | null
+        }
+        Relationships: []
+      }
       class_members: {
         Row: { athlete_id: string; class_id: string; joined_at: string }
         Insert: { athlete_id: string; class_id: string; joined_at?: string }
@@ -839,6 +884,32 @@ export type Database = {
         }
         Relationships: []
       }
+      user_badges: {
+        Row: {
+          badge_key: string
+          unlocked_at: string
+          user_id: string
+        }
+        Insert: {
+          badge_key: string
+          unlocked_at?: string
+          user_id: string
+        }
+        Update: {
+          badge_key?: string
+          unlocked_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_badges_badge_key_fkey"
+            columns: ["badge_key"]
+            isOneToOne: false
+            referencedRelation: "badges"
+            referencedColumns: ["key"]
+          },
+        ]
+      }
       vote_options: {
         Row: {
           color: string
@@ -1153,6 +1224,7 @@ export type Database = {
       is_admin_authored: { Args: { p_uid: string }; Returns: boolean }
       is_class_coach: { Args: { p_class_id: string }; Returns: boolean }
       wodbud_rank_for_minutes: { Args: { p_minutes: number }; Returns: string }
+      wodbud_recalc_badges: { Args: { p_user?: string }; Returns: string[] }
       wodbud_vote_color: { Args: { p_position: number }; Returns: string }
     }
     Enums: {

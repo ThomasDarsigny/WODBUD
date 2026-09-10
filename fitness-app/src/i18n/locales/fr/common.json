@@ -491,5 +491,24 @@
     "gym_title": "Pour mon gym",
     "gym_desc": "Je gère des cours, des athlètes et je monte des WODs.",
     "later": "Plus tard"
+  },
+  "badges": {
+    "title": "Mes badges",
+    "unlocked_count": "badges débloqués",
+    "newly_unlocked_one": "Nouveau badge débloqué !",
+    "newly_unlocked_other": "{{count}} nouveaux badges débloqués !",
+    "soon": "À venir",
+    "empty": "Aucun badge au catalogue",
+    "empty_hint": "Le catalogue se charge depuis la base. Réessaie dans un instant.",
+    "family": {
+      "assiduite": "Assiduité",
+      "volume": "Volume",
+      "endurance": "Endurance",
+      "horaires": "Horaires",
+      "variete": "Variété",
+      "communaute": "Communauté",
+      "coach": "Côté coach",
+      "suivi": "Bientôt mesurable"
+    }
   }
 }

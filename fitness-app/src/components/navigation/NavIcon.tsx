@@ -27,6 +27,11 @@ export type NavIconName =
   | 'calendar'
   | 'video'
   | 'play'
+  | 'flame'
+  | 'bolt'
+  | 'grid'
+  | 'star'
+  | 'clock'
 
 /** Un tracé par icône. Plusieurs sous-tracés séparés par un espace. */
 const PATHS: Record<NavIconName, string[]> = {
@@ -58,7 +63,17 @@ const PATHS: Record<NavIconName, string[]> = {
   // Caméra : emplacement d'une vidéo de démonstration, remplie ou non
   video: ['M3.5 6.5h11a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1h-11a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1z', 'M15.5 10.4 21 7.4v9.2l-5.5-3z'],
   // Lecture
-  play: ['M12 21.5a9.5 9.5 0 1 0 0-19 9.5 9.5 0 0 0 0 19z', 'M10.3 8.4 15.8 12l-5.5 3.6z']
+  play: ['M12 21.5a9.5 9.5 0 1 0 0-19 9.5 9.5 0 0 0 0 19z', 'M10.3 8.4 15.8 12l-5.5 3.6z'],
+  // Flamme : les séries d'assiduité
+  flame: ['M12 21.5c3.9 0 6.4-2.6 6.4-6 0-4.4-3.9-5.6-3.1-10-2.9 1.4-3.1 4-4.5 5.4-.6-1-.6-2.2-.6-3-2 1.6-4.3 4.2-4.3 7.9 0 3.4 2.4 5.7 6.1 5.7z'],
+  // Éclair : un premier fait, une pointe d'intensité
+  bolt: ['M13.6 2.5 5.4 13.4h5.2L10 21.5l8.6-10.9h-5.3z'],
+  // Grille : la variété d'agrès
+  grid: ['M4 4h7v7H4z', 'M13 4h7v7h-7z', 'M4 13h7v7H4z', 'M13 13h7v7h-7z'],
+  // Étoile : l'ancienneté
+  star: ['M12 3.4 14.6 9l6 .8-4.4 4.3 1.1 6L12 17.2l-5.3 2.9 1.1-6L3.4 9.8l6-.8z'],
+  // Horloge : la durée d'une séance
+  clock: ['M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z', 'M12 7v5.2l3.4 2']
 }
 
 interface Props {
