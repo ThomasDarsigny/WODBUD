@@ -90,7 +90,12 @@
     "log_date": "Fecha",
     "log_save": "Añadir al registro",
     "log_invalid": "Introduce una duración entre 1 y {{max}} minutos.",
-    "log_hint": "La fecha cuenta para tu racha: una salida de ayer prolonga la racha de ayer."
+    "log_hint": "La fecha cuenta para tu racha: una salida de ayer prolonga la racha de ayer.",
+    "log_start": "Empezar",
+    "log_or_manual": "o registra una sesión ya hecha",
+    "new_rank": "Nuevo rango",
+    "new_badges_one": "Nueva insignia",
+    "new_badges_other": "Nuevas insignias"
   },
   "alerts": {
     "cardio_title": "Alternancia de cardio",
@@ -106,5 +111,17 @@
     "workout_name_required": "El nombre del entrenamiento es obligatorio",
     "add_at_least_one_exercise": "Agrega al menos un ejercicio"
   },
-  "empty_hint": "Construye tu primera sesión: elige ejercicios, añade las reps, guarda."
+  "empty_hint": "Construye tu primera sesión: elige ejercicios, añade las reps, guarda.",
+  "journal": {
+    "tag": "Historial",
+    "title": "Diario de sesiones",
+    "summary_one": "{{count}} sesión · {{minutes}} min en total",
+    "summary_other": "{{count}} sesiones · {{minutes}} min en total",
+    "month_summary_one": "{{count}} sesión · {{minutes}} min",
+    "month_summary_other": "{{count}} sesiones · {{minutes}} min",
+    "minutes": "{{minutes}} min",
+    "free_session": "Sesión libre",
+    "empty": "Ninguna sesión registrada",
+    "empty_hint": "Empieza un WOD o una actividad de cardio: aparecerá aquí en cuanto la termines."
+  }
 }

@@ -125,6 +125,21 @@ export async function recalcBadges(): Promise<string[]> {
   return []
 }
 
+/**
+ * Lit quelques badges par leur clé. Sert à l'écran de fin de séance, qui
+ * connaît les clés débloquées mais pas leurs libellés.
+ */
+export async function fetchBadgesByKeys(keys: string[]): Promise<Badge[]> {
+  if (keys.length === 0) return []
+  const { data, error } = await supabase
+    .from('badges')
+    .select('*')
+    .in('key', keys)
+    .order('position', { ascending: true })
+  if (error) throw error
+  return (data ?? []) as Badge[]
+}
+
 /** Groupe le catalogue par famille, en conservant l'ordre déclaré. */
 export function groupByFamily(badges: Badge[]): Array<{ family: BadgeFamily; badges: Badge[] }> {
   return BADGE_FAMILIES.map((family) => ({

@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import i18n from '../i18n'
 import { supabase } from '../lib/supabase'
+import { recalcBadges } from '../lib/badges'
 import {
   EMPTY_TIMER,
   activeMs,
@@ -29,6 +30,13 @@ export interface SessionSummary {
   activeMinutes: number
   totalMinutes: number
   currentStreak: number
+  /** Clés des badges débloqués PAR cette séance. Vide la plupart du temps. */
+  newBadges: string[]
+  /**
+   * Total AVANT la séance. Permet de comparer le rang d'avant et d'après sans
+   * une requête de plus : le trigger ajoute exactement `activeMinutes`.
+   */
+  previousMinutes: number
 }
 
 /** Activité mesurée en durée : course, corde à sauter, rameur. */
@@ -43,6 +51,13 @@ export const MAX_LOGGED_MINUTES = 600
 interface PersistedSession {
   workoutId: string | null
   workoutName: string
+  /**
+   * Renseigné pour une activité chronométrée (course, corde, rameur) plutôt
+   * qu'un WOD. Les deux passent par le même chrono et le même `finish()` :
+   * un seul chemin de sauvegarde, donc un seul endroit où un bug peut vivre.
+   */
+  activityId: string | null
+  activityName: string
   timer: SessionTimer
   doneExerciseIds: string[]
   notes: string
@@ -58,6 +73,8 @@ interface SessionState extends PersistedSession {
 
   restore: () => void
   startSession: (workoutId: string | null, workoutName: string) => void
+  /** Démarre le chrono sur une activité cardio, sans WOD. */
+  startActivity: (activityId: string | null, activityName: string) => void
   pause: () => void
   resume: () => void
   toggleExercise: (id: string) => void
@@ -73,6 +90,8 @@ interface SessionState extends PersistedSession {
 const IDLE: PersistedSession = {
   workoutId: null,
   workoutName: '',
+  activityId: null,
+  activityName: '',
   timer: EMPTY_TIMER,
   doneExerciseIds: [],
   notes: ''
@@ -99,6 +118,8 @@ function readPersisted(): PersistedSession | null {
     return {
       workoutId: parsed.workoutId ?? null,
       workoutName: parsed.workoutName ?? '',
+      activityId: parsed.activityId ?? null,
+      activityName: parsed.activityName ?? '',
       timer: {
         startedAt: parsed.timer.startedAt,
         accumulatedMs: parsed.timer.accumulatedMs ?? 0,
@@ -137,15 +158,25 @@ export const useSessionStore = create<SessionState>((set, get) => ({
 
   startSession: (workoutId, workoutName) => {
     const next: PersistedSession = {
+      ...IDLE,
       workoutId,
       workoutName,
-      timer: startTimer(),
-      doneExerciseIds: [],
-      notes: ''
+      timer: startTimer()
     }
     persist(next)
     set({ ...next, items: [], error: null, lastSummary: null })
     if (workoutId) void get().loadItems(workoutId)
+  },
+
+  startActivity: (activityId, activityName) => {
+    const next: PersistedSession = {
+      ...IDLE,
+      activityId,
+      activityName,
+      timer: startTimer()
+    }
+    persist(next)
+    set({ ...next, items: [], error: null, lastSummary: null })
   },
 
   pause: () => {
@@ -252,6 +283,8 @@ export const useSessionStore = create<SessionState>((set, get) => ({
       const { error } = await supabase.from('workout_sessions').insert({
         user_id: userId,
         workout_id: s.workoutId,
+        // Renseigné quand la séance est une activité cardio chronométrée.
+        activity_exercise_id: s.activityId,
         started_at: s.timer.startedAt,
         ended_at: new Date(now).toISOString(),
         performed_at: s.timer.startedAt,
@@ -270,10 +303,23 @@ export const useSessionStore = create<SessionState>((set, get) => ({
         .eq('id', userId)
         .single()
 
+      // Décerné APRÈS l'insertion : la fonction lit les totaux que le trigger
+      // vient de mettre à jour. Un échec ici ne doit pas perdre la séance,
+      // qui est déjà enregistrée — d'où le repli silencieux.
+      let newBadges: string[] = []
+      try {
+        newBadges = await recalcBadges()
+      } catch {
+        // Les badges seront rattrapés à l'ouverture de « Mon rang ».
+      }
+
+      const totalMinutes = profile?.total_minutes ?? activeMinutes
       const summary: SessionSummary = {
         activeMinutes,
-        totalMinutes: profile?.total_minutes ?? activeMinutes,
-        currentStreak: profile?.current_streak ?? 0
+        totalMinutes,
+        currentStreak: profile?.current_streak ?? 0,
+        newBadges,
+        previousMinutes: Math.max(0, totalMinutes - activeMinutes)
       }
 
       persist({ ...IDLE })
@@ -353,10 +399,21 @@ export const useSessionStore = create<SessionState>((set, get) => ({
         .eq('id', userId)
         .single()
 
+      let newBadges: string[] = []
+      try {
+        newBadges = await recalcBadges()
+      } catch {
+        // Idem que dans finish() : l'activité est enregistrée, les badges
+        // seront rattrapés plus tard.
+      }
+
+      const totalMinutes = profile?.total_minutes ?? safeMinutes
       const summary: SessionSummary = {
         activeMinutes: safeMinutes,
-        totalMinutes: profile?.total_minutes ?? safeMinutes,
-        currentStreak: profile?.current_streak ?? 0
+        totalMinutes,
+        currentStreak: profile?.current_streak ?? 0,
+        newBadges,
+        previousMinutes: Math.max(0, totalMinutes - safeMinutes)
       }
       set({ saving: false, lastSummary: summary })
       return summary

@@ -7,6 +7,10 @@ import { useWorkoutStore } from '../../stores/workoutStore'
 import { activeMs, formatClock, isRunning, wallClockMs } from '../../lib/sessionTimer'
 import { METHOD_I18N_KEYS } from '../../types'
 import { field as inputStyle, textarea as textareaStyle } from '../../styles/ui'
+import { badgeDisplay, fetchBadgesByKeys, type Badge } from '../../lib/badges'
+import { computeProgress, rankDisplay } from '../../lib/ranks'
+import { useRankStore } from '../../stores/rankStore'
+import BadgeToken from '../badges/BadgeToken'
 
 interface Props {
   /** '/dashboard' côté coach, '/athlete' côté athlète. */
@@ -129,7 +133,7 @@ function todayISO(): string {
 
 function QuickLogPanel() {
   const { t } = useTranslation(['workouts', 'common'])
-  const { activities, saving, fetchActivities, logActivity } = useSessionStore()
+  const { activities, saving, fetchActivities, logActivity, startActivity } = useSessionStore()
 
   // `undefined` = l'utilisateur n'a rien choisi, on prend la première activité.
   // `null` = il a explicitement choisi « autre ». Dériver la valeur évite un
@@ -143,6 +147,8 @@ function QuickLogPanel() {
 
   // Course à pied en premier choix : c'est le cas d'usage qui a motivé l'écran.
   const selectedId = activityId === undefined ? (activities[0]?.id ?? null) : activityId
+  const selectedName =
+    activities.find((a) => a.id === selectedId)?.name ?? t('session.log_other')
 
   async function submit() {
     setLocalError(null)
@@ -172,6 +178,41 @@ function QuickLogPanel() {
           <Chip key={a.id} label={a.name} active={selectedId === a.id} onClick={() => setActivityId(a.id)} />
         ))}
         <Chip label={t('session.log_other')} active={selectedId === null} onClick={() => setActivityId(null)} />
+      </div>
+
+      {/* Le chrono d'abord : c'est le cas normal. Consigner après coup est
+          le repli, pas l'inverse — d'où la hiérarchie visuelle. */}
+      <button
+        onClick={() => startActivity(selectedId, selectedName)}
+        style={{
+          width: '100%',
+          minHeight: 52,
+          fontFamily: 'var(--font-d)',
+          fontSize: '1.25rem',
+          fontWeight: 900,
+          letterSpacing: '0.14em',
+          textTransform: 'uppercase',
+          color: 'var(--black)',
+          background: 'var(--orange)',
+          border: '1px solid var(--orange)',
+          cursor: 'pointer',
+          marginBottom: '1.25rem'
+        }}
+      >
+        {t('session.log_start')}
+      </button>
+
+      <div
+        style={{
+          display: 'flex', alignItems: 'center', gap: '0.75rem',
+          margin: '0 0 1rem', color: 'var(--muted)'
+        }}
+      >
+        <span style={{ flex: 1, height: 1, background: 'var(--border)' }} />
+        <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase' }}>
+          {t('session.log_or_manual')}
+        </span>
+        <span style={{ flex: 1, height: 1, background: 'var(--border)' }} />
       </div>
 
       <div style={{ display: 'flex', gap: '0.8rem', flexWrap: 'wrap', alignItems: 'flex-end' }}>
@@ -246,9 +287,12 @@ function Chip({ label, active, onClick }: { label: string; active: boolean; onCl
 function RunnerPanel() {
   const { t } = useTranslation(['workouts', 'common'])
   const {
-    workoutName, timer, items, doneExerciseIds, notes, saving, error,
+    workoutName, activityName, timer, items, doneExerciseIds, notes, saving, error,
     pause, resume, toggleExercise, setNotes, finish, discard
   } = useSessionStore()
+
+  // Une séance cardio n'a pas de WOD : c'est le nom de l'activité qui titre.
+  const heading = activityName || workoutName
 
   const [now, setNow] = useState(() => Date.now())
   const [confirmDiscard, setConfirmDiscard] = useState(false)
@@ -286,7 +330,7 @@ function RunnerPanel() {
       <div style={{ border: `1px solid ${running ? 'rgba(255,77,0,0.35)' : 'var(--border)'}`, background: running ? 'rgba(255,77,0,0.05)' : 'var(--dark)', padding: '1.5rem', marginBottom: '1.25rem' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: '1rem', flexWrap: 'wrap' }}>
           <p style={{ fontFamily: 'var(--font-d)', fontSize: '1.25rem', fontWeight: 800, letterSpacing: '0.06em', textTransform: 'uppercase', margin: 0, color: 'var(--white)' }}>
-            {workoutName}
+            {heading}
           </p>
           <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: running ? 'var(--orange)' : 'var(--muted)', border: `1px solid ${running ? 'rgba(255,77,0,0.4)' : 'var(--border)'}`, padding: '0.14rem 0.5rem' }}>
             {running ? `● ${t('session.running')}` : `❚❚ ${t('session.paused')}`}
@@ -422,6 +466,12 @@ function SummaryPanel({ basePath }: { basePath: string }) {
           <Stat label={t('session.done_total', { total: summary.totalMinutes })} />
           <Stat label={t('session.done_streak', { days: summary.currentStreak })} />
         </div>
+
+        <SessionRewards
+          badgeKeys={summary.newBadges}
+          previousMinutes={summary.previousMinutes}
+          totalMinutes={summary.totalMinutes}
+        />
         <div style={{ display: 'flex', gap: '0.6rem', marginTop: '1.5rem', flexWrap: 'wrap' }}>
           <ActionButton onClick={() => { clearSummary(); navigate(`${basePath}/rank`) }} variant="primary">
             {t('session.done_rank')}
@@ -432,6 +482,80 @@ function SummaryPanel({ basePath }: { basePath: string }) {
         </div>
       </div>
     </Shell>
+  )
+}
+
+/**
+ * Ce que la séance vient de rapporter.
+ *
+ * C'est le moment où la récompense a le plus de sens : juste après l'effort,
+ * pas trois écrans plus loin. Le composant ne s'affiche que s'il y a vraiment
+ * quelque chose à annoncer — un bandeau « rien de neuf » serait pire que rien.
+ */
+function SessionRewards({ badgeKeys, previousMinutes, totalMinutes }: {
+  badgeKeys: string[]
+  previousMinutes: number
+  totalMinutes: number
+}) {
+  const { t, i18n } = useTranslation(['workouts', 'common'])
+  const { ranks, fetchAll } = useRankStore()
+  const [badges, setBadges] = useState<Badge[]>([])
+
+  // L'échelle des rangs est nécessaire pour savoir si on vient d'en changer.
+  useEffect(() => { void fetchAll() }, [fetchAll])
+
+  useEffect(() => {
+    // Rien à charger : `badges` reste à son état initial, pas de setState.
+    if (badgeKeys.length === 0) return
+    let cancelled = false
+    fetchBadgesByKeys(badgeKeys)
+      .then((rows) => { if (!cancelled) setBadges(rows) })
+      .catch(() => { /* Les badges restent visibles dans « Mon rang ». */ })
+    return () => { cancelled = true }
+  }, [badgeKeys])
+
+  // Le trigger ajoute exactement les minutes actives : comparer le rang
+  // d'avant et d'après ne coûte aucune requête supplémentaire.
+  const before = ranks.length ? computeProgress(ranks, previousMinutes).current : null
+  const after = ranks.length ? computeProgress(ranks, totalMinutes).current : null
+  const rankedUp = Boolean(after && before?.key !== after.key)
+
+  if (!rankedUp && badges.length === 0) return null
+
+  return (
+    <div style={{ marginTop: '1.5rem', paddingTop: '1.25rem', borderTop: '1px solid rgba(34,197,94,0.25)' }}>
+      {rankedUp && after && (
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: badges.length ? '1.1rem' : 0 }}>
+          <span style={{ width: 26, height: 26, flexShrink: 0, border: `2px solid ${after.color}`, background: `${after.color}33`, display: 'inline-block', clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)' }} />
+          <span>
+            <span style={{ display: 'block', fontFamily: 'var(--font-d)', fontSize: '0.6875rem', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--muted)' }}>
+              {t('session.new_rank')}
+            </span>
+            <span style={{ fontFamily: 'var(--font-d)', fontSize: '1.25rem', fontWeight: 900, letterSpacing: '0.04em', textTransform: 'uppercase', color: after.color }}>
+              {rankDisplay(after, i18n.language)}
+            </span>
+          </span>
+        </div>
+      )}
+
+      {badges.length > 0 && (
+        <>
+          <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--muted)', margin: '0 0 0.75rem' }}>
+            {t('session.new_badges', { count: badges.length })}
+          </p>
+          <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+            {badges.map((b) => (
+              <div key={b.key} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.4rem', width: 96, textAlign: 'center' }}>
+                <BadgeToken icon={b.icon} state="unlocked" size={56} title={badgeDisplay(b, i18n.language)} />
+                <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', fontWeight: 800, letterSpacing: '0.04em', textTransform: 'uppercase', lineHeight: 1.2 }}>
+                  {badgeDisplay(b, i18n.language)}
+                </span>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+    </div>
   )
 }
 

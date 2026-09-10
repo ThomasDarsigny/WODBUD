@@ -6,8 +6,14 @@ import { computeProgress, formatMinutes, rankDisplay, rankMotto } from '../../li
 import RankBadge from './RankBadge'
 import { field } from '../../styles/ui'
 import BadgeGrid from '../badges/BadgeGrid'
+import { useNotificationStore } from '../../stores/notificationStore'
 
 export default function RankView() {
+  // Ouvrir cet écran, c'est avoir vu ses badges et son rang : les pastilles
+  // s'éteignent ici, et nulle part ailleurs.
+  const markProgressSeen = useNotificationStore((s) => s.markProgressSeen)
+  useEffect(() => { void markProgressSeen() }, [markProgressSeen])
+
   const { t, i18n } = useTranslation(['common'])
   const { ranks, profile, shareToken, loading, sharing, error, fetchAll, createShare, revokeShare } = useRankStore()
   const [copied, setCopied] = useState(false)

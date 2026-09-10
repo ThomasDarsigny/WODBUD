@@ -68,7 +68,7 @@ const PATHS: Record<NavIconName, string[]> = {
   flame: ['M12 21.5c3.9 0 6.4-2.6 6.4-6 0-4.4-3.9-5.6-3.1-10-2.9 1.4-3.1 4-4.5 5.4-.6-1-.6-2.2-.6-3-2 1.6-4.3 4.2-4.3 7.9 0 3.4 2.4 5.7 6.1 5.7z'],
   // Éclair : un premier fait, une pointe d'intensité
   bolt: ['M13.6 2.5 5.4 13.4h5.2L10 21.5l8.6-10.9h-5.3z'],
-  // Grille : la variété d'agrès
+  // Grille : la variété d'équipements
   grid: ['M4 4h7v7H4z', 'M13 4h7v7h-7z', 'M4 13h7v7H4z', 'M13 13h7v7h-7z'],
   // Étoile : l'ancienneté
   star: ['M12 3.4 14.6 9l6 .8-4.4 4.3 1.1 6L12 17.2l-5.3 2.9 1.1-6L3.4 9.8l6-.8z'],

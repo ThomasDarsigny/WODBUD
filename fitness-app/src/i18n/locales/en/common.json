@@ -13,7 +13,8 @@
     "session": "Session",
     "rank": "My rank",
     "open_menu": "Open menu",
-    "close_menu": "Close menu"
+    "close_menu": "Close menu",
+    "journal": "Journal"
   },
   "library": {
     "title": "Workout library",
@@ -330,7 +331,8 @@
     "delete_vote": "Delete vote",
     "empty_hint": "Create a class to invite your athletes, run votes and track attendance.",
     "no_members_hint": "Share the invite link or the QR code above so they can join.",
-    "no_votes_hint": "Start a vote: your athletes pick from the exercises you offer."
+    "no_votes_hint": "Start a vote: your athletes pick from the exercises you offer.",
+    "tab_leaderboard": "Leaderboard"
   },
   "athlete": {
     "role_label": "Athlete",
@@ -499,10 +501,21 @@
       "volume": "Volume",
       "endurance": "Endurance",
       "horaires": "Timing",
-      "variete": "Variety",
+      "variete": "Equipment",
       "communaute": "Community",
       "coach": "Coach side",
       "suivi": "Not measurable yet"
     }
+  },
+  "leaderboard": {
+    "title": "Leaderboard",
+    "minutes": "{{minutes}} min",
+    "streak_one": "{{count}}-day streak",
+    "streak_other": "{{count}}-day streak",
+    "you": "you",
+    "anonymous": "Athlete",
+    "empty": "Nobody on the board yet",
+    "empty_hint": "The leaderboard fills up as soon as a member finishes a session.",
+    "hide": "Hide leaderboard"
   }
 }

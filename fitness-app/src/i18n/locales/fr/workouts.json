@@ -90,7 +90,12 @@
     "log_date": "Date",
     "log_save": "Ajouter au journal",
     "log_invalid": "Entre une durée entre 1 et {{max}} minutes.",
-    "log_hint": "La date compte pour ta série : une sortie d'hier prolonge la série d'hier."
+    "log_hint": "La date compte pour ta série : une sortie d'hier prolonge la série d'hier.",
+    "log_start": "Commencer",
+    "log_or_manual": "ou consigner une séance déjà faite",
+    "new_rank": "Nouveau rang",
+    "new_badges_one": "Nouveau badge",
+    "new_badges_other": "Nouveaux badges"
   },
   "alerts": {
     "cardio_title": "Alternance cardio",
@@ -106,5 +111,17 @@
     "workout_name_required": "Le nom de l'entraînement est requis",
     "add_at_least_one_exercise": "Ajoute au moins un exercice"
   },
-  "empty_hint": "Construis ta première séance : choisis des exercices, ajoute les reps, enregistre."
+  "empty_hint": "Construis ta première séance : choisis des exercices, ajoute les reps, enregistre.",
+  "journal": {
+    "tag": "Historique",
+    "title": "Journal des séances",
+    "summary_one": "{{count}} séance · {{minutes}} min au total",
+    "summary_other": "{{count}} séances · {{minutes}} min au total",
+    "month_summary_one": "{{count}} séance · {{minutes}} min",
+    "month_summary_other": "{{count}} séances · {{minutes}} min",
+    "minutes": "{{minutes}} min",
+    "free_session": "Séance libre",
+    "empty": "Aucune séance enregistrée",
+    "empty_hint": "Lance un WOD ou une activité cardio : elle apparaîtra ici dès qu’elle sera terminée."
+  }
 }

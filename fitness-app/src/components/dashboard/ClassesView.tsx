@@ -11,6 +11,7 @@ import NavIcon from '../navigation/NavIcon'
 import { CATEGORY_I18N_KEYS, MUSCLE_GROUP_I18N_KEYS } from '../../types'
 import { btnPrimary as actionBtnStyle, btnSecondary as ghostBtnStyle, field as inputStyle, textarea as textareaStyle } from '../../styles/ui'
 import Skeleton from '../ui/Skeleton'
+import ClassLeaderboard from '../rank/ClassLeaderboard'
 
 const BASE_URL = window.location.origin
 
@@ -23,7 +24,7 @@ export default function ClassesView() {
   const [selectedClass, setSelectedClass] = useState<Class | null>(null)
   const [showQR, setShowQR] = useState(false)
   const [showVoteModal, setShowVoteModal] = useState(false)
-  const [activeTab, setActiveTab] = useState<'members' | 'votes'>('members')
+  const [activeTab, setActiveTab] = useState<'members' | 'votes' | 'leaderboard'>('members')
 
   useEffect(() => { fetchClasses() }, [fetchClasses])
   useEffect(() => { fetchExercises() }, [fetchExercises])
@@ -178,7 +179,7 @@ export default function ClassesView() {
 
             {/* Tabs */}
             <div style={{ display: 'flex', gap: '0', borderBottom: '1px solid var(--border)', marginBottom: '1.25rem' }}>
-              {(['members', 'votes'] as const).map((tab) => (
+              {(['members', 'votes', 'leaderboard'] as const).map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
@@ -208,6 +209,12 @@ export default function ClassesView() {
                 members={members[selectedClass.id] ?? []}
                 onRemove={(athleteId) => removeMember(selectedClass.id, athleteId)}
               />
+            )}
+
+            {/* Classement — la donnée était déjà lisible via la policy
+                profiles_select_coach_reads_members, rien ne l'affichait. */}
+            {activeTab === 'leaderboard' && (
+              <ClassLeaderboard classId={selectedClass.id} />
             )}
 
             {/* Votes tab */}

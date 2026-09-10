@@ -693,34 +693,40 @@ export type Database = {
       }
       profiles: {
         Row: {
+          badges_seen_at: string | null
           created_at: string
           current_streak: number
           full_name: string | null
           id: string
           language: string
           longest_streak: number
+          rank_seen_key: string | null
           segment: string | null
           theme_pref: string
           total_minutes: number
         }
         Insert: {
+          badges_seen_at?: string | null
           created_at?: string
           current_streak?: number
           full_name?: string | null
           id: string
           language?: string
           longest_streak?: number
+          rank_seen_key?: string | null
           segment?: string | null
           theme_pref?: string
           total_minutes?: number
         }
         Update: {
+          badges_seen_at?: string | null
           created_at?: string
           current_streak?: number
           full_name?: string | null
           id?: string
           language?: string
           longest_streak?: number
+          rank_seen_key?: string | null
           segment?: string | null
           theme_pref?: string
           total_minutes?: number

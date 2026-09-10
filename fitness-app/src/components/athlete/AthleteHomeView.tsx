@@ -8,6 +8,8 @@ import { useExerciseStore } from '../../stores/exerciseStore'
 import type { VoteSession, Class } from '../../types'
 import { CATEGORY_I18N_KEYS, MUSCLE_GROUP_I18N_KEYS } from '../../types'
 import Skeleton from '../ui/Skeleton'
+import { supabase } from '../../lib/supabase'
+import ClassLeaderboard from '../rank/ClassLeaderboard'
 void CATEGORY_I18N_KEYS
 void MUSCLE_GROUP_I18N_KEYS
 
@@ -19,6 +21,16 @@ export default function AthleteHomeView() {
 
   const [openSessions, setOpenSessions] = useState<(VoteSession & { class_name?: string })[]>([])
   const [loadingSessions, setLoadingSessions] = useState(true)
+  // Sert uniquement à surligner sa propre ligne dans le classement.
+  const [userId, setUserId] = useState<string | null>(null)
+
+  useEffect(() => {
+    let mounted = true
+    supabase.auth.getUser()
+      .then(({ data }) => { if (mounted) setUserId(data.user?.id ?? null) })
+      .catch(() => {})
+    return () => { mounted = false }
+  }, [])
 
   const { fetchOpenVoteSessions, userVotesBySession } = useClassStore()
 
@@ -80,7 +92,7 @@ export default function AthleteHomeView() {
           <EmptyState compact icon="classes" title={t('athlete.no_classes')} hint={t('athlete.no_classes_hint')} />
         ) : (
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: '0.75rem' }}>
-            {classes.map((cls) => <ClassCard key={cls.id} cls={cls} />)}
+            {classes.map((cls) => <ClassCard key={cls.id} cls={cls} currentUserId={userId} />)}
           </div>
         )}
       </section>
@@ -173,7 +185,13 @@ function VoteSessionCard({ session, exerciseMap, hasVoted, onVote }: {
   )
 }
 
-function ClassCard({ cls }: { cls: Class }) {
+function ClassCard({ cls, currentUserId }: { cls: Class; currentUserId: string | null }) {
+  const { t } = useTranslation('common')
+  // Replié par défaut : la carte sert d'abord à rappeler l'horaire. Le
+  // classement se charge seulement si on le demande, ce qui évite autant de
+  // requêtes que de cours à l'ouverture de l'écran.
+  const [showBoard, setShowBoard] = useState(false)
+
   return (
     <div style={{ border: '1px solid var(--border)', background: 'var(--dark)', padding: '1rem 1.25rem' }}>
       <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.9375rem', fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--white)', margin: 0 }}>
@@ -184,6 +202,33 @@ function ClassCard({ cls }: { cls: Class }) {
       )}
       {cls.description && (
         <p style={{ color: 'var(--muted)', fontSize: '0.8125rem', marginTop: '0.3rem' }}>{cls.description}</p>
+      )}
+
+      <button
+        onClick={() => setShowBoard((v) => !v)}
+        aria-expanded={showBoard}
+        style={{
+          marginTop: '0.75rem',
+          fontFamily: 'var(--font-d)',
+          fontSize: '0.6875rem',
+          fontWeight: 700,
+          letterSpacing: '0.14em',
+          textTransform: 'uppercase',
+          color: showBoard ? 'var(--orange)' : 'var(--muted)',
+          background: 'transparent',
+          border: '1px solid var(--border)',
+          padding: '0.4rem 0.7rem',
+          minHeight: 36,
+          cursor: 'pointer'
+        }}
+      >
+        {showBoard ? t('leaderboard.hide') : t('leaderboard.title')}
+      </button>
+
+      {showBoard && (
+        <div style={{ marginTop: '0.75rem' }}>
+          <ClassLeaderboard classId={cls.id} currentUserId={currentUserId} />
+        </div>
       )}
     </div>
   )

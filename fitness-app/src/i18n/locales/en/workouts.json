@@ -90,7 +90,12 @@
     "log_date": "Date",
     "log_save": "Add to log",
     "log_invalid": "Enter a duration between 1 and {{max}} minutes.",
-    "log_hint": "The date counts toward your streak: yesterday's run extends yesterday's streak."
+    "log_hint": "The date counts toward your streak: yesterday's run extends yesterday's streak.",
+    "log_start": "Start",
+    "log_or_manual": "or log a session you already did",
+    "new_rank": "New rank",
+    "new_badges_one": "New badge",
+    "new_badges_other": "New badges"
   },
   "alerts": {
     "cardio_title": "Cardio alternation",
@@ -106,5 +111,17 @@
     "workout_name_required": "Workout name is required",
     "add_at_least_one_exercise": "Add at least one exercise"
   },
-  "empty_hint": "Build your first session: pick exercises, add the reps, save."
+  "empty_hint": "Build your first session: pick exercises, add the reps, save.",
+  "journal": {
+    "tag": "History",
+    "title": "Session journal",
+    "summary_one": "{{count}} session · {{minutes}} min total",
+    "summary_other": "{{count}} sessions · {{minutes}} min total",
+    "month_summary_one": "{{count}} session · {{minutes}} min",
+    "month_summary_other": "{{count}} sessions · {{minutes}} min",
+    "minutes": "{{minutes}} min",
+    "free_session": "Free session",
+    "empty": "No sessions logged yet",
+    "empty_hint": "Start a WOD or a cardio activity — it shows up here as soon as you finish it."
+  }
 }

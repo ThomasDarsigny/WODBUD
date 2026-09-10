@@ -25,6 +25,7 @@ const AiCoachView = lazy(() => import('./components/dashboard/AiCoachView'))
 const SettingsView = lazy(() => import('./components/dashboard/SettingsView'))
 const SessionRunnerView = lazy(() => import('./components/session/SessionRunnerView'))
 const RankView = lazy(() => import('./components/rank/RankView'))
+const SessionJournalView = lazy(() => import('./components/session/SessionJournalView'))
 const PrivacyPolicyPage = lazy(() => import('./pages/PrivacyPolicyPage'))
 const SharedRankPage = lazy(() => import('./pages/SharedRankPage'))
 const AthleteHomeView = lazy(() => import('./components/athlete/AthleteHomeView'))
@@ -321,6 +322,17 @@ function App() {
           }
         />
 
+        <Route
+          path="/dashboard/journal"
+          element={
+            <ProtectedRoute>
+              <DashboardLayout>
+                <SessionJournalView />
+              </DashboardLayout>
+            </ProtectedRoute>
+          }
+        />
+
         <Route path="/confidentialite" element={<PrivacyPolicyPage />} />
         <Route path="/privacy" element={<PrivacyPolicyPage />} />
 
@@ -355,6 +367,16 @@ function App() {
             <ProtectedRoute>
               <AthleteDashboardLayout>
                 <SessionRunnerView basePath="/athlete" />
+              </AthleteDashboardLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/athlete/journal"
+          element={
+            <ProtectedRoute>
+              <AthleteDashboardLayout>
+                <SessionJournalView />
               </AthleteDashboardLayout>
             </ProtectedRoute>
           }

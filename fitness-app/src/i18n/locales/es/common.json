@@ -13,7 +13,8 @@
     "session": "Sesión",
     "rank": "Mi rango",
     "open_menu": "Abrir el menú",
-    "close_menu": "Cerrar el menú"
+    "close_menu": "Cerrar el menú",
+    "journal": "Diario"
   },
   "library": {
     "title": "Biblioteca de workouts",
@@ -336,7 +337,8 @@
     "delete_vote": "Eliminar el voto",
     "empty_hint": "Crea una clase para invitar a tus atletas, lanzar votaciones y seguir su asistencia.",
     "no_members_hint": "Comparte el enlace de invitación o el código QR de arriba para que se unan.",
-    "no_votes_hint": "Lanza una votación: tus atletas eligen entre los ejercicios que propongas."
+    "no_votes_hint": "Lanza una votación: tus atletas eligen entre los ejercicios que propongas.",
+    "tab_leaderboard": "Clasificación"
   },
   "athlete": {
     "role_label": "Atleta",
@@ -505,10 +507,21 @@
       "volume": "Volumen",
       "endurance": "Resistencia",
       "horaires": "Horarios",
-      "variete": "Variedad",
+      "variete": "Equipos",
       "communaute": "Comunidad",
       "coach": "Lado coach",
       "suivi": "Aún no medible"
     }
+  },
+  "leaderboard": {
+    "title": "Clasificación",
+    "minutes": "{{minutes}} min",
+    "streak_one": "racha de {{count}} día",
+    "streak_other": "racha de {{count}} días",
+    "you": "tú",
+    "anonymous": "Atleta",
+    "empty": "Nadie en la clasificación",
+    "empty_hint": "La clasificación se llena en cuanto un miembro termina una sesión.",
+    "hide": "Ocultar clasificación"
   }
 }

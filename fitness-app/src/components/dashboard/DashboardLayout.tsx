@@ -11,6 +11,8 @@ import PortalOverlay from '../portal/PortalOverlay'
 import { useIsMobile } from '../../hooks/useMediaQuery'
 import NavIcon from '../navigation/NavIcon'
 import type { NavIconName } from '../navigation/NavIcon'
+import NavDot from '../navigation/NavDot'
+import { useNotificationStore } from '../../stores/notificationStore'
 
 type NavItem = {
   id: string
@@ -28,6 +30,7 @@ const NAV_ITEMS: NavItem[] = [
   { id: 'workout', labelKey: 'new', ns: 'workouts', icon: 'workout', path: '/dashboard/workout' },
   { id: 'library', labelKey: 'nav.library', icon: 'library', path: '/dashboard/workouts' },
   { id: 'session', labelKey: 'nav.session', icon: 'session', path: '/dashboard/session' },
+  { id: 'journal', labelKey: 'nav.journal', icon: 'calendar', path: '/dashboard/journal' },
   { id: 'rank', labelKey: 'nav.rank', icon: 'rank', path: '/dashboard/rank' },
   { id: 'classes', labelKey: 'nav.classes', icon: 'classes', path: '/dashboard/classes' },
   { id: 'ai', labelKey: 'nav.ai', icon: 'ai', path: '/dashboard/ai' },
@@ -85,6 +88,17 @@ export default function DashboardLayout({ children }: Props) {
       return true
     })
   }, [isAdmin])
+
+  // Une seule lecture au montage : les pastilles n'ont pas besoin d'être
+  // temps réel, elles se rafraîchissent au changement d'écran.
+  const { openVotes, newBadges, rankUp, refresh } = useNotificationStore()
+  useEffect(() => { void refresh() }, [refresh, location.pathname])
+
+  function dotFor(id: string): number {
+    if (id === 'vote') return openVotes
+    if (id === 'rank') return newBadges + (rankUp ? 1 : 0)
+    return 0
+  }
 
   async function handleLogout() {
     await supabase.auth.signOut()
@@ -252,6 +266,7 @@ export default function DashboardLayout({ children }: Props) {
                     )}
                   </Link>
                 )}
+                <NavDot count={dotFor(item.id)} compact={rail} />
               </div>
             )
           })}

@@ -10,6 +10,8 @@ import PortalOverlay from '../portal/PortalOverlay'
 import { useIsMobile } from '../../hooks/useMediaQuery'
 import NavIcon from '../navigation/NavIcon'
 import type { NavIconName } from '../navigation/NavIcon'
+import NavDot from '../navigation/NavDot'
+import { useNotificationStore } from '../../stores/notificationStore'
 
 interface Props {
   children: ReactNode
@@ -38,8 +40,20 @@ export default function AthleteDashboardLayout({ children }: Props) {
   const navItems: Array<{ id: string; labelKey: string; icon: NavIconName; path: string }> = [
     { id: 'home', labelKey: 'athlete.nav_home', icon: 'home', path: '/athlete' },
     { id: 'session', labelKey: 'nav.session', icon: 'session', path: '/athlete/session' },
+    { id: 'journal', labelKey: 'nav.journal', icon: 'calendar', path: '/athlete/journal' },
     { id: 'rank', labelKey: 'nav.rank', icon: 'rank', path: '/athlete/rank' },
   ]
+
+  // L'athlète n'a pas d'entrée « Votes » : les votes vivent sur l'accueil,
+  // c'est donc lui qui porte la pastille.
+  const { openVotes, newBadges, rankUp, refresh } = useNotificationStore()
+  useEffect(() => { void refresh() }, [refresh, location.pathname])
+
+  function dotFor(id: string): number {
+    if (id === 'home') return openVotes
+    if (id === 'rank') return newBadges + (rankUp ? 1 : 0)
+    return 0
+  }
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--black)', color: 'var(--white)', fontFamily: 'var(--font-b)' }}>
@@ -82,8 +96,8 @@ export default function AthleteDashboardLayout({ children }: Props) {
           {navItems.map((item) => {
             const active = location.pathname === item.path
             return (
+              <div key={item.id} style={{ position: 'relative' }}>
               <Link
-                key={item.id}
                 to={item.path}
                 onClick={() => setDrawerOpen(false)}
                 style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: rail ? '0.75rem 0' : '0.75rem 1.5rem', justifyContent: rail ? 'center' : 'flex-start', textDecoration: 'none', color: active ? 'var(--white)' : 'var(--muted)', background: active ? 'rgba(255,77,0,0.08)' : 'transparent', borderLeft: active ? '2px solid var(--orange)' : '2px solid transparent', transition: 'all 0.15s' }}
@@ -95,6 +109,8 @@ export default function AthleteDashboardLayout({ children }: Props) {
                   </span>
                 )}
               </Link>
+              <NavDot count={dotFor(item.id)} compact={rail} />
+              </div>
             )
           })}
         </nav>

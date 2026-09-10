@@ -13,7 +13,8 @@
     "session": "Séance",
     "rank": "Mon rang",
     "open_menu": "Ouvrir le menu",
-    "close_menu": "Fermer le menu"
+    "close_menu": "Fermer le menu",
+    "journal": "Journal"
   },
   "library": {
     "title": "Bibliothèque de workouts",
@@ -336,7 +337,8 @@
     "delete_vote": "Supprimer le vote",
     "empty_hint": "Crée un cours pour inviter tes athlètes, lancer des votes et suivre leur présence.",
     "no_members_hint": "Partage le lien d'invitation ou le QR code ci-dessus pour qu'ils rejoignent.",
-    "no_votes_hint": "Lance un vote : tes athlètes choisissent parmi les exercices que tu proposes."
+    "no_votes_hint": "Lance un vote : tes athlètes choisissent parmi les exercices que tu proposes.",
+    "tab_leaderboard": "Classement"
   },
   "athlete": {
     "role_label": "Athlète",
@@ -505,10 +507,21 @@
       "volume": "Volume",
       "endurance": "Endurance",
       "horaires": "Horaires",
-      "variete": "Variété",
+      "variete": "Équipements",
       "communaute": "Communauté",
       "coach": "Côté coach",
       "suivi": "Bientôt mesurable"
     }
+  },
+  "leaderboard": {
+    "title": "Classement",
+    "minutes": "{{minutes}} min",
+    "streak_one": "série de {{count}} jour",
+    "streak_other": "série de {{count}} jours",
+    "you": "toi",
+    "anonymous": "Athlète",
+    "empty": "Personne au classement",
+    "empty_hint": "Le classement se remplit dès qu’un membre termine une séance.",
+    "hide": "Masquer le classement"
   }
 }
