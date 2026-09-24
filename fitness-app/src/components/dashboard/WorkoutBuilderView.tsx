@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import NavIcon from '../navigation/NavIcon'
 import EmptyState from '../ui/EmptyState'
+import { pdf } from '@react-pdf/renderer'
 import { useExerciseStore } from '../../stores/exerciseStore'
 import { useWorkoutStore } from '../../stores/workoutStore'
 import type { Exercise, WorkoutExercise, MuscleAlert, WorkoutMethod, ExerciseCategory, MuscleGroup } from '../../types'
@@ -10,6 +11,8 @@ import ExerciseDetailModal from '../exercises/ExerciseDetailModal'
 import Mannequin2D from '../mannequin/Mannequin2D'
 import { computeMuscleLoads } from '../../lib/muscleLoad'
 import { label as smallLabelStyle, fieldCompact as miniInputStyle, field as selectStyle, btnSmall as filterResetStyle, textarea as textareaStyle } from '../../styles/ui'
+import { WorkoutPdfFull } from '../pdf/workoutPDF'
+import { pdfFileName } from '../pdf/pdfTokens'
 
 export default function WorkoutBuilderView() {
   const { t } = useTranslation(['workouts', 'common'])
@@ -39,6 +42,7 @@ export default function WorkoutBuilderView() {
   const [selectedMuscles, setSelectedMuscles] = useState<MuscleGroup[]>([])
   const [pickerExercise, setPickerExercise] = useState<Exercise | undefined>()
   const [savedSuccess, setSavedSuccess] = useState(false)
+  const [loadingPdf, setLoadingPdf] = useState(false)
   const [restOverridePrompt, setRestOverridePrompt] = useState<{
     exercise: Exercise
     message: string
@@ -103,6 +107,33 @@ export default function WorkoutBuilderView() {
       setTimeout(() => setSavedSuccess(false), 3000)
     } catch {
       // handled by store error state
+    }
+  }
+
+  async function handleExportPdf() {
+    if (workoutExercises.length === 0 || !name.trim()) return
+    setLoadingPdf(true)
+    try {
+      const workout = {
+        id: 'preview',
+        name,
+        method,
+        duration_minutes: durationMinutes,
+        notes,
+        exercises: workoutExercises,
+        created_at: new Date().toISOString()
+      }
+      const blob = await pdf(
+        <WorkoutPdfFull workout={workout} theme='dark' qrDataUrls={{}} />
+      ).toBlob()
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = pdfFileName(name, 'complet', 'dark')
+      a.click()
+      URL.revokeObjectURL(url)
+    } finally {
+      setLoadingPdf(false)
     }
   }
 
@@ -504,6 +535,24 @@ export default function WorkoutBuilderView() {
             }}
           >
             {t('builder.reset', { ns: 'workouts' })}
+          </button>
+          <button
+            onClick={handleExportPdf}
+            disabled={loadingPdf || workoutExercises.length === 0 || !name.trim()}
+            style={{
+              fontFamily: 'var(--font-d)',
+              fontWeight: 700,
+              fontSize: '0.8rem',
+              letterSpacing: '0.1em',
+              textTransform: 'uppercase',
+              padding: '0.6rem 1rem',
+              background: 'transparent',
+              border: '1px solid var(--border)',
+              color: loadingPdf || workoutExercises.length === 0 || !name.trim() ? 'var(--muted)' : 'var(--orange)',
+              cursor: loadingPdf ? 'wait' : 'pointer'
+            }}
+          >
+            {loadingPdf ? 'PDF...' : 'Exporter PDF'}
           </button>
           <button
             onClick={handleSave}
