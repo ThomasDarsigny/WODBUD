@@ -126,7 +126,7 @@ export default function LandingPage() {
       <div className={s.problem} data-reveal>
         <div className={s.problemCol}>
           <p className={s.problemLabel}>{t('landing.problem.without_label')}</p>
-          <h3>{t('landing.problem.without_title')}</h3>
+          <h2>{t('landing.problem.without_title')}</h2>
           <ul className={s.problemList}>
             {(t('landing.problem.without_items', { returnObjects: true }) as string[]).map((item) => (
               <li key={item}>{item}</li>
@@ -138,7 +138,7 @@ export default function LandingPage() {
 
         <div className={s.problemCol}>
           <p className={s.problemLabel}>{t('landing.problem.with_label')}</p>
-          <h3>{t('landing.problem.with_title')}</h3>
+          <h2>{t('landing.problem.with_title')}</h2>
           <ul className={s.solutionList}>
             {(t('landing.problem.with_items', { returnObjects: true }) as string[]).map((item) => (
               <li key={item}>{item}</li>
@@ -187,7 +187,7 @@ export default function LandingPage() {
               <div className={s.stepNum} aria-hidden="true">
                 {step.num}
               </div>
-              <h4>{step.title}</h4>
+              <h3>{step.title}</h3>
               <p>{step.desc}</p>
               {i < steps.length - 1 && (
                 <span className={s.stepArrow} aria-hidden="true">

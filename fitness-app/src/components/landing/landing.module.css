@@ -472,7 +472,7 @@
   margin-bottom: 1.25rem;
 }
 
-.problemCol h3 {
+.problemCol h2 {
   font-family: var(--font-d);
   font-size: 1.4rem;
   font-weight: 700;
@@ -667,7 +667,7 @@
   color: rgba(255, 90, 31, 0.2);
 }
 
-.step h4 {
+.step h3 {
   font-family: var(--font-d);
   font-size: 1.05rem;
   font-weight: 700;

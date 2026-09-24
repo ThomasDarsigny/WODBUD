@@ -3,12 +3,10 @@
   <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;700;900&family=Barlow:wght@400;500;600&display=swap"
-    rel="stylesheet"
-  />
+  <link rel="preload" href="/fonts/barlow-condensed-900.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/fonts/barlow-400.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/fonts/barlow-condensed-400.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/fonts/barlow-condensed-700.woff2" as="font" type="font/woff2" crossorigin />
   
   <meta name="theme-color" content="#0a0a0a" />
   <meta name="mobile-web-app-capable" content="yes" />
@@ -67,6 +65,9 @@
     ]
   }
   </script>
+  <!-- Le prérendu de la landing n'est valable que sur « / » : ailleurs (login, dashboard...), on le masque pour éviter un flash avant que React prenne la main. -->
+  <script>if (location.pathname !== '/') document.documentElement.classList.add('no-prerender')</script>
+  <style>.no-prerender [data-prerender] { display: none }</style>
 </head>
   <body>
     <div id="root"></div>
