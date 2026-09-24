@@ -480,11 +480,11 @@
     ]
   },
   "portal": {
-    "title": "What brings you here?",
+    "title": "Who are you!?",
     "subtitle": "We tailor the menu to how you use WODBUD. Changeable anytime in Settings.",
-    "individu_title": "For myself",
+    "individu_title": "A solo athlete ready to crush it",
     "individu_desc": "I train on my own and track my own sessions.",
-    "gym_title": "For my gym",
+    "gym_title": "A gym that wants to dominate the market",
     "gym_desc": "I run classes, athletes and build WODs.",
     "later": "Later"
   },

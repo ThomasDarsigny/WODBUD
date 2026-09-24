@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { supabase } from '../../lib/supabase'
 import { clearAuthSessionCookies } from '../../lib/authSessionCookies'
 import { useOnlineStatus } from '../../hooks/useOnlineStatus'

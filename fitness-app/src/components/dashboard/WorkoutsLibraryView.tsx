@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import EmptyState from '../ui/EmptyState'
+import WorkoutMannequin from '../mannequin/WorkoutMannequin'
 import { useWorkoutStore } from '../../stores/workoutStore'
 import { useSessionStore } from '../../stores/sessionStore'
 import { supabase } from '../../lib/supabase'
@@ -17,6 +18,7 @@ export default function WorkoutsLibraryView() {
   const [currentUserId, setCurrentUserId] = useState<string | null>(null)
   const [search, setSearch] = useState('')
   const [methodFilter, setMethodFilter] = useState<WorkoutMethod | 'all'>('all')
+  const [musclesOpenId, setMusclesOpenId] = useState<string | null>(null)
 
   useEffect(() => {
     fetchWorkouts()
@@ -133,6 +135,15 @@ export default function WorkoutsLibraryView() {
                 <p style={{ color: 'var(--muted)', fontSize: '0.8125rem', margin: 0, opacity: 0.7 }}>
                   {new Date(w.created_at).toLocaleDateString()}
                 </p>
+
+                <button
+                  onClick={() => setMusclesOpenId(musclesOpenId === w.id ? null : w.id)}
+                  aria-expanded={musclesOpenId === w.id}
+                  style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--muted)', background: 'transparent', border: '1px solid var(--border)', padding: '0.5rem 0.9rem', cursor: 'pointer', textAlign: 'left' }}
+                >
+                  {musclesOpenId === w.id ? '▾' : '▸'} {t('mannequin.title', { ns: 'common' })}
+                </button>
+                {musclesOpenId === w.id && <WorkoutMannequin key={w.id} workoutId={w.id} height={220} />}
 
                 <button
                   onClick={() => {

@@ -84,7 +84,7 @@ export default function PortalOverlay() {
         <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'var(--orange)', margin: '0 0 0.5rem', textAlign: 'center' }}>
           WODBUD
         </p>
-        <h2 style={{ fontFamily: 'var(--font-d)', fontSize: 'clamp(1.6rem, 5vw, 2.3rem)', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.02em', margin: '0 0 0.6rem', textAlign: 'center', color: 'var(--white)' }}>
+        <h2 style={{ fontFamily: 'var(--font-d)', fontSize: 'clamp(2.6rem, 9vw, 4.5rem)', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.02em', margin: '0 0 0.6rem', textAlign: 'center', color: 'var(--white)' }}>
           {t('portal.title')}
         </h2>
         <p style={{ color: 'var(--muted)', textAlign: 'center', margin: '0 0 2rem', fontSize: '0.9375rem' }}>

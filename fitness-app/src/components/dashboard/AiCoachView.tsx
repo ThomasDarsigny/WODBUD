@@ -344,9 +344,6 @@ export default function AiCoachView() {
             {loading ? '...' : t('ai.send')}
           </button>
         </div>
-        <p style={{ color: 'var(--muted)', fontSize: '0.8125rem', marginTop: '0.4rem', marginBottom: 0 }}>
-          Entrée pour envoyer · Maj+Entrée pour nouvelle ligne
-        </p>
       </div>
 
       <style>{`

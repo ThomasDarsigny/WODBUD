@@ -486,11 +486,11 @@
     ]
   },
   "portal": {
-    "title": "Tu es ici pour quoi ?",
+    "title": "T'es qui !?",
     "subtitle": "On adapte le menu à ton usage. Modifiable n'importe quand dans Paramètres.",
-    "individu_title": "Pour moi",
+    "individu_title": "Un individu qui veut botter des foufs",
     "individu_desc": "Je m'entraîne seul et je suis mes propres séances.",
-    "gym_title": "Pour mon gym",
+    "gym_title": "Un gym qui veut dominer l'marché",
     "gym_desc": "Je gère des cours, des athlètes et je monte des WODs.",
     "later": "Plus tard"
   },

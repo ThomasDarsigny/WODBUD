@@ -11,6 +11,7 @@ import { badgeDisplay, fetchBadgesByKeys, type Badge } from '../../lib/badges'
 import { computeProgress, rankDisplay } from '../../lib/ranks'
 import { useRankStore } from '../../stores/rankStore'
 import BadgeToken from '../badges/BadgeToken'
+import WorkoutMannequin from '../mannequin/WorkoutMannequin'
 
 interface Props {
   /** '/dashboard' côté coach, '/athlete' côté athlète. */
@@ -287,7 +288,7 @@ function Chip({ label, active, onClick }: { label: string; active: boolean; onCl
 function RunnerPanel() {
   const { t } = useTranslation(['workouts', 'common'])
   const {
-    workoutName, activityName, timer, items, doneExerciseIds, notes, saving, error,
+    workoutId, workoutName, activityName, timer, items, doneExerciseIds, notes, saving, error,
     pause, resume, toggleExercise, setNotes, finish, discard
   } = useSessionStore()
 
@@ -375,6 +376,13 @@ function RunnerPanel() {
           </p>
         )}
       </div>
+
+      {workoutId && (<div style={{ border: '1px solid var(--border)', background: 'var(--dark)', padding: '1.25rem', marginBottom: '1.25rem' }}>
+        <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--muted)', margin: '0 0 0.6rem' }}>
+          {t('mannequin.title', { ns: 'common' })}
+        </p>
+        <WorkoutMannequin key={workoutId} workoutId={workoutId} />
+      </div>)}
 
       {items.length > 0 && (
         <div style={{ border: '1px solid var(--border)', background: 'var(--dark)', padding: '1.25rem', marginBottom: '1.25rem' }}>

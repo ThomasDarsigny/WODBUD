@@ -486,11 +486,11 @@
     ]
   },
   "portal": {
-    "title": "¿Qué te trae por aquí?",
+    "title": "¡¿Quién eres?!",
     "subtitle": "Adaptamos el menú a tu uso. Puedes cambiarlo cuando quieras en Ajustes.",
-    "individu_title": "Para mí",
+    "individu_title": "Un atleta que viene a romperla",
     "individu_desc": "Entreno solo y sigo mis propias sesiones.",
-    "gym_title": "Para mi gimnasio",
+    "gym_title": "Un gimnasio que quiere dominar el mercado",
     "gym_desc": "Gestiono clases, atletas y creo WODs.",
     "later": "Más tarde"
   },
