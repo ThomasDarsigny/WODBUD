@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+# Les pages privées ne sont PAS bloquées ici : un Disallow empêcherait Google
+# de lire leur en-tête « noindex » (voir vercel.json) et l'URL pourrait rester
+# indexée sans contenu. On ne bloque que les endpoints d'API.
+Disallow: /api/
+
+Sitemap: https://wodbud.com/sitemap.xml

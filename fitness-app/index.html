@@ -15,10 +15,58 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="WODBUD" />
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <!-- apple-touch-icon retiré : le fichier n'existe pas encore (voir public/). -->
 
-  <meta name="description" content="WODBUD - creation de WODs, suivi des charges musculaires et gestion de box CrossFit." />
-  <title>WODBUD</title>
+  <title>WODBUD – Créateur de WOD et gestion de box CrossFit</title>
+  <meta name="description" content="Crée tes WODs en quelques minutes, suis la charge musculaire de chaque séance et gère les cours, votes et classements de ton gym. Essai gratuit 30 jours." />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="WODBUD" />
+  <meta property="og:locale" content="fr_CA" />
+  <meta property="og:url" content="https://wodbud.com/" />
+  <meta property="og:title" content="WODBUD – Créateur de WOD et gestion de box CrossFit" />
+  <meta property="og:description" content="Crée tes WODs en quelques minutes, suis la charge musculaire de chaque séance et gère les cours, votes et classements de ton gym." />
+  <meta property="og:image" content="https://wodbud.com/hero/poster.jpg" />
+  <meta property="og:image:width" content="1920" />
+  <meta property="og:image:height" content="1080" />
+  <meta property="og:image:alt" content="Athlète à l'entraînement avec des cordes ondulatoires" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="WODBUD – Créateur de WOD et gestion de box CrossFit" />
+  <meta name="twitter:description" content="Crée tes WODs en quelques minutes, suis la charge musculaire de chaque séance et gère les cours de ton gym." />
+  <meta name="twitter:image" content="https://wodbud.com/hero/poster.jpg" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://wodbud.com/#organization",
+        "name": "WODBUD",
+        "url": "https://wodbud.com/"
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://wodbud.com/#website",
+        "url": "https://wodbud.com/",
+        "name": "WODBUD",
+        "inLanguage": ["fr", "en", "es"],
+        "publisher": { "@id": "https://wodbud.com/#organization" }
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "WODBUD",
+        "url": "https://wodbud.com/",
+        "applicationCategory": "HealthApplication",
+        "operatingSystem": "Web",
+        "description": "Application de création de WODs, de suivi des charges musculaires et de gestion de box pour entraîneurs et athlètes.",
+        "inLanguage": ["fr", "en", "es"],
+        "publisher": { "@id": "https://wodbud.com/#organization" }
+      }
+    ]
+  }
+  </script>
 </head>
   <body>
     <div id="root"></div>

@@ -236,7 +236,7 @@ export default function LandingPage() {
         </Link>
         <p className={s.footerCopy}>{t('landing.footer.copy')}</p>
         <nav className={s.footerLinks} aria-label={t('landing.footer.links_label')}>
-          <a href="/privacy">{t('landing.footer.privacy')}</a>
+          <a href="/confidentialite">{t('landing.footer.privacy')}</a>
           <a href="/contact">{t('landing.footer.contact')}</a>
         </nav>
       </footer>

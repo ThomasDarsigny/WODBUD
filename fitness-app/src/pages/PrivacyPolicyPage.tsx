@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { usePageMeta } from '../hooks/usePageMeta'
 
 /**
  * Politique de confidentialité — Loi 25 (Québec) et LPRPDE (Canada).
@@ -194,6 +195,7 @@ function highlight(text: string) {
 }
 
 export default function PrivacyPolicyPage() {
+  usePageMeta('Politique de confidentialité | WODBUD')
   return (
     <main style={{ minHeight: '100vh', background: 'var(--black)', color: 'var(--white)', padding: '3rem 1.5rem' }}>
       <div style={{ maxWidth: 760, margin: '0 auto' }}>

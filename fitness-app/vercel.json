@@ -4,11 +4,51 @@
   "outputDirectory": "dist",
   "rewrites": [
     {
-      "source": "/(.*)",
+      "source": "/(login|signup|entraineur_dashboard|confidentialite)",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/(dashboard|athlete|join|rang|rank)(/.*)?",
       "destination": "/index.html"
     }
   ],
   "headers": [
+    {
+      "source": "/",
+      "headers": [
+        {
+          "key": "Link",
+          "value": "<https://wodbud.com/>; rel=\"canonical\""
+        }
+      ]
+    },
+    {
+      "source": "/confidentialite",
+      "headers": [
+        {
+          "key": "Link",
+          "value": "<https://wodbud.com/confidentialite>; rel=\"canonical\""
+        }
+      ]
+    },
+    {
+      "source": "/(login|signup|entraineur_dashboard)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
+      "source": "/(dashboard|athlete|join|rang|rank)(/.*)?",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
     {
       "source": "/assets/(.*)",
       "headers": [
@@ -35,6 +75,18 @@
           "value": "public, max-age=86400, stale-while-revalidate=604800"
         }
       ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/landing",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/privacy",
+      "destination": "/confidentialite",
+      "permanent": true
     }
   ]
 }

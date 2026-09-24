@@ -3,9 +3,11 @@ import type { FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { supabase } from '../lib/supabase'
+import { usePageMeta } from '../hooks/usePageMeta'
 
 export default function LoginPage() {
   const { t } = useTranslation('common')
+  usePageMeta(`${t('auth.login')} | WODBUD`)
   const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
