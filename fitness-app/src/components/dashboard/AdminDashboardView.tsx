@@ -22,10 +22,9 @@ export default function AdminDashboardView() {
     fetchExercises()
   }, [fetchExercises])
 
-  const existingNames = useMemo(
-    () => new Set(exercises.map((e) => e.name.toLowerCase())),
-    [exercises]
-  )
+  // Noms bruts : OcrImportSection normalise lui-même (accents, casse,
+  // pluriels proches) pour la détection de doublons.
+  const existingNames = useMemo(() => exercises.map((e) => e.name), [exercises])
 
   const total = exercises.length
   const withVideo = useMemo(() => exercises.filter((e) => !!e.video_url).length, [exercises])

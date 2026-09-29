@@ -1,19 +1,18 @@
 import { useRef, useState } from 'react'
+import { supabase } from '../../lib/supabase'
+import { readFunctionErrorMessage } from '../../lib/edgeFunctionError'
 import { useExerciseStore } from '../../stores/exerciseStore'
 import type { ExerciseCategory, MuscleGroup } from '../../types'
+import { MUSCLE_GROUP_I18N_KEYS } from '../../types'
+import { normalizeExerciseName, matchAgainstExisting } from '../../lib/textSimilarity'
 import { btnPrimary as actionBtnStyle, btnSecondary as ghostBtnStyle, fieldCompact as inlineInputStyle, fieldCompact as inlineSelectStyle } from '../../styles/ui'
-
-const GEMINI_KEY = import.meta.env.VITE_GEMINI_API_KEY as string | undefined
-const GEMINI_URL =
-  'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent'
 
 const VALID_CATEGORIES: ExerciseCategory[] = [
   'strength', 'olympic', 'gymnastics', 'cardio', 'mobility', 'accessory'
 ]
-const VALID_MUSCLES: MuscleGroup[] = [
-  'chest', 'back', 'shoulders', 'biceps', 'triceps', 'forearms', 'core',
-  'glutes', 'quads', 'hamstrings', 'calves', 'cardio_upper', 'cardio_lower'
-]
+// Dérivé du type canonique plutôt que recopié : un muscle ajouté dans
+// types/index.ts devient automatiquement sélectionnable ici.
+const VALID_MUSCLES = Object.keys(MUSCLE_GROUP_I18N_KEYS) as MuscleGroup[]
 
 const CATEGORY_LABELS: Record<ExerciseCategory, string> = {
   strength: 'Force', olympic: 'Haltéro', gymnastics: 'Gymn.', cardio: 'Cardio',
@@ -28,15 +27,25 @@ const MUSCLE_SHORT: Record<MuscleGroup, string> = {
   cardio_upper: 'Cardio H.', cardio_lower: 'Cardio B.'
 }
 
+type RowStatus = 'pending' | 'importing' | 'done' | 'error' | 'duplicate' | 'similar'
+
 type OcrRow = {
   uid: string
   name: string
   category: ExerciseCategory
   primary_muscle: MuscleGroup
   description: string
+  source: string
   selected: boolean
-  status: 'pending' | 'importing' | 'done' | 'error' | 'duplicate'
+  status: RowStatus
   error?: string
+}
+
+/** Une image à analyser : soit un fichier déposé tel quel, soit une page de PDF rendue en JPEG. */
+type QueueItem = {
+  qid: string
+  label: string
+  file: File
 }
 
 function sanitizeCat(v: unknown): ExerciseCategory {
@@ -57,37 +66,21 @@ function fileToBase64(file: File): Promise<string> {
   })
 }
 
-const OCR_PROMPT = `Analyse cette feuille d'entraînement CrossFit/fitness. Extrait TOUS les exercices mentionnés.
-
-Réponds UNIQUEMENT avec un tableau JSON valide (pas de markdown, pas de texte autour).
-
-Format exact :
-[{"name":"Nom exercice","category":"strength","primary_muscle":"core","description":"Description courte en français"}]
-
-Valeurs de category : strength (force/charges), olympic (haltérophilie/mouvements olympiques), gymnastics (gymnastic/corps), cardio (endurance/course), mobility (mobilité/étirements), accessory (accessoire).
-Valeurs de primary_muscle : chest, back, shoulders, biceps, triceps, forearms, core, glutes, quads, hamstrings, calves, cardio_upper, cardio_lower.
-
-Si aucun exercice trouvé, retourne [].`
-
-async function callGemini(key: string, base64: string, mimeType: string): Promise<OcrRow[]> {
-  const res = await fetch(`${GEMINI_URL}?key=${key}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      contents: [{ parts: [{ inlineData: { mimeType, data: base64 } }, { text: OCR_PROMPT }] }],
-      generationConfig: { temperature: 0.1 }
-    })
+/**
+ * Analyse une image via la fonction Edge `ocr-import` (Gemini côté serveur —
+ * voir docs/import-ocr.md). Ne fait aucun tri par nom : la détection de
+ * doublon se fait après coup, une fois qu'on a la liste complète.
+ */
+async function analyzeImage(file: File, source: string): Promise<Omit<OcrRow, 'selected' | 'status'>[]> {
+  const base64 = await fileToBase64(file)
+  const { data, error } = await supabase.functions.invoke('ocr-import', {
+    body: { base64, mimeType: file.type }
   })
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}))
-    const detail = (err as { error?: { message?: string } })?.error?.message
-    throw new Error(detail ?? `Erreur API Gemini (${res.status})`)
+  if (error) {
+    const detail = await readFunctionErrorMessage(error)
+    throw new Error(detail ?? error.message ?? 'Erreur OCR')
   }
-  const data = await res.json()
-  const text: string = data?.candidates?.[0]?.content?.parts?.[0]?.text ?? '[]'
-  const jsonMatch = text.match(/\[[\s\S]*\]/)
-  if (!jsonMatch) return []
-  const raw = JSON.parse(jsonMatch[0]) as Array<Record<string, unknown>>
+  const raw = ((data as { rows?: unknown[] })?.rows ?? []) as Array<Record<string, unknown>>
   return raw
     .map((r, i) => ({
       uid: `${Date.now()}-${i}-${Math.random()}`,
@@ -95,14 +88,14 @@ async function callGemini(key: string, base64: string, mimeType: string): Promis
       category: sanitizeCat(r.category),
       primary_muscle: sanitizeMuscle(r.primary_muscle),
       description: String(r.description ?? '').trim(),
-      selected: true,
-      status: 'pending' as const
+      source
     }))
     .filter((r) => r.name.length > 0)
 }
 
 interface Props {
-  existingNames: Set<string>
+  /** Noms bruts (pas encore normalisés) des exercices déjà en bibliothèque. */
+  existingNames: string[]
 }
 
 export default function OcrImportSection({ existingNames }: Props) {
@@ -112,17 +105,21 @@ export default function OcrImportSection({ existingNames }: Props) {
   const [processing, setProcessing] = useState(false)
   const [processingMsg, setProcessingMsg] = useState('')
   const [rows, setRows] = useState<OcrRow[]>([])
+  const [failedItems, setFailedItems] = useState<{ item: QueueItem; message: string }[]>([])
   const [importing, setImporting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [dragOver, setDragOver] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
+  const cameraInputRef = useRef<HTMLInputElement>(null)
 
   function addFiles(list: FileList | File[]) {
-    const imgs = Array.from(list).filter((f) => f.type.startsWith('image/'))
-    if (imgs.length === 0) return
+    const accepted = Array.from(list).filter(
+      (f) => f.type.startsWith('image/') || f.type === 'application/pdf' || f.name.toLowerCase().endsWith('.pdf')
+    )
+    if (accepted.length === 0) return
     setFiles((prev) => {
       const names = new Set(prev.map((f) => f.name))
-      return [...prev, ...imgs.filter((f) => !names.has(f.name))]
+      return [...prev, ...accepted.filter((f) => !names.has(f.name))]
     })
     setError(null)
   }
@@ -131,49 +128,99 @@ export default function OcrImportSection({ existingNames }: Props) {
     setFiles((prev) => prev.filter((f) => f.name !== name))
   }
 
-  async function processImages() {
-    if (!GEMINI_KEY) {
-      setError('VITE_GEMINI_API_KEY manquant — ajoute la clé dans .env.local et relance le serveur.')
-      return
-    }
-    if (files.length === 0) return
+  /** Applique la détection de doublon/similarité sur un lot de lignes fraîchement extraites. */
+  function classify(newRows: Omit<OcrRow, 'selected' | 'status'>[]): OcrRow[] {
+    const existingNormalized = existingNames.map(normalizeExerciseName)
+    return newRows.map((r) => {
+      const match = matchAgainstExisting(r.name, existingNormalized)
+      return {
+        ...r,
+        selected: match !== 'exact',
+        status: match === 'exact' ? 'duplicate' : match === 'similar' ? 'similar' : 'pending'
+      }
+    })
+  }
 
+  /** PDF → une page par image ; image seule → elle-même. Un PDF illisible devient un échec isolé, pas un blocage du lot. */
+  async function buildQueue(source: File[]): Promise<{ queue: QueueItem[]; prepErrors: { item: QueueItem; message: string }[] }> {
+    const queue: QueueItem[] = []
+    const prepErrors: { item: QueueItem; message: string }[] = []
+
+    for (const file of source) {
+      const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')
+      if (!isPdf) {
+        queue.push({ qid: `${file.name}-${file.lastModified}`, label: file.name, file })
+        continue
+      }
+      try {
+        const { pdfToImages } = await import('../../lib/pdfToImages')
+        const pages = await pdfToImages(file)
+        for (const [i, page] of pages.entries()) {
+          queue.push({ qid: `${file.name}-${file.lastModified}-p${i}`, label: page.label, file: page.file })
+        }
+      } catch (err) {
+        const placeholder: QueueItem = { qid: `${file.name}-${file.lastModified}`, label: file.name, file }
+        prepErrors.push({ item: placeholder, message: err instanceof Error ? err.message : 'PDF illisible' })
+      }
+    }
+    return { queue, prepErrors }
+  }
+
+  async function runQueue(queue: QueueItem[]) {
+    const newRows: Omit<OcrRow, 'selected' | 'status'>[] = []
+    const failures: { item: QueueItem; message: string }[] = []
+
+    for (let i = 0; i < queue.length; i++) {
+      const item = queue[i]
+      setProcessingMsg(`${i + 1}/${queue.length} — ${item.label}`)
+      try {
+        const extracted = await analyzeImage(item.file, item.label)
+        newRows.push(...extracted)
+      } catch (err) {
+        failures.push({ item, message: err instanceof Error ? err.message : 'Erreur OCR' })
+      }
+    }
+    return { newRows, failures }
+  }
+
+  async function processImages() {
+    if (files.length === 0) return
     setProcessing(true)
     setError(null)
     setRows([])
+    setFailedItems([])
 
-    const allRows: OcrRow[] = []
+    setProcessingMsg('Préparation des fichiers...')
+    const { queue, prepErrors } = await buildQueue(files)
 
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i]
-      setProcessingMsg(`Image ${i + 1}/${files.length} — ${file.name}`)
-      try {
-        const base64 = await fileToBase64(file)
-        const extracted = await callGemini(GEMINI_KEY, base64, file.type)
-        for (const row of extracted) {
-          const isDupe = existingNames.has(row.name.toLowerCase())
-          allRows.push({ ...row, selected: !isDupe, status: isDupe ? 'duplicate' : 'pending' })
-        }
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Erreur OCR')
-      }
-    }
+    const { newRows, failures } = await runQueue(queue)
 
-    setRows(allRows)
+    setRows(classify(newRows))
+    setFailedItems([...prepErrors, ...failures])
     setProcessing(false)
     setProcessingMsg('')
   }
 
-  async function importSelected() {
-    const toImport = rows.filter((r) => r.selected && r.status === 'pending')
-    if (toImport.length === 0) return
+  async function retryFailed() {
+    if (failedItems.length === 0) return
+    setProcessing(true)
+    const queue = failedItems.map((f) => f.item)
+    setFailedItems([])
 
+    const { newRows, failures } = await runQueue(queue)
+
+    setRows((prev) => [...prev, ...classify(newRows)])
+    setFailedItems(failures)
+    setProcessing(false)
+    setProcessingMsg('')
+  }
+
+  async function importRows(target: OcrRow[]) {
+    if (target.length === 0) return
     setImporting(true)
 
-    for (const row of toImport) {
-      setRows((prev) =>
-        prev.map((r) => (r.uid === row.uid ? { ...r, status: 'importing' } : r))
-      )
+    for (const row of target) {
+      setRows((prev) => prev.map((r) => (r.uid === row.uid ? { ...r, status: 'importing' } : r)))
       try {
         await createExercise({
           name: row.name,
@@ -189,9 +236,7 @@ export default function OcrImportSection({ existingNames }: Props) {
           video_url: null,
           video_path: null
         })
-        setRows((prev) =>
-          prev.map((r) => (r.uid === row.uid ? { ...r, status: 'done' } : r))
-        )
+        setRows((prev) => prev.map((r) => (r.uid === row.uid ? { ...r, status: 'done' } : r)))
       } catch (err) {
         setRows((prev) =>
           prev.map((r) =>
@@ -206,11 +251,21 @@ export default function OcrImportSection({ existingNames }: Props) {
     setImporting(false)
   }
 
+  function importSelected() {
+    return importRows(rows.filter((r) => r.selected && r.status === 'pending'))
+  }
+
+  function retryErrors() {
+    const failed = rows.filter((r) => r.status === 'error')
+    setRows((prev) => prev.map((r) => (r.status === 'error' ? { ...r, status: 'pending', error: undefined } : r)))
+    return importRows(failed.map((r) => ({ ...r, status: 'pending' as const })))
+  }
+
   function toggleRow(uid: string) {
     setRows((prev) =>
       prev.map((r) =>
-        r.uid === uid && (r.status === 'pending' || r.status === 'duplicate')
-          ? { ...r, selected: !r.selected, status: 'pending' }
+        r.uid === uid && (r.status === 'pending' || r.status === 'duplicate' || r.status === 'similar')
+          ? { ...r, selected: !r.selected, status: r.status === 'duplicate' || r.status === 'similar' ? 'pending' : r.status }
           : r
       )
     )
@@ -226,7 +281,8 @@ export default function OcrImportSection({ existingNames }: Props) {
   const doneCount = rows.filter((r) => r.status === 'done').length
   const errorCount = rows.filter((r) => r.status === 'error').length
   const dupeCount = rows.filter((r) => r.status === 'duplicate').length
-  const allImported = rows.length > 0 && rows.every((r) => r.status === 'done' || r.status === 'duplicate' || r.status === 'error')
+  const similarCount = rows.filter((r) => r.status === 'similar').length
+  const allImported = rows.length > 0 && rows.every((r) => r.status === 'done' || r.status === 'duplicate' || r.status === 'similar')
 
   return (
     <div style={{ marginBottom: '1.5rem', border: '1px solid var(--border)', background: 'var(--dark)' }}>
@@ -250,19 +306,30 @@ export default function OcrImportSection({ existingNames }: Props) {
           fontFamily: 'var(--font-d)', fontSize: '0.8125rem', fontWeight: 700,
           letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--white)'
         }}>
-          Import rapide — Photos de feuilles d'entraînement
+          Import rapide — Photos ou PDF de feuilles d'entraînement
         </span>
         <span style={{ marginLeft: 'auto', fontFamily: 'var(--font-d)', fontSize: '0.8125rem', color: 'var(--muted)', letterSpacing: '0.1em' }}>
-          Gemini Flash · {open ? '▲' : '▼'}
+          {open ? '▲' : '▼'}
         </span>
       </button>
 
       {open && (
         <div style={{ borderTop: '1px solid var(--border)', padding: '1.25rem' }}>
-          {/* API key warning */}
-          {!GEMINI_KEY && (
-            <div style={{ marginBottom: '1rem', padding: '0.65rem 0.9rem', background: 'rgba(245,158,11,0.08)', border: '1px solid rgba(245,158,11,0.35)', color: '#f59e0b', fontFamily: 'var(--font-d)', fontSize: '0.8125rem', letterSpacing: '0.08em' }}>
-              ⚠ Clé API manquante — ajoute <code style={{ background: 'rgba(0,0,0,0.4)', padding: '0.1rem 0.3rem' }}>VITE_GEMINI_API_KEY=ta_clé</code> dans <code style={{ background: 'rgba(0,0,0,0.4)', padding: '0.1rem 0.3rem' }}>.env.local</code> et relance le serveur.
+          {/* Prise de photo — bouton dédié : un <input capture> avec `multiple` ou un
+              accept incluant le PDF perd son comportement caméra sur la plupart des
+              navigateurs mobiles et retombe sur la galerie. Deux entrées séparées,
+              donc, plutôt qu'une seule qui ferait mal les deux choses. */}
+          {rows.length === 0 && (
+            <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.75rem', flexWrap: 'wrap' }}>
+              <button
+                onClick={() => cameraInputRef.current?.click()}
+                style={{ ...actionBtnStyle, display: 'flex', alignItems: 'center', gap: '0.4rem' }}
+              >
+                📷 Prendre une photo
+              </button>
+              <button onClick={() => inputRef.current?.click()} style={ghostBtnStyle}>
+                Choisir des fichiers (photos, PDF)
+              </button>
             </div>
           )}
 
@@ -285,17 +352,28 @@ export default function OcrImportSection({ existingNames }: Props) {
               }}
             >
               <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--muted)', margin: 0 }}>
-                Dépose tes photos ici ou clique pour sélectionner
+                Ou dépose tes photos ou PDF ici
               </p>
               <p style={{ color: 'var(--muted)', fontSize: '0.8125rem', marginTop: '0.4rem', opacity: 0.6 }}>
-                JPG · PNG · WEBP — Feuilles d'entraînement des 6 dernières années
+                JPG · PNG · WEBP · PDF (chaque page est analysée séparément) — feuilles d'entraînement des 6 dernières années
               </p>
             </div>
           )}
+          {/* Prise de photo directe (mobile). Un seul cliché à la fois : demander
+              `multiple` avec `capture` fait échouer l'ouverture caméra sur plusieurs
+              navigateurs Android — mieux vaut reprendre le bouton pour la suivante. */}
+          <input
+            ref={cameraInputRef}
+            type="file"
+            accept="image/*"
+            capture="environment"
+            style={{ display: 'none' }}
+            onChange={(e) => { if (e.target.files) addFiles(e.target.files); e.target.value = '' }}
+          />
           <input
             ref={inputRef}
             type="file"
-            accept="image/*"
+            accept="image/*,.pdf,application/pdf"
             multiple
             style={{ display: 'none' }}
             onChange={(e) => e.target.files && addFiles(e.target.files)}
@@ -321,7 +399,7 @@ export default function OcrImportSection({ existingNames }: Props) {
                 onClick={() => inputRef.current?.click()}
                 style={{ ...ghostBtnStyle, fontSize: '0.6875rem', marginTop: '0.3rem' }}
               >
-                + Ajouter d'autres images
+                + Ajouter d'autres fichiers
               </button>
             </div>
           )}
@@ -334,7 +412,7 @@ export default function OcrImportSection({ existingNames }: Props) {
                 disabled={processing || files.length === 0}
                 style={{ ...actionBtnStyle, opacity: processing || files.length === 0 ? 0.6 : 1 }}
               >
-                {processing ? '...' : `Analyser ${files.length} image${files.length > 1 ? 's' : ''} avec Gemini`}
+                {processing ? '...' : `Analyser ${files.length} fichier${files.length > 1 ? 's' : ''}`}
               </button>
               {processing && (
                 <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--muted)' }}>
@@ -347,6 +425,29 @@ export default function OcrImportSection({ existingNames }: Props) {
           {error && (
             <div style={{ marginTop: '0.75rem', padding: '0.6rem 0.9rem', background: 'rgba(255,77,0,0.08)', border: '1px solid rgba(255,77,0,0.3)', color: 'var(--orange)', fontSize: '0.8125rem' }}>
               {error}
+            </div>
+          )}
+
+          {/* Fichiers en échec — analyse seulement, avant tout import */}
+          {failedItems.length > 0 && (
+            <div style={{ marginTop: rows.length > 0 ? '0.75rem' : 0, marginBottom: '0.75rem', border: '1px solid rgba(255,77,0,0.3)', background: 'rgba(255,77,0,0.05)', padding: '0.75rem 0.9rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.4rem' }}>
+                <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--orange)' }}>
+                  {failedItems.length} fichier{failedItems.length > 1 ? 's' : ''} en échec
+                </span>
+                <button
+                  onClick={() => { void retryFailed() }}
+                  disabled={processing}
+                  style={{ ...ghostBtnStyle, fontSize: '0.6875rem', marginLeft: 'auto' }}
+                >
+                  {processing ? 'Nouvel essai...' : 'Réessayer'}
+                </button>
+              </div>
+              {failedItems.map(({ item, message }) => (
+                <p key={item.qid} style={{ fontSize: '0.78rem', color: 'var(--muted)', margin: '0.15rem 0' }}>
+                  {item.label} — {message}
+                </p>
+              ))}
             </div>
           )}
 
@@ -363,6 +464,11 @@ export default function OcrImportSection({ existingNames }: Props) {
                     {dupeCount} déjà existants
                   </span>
                 )}
+                {similarCount > 0 && (
+                  <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#60a5fa', border: '1px solid rgba(96,165,250,0.35)', padding: '0.15rem 0.45rem' }}>
+                    {similarCount} noms proches d'un exercice existant
+                  </span>
+                )}
                 {doneCount > 0 && (
                   <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#22c55e', border: '1px solid rgba(34,197,94,0.35)', padding: '0.15rem 0.45rem' }}>
                     ✓ {doneCount} importés
@@ -374,7 +480,7 @@ export default function OcrImportSection({ existingNames }: Props) {
                   </span>
                 )}
                 <button
-                  onClick={() => { setRows([]); setFiles([]) }}
+                  onClick={() => { setRows([]); setFiles([]); setFailedItems([]) }}
                   style={{ ...ghostBtnStyle, fontSize: '0.6875rem', marginLeft: 'auto' }}
                 >
                   Réinitialiser
@@ -382,28 +488,30 @@ export default function OcrImportSection({ existingNames }: Props) {
               </div>
 
               {/* Column headers */}
-              <div style={{ display: 'grid', gridTemplateColumns: '28px minmax(0,2fr) 90px 110px minmax(0,2fr) 52px', gap: '0', background: 'var(--black)', borderBottom: '1px solid var(--border)', padding: '0.4rem 0.6rem' }}>
-                {['', 'Nom', 'Catégorie', 'Muscle', 'Description', ''].map((h, i) => (
+              <div style={{ display: 'grid', gridTemplateColumns: '28px minmax(0,2fr) 90px 110px minmax(0,2fr) 110px 52px', gap: '0', background: 'var(--black)', borderBottom: '1px solid var(--border)', padding: '0.4rem 0.6rem' }}>
+                {['', 'Nom', 'Catégorie', 'Muscle', 'Description', 'Source', ''].map((h, i) => (
                   <span key={i} style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--muted)' }}>{h}</span>
                 ))}
               </div>
 
               <div style={{ border: '1px solid var(--border)', borderTop: 'none', maxHeight: 340, overflowY: 'auto' }}>
                 {rows.map((row) => {
-                  const isEditable = row.status === 'pending' || row.status === 'duplicate'
+                  const isEditable = row.status === 'pending' || row.status === 'duplicate' || row.status === 'similar'
                   const statusColor =
                     row.status === 'done' ? '#22c55e'
                     : row.status === 'error' ? 'var(--orange)'
                     : row.status === 'importing' ? '#60a5fa'
                     : row.status === 'duplicate' ? '#f59e0b'
+                    : row.status === 'similar' ? '#60a5fa'
                     : 'var(--muted)'
 
                   return (
                     <div
                       key={row.uid}
+                      title={row.status === 'error' ? row.error : undefined}
                       style={{
                         display: 'grid',
-                        gridTemplateColumns: '28px minmax(0,2fr) 90px 110px minmax(0,2fr) 52px',
+                        gridTemplateColumns: '28px minmax(0,2fr) 90px 110px minmax(0,2fr) 110px 52px',
                         gap: '0',
                         padding: '0.45rem 0.6rem',
                         borderBottom: '1px solid var(--border)',
@@ -411,6 +519,7 @@ export default function OcrImportSection({ existingNames }: Props) {
                         background: row.status === 'done' ? 'rgba(34,197,94,0.04)'
                           : row.status === 'error' ? 'rgba(255,77,0,0.04)'
                           : row.status === 'duplicate' ? 'rgba(245,158,11,0.04)'
+                          : row.status === 'similar' ? 'rgba(96,165,250,0.04)'
                           : 'transparent',
                         opacity: row.status === 'done' || (!row.selected && isEditable) ? 0.55 : 1
                       }}
@@ -464,6 +573,11 @@ export default function OcrImportSection({ existingNames }: Props) {
                         style={{ ...inlineInputStyle, fontSize: '0.8125rem' }}
                       />
 
+                      {/* Source */}
+                      <span style={{ fontSize: '0.72rem', color: 'var(--muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        {row.source}
+                      </span>
+
                       {/* Status */}
                       <span style={{
                         fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.1em',
@@ -473,6 +587,7 @@ export default function OcrImportSection({ existingNames }: Props) {
                           : row.status === 'error' ? '✕'
                           : row.status === 'importing' ? '...'
                           : row.status === 'duplicate' ? 'DUPE'
+                          : row.status === 'similar' ? 'PROCHE'
                           : ''}
                       </span>
                     </div>
@@ -481,16 +596,25 @@ export default function OcrImportSection({ existingNames }: Props) {
               </div>
 
               {!allImported && (
-                <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.75rem', alignItems: 'center' }}>
+                <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
                   <button
-                    onClick={importSelected}
+                    onClick={() => { void importSelected() }}
                     disabled={importing || selectedCount === 0}
                     style={{ ...actionBtnStyle, opacity: importing || selectedCount === 0 ? 0.6 : 1 }}
                   >
                     {importing ? 'Import en cours...' : `Importer ${selectedCount} exercice${selectedCount !== 1 ? 's' : ''}`}
                   </button>
+                  {errorCount > 0 && (
+                    <button
+                      onClick={() => { void retryErrors() }}
+                      disabled={importing}
+                      style={{ ...ghostBtnStyle, fontSize: '0.75rem' }}
+                    >
+                      Réessayer {errorCount} erreur{errorCount > 1 ? 's' : ''}
+                    </button>
+                  )}
                   <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--muted)' }}>
-                    {rows.filter((r) => r.status === 'duplicate').length > 0 && 'Les doublons sont décochés automatiquement.'}
+                    {dupeCount > 0 && 'Les doublons exacts sont décochés automatiquement.'}
                   </span>
                 </div>
               )}
@@ -507,4 +631,3 @@ export default function OcrImportSection({ existingNames }: Props) {
     </div>
   )
 }
-
