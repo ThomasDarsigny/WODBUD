@@ -96,8 +96,7 @@
       "title_em": "free for 30 days.",
       "subtitle": "Build your group workouts in minutes. Exercise library, programming methods, videos, and AI suggestions - all in one place, no credit card required.",
       "open_dashboard": "Open coach dashboard",
-      "watch_demo": "Watch a demo",
-      "no_card": "No credit card"
+      "watch_demo": "Watch a demo"
     },
     "ticker": [
       "Exercise library",
@@ -145,8 +144,7 @@
       },
       {
         "title": "AI suggestions",
-        "desc": "AI analyzes your programming and suggests variations, progressions, or exercise combinations aligned with your goals.",
-        "badge": "Powered by Anthropic API"
+        "desc": "AI analyzes your programming and suggests variations, progressions, or exercise combinations aligned with your goals."
       },
       {
         "title": "Reference videos",

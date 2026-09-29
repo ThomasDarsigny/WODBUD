@@ -96,8 +96,7 @@
       "title_em": "Sin Límites",
       "subtitle": "La plataforma todo en uno para entrenadores de CrossFit. Crea tus WODs, sigue el progreso de tus atletas y gestiona tu box en unos clics.",
       "open_dashboard": "Abrir panel",
-      "watch_demo": "Ver demo",
-      "no_card": "Gratis — sin tarjeta requerida"
+      "watch_demo": "Ver demo"
     },
     "hero_stats": {
       "athletes_label": "Atletas activos",
@@ -137,8 +136,7 @@
       {
         "icon": "WOD",
         "title": "WOD Builder",
-        "desc": "Crea entrenamientos en segundos con nuestra interfaz intuitiva. Arrastra y suelta ejercicios y genera tu WOD del día.",
-        "badge": "Popular"
+        "desc": "Crea entrenamientos en segundos con nuestra interfaz intuitiva. Arrastra y suelta ejercicios y genera tu WOD del día."
       },
       {
         "icon": "KPI",
@@ -163,8 +161,7 @@
       {
         "icon": "ANL",
         "title": "Análisis avanzado",
-        "desc": "Informes detallados sobre asistencia, rendimiento y progreso. Exporta tus datos a CSV.",
-        "badge": "Nuevo"
+        "desc": "Informes detallados sobre asistencia, rendimiento y progreso. Exporta tus datos a CSV."
       }
     ],
     "workflow_tag": "Cómo funciona",

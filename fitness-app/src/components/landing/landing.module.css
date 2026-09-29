@@ -394,25 +394,6 @@
   transform: translateY(-2px);
 }
 
-.badgeFree {
-  font-family: var(--font-d);
-  font-size: 0.78rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--orange);
-  border: 1px solid rgba(255, 90, 31, 0.35);
-  padding: 0.3rem 0.8rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-}
-
-.badgeFree::before {
-  content: '●';
-  font-size: 0.5rem;
-  animation: pulse 1.5s ease-in-out infinite;
-}
-
 /* ---------- TICKER ---------- */
 .ticker {
   overflow: hidden;
@@ -611,17 +592,6 @@
   line-height: 1.7;
 }
 
-.featBadge {
-  display: inline-block;
-  font-family: var(--font-d);
-  font-size: 0.65rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--orange);
-  border: 1px solid rgba(255, 90, 31, 0.3);
-  padding: 0.15rem 0.5rem;
-  margin-top: 0.75rem;
-}
 
 /* ---------- HOW IT WORKS ---------- */
 .how {
@@ -873,17 +843,6 @@
 
   to {
     transform: translateX(-50%);
-  }
-}
-
-@keyframes pulse {
-  0%,
-  100% {
-    opacity: 1;
-  }
-
-  50% {
-    opacity: 0.3;
   }
 }
 

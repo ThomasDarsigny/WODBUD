@@ -13,7 +13,6 @@ export default function LandingPage() {
     icon: string
     title: string
     desc: string
-    badge?: string
   }>
   const steps = t('landing.steps', { returnObjects: true }) as Array<{
     num: string
@@ -104,7 +103,6 @@ export default function LandingPage() {
             <a href="#demo" className={s.btnGhost}>
               {t('landing.hero.watch_demo')}
             </a>
-            <span className={s.badgeFree}>{t('landing.hero.no_card')}</span>
           </div>
         </div>
 
@@ -167,7 +165,6 @@ export default function LandingPage() {
               </span>
               <h3>{f.title}</h3>
               <p>{f.desc}</p>
-              {f.badge && <span className={s.featBadge}>{f.badge}</span>}
             </div>
           ))}
         </div>
