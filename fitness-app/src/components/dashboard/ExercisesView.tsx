@@ -22,6 +22,7 @@ import ExerciseDetailModal from '../exercises/ExerciseDetailModal'
 import { useIsMobile } from '../../hooks/useMediaQuery'
 import { btnPrimary as emptyActionStyle } from '../../styles/ui'
 import { SkeletonCards } from '../ui/Skeleton'
+import { isCurrentUserAdmin } from '../../lib/access'
 
 type FilterCategory = ExerciseCategory | 'all'
 
@@ -38,10 +39,20 @@ export default function ExercisesView() {
   const [showForm, setShowForm] = useState(false)
   const [editingExercise, setEditingExercise] = useState<Exercise | undefined>()
   const [detailExercise, setDetailExercise] = useState<Exercise | undefined>()
+  // Création d'exercice réservée aux admins (RLS `exercises_admin_write`
+  // depuis la migration 022) : sans ce contrôle, un coach verrait un bouton
+  // « Nouvel exercice » qui échoue silencieusement en base.
+  const [isAdmin, setIsAdmin] = useState(false)
 
   useEffect(() => {
     fetchExercises()
   }, [fetchExercises])
+
+  useEffect(() => {
+    let mounted = true
+    isCurrentUserAdmin().then((v) => { if (mounted) setIsAdmin(v) })
+    return () => { mounted = false }
+  }, [])
 
   const filtered = useMemo(() => {
     return exercises.filter((e) => {
@@ -185,26 +196,28 @@ export default function ExercisesView() {
             </span>
           </h1>
         </div>
-        <button
-          onClick={() => {
-            setEditingExercise(undefined)
-            setShowForm(true)
-          }}
-          style={{
-            fontFamily: 'var(--font-d)',
-            fontWeight: 700,
-            fontSize: '0.9375rem',
-            letterSpacing: '0.12em',
-            textTransform: 'uppercase',
-            color: 'var(--black)',
-            background: 'var(--orange)',
-            padding: '0.7rem 1.5rem',
-            border: 'none',
-            cursor: 'pointer'
-          }}
-        >
-          + {t('new', { ns: 'exercises' })}
-        </button>
+        {isAdmin && (
+          <button
+            onClick={() => {
+              setEditingExercise(undefined)
+              setShowForm(true)
+            }}
+            style={{
+              fontFamily: 'var(--font-d)',
+              fontWeight: 700,
+              fontSize: '0.9375rem',
+              letterSpacing: '0.12em',
+              textTransform: 'uppercase',
+              color: 'var(--black)',
+              background: 'var(--orange)',
+              padding: '0.7rem 1.5rem',
+              border: 'none',
+              cursor: 'pointer'
+            }}
+          >
+            + {t('new', { ns: 'exercises' })}
+          </button>
+        )}
       </div>
 
       <FilterPanel
