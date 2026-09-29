@@ -1,7 +1,7 @@
 # Migrations
 
-L'historique complet (26 migrations, de `fix_rls_infinite_recursion_and_cleanup`
-à `022_exercises_admin_only_create`) **existe côté Supabase** : le projet les
+L'historique complet (27 migrations, de `fix_rls_infinite_recursion_and_cleanup`
+à `023_exercises_admin_only_write`) **existe côté Supabase** : le projet les
 trace dans `supabase_migrations.schema_migrations`. Rien n'est perdu.
 
 Ce qui manque, c'est leur **SQL dans le dépôt** : les migrations 001 à 016,
@@ -21,3 +21,4 @@ d'être appliqué.
 | `020_badges_equipement.sql` | **Manquant du dépôt** — appliqué directement sur le projet |
 | `021_notifications_seen.sql` | **Manquant du dépôt** — appliqué directement sur le projet |
 | `022_exercises_admin_only_create.sql` | Retire la création d'exercice en libre-service (`exercises: créer`) — seul un admin peut désormais créer un exercice |
+| `023_exercises_admin_only_write.sql` | Retire aussi la modification/suppression en libre-service — un admin gère seul toute l'écriture sur `exercises` et `exercise_muscles` |

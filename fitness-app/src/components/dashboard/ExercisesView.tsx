@@ -39,9 +39,10 @@ export default function ExercisesView() {
   const [showForm, setShowForm] = useState(false)
   const [editingExercise, setEditingExercise] = useState<Exercise | undefined>()
   const [detailExercise, setDetailExercise] = useState<Exercise | undefined>()
-  // Création d'exercice réservée aux admins (RLS `exercises_admin_write`
-  // depuis la migration 022) : sans ce contrôle, un coach verrait un bouton
-  // « Nouvel exercice » qui échoue silencieusement en base.
+  // Écriture sur `exercises` réservée aux admins (RLS `exercises_admin_write`,
+  // migrations 022-023) : sans ce contrôle, un coach verrait des boutons
+  // « Nouvel exercice », « Modifier », « Supprimer » qui échouent
+  // silencieusement en base.
   const [isAdmin, setIsAdmin] = useState(false)
 
   useEffect(() => {
@@ -345,8 +346,8 @@ export default function ExercisesView() {
         <ExerciseDetailModal
           exercise={detailExercise}
           onClose={() => setDetailExercise(undefined)}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
+          onEdit={isAdmin ? handleEdit : undefined}
+          onDelete={isAdmin ? handleDelete : undefined}
         />
       )}
     </div>
