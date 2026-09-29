@@ -23,6 +23,7 @@ import { useIsMobile } from '../../hooks/useMediaQuery'
 import { btnPrimary as emptyActionStyle } from '../../styles/ui'
 import { SkeletonCards } from '../ui/Skeleton'
 import { isCurrentUserAdmin } from '../../lib/access'
+import ExerciseMuscleMannequin from '../mannequin/ExerciseMuscleMannequin'
 
 type FilterCategory = ExerciseCategory | 'all'
 
@@ -479,6 +480,13 @@ function ExerciseCard({ exercise, onClick }: { exercise: Exercise; onClick: () =
           </span>
         )}
       </div>
+
+      <ExerciseMuscleMannequin
+        primaryMuscle={exercise.primary_muscle}
+        secondaryMuscles={exercise.secondary_muscles}
+        tertiaryMuscles={exercise.tertiary_muscles}
+        height={78}
+      />
     </button>
   )
 }
