@@ -96,8 +96,7 @@
       "title_em": "gratuitement pendant 30 jours.",
       "subtitle": "Construis tes entraînements de groupe en quelques minutes. Base d'exercices complète, méthodes de programmation, vidéos et suggestions IA - tout au même endroit, sans carte de crédit.",
       "open_dashboard": "Ouvrir le dashboard coach",
-      "watch_demo": "Voir une démo",
-      "no_card": "Sans carte de crédit"
+      "watch_demo": "Voir une démo"
     },
     "ticker": [
       "Bibliothèque d'exercices",
@@ -148,8 +147,7 @@
       {
         "icon": "AI",
         "title": "Suggestions IA",
-        "desc": "L'intelligence artificielle analyse ta programmation et propose des variations, des progressions ou des combinaisons d'exercices cohérentes avec tes objectifs.",
-        "badge": "Alimenté par l'API Anthropic"
+        "desc": "L'intelligence artificielle analyse ta programmation et propose des variations, des progressions ou des combinaisons d'exercices cohérentes avec tes objectifs."
       },
       {
         "icon": "VID",
