@@ -762,6 +762,7 @@ export type Database = {
       }
       profiles: {
         Row: {
+          avatar_url: string | null
           badges_seen_at: string | null
           created_at: string
           current_streak: number
@@ -775,6 +776,7 @@ export type Database = {
           total_minutes: number
         }
         Insert: {
+          avatar_url?: string | null
           badges_seen_at?: string | null
           created_at?: string
           current_streak?: number
@@ -788,6 +790,7 @@ export type Database = {
           total_minutes?: number
         }
         Update: {
+          avatar_url?: string | null
           badges_seen_at?: string | null
           created_at?: string
           current_streak?: number

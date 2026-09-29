@@ -362,6 +362,17 @@ function App() {
         />
 
         <Route
+          path="/athlete/settings"
+          element={
+            <ProtectedRoute>
+              <AthleteDashboardLayout>
+                <SettingsView />
+              </AthleteDashboardLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
           path="/athlete/session"
           element={
             <ProtectedRoute>

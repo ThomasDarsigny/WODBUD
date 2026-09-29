@@ -42,6 +42,7 @@ export default function AthleteDashboardLayout({ children }: Props) {
     { id: 'session', labelKey: 'nav.session', icon: 'session', path: '/athlete/session' },
     { id: 'journal', labelKey: 'nav.journal', icon: 'calendar', path: '/athlete/journal' },
     { id: 'rank', labelKey: 'nav.rank', icon: 'rank', path: '/athlete/rank' },
+    { id: 'settings', labelKey: 'nav.settings', icon: 'settings', path: '/athlete/settings' },
   ]
 
   // L'athlète n'a pas d'entrée « Votes » : les votes vivent sur l'accueil,
