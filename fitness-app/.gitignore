@@ -34,8 +34,7 @@ dist-ssr
 #DB files
 .sql
 
-# Aperçus déposés par l'app Claude Desktop dans le dossier connecté.
-# Ce sont des fichiers jetables, pas du code source.
+#Claude
 Claude outputs/
 
 # Fichiers sortis du dépôt en attendant une suppression manuelle
