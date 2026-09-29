@@ -1,7 +1,7 @@
 # Migrations
 
-L'historique complet (31 migrations, de `fix_rls_infinite_recursion_and_cleanup`
-à `027_profiles_avatar`) **existe côté Supabase** : le projet les trace dans
+L'historique complet (32 migrations, de `fix_rls_infinite_recursion_and_cleanup`
+à `028_communaute_badges`) **existe côté Supabase** : le projet les trace dans
 `supabase_migrations.schema_migrations`. Rien n'est perdu.
 
 Ce qui manque, c'est leur **SQL dans le dépôt** : les migrations 001 à 016,
@@ -26,3 +26,4 @@ d'être appliqué.
 | `025_exercise_votes_fix_permissive_bypass.sql` | Corrige 024 : une ancienne policy `ALL` sans condition d'échéance la contournait entièrement (policies RLS permissives = OR, pas remplacement) |
 | `026_scheduled_workouts.sql` | Table `scheduled_workouts` — volet « séances programmées » du journal, personnel (même modèle que `workout_sessions`) |
 | `027_profiles_avatar.sql` | Colonne `profiles.avatar_url` + bucket Storage `avatars` (public en lecture, écriture par propriétaire) — voir `docs/suppression-compte.md` pour le choix Storage plutôt que R2 |
+| `028_communaute_badges.sql` | 6 nouveaux badges dans la famille `communaute` (4 → 10) + `wodbud_recalc_badges` mis à jour pour les évaluer |

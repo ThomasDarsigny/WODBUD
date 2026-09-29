@@ -24,14 +24,31 @@ interface Props {
   title?: string
 }
 
-/** Le catalogue est en base : une icône inconnue ne doit pas casser le rendu. */
+/**
+ * Le catalogue de badges est en base et parle son propre vocabulaire
+ * d'icônes (« users », « heart », « dumbbell », « medal »...), pas celui de
+ * NavIcon. Sans cette table de correspondance, ces quatre-là retombaient
+ * silencieusement sur le fallback 'rank' — `coach_class`, `coach_20`,
+ * `cardio_1`, `cardio_20`, `wod_10`, `wod_50`, `wod_100`, `wod_250` et `pr`
+ * affichaient tous la même médaille au lieu de leur pictogramme. Les icônes
+ * qui existent déjà sous un autre nom sont réutilisées ; une icône
+ * réellement inconnue retombe sur 'rank' comme avant.
+ */
+const ICON_ALIASES: Record<string, NavIconName> = {
+  users: 'classes', // NavIcon 'classes' = deux personnes
+  heart: 'session', // NavIcon 'session' = cœur
+  dumbbell: 'exercises', // NavIcon 'exercises' = haltère
+  medal: 'rank' // NavIcon 'rank' = médaille
+}
+
 function toIconName(icon: string): NavIconName {
   const known: NavIconName[] = [
     'home', 'admin', 'exercises', 'workout', 'library', 'session', 'rank',
     'classes', 'ai', 'vote', 'settings', 'search', 'calendar', 'video',
     'play', 'flame', 'bolt', 'grid', 'star', 'clock'
   ]
-  return (known as string[]).includes(icon) ? (icon as NavIconName) : 'rank'
+  if ((known as string[]).includes(icon)) return icon as NavIconName
+  return ICON_ALIASES[icon] ?? 'rank'
 }
 
 export default function BadgeToken({ icon, state, size = 72, title }: Props) {
