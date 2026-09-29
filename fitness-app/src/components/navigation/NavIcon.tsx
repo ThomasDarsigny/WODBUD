@@ -32,6 +32,7 @@ export type NavIconName =
   | 'grid'
   | 'star'
   | 'clock'
+  | 'community'
 
 /** Un tracé par icône. Plusieurs sous-tracés séparés par un espace. */
 const PATHS: Record<NavIconName, string[]> = {
@@ -73,7 +74,14 @@ const PATHS: Record<NavIconName, string[]> = {
   // Étoile : l'ancienneté
   star: ['M12 3.4 14.6 9l6 .8-4.4 4.3 1.1 6L12 17.2l-5.3 2.9 1.1-6L3.4 9.8l6-.8z'],
   // Horloge : la durée d'une séance
-  clock: ['M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z', 'M12 7v5.2l3.4 2']
+  clock: ['M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z', 'M12 7v5.2l3.4 2'],
+  // Trois nœuds reliés : une communauté, distincte des « deux personnes » de classes
+  community: [
+    'M9.8 5a2.2 2.2 0 1 0 4.4 0 2.2 2.2 0 1 0 -4.4 0',
+    'M2.8 18a2.2 2.2 0 1 0 4.4 0 2.2 2.2 0 1 0 -4.4 0',
+    'M16.8 18a2.2 2.2 0 1 0 4.4 0 2.2 2.2 0 1 0 -4.4 0',
+    'M12 7.2 6.3 16.2', 'M12 7.2 17.7 16.2', 'M7.2 18h9.6'
+  ]
 }
 
 interface Props {

@@ -4,20 +4,31 @@ import { useTranslation } from 'react-i18next'
 import { supabase } from '../lib/supabase'
 import { formatMinutes, rankMotto, type Rank } from '../lib/ranks'
 import RankBadge from '../components/rank/RankBadge'
+import type { SocialLink } from '../types'
 
 interface SharedRank {
   display_name: string
   rank_key: string
   total_minutes: number
   current_streak: number
+  avatar_url: string | null
+  social_links: SocialLink[]
+}
+
+const SOCIAL_LABEL: Record<SocialLink['platform'], string> = {
+  facebook: 'Facebook',
+  instagram: 'Instagram',
+  x: 'X',
+  autre: ''
 }
 
 /**
  * Page publique d'un rang partagé — accessible sans compte.
  *
- * Elle passe par la fonction `get_shared_rank`, qui ne retourne que quatre
- * champs. Aucune policy large n'est ouverte sur `profiles` : un lien de partage
- * expose un rang, pas un profil.
+ * Elle passe par la fonction `get_shared_rank`, qui ne retourne que les
+ * champs choisis (nom, rang, photo, réseaux sociaux). Aucune policy large
+ * n'est ouverte sur `profiles` : un lien de partage expose un rang et ce que
+ * la personne a choisi d'y ajouter, pas le reste de son profil.
  */
 export default function SharedRankPage() {
   const { token } = useParams<{ token: string }>()
@@ -33,7 +44,7 @@ export default function SharedRankPage() {
       try {
         const { data, error } = await supabase.rpc('get_shared_rank', { p_token: token })
         if (error) throw error
-        const row = (data ?? [])[0] as SharedRank | undefined
+        const row = (data ?? [])[0] as unknown as SharedRank | undefined
         if (!mounted) return
         if (!row) { setLoading(false); return }
         setShared(row)
@@ -73,6 +84,14 @@ export default function SharedRankPage() {
             {t('rank.shared_title')}
           </p>
 
+          {shared.avatar_url && (
+            <img
+              src={shared.avatar_url}
+              alt=""
+              style={{ width: 72, height: 72, borderRadius: '50%', objectFit: 'cover', border: `1px solid ${rank.color}`, margin: '0 auto 1rem' }}
+            />
+          )}
+
           <p style={{ fontFamily: 'var(--font-d)', fontSize: '1.25rem', fontWeight: 900, letterSpacing: '0.06em', textTransform: 'uppercase', margin: '0 0 1.5rem' }}>
             {shared.display_name || t('rank.anonymous')}
           </p>
@@ -89,6 +108,25 @@ export default function SharedRankPage() {
             <PublicStat value={formatMinutes(shared.total_minutes)} label={t('rank.total_minutes')} />
             <PublicStat value={t('rank.days', { count: shared.current_streak })} label={t('rank.current_streak')} />
           </div>
+
+          {shared.social_links?.length > 0 && (
+            <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', flexWrap: 'wrap', marginTop: '1.25rem' }}>
+              {shared.social_links.map((link, i) => (
+                <a
+                  key={i}
+                  href={link.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{
+                    fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.1em', textTransform: 'uppercase',
+                    color: rank.color, border: `1px solid ${rank.color}59`, padding: '0.3rem 0.7rem', textDecoration: 'none'
+                  }}
+                >
+                  {SOCIAL_LABEL[link.platform] || link.platform}
+                </a>
+              ))}
+            </div>
+          )}
 
           <Link
             to="/"

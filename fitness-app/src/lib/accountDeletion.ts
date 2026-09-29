@@ -8,6 +8,8 @@ export interface DeletionImpact {
   workoutsCreated: number
   sessionsLogged: number
   scheduledCount: number
+  communitiesOwned: number
+  communityMembersAffected: number
 }
 
 async function call(confirm: boolean): Promise<{ impact?: DeletionImpact; deleted?: boolean }> {

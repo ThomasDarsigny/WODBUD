@@ -14,7 +14,7 @@ un bannissement — suffit donc à tout effacer en cascade :
 
 | Table | Cascade depuis |
 |---|---|
-| `workouts`, `workout_sessions`, `exercise_votes`, `rank_shares`, `class_members`, `classes`, `vote_sessions`, `admin_users` | `profiles` |
+| `workouts`, `workout_sessions`, `exercise_votes`, `rank_shares`, `class_members`, `classes`, `vote_sessions`, `admin_users`, `communities`, `community_members` | `profiles` |
 | `scheduled_workouts`, `user_badges` | `auth.users` directement |
 | `exercises.created_by`, `themes.created_by` | **`SET NULL`**, volontairement — la bibliothèque d'exercices est une ressource partagée, elle ne doit pas disparaître avec son créateur |
 
@@ -30,18 +30,24 @@ jour ici sans y toucher.
 `classes.coach_id → profiles` est en `cascade`, et `class_members.class_id
 → classes` l'est aussi. Un coach qui se supprime supprime donc ses classes,
 ce qui **retire ses athlètes de ces classes et efface leurs votes qui s'y
-rattachaient** — des données qui ne lui appartiennent pas.
+rattachaient** — des données qui ne lui appartiennent pas. Même mécanique
+pour `communities.created_by → profiles` et `community_members.community_id
+→ communities` (migration 029) : supprimer son compte supprime les
+communautés qu'on a créées, ce qui **retire tout le monde de ces
+communautés**.
 
 C'est le seul cas où « supprimer mon compte » a un effet sur quelqu'un
 d'autre. La fonction ne le cache pas : avant de supprimer quoi que ce soit,
-un premier appel (`{ confirm: false }`) calcule combien d'athlètes seraient
-touchés, et l'écran l'affiche en rouge, séparé du reste du résumé. Un
-athlète qui se supprime lui-même n'a jamais cet avertissement — ses propres
-données ne touchent que lui.
+un premier appel (`{ confirm: false }`) calcule combien d'athlètes et de
+membres de communauté seraient touchés, et l'écran l'affiche en rouge,
+séparé du reste du résumé. Un athlète ou un simple membre qui se supprime
+lui-même n'a jamais cet avertissement — ses propres données ne touchent
+que lui.
 
-Aucune fonctionnalité de transfert de classe n'existe aujourd'hui. Si un
-coach veut partir sans couper ses athlètes, il n'y a pas d'autre solution
-que de le faire manuellement avant de supprimer le compte.
+Aucune fonctionnalité de transfert de classe ou de communauté n'existe
+aujourd'hui. Si un coach veut partir sans couper ses athlètes ou ses
+membres, il n'y a pas d'autre solution que de le faire manuellement avant
+de supprimer le compte.
 
 ## Garde-fou admin
 
@@ -55,7 +61,8 @@ pas partiel.
 ## Les deux appels
 
 - `{ confirm: false }` (ou le corps omis) : calcule et renvoie l'ampleur
-  (classes, athlètes, workouts, séances, sessions de vote), sans rien
+  (classes, athlètes, workouts, séances, sessions de vote, séances
+  programmées, communautés créées, membres de communauté touchés), sans rien
   supprimer.
 - `{ confirm: true }` : supprime réellement.
 
@@ -74,3 +81,14 @@ propriétaire via le chemin `avatars/<user_id>/photo.<ext>`. Voir le
 commentaire en tête de la migration pour le choix Storage plutôt que R2
 (pas le même volume, pas le même calcul d'egress que les vidéos
 d'exercices — voir `docs/stockage-video-r2.md`).
+
+## Communautés et réseaux sociaux
+
+Migration 029 : `communities` et `community_members`, ouvertes à tout compte
+en création comme en lecture — voir le commentaire en tête de la migration
+pour pourquoi (cohérence avec `classes`, déjà ouvertes à tous, plutôt qu'une
+restriction facilement contournable). `profiles.social_links` (jsonb, liste
+de `{platform, url}`) se gère depuis Paramètres et s'affiche sur la page de
+rang partagée (`get_shared_rank`, migration 030) — c'est la seule page
+publique de l'app, donc le seul endroit où « partager ses accomplissements »
+a un sens.

@@ -35,6 +35,7 @@ const NAV_ITEMS: NavItem[] = [
   { id: 'classes', labelKey: 'nav.classes', icon: 'classes', path: '/dashboard/classes' },
   { id: 'ai', labelKey: 'nav.ai', icon: 'ai', path: '/dashboard/ai' },
   { id: 'vote', labelKey: 'nav.vote', icon: 'vote', path: '/dashboard/vote' },
+  { id: 'communities', labelKey: 'nav.communities', icon: 'community', path: '/dashboard/communities' },
   { id: 'settings', labelKey: 'nav.settings', icon: 'settings', path: '/dashboard/settings' }
 ]
 

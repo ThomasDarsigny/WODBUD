@@ -23,12 +23,13 @@ const corsHeaders = {
  *
  * Une seule opération suffit à tout effacer : `profiles.id` référence
  * `auth.users(id) on delete cascade`, et toutes les tables qui comptent
- * (classes, workouts, exercise_votes, workout_sessions, class_members,
- * vote_sessions, rank_shares, user_badges, scheduled_workouts) cascadent
- * depuis profiles ou directement depuis auth.users. `admin.deleteUser()`
- * fait un DELETE FROM auth.users en dur (pas un ban) par défaut — c'est ce
- * déclencheur qu'on utilise, plutôt que de supprimer les tables une par une
- * et risquer d'en oublier une ou de se tromper dans l'ordre.
+ * (classes, communities, workouts, exercise_votes, workout_sessions,
+ * class_members, community_members, vote_sessions, rank_shares,
+ * user_badges, scheduled_workouts) cascadent depuis profiles ou
+ * directement depuis auth.users. `admin.deleteUser()` fait un DELETE FROM
+ * auth.users en dur (pas un ban) par défaut — c'est ce déclencheur qu'on
+ * utilise, plutôt que de supprimer les tables une par une et risquer d'en
+ * oublier une ou de se tromper dans l'ordre.
  *
  * Garde-fou : un admin ne peut pas s'auto-supprimer. L'app n'a aujourd'hui
  * aucun moyen de désigner un autre admin depuis l'interface — le laisser
@@ -36,9 +37,11 @@ const corsHeaders = {
  * d'exercices, pour tout le monde, sans recours.
  *
  * Cas particulier : un coach qui supprime son compte supprime aussi ses
- * classes (cascade), ce qui retire ses athlètes de ces classes et efface
- * les votes qui s'y rattachaient. Le résumé le dit explicitement — c'est
- * la seule chose qu'on ne peut pas cacher au coach sans le tromper.
+ * classes et les communautés qu'il a créées (cascade), ce qui retire ses
+ * athlètes de ces classes, efface les votes qui s'y rattachaient, et
+ * retire les membres des communautés qu'il avait créées. Le résumé le dit
+ * explicitement — c'est la seule chose qu'on ne peut pas cacher sans
+ * tromper la personne qui supprime son compte.
  */
 
 interface Impact {
@@ -48,6 +51,8 @@ interface Impact {
   workoutsCreated: number
   sessionsLogged: number
   scheduledCount: number
+  communitiesOwned: number
+  communityMembersAffected: number
 }
 
 async function computeImpact(
@@ -77,13 +82,31 @@ async function computeImpact(
       adminClient.from('scheduled_workouts').select('id', { count: 'exact', head: true }).eq('user_id', userId)
     ])
 
+  const { data: ownedCommunities } = await adminClient
+    .from('communities')
+    .select('id')
+    .eq('created_by', userId)
+  const communityIds = (ownedCommunities ?? []).map((c: { id: string }) => c.id)
+
+  let communityMembersAffected = 0
+  if (communityIds.length > 0) {
+    const { data: communityMembers } = await adminClient
+      .from('community_members')
+      .select('user_id')
+      .in('community_id', communityIds)
+      .neq('user_id', userId) // le créateur n'est pas "affecté" par la perte de sa propre communauté
+    communityMembersAffected = new Set((communityMembers ?? []).map((m: { user_id: string }) => m.user_id)).size
+  }
+
   return {
     classesOwned: classIds.length,
     athletesAffected,
     votesSessionsOwned: votesSessionsOwned ?? 0,
     workoutsCreated: workoutsCreated ?? 0,
     sessionsLogged: sessionsLogged ?? 0,
-    scheduledCount: scheduledCount ?? 0
+    scheduledCount: scheduledCount ?? 0,
+    communitiesOwned: communityIds.length,
+    communityMembersAffected
   }
 }
 

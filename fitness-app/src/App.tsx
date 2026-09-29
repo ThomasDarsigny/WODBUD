@@ -23,6 +23,7 @@ const VoteView = lazy(() => import('./components/dashboard/VoteView'))
 const ClassesView = lazy(() => import('./components/dashboard/ClassesView'))
 const AiCoachView = lazy(() => import('./components/dashboard/AiCoachView'))
 const SettingsView = lazy(() => import('./components/dashboard/SettingsView'))
+const CommunitiesView = lazy(() => import('./components/community/CommunitiesView'))
 const SessionRunnerView = lazy(() => import('./components/session/SessionRunnerView'))
 const RankView = lazy(() => import('./components/rank/RankView'))
 const SessionJournalView = lazy(() => import('./components/session/SessionJournalView'))
@@ -301,6 +302,17 @@ function App() {
         />
 
         <Route
+          path="/dashboard/communities"
+          element={
+            <ProtectedRoute>
+              <DashboardLayout>
+                <CommunitiesView />
+              </DashboardLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
           path="/dashboard/rank"
           element={
             <ProtectedRoute>
@@ -367,6 +379,17 @@ function App() {
             <ProtectedRoute>
               <AthleteDashboardLayout>
                 <SettingsView />
+              </AthleteDashboardLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/athlete/communities"
+          element={
+            <ProtectedRoute>
+              <AthleteDashboardLayout>
+                <CommunitiesView />
               </AthleteDashboardLayout>
             </ProtectedRoute>
           }

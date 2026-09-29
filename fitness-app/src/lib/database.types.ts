@@ -492,6 +492,71 @@ export type Database = {
           },
         ]
       }
+      communities: {
+        Row: {
+          created_at: string
+          created_by: string
+          description: string | null
+          id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          description?: string | null
+          id?: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          description?: string | null
+          id?: string
+          name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "communities_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      community_members: {
+        Row: {
+          community_id: string
+          joined_at: string
+          user_id: string
+        }
+        Insert: {
+          community_id: string
+          joined_at?: string
+          user_id: string
+        }
+        Update: {
+          community_id?: string
+          joined_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "community_members_community_id_fkey"
+            columns: ["community_id"]
+            isOneToOne: false
+            referencedRelation: "communities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "community_members_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       exercise_methods: {
         Row: {
           exercise_id: string
@@ -772,6 +837,7 @@ export type Database = {
           longest_streak: number
           rank_seen_key: string | null
           segment: string | null
+          social_links: Json
           theme_pref: string
           total_minutes: number
         }
@@ -786,6 +852,7 @@ export type Database = {
           longest_streak?: number
           rank_seen_key?: string | null
           segment?: string | null
+          social_links?: Json
           theme_pref?: string
           total_minutes?: number
         }
@@ -800,6 +867,7 @@ export type Database = {
           longest_streak?: number
           rank_seen_key?: string | null
           segment?: string | null
+          social_links?: Json
           theme_pref?: string
           total_minutes?: number
         }
@@ -1351,9 +1419,11 @@ export type Database = {
       get_shared_rank: {
         Args: { p_token: string }
         Returns: {
+          avatar_url: string
           current_streak: number
           display_name: string
           rank_key: string
+          social_links: Json
           total_minutes: number
         }[]
       }

@@ -7,7 +7,7 @@ import type { TablesUpdate } from '../../lib/database.types'
 import type { MannequinBody } from '../mannequin/bodyPaths'
 import { readBodyPref, storeBodyPref } from '../mannequin/Mannequin2D'
 import { applyTheme, readStoredTheme, storeTheme } from '../../lib/theme'
-import type { ThemePref, UserSegment } from '../../types'
+import type { ThemePref, UserSegment, SocialLink, SocialPlatform } from '../../types'
 import { uploadAvatar } from '../../lib/avatar'
 import { previewAccountDeletion, confirmAccountDeletion, type DeletionImpact } from '../../lib/accountDeletion'
 import { clearAuthSessionCookies } from '../../lib/authSessionCookies'
@@ -46,6 +46,10 @@ export default function SettingsView() {
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
   const avatarInputRef = useRef<HTMLInputElement>(null)
 
+  const [socialLinks, setSocialLinks] = useState<SocialLink[]>([])
+  const [newPlatform, setNewPlatform] = useState<SocialPlatform>('instagram')
+  const [newUrl, setNewUrl] = useState('')
+
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
 
   useEffect(() => {
@@ -57,7 +61,7 @@ export default function SettingsView() {
 
       const { data: profile } = await supabase
         .from('profiles')
-        .select('theme_pref, language, segment, avatar_url')
+        .select('theme_pref, language, segment, avatar_url, social_links')
         .eq('id', data.user.id)
         .maybeSingle()
 
@@ -72,6 +76,7 @@ export default function SettingsView() {
         void i18n.changeLanguage(profile.language)
       }
       setAvatarUrl((profile as { avatar_url?: string | null }).avatar_url ?? null)
+      setSocialLinks(Array.isArray(profile.social_links) ? (profile.social_links as unknown as SocialLink[]) : [])
     }
     void load()
     return () => {
@@ -117,6 +122,26 @@ export default function SettingsView() {
     } finally {
       setBusy(null)
     }
+  }
+
+  async function addSocialLink() {
+    const url = newUrl.trim()
+    if (!url) return
+    setNotice(null)
+    // Pas de validation stricte du format d'URL : un lien Instagram peut
+    // s'écrire "instagram.com/nom" sans schéma, valider trop tôt ferait
+    // rejeter une saisie légitime.
+    const withScheme = /^https?:\/\//i.test(url) ? url : `https://${url}`
+    const next = [...socialLinks, { platform: newPlatform, url: withScheme }]
+    setSocialLinks(next)
+    setNewUrl('')
+    await persist({ social_links: next as unknown as TablesUpdate<'profiles'>['social_links'] })
+  }
+
+  async function removeSocialLink(index: number) {
+    const next = socialLinks.filter((_, i) => i !== index)
+    setSocialLinks(next)
+    await persist({ social_links: next as unknown as TablesUpdate<'profiles'>['social_links'] })
   }
 
   async function submitEmail() {
@@ -294,6 +319,44 @@ export default function SettingsView() {
         </Row>
       </Section>
 
+      <Section title={t('community.social_links')}>
+        <Row label={t('community.social_links')} hint={t('community.social_links_hint')}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+            {socialLinks.map((link, i) => (
+              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--orange)', border: '1px solid var(--border)', padding: '0.2rem 0.5rem', flexShrink: 0 }}>
+                  {t(`community.social_platform_${link.platform}`)}
+                </span>
+                <a href={link.url} target='_blank' rel='noreferrer' style={{ color: 'var(--muted)', fontSize: '0.8125rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1 }}>
+                  {link.url}
+                </a>
+                <button type='button' onClick={() => { void removeSocialLink(i) }} style={{ background: 'none', border: 'none', color: 'var(--muted)', cursor: 'pointer', fontSize: '0.875rem', flexShrink: 0 }} title={t('community.social_remove')}>
+                  ✕
+                </button>
+              </div>
+            ))}
+
+            <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: socialLinks.length > 0 ? '0.4rem' : 0 }}>
+              <select value={newPlatform} onChange={(e) => setNewPlatform(e.target.value as SocialPlatform)} style={inputStyle}>
+                <option value='instagram'>{t('community.social_platform_instagram')}</option>
+                <option value='facebook'>{t('community.social_platform_facebook')}</option>
+                <option value='x'>{t('community.social_platform_x')}</option>
+                <option value='autre'>{t('community.social_platform_autre')}</option>
+              </select>
+              <input
+                value={newUrl}
+                onChange={(e) => setNewUrl(e.target.value)}
+                placeholder={t('community.social_url_placeholder')}
+                style={{ ...inputStyle, flex: 1, minWidth: 180 }}
+              />
+              <button type='button' onClick={() => { void addSocialLink() }} disabled={!newUrl.trim()} style={{ ...buttonStyle, opacity: !newUrl.trim() ? 0.6 : 1 }}>
+                {t('community.social_add')}
+              </button>
+            </div>
+          </div>
+        </Row>
+      </Section>
+
       <Section title={t('settings.privacy')}>
         <Link to='/confidentialite' style={{ color: 'var(--orange)', fontSize: '0.8125rem' }}>
           {t('settings.privacy_link')}
@@ -413,7 +476,7 @@ function DeleteAccountModal({ onClose }: { onClose: () => void }) {
     }
   }
 
-  const hasThirdPartyImpact = (impact?.athletesAffected ?? 0) > 0
+  const hasThirdPartyImpact = (impact?.athletesAffected ?? 0) > 0 || (impact?.communityMembersAffected ?? 0) > 0
 
   return (
     <div
@@ -437,11 +500,13 @@ function DeleteAccountModal({ onClose }: { onClose: () => void }) {
               {impact.classesOwned > 0 && <li>{t('settings.delete_impact_classes', { count: impact.classesOwned })}</li>}
               {impact.votesSessionsOwned > 0 && <li>{t('settings.delete_impact_votes', { count: impact.votesSessionsOwned })}</li>}
               {impact.scheduledCount > 0 && <li>{t('settings.delete_impact_scheduled', { count: impact.scheduledCount })}</li>}
+              {impact.communitiesOwned > 0 && <li>{t('settings.delete_impact_communities', { count: impact.communitiesOwned })}</li>}
             </ul>
 
             {hasThirdPartyImpact && (
-              <div style={{ border: '1px solid rgba(239,68,68,0.4)', background: 'rgba(239,68,68,0.08)', padding: '0.75rem', fontSize: '0.8125rem', color: '#ef4444' }}>
-                {t('settings.delete_impact_athletes', { count: impact.athletesAffected })}
+              <div style={{ border: '1px solid rgba(239,68,68,0.4)', background: 'rgba(239,68,68,0.08)', padding: '0.75rem', fontSize: '0.8125rem', color: '#ef4444', display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
+                {impact.athletesAffected > 0 && <span>{t('settings.delete_impact_athletes', { count: impact.athletesAffected })}</span>}
+                {impact.communityMembersAffected > 0 && <span>{t('settings.delete_impact_community_members', { count: impact.communityMembersAffected })}</span>}
               </div>
             )}
 

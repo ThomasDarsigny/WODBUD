@@ -223,6 +223,34 @@ export interface ClassMember {
   profile?: { full_name: string | null }
 }
 
+// ─── Communities ────────────────────────────────────────────────────────────
+export interface Community {
+  id: string
+  name: string
+  description: string | null
+  created_by: string
+  created_at: string
+  /** Compté côté client à partir de community_members — pas une colonne. */
+  member_count?: number
+  /** Vrai si l'utilisateur courant en est membre — calculé côté client. */
+  is_member?: boolean
+}
+
+export type CommunityInsert = Pick<Community, 'name' | 'description'>
+
+export interface CommunityMember {
+  community_id: string
+  user_id: string
+  joined_at: string
+}
+
+export type SocialPlatform = 'facebook' | 'instagram' | 'x' | 'autre'
+
+export interface SocialLink {
+  platform: SocialPlatform
+  url: string
+}
+
 // ─── Vote Sessions ────────────────────────────────────────────────────────────
 export type VoteSessionStatus = 'open' | 'closed'
 

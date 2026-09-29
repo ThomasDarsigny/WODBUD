@@ -14,7 +14,8 @@
     "rank": "My rank",
     "open_menu": "Open menu",
     "close_menu": "Close menu",
-    "journal": "Journal"
+    "journal": "Journal",
+    "communities": "Communities"
   },
   "library": {
     "title": "Workout library",
@@ -36,6 +37,32 @@
     "go_to_classes": "Go to my classes",
     "refresh": "Refresh results",
     "empty_hint": "Votes start from a class: your athletes pick the WOD of the day."
+  },
+  "community": {
+    "tag": "Communities",
+    "title": "Communities",
+    "subtitle": "Join a community, or create your own.",
+    "create": "Create a community",
+    "field_name": "Name",
+    "field_description": "Description (optional)",
+    "join": "Join",
+    "leave": "Leave",
+    "delete": "Delete",
+    "member_count_one": "{{count}} member",
+    "member_count_other": "{{count}} members",
+    "empty": "No communities yet",
+    "empty_hint": "Be the first to create one.",
+    "social_links": "Social links",
+    "social_links_hint": "Shown on your public shared rank page.",
+    "social_add": "Add a link",
+    "social_platform": "Platform",
+    "social_url": "Link",
+    "social_url_placeholder": "https://...",
+    "social_platform_facebook": "Facebook",
+    "social_platform_instagram": "Instagram",
+    "social_platform_x": "X",
+    "social_platform_autre": "Other",
+    "social_remove": "Remove"
   },
   "actions": {
     "save": "Save",
@@ -453,6 +480,10 @@
     "delete_impact_votes_other": "{{count}} vote sessions",
     "delete_impact_scheduled_one": "{{count}} scheduled session",
     "delete_impact_scheduled_other": "{{count}} scheduled sessions",
+    "delete_impact_communities_one": "{{count}} community you created",
+    "delete_impact_communities_other": "{{count}} communities you created",
+    "delete_impact_community_members_one": "{{count}} member will lose their spot in your communities",
+    "delete_impact_community_members_other": "{{count}} members will lose their spot in your communities",
     "delete_impact_athletes_one": "{{count}} athlete will be removed from your classes and will lose their votes there.",
     "delete_impact_athletes_other": "{{count}} athletes will be removed from your classes and will lose their votes there.",
     "delete_confirm_word": "DELETE",

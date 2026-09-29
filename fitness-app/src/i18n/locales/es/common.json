@@ -14,7 +14,8 @@
     "rank": "Mi rango",
     "open_menu": "Abrir el menú",
     "close_menu": "Cerrar el menú",
-    "journal": "Diario"
+    "journal": "Diario",
+    "communities": "Comunidades"
   },
   "library": {
     "title": "Biblioteca de workouts",
@@ -36,6 +37,32 @@
     "go_to_classes": "Ir a mis clases",
     "refresh": "Actualizar resultados",
     "empty_hint": "Las votaciones nacen en una clase: tus atletas eligen el WOD del día."
+  },
+  "community": {
+    "tag": "Comunidades",
+    "title": "Comunidades",
+    "subtitle": "Únete a una comunidad, o crea la tuya.",
+    "create": "Crear una comunidad",
+    "field_name": "Nombre",
+    "field_description": "Descripción (opcional)",
+    "join": "Unirse",
+    "leave": "Salir",
+    "delete": "Eliminar",
+    "member_count_one": "{{count}} miembro",
+    "member_count_other": "{{count}} miembros",
+    "empty": "Aún no hay comunidades",
+    "empty_hint": "Sé el primero en crear una.",
+    "social_links": "Redes sociales",
+    "social_links_hint": "Se muestran en tu página de rango compartida.",
+    "social_add": "Añadir un enlace",
+    "social_platform": "Red",
+    "social_url": "Enlace",
+    "social_url_placeholder": "https://...",
+    "social_platform_facebook": "Facebook",
+    "social_platform_instagram": "Instagram",
+    "social_platform_x": "X",
+    "social_platform_autre": "Otra",
+    "social_remove": "Quitar"
   },
   "actions": {
     "save": "Guardar",
@@ -458,6 +485,10 @@
     "delete_impact_votes_other": "{{count}} sesiones de votación",
     "delete_impact_scheduled_one": "{{count}} sesión programada",
     "delete_impact_scheduled_other": "{{count}} sesiones programadas",
+    "delete_impact_communities_one": "{{count}} comunidad que creaste",
+    "delete_impact_communities_other": "{{count}} comunidades que creaste",
+    "delete_impact_community_members_one": "{{count}} miembro perderá su lugar en tus comunidades",
+    "delete_impact_community_members_other": "{{count}} miembros perderán su lugar en tus comunidades",
     "delete_impact_athletes_one": "{{count}} atleta será retirado de tus clases y perderá sus votos ahí.",
     "delete_impact_athletes_other": "{{count}} atletas serán retirados de tus clases y perderán sus votos ahí.",
     "delete_confirm_word": "ELIMINAR",
