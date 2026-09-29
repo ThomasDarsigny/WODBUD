@@ -313,6 +313,7 @@
     "launch_vote": "Launch vote",
     "vote_open": "Open",
     "vote_closed": "Closed",
+    "vote_expired": "Expired",
     "close_vote": "Close",
     "deadline": "Deadline",
     "pick_exercises": "Exercises to vote on",
@@ -345,6 +346,7 @@
     "back_home": "Back to home",
     "vote_not_found": "Vote not found or expired",
     "vote_closed": "This vote is now closed",
+    "vote_expired": "This vote's deadline has passed",
     "no_votes_hint": "As soon as your coach opens a vote, it shows up here.",
     "no_classes_hint": "Ask your coach for the invite link to join their class."
   },

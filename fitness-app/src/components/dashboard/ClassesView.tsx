@@ -12,6 +12,7 @@ import { CATEGORY_I18N_KEYS, MUSCLE_GROUP_I18N_KEYS } from '../../types'
 import { btnPrimary as actionBtnStyle, btnSecondary as ghostBtnStyle, field as inputStyle, textarea as textareaStyle } from '../../styles/ui'
 import Skeleton from '../ui/Skeleton'
 import ClassLeaderboard from '../rank/ClassLeaderboard'
+import { isVoteSessionOpen, voteSessionKind } from '../../lib/voteSessions'
 
 const BASE_URL = window.location.origin
 
@@ -368,12 +369,14 @@ function VotesTab({ sessions, voteResults, onCreateVote, onCloseSession, onDelet
                       </p>
                       <span style={{
                         fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.15em', textTransform: 'uppercase',
-                        color: session.status === 'open' ? '#22c55e' : 'var(--muted)',
-                        border: `1px solid ${session.status === 'open' ? 'rgba(34,197,94,0.35)' : 'var(--border)'}`,
-                        background: session.status === 'open' ? 'rgba(34,197,94,0.08)' : 'transparent',
+                        color: isVoteSessionOpen(session) ? '#22c55e' : 'var(--muted)',
+                        border: `1px solid ${isVoteSessionOpen(session) ? 'rgba(34,197,94,0.35)' : 'var(--border)'}`,
+                        background: isVoteSessionOpen(session) ? 'rgba(34,197,94,0.08)' : 'transparent',
                         padding: '0.1rem 0.4rem'
                       }}>
-                        {session.status === 'open' ? t('classes.vote_open') : t('classes.vote_closed')}
+                        {voteSessionKind(session) === 'open' ? t('classes.vote_open')
+                          : voteSessionKind(session) === 'expired' ? t('classes.vote_expired')
+                          : t('classes.vote_closed')}
                       </span>
                       {totalVotes > 0 && (
                         <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--muted)', padding: '0.1rem 0.4rem' }}>
@@ -395,7 +398,7 @@ function VotesTab({ sessions, voteResults, onCreateVote, onCloseSession, onDelet
                     >
                       ↻
                     </button>
-                    {session.status === 'open' && (
+                    {isVoteSessionOpen(session) && (
                       <button
                         onClick={() => onCloseSession(session.id)}
                         title="Clôturer ce vote — les athlètes ne pourront plus voter"

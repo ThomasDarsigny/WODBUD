@@ -10,6 +10,7 @@ import { CATEGORY_I18N_KEYS, MUSCLE_GROUP_I18N_KEYS } from '../../types'
 import Skeleton from '../ui/Skeleton'
 import { supabase } from '../../lib/supabase'
 import ClassLeaderboard from '../rank/ClassLeaderboard'
+import { isVoteSessionOpen } from '../../lib/voteSessions'
 void CATEGORY_I18N_KEYS
 void MUSCLE_GROUP_I18N_KEYS
 
@@ -44,7 +45,11 @@ export default function AthleteHomeView() {
     // Pas de setLoadingSessions(true) synchrone ici : l'état initial vaut déjà
     // `true`, et le remettre pendant l'effet déclenche un rendu en cascade.
     fetchOpenVoteSessions()
-      .then((sessions) => { if (mounted) setOpenSessions(sessions) })
+      // `status = 'open'` côté requête ne dit rien de l'échéance : un vote
+      // resté « open » depuis des mois parce que personne ne l'a fermé à la
+      // main apparaîtrait comme actif ici, pour finir bloqué par la RLS une
+      // fois l'athlète rendu à l'écran de vote (migration 024).
+      .then((sessions) => { if (mounted) setOpenSessions(sessions.filter(isVoteSessionOpen)) })
       .catch(() => {})
       .finally(() => { if (mounted) setLoadingSessions(false) })
     return () => { mounted = false }

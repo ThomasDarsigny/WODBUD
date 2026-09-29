@@ -318,6 +318,7 @@
     "launch_vote": "Lanzar voto",
     "vote_open": "Abierto",
     "vote_closed": "Cerrado",
+    "vote_expired": "Expirado",
     "close_vote": "Cerrar",
     "deadline": "Fecha límite",
     "pick_exercises": "Ejercicios a votar",
@@ -350,6 +351,7 @@
     "back_home": "Volver al inicio",
     "vote_not_found": "Voto no encontrado o expirado",
     "vote_closed": "Esta votación está cerrada",
+    "vote_expired": "La fecha límite de esta votación ha pasado",
     "no_votes_hint": "En cuanto tu coach abra una votación, aparecerá aquí.",
     "no_classes_hint": "Pide el enlace de invitación a tu coach para unirte a su clase."
   },

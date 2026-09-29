@@ -10,6 +10,7 @@ import type { Exercise, VoteOption, VoteSession } from '../../types'
 import { CATEGORY_I18N_KEYS, MUSCLE_GROUP_I18N_KEYS } from '../../types'
 import VoteResultsBars from '../vote/VoteResultsBars'
 import { btnPrimary as actionBtnStyle } from '../../styles/ui'
+import { isVoteSessionOpen, voteSessionKind } from '../../lib/voteSessions'
 
 /**
  * Vote de l'athlète — un seul choix par séance.
@@ -112,14 +113,18 @@ export default function AthleteVoteView() {
 
   if (loadingSession) return <CenteredMessage message={t('status.loading')} />
   if (!session) return <CenteredMessage message={t('athlete.vote_not_found')} />
-  if (session.status === 'closed') {
+  if (!isVoteSessionOpen(session)) {
+    // Fermé par le coach ou expiré tout seul : même écran, message différent
+    // — un athlète qui voit « fermé » alors que la date limite est juste
+    // passée cherche un coach qui n'a rien fait.
+    const closedMessage = voteSessionKind(session) === 'expired' ? t('athlete.vote_expired') : t('athlete.vote_closed')
     return (
       <div style={{ padding: 'var(--page-pad)', maxWidth: 720 }}>
         <BackButton onClick={() => navigate('/athlete')} label={t('actions.back')} />
         <h1 style={{ fontFamily: 'var(--font-d)', fontSize: '1.75rem', fontWeight: 900, textTransform: 'uppercase', margin: '0 0 0.5rem' }}>
           {session.title}
         </h1>
-        <p style={{ color: 'var(--muted)', marginBottom: '1.5rem' }}>{t('athlete.vote_closed')}</p>
+        <p style={{ color: 'var(--muted)', marginBottom: '1.5rem' }}>{closedMessage}</p>
         <SectionTitle>{t('vote.results_title')}</SectionTitle>
         <VoteResultsBars results={results} emptyLabel={t('vote.no_options')} />
       </div>
