@@ -122,6 +122,18 @@
     "minutes": "{{minutes}} min",
     "free_session": "Free session",
     "empty": "No sessions logged yet",
-    "empty_hint": "Start a WOD or a cardio activity — it shows up here as soon as you finish it."
+    "empty_hint": "Start a WOD or a cardio activity — it shows up here as soon as you finish it.",
+    "past_title": "Past",
+    "upcoming_title": "Upcoming",
+    "upcoming_empty": "Nothing scheduled yet",
+    "schedule_add": "Schedule a session",
+    "schedule_date": "Date",
+    "schedule_workout": "Link to a workout (optional)",
+    "schedule_workout_none": "None — free session",
+    "schedule_title": "Title (optional)",
+    "schedule_title_placeholder": "e.g. 5km run",
+    "schedule_notes": "Notes (optional)",
+    "schedule_save": "Add to journal",
+    "delete_scheduled": "Remove"
   }
 }

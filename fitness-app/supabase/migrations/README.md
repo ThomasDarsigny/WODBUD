@@ -1,8 +1,8 @@
 # Migrations
 
-L'historique complet (29 migrations, de `fix_rls_infinite_recursion_and_cleanup`
-à `025_exercise_votes_fix_permissive_bypass`) **existe côté Supabase** : le
-projet les trace dans `supabase_migrations.schema_migrations`. Rien n'est perdu.
+L'historique complet (30 migrations, de `fix_rls_infinite_recursion_and_cleanup`
+à `026_scheduled_workouts`) **existe côté Supabase** : le projet les trace dans
+`supabase_migrations.schema_migrations`. Rien n'est perdu.
 
 Ce qui manque, c'est leur **SQL dans le dépôt** : les migrations 001 à 016,
 ainsi que 020 et 021, ont été appliquées directement sur le projet (dashboard
@@ -24,3 +24,4 @@ d'être appliqué.
 | `023_exercises_admin_only_write.sql` | Retire aussi la modification/suppression en libre-service — un admin gère seul toute l'écriture sur `exercises` et `exercise_muscles` |
 | `024_vote_sessions_deadline_enforced.sql` | Bloque le vote (INSERT/DELETE sur `exercise_votes`) une fois la session fermée ou l'échéance dépassée — c'était jusque-là seulement caché côté écran |
 | `025_exercise_votes_fix_permissive_bypass.sql` | Corrige 024 : une ancienne policy `ALL` sans condition d'échéance la contournait entièrement (policies RLS permissives = OR, pas remplacement) |
+| `026_scheduled_workouts.sql` | Table `scheduled_workouts` — volet « séances programmées » du journal, personnel (même modèle que `workout_sessions`) |

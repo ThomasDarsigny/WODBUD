@@ -122,6 +122,18 @@
     "minutes": "{{minutes}} min",
     "free_session": "Séance libre",
     "empty": "Aucune séance enregistrée",
-    "empty_hint": "Lance un WOD ou une activité cardio : elle apparaîtra ici dès qu’elle sera terminée."
+    "empty_hint": "Lance un WOD ou une activité cardio : elle apparaîtra ici dès qu’elle sera terminée.",
+    "past_title": "Passées",
+    "upcoming_title": "À venir",
+    "upcoming_empty": "Rien de programmé pour l'instant",
+    "schedule_add": "Programmer une séance",
+    "schedule_date": "Date",
+    "schedule_workout": "Lier à un workout (optionnel)",
+    "schedule_workout_none": "Aucun — séance libre",
+    "schedule_title": "Titre (optionnel)",
+    "schedule_title_placeholder": "ex. Course 5km",
+    "schedule_notes": "Notes (optionnel)",
+    "schedule_save": "Ajouter au journal",
+    "delete_scheduled": "Retirer"
   }
 }

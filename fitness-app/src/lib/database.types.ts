@@ -15,9 +15,21 @@ export type Database = {
   public: {
     Tables: {
       admin_users: {
-        Row: { created_at: string; created_by: string | null; user_id: string }
-        Insert: { created_at?: string; created_by?: string | null; user_id: string }
-        Update: { created_at?: string; created_by?: string | null; user_id?: string }
+        Row: {
+          created_at: string
+          created_by: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          user_id?: string
+        }
         Relationships: [
           {
             foreignKeyName: "admin_users_created_by_fkey"
@@ -192,15 +204,33 @@ export type Database = {
         Relationships: []
       }
       app_hidden_exercises: {
-        Row: { exercise_key: string; id: string; workout_key: string }
-        Insert: { exercise_key: string; id?: string; workout_key: string }
-        Update: { exercise_key?: string; id?: string; workout_key?: string }
+        Row: {
+          exercise_key: string
+          id: string
+          workout_key: string
+        }
+        Insert: {
+          exercise_key: string
+          id?: string
+          workout_key: string
+        }
+        Update: {
+          exercise_key?: string
+          id?: string
+          workout_key?: string
+        }
         Relationships: []
       }
       app_hidden_workouts: {
-        Row: { workout_key: string }
-        Insert: { workout_key: string }
-        Update: { workout_key?: string }
+        Row: {
+          workout_key: string
+        }
+        Insert: {
+          workout_key: string
+        }
+        Update: {
+          workout_key?: string
+        }
         Relationships: []
       }
       app_sessions: {
@@ -326,9 +356,24 @@ export type Database = {
         Relationships: []
       }
       app_weight_logs: {
-        Row: { created_at: string; log_date: string; unit: string; weight: number }
-        Insert: { created_at?: string; log_date: string; unit?: string; weight: number }
-        Update: { created_at?: string; log_date?: string; unit?: string; weight?: number }
+        Row: {
+          created_at: string
+          log_date: string
+          unit: string
+          weight: number
+        }
+        Insert: {
+          created_at?: string
+          log_date: string
+          unit?: string
+          weight: number
+        }
+        Update: {
+          created_at?: string
+          log_date?: string
+          unit?: string
+          weight?: number
+        }
         Relationships: []
       }
       badges: {
@@ -377,9 +422,21 @@ export type Database = {
         Relationships: []
       }
       class_members: {
-        Row: { athlete_id: string; class_id: string; joined_at: string }
-        Insert: { athlete_id: string; class_id: string; joined_at?: string }
-        Update: { athlete_id?: string; class_id?: string; joined_at?: string }
+        Row: {
+          athlete_id: string
+          class_id: string
+          joined_at: string
+        }
+        Insert: {
+          athlete_id: string
+          class_id: string
+          joined_at?: string
+        }
+        Update: {
+          athlete_id?: string
+          class_id?: string
+          joined_at?: string
+        }
         Relationships: [
           {
             foreignKeyName: "class_members_athlete_id_fkey"
@@ -436,9 +493,21 @@ export type Database = {
         ]
       }
       exercise_methods: {
-        Row: { exercise_id: string; is_primary: boolean; method_key: string }
-        Insert: { exercise_id: string; is_primary?: boolean; method_key: string }
-        Update: { exercise_id?: string; is_primary?: boolean; method_key?: string }
+        Row: {
+          exercise_id: string
+          is_primary: boolean
+          method_key: string
+        }
+        Insert: {
+          exercise_id: string
+          is_primary?: boolean
+          method_key: string
+        }
+        Update: {
+          exercise_id?: string
+          is_primary?: boolean
+          method_key?: string
+        }
         Relationships: [
           {
             foreignKeyName: "exercise_methods_exercise_id_fkey"
@@ -734,9 +803,24 @@ export type Database = {
         Relationships: []
       }
       rank_shares: {
-        Row: { created_at: string; revoked_at: string | null; token: string; user_id: string }
-        Insert: { created_at?: string; revoked_at?: string | null; token?: string; user_id: string }
-        Update: { created_at?: string; revoked_at?: string | null; token?: string; user_id?: string }
+        Row: {
+          created_at: string
+          revoked_at: string | null
+          token: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          revoked_at?: string | null
+          token?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          revoked_at?: string | null
+          token?: string
+          user_id?: string
+        }
         Relationships: [
           {
             foreignKeyName: "rank_shares_user_id_fkey"
@@ -785,6 +869,44 @@ export type Database = {
           position?: number
         }
         Relationships: []
+      }
+      scheduled_workouts: {
+        Row: {
+          created_at: string
+          id: string
+          notes: string | null
+          scheduled_date: string
+          title: string | null
+          user_id: string
+          workout_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          notes?: string | null
+          scheduled_date: string
+          title?: string | null
+          user_id: string
+          workout_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          notes?: string | null
+          scheduled_date?: string
+          title?: string | null
+          user_id?: string
+          workout_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scheduled_workouts_workout_id_fkey"
+            columns: ["workout_id"]
+            isOneToOne: false
+            referencedRelation: "workouts"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       session_exercises: {
         Row: {
@@ -1209,13 +1331,19 @@ export type Database = {
         Args: { p_token: string }
         Returns: {
           coach_id: string
-          created_at: string | null
+          created_at: string
           description: string | null
           id: string
           invite_token: string
           name: string
           schedule: string | null
         }[]
+        SetofOptions: {
+          from: "*"
+          to: "classes"
+          isOneToOne: false
+          isSetofReturn: true
+        }
       }
       get_shared_rank: {
         Args: { p_token: string }
