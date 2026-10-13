@@ -71,9 +71,14 @@ export default function DashboardLayout({ children }: Props) {
 
     const {
       data: { subscription }
-    } = supabase.auth.onAuthStateChange(async (_event, session) => {
+    } = supabase.auth.onAuthStateChange((_event, session) => {
       if (!mounted) return
-      setIsAdmin(session ? await isCurrentUserAdmin() : false)
+      // Hors du callback : voir App.tsx, un appel Supabase attendu ici fige l'app.
+      setTimeout(() => {
+        void (session ? isCurrentUserAdmin() : Promise.resolve(false)).then((isAdmin) => {
+          if (mounted) setIsAdmin(isAdmin)
+        })
+      }, 0)
     })
 
     return () => {

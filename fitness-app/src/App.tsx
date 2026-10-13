@@ -58,11 +58,18 @@ function ProtectedRoute({ children, adminOnly = false }: { children: ReactNode; 
 
     const {
       data: { subscription }
-    } = supabase.auth.onAuthStateChange(async (_event, session) => {
+    } = supabase.auth.onAuthStateChange((_event, session) => {
       if (!mounted) return
       setAuthenticated(Boolean(session))
-      setAdmin(session ? await isCurrentUserAdmin() : false)
-      setLoading(false)
+      // supabase-js garde son verrou de session pendant ce callback : un appel
+      // Supabase attendu ici ne l'obtient jamais et fige l'app. On sort du callback.
+      setTimeout(() => {
+        void (session ? isCurrentUserAdmin() : Promise.resolve(false)).then((isAdmin) => {
+          if (!mounted) return
+          setAdmin(isAdmin)
+          setLoading(false)
+        })
+      }, 0)
     })
 
     return () => {
