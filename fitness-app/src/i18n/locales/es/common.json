@@ -577,7 +577,10 @@
     "empty_hint": "La clasificación se llena en cuanto un miembro termina una sesión.",
     "hide": "Ocultar clasificación",
     "period_week": "Esta semana",
+    "period_month": "Este mes",
     "period_all": "Desde siempre",
+    "empty_month": "Nadie ha entrenado todavía este mes",
+    "empty_month_hint": "El contador vuelve a cero el día 1 de cada mes. La primera sesión toma la delantera.",
     "empty_week": "Nadie ha entrenado todavía esta semana",
     "empty_week_hint": "El contador vuelve a cero cada lunes. La primera sesión toma la delantera."
   }

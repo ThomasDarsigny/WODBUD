@@ -4,15 +4,15 @@ import { supabase } from './supabase'
  * Classement d'un cours.
  *
  * « Depuis toujours » lit directement les profils : `profiles_select_classmates`
- * et `profiles_select_coach_reads_members` en donnent l'accès. « Semaine »
- * passe par `get_class_leaderboard_since`, parce que les séances sont privées
+ * et `profiles_select_coach_reads_members` en donnent l'accès. Semaine et mois
+ * passent par `get_class_leaderboard_since`, parce que les séances sont privées
  * et que seule une somme par membre doit sortir de la base.
  *
  * Le tri se fait côté client : PostgREST ne trie pas de façon fiable sur une
  * colonne imbriquée, et un cours compte quelques dizaines de membres au plus.
  */
 
-export type LeaderboardPeriod = 'week' | 'all'
+export type LeaderboardPeriod = 'week' | 'month' | 'all'
 
 export interface LeaderboardRow {
   userId: string
@@ -46,6 +46,11 @@ export function startOfWeekLocal(now = new Date()): Date {
   return start
 }
 
+/** Le 1er du mois à 0 h, heure locale de l'appareil. */
+export function startOfMonthLocal(now = new Date()): Date {
+  return new Date(now.getFullYear(), now.getMonth(), 1)
+}
+
 async function fetchAllTime(classId: string): Promise<LeaderboardRow[]> {
   const { data, error } = await supabase
     .from('class_members')
@@ -71,10 +76,10 @@ async function fetchAllTime(classId: string): Promise<LeaderboardRow[]> {
     .filter((r): r is LeaderboardRow => r !== null)
 }
 
-async function fetchWeek(classId: string): Promise<LeaderboardRow[]> {
+async function fetchSince(classId: string, since: Date): Promise<LeaderboardRow[]> {
   const { data, error } = await supabase.rpc('get_class_leaderboard_since', {
     p_class_id: classId,
-    p_since: startOfWeekLocal().toISOString()
+    p_since: since.toISOString()
   })
   if (error) throw error
 
@@ -92,7 +97,10 @@ export async function fetchClassLeaderboard(
   classId: string,
   period: LeaderboardPeriod = 'all'
 ): Promise<LeaderboardRow[]> {
-  const rows = period === 'week' ? await fetchWeek(classId) : await fetchAllTime(classId)
+  const rows =
+    period === 'week' ? await fetchSince(classId, startOfWeekLocal())
+    : period === 'month' ? await fetchSince(classId, startOfMonthLocal())
+    : await fetchAllTime(classId)
   rows.sort((a, b) => b.minutes - a.minutes || b.longestStreak - a.longestStreak)
 
   // Ex æquo : deux athlètes à 120 min sont tous deux 1ers, le suivant 3e.

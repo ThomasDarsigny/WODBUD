@@ -6,7 +6,7 @@ import Skeleton from '../ui/Skeleton'
 import { label, text } from '../../styles/ui'
 
 /**
- * Classement d'un cours, par minutes actives — de la semaine ou cumulées.
+ * Classement d'un cours, par minutes actives — de la semaine, du mois ou cumulées.
  *
  * La semaine est l'onglet par défaut : le total depuis l'inscription place
  * toujours les anciens devant, la semaine remet tout le monde à zéro le lundi.
@@ -39,14 +39,14 @@ export default function ClassLeaderboard({ classId, currentUserId }: {
     return () => { cancelled = true }
   }, [classId, period, key])
 
-  // En semaine, tout le monde est inscrit mais à 0 le lundi matin : un
+  // Semaine ou mois qui commence : tout le monde est inscrit mais à 0. Un
   // classement de zéros ex æquo n'apprend rien, l'état vide le dit mieux.
-  const nobodyYet = period === 'week' && rows.every((r) => r.minutes === 0)
+  const nobodyYet = period !== 'all' && rows.length > 0 && rows.every((r) => r.minutes === 0)
 
   return (
     <div>
-      <div role="tablist" style={{ display: 'flex', gap: 'var(--s2)', marginBottom: 'var(--s3)' }}>
-        {(['week', 'all'] as const).map((p) => (
+      <div role="tablist" style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--s2)', marginBottom: 'var(--s3)' }}>
+        {(['week', 'month', 'all'] as const).map((p) => (
           <button
             key={p}
             role="tab"
@@ -55,14 +55,15 @@ export default function ClassLeaderboard({ classId, currentUserId }: {
             style={{
               ...label,
               display: 'inline-block',
-              padding: '0.45rem 0.8rem',
+              whiteSpace: 'nowrap',
+              padding: '0.45rem 0.7rem',
               cursor: 'pointer',
               color: period === p ? 'var(--orange)' : 'var(--muted)',
               background: 'transparent',
               border: `1px solid ${period === p ? 'var(--orange)' : 'var(--border)'}`
             }}
           >
-            {t(p === 'week' ? 'leaderboard.period_week' : 'leaderboard.period_all')}
+            {t(`leaderboard.period_${p}`)}
           </button>
         ))}
       </div>
@@ -73,8 +74,8 @@ export default function ClassLeaderboard({ classId, currentUserId }: {
         <EmptyState
           compact
           icon="rank"
-          title={t(nobodyYet && rows.length > 0 ? 'leaderboard.empty_week' : 'leaderboard.empty')}
-          hint={t(nobodyYet && rows.length > 0 ? 'leaderboard.empty_week_hint' : 'leaderboard.empty_hint')}
+          title={t(nobodyYet ? `leaderboard.empty_${period}` : 'leaderboard.empty')}
+          hint={t(nobodyYet ? `leaderboard.empty_${period}_hint` : 'leaderboard.empty_hint')}
         />
       ) : (
         <Board rows={rows} currentUserId={currentUserId} />

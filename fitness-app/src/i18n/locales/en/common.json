@@ -572,7 +572,10 @@
     "empty_hint": "The leaderboard fills up as soon as a member finishes a session.",
     "hide": "Hide leaderboard",
     "period_week": "This week",
+    "period_month": "This month",
     "period_all": "All time",
+    "empty_month": "Nobody has trained yet this month",
+    "empty_month_hint": "The count resets on the 1st of every month. The first session takes the lead.",
     "empty_week": "Nobody has trained yet this week",
     "empty_week_hint": "The count resets every Monday. The first session takes the lead."
   }

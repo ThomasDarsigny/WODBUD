@@ -578,7 +578,10 @@
     "empty_hint": "Le classement se remplit dès qu’un membre termine une séance.",
     "hide": "Masquer le classement",
     "period_week": "Cette semaine",
+    "period_month": "Ce mois",
     "period_all": "Depuis toujours",
+    "empty_month": "Personne n'a encore bougé ce mois-ci",
+    "empty_month_hint": "Le compteur repart à zéro le 1er de chaque mois. La première séance prend la tête.",
     "empty_week": "Personne n'a encore bougé cette semaine",
     "empty_week_hint": "Le compteur repart à zéro chaque lundi. La première séance prend la tête."
   }
