@@ -1,8 +1,10 @@
 import { useEffect, useMemo, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { fetchJournal, groupByMonth, type JournalEntry } from '../../lib/journal'
-import { fetchUpcoming, scheduleWorkout, deleteScheduledWorkout, type ScheduledEntry } from '../../lib/scheduledWorkouts'
+import { fetchUpcoming, scheduleWorkout, deleteScheduledWorkout, localDate, type ScheduledEntry } from '../../lib/scheduledWorkouts'
 import { useWorkoutStore } from '../../stores/workoutStore'
+import { useSessionStore } from '../../stores/sessionStore'
 import NavIcon, { type NavIconName } from '../navigation/NavIcon'
 import EmptyState from '../ui/EmptyState'
 import ConfirmButton from '../ui/ConfirmButton'
@@ -26,6 +28,11 @@ const KIND_ICON: Record<JournalEntry['kind'], NavIconName> = {
 export default function SessionJournalView() {
   const { t, i18n } = useTranslation(['workouts', 'common'])
   const { savedWorkouts, fetchWorkouts } = useWorkoutStore()
+  const startSession = useSessionStore((s) => s.startSession)
+  const sessionRunning = useSessionStore((s) => s.timer.startedAt !== null)
+  const navigate = useNavigate()
+  const sessionPath = useLocation().pathname.startsWith('/athlete') ? '/athlete/session' : '/dashboard/session'
+  const today = localDate()
   const [entries, setEntries] = useState<JournalEntry[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -77,6 +84,15 @@ export default function SessionJournalView() {
     setUpcoming((prev) => prev.filter((e) => e.id !== id))
   }
 
+  // Une séance déjà en cours n'est jamais écrasée : on y renvoie plutôt que
+  // de perdre le chrono qui tourne.
+  function handleStartPlan(e: ScheduledEntry) {
+    if (!sessionRunning) {
+      startSession(e.workout_id, e.title ?? e.workout_title ?? t('journal.free_session'), e.id)
+    }
+    navigate(sessionPath)
+  }
+
   return (
     <div style={{ padding: 'var(--page-pad)', maxWidth: 880 }}>
       <div style={{ marginBottom: 'var(--s6)' }}>
@@ -119,35 +135,56 @@ export default function SessionJournalView() {
           )
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 1, background: 'var(--border)', border: '1px solid var(--border)' }}>
-            {upcoming.map((e) => (
-              <article key={e.id} style={{ background: 'var(--dark)', padding: 'var(--s4)', display: 'flex', gap: 'var(--s4)', alignItems: 'flex-start' }}>
-                <span style={{ color: 'var(--orange)', display: 'flex', marginTop: 2, flexShrink: 0 }}>
-                  <NavIcon name="calendar" size={20} />
-                </span>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <p style={{ fontFamily: 'var(--font-d)', fontSize: text.h2, fontWeight: 800, letterSpacing: '0.02em', textTransform: 'uppercase', lineHeight: 1.15, margin: 0 }}>
-                    {e.title ?? e.workout_title ?? t('journal.free_session')}
-                  </p>
-                  <p style={{ ...label, display: 'block', marginTop: 'var(--s1)' }}>
-                    {new Date(`${e.scheduled_date}T00:00:00`).toLocaleDateString(i18n.language, {
-                      weekday: 'long', day: 'numeric', month: 'long'
-                    })}
-                  </p>
-                  {e.notes && (
-                    <p style={{ fontSize: text.sm, color: 'var(--muted)', lineHeight: 1.5, margin: 'var(--s2) 0 0' }}>
-                      {e.notes}
+            {upcoming.map((e) => {
+              const done = e.session_id !== null
+              const overdue = !done && e.scheduled_date < today
+              const startable = !done && e.scheduled_date <= today
+              return (
+                <article key={e.id} style={{ background: 'var(--dark)', padding: 'var(--s4)', display: 'flex', gap: 'var(--s4)', alignItems: 'flex-start', flexWrap: 'wrap' }}>
+                  <span style={{ color: done ? '#22c55e' : 'var(--orange)', display: 'flex', marginTop: 2, flexShrink: 0 }}>
+                    <NavIcon name="calendar" size={20} />
+                  </span>
+                  <div style={{ flex: '1 1 180px', minWidth: 0 }}>
+                    <p style={{ fontFamily: 'var(--font-d)', fontSize: text.h2, fontWeight: 800, letterSpacing: '0.02em', textTransform: 'uppercase', lineHeight: 1.15, margin: 0, color: done ? 'var(--muted)' : undefined }}>
+                      {e.title ?? e.workout_title ?? t('journal.free_session')}
                     </p>
-                  )}
-                </div>
-                <ConfirmButton
-                  onConfirm={() => handleDeleteUpcoming(e.id)}
-                  title={t('journal.delete_scheduled')}
-                  style={{ ...ghostBtnStyle, fontSize: '0.75rem', flexShrink: 0, color: 'rgba(255,77,0,0.8)', borderColor: 'rgba(255,77,0,0.35)' }}
-                >
-                  ✕
-                </ConfirmButton>
-              </article>
-            ))}
+                    <p style={{ ...label, display: 'block', marginTop: 'var(--s1)' }}>
+                      {new Date(`${e.scheduled_date}T00:00:00`).toLocaleDateString(i18n.language, {
+                        weekday: 'long', day: 'numeric', month: 'long'
+                      })}
+                      {overdue && <span style={{ color: 'var(--orange)' }}> · {t('journal.plan_overdue')}</span>}
+                    </p>
+                    {e.notes && (
+                      <p style={{ fontSize: text.sm, color: 'var(--muted)', lineHeight: 1.5, margin: 'var(--s2) 0 0' }}>
+                        {e.notes}
+                      </p>
+                    )}
+                  </div>
+                  <div style={{ display: 'flex', gap: 'var(--s2)', flexShrink: 0, alignItems: 'center' }}>
+                    {done ? (
+                      <span style={{ ...label, display: 'inline', color: '#22c55e', border: '1px solid rgba(34,197,94,0.35)', padding: '0.35rem 0.6rem' }}>
+                        ✓ {t('journal.plan_done')}
+                      </span>
+                    ) : (
+                      <>
+                        {startable && (
+                          <button onClick={() => handleStartPlan(e)} style={{ ...actionBtnStyle, fontSize: '0.75rem' }}>
+                            ▶ {t('journal.plan_start')}
+                          </button>
+                        )}
+                        <ConfirmButton
+                          onConfirm={() => handleDeleteUpcoming(e.id)}
+                          title={t('journal.delete_scheduled')}
+                          style={{ ...ghostBtnStyle, fontSize: '0.75rem', color: 'rgba(255,77,0,0.8)', borderColor: 'rgba(255,77,0,0.35)' }}
+                        >
+                          ✕
+                        </ConfirmButton>
+                      </>
+                    )}
+                  </div>
+                </article>
+              )
+            })}
           </div>
         )}
       </section>
@@ -198,6 +235,7 @@ export default function SessionJournalView() {
                       {new Date(e.performed_at).toLocaleDateString(i18n.language, {
                         weekday: 'long', day: 'numeric', month: 'long'
                       })}
+                      {e.planned && <span style={{ color: '#22c55e' }}> · ✓ {t('journal.plan_tag')}</span>}
                     </p>
                     {e.notes && (
                       <p style={{ fontSize: text.sm, color: 'var(--muted)', lineHeight: 1.5, margin: 'var(--s2) 0 0' }}>

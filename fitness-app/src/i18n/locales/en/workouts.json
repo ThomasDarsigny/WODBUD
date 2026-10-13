@@ -134,6 +134,10 @@
     "schedule_title_placeholder": "e.g. 5km run",
     "schedule_notes": "Notes (optional)",
     "schedule_save": "Add to journal",
-    "delete_scheduled": "Remove"
+    "delete_scheduled": "Remove",
+    "plan_start": "Start",
+    "plan_done": "Done",
+    "plan_overdue": "Overdue",
+    "plan_tag": "Planned"
   }
 }

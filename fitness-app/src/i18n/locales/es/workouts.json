@@ -134,6 +134,10 @@
     "schedule_title_placeholder": "ej. Carrera de 5km",
     "schedule_notes": "Notas (opcional)",
     "schedule_save": "Añadir al diario",
-    "delete_scheduled": "Quitar"
+    "delete_scheduled": "Quitar",
+    "plan_start": "Empezar",
+    "plan_done": "Hecho",
+    "plan_overdue": "Atrasada",
+    "plan_tag": "Planificada"
   }
 }

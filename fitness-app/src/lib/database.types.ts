@@ -947,6 +947,7 @@ export type Database = {
           id: string
           notes: string | null
           scheduled_date: string
+          session_id: string | null
           title: string | null
           user_id: string
           workout_id: string | null
@@ -956,6 +957,7 @@ export type Database = {
           id?: string
           notes?: string | null
           scheduled_date: string
+          session_id?: string | null
           title?: string | null
           user_id: string
           workout_id?: string | null
@@ -965,11 +967,19 @@ export type Database = {
           id?: string
           notes?: string | null
           scheduled_date?: string
+          session_id?: string | null
           title?: string | null
           user_id?: string
           workout_id?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "scheduled_workouts_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "workout_sessions"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "scheduled_workouts_workout_id_fkey"
             columns: ["workout_id"]

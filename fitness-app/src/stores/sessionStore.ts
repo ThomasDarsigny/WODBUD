@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import i18n from '../i18n'
 import { supabase } from '../lib/supabase'
 import { recalcBadges } from '../lib/badges'
+import { linkSessionToPlan, localDate } from '../lib/scheduledWorkouts'
 import {
   EMPTY_TIMER,
   activeMs,
@@ -58,6 +59,8 @@ interface PersistedSession {
    */
   activityId: string | null
   activityName: string
+  /** Plan du journal depuis lequel la séance a été lancée, s'il y en a un. */
+  scheduledId: string | null
   timer: SessionTimer
   doneExerciseIds: string[]
   notes: string
@@ -72,7 +75,7 @@ interface SessionState extends PersistedSession {
   lastSummary: SessionSummary | null
 
   restore: () => void
-  startSession: (workoutId: string | null, workoutName: string) => void
+  startSession: (workoutId: string | null, workoutName: string, scheduledId?: string | null) => void
   /** Démarre le chrono sur une activité cardio, sans WOD. */
   startActivity: (activityId: string | null, activityName: string) => void
   pause: () => void
@@ -92,6 +95,7 @@ const IDLE: PersistedSession = {
   workoutName: '',
   activityId: null,
   activityName: '',
+  scheduledId: null,
   timer: EMPTY_TIMER,
   doneExerciseIds: [],
   notes: ''
@@ -120,6 +124,7 @@ function readPersisted(): PersistedSession | null {
       workoutName: parsed.workoutName ?? '',
       activityId: parsed.activityId ?? null,
       activityName: parsed.activityName ?? '',
+      scheduledId: parsed.scheduledId ?? null,
       timer: {
         startedAt: parsed.timer.startedAt,
         accumulatedMs: parsed.timer.accumulatedMs ?? 0,
@@ -156,11 +161,12 @@ export const useSessionStore = create<SessionState>((set, get) => ({
     if (saved.workoutId) void get().loadItems(saved.workoutId)
   },
 
-  startSession: (workoutId, workoutName) => {
+  startSession: (workoutId, workoutName, scheduledId = null) => {
     const next: PersistedSession = {
       ...IDLE,
       workoutId,
       workoutName,
+      scheduledId,
       timer: startTimer()
     }
     persist(next)
@@ -280,7 +286,7 @@ export const useSessionStore = create<SessionState>((set, get) => ({
       const activeMinutes = toActiveMinutes(activeMs(s.timer, now))
       const durationMinutes = Math.round(wallClockMs(s.timer, now) / 60000)
 
-      const { error } = await supabase.from('workout_sessions').insert({
+      const { data: inserted, error } = await supabase.from('workout_sessions').insert({
         user_id: userId,
         workout_id: s.workoutId,
         // Renseigné quand la séance est une activité cardio chronométrée.
@@ -291,8 +297,15 @@ export const useSessionStore = create<SessionState>((set, get) => ({
         duration_minutes: durationMinutes,
         active_minutes: activeMinutes,
         notes: s.notes.trim() || null
-      })
+      }).select('id').single()
       if (error) throw error
+
+      await linkSessionToPlan({
+        sessionId: inserted.id,
+        scheduledId: s.scheduledId,
+        workoutId: s.workoutId,
+        date: localDate(new Date(s.timer.startedAt))
+      })
 
       // Le trigger wodbud_recalc_profile_totals s'exécute dans la même
       // transaction que l'insertion : la lecture qui suit voit déjà les totaux

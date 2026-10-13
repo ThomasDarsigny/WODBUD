@@ -1,7 +1,7 @@
 # Migrations
 
-L'historique complet (37 migrations, de `fix_rls_infinite_recursion_and_cleanup`
-à `033_class_leaderboard_month`) **existe côté Supabase** : le projet les
+L'historique complet (38 migrations, de `fix_rls_infinite_recursion_and_cleanup`
+à `034_scheduled_workouts_link_session`) **existe côté Supabase** : le projet les
 trace dans `supabase_migrations.schema_migrations`. Rien n'est perdu.
 
 Ce qui manque, c'est leur **SQL dans le dépôt** : les migrations 001 à 016,
@@ -32,3 +32,4 @@ d'être appliqué.
 | `031_class_members_visible_to_classmates.sql` | Un athlète voit les autres inscrits de ses cours (fonction `is_class_member`) — le classement d'un cours était vide côté athlète |
 | `032_class_leaderboard_week.sql` | Fonction `get_class_leaderboard_since` : minutes par membre depuis une date (≤ 8 jours), pour le classement de la semaine — les séances restent privées, seule la somme sort |
 | `033_class_leaderboard_month.sql` | Même fonction, borne portée à 32 jours pour le classement du mois |
+| `034_scheduled_workouts_link_session.sql` | `scheduled_workouts.session_id` : un plan retient la séance effectuée qui l'a accomplie (unique, remis à null si la séance est supprimée) |

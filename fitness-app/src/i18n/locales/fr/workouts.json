@@ -134,6 +134,10 @@
     "schedule_title_placeholder": "ex. Course 5km",
     "schedule_notes": "Notes (optionnel)",
     "schedule_save": "Ajouter au journal",
-    "delete_scheduled": "Retirer"
+    "delete_scheduled": "Retirer",
+    "plan_start": "Commencer",
+    "plan_done": "Fait",
+    "plan_overdue": "En retard",
+    "plan_tag": "Planifiée"
   }
 }
