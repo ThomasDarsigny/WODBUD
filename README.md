@@ -2,8 +2,6 @@
 
 Créateur de WOD et outil de gestion de box CrossFit — pour les coachs qui programment, et pour les athlètes qui s'entraînent.
 
-**[wodbud.com](https://wodbud.com)**
-
 ## Fonctionnalités
 
 **Pour les coachs**
@@ -44,8 +42,8 @@ npm install
 Crée `fitness-app/.env.local` :
 
 ```
-VITE_SUPABASE_URL=https://<ton-projet>.supabase.co
-VITE_SUPABASE_ANON_KEY=<ta-clé-anon>
+VITE_SUPABASE_URL=https://<nom-projet>.supabase.co
+VITE_SUPABASE_ANON_KEY=<clé-anon>
 ```
 
 Puis :
