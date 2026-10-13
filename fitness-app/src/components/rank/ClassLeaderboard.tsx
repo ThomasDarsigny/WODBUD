@@ -1,12 +1,15 @@
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { fetchClassLeaderboard, type LeaderboardRow } from '../../lib/leaderboard'
+import { fetchClassLeaderboard, type LeaderboardPeriod, type LeaderboardRow } from '../../lib/leaderboard'
 import EmptyState from '../ui/EmptyState'
 import Skeleton from '../ui/Skeleton'
 import { label, text } from '../../styles/ui'
 
 /**
- * Classement d'un cours, par minutes actives cumulées.
+ * Classement d'un cours, par minutes actives — de la semaine ou cumulées.
+ *
+ * La semaine est l'onglet par défaut : le total depuis l'inscription place
+ * toujours les anciens devant, la semaine remet tout le monde à zéro le lundi.
  *
  * Le podium n'est pas décoré : dans une box, le tableau blanc est un tableau,
  * pas une cérémonie. Seule la première place et la ligne de l'utilisateur
@@ -18,35 +21,70 @@ export default function ClassLeaderboard({ classId, currentUserId }: {
   currentUserId?: string | null
 }) {
   const { t } = useTranslation('common')
-  // L'état retient POUR QUEL cours il a été chargé. Le coach peut changer de
-  // cours sans que le composant soit démonté : sans cette clé, on afficherait
-  // le classement du cours précédent pendant le chargement du suivant.
+  const [period, setPeriod] = useState<LeaderboardPeriod>('week')
+  // L'état retient POUR QUEL cours et quelle période il a été chargé. Le coach
+  // peut changer de cours sans que le composant soit démonté : sans cette clé,
+  // on afficherait l'ancien classement pendant le chargement du suivant.
   // Dériver `loading` évite aussi un setState synchrone dans l'effet.
-  const [loaded, setLoaded] = useState<{ classId: string; rows: LeaderboardRow[] } | null>(null)
-  const ready = loaded?.classId === classId
+  const [loaded, setLoaded] = useState<{ key: string; rows: LeaderboardRow[] } | null>(null)
+  const key = `${classId}:${period}`
+  const ready = loaded?.key === key
   const rows = ready ? loaded.rows : []
 
   useEffect(() => {
     let cancelled = false
-    fetchClassLeaderboard(classId)
-      .then((r) => { if (!cancelled) setLoaded({ classId, rows: r }) })
-      .catch(() => { if (!cancelled) setLoaded({ classId, rows: [] }) })
+    fetchClassLeaderboard(classId, period)
+      .then((r) => { if (!cancelled) setLoaded({ key, rows: r }) })
+      .catch(() => { if (!cancelled) setLoaded({ key, rows: [] }) })
     return () => { cancelled = true }
-  }, [classId])
+  }, [classId, period, key])
 
-  if (!ready) return <Skeleton height={44} lines={4} />
+  // En semaine, tout le monde est inscrit mais à 0 le lundi matin : un
+  // classement de zéros ex æquo n'apprend rien, l'état vide le dit mieux.
+  const nobodyYet = period === 'week' && rows.every((r) => r.minutes === 0)
 
-  if (rows.length === 0) {
-    return (
-      <EmptyState
-        compact
-        icon="rank"
-        title={t('leaderboard.empty')}
-        hint={t('leaderboard.empty_hint')}
-      />
-    )
-  }
+  return (
+    <div>
+      <div role="tablist" style={{ display: 'flex', gap: 'var(--s2)', marginBottom: 'var(--s3)' }}>
+        {(['week', 'all'] as const).map((p) => (
+          <button
+            key={p}
+            role="tab"
+            aria-selected={period === p}
+            onClick={() => setPeriod(p)}
+            style={{
+              ...label,
+              display: 'inline-block',
+              padding: '0.45rem 0.8rem',
+              cursor: 'pointer',
+              color: period === p ? 'var(--orange)' : 'var(--muted)',
+              background: 'transparent',
+              border: `1px solid ${period === p ? 'var(--orange)' : 'var(--border)'}`
+            }}
+          >
+            {t(p === 'week' ? 'leaderboard.period_week' : 'leaderboard.period_all')}
+          </button>
+        ))}
+      </div>
 
+      {!ready ? (
+        <Skeleton height={44} lines={4} />
+      ) : rows.length === 0 || nobodyYet ? (
+        <EmptyState
+          compact
+          icon="rank"
+          title={t(nobodyYet && rows.length > 0 ? 'leaderboard.empty_week' : 'leaderboard.empty')}
+          hint={t(nobodyYet && rows.length > 0 ? 'leaderboard.empty_week_hint' : 'leaderboard.empty_hint')}
+        />
+      ) : (
+        <Board rows={rows} currentUserId={currentUserId} />
+      )}
+    </div>
+  )
+}
+
+function Board({ rows, currentUserId }: { rows: LeaderboardRow[]; currentUserId?: string | null }) {
+  const { t } = useTranslation('common')
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 1, background: 'var(--border)', border: '1px solid var(--border)' }}>
       {rows.map((row) => {
@@ -115,7 +153,7 @@ export default function ClassLeaderboard({ classId, currentUserId }: {
                 flexShrink: 0
               }}
             >
-              {t('leaderboard.minutes', { minutes: row.totalMinutes })}
+              {t('leaderboard.minutes', { minutes: row.minutes })}
             </span>
           </div>
         )

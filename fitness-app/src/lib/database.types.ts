@@ -1416,6 +1416,16 @@ export type Database = {
           isSetofReturn: true
         }
       }
+      get_class_leaderboard_since: {
+        Args: { p_class_id: string; p_since: string }
+        Returns: {
+          athlete_id: string
+          current_streak: number
+          full_name: string
+          longest_streak: number
+          minutes: number
+        }[]
+      }
       get_shared_rank: {
         Args: { p_token: string }
         Returns: {
@@ -1430,6 +1440,7 @@ export type Database = {
       is_admin: { Args: never; Returns: boolean }
       is_admin_authored: { Args: { p_uid: string }; Returns: boolean }
       is_class_coach: { Args: { p_class_id: string }; Returns: boolean }
+      is_class_member: { Args: { p_class_id: string }; Returns: boolean }
       wodbud_rank_for_minutes: { Args: { p_minutes: number }; Returns: string }
       wodbud_recalc_badges: { Args: { p_user?: string }; Returns: string[] }
       wodbud_vote_color: { Args: { p_position: number }; Returns: string }

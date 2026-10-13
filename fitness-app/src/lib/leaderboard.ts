@@ -3,26 +3,29 @@ import { supabase } from './supabase'
 /**
  * Classement d'un cours.
  *
- * Aucun changement de schéma : la policy `profiles_select_classmates` autorise
- * déjà chaque athlète à lire le profil de ceux avec qui il partage un cours, et
- * `profiles_select_coach_reads_members` fait de même pour le coach. La donnée
- * était accessible depuis le début, rien ne l'affichait.
+ * « Depuis toujours » lit directement les profils : `profiles_select_classmates`
+ * et `profiles_select_coach_reads_members` en donnent l'accès. « Semaine »
+ * passe par `get_class_leaderboard_since`, parce que les séances sont privées
+ * et que seule une somme par membre doit sortir de la base.
  *
  * Le tri se fait côté client : PostgREST ne trie pas de façon fiable sur une
  * colonne imbriquée, et un cours compte quelques dizaines de membres au plus.
  */
 
+export type LeaderboardPeriod = 'week' | 'all'
+
 export interface LeaderboardRow {
   userId: string
   displayName: string | null
-  totalMinutes: number
+  /** Minutes de la période demandée : la semaine, ou le total. */
+  minutes: number
   currentStreak: number
   longestStreak: number
   /** Rang dans le classement, à partir de 1. Les ex æquo partagent leur rang. */
   position: number
 }
 
-type Row = {
+type ProfileRow = {
   athlete_id: string
   profiles:
     | { full_name: string | null; total_minutes: number; current_streak: number; longest_streak: number }
@@ -35,14 +38,22 @@ function first<T>(value: T | T[] | null): T | null {
   return Array.isArray(value) ? (value[0] ?? null) : value
 }
 
-export async function fetchClassLeaderboard(classId: string): Promise<LeaderboardRow[]> {
+/** Lundi 0 h, heure locale de l'appareil. */
+export function startOfWeekLocal(now = new Date()): Date {
+  const start = new Date(now)
+  start.setHours(0, 0, 0, 0)
+  start.setDate(start.getDate() - ((start.getDay() + 6) % 7))
+  return start
+}
+
+async function fetchAllTime(classId: string): Promise<LeaderboardRow[]> {
   const { data, error } = await supabase
     .from('class_members')
     .select('athlete_id, profiles(full_name, total_minutes, current_streak, longest_streak)')
     .eq('class_id', classId)
   if (error) throw error
 
-  const rows = ((data ?? []) as unknown as Row[])
+  return ((data ?? []) as unknown as ProfileRow[])
     .map((r) => {
       const p = first(r.profiles)
       // Un profil illisible (RLS) arrive à null : on l'écarte plutôt que
@@ -51,22 +62,46 @@ export async function fetchClassLeaderboard(classId: string): Promise<Leaderboar
       return {
         userId: r.athlete_id,
         displayName: p.full_name,
-        totalMinutes: p.total_minutes ?? 0,
+        minutes: p.total_minutes ?? 0,
         currentStreak: p.current_streak ?? 0,
         longestStreak: p.longest_streak ?? 0,
         position: 0
       }
     })
     .filter((r): r is LeaderboardRow => r !== null)
-    .sort((a, b) => b.totalMinutes - a.totalMinutes || b.longestStreak - a.longestStreak)
+}
+
+async function fetchWeek(classId: string): Promise<LeaderboardRow[]> {
+  const { data, error } = await supabase.rpc('get_class_leaderboard_since', {
+    p_class_id: classId,
+    p_since: startOfWeekLocal().toISOString()
+  })
+  if (error) throw error
+
+  return (data ?? []).map((r) => ({
+    userId: r.athlete_id,
+    displayName: r.full_name,
+    minutes: r.minutes,
+    currentStreak: r.current_streak,
+    longestStreak: r.longest_streak,
+    position: 0
+  }))
+}
+
+export async function fetchClassLeaderboard(
+  classId: string,
+  period: LeaderboardPeriod = 'all'
+): Promise<LeaderboardRow[]> {
+  const rows = period === 'week' ? await fetchWeek(classId) : await fetchAllTime(classId)
+  rows.sort((a, b) => b.minutes - a.minutes || b.longestStreak - a.longestStreak)
 
   // Ex æquo : deux athlètes à 120 min sont tous deux 1ers, le suivant 3e.
   let position = 0
   let previous: number | null = null
   rows.forEach((row, index) => {
-    if (previous === null || row.totalMinutes !== previous) position = index + 1
+    if (previous === null || row.minutes !== previous) position = index + 1
     row.position = position
-    previous = row.totalMinutes
+    previous = row.minutes
   })
 
   return rows

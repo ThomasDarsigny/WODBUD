@@ -570,6 +570,10 @@
     "anonymous": "Athlete",
     "empty": "Nobody on the board yet",
     "empty_hint": "The leaderboard fills up as soon as a member finishes a session.",
-    "hide": "Hide leaderboard"
+    "hide": "Hide leaderboard",
+    "period_week": "This week",
+    "period_all": "All time",
+    "empty_week": "Nobody has trained yet this week",
+    "empty_week_hint": "The count resets every Monday. The first session takes the lead."
   }
 }
