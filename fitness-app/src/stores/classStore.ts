@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { supabase } from '../lib/supabase'
+import { getLocalUser } from '../lib/currentUser'
 import type { Class, ClassInsert, ClassMember, VoteSession, VoteSessionStatus, VoteSessionInsert, VoteResult, VoteOption } from '../types'
 
 interface ClassState {
@@ -53,7 +54,7 @@ function getErrorMessage(err: unknown, fallback = 'Erreur'): string {
 }
 
 async function getUserId(): Promise<string> {
-  const { data: { user }, error } = await supabase.auth.getUser()
+  const { data: { user }, error } = await getLocalUser()
   if (error || !user) throw new Error('Non authentifié')
   return user.id
 }

@@ -1,4 +1,5 @@
 import { supabase } from './supabase'
+import { getLocalUser } from './currentUser'
 
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp']
 const MAX_BYTES = 2 * 1024 * 1024 // doit rester aligné avec allowed_mime_types / file_size_limit du bucket (migration 027)
@@ -27,7 +28,7 @@ export async function uploadAvatar(file: File): Promise<string> {
 
   const {
     data: { user }
-  } = await supabase.auth.getUser()
+  } = await getLocalUser()
   if (!user) throw new Error('Non authentifié')
 
   const path = `${user.id}/photo.${extFor(file.type)}`

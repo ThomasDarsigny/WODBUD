@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import type { FormEvent, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { supabase } from '../../lib/supabase'
+import { getLocalUser } from '../../lib/currentUser'
 import { useCommunityStore } from '../../stores/communityStore'
 import type { Community } from '../../types'
 import ConfirmButton from '../ui/ConfirmButton'
@@ -25,7 +25,7 @@ export default function CommunitiesView() {
 
   useEffect(() => {
     fetchCommunities()
-    supabase.auth.getUser().then(({ data }) => setUserId(data.user?.id ?? null))
+    getLocalUser().then(({ data }) => setUserId(data.user?.id ?? null))
   }, [fetchCommunities])
 
   async function handleToggleMembership(c: Community) {

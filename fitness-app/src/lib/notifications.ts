@@ -1,4 +1,5 @@
 import { supabase } from './supabase'
+import { getLocalUser } from './currentUser'
 
 /**
  * Notifications in-app.
@@ -29,7 +30,7 @@ export const NO_NOTIFICATIONS: NotificationCounts = {
 }
 
 export async function fetchNotifications(): Promise<NotificationCounts> {
-  const { data: auth } = await supabase.auth.getUser()
+  const { data: auth } = await getLocalUser()
   const userId = auth.user?.id
   if (!userId) return NO_NOTIFICATIONS
 
@@ -70,7 +71,7 @@ export async function fetchNotifications(): Promise<NotificationCounts> {
 
 /** Marque la collection de badges et le rang courant comme vus. */
 export async function acknowledgeProgress(): Promise<void> {
-  const { data: auth } = await supabase.auth.getUser()
+  const { data: auth } = await getLocalUser()
   const userId = auth.user?.id
   if (!userId) return
 

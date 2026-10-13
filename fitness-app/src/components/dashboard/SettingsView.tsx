@@ -3,6 +3,7 @@ import type { ChangeEvent, ReactNode } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { supabase } from '../../lib/supabase'
+import { getLocalUser } from '../../lib/currentUser'
 import type { TablesUpdate } from '../../lib/database.types'
 import type { MannequinBody } from '../mannequin/bodyPaths'
 import { readBodyPref, storeBodyPref } from '../mannequin/Mannequin2D'
@@ -55,7 +56,7 @@ export default function SettingsView() {
   useEffect(() => {
     let mounted = true
     const load = async () => {
-      const { data } = await supabase.auth.getUser()
+      const { data } = await getLocalUser()
       if (!mounted || !data.user) return
       setCurrentEmail(data.user.email ?? '')
 
@@ -85,7 +86,7 @@ export default function SettingsView() {
   }, [i18n])
 
   async function persist(patch: TablesUpdate<'profiles'>) {
-    const { data } = await supabase.auth.getUser()
+    const { data } = await getLocalUser()
     if (!data.user) return
     await supabase.from('profiles').update(patch).eq('id', data.user.id)
   }

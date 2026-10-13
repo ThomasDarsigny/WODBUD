@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { supabase } from '../lib/supabase'
+import { getLocalUser } from '../lib/currentUser'
 import type { Community, CommunityInsert } from '../types'
 
 /**
@@ -12,7 +13,7 @@ import type { Community, CommunityInsert } from '../types'
 async function getUserId(): Promise<string> {
   const {
     data: { user }
-  } = await supabase.auth.getUser()
+  } = await getLocalUser()
   if (!user) throw new Error('Non authentifié')
   return user.id
 }

@@ -1,10 +1,11 @@
 import { supabase } from './supabase'
+import { getLocalUser } from './currentUser'
 
 export async function isCurrentUserAdmin(): Promise<boolean> {
 	const {
 		data: { user },
 		error: userError
-	} = await supabase.auth.getUser()
+	} = await getLocalUser()
 
 	if (userError || !user?.id) return false
 

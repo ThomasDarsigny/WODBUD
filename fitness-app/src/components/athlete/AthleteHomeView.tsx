@@ -8,7 +8,7 @@ import { useExerciseStore } from '../../stores/exerciseStore'
 import type { VoteSession, Class } from '../../types'
 import { CATEGORY_I18N_KEYS, MUSCLE_GROUP_I18N_KEYS } from '../../types'
 import Skeleton from '../ui/Skeleton'
-import { supabase } from '../../lib/supabase'
+import { getLocalUser } from '../../lib/currentUser'
 import ClassLeaderboard from '../rank/ClassLeaderboard'
 import { isVoteSessionOpen } from '../../lib/voteSessions'
 void CATEGORY_I18N_KEYS
@@ -27,7 +27,7 @@ export default function AthleteHomeView() {
 
   useEffect(() => {
     let mounted = true
-    supabase.auth.getUser()
+    getLocalUser()
       .then(({ data }) => { if (mounted) setUserId(data.user?.id ?? null) })
       .catch(() => {})
     return () => { mounted = false }

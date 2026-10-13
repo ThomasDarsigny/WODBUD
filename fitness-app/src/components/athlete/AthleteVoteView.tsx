@@ -4,6 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import NavIcon from '../navigation/NavIcon'
 import { supabase } from '../../lib/supabase'
+import { getLocalUser } from '../../lib/currentUser'
 import { useClassStore } from '../../stores/classStore'
 import { useExerciseStore } from '../../stores/exerciseStore'
 import type { Exercise, VoteOption, VoteSession } from '../../types'
@@ -42,7 +43,7 @@ export default function AthleteVoteView() {
     if (!sessionId) return
     let mounted = true
     ;(async () => {
-      const { data: { user } } = await supabase.auth.getUser()
+      const { data: { user } } = await getLocalUser()
 
       const [sessionRes, voteRes] = await Promise.all([
         supabase.from('vote_sessions').select('*').eq('id', sessionId).single(),

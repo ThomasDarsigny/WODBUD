@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import i18n from '../i18n'
 import { supabase } from '../lib/supabase'
+import { getLocalUser } from '../lib/currentUser'
 import { recalcBadges } from '../lib/badges'
 import { linkSessionToPlan, localDate } from '../lib/scheduledWorkouts'
 import {
@@ -139,7 +140,7 @@ function readPersisted(): PersistedSession | null {
 }
 
 async function getCurrentUserId(): Promise<string> {
-  const { data, error } = await supabase.auth.getUser()
+  const { data, error } = await getLocalUser()
   if (error) throw error
   if (!data.user?.id) throw new Error(i18n.t('errors.not_authenticated', { ns: 'common' }))
   return data.user.id

@@ -5,7 +5,7 @@ import EmptyState from '../ui/EmptyState'
 import WorkoutMannequin from '../mannequin/WorkoutMannequin'
 import { useWorkoutStore } from '../../stores/workoutStore'
 import { useSessionStore } from '../../stores/sessionStore'
-import { supabase } from '../../lib/supabase'
+import { getLocalUser } from '../../lib/currentUser'
 import type { WorkoutMethod } from '../../types'
 import { METHOD_I18N_KEYS } from '../../types'
 
@@ -22,7 +22,7 @@ export default function WorkoutsLibraryView() {
 
   useEffect(() => {
     fetchWorkouts()
-    supabase.auth.getUser().then(({ data }) => setCurrentUserId(data.user?.id ?? null))
+    getLocalUser().then(({ data }) => setCurrentUserId(data.user?.id ?? null))
   }, [fetchWorkouts])
 
   const filtered = useMemo(() => {

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { supabase } from '../../lib/supabase'
+import { getLocalUser } from '../../lib/currentUser'
 import {
   BADGE_FAMILY_I18N_KEYS,
   badgeCondition,
@@ -38,7 +38,7 @@ export default function BadgeGrid() {
 
     async function load() {
       try {
-        const { data: auth } = await supabase.auth.getUser()
+        const { data: auth } = await getLocalUser()
         const userId = auth.user?.id
         if (!userId) return
 

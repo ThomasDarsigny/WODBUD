@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import i18n from '../i18n'
 import { supabase } from '../lib/supabase'
+import { getLocalUser } from '../lib/currentUser'
 import { R2NotConfiguredError, deleteVideoFromR2, uploadVideoToR2 } from '../lib/r2'
 import { saveToCache, loadFromCache } from '../lib/offlineCache'
 import type { TablesUpdate } from '../lib/database.types'
@@ -133,7 +134,7 @@ async function getCurrentUserId(): Promise<string> {
   const {
     data: { user },
     error
-  } = await supabase.auth.getUser()
+  } = await getLocalUser()
 
   if (error) throw error
   if (!user?.id) {

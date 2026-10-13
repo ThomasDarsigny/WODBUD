@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { supabase } from '../../lib/supabase'
+import { getLocalUser } from '../../lib/currentUser'
 import type { UserSegment } from '../../types'
 
 const DEFER_KEY = 'wodbud_portal_deferred'
@@ -29,7 +30,7 @@ export default function PortalOverlay() {
         if (sessionStorage.getItem(DEFER_KEY) === '1') return
       } catch { /* sessionStorage indisponible : on continue */ }
 
-      const { data } = await supabase.auth.getUser()
+      const { data } = await getLocalUser()
       if (!mounted || !data.user) return
 
       const { data: profile } = await supabase
@@ -47,7 +48,7 @@ export default function PortalOverlay() {
   async function choose(segment: UserSegment) {
     setSaving(true)
     try {
-      const { data } = await supabase.auth.getUser()
+      const { data } = await getLocalUser()
       if (data.user) {
         await supabase.from('profiles').update({ segment }).eq('id', data.user.id)
       }

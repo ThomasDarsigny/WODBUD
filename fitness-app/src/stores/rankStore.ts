@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import i18n from '../i18n'
 import { supabase } from '../lib/supabase'
+import { getLocalUser } from '../lib/currentUser'
 import type { Rank } from '../lib/ranks'
 
 export interface RankProfile {
@@ -34,7 +35,7 @@ export const useRankStore = create<RankState>((set, get) => ({
   fetchAll: async () => {
     set({ loading: true, error: null })
     try {
-      const { data: userData, error: userError } = await supabase.auth.getUser()
+      const { data: userData, error: userError } = await getLocalUser()
       if (userError) throw userError
       const userId = userData.user?.id
       if (!userId) throw new Error(i18n.t('errors.not_authenticated', { ns: 'common' }))
@@ -78,7 +79,7 @@ export const useRankStore = create<RankState>((set, get) => ({
 
     set({ sharing: true, error: null })
     try {
-      const { data: userData } = await supabase.auth.getUser()
+      const { data: userData } = await getLocalUser()
       const userId = userData.user?.id
       if (!userId) throw new Error(i18n.t('errors.not_authenticated', { ns: 'common' }))
 

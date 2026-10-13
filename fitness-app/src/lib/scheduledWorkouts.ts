@@ -1,4 +1,5 @@
 import { supabase } from './supabase'
+import { getLocalUser } from './currentUser'
 
 /**
  * Volet « à venir » du journal.
@@ -131,7 +132,7 @@ export interface ScheduleWorkoutInput {
 export async function scheduleWorkout(input: ScheduleWorkoutInput): Promise<void> {
   const {
     data: { user }
-  } = await supabase.auth.getUser()
+  } = await getLocalUser()
   if (!user) throw new Error('Non authentifié')
 
   const { error } = await supabase.from('scheduled_workouts').insert({

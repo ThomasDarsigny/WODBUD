@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import { v4 as uuid } from 'uuid'
 import i18n from '../i18n'
 import { supabase } from '../lib/supabase'
+import { getLocalUser } from '../lib/currentUser'
 import { saveToCache, loadFromCache } from '../lib/offlineCache'
 import { computeMuscleAlerts } from '../lib/muscleAlerts'
 import type {
@@ -51,7 +52,7 @@ async function getCurrentUserId(): Promise<string> {
   const {
     data: { user },
     error
-  } = await supabase.auth.getUser()
+  } = await getLocalUser()
 
   if (error) throw error
   if (!user?.id) {
