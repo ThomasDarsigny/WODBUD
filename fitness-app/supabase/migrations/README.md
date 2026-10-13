@@ -1,7 +1,7 @@
 # Migrations
 
-L'historique complet (38 migrations, de `fix_rls_infinite_recursion_and_cleanup`
-à `034_scheduled_workouts_link_session`) **existe côté Supabase** : le projet les
+L'historique complet (39 migrations, de `fix_rls_infinite_recursion_and_cleanup`
+à `035_rls_consolidation`) **existe côté Supabase** : le projet les
 trace dans `supabase_migrations.schema_migrations`. Rien n'est perdu.
 
 Ce qui manque, c'est leur **SQL dans le dépôt** : les migrations 001 à 016,
@@ -33,3 +33,4 @@ d'être appliqué.
 | `032_class_leaderboard_week.sql` | Fonction `get_class_leaderboard_since` : minutes par membre depuis une date (≤ 8 jours), pour le classement de la semaine — les séances restent privées, seule la somme sort |
 | `033_class_leaderboard_month.sql` | Même fonction, borne portée à 32 jours pour le classement du mois |
 | `034_scheduled_workouts_link_session.sql` | `scheduled_workouts.session_id` : un plan retient la séance effectuée qui l'a accomplie (unique, remis à null si la séance est supprimée) |
+| `035_rls_consolidation.sql` | Règles d'accès fusionnées (une par table et par action, OU exact des anciennes), `auth.uid()` évalué une fois par requête, règles liées à l'utilisateur réservées à `authenticated` ; `is_admin()` & co. retirées à `anon` ; garde sur `wodbud_recalc_badges`. Tables `app_*` hors périmètre |
