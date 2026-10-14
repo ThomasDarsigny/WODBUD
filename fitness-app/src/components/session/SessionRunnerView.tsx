@@ -2,11 +2,11 @@ import { useEffect, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { MAX_LOGGED_MINUTES, useSessionStore } from '../../stores/sessionStore'
+import { useSessionStore } from '../../stores/sessionStore'
 import { useWorkoutStore } from '../../stores/workoutStore'
 import { activeMs, formatClock, isRunning, wallClockMs } from '../../lib/sessionTimer'
 import { METHOD_I18N_KEYS } from '../../types'
-import { field as inputStyle, textarea as textareaStyle } from '../../styles/ui'
+import { textarea as textareaStyle } from '../../styles/ui'
 import { badgeDisplay, fetchBadgesByKeys, type Badge } from '../../lib/badges'
 import { computeProgress, rankDisplay } from '../../lib/ranks'
 import { useRankStore } from '../../stores/rankStore'
@@ -122,27 +122,20 @@ function SessionPicker() {
   )
 }
 
-/* ── Journal rapide (activité déjà faite, sans chrono) ──────────────────── */
+/* ── Activité cardio chronométrée ───────────────────────────────────────── */
 
-function todayISO(): string {
-  // Date locale, pas UTC : à 20 h à Montréal, toISOString() donnerait déjà
-  // le lendemain et la séance tomberait le mauvais jour dans la série.
-  const now = new Date()
-  const pad = (n: number) => String(n).padStart(2, '0')
-  return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`
-}
-
+/**
+ * Seul le chrono enregistre des minutes : consigner après coup une séance
+ * « déjà faite » permettait de gonfler les classements, c'est retiré.
+ */
 function QuickLogPanel() {
   const { t } = useTranslation(['workouts', 'common'])
-  const { activities, saving, fetchActivities, logActivity, startActivity } = useSessionStore()
+  const { activities, fetchActivities, startActivity } = useSessionStore()
 
   // `undefined` = l'utilisateur n'a rien choisi, on prend la première activité.
   // `null` = il a explicitement choisi « autre ». Dériver la valeur évite un
   // setState synchrone dans un effet, et donc un rendu en cascade.
   const [activityId, setActivityId] = useState<string | null | undefined>(undefined)
-  const [minutes, setMinutes] = useState('30')
-  const [date, setDate] = useState(todayISO())
-  const [localError, setLocalError] = useState<string | null>(null)
 
   useEffect(() => { void fetchActivities() }, [fetchActivities])
 
@@ -150,19 +143,6 @@ function QuickLogPanel() {
   const selectedId = activityId === undefined ? (activities[0]?.id ?? null) : activityId
   const selectedName =
     activities.find((a) => a.id === selectedId)?.name ?? t('session.log_other')
-
-  async function submit() {
-    setLocalError(null)
-    try {
-      await logActivity({ exerciseId: selectedId, minutes: Number(minutes), date })
-      setMinutes('30')
-    } catch (err) {
-      setLocalError(err instanceof Error ? err.message : t('errors.generic', { ns: 'common' }))
-    }
-  }
-
-  const parsed = Number(minutes)
-  const valid = Number.isFinite(parsed) && parsed >= 1 && parsed <= MAX_LOGGED_MINUTES
 
   return (
     <div style={{ border: '1px solid var(--border)', background: 'var(--dark)', padding: '1.25rem', marginBottom: '1.75rem' }}>
@@ -181,8 +161,6 @@ function QuickLogPanel() {
         <Chip label={t('session.log_other')} active={selectedId === null} onClick={() => setActivityId(null)} />
       </div>
 
-      {/* Le chrono d'abord : c'est le cas normal. Consigner après coup est
-          le repli, pas l'inverse — d'où la hiérarchie visuelle. */}
       <button
         onClick={() => startActivity(selectedId, selectedName)}
         style={{
@@ -196,63 +174,11 @@ function QuickLogPanel() {
           color: 'var(--black)',
           background: 'var(--orange)',
           border: '1px solid var(--orange)',
-          cursor: 'pointer',
-          marginBottom: '1.25rem'
+          cursor: 'pointer'
         }}
       >
         {t('session.log_start')}
       </button>
-
-      <div
-        style={{
-          display: 'flex', alignItems: 'center', gap: '0.75rem',
-          margin: '0 0 1rem', color: 'var(--muted)'
-        }}
-      >
-        <span style={{ flex: 1, height: 1, background: 'var(--border)' }} />
-        <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase' }}>
-          {t('session.log_or_manual')}
-        </span>
-        <span style={{ flex: 1, height: 1, background: 'var(--border)' }} />
-      </div>
-
-      <div style={{ display: 'flex', gap: '0.8rem', flexWrap: 'wrap', alignItems: 'flex-end' }}>
-        <div style={{ flex: '1 1 150px', minWidth: 130 }}>
-          <FieldLabel>{t('session.log_minutes')}</FieldLabel>
-          <input
-            type="number"
-            inputMode="numeric"
-            min={1}
-            max={MAX_LOGGED_MINUTES}
-            value={minutes}
-            onChange={(e) => setMinutes(e.target.value)}
-            style={inputStyle}
-          />
-        </div>
-        <div style={{ flex: '1 1 160px', minWidth: 140 }}>
-          <FieldLabel>{t('session.log_date')}</FieldLabel>
-          <input
-            type="date"
-            value={date}
-            max={todayISO()}
-            onChange={(e) => setDate(e.target.value)}
-            style={inputStyle}
-          />
-        </div>
-        <ActionButton onClick={() => { void submit() }} variant="primary" disabled={!valid || saving}>
-          {saving ? t('session.saving') : `+ ${t('session.log_save')}`}
-        </ActionButton>
-      </div>
-
-      <p style={{ color: 'var(--muted)', fontSize: '0.8125rem', margin: '0.85rem 0 0', opacity: 0.8 }}>
-        {t('session.log_hint')}
-      </p>
-
-      {localError && (
-        <div style={{ marginTop: '0.8rem', padding: '0.6rem 0.85rem', background: 'rgba(255,77,0,0.1)', border: '1px solid rgba(255,77,0,0.3)', color: 'var(--orange)', fontSize: '0.8125rem' }}>
-          {localError}
-        </div>
-      )}
     </div>
   )
 }

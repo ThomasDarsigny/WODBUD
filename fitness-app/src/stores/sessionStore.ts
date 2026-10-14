@@ -47,8 +47,6 @@ export interface TimedActivity {
   name: string
 }
 
-export const MAX_LOGGED_MINUTES = 600
-
 /** Ce qui survit à un rechargement de page. */
 interface PersistedSession {
   workoutId: string | null
@@ -88,7 +86,6 @@ interface SessionState extends PersistedSession {
   discard: () => void
   clearSummary: () => void
   fetchActivities: () => Promise<void>
-  logActivity: (input: { exerciseId: string | null; minutes: number; date: string }) => Promise<SessionSummary>
 }
 
 const IDLE: PersistedSession = {
@@ -367,76 +364,6 @@ export const useSessionStore = create<SessionState>((set, get) => ({
     }
   },
 
-  /**
-   * Journalise une activité déjà faite, sans chrono.
-   *
-   * Une course ou une corde à sauter ne se fait pas l'application ouverte.
-   * Sans cette saisie, ce temps n'entrerait jamais dans `active_minutes` et
-   * donc jamais dans les rangs. La date est reportée telle quelle dans
-   * `started_at`, ce que le trigger de série lit pour compter les jours
-   * consécutifs — une sortie d'hier prolonge donc correctement la série.
-   */
-  logActivity: async ({ exerciseId, minutes, date }) => {
-    const safeMinutes = Math.round(minutes)
-    if (!Number.isFinite(safeMinutes) || safeMinutes < 1 || safeMinutes > MAX_LOGGED_MINUTES) {
-      throw new Error(i18n.t('session.log_invalid', { ns: 'workouts', max: MAX_LOGGED_MINUTES }))
-    }
-
-    set({ saving: true, error: null })
-    try {
-      const userId = await getCurrentUserId()
-
-      // 12 h locale : au milieu de la journée, donc le décalage vers UTC ne
-      // fait jamais basculer la séance sur la veille ou le lendemain.
-      const startedAt = new Date(`${date}T12:00:00`)
-      if (Number.isNaN(startedAt.getTime())) {
-        throw new Error(i18n.t('session.log_invalid', { ns: 'workouts', max: MAX_LOGGED_MINUTES }))
-      }
-      const endedAt = new Date(startedAt.getTime() + safeMinutes * 60000)
-
-      const { error } = await supabase.from('workout_sessions').insert({
-        user_id: userId,
-        workout_id: null,
-        activity_exercise_id: exerciseId,
-        started_at: startedAt.toISOString(),
-        ended_at: endedAt.toISOString(),
-        performed_at: startedAt.toISOString(),
-        duration_minutes: safeMinutes,
-        active_minutes: safeMinutes,
-        notes: null
-      })
-      if (error) throw error
-
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('total_minutes, current_streak')
-        .eq('id', userId)
-        .single()
-
-      let newBadges: string[] = []
-      try {
-        newBadges = await recalcBadges()
-      } catch {
-        // Idem que dans finish() : l'activité est enregistrée, les badges
-        // seront rattrapés plus tard.
-      }
-
-      const totalMinutes = profile?.total_minutes ?? safeMinutes
-      const summary: SessionSummary = {
-        activeMinutes: safeMinutes,
-        totalMinutes,
-        currentStreak: profile?.current_streak ?? 0,
-        newBadges,
-        previousMinutes: Math.max(0, totalMinutes - safeMinutes)
-      }
-      set({ saving: false, lastSummary: summary })
-      return summary
-    } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : i18n.t('errors.generic', { ns: 'common' })
-      set({ saving: false, error: message })
-      throw err
-    }
-  }
 }))
 
 /** Vrai si une séance est en cours (démarrée et non terminée). */

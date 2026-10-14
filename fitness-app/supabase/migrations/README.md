@@ -1,7 +1,7 @@
 # Migrations
 
-L'historique complet (43 migrations, de `fix_rls_infinite_recursion_and_cleanup`
-à `039_push_notifications`) **existe côté Supabase** : le projet les
+L'historique complet (44 migrations, de `fix_rls_infinite_recursion_and_cleanup`
+à `040_sessions_no_backfill`) **existe côté Supabase** : le projet les
 trace dans `supabase_migrations.schema_migrations`. Rien n'est perdu.
 
 Les migrations 001 à 016, ainsi que 020 et 021, ont été appliquées
@@ -46,3 +46,4 @@ enregistré en base, il faudrait d'abord le réparer.
 | `037_class_plans.sql` | Planification par le coach : `class_plans`, copie par athlète dans `scheduled_workouts.class_plan_id` (déclencheurs), lecture des copies par le coach |
 | `038_class_plans_title_copy.sql` | Corrige 037 : la fiche du workout du coach n'est plus lisible par l'athlète (bibliothèque), le titre est recopié dans la copie |
 | `039_push_notifications.sql` | Notifications push : `push_subscriptions` (un abonnement par appareil), secret Vault `push_cron_secret`, tâche pg_cron `push-rappel-du-matin` (12 h UTC) qui appelle la fonction Edge `push`. Secrets VAPID dans les secrets des fonctions Edge |
+| `040_sessions_no_backfill.sql` | Fin du « journal rapide » : déclencheur `wodbud_guard_session` — une séance doit être chronométrée (début < 12 h, fin = heure du serveur, minutes ≤ temps écoulé), et ses durées/dates ne se modifient plus après coup |
