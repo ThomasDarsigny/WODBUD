@@ -101,16 +101,20 @@ export async function fetchClassLeaderboard(
     period === 'week' ? await fetchSince(classId, startOfWeekLocal())
     : period === 'month' ? await fetchSince(classId, startOfMonthLocal())
     : await fetchAllTime(classId)
-  rows.sort((a, b) => b.minutes - a.minutes || b.longestStreak - a.longestStreak)
+  return rankRows(rows)
+}
 
-  // Ex æquo : deux athlètes à 120 min sont tous deux 1ers, le suivant 3e.
+/**
+ * Trie par minutes puis par meilleure série, et attribue les positions.
+ * Ex æquo : deux athlètes à 120 min sont tous deux 1ers, le suivant 3e.
+ */
+export function rankRows(rows: LeaderboardRow[]): LeaderboardRow[] {
+  const sorted = [...rows].sort((a, b) => b.minutes - a.minutes || b.longestStreak - a.longestStreak)
   let position = 0
   let previous: number | null = null
-  rows.forEach((row, index) => {
+  return sorted.map((row, index) => {
     if (previous === null || row.minutes !== previous) position = index + 1
-    row.position = position
     previous = row.minutes
+    return { ...row, position }
   })
-
-  return rows
 }
