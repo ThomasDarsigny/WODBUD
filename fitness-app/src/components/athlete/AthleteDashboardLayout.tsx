@@ -6,7 +6,6 @@ import { supabase } from '../../lib/supabase'
 import { clearAuthSessionCookies } from '../../lib/authSessionCookies'
 import { useOnlineStatus } from '../../hooks/useOnlineStatus'
 import ActiveSessionBar from '../session/ActiveSessionBar'
-import PortalOverlay from '../portal/PortalOverlay'
 import { useIsMobile } from '../../hooks/useMediaQuery'
 import NavIcon from '../navigation/NavIcon'
 import type { NavIconName } from '../navigation/NavIcon'
@@ -164,7 +163,6 @@ export default function AthleteDashboardLayout({ children }: Props) {
         <div style={{ flex: 1, overflow: 'auto' }}>{children}</div>
       </main>
 
-      <PortalOverlay />
     </div>
   )
 }

@@ -565,15 +565,6 @@
       "Shoulder mobility exercises"
     ]
   },
-  "portal": {
-    "title": "Who are you!?",
-    "subtitle": "We tailor the menu to how you use WODBUD. Changeable anytime in Settings.",
-    "individu_title": "A solo athlete ready to crush it",
-    "individu_desc": "I train on my own and track my own sessions.",
-    "gym_title": "A gym that wants to dominate the market",
-    "gym_desc": "I run classes, athletes and build WODs.",
-    "later": "Later"
-  },
   "badges": {
     "title": "My badges",
     "unlocked_count": "badges unlocked",

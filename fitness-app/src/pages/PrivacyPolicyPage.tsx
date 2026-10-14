@@ -32,7 +32,7 @@ const SECTIONS: Bloc[] = [
       'Nous ne recueillons que ce dont l’application a besoin pour fonctionner.',
       [
         'Compte : adresse courriel, mot de passe (stocké sous forme chiffrée à sens unique — nous ne le voyons jamais), nom affiché.',
-        'Préférences : langue, thème d’affichage, type de portail choisi (particulier ou gym).',
+        'Préférences : langue, thème d’affichage.',
         'Entraînement : séances, exercices, séries, répétitions, charges soulevées, RIR, durée et minutes actives, records personnels, rang et série de jours.',
         'Appartenance : les cours ou gyms auxquels vous êtes rattaché, et vos votes sur les entraînements proposés.',
         'Suivi corporel, si vous choisissez de l’utiliser : poids corporel, aliments consommés et valeurs nutritionnelles associées.',

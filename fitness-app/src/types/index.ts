@@ -430,4 +430,3 @@ export interface Rank {
 
 // ─── Préférences ──────────────────────────────────────────────────────────────
 export type ThemePref = 'clair' | 'sombre' | 'auto'
-export type UserSegment = 'individu' | 'gym'

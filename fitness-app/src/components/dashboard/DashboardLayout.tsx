@@ -7,7 +7,6 @@ import { clearAuthSessionCookies } from '../../lib/authSessionCookies'
 import { isCurrentUserAdmin } from '../../lib/access'
 import { useOnlineStatus } from '../../hooks/useOnlineStatus'
 import ActiveSessionBar from '../session/ActiveSessionBar'
-import PortalOverlay from '../portal/PortalOverlay'
 import { useIsMobile } from '../../hooks/useMediaQuery'
 import NavIcon from '../navigation/NavIcon'
 import type { NavIconName } from '../navigation/NavIcon'
@@ -421,7 +420,6 @@ export default function DashboardLayout({ children }: Props) {
         <div style={{ flex: 1, overflow: 'auto' }}>{children}</div>
       </main>
 
-      <PortalOverlay />
     </div>
   )
 }
