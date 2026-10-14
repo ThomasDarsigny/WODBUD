@@ -38,6 +38,8 @@ export default function SettingsView() {
   const [segment, setSegment] = useState<UserSegment | null>(null)
   const [mannequin, setMannequin] = useState<MannequinBody>(readBodyPref)
   const [currentEmail, setCurrentEmail] = useState('')
+  const [fullName, setFullName] = useState('')
+  const [savedName, setSavedName] = useState('')
   const [newEmail, setNewEmail] = useState('')
   const [newPassword, setNewPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -62,11 +64,13 @@ export default function SettingsView() {
 
       const { data: profile } = await supabase
         .from('profiles')
-        .select('theme_pref, language, segment, avatar_url, social_links')
+        .select('full_name, theme_pref, language, segment, avatar_url, social_links')
         .eq('id', data.user.id)
         .maybeSingle()
 
       if (!mounted || !profile) return
+      setFullName(profile.full_name ?? '')
+      setSavedName(profile.full_name ?? '')
       if (profile.theme_pref) {
         setTheme(profile.theme_pref as ThemePref)
         applyTheme(profile.theme_pref as ThemePref)
@@ -143,6 +147,24 @@ export default function SettingsView() {
     const next = socialLinks.filter((_, i) => i !== index)
     setSocialLinks(next)
     await persist({ social_links: next as unknown as TablesUpdate<'profiles'>['social_links'] })
+  }
+
+  async function submitName() {
+    setNotice(null)
+    const name = fullName.trim()
+    if (!name || name === savedName) return
+    setBusy('name')
+    const { data } = await getLocalUser()
+    const { error } = data.user
+      ? await supabase.from('profiles').update({ full_name: name }).eq('id', data.user.id)
+      : { error: new Error(t('errors.generic')) }
+    setBusy(null)
+    if (error) setNotice({ kind: 'err', text: error.message })
+    else {
+      setSavedName(name)
+      setFullName(name)
+      setNotice({ kind: 'ok', text: t('settings.name_saved') })
+    }
   }
 
   async function submitEmail() {
@@ -260,7 +282,7 @@ export default function SettingsView() {
                 aria-hidden='true'
                 style={{ width: 64, height: 64, borderRadius: '50%', border: '1px solid var(--border)', background: 'var(--surface)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--muted)', fontFamily: 'var(--font-d)', fontSize: '1.5rem' }}
               >
-                {(currentEmail || '?').charAt(0).toUpperCase()}
+                {(savedName || currentEmail || '?').charAt(0).toUpperCase()}
               </div>
             )}
             <input
@@ -272,6 +294,29 @@ export default function SettingsView() {
             />
             <button type='button' onClick={() => avatarInputRef.current?.click()} disabled={busy === 'avatar'} style={buttonStyle}>
               {busy === 'avatar' ? t('settings.saving') : avatarUrl ? t('settings.avatar_change') : t('settings.avatar_add')}
+            </button>
+          </div>
+        </Row>
+
+        <Row label={t('settings.display_name')} hint={t('settings.display_name_hint')}>
+          <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+            <input
+              type='text'
+              value={fullName}
+              maxLength={60}
+              onChange={(e) => setFullName(e.target.value)}
+              onKeyDown={(e) => { if (e.key === 'Enter') void submitName() }}
+              placeholder={t('settings.display_name_placeholder')}
+              autoComplete='name'
+              style={inputStyle}
+            />
+            <button
+              type='button'
+              onClick={() => { void submitName() }}
+              disabled={busy === 'name' || !fullName.trim() || fullName.trim() === savedName}
+              style={buttonStyle}
+            >
+              {busy === 'name' ? t('settings.saving') : t('settings.save_name')}
             </button>
           </div>
         </Row>

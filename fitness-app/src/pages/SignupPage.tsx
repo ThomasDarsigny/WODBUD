@@ -8,6 +8,7 @@ import { usePageMeta } from '../hooks/usePageMeta'
 export default function SignupPage() {
   const { t } = useTranslation('common')
   usePageMeta(`${t('auth.signup')} | WODBUD`)
+  const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -41,7 +42,9 @@ export default function SignupPage() {
       email: email.trim(),
       password,
       options: {
-        emailRedirectTo: `${window.location.origin}/entraineur_dashboard`
+        emailRedirectTo: `${window.location.origin}/entraineur_dashboard`,
+        // Lu par le déclencheur handle_new_user pour remplir profiles.full_name.
+        data: { full_name: fullName.trim() }
       }
     })
 
@@ -95,6 +98,21 @@ export default function SignupPage() {
         )}
 
         <form onSubmit={handleEmailSignup} style={{ display: 'grid', gap: '0.9rem', marginTop: '1rem' }}>
+          <label style={{ display: 'grid', gap: '0.4rem' }}>
+            <span>{t('auth_ui.full_name')}</span>
+            <input
+              type="text"
+              required
+              pattern=".*\S.*"
+              maxLength={60}
+              autoComplete="name"
+              placeholder={t('auth_ui.full_name_placeholder')}
+              value={fullName}
+              onChange={(event) => setFullName(event.target.value)}
+              style={baseInputStyle}
+            />
+          </label>
+
           <label style={{ display: 'grid', gap: '0.4rem' }}>
             <span>{t('auth.email')}</span>
             <input
