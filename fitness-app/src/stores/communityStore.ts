@@ -88,8 +88,12 @@ export const useCommunityStore = create<CommunityState>((set, get) => ({
       .single()
     if (error) throw error
 
-    // Le créateur n'est pas membre d'office : rejoindre reste un geste
-    // explicite, cohérent avec le reste de la fonctionnalité.
+    // Le créateur rejoint d'office sa communauté.
+    const { error: joinErr } = await supabase
+      .from('community_members')
+      .insert({ community_id: row.id, user_id: userId })
+    if (joinErr) throw joinErr
+
     await get().fetchCommunities()
     return row as Community
   },

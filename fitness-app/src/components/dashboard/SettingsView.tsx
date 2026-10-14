@@ -9,7 +9,7 @@ import type { TablesUpdate } from '../../lib/database.types'
 import type { MannequinBody } from '../mannequin/bodyPaths'
 import { readBodyPref, storeBodyPref } from '../mannequin/Mannequin2D'
 import { applyTheme, readStoredTheme, storeTheme } from '../../lib/theme'
-import type { ThemePref, UserSegment, SocialLink, SocialPlatform } from '../../types'
+import type { ThemePref, SocialLink, SocialPlatform } from '../../types'
 import { uploadAvatar } from '../../lib/avatar'
 import { previewAccountDeletion, confirmAccountDeletion, type DeletionImpact } from '../../lib/accountDeletion'
 import { clearAuthSessionCookies } from '../../lib/authSessionCookies'
@@ -27,16 +27,10 @@ const THEMES: Array<{ value: ThemePref; key: string }> = [
   { value: 'auto', key: 'settings.theme_auto' }
 ]
 
-const SEGMENTS: Array<{ value: UserSegment; key: string }> = [
-  { value: 'individu', key: 'settings.segment_individu' },
-  { value: 'gym', key: 'settings.segment_gym' }
-]
-
 export default function SettingsView() {
   const { t, i18n } = useTranslation(['common'])
 
   const [theme, setTheme] = useState<ThemePref>(readStoredTheme())
-  const [segment, setSegment] = useState<UserSegment | null>(null)
   const [mannequin, setMannequin] = useState<MannequinBody>(readBodyPref)
   const [currentEmail, setCurrentEmail] = useState('')
   const [fullName, setFullName] = useState('')
@@ -94,7 +88,7 @@ export default function SettingsView() {
 
       const { data: profile } = await supabase
         .from('profiles')
-        .select('full_name, theme_pref, language, segment, avatar_url, social_links')
+        .select('full_name, theme_pref, language, avatar_url, social_links')
         .eq('id', data.user.id)
         .maybeSingle()
 
@@ -106,7 +100,6 @@ export default function SettingsView() {
         applyTheme(profile.theme_pref as ThemePref)
         storeTheme(profile.theme_pref as ThemePref)
       }
-      if (profile.segment) setSegment(profile.segment as UserSegment)
       if (profile.language && profile.language !== i18n.language) {
         void i18n.changeLanguage(profile.language)
       }
@@ -135,11 +128,6 @@ export default function SettingsView() {
   function pickLanguage(code: string) {
     void i18n.changeLanguage(code)
     void persist({ language: code })
-  }
-
-  function pickSegment(value: UserSegment) {
-    setSegment(value)
-    void persist({ segment: value })
   }
 
   async function handleAvatarChange(e: ChangeEvent<HTMLInputElement>) {
@@ -272,14 +260,6 @@ export default function SettingsView() {
                 onClick={() => pickLanguage(l.code)}
                 label={t(l.key)}
               />
-            ))}
-          </div>
-        </Row>
-
-        <Row label={t('settings.segment')} hint={t('settings.segment_hint')}>
-          <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
-            {SEGMENTS.map((sgm) => (
-              <Chip key={sgm.value} active={segment === sgm.value} onClick={() => pickSegment(sgm.value)} label={t(sgm.key)} />
             ))}
           </div>
         </Row>
