@@ -1,7 +1,7 @@
 # Migrations
 
-L'historique complet (42 migrations, de `fix_rls_infinite_recursion_and_cleanup`
-à `038_class_plans_title_copy`) **existe côté Supabase** : le projet les
+L'historique complet (43 migrations, de `fix_rls_infinite_recursion_and_cleanup`
+à `039_push_notifications`) **existe côté Supabase** : le projet les
 trace dans `supabase_migrations.schema_migrations`. Rien n'est perdu.
 
 Les migrations 001 à 016, ainsi que 020 et 021, ont été appliquées
@@ -45,3 +45,4 @@ enregistré en base, il faudrait d'abord le réparer.
 | `036_close_app_tables.sql` | Tables `app_*` (inutilisées par WODBUD, ouvertes à `anon` en lecture/écriture) fermées : règles et droits retirés, données conservées |
 | `037_class_plans.sql` | Planification par le coach : `class_plans`, copie par athlète dans `scheduled_workouts.class_plan_id` (déclencheurs), lecture des copies par le coach |
 | `038_class_plans_title_copy.sql` | Corrige 037 : la fiche du workout du coach n'est plus lisible par l'athlète (bibliothèque), le titre est recopié dans la copie |
+| `039_push_notifications.sql` | Notifications push : `push_subscriptions` (un abonnement par appareil), secret Vault `push_cron_secret`, tâche pg_cron `push-rappel-du-matin` (12 h UTC) qui appelle la fonction Edge `push`. Secrets VAPID dans les secrets des fonctions Edge |

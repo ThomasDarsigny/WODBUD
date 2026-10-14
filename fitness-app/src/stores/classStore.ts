@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { supabase } from '../lib/supabase'
 import { getLocalUser } from '../lib/currentUser'
+import { notifyClass } from '../lib/push'
 import type { Class, ClassInsert, ClassMember, VoteSession, VoteSessionStatus, VoteSessionInsert, VoteResult, VoteOption } from '../types'
 
 interface ClassState {
@@ -215,6 +216,8 @@ export const useClassStore = create<ClassState>((set) => ({
           [data.class_id]: [session, ...(s.voteSessions[data.class_id] ?? [])]
         }
       }))
+      // Après les options : la notification ouvre un vote déjà complet.
+      notifyClass(data.class_id, 'vote', session.id)
       return session
     } catch (err) {
       clearTimeout(timeoutId)

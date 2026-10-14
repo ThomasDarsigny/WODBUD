@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { supabase } from '../../lib/supabase'
 import { getLocalUser } from '../../lib/currentUser'
+import { disablePush, enablePush, getPushState, sendTestPush, type PushState } from '../../lib/push'
 import type { TablesUpdate } from '../../lib/database.types'
 import type { MannequinBody } from '../mannequin/bodyPaths'
 import { readBodyPref, storeBodyPref } from '../mannequin/Mannequin2D'
@@ -54,6 +55,35 @@ export default function SettingsView() {
   const [newUrl, setNewUrl] = useState('')
 
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
+  const [pushState, setPushState] = useState<PushState | null>(null)
+
+  useEffect(() => {
+    let mounted = true
+    getPushState()
+      .then((s) => { if (mounted) setPushState(s) })
+      .catch(() => { if (mounted) setPushState('unsupported') })
+    return () => { mounted = false }
+  }, [])
+
+  async function runPush(action: () => Promise<PushState | { sent: number }>, okText?: string) {
+    setNotice(null)
+    setBusy('push')
+    try {
+      const result = await action()
+      if (typeof result === 'string') {
+        setPushState(result)
+        if (okText && result === 'on') setNotice({ kind: 'ok', text: okText })
+      } else if (result.sent > 0) {
+        if (okText) setNotice({ kind: 'ok', text: okText })
+      } else {
+        setNotice({ kind: 'err', text: t('settings.push_test_none') })
+      }
+    } catch (err) {
+      setNotice({ kind: 'err', text: err instanceof Error ? err.message : t('errors.generic') })
+    } finally {
+      setBusy(null)
+    }
+  }
 
   useEffect(() => {
     let mounted = true
@@ -362,6 +392,35 @@ export default function SettingsView() {
               {busy === 'password' ? t('settings.saving') : t('settings.change_password')}
             </button>
           </div>
+        </Row>
+      </Section>
+
+      <Section title={t('settings.notifications')}>
+        <Row label={t('settings.push')} hint={t('settings.push_hint')}>
+          {pushState === null ? (
+            <p style={{ margin: 0, color: 'var(--muted)' }}>…</p>
+          ) : pushState === 'on' ? (
+            <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', alignItems: 'center' }}>
+              <span style={{ color: '#22c55e', fontSize: '0.9375rem', marginRight: '0.25rem' }}>✓ {t('settings.push_on')}</span>
+              <button type='button' disabled={busy === 'push'} style={buttonStyle}
+                onClick={() => { void runPush(sendTestPush, t('settings.push_test_sent')) }}>
+                {t('settings.push_test')}
+              </button>
+              <button type='button' disabled={busy === 'push'} style={buttonStyle}
+                onClick={() => { void runPush(disablePush) }}>
+                {t('settings.push_disable')}
+              </button>
+            </div>
+          ) : pushState === 'off' ? (
+            <button type='button' disabled={busy === 'push'} style={buttonStyle}
+              onClick={() => { void runPush(enablePush, t('settings.push_enabled')) }}>
+              {busy === 'push' ? t('settings.saving') : t('settings.push_enable')}
+            </button>
+          ) : (
+            <p style={{ margin: 0, color: 'var(--muted)', fontSize: '0.875rem', lineHeight: 1.5 }}>
+              {t(`settings.push_${pushState.replace('-', '_')}`)}
+            </p>
+          )}
         </Row>
       </Section>
 

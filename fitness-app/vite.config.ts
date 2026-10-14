@@ -15,7 +15,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'icons/*.png'], //todo: ajouter les icônes manquantes (favicon.io)
+      includeAssets: ['favicon.svg', 'apple-touch-icon.png', 'icons/*.png'],
       manifest: {
         name: 'WODBUD',
         short_name: 'WODBUD',
@@ -47,6 +47,8 @@ export default defineConfig({
         ]
       },
       workbox: {
+        // Réception et clic des notifications push (public/push-sw.js).
+        importScripts: ['push-sw.js'],
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
         navigateFallback: '/index.html',
         disableDevLogs: true,

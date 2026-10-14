@@ -1,6 +1,7 @@
 import { supabase } from './supabase'
 import { getLocalUser } from './currentUser'
 import { localDate } from './scheduledWorkouts'
+import { notifyClass } from './push'
 
 /**
  * Séances programmées par le coach pour un cours (migration 037).
@@ -77,15 +78,20 @@ export async function createClassPlan(input: {
   const { data } = await getLocalUser()
   if (!data.user) throw new Error('Non authentifié')
 
-  const { error } = await supabase.from('class_plans').insert({
-    class_id: input.classId,
-    coach_id: data.user.id,
-    scheduled_date: input.scheduledDate,
-    workout_id: input.workoutId,
-    title: input.title,
-    notes: input.notes
-  })
+  const { data: row, error } = await supabase
+    .from('class_plans')
+    .insert({
+      class_id: input.classId,
+      coach_id: data.user.id,
+      scheduled_date: input.scheduledDate,
+      workout_id: input.workoutId,
+      title: input.title,
+      notes: input.notes
+    })
+    .select('id')
+    .single()
   if (error) throw error
+  notifyClass(input.classId, 'plan', row.id)
 }
 
 export async function deleteClassPlan(id: string): Promise<void> {
