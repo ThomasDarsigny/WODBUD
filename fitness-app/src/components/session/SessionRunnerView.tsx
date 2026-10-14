@@ -468,7 +468,7 @@ function SummaryPanel({ basePath }: { basePath: string }) {
     <Shell tag={t('session.page_tag')} title={t('session.done_title')}>
       <div style={{ border: '1px solid rgba(34,197,94,0.35)', background: 'rgba(34,197,94,0.06)', padding: '1.75rem' }}>
         <p style={{ fontFamily: 'var(--font-d)', fontSize: 'clamp(2rem, 8vw, 3rem)', fontWeight: 900, color: '#22c55e', margin: 0, lineHeight: 1 }}>
-          {t('session.done_minutes', { minutes: summary.activeMinutes })}
+          {t('session.done_minutes', { count: summary.activeMinutes })}
         </p>
         <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '1.1rem' }}>
           <Stat label={t('session.done_total', { total: summary.totalMinutes })} />

@@ -97,11 +97,12 @@ export default function DashboardLayout({ children }: Props) {
 
   // Une seule lecture au montage : les pastilles n'ont pas besoin d'être
   // temps réel, elles se rafraîchissent au changement d'écran.
-  const { openVotes, newBadges, rankUp, refresh } = useNotificationStore()
+  const { openVotes, newBadges, rankUp, plannedToday, refresh } = useNotificationStore()
   useEffect(() => { void refresh() }, [refresh, location.pathname])
 
   function dotFor(id: string): number {
     if (id === 'vote') return openVotes
+    if (id === 'journal') return plannedToday
     if (id === 'rank') return newBadges + (rankUp ? 1 : 0)
     return 0
   }

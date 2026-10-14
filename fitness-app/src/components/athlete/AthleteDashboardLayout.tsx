@@ -48,11 +48,12 @@ export default function AthleteDashboardLayout({ children }: Props) {
 
   // L'athlète n'a pas d'entrée « Votes » : les votes vivent sur l'accueil,
   // c'est donc lui qui porte la pastille.
-  const { openVotes, newBadges, rankUp, refresh } = useNotificationStore()
+  const { openVotes, newBadges, rankUp, plannedToday, refresh } = useNotificationStore()
   useEffect(() => { void refresh() }, [refresh, location.pathname])
 
   function dotFor(id: string): number {
     if (id === 'home') return openVotes
+    if (id === 'journal') return plannedToday
     if (id === 'rank') return newBadges + (rankUp ? 1 : 0)
     return 0
   }

@@ -11,6 +11,8 @@ import Skeleton from '../ui/Skeleton'
 import { getLocalUser } from '../../lib/currentUser'
 import ClassLeaderboard from '../rank/ClassLeaderboard'
 import { isVoteSessionOpen } from '../../lib/voteSessions'
+import { fetchUpcoming, localDate, type ScheduledEntry } from '../../lib/scheduledWorkouts'
+import { useSessionStore } from '../../stores/sessionStore'
 void CATEGORY_I18N_KEYS
 void MUSCLE_GROUP_I18N_KEYS
 
@@ -68,6 +70,8 @@ export default function AthleteHomeView() {
         </h1>
       </div>
 
+      <TodayPlans />
+
       {/* Active votes */}
       <section style={{ marginBottom: '2.5rem' }}>
         <SectionHeader icon="vote" title={t('athlete.section_votes')} />
@@ -102,6 +106,67 @@ export default function AthleteHomeView() {
         )}
       </section>
     </div>
+  )
+}
+
+/**
+ * Rappel du jour : ce que l'athlète (ou son coach) a prévu aujourd'hui et
+ * qu'il n'a pas encore fait. N'apparaît pas du tout s'il n'y a rien — un
+ * bandeau « rien de prévu » sur l'accueil serait du bruit.
+ */
+function TodayPlans() {
+  const { t } = useTranslation(['common', 'workouts'])
+  const navigate = useNavigate()
+  const startSession = useSessionStore((s) => s.startSession)
+  const sessionRunning = useSessionStore((s) => s.timer.startedAt !== null)
+  const [plans, setPlans] = useState<ScheduledEntry[]>([])
+
+  useEffect(() => {
+    let mounted = true
+    const today = localDate()
+    fetchUpcoming()
+      .then((rows) => {
+        if (mounted) setPlans(rows.filter((r) => r.scheduled_date === today && r.session_id === null))
+      })
+      .catch(() => {})
+    return () => { mounted = false }
+  }, [])
+
+  if (plans.length === 0) return null
+
+  function start(p: ScheduledEntry) {
+    if (!sessionRunning) {
+      startSession(p.workout_id, p.title ?? p.workout_title ?? t('journal.free_session', { ns: 'workouts' }), p.id)
+    }
+    navigate('/athlete/session')
+  }
+
+  return (
+    <section style={{ marginBottom: '2.5rem' }}>
+      <SectionHeader icon="calendar" title={t('athlete.section_today')} />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+        {plans.map((p) => (
+          <div key={p.id} style={{ border: '1px solid rgba(255,77,0,0.35)', background: 'rgba(255,77,0,0.06)', padding: '1rem 1.1rem', display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+            <div style={{ flex: '1 1 180px', minWidth: 0 }}>
+              <p style={{ fontFamily: 'var(--font-d)', fontSize: '1.25rem', fontWeight: 800, letterSpacing: '0.04em', textTransform: 'uppercase', margin: 0 }}>
+                {p.title ?? p.workout_title ?? t('journal.free_session', { ns: 'workouts' })}
+              </p>
+              {(p.class_name || p.notes) && (
+                <p style={{ color: 'var(--muted)', fontSize: '0.8125rem', margin: '0.3rem 0 0', lineHeight: 1.5 }}>
+                  {[p.class_name, p.notes].filter(Boolean).join(' · ')}
+                </p>
+              )}
+            </div>
+            <button
+              onClick={() => start(p)}
+              style={{ fontFamily: 'var(--font-d)', fontSize: '0.8125rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.7rem 1.3rem', color: 'var(--black)', background: 'var(--orange)', border: '1px solid var(--orange)', cursor: 'pointer', flexShrink: 0 }}
+            >
+              ▶ {t('journal.plan_start', { ns: 'workouts' })}
+            </button>
+          </div>
+        ))}
+      </div>
+    </section>
   )
 }
 
