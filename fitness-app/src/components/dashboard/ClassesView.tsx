@@ -12,6 +12,7 @@ import { CATEGORY_I18N_KEYS, MUSCLE_GROUP_I18N_KEYS } from '../../types'
 import { btnPrimary as actionBtnStyle, btnSecondary as ghostBtnStyle, field as inputStyle, textarea as textareaStyle } from '../../styles/ui'
 import Skeleton from '../ui/Skeleton'
 import ClassLeaderboard from '../rank/ClassLeaderboard'
+import ClassPlanningTab from './ClassPlanningTab'
 import { isVoteSessionOpen, voteSessionKind } from '../../lib/voteSessions'
 
 const BASE_URL = window.location.origin
@@ -25,7 +26,7 @@ export default function ClassesView() {
   const [selectedClass, setSelectedClass] = useState<Class | null>(null)
   const [showQR, setShowQR] = useState(false)
   const [showVoteModal, setShowVoteModal] = useState(false)
-  const [activeTab, setActiveTab] = useState<'members' | 'votes' | 'leaderboard'>('members')
+  const [activeTab, setActiveTab] = useState<'members' | 'planning' | 'votes' | 'leaderboard'>('members')
 
   useEffect(() => { fetchClasses() }, [fetchClasses])
   useEffect(() => { fetchExercises() }, [fetchExercises])
@@ -180,7 +181,7 @@ export default function ClassesView() {
 
             {/* Tabs */}
             <div style={{ display: 'flex', gap: '0', borderBottom: '1px solid var(--border)', marginBottom: '1.25rem' }}>
-              {(['members', 'votes', 'leaderboard'] as const).map((tab) => (
+              {(['members', 'planning', 'votes', 'leaderboard'] as const).map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
@@ -210,6 +211,10 @@ export default function ClassesView() {
                 members={members[selectedClass.id] ?? []}
                 onRemove={(athleteId) => removeMember(selectedClass.id, athleteId)}
               />
+            )}
+
+            {activeTab === 'planning' && (
+              <ClassPlanningTab classId={selectedClass.id} />
             )}
 
             {/* Classement — la donnée était déjà lisible via la policy

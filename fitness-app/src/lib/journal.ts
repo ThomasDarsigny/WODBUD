@@ -32,6 +32,7 @@ type Row = {
   active_minutes: number
   duration_minutes: number | null
   notes: string | null
+  workout_id: string | null
   workouts: { title: string } | { title: string }[] | null
   activity: { name: string } | { name: string }[] | null
   scheduled_workouts: { id: string; title: string | null }[] | null
@@ -47,7 +48,7 @@ export async function fetchJournal(limit = 100): Promise<JournalEntry[]> {
   const { data, error } = await supabase
     .from('workout_sessions')
     .select(
-      'id, performed_at, active_minutes, duration_minutes, notes, workouts(title), activity:exercises!workout_sessions_activity_exercise_id_fkey(name), scheduled_workouts(id, title)'
+      'id, performed_at, active_minutes, duration_minutes, notes, workout_id, workouts(title), activity:exercises!workout_sessions_activity_exercise_id_fkey(name), scheduled_workouts(id, title)'
     )
     .order('performed_at', { ascending: false })
     .limit(limit)
@@ -66,7 +67,9 @@ export async function fetchJournal(limit = 100): Promise<JournalEntry[]> {
       // Une séance lancée depuis un plan sans WOD n'a pas de titre à elle :
       // celui du plan (« Course 5 km ») vaut mieux que « Séance libre ».
       title: wod?.title ?? activity?.name ?? plan?.title ?? null,
-      kind: wod ? 'wod' : activity ? 'cardio' : 'free',
+      // workout_id plutôt que la fiche : le WOD planifié par un coach n'est
+      // pas lisible par l'athlète, mais c'en est bien un.
+      kind: row.workout_id ? 'wod' : activity ? 'cardio' : 'free',
       planned: plan !== null
     }
   })

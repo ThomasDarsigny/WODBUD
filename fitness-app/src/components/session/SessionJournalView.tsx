@@ -152,6 +152,7 @@ export default function SessionJournalView() {
                       {new Date(`${e.scheduled_date}T00:00:00`).toLocaleDateString(i18n.language, {
                         weekday: 'long', day: 'numeric', month: 'long'
                       })}
+                      {e.class_name && <span> · {e.class_name}</span>}
                       {overdue && <span style={{ color: 'var(--orange)' }}> · {t('journal.plan_overdue')}</span>}
                     </p>
                     {e.notes && (

@@ -27,6 +27,8 @@ export interface ScheduledEntry {
   workout_title: string | null
   /** Séance effectuée qui a accompli ce plan, sinon null. */
   session_id: string | null
+  /** Cours dont le coach a programmé cette séance, sinon null (plan perso). */
+  class_name: string | null
 }
 
 type Row = {
@@ -37,6 +39,10 @@ type Row = {
   workout_id: string | null
   session_id: string | null
   workouts: { title: string } | { title: string }[] | null
+  class_plans:
+    | { classes: { name: string } | { name: string }[] | null }
+    | { classes: { name: string } | { name: string }[] | null }[]
+    | null
 }
 
 function first<T>(value: T | T[] | null): T | null {
@@ -58,10 +64,15 @@ export async function fetchUpcoming(limit = 50): Promise<ScheduledEntry[]> {
   const today = localDate()
   const from = new Date()
   from.setDate(from.getDate() - OVERDUE_DAYS)
+  const { data: auth } = await getLocalUser()
+  if (!auth.user) return []
 
+  // Filtre explicite : un coach lit aussi les copies de ses athlètes
+  // (pour le suivi, migration 037), elles n'ont rien à faire dans SON journal.
   const { data, error } = await supabase
     .from('scheduled_workouts')
-    .select('id, scheduled_date, title, notes, workout_id, session_id, workouts(title)')
+    .select('id, scheduled_date, title, notes, workout_id, session_id, workouts(title), class_plans(classes(name))')
+    .eq('user_id', auth.user.id)
     .gte('scheduled_date', localDate(from))
     .order('scheduled_date', { ascending: true })
     .limit(limit)
@@ -76,7 +87,8 @@ export async function fetchUpcoming(limit = 50): Promise<ScheduledEntry[]> {
       notes: row.notes,
       workout_id: row.workout_id,
       workout_title: first(row.workouts)?.title ?? null,
-      session_id: row.session_id
+      session_id: row.session_id,
+      class_name: first(first(row.class_plans)?.classes ?? null)?.name ?? null
     }))
 }
 
@@ -100,9 +112,12 @@ export async function linkSessionToPlan(input: {
     let planId = input.scheduledId
     if (!planId) {
       if (!input.workoutId) return
+      const { data: auth } = await getLocalUser()
+      if (!auth.user) return
       const { data } = await supabase
         .from('scheduled_workouts')
         .select('id')
+        .eq('user_id', auth.user.id)
         .eq('scheduled_date', input.date)
         .eq('workout_id', input.workoutId)
         .is('session_id', null)

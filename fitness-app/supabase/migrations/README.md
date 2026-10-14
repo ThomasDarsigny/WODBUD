@@ -1,7 +1,7 @@
 # Migrations
 
-L'historique complet (39 migrations, de `fix_rls_infinite_recursion_and_cleanup`
-à `035_rls_consolidation`) **existe côté Supabase** : le projet les
+L'historique complet (42 migrations, de `fix_rls_infinite_recursion_and_cleanup`
+à `038_class_plans_title_copy`) **existe côté Supabase** : le projet les
 trace dans `supabase_migrations.schema_migrations`. Rien n'est perdu.
 
 Ce qui manque, c'est leur **SQL dans le dépôt** : les migrations 001 à 016,
@@ -34,3 +34,6 @@ d'être appliqué.
 | `033_class_leaderboard_month.sql` | Même fonction, borne portée à 32 jours pour le classement du mois |
 | `034_scheduled_workouts_link_session.sql` | `scheduled_workouts.session_id` : un plan retient la séance effectuée qui l'a accomplie (unique, remis à null si la séance est supprimée) |
 | `035_rls_consolidation.sql` | Règles d'accès fusionnées (une par table et par action, OU exact des anciennes), `auth.uid()` évalué une fois par requête, règles liées à l'utilisateur réservées à `authenticated` ; `is_admin()` & co. retirées à `anon` ; garde sur `wodbud_recalc_badges`. Tables `app_*` hors périmètre |
+| `036_close_app_tables.sql` | Tables `app_*` (inutilisées par WODBUD, ouvertes à `anon` en lecture/écriture) fermées : règles et droits retirés, données conservées |
+| `037_class_plans.sql` | Planification par le coach : `class_plans`, copie par athlète dans `scheduled_workouts.class_plan_id` (déclencheurs), lecture des copies par le coach |
+| `038_class_plans_title_copy.sql` | Corrige 037 : la fiche du workout du coach n'est plus lisible par l'athlète (bibliothèque), le titre est recopié dans la copie |

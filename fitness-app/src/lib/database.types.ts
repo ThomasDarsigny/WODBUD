@@ -941,8 +941,57 @@ export type Database = {
         }
         Relationships: []
       }
+      class_plans: {
+        Row: {
+          class_id: string
+          coach_id: string
+          created_at: string
+          id: string
+          notes: string | null
+          scheduled_date: string
+          title: string | null
+          workout_id: string | null
+        }
+        Insert: {
+          class_id: string
+          coach_id: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          scheduled_date: string
+          title?: string | null
+          workout_id?: string | null
+        }
+        Update: {
+          class_id?: string
+          coach_id?: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          scheduled_date?: string
+          title?: string | null
+          workout_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "class_plans_class_id_fkey"
+            columns: ["class_id"]
+            isOneToOne: false
+            referencedRelation: "classes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "class_plans_workout_id_fkey"
+            columns: ["workout_id"]
+            isOneToOne: false
+            referencedRelation: "workouts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       scheduled_workouts: {
         Row: {
+          class_plan_id: string | null
           created_at: string
           id: string
           notes: string | null
@@ -953,6 +1002,7 @@ export type Database = {
           workout_id: string | null
         }
         Insert: {
+          class_plan_id?: string | null
           created_at?: string
           id?: string
           notes?: string | null
@@ -963,6 +1013,7 @@ export type Database = {
           workout_id?: string | null
         }
         Update: {
+          class_plan_id?: string | null
           created_at?: string
           id?: string
           notes?: string | null
@@ -973,6 +1024,13 @@ export type Database = {
           workout_id?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "scheduled_workouts_class_plan_id_fkey"
+            columns: ["class_plan_id"]
+            isOneToOne: false
+            referencedRelation: "class_plans"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "scheduled_workouts_session_id_fkey"
             columns: ["session_id"]
