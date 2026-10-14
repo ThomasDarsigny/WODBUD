@@ -355,11 +355,14 @@ export default function WorkoutBuilderView() {
         </div>
       </div>
 
+      {/* Une seule zone qui défile : avec le mannequin et les alertes, une
+          liste en flex: 1 dans une colonne de 100vh tombait à zéro hauteur. */}
       <div
         style={{
           display: 'flex',
           flexDirection: 'column',
-          overflow: 'hidden',
+          overflowY: 'auto',
+          overflowX: 'hidden',
           background: 'var(--dark)'
         }}
       >
@@ -480,7 +483,7 @@ export default function WorkoutBuilderView() {
           </div>
         )}
 
-        <div style={{ flex: 1, overflowY: 'auto', padding: '0.75rem 1rem' }}>
+        <div style={{ flexShrink: 0, padding: '0.75rem 1rem' }}>
           {workoutExercises.length === 0 ? (
             <EmptyState
               compact
@@ -519,7 +522,12 @@ export default function WorkoutBuilderView() {
             borderTop: '1px solid var(--border)',
             display: 'flex',
             gap: '0.5rem',
-            flexShrink: 0
+            flexShrink: 0,
+            marginTop: 'auto',
+            position: 'sticky',
+            bottom: 0,
+            background: 'var(--dark)',
+            zIndex: 1
           }}
         >
           <button
