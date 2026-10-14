@@ -2,7 +2,6 @@ import { useState, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import NavIcon from '../navigation/NavIcon'
 import EmptyState from '../ui/EmptyState'
-import { pdf } from '@react-pdf/renderer'
 import { useExerciseStore } from '../../stores/exerciseStore'
 import { useWorkoutStore } from '../../stores/workoutStore'
 import type { Exercise, WorkoutExercise, MuscleAlert, WorkoutMethod, ExerciseCategory, MuscleGroup } from '../../types'
@@ -11,7 +10,6 @@ import ExerciseDetailModal from '../exercises/ExerciseDetailModal'
 import Mannequin2D from '../mannequin/Mannequin2D'
 import { computeMuscleLoads } from '../../lib/muscleLoad'
 import { label as smallLabelStyle, fieldCompact as miniInputStyle, field as selectStyle, btnSmall as filterResetStyle, textarea as textareaStyle } from '../../styles/ui'
-import { WorkoutPdfFull } from '../pdf/workoutPDF'
 import { pdfFileName } from '../pdf/pdfTokens'
 
 export default function WorkoutBuilderView() {
@@ -123,6 +121,11 @@ export default function WorkoutBuilderView() {
         exercises: workoutExercises,
         created_at: new Date().toISOString()
       }
+      // Chargé au clic : le moteur PDF pèse plus que tout le reste de l'écran.
+      const [{ pdf }, { WorkoutPdfFull }] = await Promise.all([
+        import('@react-pdf/renderer'),
+        import('../pdf/workoutPDF')
+      ])
       const blob = await pdf(
         <WorkoutPdfFull workout={workout} theme='dark' qrDataUrls={{}} />
       ).toBlob()
