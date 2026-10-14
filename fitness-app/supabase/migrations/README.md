@@ -4,14 +4,22 @@ L'historique complet (42 migrations, de `fix_rls_infinite_recursion_and_cleanup`
 à `038_class_plans_title_copy`) **existe côté Supabase** : le projet les
 trace dans `supabase_migrations.schema_migrations`. Rien n'est perdu.
 
-Ce qui manque, c'est leur **SQL dans le dépôt** : les migrations 001 à 016,
-ainsi que 020 et 021, ont été appliquées directement sur le projet (dashboard
-ou une session précédente), sans fichier versionné ici. On ne peut donc pas
-relire l'intention de ces changements-là depuis git.
+Les migrations 001 à 016, ainsi que 020 et 021, ont été appliquées
+directement sur le projet, sans fichier versionné ici : leur intention ne se
+relit pas depuis git.
 
-**Pour rattraper** : `supabase db pull` récupère le schéma courant en une
-migration de base, après quoi chaque changement peut être versionné ici avant
-d'être appliqué.
+**Le schéma complet, lui, est dans le dépôt** depuis le 2026-10-14 :
+
+- `../schema.sql` — tout le schéma `public` (tables, règles d'accès,
+  fonctions, déclencheurs), tiré de la production par
+  `npx supabase db dump --linked -f supabase/schema.sql` ;
+- `../schema_auth_storage.sql` — ce que ce dump n'inclut pas : le déclencheur
+  de création de profil sur `auth.users` et le bucket `avatars`.
+
+À régénérer après une série de migrations, pour qu'il reste la référence.
+`db pull` n'est pas utilisé : les noms de fichiers ici (`024_…`) ne suivent
+pas le format horodaté de la CLI et ne correspondent pas à l'historique
+enregistré en base, il faudrait d'abord le réparer.
 
 | Fichier | Contenu |
 |---|---|
