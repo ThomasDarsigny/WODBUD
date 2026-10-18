@@ -606,5 +606,29 @@
     "empty_month_hint": "El contador vuelve a cero el día 1 de cada mes. La primera sesión toma la delantera.",
     "empty_week": "Nadie ha entrenado todavía esta semana",
     "empty_week_hint": "El contador vuelve a cero cada lunes. La primera sesión toma la delantera."
+  },
+  "feature_topics": {
+    "tag": "Próximas novedades",
+    "title": "¿Qué temática añadir a WODBUD?",
+    "subtitle": "Elige la temática que quieres ver primero. Una sola elección, que puedes cambiar mientras la votación esté abierta.",
+    "your_choice": "Tu elección: {{title}}. Puedes cambiarla mientras la votación esté abierta.",
+    "admin_subtitle_one": "Propón temáticas: cada cuenta elige una. {{count}} voto por ahora.",
+    "admin_subtitle_other": "Propón temáticas: cada cuenta elige una. {{count}} votos por ahora.",
+    "title_placeholder": "Temática (p. ej. Nutrición, Movilidad, Programas)",
+    "description_placeholder": "Detalle (opcional)",
+    "add": "Proponer",
+    "empty": "Todavía no hay temáticas para votar.",
+    "empty_admin": "Todavía no hay temáticas. Propón la primera arriba.",
+    "choose": "Elegir",
+    "chosen": "Tu elección",
+    "status_done": "Añadida",
+    "status_closed": "Cerrada",
+    "reopen": "Reabrir",
+    "close": "Cerrar",
+    "mark_done": "Añadida",
+    "delete": "Eliminar",
+    "delete_confirm": "Confirmar",
+    "votes_one": "{{count}} voto",
+    "votes_other": "{{count}} votos"
   }
 }

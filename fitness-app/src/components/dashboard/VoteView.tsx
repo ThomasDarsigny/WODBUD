@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useClassStore } from '../../stores/classStore'
 import type { VoteSession } from '../../types'
 import VoteResultsBars from '../vote/VoteResultsBars'
+import FeatureTopicsCard from '../vote/FeatureTopicsCard'
 import ConfirmButton from '../ui/ConfirmButton'
 import EmptyState from '../ui/EmptyState'
 import { btnPrimary as actionBtnStyle, btnSecondary as ghostBtnStyle } from '../../styles/ui'
@@ -82,6 +83,8 @@ export default function VoteView() {
           {t('vote_view.subtitle', { open: openCount, total: allSessions.length })}
         </p>
       </div>
+
+      <FeatureTopicsCard />
 
       {allSessions.length === 0 ? (
         <EmptyState

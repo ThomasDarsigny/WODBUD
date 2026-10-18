@@ -6,6 +6,7 @@ import { CATEGORY_I18N_KEYS, MUSCLE_GROUP_I18N_KEYS } from '../../types'
 import ExerciseFormModal from '../exercises/ExerciseFormModal'
 import ExerciseDetailModal from '../exercises/ExerciseDetailModal'
 import OcrImportSection from './OcrImportSection'
+import FeatureTopicsCard from '../vote/FeatureTopicsCard'
 import { btnPrimary as actionBtnStyle, btnSecondary as ghostBtnStyle } from '../../styles/ui'
 import Skeleton from '../ui/Skeleton'
 
@@ -125,6 +126,8 @@ export default function AdminDashboardView() {
           + {t('add', { ns: 'exercises' })}
         </button>
       </div>
+
+      <FeatureTopicsCard admin />
 
       <OcrImportSection existingNames={existingNames} />
 

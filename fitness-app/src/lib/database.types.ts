@@ -10,7 +10,7 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "14.5"
+    PostgrestVersion: "14.15"
   }
   public: {
     Tables: {
@@ -454,6 +454,54 @@ export type Database = {
           },
         ]
       }
+      class_plans: {
+        Row: {
+          class_id: string
+          coach_id: string
+          created_at: string
+          id: string
+          notes: string | null
+          scheduled_date: string
+          title: string | null
+          workout_id: string | null
+        }
+        Insert: {
+          class_id: string
+          coach_id: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          scheduled_date: string
+          title?: string | null
+          workout_id?: string | null
+        }
+        Update: {
+          class_id?: string
+          coach_id?: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          scheduled_date?: string
+          title?: string | null
+          workout_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "class_plans_class_id_fkey"
+            columns: ["class_id"]
+            isOneToOne: false
+            referencedRelation: "classes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "class_plans_workout_id_fkey"
+            columns: ["workout_id"]
+            isOneToOne: false
+            referencedRelation: "workouts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       classes: {
         Row: {
           coach_id: string
@@ -762,6 +810,74 @@ export type Database = {
           },
         ]
       }
+      feature_topic_votes: {
+        Row: {
+          created_at: string
+          topic_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          topic_id: string
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          topic_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "feature_topic_votes_topic_id_fkey"
+            columns: ["topic_id"]
+            isOneToOne: false
+            referencedRelation: "feature_topics"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "feature_topic_votes_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      feature_topics: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          description: string | null
+          id: string
+          status: string
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          status?: string
+          title: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          status?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "feature_topics_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       movement_types: {
         Row: {
           description_fr: string | null
@@ -873,6 +989,36 @@ export type Database = {
         }
         Relationships: []
       }
+      push_subscriptions: {
+        Row: {
+          auth: string
+          created_at: string
+          endpoint: string
+          id: string
+          p256dh: string
+          user_agent: string | null
+          user_id: string
+        }
+        Insert: {
+          auth: string
+          created_at?: string
+          endpoint: string
+          id?: string
+          p256dh: string
+          user_agent?: string | null
+          user_id: string
+        }
+        Update: {
+          auth?: string
+          created_at?: string
+          endpoint?: string
+          id?: string
+          p256dh?: string
+          user_agent?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       rank_shares: {
         Row: {
           created_at: string
@@ -940,84 +1086,6 @@ export type Database = {
           position?: number
         }
         Relationships: []
-      }
-      push_subscriptions: {
-        Row: {
-          auth: string
-          created_at: string
-          endpoint: string
-          id: string
-          p256dh: string
-          user_agent: string | null
-          user_id: string
-        }
-        Insert: {
-          auth: string
-          created_at?: string
-          endpoint: string
-          id?: string
-          p256dh: string
-          user_agent?: string | null
-          user_id: string
-        }
-        Update: {
-          auth?: string
-          created_at?: string
-          endpoint?: string
-          id?: string
-          p256dh?: string
-          user_agent?: string | null
-          user_id?: string
-        }
-        Relationships: []
-      }
-      class_plans: {
-        Row: {
-          class_id: string
-          coach_id: string
-          created_at: string
-          id: string
-          notes: string | null
-          scheduled_date: string
-          title: string | null
-          workout_id: string | null
-        }
-        Insert: {
-          class_id: string
-          coach_id: string
-          created_at?: string
-          id?: string
-          notes?: string | null
-          scheduled_date: string
-          title?: string | null
-          workout_id?: string | null
-        }
-        Update: {
-          class_id?: string
-          coach_id?: string
-          created_at?: string
-          id?: string
-          notes?: string | null
-          scheduled_date?: string
-          title?: string | null
-          workout_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "class_plans_class_id_fkey"
-            columns: ["class_id"]
-            isOneToOne: false
-            referencedRelation: "classes"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "class_plans_workout_id_fkey"
-            columns: ["workout_id"]
-            isOneToOne: false
-            referencedRelation: "workouts"
-            referencedColumns: ["id"]
-          },
-        ]
       }
       scheduled_workouts: {
         Row: {
@@ -1524,6 +1592,18 @@ export type Database = {
           minutes: number
         }[]
       }
+      get_feature_topics: {
+        Args: never
+        Returns: {
+          created_at: string
+          description: string
+          id: string
+          is_mine: boolean
+          status: string
+          title: string
+          votes: number
+        }[]
+      }
       get_shared_rank: {
         Args: { p_token: string }
         Returns: {
@@ -1539,6 +1619,10 @@ export type Database = {
       is_admin_authored: { Args: { p_uid: string }; Returns: boolean }
       is_class_coach: { Args: { p_class_id: string }; Returns: boolean }
       is_class_member: { Args: { p_class_id: string }; Returns: boolean }
+      wodbud_check_push_cron_secret: {
+        Args: { p_secret: string }
+        Returns: boolean
+      }
       wodbud_rank_for_minutes: { Args: { p_minutes: number }; Returns: string }
       wodbud_recalc_badges: { Args: { p_user?: string }; Returns: string[] }
       wodbud_vote_color: { Args: { p_position: number }; Returns: string }

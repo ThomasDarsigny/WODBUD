@@ -10,6 +10,7 @@ import { CATEGORY_I18N_KEYS, MUSCLE_GROUP_I18N_KEYS } from '../../types'
 import Skeleton from '../ui/Skeleton'
 import { getLocalUser } from '../../lib/currentUser'
 import ClassLeaderboard from '../rank/ClassLeaderboard'
+import FeatureTopicsCard from '../vote/FeatureTopicsCard'
 import { isVoteSessionOpen } from '../../lib/voteSessions'
 import { fetchUpcoming, localDate, type ScheduledEntry } from '../../lib/scheduledWorkouts'
 import { useSessionStore } from '../../stores/sessionStore'
@@ -93,6 +94,8 @@ export default function AthleteHomeView() {
           </div>
         )}
       </section>
+
+      <FeatureTopicsCard />
 
       {/* My classes */}
       <section>

@@ -601,5 +601,29 @@
     "empty_month_hint": "The count resets on the 1st of every month. The first session takes the lead.",
     "empty_week": "Nobody has trained yet this week",
     "empty_week_hint": "The count resets every Monday. The first session takes the lead."
+  },
+  "feature_topics": {
+    "tag": "Coming next",
+    "title": "Which topic should WODBUD add?",
+    "subtitle": "Pick the topic you want first. One choice, which you can change while voting is open.",
+    "your_choice": "Your choice: {{title}}. You can change it while voting is open.",
+    "admin_subtitle_one": "Propose topics: every account picks one. {{count}} vote so far.",
+    "admin_subtitle_other": "Propose topics: every account picks one. {{count}} votes so far.",
+    "title_placeholder": "Topic (e.g. Nutrition, Mobility, Programs)",
+    "description_placeholder": "Details (optional)",
+    "add": "Propose",
+    "empty": "No topics to vote on yet.",
+    "empty_admin": "No topics yet. Propose the first one above.",
+    "choose": "Choose",
+    "chosen": "Your choice",
+    "status_done": "Added",
+    "status_closed": "Closed",
+    "reopen": "Reopen",
+    "close": "Close",
+    "mark_done": "Added",
+    "delete": "Delete",
+    "delete_confirm": "Confirm",
+    "votes_one": "{{count}} vote",
+    "votes_other": "{{count}} votes"
   }
 }

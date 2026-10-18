@@ -607,5 +607,29 @@
     "empty_month_hint": "Le compteur repart à zéro le 1er de chaque mois. La première séance prend la tête.",
     "empty_week": "Personne n'a encore bougé cette semaine",
     "empty_week_hint": "Le compteur repart à zéro chaque lundi. La première séance prend la tête."
+  },
+  "feature_topics": {
+    "tag": "Prochaines nouveautés",
+    "title": "Quelle thématique ajouter à WODBUD ?",
+    "subtitle": "Choisis la thématique que tu veux voir arriver en premier. Un seul choix, que tu peux changer tant que le vote est ouvert.",
+    "your_choice": "Ton choix : {{title}}. Tu peux le changer tant que le vote est ouvert.",
+    "admin_subtitle_one": "Propose des thématiques : tous les comptes en choisissent une. {{count}} vote pour l'instant.",
+    "admin_subtitle_other": "Propose des thématiques : tous les comptes en choisissent une. {{count}} votes pour l'instant.",
+    "title_placeholder": "Thématique (ex. Nutrition, Mobilité, Programmes)",
+    "description_placeholder": "Précision (optionnel)",
+    "add": "Proposer",
+    "empty": "Aucune thématique à voter pour l'instant.",
+    "empty_admin": "Aucune thématique. Propose la première ci-dessus.",
+    "choose": "Choisir",
+    "chosen": "Ton choix",
+    "status_done": "Ajoutée",
+    "status_closed": "Fermée",
+    "reopen": "Rouvrir",
+    "close": "Fermer",
+    "mark_done": "Ajoutée",
+    "delete": "Supprimer",
+    "delete_confirm": "Confirmer",
+    "votes_one": "{{count}} vote",
+    "votes_other": "{{count}} votes"
   }
 }
