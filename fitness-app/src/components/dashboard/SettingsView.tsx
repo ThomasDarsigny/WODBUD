@@ -29,6 +29,7 @@ const THEMES: Array<{ value: ThemePref; key: string }> = [
 
 export default function SettingsView() {
   const { t, i18n } = useTranslation(['common'])
+  const navigate = useNavigate()
 
   const [theme, setTheme] = useState<ThemePref>(readStoredTheme())
   const [mannequin, setMannequin] = useState<MannequinBody>(readBodyPref)
@@ -165,6 +166,15 @@ export default function SettingsView() {
     const next = socialLinks.filter((_, i) => i !== index)
     setSocialLinks(next)
     await persist({ social_links: next as unknown as TablesUpdate<'profiles'>['social_links'] })
+  }
+
+  // La déconnexion vivait au pied du menu latéral : elle est ici, avec le
+  // reste du compte, pour libérer la barre.
+  async function logout() {
+    setBusy('logout')
+    try { await supabase.auth.signOut() } catch { /* session déjà expirée */ }
+    try { await clearAuthSessionCookies() } catch { /* ignore */ }
+    navigate('/login')
   }
 
   async function submitName() {
@@ -446,6 +456,19 @@ export default function SettingsView() {
         <Link to='/confidentialite' style={{ color: 'var(--orange)', fontSize: '0.8125rem' }}>
           {t('settings.privacy_link')}
         </Link>
+      </Section>
+
+      <Section title={t('settings.session')}>
+        <Row label={currentEmail} hint={t('settings.logout_hint')}>
+          <button
+            type='button'
+            onClick={() => { void logout() }}
+            disabled={busy === 'logout'}
+            style={{ ...buttonStyle, alignSelf: 'flex-start' }}
+          >
+            {t('actions.logout')}
+          </button>
+        </Row>
       </Section>
 
       <Section title={t('settings.danger_zone')}>

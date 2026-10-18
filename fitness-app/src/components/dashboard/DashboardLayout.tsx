@@ -1,9 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { supabase } from '../../lib/supabase'
-import { clearAuthSessionCookies } from '../../lib/authSessionCookies'
 import { isCurrentUserAdmin } from '../../lib/access'
 import { useOnlineStatus } from '../../hooks/useOnlineStatus'
 import ActiveSessionBar from '../session/ActiveSessionBar'
@@ -45,7 +44,6 @@ interface Props {
 export default function DashboardLayout({ children }: Props) {
   const { t } = useTranslation(['common', 'workouts'])
   const location = useLocation()
-  const navigate = useNavigate()
   const [collapsed, setCollapsed] = useState(false)
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [isAdmin, setIsAdmin] = useState(false)
@@ -104,12 +102,6 @@ export default function DashboardLayout({ children }: Props) {
     if (id === 'journal') return plannedToday
     if (id === 'rank') return newBadges + (rankUp ? 1 : 0)
     return 0
-  }
-
-  async function handleLogout() {
-    await supabase.auth.signOut()
-    await clearAuthSessionCookies()
-    navigate('/login')
   }
 
   return (
@@ -278,66 +270,6 @@ export default function DashboardLayout({ children }: Props) {
           })}
         </nav>
 
-        <div
-          style={{
-            borderTop: '1px solid var(--border)',
-            padding: rail ? '1rem 0' : '1rem 1.5rem',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.75rem',
-            justifyContent: rail ? 'center' : 'flex-start'
-          }}
-        >
-          <div
-            style={{
-              width: 32,
-              height: 32,
-              borderRadius: '50%',
-              background: 'var(--orange)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontFamily: 'var(--font-d)',
-              fontWeight: 700,
-              fontSize: '0.9375rem',
-              color: 'var(--black)',
-              flexShrink: 0
-            }}
-          >
-            C
-          </div>
-          {!rail && (
-            <div style={{ overflow: 'hidden' }}>
-              <div
-                style={{
-                  fontFamily: 'var(--font-d)',
-                  fontSize: '0.8125rem',
-                  letterSpacing: '0.06em',
-                  textTransform: 'uppercase',
-                  whiteSpace: 'nowrap',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis'
-                }}
-              >
-                Coach
-              </div>
-              <button
-                onClick={handleLogout}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  color: 'var(--muted)',
-                  cursor: 'pointer',
-                  fontSize: '0.8125rem',
-                  padding: 0,
-                  fontFamily: 'var(--font-b)'
-                }}
-              >
-                {t('actions.logout')}
-              </button>
-            </div>
-          )}
-        </div>
       </aside>
 
       {isMobile && drawerOpen && (

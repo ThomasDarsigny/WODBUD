@@ -1,9 +1,7 @@
 import type { ReactNode } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useEffect, useState } from 'react'
-import { supabase } from '../../lib/supabase'
-import { clearAuthSessionCookies } from '../../lib/authSessionCookies'
 import { useOnlineStatus } from '../../hooks/useOnlineStatus'
 import ActiveSessionBar from '../session/ActiveSessionBar'
 import { useIsMobile } from '../../hooks/useMediaQuery'
@@ -19,22 +17,11 @@ interface Props {
 export default function AthleteDashboardLayout({ children }: Props) {
   const { t } = useTranslation('common')
   const location = useLocation()
-  const navigate = useNavigate()
   const [collapsed, setCollapsed] = useState(false)
   const [drawerOpen, setDrawerOpen] = useState(false)
   const isMobile = useIsMobile()
   const rail = isMobile ? false : collapsed
   const online = useOnlineStatus()
-
-  async function handleLogout() {
-    try {
-      await supabase.auth.signOut()
-    } catch { /* ignore */ }
-    try {
-      await clearAuthSessionCookies()
-    } catch { /* ignore */ }
-    navigate('/login')
-  }
 
   const navItems: Array<{ id: string; labelKey: string; icon: NavIconName; path: string }> = [
     { id: 'home', labelKey: 'athlete.nav_home', icon: 'home', path: '/athlete' },
@@ -117,21 +104,6 @@ export default function AthleteDashboardLayout({ children }: Props) {
           })}
         </nav>
 
-        <div style={{ borderTop: '1px solid var(--border)', padding: rail ? '1rem 0' : '1rem 1.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem', justifyContent: rail ? 'center' : 'flex-start' }}>
-          <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-d)', fontWeight: 700, fontSize: '0.9375rem', color: 'var(--white)', flexShrink: 0 }}>
-            A
-          </div>
-          {!rail && (
-            <div style={{ overflow: 'hidden' }}>
-              <div style={{ fontFamily: 'var(--font-d)', fontSize: '0.8125rem', letterSpacing: '0.06em', textTransform: 'uppercase', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                {t('athlete.role_label')}
-              </div>
-              <button onClick={handleLogout} style={{ background: 'none', border: 'none', color: 'var(--muted)', cursor: 'pointer', fontSize: '0.8125rem', padding: 0, fontFamily: 'var(--font-b)' }}>
-                {t('actions.logout')}
-              </button>
-            </div>
-          )}
-        </div>
       </aside>
 
       {isMobile && drawerOpen && (
