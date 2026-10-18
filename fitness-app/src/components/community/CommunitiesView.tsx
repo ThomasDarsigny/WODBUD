@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import type { FormEvent, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { getLocalUser } from '../../lib/currentUser'
@@ -22,6 +23,18 @@ export default function CommunitiesView() {
   const [userId, setUserId] = useState<string | null>(null)
   const [showCreate, setShowCreate] = useState(false)
   const [busyId, setBusyId] = useState<string | null>(null)
+  const [search, setSearch] = useState('')
+  const navigate = useNavigate()
+  const basePath = useLocation().pathname.startsWith('/athlete') ? '/athlete' : '/dashboard'
+  const open = (id: string) => navigate(`${basePath}/communities/${id}`)
+
+  // Les miennes d'abord, puis par nom ; la recherche porte sur le nom et la description.
+  const visible = useMemo(() => {
+    const q = search.trim().toLocaleLowerCase()
+    return communities
+      .filter((c) => !q || c.name.toLocaleLowerCase().includes(q) || (c.description ?? '').toLocaleLowerCase().includes(q))
+      .sort((a, b) => Number(b.is_member) - Number(a.is_member))
+  }, [communities, search])
 
   useEffect(() => {
     fetchCommunities()
@@ -61,6 +74,17 @@ export default function CommunitiesView() {
         </div>
       )}
 
+      {communities.length > 0 && (
+        <input
+          type='search'
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder={t('community.search_placeholder')}
+          aria-label={t('community.search_placeholder')}
+          style={{ ...inputStyle, marginBottom: '1rem', maxWidth: 420 }}
+        />
+      )}
+
       {loading ? (
         <Skeleton height={90} lines={3} />
       ) : communities.length === 0 ? (
@@ -72,13 +96,25 @@ export default function CommunitiesView() {
         />
       ) : (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '0.75rem' }}>
-          {communities.map((c) => (
-            <div key={c.id} style={{ border: '1px solid var(--border)', background: 'var(--dark)', padding: '1.1rem', display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+          {visible.length === 0 && (
+            <p style={{ color: 'var(--muted)', fontSize: '0.875rem', margin: 0 }}>{t('community.search_empty')}</p>
+          )}
+          {visible.map((c) => (
+            <div
+              key={c.id}
+              role='button'
+              tabIndex={0}
+              aria-label={c.name}
+              onClick={() => open(c.id)}
+              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(c.id) } }}
+              style={{ border: '1px solid var(--border)', borderLeft: '2px solid var(--orange)', background: 'var(--dark)', padding: '1.1rem', display: 'flex', flexDirection: 'column', gap: '0.6rem', cursor: 'pointer' }}
+            >
               <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '0.5rem' }}>
                 <p style={{ fontFamily: 'var(--font-d)', fontSize: '1.0625rem', fontWeight: 800, letterSpacing: '0.02em', textTransform: 'uppercase', margin: 0 }}>
                   {c.name}
                 </p>
                 {c.created_by === userId && (
+                  <span onClick={(e) => e.stopPropagation()} style={{ display: 'contents' }}>
                   <ConfirmButton
                     onConfirm={() => deleteCommunity(c.id)}
                     title={t('community.delete')}
@@ -86,6 +122,7 @@ export default function CommunitiesView() {
                   >
                     ✕
                   </ConfirmButton>
+                  </span>
                 )}
               </div>
 
@@ -99,7 +136,7 @@ export default function CommunitiesView() {
                   {t('community.member_count', { count: c.member_count ?? 0 })}
                 </span>
                 <button
-                  onClick={() => { void handleToggleMembership(c) }}
+                  onClick={(e) => { e.stopPropagation(); void handleToggleMembership(c) }}
                   disabled={busyId === c.id}
                   style={c.is_member
                     ? { ...ghostBtnStyle, fontSize: '0.75rem', opacity: busyId === c.id ? 0.6 : 1 }
@@ -117,8 +154,9 @@ export default function CommunitiesView() {
         <CreateCommunityModal
           onClose={() => setShowCreate(false)}
           onCreate={async (data) => {
-            await createCommunity(data)
+            const created = await createCommunity(data)
             setShowCreate(false)
+            open(created.id)
           }}
         />
       )}

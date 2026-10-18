@@ -1,7 +1,7 @@
 # Migrations
 
-L'historique complet (45 migrations, de `fix_rls_infinite_recursion_and_cleanup`
-à `041_feature_topics`) **existe côté Supabase** : le projet les
+L'historique complet (47 migrations, de `fix_rls_infinite_recursion_and_cleanup`
+à `043_communities_social`) **existe côté Supabase** : le projet les
 trace dans `supabase_migrations.schema_migrations`. Rien n'est perdu.
 
 Les migrations 001 à 016, ainsi que 020 et 021, ont été appliquées
@@ -48,3 +48,5 @@ enregistré en base, il faudrait d'abord le réparer.
 | `039_push_notifications.sql` | Notifications push : `push_subscriptions` (un abonnement par appareil), secret Vault `push_cron_secret`, tâche pg_cron `push-rappel-du-matin` (12 h UTC) qui appelle la fonction Edge `push`. Secrets VAPID dans les secrets des fonctions Edge |
 | `040_sessions_no_backfill.sql` | Fin du « journal rapide » : déclencheur `wodbud_guard_session` — une séance doit être chronométrée (début < 12 h, fin = heure du serveur, minutes ≤ temps écoulé), et ses durées/dates ne se modifient plus après coup |
 | `041_feature_topics.sql` | Vote des thématiques à ajouter : `feature_topics` (l'admin propose, ferme, marque « ajoutée »), `feature_topic_votes` (un seul choix par compte, clé primaire `user_id`, seulement vers une thématique ouverte), fonction `get_feature_topics()` qui ne sort que les décomptes |
+| `042_community_members_rank_share.sql` | Communautés : `community_members.share_rank` (chaque membre choisit, par communauté, de partager son rang) et `get_community_members()` — nom et avatar pour tous, rang/minutes/série/badges seulement pour les autres membres et seulement si partagé |
+| `043_communities_social.sql` | Communautés : rôles (propriétaire, co-admins, garde `wodbud_guard_community_member`), défis collectifs, classement semaine/mois, WOD épinglé (exercices lisibles par les membres), fil d'activité + réactions, profil d'un membre, 2 badges (`community_challenge`, `community_wod_10`) évalués par `wodbud_recalc_badges`. Rien d'un membre ne sort s'il ne partage pas son rang |

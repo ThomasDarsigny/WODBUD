@@ -24,6 +24,8 @@ const ClassesView = lazy(() => import('./components/dashboard/ClassesView'))
 const AiCoachView = lazy(() => import('./components/dashboard/AiCoachView'))
 const SettingsView = lazy(() => import('./components/dashboard/SettingsView'))
 const CommunitiesView = lazy(() => import('./components/community/CommunitiesView'))
+const CommunityPage = lazy(() => import('./components/community/CommunityPage'))
+const CommunityInviteRedirect = lazy(() => import('./pages/CommunityInviteRedirect'))
 const SessionRunnerView = lazy(() => import('./components/session/SessionRunnerView'))
 const RankView = lazy(() => import('./components/rank/RankView'))
 const SessionJournalView = lazy(() => import('./components/session/SessionJournalView'))
@@ -318,6 +320,16 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/dashboard/communities/:id"
+          element={
+            <ProtectedRoute>
+              <DashboardLayout>
+                <CommunityPage />
+              </DashboardLayout>
+            </ProtectedRoute>
+          }
+        />
 
         <Route
           path="/dashboard/rank"
@@ -401,6 +413,16 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/athlete/communities/:id"
+          element={
+            <ProtectedRoute>
+              <AthleteDashboardLayout>
+                <CommunityPage />
+              </AthleteDashboardLayout>
+            </ProtectedRoute>
+          }
+        />
 
         <Route
           path="/athlete/session"
@@ -433,6 +455,14 @@ function App() {
           }
         />
 
+        <Route
+          path="/communities/:id"
+          element={
+            <ProtectedRoute>
+              <CommunityInviteRedirect />
+            </ProtectedRoute>
+          }
+        />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       </Suspense>

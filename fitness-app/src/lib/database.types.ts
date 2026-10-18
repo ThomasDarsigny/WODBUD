@@ -572,20 +572,74 @@ export type Database = {
           },
         ]
       }
+      community_challenges: {
+        Row: {
+          community_id: string
+          created_at: string
+          created_by: string | null
+          ends_on: string
+          id: string
+          starts_on: string
+          target_minutes: number
+          title: string
+        }
+        Insert: {
+          community_id: string
+          created_at?: string
+          created_by?: string | null
+          ends_on: string
+          id?: string
+          starts_on: string
+          target_minutes: number
+          title: string
+        }
+        Update: {
+          community_id?: string
+          created_at?: string
+          created_by?: string | null
+          ends_on?: string
+          id?: string
+          starts_on?: string
+          target_minutes?: number
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "community_challenges_community_id_fkey"
+            columns: ["community_id"]
+            isOneToOne: false
+            referencedRelation: "communities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "community_challenges_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       community_members: {
         Row: {
           community_id: string
           joined_at: string
+          role: string
+          share_rank: boolean
           user_id: string
         }
         Insert: {
           community_id: string
           joined_at?: string
+          role?: string
+          share_rank?: boolean
           user_id: string
         }
         Update: {
           community_id?: string
           joined_at?: string
+          role?: string
+          share_rank?: boolean
           user_id?: string
         }
         Relationships: [
@@ -601,6 +655,97 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      community_reactions: {
+        Row: {
+          community_id: string
+          created_at: string
+          emoji: string
+          event_key: string
+          user_id: string
+        }
+        Insert: {
+          community_id: string
+          created_at?: string
+          emoji: string
+          event_key: string
+          user_id?: string
+        }
+        Update: {
+          community_id?: string
+          created_at?: string
+          emoji?: string
+          event_key?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "community_reactions_community_id_fkey"
+            columns: ["community_id"]
+            isOneToOne: false
+            referencedRelation: "communities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "community_reactions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      community_wods: {
+        Row: {
+          community_id: string
+          id: string
+          note: string | null
+          pinned_at: string
+          pinned_by: string | null
+          title: string
+          workout_id: string
+        }
+        Insert: {
+          community_id: string
+          id?: string
+          note?: string | null
+          pinned_at?: string
+          pinned_by?: string | null
+          title: string
+          workout_id: string
+        }
+        Update: {
+          community_id?: string
+          id?: string
+          note?: string | null
+          pinned_at?: string
+          pinned_by?: string | null
+          title?: string
+          workout_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "community_wods_community_id_fkey"
+            columns: ["community_id"]
+            isOneToOne: false
+            referencedRelation: "communities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "community_wods_pinned_by_fkey"
+            columns: ["pinned_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "community_wods_workout_id_fkey"
+            columns: ["workout_id"]
+            isOneToOne: false
+            referencedRelation: "workouts"
             referencedColumns: ["id"]
           },
         ]
@@ -1592,6 +1737,94 @@ export type Database = {
           minutes: number
         }[]
       }
+      get_community_challenges: {
+        Args: { p_community: string }
+        Returns: {
+          contributors: number
+          ends_on: string
+          id: string
+          progress_minutes: number
+          starts_on: string
+          target_minutes: number
+          title: string
+        }[]
+      }
+      get_community_feed: {
+        Args: { p_community: string; p_limit?: number }
+        Returns: {
+          at: string
+          avatar_url: string
+          badge_key: string
+          clap: number
+          display_name: string
+          event_key: string
+          fire: number
+          is_me: boolean
+          kind: string
+          minutes: number
+          muscle: number
+          my_reactions: string[]
+          rank_key: string
+          title: string
+          user_id: string
+        }[]
+      }
+      get_community_leaderboard_since: {
+        Args: { p_community: string; p_since: string }
+        Returns: {
+          avatar_url: string
+          display_name: string
+          is_me: boolean
+          minutes: number
+          user_id: string
+        }[]
+      }
+      get_community_member_profile: {
+        Args: { p_community: string; p_user: string }
+        Returns: {
+          avatar_url: string
+          badges: Json
+          current_streak: number
+          display_name: string
+          is_owner: boolean
+          longest_streak: number
+          rank_key: string
+          role: string
+          social_links: Json
+          total_minutes: number
+          user_id: string
+          visible: boolean
+        }[]
+      }
+      get_community_members: {
+        Args: { p_community: string }
+        Returns: {
+          avatar_url: string
+          badges: number
+          current_streak: number
+          display_name: string
+          is_me: boolean
+          is_owner: boolean
+          joined_at: string
+          rank_key: string
+          role: string
+          share_rank: boolean
+          total_minutes: number
+          user_id: string
+        }[]
+      }
+      get_community_wod: {
+        Args: { p_community: string }
+        Returns: {
+          done_by: Json
+          i_did: boolean
+          id: string
+          note: string
+          pinned_at: string
+          title: string
+          workout_id: string
+        }[]
+      }
       get_feature_topics: {
         Args: never
         Returns: {
@@ -1619,6 +1852,9 @@ export type Database = {
       is_admin_authored: { Args: { p_uid: string }; Returns: boolean }
       is_class_coach: { Args: { p_class_id: string }; Returns: boolean }
       is_class_member: { Args: { p_class_id: string }; Returns: boolean }
+      is_community_admin: { Args: { p_community: string }; Returns: boolean }
+      is_community_member: { Args: { p_community: string }; Returns: boolean }
+      is_community_owner: { Args: { p_community: string }; Returns: boolean }
       wodbud_check_push_cron_secret: {
         Args: { p_secret: string }
         Returns: boolean
