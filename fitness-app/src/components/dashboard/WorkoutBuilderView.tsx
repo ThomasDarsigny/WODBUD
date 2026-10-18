@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import NavIcon from '../navigation/NavIcon'
 import EmptyState from '../ui/EmptyState'
@@ -40,6 +40,10 @@ export default function WorkoutBuilderView() {
   const [selectedMuscles, setSelectedMuscles] = useState<MuscleGroup[]>([])
   const [pickerExercise, setPickerExercise] = useState<Exercise | undefined>()
   const [savedSuccess, setSavedSuccess] = useState(false)
+  // Ce qui manque pour enregistrer : dit à voix haute plutôt qu'un bouton
+  // grisé muet (le nom vide passait inaperçu).
+  const [missing, setMissing] = useState<string | null>(null)
+  const nameRef = useRef<HTMLInputElement>(null)
   const [loadingPdf, setLoadingPdf] = useState(false)
   const [restOverridePrompt, setRestOverridePrompt] = useState<{
     exercise: Exercise
@@ -99,6 +103,16 @@ export default function WorkoutBuilderView() {
   }
 
   async function handleSave() {
+    if (workoutExercises.length === 0) {
+      setMissing(t('errors.add_at_least_one_exercise', { ns: 'workouts' }))
+      return
+    }
+    if (!name.trim()) {
+      setMissing(t('errors.workout_name_required', { ns: 'workouts' }))
+      nameRef.current?.focus()
+      return
+    }
+    setMissing(null)
     try {
       await saveWorkout()
       setSavedSuccess(true)
@@ -386,14 +400,16 @@ export default function WorkoutBuilderView() {
             {t('builder.workout_section', { ns: 'workouts' })}
           </p>
           <input
+            ref={nameRef}
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) => { setName(e.target.value); setMissing(null) }}
             placeholder={t('builder.name_placeholder', { ns: 'workouts' })}
+            aria-invalid={missing !== null && !name.trim()}
             style={{
               width: '100%',
               background: 'transparent',
               border: 'none',
-              borderBottom: '1px solid var(--border)',
+              borderBottom: `1px solid ${missing && !name.trim() ? 'var(--orange)' : 'var(--border)'}`,
               color: 'var(--white)',
               padding: '0.3rem 0',
               fontFamily: 'var(--font-d)',
@@ -516,18 +532,28 @@ export default function WorkoutBuilderView() {
           />
         </div>
 
+        <div style={{ flexShrink: 0, marginTop: 'auto', position: 'sticky', bottom: 0, background: 'var(--dark)', zIndex: 1 }}>
+        {((missing && (workoutExercises.length === 0 || !name.trim())) || error) && (
+          <div
+            role='alert'
+            style={{
+              padding: '0.5rem 1rem',
+              background: 'rgba(255,77,0,0.1)',
+              borderTop: '1px solid rgba(255,77,0,0.2)',
+              color: 'var(--orange)',
+              fontSize: '0.8125rem',
+              fontFamily: 'var(--font-b)'
+            }}
+          >
+            {missing && (workoutExercises.length === 0 || !name.trim()) ? missing : error}
+          </div>
+        )}
         <div
           style={{
             padding: '0.75rem 1rem',
             borderTop: '1px solid var(--border)',
             display: 'flex',
-            gap: '0.5rem',
-            flexShrink: 0,
-            marginTop: 'auto',
-            position: 'sticky',
-            bottom: 0,
-            background: 'var(--dark)',
-            zIndex: 1
+            gap: '0.5rem'
           }}
         >
           <button
@@ -567,7 +593,7 @@ export default function WorkoutBuilderView() {
           </button>
           <button
             onClick={handleSave}
-            disabled={loadingSave || workoutExercises.length === 0 || !name.trim()}
+            disabled={loadingSave}
             style={{
               flex: 1,
               fontFamily: 'var(--font-d)',
@@ -578,7 +604,7 @@ export default function WorkoutBuilderView() {
               padding: '0.65rem 1rem',
               background: savedSuccess
                 ? '#22c55e'
-                : loadingSave || workoutExercises.length === 0 || !name.trim()
+                : loadingSave
                   ? 'var(--border)'
                   : 'var(--orange)',
               color: 'var(--black)',
@@ -594,21 +620,7 @@ export default function WorkoutBuilderView() {
                 : t('builder.save', { ns: 'workouts' })}
           </button>
         </div>
-
-        {error && (
-          <div
-            style={{
-              padding: '0.5rem 1rem',
-              background: 'rgba(255,77,0,0.1)',
-              borderTop: '1px solid rgba(255,77,0,0.2)',
-              color: 'var(--orange)',
-              fontSize: '0.8125rem',
-              fontFamily: 'var(--font-b)'
-            }}
-          >
-            {error}
-          </div>
-        )}
+        </div>
       </div>
 
       {pickerExercise && (
