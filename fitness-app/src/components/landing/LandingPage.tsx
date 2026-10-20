@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useEffect, useState } from 'react'
 import HeroMedia from './HeroMedia'
+import { APP_STORE_URL, PLAY_STORE_URL, STORES_LIVE } from '../../lib/storeLinks'
 import s from './landing.module.css'
 
 export default function LandingPage() {
@@ -227,6 +228,34 @@ export default function LandingPage() {
         </div>
       </section>
 
+      <section className={s.download} id="download">
+        <p className={s.sectionTag} data-reveal>{t('landing.download.tag')}</p>
+        <h2 className={s.sectionTitle} data-reveal>{t('landing.download.title')}</h2>
+        <p className={s.downloadText} data-reveal>{t('landing.download.subtitle')}</p>
+        <div className={s.storeRow} data-reveal>
+          <StoreButton
+            href={APP_STORE_URL}
+            kicker={STORES_LIVE ? t('landing.download.available_on') : t('landing.download.soon_on')}
+            store="App Store"
+            soon={!STORES_LIVE}
+            soonLabel={t('landing.download.soon')}
+          />
+          <StoreButton
+            href={PLAY_STORE_URL}
+            kicker={STORES_LIVE ? t('landing.download.available_on') : t('landing.download.soon_on')}
+            store="Google Play"
+            soon={!STORES_LIVE}
+            soonLabel={t('landing.download.soon')}
+          />
+        </div>
+        {!STORES_LIVE && (
+          <p className={s.downloadHint} data-reveal>
+            {t('landing.download.meanwhile')}{' '}
+            <Link to="/signup">{t('landing.download.meanwhile_link')}</Link>
+          </p>
+        )}
+      </section>
+
       <footer className={s.footer}>
         <Link to="/" className={s.logo}>
           WOD<span>BUD</span>
@@ -238,5 +267,27 @@ export default function LandingPage() {
         </nav>
       </footer>
     </div>
+  )
+}
+
+function StoreButton({ href, kicker, store, soon, soonLabel }: {
+  href: string
+  kicker: string
+  store: string
+  soon: boolean
+  soonLabel: string
+}) {
+  return (
+    <a href={href} target="_blank" rel="noopener noreferrer" className={s.storeBtn}>
+      <svg className={s.storeIcon} viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="6" y="2" width="12" height="20" rx="2.5" fill="none" stroke="currentColor" strokeWidth="1.8" />
+        <line x1="10.5" y1="18.5" x2="13.5" y2="18.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      </svg>
+      <span className={s.storeText}>
+        <small>{kicker}</small>
+        <strong>{store}</strong>
+      </span>
+      {soon && <span className={s.storeSoon}>{soonLabel}</span>}
+    </a>
   )
 }

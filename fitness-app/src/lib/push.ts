@@ -1,5 +1,6 @@
 import { supabase } from './supabase'
 import { getLocalUser } from './currentUser'
+import { isInstalledApp } from './platform'
 
 /**
  * Notifications push sur cet appareil (migration 039, fonction Edge `push`).
@@ -26,11 +27,6 @@ function isIos(): boolean {
   return /iphone|ipad|ipod/i.test(navigator.userAgent)
 }
 
-function isStandalone(): boolean {
-  return window.matchMedia('(display-mode: standalone)').matches
-    || (navigator as Navigator & { standalone?: boolean }).standalone === true
-}
-
 function base64UrlToBytes(value: string): Uint8Array<ArrayBuffer> {
   const padded = (value + '='.repeat((4 - (value.length % 4)) % 4)).replace(/-/g, '+').replace(/_/g, '/')
   const raw = atob(padded)
@@ -47,7 +43,7 @@ async function registration(): Promise<ServiceWorkerRegistration | null> {
 export async function getPushState(): Promise<PushState> {
   // Safari iOS n'expose PushManager qu'une fois l'app ajoutée à l'écran
   // d'accueil (iOS 16.4+) : avant, c'est la seule chose à lui dire.
-  if (isIos() && !isStandalone()) return 'ios-install'
+  if (isIos() && !isInstalledApp()) return 'ios-install'
   if (!('PushManager' in window) || !('Notification' in window)) return 'unsupported'
   const reg = await registration()
   if (!reg) return 'unsupported'

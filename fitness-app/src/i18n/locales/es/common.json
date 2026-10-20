@@ -309,6 +309,16 @@
         "desc": "Analiza el rendimiento en tiempo real. Cada atleta registra sus puntuaciones, tú lo visualizas todo."
       }
     ],
+    "download": {
+      "tag": "Móvil",
+      "title": "WODBUD en tu bolsillo",
+      "subtitle": "Las apps para iPhone y Android llegan pronto: tu cronómetro, tu diario y tu comunidad, siempre contigo.",
+      "soon_on": "Próximamente en",
+      "available_on": "Disponible en",
+      "soon": "Pronto",
+      "meanwhile": "Mientras tanto, WODBUD ya se instala desde tu navegador, en el móvil o en el ordenador.",
+      "meanwhile_link": "Crear una cuenta"
+    },
     "demo": {
       "tag": "Acceso anticipado",
       "title_line1": "Únete a los entrenadores",

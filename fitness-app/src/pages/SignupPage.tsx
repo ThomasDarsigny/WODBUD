@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { supabase } from '../lib/supabase'
 import { usePageMeta } from '../hooks/usePageMeta'
+import { isInstalledApp } from '../lib/platform'
 
 export default function SignupPage() {
   const { t } = useTranslation('common')
@@ -176,9 +177,12 @@ export default function SignupPage() {
           <Link to="/login" style={{ color: 'var(--orange)', textDecoration: 'none' }}>
             {t('auth_ui.have_account_action')}
           </Link>
-          <Link to="/" style={{ color: 'var(--orange)', textDecoration: 'none' }}>
-            {t('auth_ui.back_home')}
-          </Link>
+          {/* Pas de landing dans l'app installée : le lien n'y mènerait nulle part. */}
+          {!isInstalledApp() && (
+            <Link to="/" style={{ color: 'var(--orange)', textDecoration: 'none' }}>
+              {t('auth_ui.back_home')}
+            </Link>
+          )}
         </div>
       </section>
     </main>

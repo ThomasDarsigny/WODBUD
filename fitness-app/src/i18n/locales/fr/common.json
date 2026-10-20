@@ -310,6 +310,16 @@
         "desc": "Génère le PDF et partage la séance avec ton groupe. Affiche-le en box ou envoie-le directement."
       }
     ],
+    "download": {
+      "tag": "Mobile",
+      "title": "WODBUD dans ta poche",
+      "subtitle": "Les apps iPhone et Android arrivent bientôt : ton chrono, ton journal et ta communauté, toujours sur toi.",
+      "soon_on": "Bientôt sur",
+      "available_on": "Disponible sur",
+      "soon": "Bientôt",
+      "meanwhile": "En attendant, WODBUD s'installe déjà depuis ton navigateur, sur téléphone comme sur ordi.",
+      "meanwhile_link": "Créer un compte"
+    },
     "demo": {
       "tag": "Démo WODBUD",
       "title_line1": "Réserve une démo",

@@ -35,6 +35,7 @@ const AthleteHomeView = lazy(() => import('./components/athlete/AthleteHomeView'
 const AthleteVoteView = lazy(() => import('./components/athlete/AthleteVoteView'))
 const JoinClassPage = lazy(() => import('./pages/JoinClassPage'))
 import { useSessionStore } from './stores/sessionStore'
+import { isInstalledApp } from './lib/platform'
 
 function ProtectedRoute({ children, adminOnly = false }: { children: ReactNode; adminOnly?: boolean }) {
   const { t } = useTranslation('common')
@@ -105,6 +106,12 @@ function ProtectedRoute({ children, adminOnly = false }: { children: ReactNode; 
   }
 
   return <>{children}</>
+}
+
+/** La landing est réservée au site web : l'app installée ouvre le compte. */
+function WebOnlyLanding() {
+  if (isInstalledApp()) return <Navigate to="/entraineur_dashboard" replace />
+  return <LandingPage />
 }
 
 function DashboardHomeRedirect() {
@@ -203,8 +210,8 @@ function App() {
     <BrowserRouter>
       <Suspense fallback={<RouteFallback />}>
       <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/landing" element={<LandingPage />} />
+        <Route path="/" element={<WebOnlyLanding />} />
+        <Route path="/landing" element={<WebOnlyLanding />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
 

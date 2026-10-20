@@ -304,6 +304,16 @@
         "desc": "Generate the PDF and share the session with your group. Display it in your box or send it directly."
       }
     ],
+    "download": {
+      "tag": "Mobile",
+      "title": "WODBUD in your pocket",
+      "subtitle": "The iPhone and Android apps are coming soon: your timer, your journal and your community, always with you.",
+      "soon_on": "Coming soon to",
+      "available_on": "Available on",
+      "soon": "Soon",
+      "meanwhile": "In the meantime, WODBUD already installs from your browser, on phone or computer.",
+      "meanwhile_link": "Create an account"
+    },
     "demo": {
       "tag": "WODBUD demo",
       "title_line1": "Book a demo",

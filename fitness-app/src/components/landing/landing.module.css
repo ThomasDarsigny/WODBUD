@@ -766,6 +766,116 @@
   color: var(--orange);
 }
 
+/* ---------- TELECHARGER ---------- */
+.download {
+  padding: 5rem 2.5rem;
+  border-top: 1px solid var(--border);
+  text-align: center;
+}
+
+.download .sectionTitle {
+  margin-bottom: 1rem;
+}
+
+.downloadText {
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  max-width: 52ch;
+  margin: 0 auto 2.25rem;
+}
+
+.storeRow {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.storeBtn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.85rem;
+  min-width: 220px;
+  padding: 0.85rem 1.4rem;
+  border: 1px solid rgba(240, 235, 228, 0.25);
+  background: var(--dark);
+  color: var(--white);
+  text-decoration: none;
+  text-align: left;
+  transition: border-color 0.2s, transform 0.15s, background 0.2s;
+}
+
+.storeBtn:hover,
+.storeBtn:focus-visible {
+  border-color: var(--orange);
+  background: rgba(255, 90, 31, 0.06);
+  transform: translateY(-2px);
+}
+
+.storeIcon {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  color: var(--orange);
+}
+
+.storeText {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+
+.storeText small {
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.storeText strong {
+  font-family: var(--font-d);
+  font-size: 1.35rem;
+  font-weight: 900;
+  letter-spacing: 0.03em;
+}
+
+.storeSoon {
+  position: absolute;
+  top: -0.6rem;
+  right: -0.6rem;
+  font-family: var(--font-d);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--black);
+  background: var(--orange);
+  padding: 0.2rem 0.5rem;
+}
+
+.downloadHint {
+  margin-top: 1.75rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.downloadHint a {
+  color: var(--orange);
+}
+
+@media (max-width: 600px) {
+  .download {
+    padding: 3rem 1.25rem;
+  }
+
+  .storeBtn {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
 /* ---------- FOOTER ---------- */
 .footer {
   border-top: 1px solid var(--border);
