@@ -208,6 +208,7 @@
       "features": "Fonctionnalités",
       "how": "Comment ça marche",
       "demo": "Démo",
+      "try": "Essaie-le",
       "access_dashboard": "Accéder au dashboard",
       "login": "Connexion",
       "download": "Télécharger",
@@ -220,7 +221,8 @@
       "title_em": "gratuitement pendant 30 jours.",
       "subtitle": "Construis tes entraînements de groupe en quelques minutes. Base d'exercices complète, méthodes de programmation, vidéos et suggestions IA - tout au même endroit, sans carte de crédit.",
       "open_dashboard": "Ouvrir le dashboard coach",
-      "watch_demo": "Voir une démo"
+      "watch_demo": "Voir une démo",
+      "see_app": "Voir l'app"
     },
     "ticker": [
       "Bibliothèque d'exercices",

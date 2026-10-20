@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { lazy, Suspense, useEffect, useState } from 'react'
 import HeroMedia from './HeroMedia'
+import PhoneFrame from './PhoneFrame'
 import { APP_STORE_URL, PLAY_STORE_URL, STORES_LIVE } from '../../lib/storeLinks'
 import s from './landing.module.css'
 
@@ -31,7 +32,6 @@ export default function LandingPage() {
     title: string
     desc: string
   }>
-  const demoPerks = t('landing.demo.perks', { returnObjects: true }) as string[]
   const screens = t('landing.showcase.screens', { returnObjects: true }) as Array<{ title: string; desc: string; alt: string }>
   const compareCols = t('landing.compare.cols', { returnObjects: true }) as string[]
   const compareRows = t('landing.compare.rows', { returnObjects: true }) as Array<{ label: string; values: CompareValue[] }>
@@ -85,8 +85,8 @@ export default function LandingPage() {
             </a>
           </li>
           <li>
-            <a href="#demo" className={s.navLink} onClick={closeMenu}>
-              {t('landing.nav.demo')}
+            <a href="#try" className={s.navLink} onClick={closeMenu}>
+              {t('landing.nav.try')}
             </a>
           </li>
           <li>
@@ -150,8 +150,8 @@ export default function LandingPage() {
             <Link to="/entraineur_dashboard" className={s.btnPrimary}>
               {t('landing.hero.open_dashboard')}
             </Link>
-            <a href="#demo" className={s.btnGhost}>
-              {t('landing.hero.watch_demo')}
+            <a href="#app" className={s.btnGhost}>
+              {t('landing.hero.see_app')}
             </a>
           </div>
         </div>
@@ -178,16 +178,7 @@ export default function LandingPage() {
         <div className={s.phones}>
           {(['builder', 'session', 'rank'] as const).map((img, i) => (
             <figure key={img} className={`${s.phoneItem} ${i === 0 ? s.phoneItemMain : ''}`} data-reveal style={{ transitionDelay: `${i * 90}ms` }}>
-              <div className={s.phone}>
-                <img
-                  src={`/landing/${img}.webp`}
-                  alt={screens[i]?.alt ?? ''}
-                  width={390}
-                  height={844}
-                  loading="lazy"
-                  decoding="async"
-                />
-              </div>
+              <PhoneFrame src={`/landing/${img}.webp`} alt={screens[i]?.alt ?? ''} />
               <figcaption>
                 <strong>{screens[i]?.title}</strong>
                 <span>{screens[i]?.desc}</span>
@@ -311,37 +302,6 @@ export default function LandingPage() {
           </table>
         </div>
         <p className={s.compareLegend}>{t('landing.compare.legend')}</p>
-      </section>
-
-      <section className={s.beta} id="demo">
-        <div className={s.betaCard} data-reveal>
-          <div>
-            <p className={s.betaTag}>{t('landing.demo.tag')}</p>
-            <h2>
-              {t('landing.demo.title_line1')}
-              <br />
-              {t('landing.demo.title_line2')}
-            </h2>
-            <p>{t('landing.demo.subtitle')}</p>
-            <div className={s.betaButtons}>
-              <a href="mailto:demo@wodbud.com" className={s.btnPrimary}>
-                {t('landing.demo.book')}
-              </a>
-              <a href="#features" className={s.btnGhost}>
-                {t('landing.demo.view_features')}
-              </a>
-            </div>
-          </div>
-
-          <div className={s.betaRight} aria-label={t('landing.demo.perks_label')}>
-            {demoPerks.map((perk) => (
-              <div key={perk} className={s.betaPoint}>
-                <span aria-hidden="true">-</span>
-                {perk}
-              </div>
-            ))}
-          </div>
-        </div>
       </section>
 
       <section className={s.download} id="download">

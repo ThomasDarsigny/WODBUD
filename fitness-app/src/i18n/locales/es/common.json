@@ -208,6 +208,7 @@
       "features": "Funciones",
       "how": "Cómo funciona",
       "demo": "Demo",
+      "try": "Pruébalo",
       "access_dashboard": "Acceder",
       "login": "Entrar",
       "download": "Descargar",
@@ -220,7 +221,8 @@
       "title_em": "Sin Límites",
       "subtitle": "La plataforma todo en uno para entrenadores de CrossFit. Crea tus WODs, sigue el progreso de tus atletas y gestiona tu box en unos clics.",
       "open_dashboard": "Abrir panel",
-      "watch_demo": "Ver demo"
+      "watch_demo": "Ver demo",
+      "see_app": "Ver la app"
     },
     "hero_stats": {
       "athletes_label": "Atletas activos",

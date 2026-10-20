@@ -782,39 +782,119 @@
   margin: 0;
 }
 
-.phone {
+/* ---------- CADRE DE TELEPHONE ----------
+   Proportions d'un iPhone récent. Les tailles internes sont en cqw (largeur
+   du cadre) : le téléphone garde ses proportions à toutes les tailles. */
+.device {
+  container-type: inline-size;
   position: relative;
-  border: 9px solid #1f1c19;
-  border-radius: 2.2rem;
-  background: #000;
-  overflow: hidden;
-  aspect-ratio: 390 / 844;
+  padding: 3.4%;
+  border-radius: 15.5% / 7.4%;
+  /* Tranche en titane : reflet clair, puis le corps sombre. */
+  background:
+    linear-gradient(145deg, #4a4540 0%, #1d1b19 22%, #121110 55%, #2c2926 80%, #4a4540 100%);
   box-shadow:
-    0 0 0 1px rgba(240, 235, 228, 0.12),
-    0 24px 60px rgba(0, 0, 0, 0.55),
-    0 0 80px rgba(255, 90, 31, 0.08);
+    inset 0 0 0 1.5px rgba(255, 255, 255, 0.16),
+    inset 0 0 0 4px #0a0908,
+    0 1px 0 rgba(255, 255, 255, 0.08),
+    0 30px 60px -18px rgba(0, 0, 0, 0.85),
+    0 18px 36px -24px rgba(255, 90, 31, 0.35);
 }
 
-/* Encoche. */
-.phone::before {
-  content: '';
+/* Boutons latéraux, en relief sur la tranche. */
+.devBtn {
   position: absolute;
-  top: 6px;
+  width: 1.4%;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #2b2825, #5a544e 50%, #2b2825);
+}
+
+.devSilent { left: -1.1%; top: 15%; height: 4.5%; }
+.devVolUp { left: -1.1%; top: 23%; height: 8.5%; }
+.devVolDown { left: -1.1%; top: 33.5%; height: 8.5%; }
+.devPower { right: -1.1%; top: 26%; height: 13%; }
+
+/* Écran : barre d'état + capture, coins arrondis comme une vraie dalle. */
+.screen {
+  position: relative;
+  border-radius: 12.5% / 5.8%;
+  overflow: hidden;
+  background: #0d0c0b;
+  display: flex;
+  flex-direction: column;
+  isolation: isolate;
+}
+
+.statusBar {
+  position: relative;
+  flex-shrink: 0;
+  height: 12.5cqw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5cqw 7.5cqw 0 9cqw;
+  color: #f2ede6;
+  background: #161412;
+}
+
+.statusTime {
+  font-family: -apple-system, 'SF Pro Text', 'Barlow', sans-serif;
+  font-size: 4.1cqw;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.statusIcons {
+  display: flex;
+  align-items: center;
+  gap: 1.4cqw;
+}
+
+.statusIcons svg {
+  height: 3cqw;
+  width: auto;
+  fill: currentColor;
+}
+
+/* Dynamic Island. */
+.island {
+  position: absolute;
+  top: 2.6cqw;
   left: 50%;
   transform: translateX(-50%);
-  width: 34%;
-  height: 18px;
+  width: 30%;
+  height: 8.2cqw;
   border-radius: 999px;
   background: #000;
-  z-index: 1;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
 }
 
-.phone img {
+.screenImg {
   display: block;
   width: 100%;
-  height: 100%;
+  height: auto;
+  aspect-ratio: 390 / 844;
   object-fit: cover;
   object-position: top;
+}
+
+.homeBar {
+  position: absolute;
+  left: 50%;
+  bottom: 2.2cqw;
+  transform: translateX(-50%);
+  width: 34%;
+  height: 1.3cqw;
+  border-radius: 999px;
+  background: rgba(242, 237, 230, 0.75);
+}
+
+/* Reflet du verre, très léger. */
+.glare {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(118deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.02) 28%, transparent 42%);
 }
 
 .phoneItem figcaption {
@@ -843,14 +923,23 @@
     overflow: visible;
     justify-content: center;
     align-items: flex-end;
-    gap: 2.5rem;
+    gap: 3rem;
     margin: 0;
     padding: 1rem 0 0;
+    perspective: 1600px;
   }
 
   .phoneItem {
     flex: 0 0 250px;
     order: 1;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* Les écrans de côté tournés vers le centre, celui du milieu en avant. */
+  .phoneItem .device {
+    transform: rotateY(14deg) rotateZ(-1deg);
+    transform-origin: right center;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .phoneItemMain {
@@ -858,8 +947,27 @@
     flex-basis: 290px;
   }
 
+  .phoneItemMain .device {
+    transform: translateY(-1.5rem);
+  }
+
   .phoneItem:last-child {
     order: 3;
+  }
+
+  .phoneItem:last-child .device {
+    transform: rotateY(-14deg) rotateZ(1deg);
+    transform-origin: left center;
+  }
+}
+
+@media (min-width: 960px) and (hover: hover) {
+  .phoneItem:hover .device {
+    transform: translateY(-0.75rem);
+  }
+
+  .phoneItemMain:hover .device {
+    transform: translateY(-2.25rem);
   }
 }
 

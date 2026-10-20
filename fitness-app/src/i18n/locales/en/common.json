@@ -208,6 +208,7 @@
       "features": "Features",
       "how": "How it works",
       "demo": "Demo",
+      "try": "Try it",
       "access_dashboard": "Open dashboard",
       "login": "Log in",
       "download": "Download",
@@ -220,7 +221,8 @@
       "title_em": "free for 30 days.",
       "subtitle": "Build your group workouts in minutes. Exercise library, programming methods, videos, and AI suggestions - all in one place, no credit card required.",
       "open_dashboard": "Open coach dashboard",
-      "watch_demo": "Watch a demo"
+      "watch_demo": "Watch a demo",
+      "see_app": "See the app"
     },
     "ticker": [
       "Exercise library",
