@@ -208,8 +208,11 @@
       "features": "Funciones",
       "how": "Cómo funciona",
       "demo": "Demo",
-      "dashboard": "Panel",
-      "access_dashboard": "Acceder"
+      "access_dashboard": "Acceder",
+      "login": "Entrar",
+      "download": "Descargar",
+      "menu_open": "Abrir el menú",
+      "menu_close": "Cerrar el menú"
     },
     "hero": {
       "tag": "Plataforma CrossFit Pro",

@@ -208,8 +208,11 @@
       "features": "Features",
       "how": "How it works",
       "demo": "Demo",
-      "dashboard": "Dashboard",
-      "access_dashboard": "Open dashboard"
+      "access_dashboard": "Open dashboard",
+      "login": "Log in",
+      "download": "Download",
+      "menu_open": "Open menu",
+      "menu_close": "Close menu"
     },
     "hero": {
       "tag": "For fitness coaches",

@@ -208,8 +208,11 @@
       "features": "Fonctionnalités",
       "how": "Comment ça marche",
       "demo": "Démo",
-      "dashboard": "Dashboard",
-      "access_dashboard": "Accéder au dashboard"
+      "access_dashboard": "Accéder au dashboard",
+      "login": "Connexion",
+      "download": "Télécharger",
+      "menu_open": "Ouvrir le menu",
+      "menu_close": "Fermer le menu"
     },
     "hero": {
       "tag": "Pour entraîneurs fitness",

@@ -8,6 +8,9 @@ import s from './landing.module.css'
 export default function LandingPage() {
   const { t } = useTranslation('common')
   const [scrolled, setScrolled] = useState(false)
+  // Menu replié sur téléphone (☰) ; toujours déplié à partir de 960px.
+  const [menuOpen, setMenuOpen] = useState(false)
+  const closeMenu = () => setMenuOpen(false)
 
   const tickerBase = t('landing.ticker', { returnObjects: true }) as string[]
   const features = t('landing.features', { returnObjects: true }) as Array<{
@@ -30,6 +33,13 @@ export default function LandingPage() {
   }, [])
 
   useEffect(() => {
+    if (!menuOpen) return
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setMenuOpen(false) }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [menuOpen])
+
+  useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -47,37 +57,48 @@ export default function LandingPage() {
 
   return (
     <div className={s.root}>
-      <nav className={`${s.nav} ${scrolled ? s.navScrolled : ''}`}>
-        <Link to="/" className={s.logo}>
+      <nav className={`${s.nav} ${scrolled || menuOpen ? s.navScrolled : ''}`}>
+        <Link to="/" className={s.logo} onClick={closeMenu}>
           WOD<span>BUD</span>
         </Link>
-        <ul className={s.navLinks}>
+        <ul id="landing-menu" className={`${s.navLinks} ${menuOpen ? s.navLinksOpen : ''}`}>
           <li>
-            <a href="#features" className={s.navLink}>
+            <a href="#features" className={s.navLink} onClick={closeMenu}>
               {t('landing.nav.features')}
             </a>
           </li>
           <li>
-            <a href="#how" className={s.navLink}>
+            <a href="#how" className={s.navLink} onClick={closeMenu}>
               {t('landing.nav.how')}
             </a>
           </li>
           <li>
-            <a href="#demo" className={s.navLink}>
+            <a href="#demo" className={s.navLink} onClick={closeMenu}>
               {t('landing.nav.demo')}
             </a>
           </li>
           <li>
-            <Link to="/entraineur_dashboard" className={s.navLink}>
-              {t('landing.nav.dashboard')}
-            </Link>
-          </li>
-          <li>
-            <Link to="/entraineur_dashboard" className={s.btnNav}>
-              {t('landing.nav.access_dashboard')}
-            </Link>
+            <a href="#download" className={s.navLink} onClick={closeMenu}>
+              {t('landing.nav.download')}
+            </a>
           </li>
         </ul>
+        <div className={s.navRight}>
+          <Link to="/entraineur_dashboard" className={s.btnNav}>
+            <span className={s.labelShort}>{t('landing.nav.login')}</span>
+            <span className={s.labelLong}>{t('landing.nav.access_dashboard')}</span>
+          </Link>
+          <button
+            type="button"
+            className={s.menuBtn}
+            aria-expanded={menuOpen}
+            aria-controls="landing-menu"
+            aria-label={menuOpen ? t('landing.nav.menu_close') : t('landing.nav.menu_open')}
+            onClick={() => setMenuOpen((v) => !v)}
+          >
+            {menuOpen ? '✕' : '☰'}
+          </button>
+        </div>
       </nav>
 
       <section className={s.hero}>
