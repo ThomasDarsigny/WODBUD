@@ -1,12 +1,20 @@
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import HeroMedia from './HeroMedia'
 import { APP_STORE_URL, PLAY_STORE_URL, STORES_LIVE } from '../../lib/storeLinks'
 import s from './landing.module.css'
 
+// Le mannequin (tracés SVG du corps) n'est chargé qu'à l'arrivée sur la page,
+// pas dans le premier rendu du haut de page.
+const MannequinDemo = lazy(() => import('./MannequinDemo'))
+
+const LANGS = ['fr', 'en', 'es'] as const
+
+type CompareValue = 'yes' | 'partial' | 'no'
+
 export default function LandingPage() {
-  const { t } = useTranslation('common')
+  const { t, i18n } = useTranslation('common')
   const [scrolled, setScrolled] = useState(false)
   // Menu replié sur téléphone (☰) ; toujours déplié à partir de 960px.
   const [menuOpen, setMenuOpen] = useState(false)
@@ -24,6 +32,10 @@ export default function LandingPage() {
     desc: string
   }>
   const demoPerks = t('landing.demo.perks', { returnObjects: true }) as string[]
+  const screens = t('landing.showcase.screens', { returnObjects: true }) as Array<{ title: string; desc: string; alt: string }>
+  const compareCols = t('landing.compare.cols', { returnObjects: true }) as string[]
+  const compareRows = t('landing.compare.rows', { returnObjects: true }) as Array<{ label: string; values: CompareValue[] }>
+  const currentLang = (i18n.resolvedLanguage ?? i18n.language ?? 'fr').slice(0, 2)
   const tickerItems = [...tickerBase, ...tickerBase]
 
   useEffect(() => {
@@ -81,6 +93,22 @@ export default function LandingPage() {
             <a href="#download" className={s.navLink} onClick={closeMenu}>
               {t('landing.nav.download')}
             </a>
+          </li>
+          <li className={s.langItem}>
+            <div className={s.langSwitch} role="group" aria-label={t('landing.lang_label')}>
+              {LANGS.map((l) => (
+                <button
+                  key={l}
+                  type="button"
+                  lang={l}
+                  aria-pressed={currentLang === l}
+                  className={`${s.langBtn} ${currentLang === l ? s.langBtnOn : ''}`}
+                  onClick={() => { void i18n.changeLanguage(l) }}
+                >
+                  {l.toUpperCase()}
+                </button>
+              ))}
+            </div>
           </li>
         </ul>
         <div className={s.navRight}>
@@ -143,6 +171,32 @@ export default function LandingPage() {
         </div>
       </div>
 
+      <section className={s.showcase} id="app">
+        <p className={s.sectionTag} data-reveal>{t('landing.showcase.tag')}</p>
+        <h2 className={s.sectionTitle} data-reveal>{t('landing.showcase.title')}</h2>
+        <p className={s.sectionLead} data-reveal>{t('landing.showcase.subtitle')}</p>
+        <div className={s.phones}>
+          {(['builder', 'session', 'rank'] as const).map((img, i) => (
+            <figure key={img} className={`${s.phoneItem} ${i === 0 ? s.phoneItemMain : ''}`} data-reveal style={{ transitionDelay: `${i * 90}ms` }}>
+              <div className={s.phone}>
+                <img
+                  src={`/landing/${img}.webp`}
+                  alt={screens[i]?.alt ?? ''}
+                  width={390}
+                  height={844}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+              <figcaption>
+                <strong>{screens[i]?.title}</strong>
+                <span>{screens[i]?.desc}</span>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      </section>
+
       <div className={s.problem} data-reveal>
         <div className={s.problemCol}>
           <p className={s.problemLabel}>{t('landing.problem.without_label')}</p>
@@ -192,6 +246,15 @@ export default function LandingPage() {
         </div>
       </section>
 
+      <section className={s.try} id="try">
+        <p className={s.sectionTag} data-reveal>{t('landing.try.tag')}</p>
+        <h2 className={s.sectionTitle} data-reveal>{t('landing.try.title')}</h2>
+        <p className={s.sectionLead} data-reveal>{t('landing.try.subtitle')}</p>
+        <Suspense fallback={<div className={s.tryFallback} aria-hidden="true" />}>
+          <MannequinDemo />
+        </Suspense>
+      </section>
+
       <section className={s.how} id="how">
         <p className={s.sectionTag} data-reveal>{t('landing.workflow_tag')}</p>
         <h2 className={s.sectionTitle} data-reveal>{t('landing.workflow_title')}</h2>
@@ -216,6 +279,38 @@ export default function LandingPage() {
             </div>
           ))}
         </div>
+      </section>
+
+      <section className={s.section} id="compare">
+        <p className={s.sectionTag} data-reveal>{t('landing.compare.tag')}</p>
+        <h2 className={s.sectionTitle} data-reveal>{t('landing.compare.title')}</h2>
+        <div className={s.compareWrap} data-reveal>
+          <table className={s.compare}>
+            <caption className={s.srOnly}>{t('landing.compare.caption')}</caption>
+            <thead>
+              <tr>
+                <th scope="col"><span className={s.srOnly}>{t('landing.compare.feature_col')}</span></th>
+                {compareCols.map((c, i) => (
+                  <th key={c} scope="col" className={i === compareCols.length - 1 ? s.compareUs : undefined}>{c}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {compareRows.map((row) => (
+                <tr key={row.label}>
+                  <th scope="row">{row.label}</th>
+                  {row.values.map((v, i) => (
+                    <td key={i} className={i === row.values.length - 1 ? s.compareUs : undefined}>
+                      <span className={s[`mark_${v}`]} aria-hidden="true">{v === 'yes' ? '✓' : v === 'partial' ? '~' : '—'}</span>
+                      <span className={s.srOnly}>{t(`landing.compare.value_${v}`)}</span>
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className={s.compareLegend}>{t('landing.compare.legend')}</p>
       </section>
 
       <section className={s.beta} id="demo">

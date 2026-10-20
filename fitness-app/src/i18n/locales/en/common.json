@@ -307,6 +307,112 @@
         "desc": "Generate the PDF and share the session with your group. Display it in your box or send it directly."
       }
     ],
+    "lang_label": "Language",
+    "showcase": {
+      "tag": "The app",
+      "title": "Built for the gym floor",
+      "subtitle": "WODBUD's real screens, the way you and your athletes use them on a phone.",
+      "screens": [
+        {
+          "title": "Build the WOD",
+          "desc": "The body map shows which muscles work, live, and flags overloads.",
+          "alt": "WODBUD workout builder with the muscle map"
+        },
+        {
+          "title": "Start the timer",
+          "desc": "Active time and elapsed time, pause, notes: every minute counts.",
+          "alt": "Timer of a session in progress in WODBUD"
+        },
+        {
+          "title": "Climb the ranks",
+          "desc": "Minutes, streaks and badges: progress you can see.",
+          "alt": "WODBUD My rank page"
+        }
+      ]
+    },
+    "try": {
+      "tag": "Try it",
+      "title": "See what your WOD works",
+      "subtitle": "The same body map as in the app. Pick movements: muscles light up by load, 4 sets per movement.",
+      "hint": "Movements",
+      "moves_label": "Demo movements",
+      "top_label": "Most worked",
+      "empty": "Pick at least one movement.",
+      "reset": "Clear all"
+    },
+    "compare": {
+      "tag": "Comparison",
+      "title": "Before / with WODBUD",
+      "caption": "What paper or Excel, WhatsApp and WODBUD let you do",
+      "feature_col": "Feature",
+      "cols": [
+        "Paper / Excel",
+        "WhatsApp",
+        "WODBUD"
+      ],
+      "rows": [
+        {
+          "label": "Exercise library with videos",
+          "values": [
+            "no",
+            "no",
+            "yes"
+          ]
+        },
+        {
+          "label": "Muscle load of the session",
+          "values": [
+            "no",
+            "no",
+            "yes"
+          ]
+        },
+        {
+          "label": "Program a whole class at once",
+          "values": [
+            "partial",
+            "partial",
+            "yes"
+          ]
+        },
+        {
+          "label": "Athletes vote for the WOD",
+          "values": [
+            "no",
+            "partial",
+            "yes"
+          ]
+        },
+        {
+          "label": "Timer and training log",
+          "values": [
+            "no",
+            "no",
+            "yes"
+          ]
+        },
+        {
+          "label": "Ranks, badges and leaderboards",
+          "values": [
+            "no",
+            "no",
+            "yes"
+          ]
+        },
+        {
+          "label": "Printable PDF sheet",
+          "values": [
+            "yes",
+            "no",
+            "yes"
+          ]
+        }
+      ],
+      "value_yes": "Yes",
+      "value_partial": "Partly",
+      "value_no": "No",
+      "legend": "✓ yes · ~ partly, by hand · — no"
+    },
     "download": {
       "tag": "Mobile",
       "title": "WODBUD in your pocket",

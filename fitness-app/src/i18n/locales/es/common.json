@@ -312,6 +312,112 @@
         "desc": "Analiza el rendimiento en tiempo real. Cada atleta registra sus puntuaciones, tú lo visualizas todo."
       }
     ],
+    "lang_label": "Idioma",
+    "showcase": {
+      "tag": "La app",
+      "title": "Pensada para el box",
+      "subtitle": "Las pantallas reales de WODBUD, tal como tú y tus atletas las usan en el móvil.",
+      "screens": [
+        {
+          "title": "Construye el WOD",
+          "desc": "El maniquí muestra en vivo los músculos trabajados y avisa de las sobrecargas.",
+          "alt": "Creador de WOD de WODBUD con el maniquí muscular"
+        },
+        {
+          "title": "Lanza el cronómetro",
+          "desc": "Tiempo activo y transcurrido, pausa, notas: cada minuto cuenta.",
+          "alt": "Cronómetro de una sesión en curso en WODBUD"
+        },
+        {
+          "title": "Sube de rango",
+          "desc": "Minutos, rachas e insignias: el progreso se ve.",
+          "alt": "Página Mi rango de WODBUD"
+        }
+      ]
+    },
+    "try": {
+      "tag": "Pruébalo",
+      "title": "Mira qué trabaja tu WOD",
+      "subtitle": "El mismo maniquí que en la app. Elige movimientos: los músculos se iluminan según la carga, 4 series por movimiento.",
+      "hint": "Movimientos",
+      "moves_label": "Movimientos de la demo",
+      "top_label": "Los más trabajados",
+      "empty": "Elige al menos un movimiento.",
+      "reset": "Desmarcar todo"
+    },
+    "compare": {
+      "tag": "Comparativa",
+      "title": "Antes / con WODBUD",
+      "caption": "Lo que permiten el papel o Excel, WhatsApp y WODBUD",
+      "feature_col": "Función",
+      "cols": [
+        "Papel / Excel",
+        "WhatsApp",
+        "WODBUD"
+      ],
+      "rows": [
+        {
+          "label": "Biblioteca de ejercicios con vídeos",
+          "values": [
+            "no",
+            "no",
+            "yes"
+          ]
+        },
+        {
+          "label": "Carga muscular de la sesión",
+          "values": [
+            "no",
+            "no",
+            "yes"
+          ]
+        },
+        {
+          "label": "Programar toda una clase de una vez",
+          "values": [
+            "partial",
+            "partial",
+            "yes"
+          ]
+        },
+        {
+          "label": "Los atletas votan el WOD",
+          "values": [
+            "no",
+            "partial",
+            "yes"
+          ]
+        },
+        {
+          "label": "Cronómetro y diario de sesiones",
+          "values": [
+            "no",
+            "no",
+            "yes"
+          ]
+        },
+        {
+          "label": "Rangos, insignias y clasificaciones",
+          "values": [
+            "no",
+            "no",
+            "yes"
+          ]
+        },
+        {
+          "label": "Ficha PDF para imprimir",
+          "values": [
+            "yes",
+            "no",
+            "yes"
+          ]
+        }
+      ],
+      "value_yes": "Sí",
+      "value_partial": "En parte",
+      "value_no": "No",
+      "legend": "✓ sí · ~ en parte, a mano · — no"
+    },
     "download": {
       "tag": "Móvil",
       "title": "WODBUD en tu bolsillo",
