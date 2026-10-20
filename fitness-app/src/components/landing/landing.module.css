@@ -1058,8 +1058,9 @@
   gap: 0.85rem;
   padding: 0.85rem 1.25rem;
   min-height: 64px;
-  border: 1px solid rgba(240, 235, 228, 0.25);
-  background: var(--dark);
+  border: 1px solid rgba(240, 235, 228, 0.35);
+  border-radius: 10px;
+  background: #000;
   color: var(--white);
   text-decoration: none;
   text-align: left;
@@ -1072,10 +1073,10 @@
 }
 
 .storeIcon {
-  width: 30px;
-  height: 30px;
+  width: 28px;
+  height: 28px;
   flex-shrink: 0;
-  color: var(--orange);
+  color: var(--white);
 }
 
 .storeText {
