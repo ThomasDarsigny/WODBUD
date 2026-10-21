@@ -11,6 +11,7 @@ import NavIcon from '../navigation/NavIcon'
 import type { NavIconName } from '../navigation/NavIcon'
 import NavDot from '../navigation/NavDot'
 import MobileTabBar, { type MobileNavItem } from '../navigation/MobileTabBar'
+import OnboardingCard from '../onboarding/OnboardingCard'
 import { useNotificationStore } from '../../stores/notificationStore'
 
 type NavItem = {
@@ -334,7 +335,15 @@ export default function DashboardLayout({ children }: Props) {
           </div>
         )}
         <ActiveSessionBar basePath="/dashboard" />
-        <div className={isMobile ? 'wb-has-tabbar' : undefined} style={{ flex: 1, overflow: 'auto' }}>{children}</div>
+        <div className={isMobile ? 'wb-has-tabbar' : undefined} style={{ flex: 1, overflow: 'auto' }}>
+          {/* Accueil du coach : les premiers pas, au-dessus de la bibliothèque. */}
+          {location.pathname === '/dashboard/exercises' && (
+            <div style={{ padding: 'var(--page-pad) var(--page-pad) 0' }}>
+              <OnboardingCard area="coach" />
+            </div>
+          )}
+          {children}
+        </div>
       </main>
 
       {isMobile && <MobileTabBar primary={tabItems} more={moreItems} />}

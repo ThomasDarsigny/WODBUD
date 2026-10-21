@@ -207,7 +207,9 @@
     "confirm_password": "Confirmer le mot de passe",
     "signup_loading": "Création du compte...",
     "signup_submit": "Créer mon compte",
-    "have_account_action": "J'ai déjà un compte"
+    "have_account_action": "J'ai déjà un compte",
+    "continue_apple": "Continuer avec Apple",
+    "apple_redirect": "Redirection vers Apple..."
   },
   "landing": {
     "nav": {
@@ -827,5 +829,25 @@
     "delete_confirm": "Confirmer",
     "votes_one": "{{count}} vote",
     "votes_other": "{{count}} votes"
+  },
+  "onboarding": {
+    "tag": "Premiers pas",
+    "title_coach": "Lance ton coaching",
+    "title_athlete": "Bienvenue dans WODBUD",
+    "progress": "{{done}} sur {{total}} terminées",
+    "hide": "Masquer les premiers pas",
+    "done": "Terminé",
+    "wod_title": "Crée ton premier WOD",
+    "wod_desc": "Choisis des mouvements, le mannequin te montre la charge.",
+    "class_title": "Crée ton cours",
+    "class_desc": "Tu obtiens un lien pour inviter tes athlètes.",
+    "session_title": "Lance ta première séance",
+    "session_desc": "Le chrono compte tes minutes et ta série.",
+    "photo_title": "Ajoute ta photo",
+    "photo_desc": "Ton cours te reconnaîtra dans les classements.",
+    "join_title": "Rejoins le cours de ton coach",
+    "join_desc": "Ouvre le lien d'invitation qu'il t'a envoyé.",
+    "community_title": "Rejoins une communauté",
+    "community_desc": "Défis, classements et WODs partagés."
   }
 }

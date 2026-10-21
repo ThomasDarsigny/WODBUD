@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { supabase } from '../lib/supabase'
 import { usePageMeta } from '../hooks/usePageMeta'
 import { isInstalledApp } from '../lib/platform'
+import OAuthButtons from '../components/auth/OAuthButtons'
 
 export default function SignupPage() {
   const { t } = useTranslation('common')
@@ -14,7 +15,6 @@ export default function SignupPage() {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isGoogleLoading, setIsGoogleLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [notice, setNotice] = useState<string | null>(null)
 
@@ -59,24 +59,6 @@ export default function SignupPage() {
     setNotice(t('auth_ui.signup_success'))
   }
 
-  const handleGoogleSignup = async () => {
-    setError(null)
-    setNotice(null)
-    setIsGoogleLoading(true)
-
-    const { error: oauthError } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: `${window.location.origin}/entraineur_dashboard`
-      }
-    })
-
-    setIsGoogleLoading(false)
-
-    if (oauthError) {
-      setError(oauthError.message)
-    }
-  }
 
   return (
     <main style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', background: 'var(--black)', color: 'var(--white)', padding: 'var(--page-pad)' }}>
@@ -156,7 +138,7 @@ export default function SignupPage() {
 
           <button
             type="submit"
-            disabled={isSubmitting || isGoogleLoading}
+            disabled={isSubmitting}
             style={{ border: 'none', padding: '0.78rem 0.9rem', background: 'var(--orange)', color: 'var(--black)', fontWeight: 700, cursor: 'pointer' }}
           >
             {isSubmitting ? t('auth_ui.signup_loading') : t('auth_ui.signup_submit')}
@@ -165,14 +147,7 @@ export default function SignupPage() {
 
         <div style={{ display: 'grid', gap: '0.9rem', marginTop: '1rem' }}>
           <div style={{ height: 1, background: 'var(--border)' }} />
-          <button
-            type="button"
-            onClick={handleGoogleSignup}
-            disabled={isSubmitting || isGoogleLoading}
-            style={{ border: '1px solid var(--line-fn)', padding: '0.75rem 0.9rem', background: 'var(--surface)', color: 'var(--white)', cursor: 'pointer' }}
-          >
-            {isGoogleLoading ? t('auth_ui.google_redirect') : t('auth_ui.continue_google')}
-          </button>
+          <OAuthButtons disabled={isSubmitting} onError={setError} />
         </div>
 
         <div style={{ marginTop: '1.25rem', display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
