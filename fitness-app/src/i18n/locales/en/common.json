@@ -228,7 +228,15 @@
       "subtitle": "Build your group workouts in minutes. Exercise library, programming methods, videos, and AI suggestions - all in one place, no credit card required.",
       "open_dashboard": "Open coach dashboard",
       "watch_demo": "Watch a demo",
-      "see_app": "See the app"
+      "see_app": "See the app",
+      "card_live": "Live",
+      "card_title": "Fran",
+      "card_moves": [
+        "21 Thrusters",
+        "21 Pull-ups",
+        "15 Thrusters",
+        "15 Pull-ups"
+      ]
     },
     "ticker": [
       "Exercise library",
@@ -452,7 +460,30 @@
       "privacy": "Privacy",
       "contact": "Contact",
       "links_label": "Footer links"
-    }
+    },
+    "stats_label": "WODBUD in numbers",
+    "stats": [
+      {
+        "value": 60,
+        "suffix": "+",
+        "label": "Exercises"
+      },
+      {
+        "value": 18,
+        "suffix": "",
+        "label": "Muscle groups"
+      },
+      {
+        "value": 32,
+        "suffix": "",
+        "label": "Badges to unlock"
+      },
+      {
+        "value": 10,
+        "suffix": "",
+        "label": "Ranks to climb"
+      }
+    ]
   },
   "labels": {
     "categories": {

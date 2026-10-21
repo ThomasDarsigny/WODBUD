@@ -5,8 +5,17 @@ import s from './landing.module.css'
  * boutons latéraux, Dynamic Island, barre d'état et reflet de verre.
  * Tout est en CSS (aucune image de maquette) et mis à l'échelle sur la
  * largeur du cadre, donc net à toutes les tailles.
+ *
+ * `slides` + `active` : plusieurs écrans empilés, celui actif en fondu
+ * (récit au défilement). Sinon `src` affiche une seule capture.
  */
-export default function PhoneFrame({ src, alt }: { src: string; alt: string }) {
+export default function PhoneFrame({ src, alt, slides, active = 0 }: {
+  src?: string
+  alt?: string
+  slides?: Array<{ src: string; alt: string }>
+  active?: number
+}) {
+  const screens = slides ?? (src ? [{ src, alt: alt ?? '' }] : [])
   return (
     <div className={s.device}>
       <span className={`${s.devBtn} ${s.devSilent}`} aria-hidden="true" />
@@ -24,7 +33,21 @@ export default function PhoneFrame({ src, alt }: { src: string; alt: string }) {
             <svg viewBox="0 0 27 12"><rect x="0.5" y="0.5" width="23" height="11" rx="3.2" fill="none" stroke="currentColor" opacity="0.4" /><rect x="2" y="2" width="20" height="8" rx="2" /><path d="M25 4v4c.8-.3 1.3-1.1 1.3-2S25.8 4.3 25 4Z" opacity="0.4" /></svg>
           </span>
         </div>
-        <img src={src} alt={alt} width={390} height={844} loading="lazy" decoding="async" className={s.screenImg} />
+        <div className={s.screenStack}>
+          {screens.map((sc, i) => (
+            <img
+              key={sc.src}
+              src={sc.src}
+              alt={i === active ? sc.alt : ''}
+              aria-hidden={i === active ? undefined : true}
+              width={390}
+              height={844}
+              loading="lazy"
+              decoding="async"
+              className={`${s.screenImg} ${i === active ? s.screenImgOn : ''}`}
+            />
+          ))}
+        </div>
         <span className={s.homeBar} aria-hidden="true" />
         <span className={s.glare} aria-hidden="true" />
       </div>

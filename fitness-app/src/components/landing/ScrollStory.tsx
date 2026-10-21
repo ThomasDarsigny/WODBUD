@@ -1,0 +1,80 @@
+import { useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScroll, useSpring, useTransform } from 'motion/react'
+import PhoneFrame from './PhoneFrame'
+import s from './landing.module.css'
+
+const IMAGES = ['builder', 'session', 'rank'] as const
+
+/**
+ * Récit au défilement, façon pages produit : la section fait trois écrans
+ * de haut, son contenu reste collé pendant qu'on défile, et chaque tiers
+ * du défilement change l'écran du téléphone et le texte.
+ */
+export default function ScrollStory() {
+  const { t } = useTranslation('common')
+  const reduce = useReducedMotion()
+  const ref = useRef<HTMLElement>(null)
+  const [active, setActive] = useState(0)
+  const screens = t('landing.showcase.screens', { returnObjects: true }) as Array<{ title: string; desc: string; alt: string }>
+
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end end'] })
+  useMotionValueEvent(scrollYProgress, 'change', (v) => {
+    const next = Math.min(IMAGES.length - 1, Math.max(0, Math.floor(v * IMAGES.length)))
+    if (next !== active) setActive(next)
+  })
+
+  // Le téléphone pivote doucement et grossit à l'entrée : il « vit » avec le défilement.
+  const smooth = useSpring(scrollYProgress, { stiffness: 120, damping: 30 })
+  const rotateY = useTransform(smooth, [0, 0.5, 1], [-14, 0, 14])
+  const scale = useTransform(smooth, [0, 0.12, 0.88, 1], [0.88, 1, 1, 0.94])
+  const bar = useTransform(scrollYProgress, [0, 1], ['0%', '100%'])
+
+  return (
+    <section ref={ref} className={s.story} id="app" style={{ height: `${IMAGES.length * 100 + 20}svh` }}>
+      <div className={s.storySticky}>
+        <div className={s.storyCopy}>
+          <p className={s.sectionTag}>{t('landing.showcase.tag')}</p>
+          <h2 className={s.storyTitle}>{t('landing.showcase.title')}</h2>
+
+          <div className={s.storyStep} aria-live="polite">
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.div
+                key={active}
+                initial={reduce ? false : { opacity: 0, y: 24, filter: 'blur(6px)' }}
+                animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                exit={reduce ? undefined : { opacity: 0, y: -16, filter: 'blur(6px)', transition: { duration: 0.18 } }}
+                transition={{ type: 'spring', stiffness: 140, damping: 22 }}
+              >
+                <span className={s.storyNum}>0{active + 1}</span>
+                <h3>{screens[active]?.title}</h3>
+                <p>{screens[active]?.desc}</p>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          <ol className={s.storyDots} aria-hidden="true">
+            {IMAGES.map((img, i) => (
+              <li key={img} className={i === active ? s.storyDotOn : undefined}>
+                <span>0{i + 1}</span>
+              </li>
+            ))}
+          </ol>
+          <div className={s.storyBar} aria-hidden="true">
+            <motion.span style={{ width: bar }} />
+          </div>
+        </div>
+
+        <div className={s.storyStage}>
+          <div className={s.storyGlow} aria-hidden="true" />
+          <motion.div className={s.storyPhone} style={reduce ? undefined : { rotateY, scale, transformPerspective: 1400 }}>
+            <PhoneFrame
+              slides={IMAGES.map((img, i) => ({ src: `/landing/${img}.webp`, alt: screens[i]?.alt ?? '' }))}
+              active={active}
+            />
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  )
+}

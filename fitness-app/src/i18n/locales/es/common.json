@@ -228,7 +228,15 @@
       "subtitle": "La plataforma todo en uno para entrenadores de CrossFit. Crea tus WODs, sigue el progreso de tus atletas y gestiona tu box en unos clics.",
       "open_dashboard": "Abrir panel",
       "watch_demo": "Ver demo",
-      "see_app": "Ver la app"
+      "see_app": "Ver la app",
+      "card_live": "En curso",
+      "card_title": "Fran",
+      "card_moves": [
+        "21 Thrusters",
+        "21 Dominadas",
+        "15 Thrusters",
+        "15 Dominadas"
+      ]
     },
     "hero_stats": {
       "athletes_label": "Atletas activos",
@@ -457,7 +465,30 @@
       "links_label": "Enlaces legales",
       "privacy": "Privacidad",
       "contact": "Contacto"
-    }
+    },
+    "stats_label": "WODBUD en cifras",
+    "stats": [
+      {
+        "value": 60,
+        "suffix": "+",
+        "label": "Ejercicios"
+      },
+      {
+        "value": 18,
+        "suffix": "",
+        "label": "Grupos musculares"
+      },
+      {
+        "value": 32,
+        "suffix": "",
+        "label": "Insignias por desbloquear"
+      },
+      {
+        "value": 10,
+        "suffix": "",
+        "label": "Rangos por escalar"
+      }
+    ]
   },
   "labels": {
     "categories": {

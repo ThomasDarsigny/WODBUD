@@ -582,3 +582,87 @@ label {
 :root[data-theme='clair'] {
   --seg-on: #ffffff;
 }
+
+/* ─── Transition landing → connexion (View Transitions natives) ────
+   La page sortante s'efface, l'entrante monte en fondu, et le logo
+   WODBUD glisse d'un écran à l'autre (même view-transition-name). */
+::view-transition-old(root) {
+  animation: 180ms ease-in both wb-vt-out;
+}
+
+::view-transition-new(root) {
+  animation: 420ms cubic-bezier(0.16, 1, 0.3, 1) both wb-vt-in;
+}
+
+::view-transition-group(wodbud-logo) {
+  animation-duration: 520ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes wb-vt-out {
+  to { opacity: 0; transform: scale(0.985); }
+}
+
+@keyframes wb-vt-in {
+  from { opacity: 0; transform: translateY(18px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
+/* ─── Écrans de connexion / inscription ─────────────────────────── */
+.wb-auth-wrap {
+  width: 100%;
+  max-width: 560px;
+  display: grid;
+  justify-items: center;
+  gap: 1.5rem;
+  animation: wb-auth-in 480ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.wb-auth-logo {
+  font-family: var(--font-d);
+  font-weight: 900;
+  font-size: 2.25rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--white);
+  view-transition-name: wodbud-logo;
+}
+
+.wb-auth-logo span {
+  color: var(--orange);
+}
+
+.wb-auth-card {
+  position: relative;
+  box-shadow: 0 40px 80px -40px rgba(0, 0, 0, 0.8);
+}
+
+.wb-auth-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--orange), transparent);
+}
+
+.wb-auth-title {
+  font-family: var(--font-d);
+  font-size: 2rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+
+@keyframes wb-auth-in {
+  from { opacity: 0; transform: translateY(14px); }
+}

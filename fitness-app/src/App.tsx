@@ -2,7 +2,6 @@ import { lazy, Suspense, useEffect, useState } from 'react'
 import type { ReactNode } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import LandingPage from './pages/LandingPage'
 import LoginPage from './pages/LoginPage'
 import SignupPage from './pages/SignupPage'
 import DashboardLayout from './components/dashboard/DashboardLayout'
@@ -24,6 +23,7 @@ const ClassesView = lazy(() => import('./components/dashboard/ClassesView'))
 const AiCoachView = lazy(() => import('./components/dashboard/AiCoachView'))
 const SettingsView = lazy(() => import('./components/dashboard/SettingsView'))
 const CommunitiesView = lazy(() => import('./components/community/CommunitiesView'))
+const LandingPage = lazy(() => import('./pages/LandingPage'))
 const CommunityPage = lazy(() => import('./components/community/CommunityPage'))
 const CommunityInviteRedirect = lazy(() => import('./pages/CommunityInviteRedirect'))
 const SessionRunnerView = lazy(() => import('./components/session/SessionRunnerView'))

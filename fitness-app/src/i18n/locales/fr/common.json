@@ -228,7 +228,15 @@
       "subtitle": "Construis tes entraînements de groupe en quelques minutes. Base d'exercices complète, méthodes de programmation, vidéos et suggestions IA - tout au même endroit, sans carte de crédit.",
       "open_dashboard": "Ouvrir le dashboard coach",
       "watch_demo": "Voir une démo",
-      "see_app": "Voir l'app"
+      "see_app": "Voir l'app",
+      "card_live": "En cours",
+      "card_title": "Fran",
+      "card_moves": [
+        "21 Thrusters",
+        "21 Tractions",
+        "15 Thrusters",
+        "15 Tractions"
+      ]
     },
     "ticker": [
       "Bibliothèque d'exercices",
@@ -458,7 +466,30 @@
       "privacy": "Confidentialité",
       "contact": "Contact",
       "links_label": "Liens de bas de page"
-    }
+    },
+    "stats_label": "WODBUD en chiffres",
+    "stats": [
+      {
+        "value": 60,
+        "suffix": "+",
+        "label": "Exercices"
+      },
+      {
+        "value": 18,
+        "suffix": "",
+        "label": "Groupes musculaires"
+      },
+      {
+        "value": 32,
+        "suffix": "",
+        "label": "Badges à débloquer"
+      },
+      {
+        "value": 10,
+        "suffix": "",
+        "label": "Rangs à gravir"
+      }
+    ]
   },
   "labels": {
     "categories": {

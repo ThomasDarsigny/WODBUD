@@ -80,8 +80,10 @@ export default function SignupPage() {
 
   return (
     <main style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', background: 'var(--black)', color: 'var(--white)', padding: 'var(--page-pad)' }}>
-      <section style={{ width: '100%', maxWidth: 560, border: '1px solid var(--border)', background: 'var(--dark)', padding: 'var(--page-pad)' }}>
-        <h1 style={{ marginTop: 0, marginBottom: '0.75rem' }}>{t('auth.signup')}</h1>
+      <div className="wb-auth-wrap">
+      <div className="wb-auth-logo" aria-hidden="true">WOD<span>BUD</span></div>
+      <section className="wb-auth-card" style={{ width: '100%', maxWidth: 560, border: '1px solid var(--border)', background: 'var(--dark)', padding: 'var(--page-pad)' }}>
+        <h1 className="wb-auth-title" style={{ marginTop: 0, marginBottom: '0.75rem' }}>{t('auth.signup')}</h1>
         <p style={{ marginTop: 0, color: 'var(--muted)' }}>
           {t('auth_ui.signup_subtitle')}
         </p>
@@ -185,6 +187,7 @@ export default function SignupPage() {
           )}
         </div>
       </section>
+      </div>
     </main>
   )
 }

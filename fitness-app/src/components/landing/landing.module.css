@@ -28,8 +28,21 @@
   background: var(--black);
   color: var(--white);
   font-family: var(--font-b);
-  overflow-x: hidden;
+  overflow-x: clip;
   line-height: 1.6;
+  position: relative;
+}
+
+/* Grain de pellicule sur toute la page : donne de la matière au noir. */
+.root::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  pointer-events: none;
+  opacity: 0.06;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 @media (min-width: 640px) {
@@ -371,17 +384,6 @@
   pointer-events: none;
 }
 
-.heroGlow {
-  position: absolute;
-  top: 0;
-  left: -10%;
-  width: 55%;
-  height: 100%;
-  background: radial-gradient(ellipse at 30% 40%, rgba(255, 90, 31, 0.09) 0%, transparent 65%);
-  z-index: 1;
-  pointer-events: none;
-}
-
 .heroContent {
   flex: 1;
   display: flex;
@@ -418,13 +420,13 @@
 .heroTitle {
   font-family: var(--font-d);
   font-weight: 900;
-  font-size: clamp(2.6rem, 11vw, 7.5rem);
-  line-height: 0.92;
+  font-size: clamp(2.6rem, 9vw, 7.5rem);
+  line-height: 0.88;
   text-transform: uppercase;
-  letter-spacing: -0.01em;
-  max-width: 18ch;
+  letter-spacing: -0.015em;
+  max-width: 16ch;
   margin-bottom: 1.25rem;
-  overflow-wrap: anywhere;
+  overflow-wrap: normal;
   animation: fadeUp 0.55s ease both 0.15s;
 }
 
@@ -565,11 +567,13 @@
 /* ---------- TICKER ---------- */
 .ticker {
   overflow: hidden;
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-  padding: 0.55rem 0;
-  background: var(--dark);
+  padding: 0.85rem 0;
+  background: var(--orange);
   position: relative;
+  z-index: 3;
+  transform: rotate(-2deg) scale(1.04);
+  margin: -1.5rem 0 1.5rem;
+  box-shadow: 0 20px 50px rgba(255, 90, 31, 0.25);
 }
 
 .tickerInner {
@@ -580,17 +584,19 @@
 
 .tickerItem {
   font-family: var(--font-d);
-  font-size: 0.78rem;
-  letter-spacing: 0.2em;
+  font-size: clamp(1rem, 2.6vw, 1.35rem);
+  font-weight: 900;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: var(--black);
   padding: 0 1.75rem;
   flex-shrink: 0;
 }
 
 .tickerItem b {
-  color: var(--orange);
+  color: var(--black);
   font-weight: 400;
+  opacity: 0.5;
 }
 
 /* ---------- PROBLEM / SOLUTION ---------- */
@@ -687,7 +693,6 @@
 
 /* ---------- SECTION SHARED ---------- */
 .section,
-.showcase,
 .try,
 .how,
 .beta,
@@ -708,16 +713,16 @@
 
 .sectionTitle {
   font-family: var(--font-d);
-  font-size: clamp(1.9rem, 7vw, 2.8rem);
+  font-size: clamp(2.4rem, 9vw, 4.75rem);
   font-weight: 900;
   text-transform: uppercase;
-  line-height: 1;
+  line-height: 0.9;
+  letter-spacing: -0.01em;
   margin-bottom: 2rem;
 }
 
 @media (min-width: 640px) {
   .section,
-  .showcase,
   .try,
   .how,
   .beta,
@@ -749,37 +754,6 @@
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
-}
-
-/* ---------- APERCU DE L'APP (téléphones) ----------
-   Téléphone : carrousel horizontal qu'on fait glisser au pouce.
-   Ordinateur : les trois écrans côte à côte, le créateur au centre. */
-.showcase {
-  border-top: 1px solid var(--border);
-  background:
-    radial-gradient(60% 50% at 50% 60%, rgba(255, 90, 31, 0.08) 0%, transparent 70%),
-    var(--black);
-  overflow: hidden;
-}
-
-.phones {
-  display: flex;
-  gap: 1.25rem;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  margin: 0 calc(var(--gutter) * -1);
-  padding: 0.5rem var(--gutter) 1.5rem;
-  scrollbar-width: none;
-}
-
-.phones::-webkit-scrollbar {
-  display: none;
-}
-
-.phoneItem {
-  flex: 0 0 min(72vw, 270px);
-  scroll-snap-align: center;
-  margin: 0;
 }
 
 /* ---------- CADRE DE TELEPHONE ----------
@@ -895,80 +869,6 @@
   inset: 0;
   pointer-events: none;
   background: linear-gradient(118deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.02) 28%, transparent 42%);
-}
-
-.phoneItem figcaption {
-  margin-top: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-}
-
-.phoneItem figcaption strong {
-  font-family: var(--font-d);
-  font-size: 1.05rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.phoneItem figcaption span {
-  font-size: 0.85rem;
-  color: var(--muted);
-  line-height: 1.5;
-}
-
-@media (min-width: 960px) {
-  .phones {
-    overflow: visible;
-    justify-content: center;
-    align-items: flex-end;
-    gap: 3rem;
-    margin: 0;
-    padding: 1rem 0 0;
-    perspective: 1600px;
-  }
-
-  .phoneItem {
-    flex: 0 0 250px;
-    order: 1;
-    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  /* Les écrans de côté tournés vers le centre, celui du milieu en avant. */
-  .phoneItem .device {
-    transform: rotateY(14deg) rotateZ(-1deg);
-    transform-origin: right center;
-    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  .phoneItemMain {
-    order: 2;
-    flex-basis: 290px;
-  }
-
-  .phoneItemMain .device {
-    transform: translateY(-1.5rem);
-  }
-
-  .phoneItem:last-child {
-    order: 3;
-  }
-
-  .phoneItem:last-child .device {
-    transform: rotateY(-14deg) rotateZ(1deg);
-    transform-origin: left center;
-  }
-}
-
-@media (min-width: 960px) and (hover: hover) {
-  .phoneItem:hover .device {
-    transform: translateY(-0.75rem);
-  }
-
-  .phoneItemMain:hover .device {
-    transform: translateY(-2.25rem);
-  }
 }
 
 /* ---------- ESSAIE LE MANNEQUIN ---------- */
@@ -1725,6 +1625,493 @@
   }
 }
 
+/* =====================================================================
+   EFFETS « WOW » (Motion) — haut de page, chiffres, récit au défilement,
+   cartes inclinables, boutons magnétiques. Mobile first comme le reste.
+   ===================================================================== */
+
+/* ---------- HAUT DE PAGE ---------- */
+.heroInner {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: center;
+  will-change: transform, opacity;
+}
+
+/* Halo qui suit la souris (variables posées par HeroWow). */
+.heroSpot {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(520px circle at var(--hx, 70%) var(--hy, 35%), rgba(255, 90, 31, 0.16), transparent 60%);
+  transition: background 0.1s linear;
+}
+
+/* Mot fantôme en contour, géant, qui glisse au défilement. */
+.heroGhost {
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  bottom: 6%;
+  white-space: nowrap;
+  font-family: var(--font-d);
+  font-weight: 900;
+  font-size: clamp(7rem, 32vw, 26rem);
+  line-height: 0.8;
+  letter-spacing: -0.02em;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(242, 237, 230, 0.07);
+  pointer-events: none;
+  user-select: none;
+}
+
+.wordMask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding-bottom: 0.06em;
+  margin-bottom: -0.06em;
+}
+
+.word {
+  display: inline-block;
+  transform-origin: left bottom;
+}
+
+.heroTitleEm {
+  display: block;
+  color: var(--orange);
+}
+
+.btnArrow {
+  display: inline-block;
+  margin-left: 0.6rem;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.magnetic {
+  display: block;
+  will-change: transform;
+}
+
+.magnetic > a {
+  width: 100%;
+}
+
+/* Boutons « sportifs » : coin coupé, comme une étiquette de dossard. */
+.btnPrimary {
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%);
+}
+
+@media (min-width: 640px) {
+  .magnetic {
+    display: inline-block;
+  }
+
+  .magnetic > a {
+    width: auto;
+  }
+}
+
+@media (hover: hover) {
+  .btnPrimary:hover .btnArrow {
+    transform: translateX(5px);
+  }
+}
+
+/* Carte « séance en cours » : réservée aux grands écrans. */
+.heroCard {
+  display: none;
+}
+
+@media (min-width: 1100px) {
+  .heroInner {
+    grid-template-columns: minmax(0, 1fr) 340px;
+    gap: 3rem;
+    padding-right: var(--gutter);
+  }
+
+  .heroCard {
+    display: block;
+    position: relative;
+    padding: 1.4rem 1.5rem 1.5rem;
+    border-radius: 18px;
+    background: linear-gradient(160deg, rgba(40, 36, 32, 0.78), rgba(18, 16, 14, 0.86));
+    border: 1px solid rgba(242, 237, 230, 0.1);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    backdrop-filter: blur(18px) saturate(140%);
+    box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 90, 31, 0.08), 0 0 60px rgba(255, 90, 31, 0.12);
+  }
+}
+
+.heroCardHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.6rem;
+}
+
+.livePill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--font-d);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--orange);
+  border: 1px solid rgba(255, 90, 31, 0.4);
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+}
+
+.livePill i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--orange);
+  animation: livePulse 1.4s ease-in-out infinite;
+}
+
+.heroCardTitle {
+  font-family: var(--font-d);
+  font-size: 1.1rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.heroCardClock {
+  font-family: var(--font-d);
+  font-size: 5rem;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  font-variant-numeric: tabular-nums;
+  margin: 0.2rem 0 1rem;
+}
+
+.heroCardMoves {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.heroCardMoves li {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-d);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.45rem 0.6rem;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  transition: color 0.3s, background 0.3s;
+}
+
+.moveCheck {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1.5px solid var(--line-fn);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  color: var(--black);
+  transition: background 0.3s, border-color 0.3s;
+}
+
+.moveDone {
+  color: var(--muted);
+  background: rgba(74, 222, 128, 0.06) !important;
+}
+
+.moveDone .moveCheck {
+  background: #4ade80;
+  border-color: #4ade80;
+}
+
+.heroCardBar {
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  margin-top: 1rem;
+  overflow: hidden;
+}
+
+.heroCardBar span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--orange), #ffb38f);
+  border-radius: inherit;
+}
+
+/* ---------- CHIFFRES ---------- */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.stat {
+  background: var(--black);
+  padding: 2rem var(--gutter);
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.stat strong {
+  font-family: var(--font-d);
+  font-size: clamp(3rem, 12vw, 5.5rem);
+  font-weight: 900;
+  line-height: 0.9;
+  color: var(--white);
+  background: linear-gradient(180deg, var(--white) 30%, rgba(242, 237, 230, 0.35));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.stat > span {
+  font-family: var(--font-d);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--orange);
+}
+
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+@media (min-width: 900px) {
+  .stats {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ---------- RECIT AU DEFILEMENT ---------- */
+.story {
+  position: relative;
+  border-top: 1px solid var(--border);
+}
+
+.storySticky {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 0.75rem;
+  padding: 4.5rem var(--gutter) 1.25rem;
+  overflow: hidden;
+}
+
+.storyCopy {
+  position: relative;
+  z-index: 2;
+}
+
+.storyTitle {
+  font-family: var(--font-d);
+  font-size: clamp(1.8rem, 7.5vw, 4.25rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 0.9;
+  margin-bottom: 0.75rem;
+}
+
+.storyStep {
+  min-height: 6.5rem;
+}
+
+.storyStep h3 {
+  font-family: var(--font-d);
+  font-size: clamp(1.3rem, 5vw, 2.4rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 1;
+  margin: 0.15rem 0 0.35rem;
+}
+
+.storyStep p {
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.55;
+  max-width: 38ch;
+}
+
+.storyNum {
+  font-family: var(--font-d);
+  font-size: 0.85rem;
+  font-weight: 900;
+  letter-spacing: 0.2em;
+  color: var(--orange);
+}
+
+.storyDots {
+  list-style: none;
+  margin: 0.9rem 0 0.6rem;
+  padding: 0;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.storyDots li {
+  font-family: var(--font-d);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--line-fn);
+  border: 1px solid var(--border);
+  padding: 0.2rem 0.55rem;
+  transition: color 0.3s, border-color 0.3s, background 0.3s;
+}
+
+.storyDotOn {
+  color: var(--black) !important;
+  background: var(--orange);
+  border-color: var(--orange) !important;
+}
+
+.storyBar {
+  height: 3px;
+  background: var(--border);
+  max-width: 260px;
+  overflow: hidden;
+}
+
+.storyBar span {
+  display: block;
+  height: 100%;
+  background: var(--orange);
+}
+
+.storyStage {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+}
+
+.storyGlow {
+  position: absolute;
+  width: 80%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 90, 31, 0.28), transparent 65%);
+  filter: blur(20px);
+}
+
+/* Le téléphone se règle sur la hauteur disponible, jamais plus large que l'écran. */
+.storyPhone {
+  position: relative;
+  height: 100%;
+  max-height: 640px;
+  aspect-ratio: 0.47;
+  max-width: 78vw;
+  display: flex;
+  align-items: center;
+  will-change: transform;
+}
+
+.storyPhone > div {
+  width: 100%;
+}
+
+.screenStack {
+  position: relative;
+  aspect-ratio: 390 / 844;
+}
+
+.screenStack .screenImg {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  opacity: 0;
+  transform: scale(1.04);
+  transition: opacity 0.45s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.screenStack .screenImgOn {
+  opacity: 1;
+  transform: scale(1);
+}
+
+@media (min-width: 960px) {
+  .storySticky {
+    grid-template-rows: none;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 3rem;
+    padding: 5rem var(--gutter) 2rem;
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+
+  .storyStep {
+    min-height: 9rem;
+  }
+
+  .storyStep p {
+    font-size: 1.05rem;
+  }
+
+  .storyPhone {
+    height: min(78svh, 680px);
+  }
+}
+
+/* ---------- CARTES INCLINABLES ---------- */
+.featCell {
+  background: var(--dark);
+  perspective: 900px;
+}
+
+.feat::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s;
+  background: radial-gradient(380px circle at var(--mx, 50%) var(--my, 50%), rgba(255, 90, 31, 0.14), transparent 55%);
+}
+
+.feat {
+  height: 100%;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+@media (hover: hover) {
+  .feat:hover::after {
+    opacity: 1;
+  }
+}
+
+@keyframes livePulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.35; transform: scale(0.75); }
+}
+
 /* ---------- KEYFRAMES ---------- */
 @keyframes heroDrift {
   0%,
@@ -1805,4 +2192,9 @@
     transform: none;
     transition: none;
   }
+}
+
+/* Logo partagé avec l'écran de connexion : il y glisse pendant la transition. */
+.logoVT {
+  view-transition-name: wodbud-logo;
 }

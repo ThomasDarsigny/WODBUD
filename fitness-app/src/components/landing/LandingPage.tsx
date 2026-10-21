@@ -1,8 +1,10 @@
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { lazy, Suspense, useEffect, useState } from 'react'
-import HeroMedia from './HeroMedia'
-import PhoneFrame from './PhoneFrame'
+import HeroWow from './HeroWow'
+import ScrollStory from './ScrollStory'
+import { CountUp, Magnetic, TiltCard } from './fx'
+import { useAppEntry } from '../../lib/useAppEntry'
 import { APP_STORE_URL, PLAY_STORE_URL, STORES_LIVE } from '../../lib/storeLinks'
 import s from './landing.module.css'
 
@@ -17,6 +19,7 @@ type CompareValue = 'yes' | 'partial' | 'no'
 export default function LandingPage() {
   const { t, i18n } = useTranslation('common')
   const [scrolled, setScrolled] = useState(false)
+  const appEntry = useAppEntry()
   // Menu replié sur téléphone (☰) ; toujours déplié à partir de 960px.
   const [menuOpen, setMenuOpen] = useState(false)
   const closeMenu = () => setMenuOpen(false)
@@ -32,7 +35,7 @@ export default function LandingPage() {
     title: string
     desc: string
   }>
-  const screens = t('landing.showcase.screens', { returnObjects: true }) as Array<{ title: string; desc: string; alt: string }>
+  const stats = t('landing.stats', { returnObjects: true }) as Array<{ value: number; suffix: string; label: string }>
   const compareCols = t('landing.compare.cols', { returnObjects: true }) as string[]
   const compareRows = t('landing.compare.rows', { returnObjects: true }) as Array<{ label: string; values: CompareValue[] }>
   const currentLang = (i18n.resolvedLanguage ?? i18n.language ?? 'fr').slice(0, 2)
@@ -70,7 +73,7 @@ export default function LandingPage() {
   return (
     <div className={s.root}>
       <nav className={`${s.nav} ${scrolled || menuOpen ? s.navScrolled : ''}`}>
-        <Link to="/" className={s.logo} onClick={closeMenu}>
+        <Link to="/" className={`${s.logo} ${s.logoVT}`} onClick={closeMenu}>
           WOD<span>BUD</span>
         </Link>
         <ul id="landing-menu" className={`${s.navLinks} ${menuOpen ? s.navLinksOpen : ''}`}>
@@ -112,7 +115,7 @@ export default function LandingPage() {
           </li>
         </ul>
         <div className={s.navRight}>
-          <Link to="/entraineur_dashboard" className={s.btnNav}>
+          <Link to={appEntry} viewTransition className={s.btnNav}>
             <span className={s.labelShort}>{t('landing.nav.login')}</span>
             <span className={s.labelLong}>{t('landing.nav.access_dashboard')}</span>
           </Link>
@@ -129,37 +132,7 @@ export default function LandingPage() {
         </div>
       </nav>
 
-      <section className={s.hero}>
-        <HeroMedia />
-        <div className={s.heroOverlay} aria-hidden="true" />
-        <div className={s.heroGrid} aria-hidden="true" />
-        <div className={s.heroGlow} aria-hidden="true" />
-
-        <div className={s.heroContent}>
-          <p className={s.tag}>{t('landing.hero.tag')}</p>
-
-          <h1 className={s.heroTitle}>
-            {t('landing.hero.title_line1')}
-            <br />
-            <em>{t('landing.hero.title_em')}</em>
-          </h1>
-
-          <p className={s.heroSub}>{t('landing.hero.subtitle')}</p>
-
-          <div className={s.ctaRow}>
-            <Link to="/entraineur_dashboard" className={s.btnPrimary}>
-              {t('landing.hero.open_dashboard')}
-            </Link>
-            <a href="#app" className={s.btnGhost}>
-              {t('landing.hero.see_app')}
-            </a>
-          </div>
-        </div>
-
-        <div className={s.scrollHint} aria-hidden="true">
-          <div className={s.scrollHintLine} />
-        </div>
-      </section>
+      <HeroWow />
 
       <div className={s.ticker} aria-hidden="true">
         <div className={s.tickerInner}>
@@ -171,22 +144,18 @@ export default function LandingPage() {
         </div>
       </div>
 
-      <section className={s.showcase} id="app">
-        <p className={s.sectionTag} data-reveal>{t('landing.showcase.tag')}</p>
-        <h2 className={s.sectionTitle} data-reveal>{t('landing.showcase.title')}</h2>
-        <p className={s.sectionLead} data-reveal>{t('landing.showcase.subtitle')}</p>
-        <div className={s.phones}>
-          {(['builder', 'session', 'rank'] as const).map((img, i) => (
-            <figure key={img} className={`${s.phoneItem} ${i === 0 ? s.phoneItemMain : ''}`} data-reveal style={{ transitionDelay: `${i * 90}ms` }}>
-              <PhoneFrame src={`/landing/${img}.webp`} alt={screens[i]?.alt ?? ''} />
-              <figcaption>
-                <strong>{screens[i]?.title}</strong>
-                <span>{screens[i]?.desc}</span>
-              </figcaption>
-            </figure>
-          ))}
-        </div>
+      <section className={s.stats} aria-label={t('landing.stats_label')}>
+        {stats.map((st) => (
+          <div key={st.label} className={s.stat} data-reveal>
+            <strong>
+              <CountUp to={st.value} suffix={st.suffix} />
+            </strong>
+            <span>{st.label}</span>
+          </div>
+        ))}
       </section>
+
+      <ScrollStory />
 
       <div className={s.problem} data-reveal>
         <div className={s.problemCol}>
@@ -221,17 +190,14 @@ export default function LandingPage() {
         </h2>
         <div className={s.featuresGrid}>
           {features.map((f, i) => (
-            <div
-              key={f.title}
-              className={s.feat}
-              data-reveal
-              style={{ transitionDelay: `${i * 80}ms` }}
-            >
-              <span className={s.featIcon} aria-hidden="true">
-                {f.icon}
-              </span>
-              <h3>{f.title}</h3>
-              <p>{f.desc}</p>
+            <div key={f.title} className={s.featCell} data-reveal style={{ transitionDelay: `${i * 70}ms` }}>
+              <TiltCard className={s.feat}>
+                <span className={s.featIcon} aria-hidden="true">
+                  {f.icon}
+                </span>
+                <h3>{f.title}</h3>
+                <p>{f.desc}</p>
+              </TiltCard>
             </div>
           ))}
         </div>
@@ -309,6 +275,7 @@ export default function LandingPage() {
         <h2 className={s.sectionTitle} data-reveal>{t('landing.download.title')}</h2>
         <p className={s.downloadText} data-reveal>{t('landing.download.subtitle')}</p>
         <div className={s.storeRow} data-reveal>
+          <Magnetic strength={0.18}>
           <StoreButton
             href={APP_STORE_URL}
             kicker={STORES_LIVE ? t('landing.download.available_on') : t('landing.download.soon_on')}
@@ -317,6 +284,8 @@ export default function LandingPage() {
             soon={!STORES_LIVE}
             soonLabel={t('landing.download.soon')}
           />
+          </Magnetic>
+          <Magnetic strength={0.18}>
           <StoreButton
             href={PLAY_STORE_URL}
             kicker={STORES_LIVE ? t('landing.download.available_on') : t('landing.download.soon_on')}
@@ -325,11 +294,12 @@ export default function LandingPage() {
             soon={!STORES_LIVE}
             soonLabel={t('landing.download.soon')}
           />
+          </Magnetic>
         </div>
         {!STORES_LIVE && (
           <p className={s.downloadHint} data-reveal>
             {t('landing.download.meanwhile')}{' '}
-            <Link to="/signup">{t('landing.download.meanwhile_link')}</Link>
+            <Link to="/signup" viewTransition>{t('landing.download.meanwhile_link')}</Link>
           </p>
         )}
       </section>
