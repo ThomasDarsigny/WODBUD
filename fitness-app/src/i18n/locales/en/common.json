@@ -228,15 +228,7 @@
       "subtitle": "Build your group workouts in minutes. Exercise library, programming methods, videos, and AI suggestions - all in one place, no credit card required.",
       "open_dashboard": "Open coach dashboard",
       "watch_demo": "Watch a demo",
-      "see_app": "See the app",
-      "card_live": "Live",
-      "card_title": "Fran",
-      "card_moves": [
-        "21 Thrusters",
-        "21 Pull-ups",
-        "15 Thrusters",
-        "15 Pull-ups"
-      ]
+      "see_app": "See the app"
     },
     "ticker": [
       "Exercise library",
@@ -249,80 +241,40 @@
       "CrossFit · Weightlifting · Gymnastics"
     ],
     "problem": {
-      "without_label": "Current problem",
-      "without_title": "Without WODBUD",
-      "without_items": [
-        "Scattered spreadsheets that are hard to maintain",
-        "No visual reference for technical exercises",
-        "Time-consuming and repetitive programming",
-        "No consistency in training methods",
-        "Exporting and sharing programs is a hassle",
-        "Reinventing the wheel every cycle"
-      ],
-      "with_label": "With the platform",
-      "with_title": "With WODBUD",
-      "with_items": [
-        "Everything centralized in one interface",
-        "Videos linked directly to each exercise",
-        "AI suggests adapted workouts",
-        "Structured methods (AMRAP, EMOM, Rounds...)",
-        "Professional PDF generated in one click",
-        "Reusable workout library cycle after cycle"
+      "tag": "The problem",
+      "title": "No more duct tape.",
+      "pain_label": "Before",
+      "fix_label": "With WODBUD",
+      "pairs": [
+        {
+          "pain": "Scattered Excel sheets nobody keeps up to date",
+          "fix": "All your coaching in one app"
+        },
+        {
+          "pain": "No visual reference for technical movements",
+          "fix": "Every exercise with its muscles, and its video when there is one"
+        },
+        {
+          "pain": "Hours spent building each session by hand",
+          "fix": "A WOD ready in minutes, with AI backup"
+        },
+        {
+          "pain": "Methods applied by feel, one week to the next",
+          "fix": "AMRAP, EMOM, For Time, Tabata: structured methods"
+        },
+        {
+          "pain": "Sharing the program? Screenshots and lost messages",
+          "fix": "A clean PDF sheet in one click"
+        },
+        {
+          "pain": "Reinventing the wheel every cycle",
+          "fix": "Your WODs stay in your library, ready to run again"
+        }
       ]
     },
     "features_tag": "Features",
-    "features_title_line1": "Everything a",
-    "features_title_line2": "CrossFit coach needs",
-    "features": [
-      {
-        "title": "Exercise library",
-        "desc": "A large exercise database by category - weightlifting, gymnastics, cardio, strength. Each movement is linked to a reference video."
-      },
-      {
-        "title": "Workout builder",
-        "desc": "Choose your exercises, apply a training method (AMRAP, EMOM, For Time, Rounds...) and configure session rules in a few clicks."
-      },
-      {
-        "title": "AI suggestions",
-        "desc": "AI analyzes your programming and suggests variations, progressions, or exercise combinations aligned with your goals."
-      },
-      {
-        "title": "Reference videos",
-        "desc": "Attach a video to every exercise in your library. Athletes can see the expected technique before each WOD."
-      },
-      {
-        "title": "PDF export",
-        "desc": "Generate a clean professional workout sheet in one click. Perfect for in-box display or sharing with your group."
-      },
-      {
-        "title": "Mobile-first PWA",
-        "desc": "Install the app directly on your phone. Fast access on the gym floor, even with limited connectivity."
-      }
-    ],
-    "workflow_tag": "Workflow",
-    "workflow_title": "How it works",
-    "steps": [
-      {
-        "num": "01",
-        "title": "Build your library",
-        "desc": "Add your exercises with descriptions, muscle groups, and reference videos. Reusable forever."
-      },
-      {
-        "num": "02",
-        "title": "Create your workout",
-        "desc": "Select your exercises, choose a method (AMRAP, EMOM...) and configure session rules."
-      },
-      {
-        "num": "03",
-        "title": "Refine with AI",
-        "desc": "Ask AI for suggestions to vary, progress, or balance your training load."
-      },
-      {
-        "num": "04",
-        "title": "Export and share",
-        "desc": "Generate the PDF and share the session with your group. Display it in your box or send it directly."
-      }
-    ],
+    "features_title_line1": "All your coaching.",
+    "features_title_line2": "One app.",
     "lang_label": "Language",
     "showcase": {
       "tag": "The app",
@@ -355,79 +307,6 @@
       "top_label": "Most worked",
       "empty": "Pick at least one movement.",
       "reset": "Clear all"
-    },
-    "compare": {
-      "tag": "Comparison",
-      "title": "Before / with WODBUD",
-      "caption": "What paper or Excel, WhatsApp and WODBUD let you do",
-      "feature_col": "Feature",
-      "cols": [
-        "Paper / Excel",
-        "WhatsApp",
-        "WODBUD"
-      ],
-      "rows": [
-        {
-          "label": "Exercise library with videos",
-          "values": [
-            "no",
-            "no",
-            "yes"
-          ]
-        },
-        {
-          "label": "Muscle load of the session",
-          "values": [
-            "no",
-            "no",
-            "yes"
-          ]
-        },
-        {
-          "label": "Program a whole class at once",
-          "values": [
-            "partial",
-            "partial",
-            "yes"
-          ]
-        },
-        {
-          "label": "Athletes vote for the WOD",
-          "values": [
-            "no",
-            "partial",
-            "yes"
-          ]
-        },
-        {
-          "label": "Timer and training log",
-          "values": [
-            "no",
-            "no",
-            "yes"
-          ]
-        },
-        {
-          "label": "Ranks, badges and leaderboards",
-          "values": [
-            "no",
-            "no",
-            "yes"
-          ]
-        },
-        {
-          "label": "Printable PDF sheet",
-          "values": [
-            "yes",
-            "no",
-            "yes"
-          ]
-        }
-      ],
-      "value_yes": "Yes",
-      "value_partial": "Partly",
-      "value_no": "No",
-      "legend": "✓ yes · ~ partly, by hand · — no"
     },
     "download": {
       "tag": "Mobile",
@@ -483,7 +362,59 @@
         "suffix": "",
         "label": "Ranks to climb"
       }
-    ]
+    ],
+    "bento": {
+      "mannequin": {
+        "title": "See the load before the session",
+        "desc": "The body map lights up muscle by muscle and flags overloads before they happen.",
+        "cta": "Try it"
+      },
+      "library": {
+        "title": "60+ movements ready",
+        "desc": "Sorted by category and by muscle."
+      },
+      "methods": {
+        "title": "Every method",
+        "desc": "Pick the structure, WODBUD follows."
+      },
+      "votes": {
+        "title": "Your class votes the WOD",
+        "desc": "Offer two options, athletes pick.",
+        "a": "Option A",
+        "b": "Option B"
+      },
+      "ranks": {
+        "title": "They come back to progress",
+        "desc": "Ranks, streaks, badges and class leaderboards."
+      },
+      "ai": {
+        "title": "An AI assistant",
+        "desc": "Variations and progressions in one question.",
+        "prompt": "A lighter variation for the shoulders?"
+      }
+    },
+    "flow": {
+      "tag": "Workflow",
+      "title": "From idea to WOD in 4 steps",
+      "steps": [
+        {
+          "title": "Pick your movements",
+          "desc": "Draw from a library of 60+ exercises, filtered by category and muscle."
+        },
+        {
+          "title": "Build the WOD",
+          "desc": "Method, sets, reps: the body map shows the load as you build."
+        },
+        {
+          "title": "Program your class",
+          "desc": "Schedule the session for the whole class, or let your athletes vote."
+        },
+        {
+          "title": "Track progress",
+          "desc": "Timer, log, ranks and leaderboards: see who trains, and how."
+        }
+      ]
+    }
   },
   "labels": {
     "categories": {

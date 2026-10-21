@@ -228,15 +228,7 @@
       "subtitle": "Construis tes entraînements de groupe en quelques minutes. Base d'exercices complète, méthodes de programmation, vidéos et suggestions IA - tout au même endroit, sans carte de crédit.",
       "open_dashboard": "Ouvrir le dashboard coach",
       "watch_demo": "Voir une démo",
-      "see_app": "Voir l'app",
-      "card_live": "En cours",
-      "card_title": "Fran",
-      "card_moves": [
-        "21 Thrusters",
-        "21 Tractions",
-        "15 Thrusters",
-        "15 Tractions"
-      ]
+      "see_app": "Voir l'app"
     },
     "ticker": [
       "Bibliothèque d'exercices",
@@ -249,86 +241,40 @@
       "CrossFit · Haltérophilie · Gymnastics"
     ],
     "problem": {
-      "without_label": "Le problème actuel",
-      "without_title": "Sans WODBUD",
-      "without_items": [
-        "Feuilles Excel dispersées et difficiles à maintenir",
-        "Pas de référence visuelle pour les exercices techniques",
-        "Programmation chronophage et répétitive",
-        "Aucune cohérence dans les méthodes d'entraînement",
-        "Export et partage du programme = galère",
-        "Réinventer la roue à chaque cycle"
-      ],
-      "with_label": "Avec la plateforme",
-      "with_title": "Avec WODBUD",
-      "with_items": [
-        "Tout centralisé dans une seule interface",
-        "Vidéos liées directement à chaque exercice",
-        "L'IA suggère des entraînements adaptés",
-        "Méthodes structurées (AMRAP, EMOM, Rounds...)",
-        "PDF professionnel généré en un clic",
-        "Bibliothèque réutilisable d'une séance à l'autre"
+      "tag": "Le problème",
+      "title": "Fini le bricolage.",
+      "pain_label": "Avant",
+      "fix_label": "Avec WODBUD",
+      "pairs": [
+        {
+          "pain": "Des feuilles Excel éparpillées, impossibles à tenir à jour",
+          "fix": "Tout ton coaching dans une seule app"
+        },
+        {
+          "pain": "Aucune référence visuelle pour les mouvements techniques",
+          "fix": "Chaque exercice avec ses muscles et sa vidéo quand elle existe"
+        },
+        {
+          "pain": "Des heures à bâtir chaque séance à la main",
+          "fix": "Un WOD prêt en quelques minutes, l'IA en renfort"
+        },
+        {
+          "pain": "Des méthodes appliquées au feeling, d'une fois à l'autre",
+          "fix": "AMRAP, EMOM, For Time, Tabata : des méthodes structurées"
+        },
+        {
+          "pain": "Partager le programme ? Captures et messages perdus",
+          "fix": "Une fiche PDF propre en un clic"
+        },
+        {
+          "pain": "Réinventer la roue à chaque cycle",
+          "fix": "Tes WODs restent dans ta bibliothèque, prêts à relancer"
+        }
       ]
     },
     "features_tag": "Fonctionnalités",
-    "features_title_line1": "Tout ce qu'un coach",
-    "features_title_line2": "CrossFit a besoin",
-    "features": [
-      {
-        "icon": "LIB",
-        "title": "Bibliothèque d'exercices",
-        "desc": "Une large base de données d'exercices catégorisés - haltérophilie, gymnastics, cardio, force. Chaque mouvement est lié à une vidéo de référence pour la technique."
-      },
-      {
-        "icon": "CFG",
-        "title": "Constructeur de séances",
-        "desc": "Choisis tes exercices, applique une méthode d'entraînement (AMRAP, EMOM, For Time, Rounds...) et configure les règles de la séance en quelques clics."
-      },
-      {
-        "icon": "AI",
-        "title": "Suggestions IA",
-        "desc": "L'intelligence artificielle analyse ta programmation et propose des variations, des progressions ou des combinaisons d'exercices cohérentes avec tes objectifs."
-      },
-      {
-        "icon": "VID",
-        "title": "Vidéos de référence",
-        "desc": "Associe une vidéo à chaque exercice de ta bibliothèque. Tes athlètes voient exactement la technique attendue avant chaque WOD."
-      },
-      {
-        "icon": "PDF",
-        "title": "Export PDF",
-        "desc": "Génère une fiche d'entraînement propre et professionnelle en un clic. Idéal pour l'afficher en box ou l'envoyer à ton groupe."
-      },
-      {
-        "icon": "APP",
-        "title": "PWA mobile-first",
-        "desc": "Installe l'app directement sur ton téléphone. Accès rapide sur le plancher de la box, même sans connexion internet."
-      }
-    ],
-    "workflow_tag": "Flux de travail",
-    "workflow_title": "Comment ça marche",
-    "steps": [
-      {
-        "num": "01",
-        "title": "Construis ta bibliothèque",
-        "desc": "Ajoute tes exercices avec descriptions, groupes musculaires et vidéos de référence. Réutilisable à l'infini."
-      },
-      {
-        "num": "02",
-        "title": "Crée ton entraînement",
-        "desc": "Sélectionne tes exercices, choisis une méthode (AMRAP, EMOM...) et configure les règles de la séance."
-      },
-      {
-        "num": "03",
-        "title": "Affine avec l'IA",
-        "desc": "Demande des suggestions à l'IA pour varier, progresser ou équilibrer la charge de ton programme."
-      },
-      {
-        "num": "04",
-        "title": "Exporte et partage",
-        "desc": "Génère le PDF et partage la séance avec ton groupe. Affiche-le en box ou envoie-le directement."
-      }
-    ],
+    "features_title_line1": "Tout ton coaching.",
+    "features_title_line2": "Une seule app.",
     "lang_label": "Langue",
     "showcase": {
       "tag": "L'app",
@@ -361,79 +307,6 @@
       "top_label": "Les plus sollicités",
       "empty": "Choisis au moins un mouvement.",
       "reset": "Tout décocher"
-    },
-    "compare": {
-      "tag": "Comparatif",
-      "title": "Avant / avec WODBUD",
-      "caption": "Ce que permettent le papier ou Excel, WhatsApp et WODBUD",
-      "feature_col": "Fonction",
-      "cols": [
-        "Papier / Excel",
-        "WhatsApp",
-        "WODBUD"
-      ],
-      "rows": [
-        {
-          "label": "Bibliothèque d'exercices avec vidéos",
-          "values": [
-            "no",
-            "no",
-            "yes"
-          ]
-        },
-        {
-          "label": "Charge musculaire de la séance",
-          "values": [
-            "no",
-            "no",
-            "yes"
-          ]
-        },
-        {
-          "label": "Programmer tout un cours d'un coup",
-          "values": [
-            "partial",
-            "partial",
-            "yes"
-          ]
-        },
-        {
-          "label": "Les athlètes votent pour le WOD",
-          "values": [
-            "no",
-            "partial",
-            "yes"
-          ]
-        },
-        {
-          "label": "Chrono et journal des séances",
-          "values": [
-            "no",
-            "no",
-            "yes"
-          ]
-        },
-        {
-          "label": "Rangs, badges et classements",
-          "values": [
-            "no",
-            "no",
-            "yes"
-          ]
-        },
-        {
-          "label": "Fiche PDF à imprimer",
-          "values": [
-            "yes",
-            "no",
-            "yes"
-          ]
-        }
-      ],
-      "value_yes": "Oui",
-      "value_partial": "En partie",
-      "value_no": "Non",
-      "legend": "✓ oui · ~ en partie, à la main · — non"
     },
     "download": {
       "tag": "Mobile",
@@ -489,7 +362,59 @@
         "suffix": "",
         "label": "Rangs à gravir"
       }
-    ]
+    ],
+    "bento": {
+      "mannequin": {
+        "title": "Vois la charge avant la séance",
+        "desc": "Le mannequin s'allume muscle par muscle et signale les surcharges avant qu'elles arrivent.",
+        "cta": "Essaie-le"
+      },
+      "library": {
+        "title": "60+ mouvements prêts",
+        "desc": "Classés par catégorie et par muscle."
+      },
+      "methods": {
+        "title": "Toutes les méthodes",
+        "desc": "Choisis la structure, WODBUD suit."
+      },
+      "votes": {
+        "title": "Ton cours vote le WOD",
+        "desc": "Propose deux options, les athlètes choisissent.",
+        "a": "Option A",
+        "b": "Option B"
+      },
+      "ranks": {
+        "title": "Ils reviennent pour progresser",
+        "desc": "Rangs, séries, badges et classements du cours."
+      },
+      "ai": {
+        "title": "Un assistant IA",
+        "desc": "Des variations et progressions en une question.",
+        "prompt": "Une variante plus légère pour les épaules ?"
+      }
+    },
+    "flow": {
+      "tag": "Flux de travail",
+      "title": "De l’idée au WOD, en 4 étapes",
+      "steps": [
+        {
+          "title": "Choisis tes mouvements",
+          "desc": "Pioche dans une bibliothèque de 60+ exercices, filtrée par catégorie et par muscle."
+        },
+        {
+          "title": "Construis le WOD",
+          "desc": "Méthode, séries, reps : le mannequin te montre la charge pendant que tu bâtis."
+        },
+        {
+          "title": "Programme ton cours",
+          "desc": "Planifie la séance pour tout le cours, ou laisse tes athlètes voter."
+        },
+        {
+          "title": "Suis la progression",
+          "desc": "Chrono, journal, rangs et classements : tu vois qui s’entraîne, et comment."
+        }
+      ]
+    }
   },
   "labels": {
     "categories": {

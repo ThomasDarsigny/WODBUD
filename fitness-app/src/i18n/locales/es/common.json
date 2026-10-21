@@ -228,15 +228,7 @@
       "subtitle": "La plataforma todo en uno para entrenadores de CrossFit. Crea tus WODs, sigue el progreso de tus atletas y gestiona tu box en unos clics.",
       "open_dashboard": "Abrir panel",
       "watch_demo": "Ver demo",
-      "see_app": "Ver la app",
-      "card_live": "En curso",
-      "card_title": "Fran",
-      "card_moves": [
-        "21 Thrusters",
-        "21 Dominadas",
-        "15 Thrusters",
-        "15 Dominadas"
-      ]
+      "see_app": "Ver la app"
     },
     "hero_stats": {
       "athletes_label": "Atletas activos",
@@ -252,82 +244,40 @@
       "Multi-box"
     ],
     "problem": {
-      "without_label": "Sin WODBUD",
-      "without_title": "Caos y tiempo perdido",
-      "without_items": [
-        "WODs escritos en papel o en Excel",
-        "Seguimiento de progreso imposible de gestionar",
-        "Comunicación dispersa con los atletas",
-        "Sin visibilidad del rendimiento"
-      ],
-      "with_label": "Con WODBUD",
-      "with_title": "Todo centralizado, todo bajo control",
-      "with_items": [
-        "WODs creados en 2 minutos, compartidos al instante",
-        "Seguimiento automático de PRs y progreso",
-        "Comunicación directa en la app",
-        "Paneles en tiempo real"
+      "tag": "El problema",
+      "title": "Se acabó improvisar.",
+      "pain_label": "Antes",
+      "fix_label": "Con WODBUD",
+      "pairs": [
+        {
+          "pain": "Hojas de Excel dispersas, imposibles de mantener",
+          "fix": "Todo tu coaching en una sola app"
+        },
+        {
+          "pain": "Ninguna referencia visual para los movimientos técnicos",
+          "fix": "Cada ejercicio con sus músculos y su vídeo cuando existe"
+        },
+        {
+          "pain": "Horas armando cada sesión a mano",
+          "fix": "Un WOD listo en minutos, con la IA de apoyo"
+        },
+        {
+          "pain": "Métodos aplicados a ojo, de una vez a otra",
+          "fix": "AMRAP, EMOM, For Time, Tabata: métodos estructurados"
+        },
+        {
+          "pain": "¿Compartir el programa? Capturas y mensajes perdidos",
+          "fix": "Una ficha PDF limpia en un clic"
+        },
+        {
+          "pain": "Reinventar la rueda en cada ciclo",
+          "fix": "Tus WODs quedan en tu biblioteca, listos para repetir"
+        }
       ]
     },
     "features_tag": "Funciones",
-    "features_title_line1": "Todo lo que un entrenador",
-    "features_title_line2": "de CrossFit necesita",
-    "features": [
-      {
-        "icon": "WOD",
-        "title": "WOD Builder",
-        "desc": "Crea entrenamientos en segundos con nuestra interfaz intuitiva. Arrastra y suelta ejercicios y genera tu WOD del día."
-      },
-      {
-        "icon": "KPI",
-        "title": "Seguimiento del rendimiento",
-        "desc": "Visualiza el progreso de cada atleta en una línea de tiempo. Detecta mesetas, celebra los PRs."
-      },
-      {
-        "icon": "EX",
-        "title": "Biblioteca de ejercicios",
-        "desc": "Accede a más de 500 ejercicios de CrossFit con descripciones y videos. Crea tus propios movimientos personalizados."
-      },
-      {
-        "icon": "PLAN",
-        "title": "Programación",
-        "desc": "Planifica tus ciclos de entrenamiento en 4, 8 o 12 semanas. Equilibra movimientos e intensidades automáticamente."
-      },
-      {
-        "icon": "TEAM",
-        "title": "Gestión multi-box",
-        "desc": "Gestiona varios boxes desde un solo panel. Asigna entrenadores, controla asistencia, gestiona suscripciones."
-      },
-      {
-        "icon": "ANL",
-        "title": "Análisis avanzado",
-        "desc": "Informes detallados sobre asistencia, rendimiento y progreso. Exporta tus datos a CSV."
-      }
-    ],
-    "workflow_tag": "Cómo funciona",
-    "workflow_title": "Listo en 4 pasos simples",
-    "steps": [
-      {
-        "num": "01",
-        "title": "Crea tu box",
-        "desc": "Configura tu box en minutos. Importa atletas vía CSV o invítalos por email."
-      },
-      {
-        "num": "02",
-        "title": "Construye tus WODs",
-        "desc": "Usa nuestra biblioteca o crea tus propios ejercicios. El WOD builder genera automáticamente el formato."
-      },
-      {
-        "num": "03",
-        "title": "Comparte y entrena",
-        "desc": "Publica tus WODs con un clic. Los atletas reciben una notificación y ven el programa desde su teléfono."
-      },
-      {
-        "num": "04",
-        "title": "Sigue el progreso",
-        "desc": "Analiza el rendimiento en tiempo real. Cada atleta registra sus puntuaciones, tú lo visualizas todo."
-      }
-    ],
+    "features_title_line1": "Todo tu coaching.",
+    "features_title_line2": "Una sola app.",
     "lang_label": "Idioma",
     "showcase": {
       "tag": "La app",
@@ -360,79 +310,6 @@
       "top_label": "Los más trabajados",
       "empty": "Elige al menos un movimiento.",
       "reset": "Desmarcar todo"
-    },
-    "compare": {
-      "tag": "Comparativa",
-      "title": "Antes / con WODBUD",
-      "caption": "Lo que permiten el papel o Excel, WhatsApp y WODBUD",
-      "feature_col": "Función",
-      "cols": [
-        "Papel / Excel",
-        "WhatsApp",
-        "WODBUD"
-      ],
-      "rows": [
-        {
-          "label": "Biblioteca de ejercicios con vídeos",
-          "values": [
-            "no",
-            "no",
-            "yes"
-          ]
-        },
-        {
-          "label": "Carga muscular de la sesión",
-          "values": [
-            "no",
-            "no",
-            "yes"
-          ]
-        },
-        {
-          "label": "Programar toda una clase de una vez",
-          "values": [
-            "partial",
-            "partial",
-            "yes"
-          ]
-        },
-        {
-          "label": "Los atletas votan el WOD",
-          "values": [
-            "no",
-            "partial",
-            "yes"
-          ]
-        },
-        {
-          "label": "Cronómetro y diario de sesiones",
-          "values": [
-            "no",
-            "no",
-            "yes"
-          ]
-        },
-        {
-          "label": "Rangos, insignias y clasificaciones",
-          "values": [
-            "no",
-            "no",
-            "yes"
-          ]
-        },
-        {
-          "label": "Ficha PDF para imprimir",
-          "values": [
-            "yes",
-            "no",
-            "yes"
-          ]
-        }
-      ],
-      "value_yes": "Sí",
-      "value_partial": "En parte",
-      "value_no": "No",
-      "legend": "✓ sí · ~ en parte, a mano · — no"
     },
     "download": {
       "tag": "Móvil",
@@ -488,7 +365,59 @@
         "suffix": "",
         "label": "Rangos por escalar"
       }
-    ]
+    ],
+    "bento": {
+      "mannequin": {
+        "title": "Mira la carga antes de la sesión",
+        "desc": "El maniquí se ilumina músculo por músculo y avisa de las sobrecargas antes de que lleguen.",
+        "cta": "Pruébalo"
+      },
+      "library": {
+        "title": "60+ movimientos listos",
+        "desc": "Ordenados por categoría y por músculo."
+      },
+      "methods": {
+        "title": "Todos los métodos",
+        "desc": "Elige la estructura, WODBUD sigue."
+      },
+      "votes": {
+        "title": "Tu clase vota el WOD",
+        "desc": "Propón dos opciones, los atletas eligen.",
+        "a": "Opción A",
+        "b": "Opción B"
+      },
+      "ranks": {
+        "title": "Vuelven para progresar",
+        "desc": "Rangos, rachas, insignias y clasificaciones de la clase."
+      },
+      "ai": {
+        "title": "Un asistente IA",
+        "desc": "Variaciones y progresiones en una pregunta.",
+        "prompt": "¿Una variante más ligera para los hombros?"
+      }
+    },
+    "flow": {
+      "tag": "Flujo de trabajo",
+      "title": "De la idea al WOD en 4 pasos",
+      "steps": [
+        {
+          "title": "Elige tus movimientos",
+          "desc": "Escoge en una biblioteca de 60+ ejercicios, filtrada por categoría y músculo."
+        },
+        {
+          "title": "Construye el WOD",
+          "desc": "Método, series, reps: el maniquí muestra la carga mientras construyes."
+        },
+        {
+          "title": "Programa tu clase",
+          "desc": "Planifica la sesión para toda la clase, o deja que tus atletas voten."
+        },
+        {
+          "title": "Sigue el progreso",
+          "desc": "Cronómetro, diario, rangos y clasificaciones: ves quién entrena, y cómo."
+        }
+      ]
+    }
   },
   "labels": {
     "categories": {

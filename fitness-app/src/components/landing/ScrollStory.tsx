@@ -26,7 +26,10 @@ export default function ScrollStory() {
 
   // Le téléphone pivote doucement et grossit à l'entrée : il « vit » avec le défilement.
   const smooth = useSpring(scrollYProgress, { stiffness: 120, damping: 30 })
-  const rotateY = useTransform(smooth, [0, 0.5, 1], [-14, 0, 14])
+  const rotateY = useTransform(smooth, [0, 0.5, 1], [-24, 0, 24])
+  const rotateX = useTransform(smooth, [0, 0.5, 1], [6, 2, 6])
+  // Le reflet du verre glisse en sens inverse de la rotation.
+  const glare = useTransform(smooth, [0, 1], ['85%', '0%'])
   const scale = useTransform(smooth, [0, 0.12, 0.88, 1], [0.88, 1, 1, 0.94])
   const bar = useTransform(scrollYProgress, [0, 1], ['0%', '100%'])
 
@@ -67,7 +70,7 @@ export default function ScrollStory() {
 
         <div className={s.storyStage}>
           <div className={s.storyGlow} aria-hidden="true" />
-          <motion.div className={s.storyPhone} style={reduce ? undefined : { rotateY, scale, transformPerspective: 1400 }}>
+          <motion.div className={s.storyPhone} style={reduce ? undefined : { rotateY, rotateX, scale, transformPerspective: 1400, ['--glare' as string]: glare }}>
             <PhoneFrame
               slides={IMAGES.map((img, i) => ({ src: `/landing/${img}.webp`, alt: screens[i]?.alt ?? '' }))}
               active={active}

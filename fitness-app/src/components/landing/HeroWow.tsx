@@ -4,24 +4,19 @@ import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react'
 import HeroMedia from './HeroMedia'
-import { formatClock, Magnetic, useTicker, WordReveal } from './fx'
+import { Magnetic, WordReveal } from './fx'
 import { useAppEntry } from '../../lib/useAppEntry'
 import s from './landing.module.css'
 
 /**
- * Haut de page : titre géant révélé mot par mot, halo qui suit le pointeur,
- * carte « séance en cours » dont le chrono tourne vraiment, et un mot
- * fantôme en contour qui glisse au défilement.
+ * Haut de page : titre géant révélé mot par mot, halo qui suit le pointeur
+ * et un mot fantôme en contour qui glisse au défilement.
  */
 export default function HeroWow() {
   const { t } = useTranslation('common')
   const reduce = useReducedMotion()
   const ref = useRef<HTMLElement>(null)
-  const sec = useTicker()
   const appEntry = useAppEntry()
-  const moves = t('landing.hero.card_moves', { returnObjects: true }) as string[]
-  // Un mouvement « fait » toutes les 4 s, en boucle : la carte a l'air vivante.
-  const done = Math.floor(sec / 4) % (moves.length + 1)
 
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
   const ghostX = useTransform(scrollYProgress, [0, 1], ['0%', '-18%'])
@@ -91,30 +86,6 @@ export default function HeroWow() {
           </motion.div>
         </div>
 
-        <motion.aside
-          className={s.heroCard}
-          aria-hidden="true"
-          initial={reduce ? false : { opacity: 0, y: 40, rotate: -6, scale: 0.92 }}
-          animate={{ opacity: 1, y: 0, rotate: -3, scale: 1 }}
-          transition={{ type: 'spring', stiffness: 80, damping: 16, delay: 0.6 }}
-        >
-          <div className={s.heroCardHead}>
-            <span className={s.livePill}><i />{t('landing.hero.card_live')}</span>
-            <span className={s.heroCardTitle}>{t('landing.hero.card_title')}</span>
-          </div>
-          <div className={s.heroCardClock}>{formatClock(sec)}</div>
-          <ul className={s.heroCardMoves}>
-            {moves.map((m, i) => (
-              <li key={m} className={i < done ? s.moveDone : undefined}>
-                <span className={s.moveCheck}>{i < done ? '✓' : ''}</span>
-                {m}
-              </li>
-            ))}
-          </ul>
-          <div className={s.heroCardBar}>
-            <motion.span animate={{ width: `${(done / moves.length) * 100}%` }} transition={{ type: 'spring', stiffness: 120, damping: 20 }} />
-          </div>
-        </motion.aside>
       </motion.div>
 
       <div className={s.scrollHint} aria-hidden="true">

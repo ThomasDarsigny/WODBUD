@@ -3,7 +3,10 @@ import { useTranslation } from 'react-i18next'
 import { lazy, Suspense, useEffect, useState } from 'react'
 import HeroWow from './HeroWow'
 import ScrollStory from './ScrollStory'
-import { CountUp, Magnetic, TiltCard } from './fx'
+import { CountUp } from './fx'
+import ProblemPairs from './ProblemPairs'
+import FeatureBento from './FeatureBento'
+import FlowSteps from './FlowSteps'
 import { useAppEntry } from '../../lib/useAppEntry'
 import { APP_STORE_URL, PLAY_STORE_URL, STORES_LIVE } from '../../lib/storeLinks'
 import s from './landing.module.css'
@@ -14,8 +17,6 @@ const MannequinDemo = lazy(() => import('./MannequinDemo'))
 
 const LANGS = ['fr', 'en', 'es'] as const
 
-type CompareValue = 'yes' | 'partial' | 'no'
-
 export default function LandingPage() {
   const { t, i18n } = useTranslation('common')
   const [scrolled, setScrolled] = useState(false)
@@ -25,19 +26,7 @@ export default function LandingPage() {
   const closeMenu = () => setMenuOpen(false)
 
   const tickerBase = t('landing.ticker', { returnObjects: true }) as string[]
-  const features = t('landing.features', { returnObjects: true }) as Array<{
-    icon: string
-    title: string
-    desc: string
-  }>
-  const steps = t('landing.steps', { returnObjects: true }) as Array<{
-    num: string
-    title: string
-    desc: string
-  }>
   const stats = t('landing.stats', { returnObjects: true }) as Array<{ value: number; suffix: string; label: string }>
-  const compareCols = t('landing.compare.cols', { returnObjects: true }) as string[]
-  const compareRows = t('landing.compare.rows', { returnObjects: true }) as Array<{ label: string; values: CompareValue[] }>
   const currentLang = (i18n.resolvedLanguage ?? i18n.language ?? 'fr').slice(0, 2)
   const tickerItems = [...tickerBase, ...tickerBase]
 
@@ -137,8 +126,9 @@ export default function LandingPage() {
       <div className={s.ticker} aria-hidden="true">
         <div className={s.tickerInner}>
           {tickerItems.map((item, i) => (
-            <span key={i} className={s.tickerItem}>
-              <b>◆</b> {item}
+            <span key={i} className={`${s.tickerItem} ${i % 2 ? s.tickerOutline : ''}`}>
+              {item}
+              <b aria-hidden="true">✦</b>
             </span>
           ))}
         </div>
@@ -157,29 +147,7 @@ export default function LandingPage() {
 
       <ScrollStory />
 
-      <div className={s.problem} data-reveal>
-        <div className={s.problemCol}>
-          <p className={s.problemLabel}>{t('landing.problem.without_label')}</p>
-          <h2>{t('landing.problem.without_title')}</h2>
-          <ul className={s.problemList}>
-            {(t('landing.problem.without_items', { returnObjects: true }) as string[]).map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
-        </div>
-
-        <div className={s.problemDivider} aria-hidden="true" />
-
-        <div className={s.problemCol}>
-          <p className={s.problemLabel}>{t('landing.problem.with_label')}</p>
-          <h2>{t('landing.problem.with_title')}</h2>
-          <ul className={s.solutionList}>
-            {(t('landing.problem.with_items', { returnObjects: true }) as string[]).map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
-        </div>
-      </div>
+      <ProblemPairs />
 
       <section className={s.section} id="features">
         <p className={s.sectionTag} data-reveal>{t('landing.features_tag')}</p>
@@ -188,19 +156,7 @@ export default function LandingPage() {
           <br />
           {t('landing.features_title_line2')}
         </h2>
-        <div className={s.featuresGrid}>
-          {features.map((f, i) => (
-            <div key={f.title} className={s.featCell} data-reveal style={{ transitionDelay: `${i * 70}ms` }}>
-              <TiltCard className={s.feat}>
-                <span className={s.featIcon} aria-hidden="true">
-                  {f.icon}
-                </span>
-                <h3>{f.title}</h3>
-                <p>{f.desc}</p>
-              </TiltCard>
-            </div>
-          ))}
-        </div>
+        <FeatureBento />
       </section>
 
       <section className={s.try} id="try">
@@ -212,70 +168,13 @@ export default function LandingPage() {
         </Suspense>
       </section>
 
-      <section className={s.how} id="how">
-        <p className={s.sectionTag} data-reveal>{t('landing.workflow_tag')}</p>
-        <h2 className={s.sectionTitle} data-reveal>{t('landing.workflow_title')}</h2>
-        <div className={s.steps}>
-          {steps.map((step, i) => (
-            <div
-              key={step.num}
-              className={s.step}
-              data-reveal
-              style={{ transitionDelay: `${i * 100}ms` }}
-            >
-              <div className={s.stepNum} aria-hidden="true">
-                {step.num}
-              </div>
-              <h3>{step.title}</h3>
-              <p>{step.desc}</p>
-              {i < steps.length - 1 && (
-                <span className={s.stepArrow} aria-hidden="true">
-                  ›
-                </span>
-              )}
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className={s.section} id="compare">
-        <p className={s.sectionTag} data-reveal>{t('landing.compare.tag')}</p>
-        <h2 className={s.sectionTitle} data-reveal>{t('landing.compare.title')}</h2>
-        <div className={s.compareWrap} data-reveal>
-          <table className={s.compare}>
-            <caption className={s.srOnly}>{t('landing.compare.caption')}</caption>
-            <thead>
-              <tr>
-                <th scope="col"><span className={s.srOnly}>{t('landing.compare.feature_col')}</span></th>
-                {compareCols.map((c, i) => (
-                  <th key={c} scope="col" className={i === compareCols.length - 1 ? s.compareUs : undefined}>{c}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {compareRows.map((row) => (
-                <tr key={row.label}>
-                  <th scope="row">{row.label}</th>
-                  {row.values.map((v, i) => (
-                    <td key={i} className={i === row.values.length - 1 ? s.compareUs : undefined}>
-                      <span className={s[`mark_${v}`]} aria-hidden="true">{v === 'yes' ? '✓' : v === 'partial' ? '~' : '—'}</span>
-                      <span className={s.srOnly}>{t(`landing.compare.value_${v}`)}</span>
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <p className={s.compareLegend}>{t('landing.compare.legend')}</p>
-      </section>
+      <FlowSteps />
 
       <section className={s.download} id="download">
         <p className={s.sectionTag} data-reveal>{t('landing.download.tag')}</p>
         <h2 className={s.sectionTitle} data-reveal>{t('landing.download.title')}</h2>
         <p className={s.downloadText} data-reveal>{t('landing.download.subtitle')}</p>
         <div className={s.storeRow} data-reveal>
-          <Magnetic strength={0.18}>
           <StoreButton
             href={APP_STORE_URL}
             kicker={STORES_LIVE ? t('landing.download.available_on') : t('landing.download.soon_on')}
@@ -284,8 +183,6 @@ export default function LandingPage() {
             soon={!STORES_LIVE}
             soonLabel={t('landing.download.soon')}
           />
-          </Magnetic>
-          <Magnetic strength={0.18}>
           <StoreButton
             href={PLAY_STORE_URL}
             kicker={STORES_LIVE ? t('landing.download.available_on') : t('landing.download.soon_on')}
@@ -294,7 +191,6 @@ export default function LandingPage() {
             soon={!STORES_LIVE}
             soonLabel={t('landing.download.soon')}
           />
-          </Magnetic>
         </div>
         {!STORES_LIVE && (
           <p className={s.downloadHint} data-reveal>

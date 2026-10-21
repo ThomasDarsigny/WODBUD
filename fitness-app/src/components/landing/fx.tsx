@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useRef, useState } from 'react'
+import { Fragment, useEffect, useRef } from 'react'
 import type { CSSProperties, PointerEvent, ReactNode } from 'react'
 import { animate, motion, useInView, useMotionValue, useReducedMotion, useSpring, useTransform } from 'motion/react'
 import s from './landing.module.css'
@@ -82,12 +82,12 @@ export function Magnetic({ children, strength = 0.28 }: { children: ReactNode; s
  * Carte qui s'incline vers le pointeur, avec un halo qui le suit
  * (variables --mx / --my lues par le CSS).
  */
-export function TiltCard({ children, className, style }: { children: ReactNode; className?: string; style?: CSSProperties }) {
+export function TiltCard({ children, className, style, intensity = 1 }: { children: ReactNode; className?: string; style?: CSSProperties; intensity?: number }) {
   const reduce = useReducedMotion()
   const px = useMotionValue(0.5)
   const py = useMotionValue(0.5)
-  const rotateX = useSpring(useTransform(py, [0, 1], [7, -7]), SPRING)
-  const rotateY = useSpring(useTransform(px, [0, 1], [-9, 9]), SPRING)
+  const rotateX = useSpring(useTransform(py, [0, 1], [7 * intensity, -7 * intensity]), SPRING)
+  const rotateY = useSpring(useTransform(px, [0, 1], [-9 * intensity, 9 * intensity]), SPRING)
 
   function onMove(e: PointerEvent<HTMLDivElement>) {
     if (e.pointerType !== 'mouse') return
@@ -139,20 +139,4 @@ export function CountUp({ to, suffix = '', duration = 1.4 }: { to: number; suffi
   }, [inView, to, suffix, duration, reduce])
 
   return <span ref={ref} className={s.tnum}>{`0${suffix}`}</span>
-}
-
-/** Chrono qui tourne en continu (carte flottante du haut de page). */
-export function useTicker(): number {
-  const [sec, setSec] = useState(754)
-  useEffect(() => {
-    const id = window.setInterval(() => setSec((v) => v + 1), 1000)
-    return () => window.clearInterval(id)
-  }, [])
-  return sec
-}
-
-export function formatClock(total: number): string {
-  const m = Math.floor(total / 60) % 60
-  const sec = total % 60
-  return `${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`
 }
