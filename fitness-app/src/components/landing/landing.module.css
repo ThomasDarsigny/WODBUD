@@ -1538,25 +1538,38 @@
   padding-top: 0.2rem;
 }
 
+.pairPain,
+.pairFix {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  line-height: 1.45;
+}
+
 .pairPain {
-  color: var(--muted);
-  font-size: 0.92rem;
-  line-height: 1.5;
+  color: #b9b1a6;
+  font-size: 1rem;
 }
 
-.pairPainText {
-  position: relative;
+/* Pastilles ✕ / ✓ : le sens se lit sans dépendre de la couleur seule. */
+.pairX,
+.pairCheck {
+  flex-shrink: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-top: 0.05rem;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 900;
+  font-family: var(--font-b);
 }
 
-/* Trait qui raye l'irritant, dessiné de gauche à droite. */
-.pairStrike {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 55%;
-  height: 2px;
-  background: rgba(255, 90, 31, 0.75);
-  transform-origin: left center;
+.pairX {
+  color: #f0a39a;
+  background: rgba(239, 68, 68, 0.14);
 }
 
 .pairArrow {
@@ -1564,22 +1577,14 @@
 }
 
 .pairFix {
-  display: flex;
-  align-items: baseline;
-  gap: 0.55rem;
-  font-family: var(--font-d);
-  font-size: clamp(1.15rem, 4.6vw, 1.6rem);
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.01em;
-  line-height: 1.1;
+  font-size: 1.08rem;
+  font-weight: 600;
   color: var(--white);
 }
 
 .pairCheck {
-  flex-shrink: 0;
-  color: var(--orange);
-  font-size: 0.85em;
+  color: var(--black);
+  background: var(--orange);
 }
 
 @media (min-width: 640px) {
@@ -1622,7 +1627,7 @@
   }
 
   .pairPain {
-    font-size: 1rem;
+    font-size: 1.02rem;
   }
 
   .pairArrow {
@@ -1633,7 +1638,7 @@
   }
 
   .pairFix {
-    font-size: 1.6rem;
+    font-size: 1.2rem;
   }
 }
 
@@ -1868,40 +1873,65 @@
   background: linear-gradient(180deg, var(--orange), rgba(255, 90, 31, 0.45));
 }
 
-/* IA : une question, la réponse qui s'écrit. */
+/* IA : une vraie petite conversation (AiChat). */
 .tileAi {
-  min-height: 230px;
+  justify-content: flex-start;
 }
 
-.aiArt {
-  position: absolute;
-  inset: 1.3rem 1.35rem auto;
-  display: grid;
-  gap: 0.55rem;
+.chat {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  /* Hauteur de la conversation complète, réservée d'emblée : la tuile ne
+     grandit pas (et ne pousse pas la page) quand les messages arrivent. */
+  min-height: 19rem;
+  padding: 1.3rem 1.35rem 0;
 }
 
-.aiBubbleMe {
-  justify-self: end;
-  max-width: 85%;
+.bubbleMe,
+.bubbleBot {
+  max-width: 86%;
   padding: 0.6rem 0.85rem;
-  border-radius: 14px 14px 4px 14px;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.bubbleMe {
+  align-self: flex-end;
+  border-radius: 16px 16px 4px 16px;
   background: var(--orange);
   color: var(--black);
-  font-size: 0.88rem;
   font-weight: 600;
-  line-height: 1.35;
 }
 
-.aiBubbleBot {
-  justify-self: start;
+.bubbleBot {
+  align-self: flex-start;
+  border-radius: 16px 16px 16px 4px;
+  background: var(--surface);
+  color: var(--white);
+  border: 1px solid var(--border);
+}
+
+.bubbleWho {
+  display: block;
+  font-family: var(--font-d);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 0.2rem;
+}
+
+.bubbleTyping {
   display: inline-flex;
   gap: 5px;
-  padding: 0.75rem 0.9rem;
-  border-radius: 14px 14px 14px 4px;
-  background: var(--surface);
+  padding: 0.8rem 0.95rem;
 }
 
-.aiBubbleBot i {
+.bubbleTyping i {
   width: 7px;
   height: 7px;
   border-radius: 50%;
@@ -1909,8 +1939,8 @@
   animation: typing 1.2s ease-in-out infinite;
 }
 
-.aiBubbleBot i:nth-child(2) { animation-delay: 0.15s; }
-.aiBubbleBot i:nth-child(3) { animation-delay: 0.3s; }
+.bubbleTyping i:nth-child(2) { animation-delay: 0.15s; }
+.bubbleTyping i:nth-child(3) { animation-delay: 0.3s; }
 
 @media (hover: hover) {
   .tile:hover::after {
@@ -1952,22 +1982,22 @@
 
   .tileAi {
     grid-area: ai;
-    min-height: 200px;
+    min-height: 0;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
   }
 
-  .tileAi .aiArt {
-    position: relative;
-    inset: auto;
+  .tileAi .chat {
     order: 2;
-    width: min(42%, 380px);
-    margin-right: 1.5rem;
+    width: min(50%, 520px);
+    min-height: 20rem;
+    padding: 1.5rem 1.75rem 1.5rem 0;
+    justify-content: center;
   }
 
   .tileAi .tileBody {
-    max-width: 46%;
+    max-width: 42%;
   }
 
   .tileMannArt {

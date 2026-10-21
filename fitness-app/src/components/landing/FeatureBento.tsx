@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { motion, useReducedMotion } from 'motion/react'
 import { TiltCard } from './fx'
+import AiChat from './AiChat'
 import { DEMO_MOVES, demoMoveName } from './demoMoves'
 import s from './landing.module.css'
 
@@ -26,7 +27,11 @@ export default function FeatureBento() {
   const meth = b('methods')
   const votes = b('votes')
   const ranks = b('ranks')
-  const ai = b('ai')
+  const ai = t('landing.bento.ai', { returnObjects: true }) as Tile & {
+    me: string
+    bot: string
+    chat: Array<{ from: 'me' | 'ai'; text: string }>
+  }
 
   return (
     <div className={s.bento}>
@@ -109,13 +114,8 @@ export default function FeatureBento() {
         </div>
       </TiltCard>
 
-      <TiltCard className={`${s.tile} ${s.tileAi}`} intensity={0.25}>
-        <div className={s.aiArt} aria-hidden="true">
-          <div className={s.aiBubbleMe}>{ai.prompt}</div>
-          <div className={s.aiBubbleBot}>
-            <i /><i /><i />
-          </div>
-        </div>
+      <TiltCard className={`${s.tile} ${s.tileAi}`} intensity={0.15}>
+        <AiChat messages={ai.chat} meLabel={ai.me} botLabel={ai.bot} />
         <div className={s.tileBody}>
           <h3>{ai.title}</h3>
           <p>{ai.desc}</p>

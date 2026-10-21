@@ -3,8 +3,9 @@ import { motion, useReducedMotion } from 'motion/react'
 import s from './landing.module.css'
 
 /**
- * « Avant / avec » en paires : chaque irritant est rayé quand il arrive à
- * l'écran, puis sa solution apparaît juste à côté. Une ligne = une idée.
+ * « Avant / avec » en paires : l'irritant s'efface un peu quand il arrive à
+ * l'écran, puis sa solution glisse à côté. Une ligne = une idée.
+ * Pas de texte barré ni de capitales sur des phrases : ça se lit d'abord.
  */
 export default function ProblemPairs() {
   const { t } = useTranslation('common')
@@ -32,18 +33,15 @@ export default function ProblemPairs() {
             variants={{ off: {}, on: {} }}
           >
             <span className={s.pairNum} aria-hidden="true">0{i + 1}</span>
-            <p className={s.pairPain}>
+            <motion.p
+              className={s.pairPain}
+              variants={{ off: { opacity: 1 }, on: { opacity: 0.85 } }}
+              transition={{ duration: 0.5, delay: 0.15 }}
+            >
               <span className={s.srOnly}>{t('landing.problem.pain_label')} : </span>
-              <span className={s.pairPainText}>
-                {p.pain}
-                <motion.span
-                  className={s.pairStrike}
-                  aria-hidden="true"
-                  variants={{ off: { scaleX: 0 }, on: { scaleX: 1 } }}
-                  transition={{ duration: 0.45, ease: [0.65, 0, 0.35, 1], delay: 0.1 }}
-                />
-              </span>
-            </p>
+              <span className={s.pairX} aria-hidden="true">✕</span>
+              {p.pain}
+            </motion.p>
             <motion.span
               className={s.pairArrow}
               aria-hidden="true"

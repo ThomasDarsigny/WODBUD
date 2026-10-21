@@ -390,7 +390,26 @@
       "ai": {
         "title": "Un assistant IA",
         "desc": "Des variations et progressions en une question.",
-        "prompt": "Une variante plus légère pour les épaules ?"
+        "chat": [
+          {
+            "from": "me",
+            "text": "Une variante plus légère pour les épaules ?"
+          },
+          {
+            "from": "ai",
+            "text": "Remplace le développé militaire par des pompes inclinées, 3 × 12."
+          },
+          {
+            "from": "me",
+            "text": "Et pour un groupe débutant ?"
+          },
+          {
+            "from": "ai",
+            "text": "Passe en EMOM 12 min : 8 air squats, 6 pompes, 30 s de corde."
+          }
+        ],
+        "me": "Toi",
+        "bot": "Assistant IA"
       }
     },
     "flow": {

@@ -390,7 +390,26 @@
       "ai": {
         "title": "An AI assistant",
         "desc": "Variations and progressions in one question.",
-        "prompt": "A lighter variation for the shoulders?"
+        "chat": [
+          {
+            "from": "me",
+            "text": "A lighter variation for the shoulders?"
+          },
+          {
+            "from": "ai",
+            "text": "Swap the strict press for incline push-ups, 3 × 12."
+          },
+          {
+            "from": "me",
+            "text": "And for a beginner group?"
+          },
+          {
+            "from": "ai",
+            "text": "Go EMOM 12 min: 8 air squats, 6 push-ups, 30 s of rope."
+          }
+        ],
+        "me": "You",
+        "bot": "AI assistant"
       }
     },
     "flow": {

@@ -393,7 +393,26 @@
       "ai": {
         "title": "Un asistente IA",
         "desc": "Variaciones y progresiones en una pregunta.",
-        "prompt": "¿Una variante más ligera para los hombros?"
+        "chat": [
+          {
+            "from": "me",
+            "text": "¿Una variante más ligera para los hombros?"
+          },
+          {
+            "from": "ai",
+            "text": "Cambia el press militar por flexiones inclinadas, 3 × 12."
+          },
+          {
+            "from": "me",
+            "text": "¿Y para un grupo principiante?"
+          },
+          {
+            "from": "ai",
+            "text": "Pasa a EMOM 12 min: 8 air squats, 6 flexiones, 30 s de comba."
+          }
+        ],
+        "me": "Tú",
+        "bot": "Asistente IA"
       }
     },
     "flow": {
