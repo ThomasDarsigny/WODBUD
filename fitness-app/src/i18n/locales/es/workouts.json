@@ -19,6 +19,7 @@
     "rest": "Descanso"
   },
   "builder": {
+    "panes_label": "Paneles del creador",
     "library": "Biblioteca",
     "choose_exercise": "Elegir un ejercicio",
     "search_placeholder": "Buscar...",

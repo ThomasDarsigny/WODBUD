@@ -1,6 +1,12 @@
 {
   "app_name": "WODBUD",
   "nav": {
+    "more": "Más",
+    "main": "Navegación principal",
+    "tab_new": "Crear",
+    "tab_admin": "Admin",
+    "tab_classes": "Clases",
+    "tab_rank": "Rango",
     "exercises": "Ejercicios",
     "workouts": "Entrenamientos",
     "history": "Historial",

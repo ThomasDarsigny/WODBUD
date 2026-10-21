@@ -8,6 +8,7 @@ import { useIsMobile } from '../../hooks/useMediaQuery'
 import NavIcon from '../navigation/NavIcon'
 import type { NavIconName } from '../navigation/NavIcon'
 import NavDot from '../navigation/NavDot'
+import MobileTabBar from '../navigation/MobileTabBar'
 import { useNotificationStore } from '../../stores/notificationStore'
 
 interface Props {
@@ -18,9 +19,8 @@ export default function AthleteDashboardLayout({ children }: Props) {
   const { t } = useTranslation('common')
   const location = useLocation()
   const [collapsed, setCollapsed] = useState(false)
-  const [drawerOpen, setDrawerOpen] = useState(false)
   const isMobile = useIsMobile()
-  const rail = isMobile ? false : collapsed
+  const rail = collapsed
   const online = useOnlineStatus()
 
   const navItems: Array<{ id: string; labelKey: string; icon: NavIconName; path: string }> = [
@@ -44,19 +44,28 @@ export default function AthleteDashboardLayout({ children }: Props) {
     return 0
   }
 
+  // Téléphone : accueil, séance, journal, rang en onglets ; le reste dans « Plus ».
+  const tabIds = ['home', 'session', 'journal', 'rank']
+  const toMobile = (item: (typeof navItems)[number]) => ({
+    id: item.id,
+    label: item.id === 'rank' ? t('nav.tab_rank') : t(item.labelKey),
+    icon: item.icon,
+    path: item.path,
+    dot: dotFor(item.id)
+  })
+  const tabItems = navItems.filter((i) => tabIds.includes(i.id)).map(toMobile)
+  const moreItems = navItems.filter((i) => !tabIds.includes(i.id)).map(toMobile)
+
   return (
     <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--black)', color: 'var(--white)', fontFamily: 'var(--font-b)' }}>
-      {/* Même logique que le tableau de bord coach : sur téléphone, la barre
-          latérale devient un tiroir hors écran. */}
+      {/* Même logique que le tableau de bord coach : sur téléphone, barre
+          d'onglets en bas à la place de la barre latérale. */}
+      {!isMobile && (
       <aside style={{
-        width: isMobile ? '260px' : rail ? '64px' : '220px',
+        width: rail ? '64px' : '220px',
         flexShrink: 0, background: 'var(--dark)', borderRight: '1px solid var(--border)',
         display: 'flex', flexDirection: 'column',
-        transition: isMobile ? 'transform 0.25s ease' : 'width 0.25s ease', overflow: 'hidden',
-        ...(isMobile ? {
-          position: 'fixed' as const, top: 0, bottom: 0, left: 0, zIndex: 300,
-          transform: drawerOpen ? 'translateX(0)' : 'translateX(-100%)'
-        } : null)
+        transition: 'width 0.25s ease', overflow: 'hidden'
       }}>
         <div style={{ padding: rail ? '1.25rem 0' : '1.25rem 1.5rem', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: rail ? 'center' : 'space-between', gap: '0.5rem' }}>
           {!rail && (
@@ -65,11 +74,11 @@ export default function AthleteDashboardLayout({ children }: Props) {
             </Link>
           )}
           <button
-            onClick={() => (isMobile ? setDrawerOpen(false) : setCollapsed(!collapsed))}
+            onClick={() => setCollapsed(!collapsed)}
             style={{ background: 'none', border: 'none', color: 'var(--muted)', cursor: 'pointer', fontSize: isMobile ? '1.4rem' : '1rem', padding: '0.25rem 0.5rem', lineHeight: 1 }}
-            aria-label={isMobile ? t('nav.close_menu') : 'Toggle sidebar'}
+            aria-label="Toggle sidebar"
           >
-            {isMobile ? '✕' : rail ? '›' : '‹'}
+            {rail ? '›' : '‹'}
           </button>
         </div>
 
@@ -88,7 +97,6 @@ export default function AthleteDashboardLayout({ children }: Props) {
               <div key={item.id} style={{ position: 'relative' }}>
               <Link
                 to={item.path}
-                onClick={() => setDrawerOpen(false)}
                 style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: rail ? '0.75rem 0' : '0.75rem 1.5rem', justifyContent: rail ? 'center' : 'flex-start', textDecoration: 'none', color: active ? 'var(--white)' : 'var(--muted)', background: active ? 'rgba(255,77,0,0.08)' : 'transparent', borderLeft: active ? '2px solid var(--orange)' : '2px solid transparent', transition: 'all 0.15s' }}
               >
                 <NavIcon name={item.icon} />
@@ -105,21 +113,11 @@ export default function AthleteDashboardLayout({ children }: Props) {
         </nav>
 
       </aside>
-
-      {isMobile && drawerOpen && (
-        <div onClick={() => setDrawerOpen(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 250 }} />
       )}
 
       <main style={{ flex: 1, overflow: 'auto', minWidth: 0, display: 'flex', flexDirection: 'column' }}>
         {isMobile && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.6rem 1rem', borderBottom: '1px solid var(--border)', background: 'var(--dark)', flexShrink: 0, position: 'sticky', top: 0, zIndex: 100 }}>
-            <button
-              onClick={() => setDrawerOpen(true)}
-              aria-label={t('nav.open_menu')}
-              style={{ background: 'none', border: '1px solid var(--border)', color: 'var(--white)', cursor: 'pointer', fontSize: '1rem', lineHeight: 1, padding: '0.5rem 0.7rem', minHeight: 44 }}
-            >
-              ☰
-            </button>
+          <div className="wb-mobile-top" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem', padding: '0.6rem 1rem', borderBottom: '1px solid var(--border)', background: 'var(--dark)', flexShrink: 0, position: 'sticky', top: 0, zIndex: 100 }}>
             <Link to="/" style={{ fontFamily: 'var(--font-d)', fontWeight: 900, fontSize: '1.25rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--white)', textDecoration: 'none' }}>
               WOD<span style={{ color: 'var(--orange)' }}>BUD</span>
             </Link>
@@ -132,8 +130,10 @@ export default function AthleteDashboardLayout({ children }: Props) {
           </div>
         )}
         <ActiveSessionBar basePath="/athlete" />
-        <div style={{ flex: 1, overflow: 'auto' }}>{children}</div>
+        <div className={isMobile ? 'wb-has-tabbar' : undefined} style={{ flex: 1, overflow: 'auto' }}>{children}</div>
       </main>
+
+      {isMobile && <MobileTabBar primary={tabItems} more={moreItems} />}
 
     </div>
   )

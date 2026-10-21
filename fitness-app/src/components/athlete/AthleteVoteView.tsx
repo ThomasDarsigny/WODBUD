@@ -191,7 +191,7 @@ export default function AthleteVoteView() {
         </div>
       )}
 
-      <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, background: 'var(--dark)', borderTop: '1px solid var(--border)', padding: '1rem 2rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', zIndex: 100, flexWrap: 'wrap' }}>
+      <div className="wb-above-tabbar" style={{ position: 'fixed', bottom: 0, left: 0, right: 0, background: 'var(--dark)', borderTop: '1px solid var(--border)', padding: '1rem var(--page-pad)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', zIndex: 100, flexWrap: 'wrap' }}>
         <div style={{ color: 'var(--muted)', fontFamily: 'var(--font-d)', fontSize: '0.8125rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
           {selectedOptionId ? t('vote.single_hint') : t('vote.none_selected')}
         </div>

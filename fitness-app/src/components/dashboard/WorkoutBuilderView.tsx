@@ -11,6 +11,7 @@ import Mannequin2D from '../mannequin/Mannequin2D'
 import { computeMuscleLoads } from '../../lib/muscleLoad'
 import { label as smallLabelStyle, fieldCompact as miniInputStyle, field as selectStyle, btnSmall as filterResetStyle, textarea as textareaStyle } from '../../styles/ui'
 import { pdfFileName } from '../pdf/pdfTokens'
+import { useIsMobile } from '../../hooks/useMediaQuery'
 
 export default function WorkoutBuilderView() {
   const { t } = useTranslation(['workouts', 'common'])
@@ -36,6 +37,10 @@ export default function WorkoutBuilderView() {
   } = useWorkoutStore()
 
   const [search, setSearch] = useState('')
+  // Téléphone : un seul panneau à la fois, choisi par un contrôle segmenté
+  // (façon iOS) — deux colonnes ne tiennent pas sur 390 px.
+  const isMobile = useIsMobile()
+  const [pane, setPane] = useState<'library' | 'workout'>(() => (workoutExercises.length === 0 ? 'library' : 'workout'))
   const [selectedCategories, setSelectedCategories] = useState<ExerciseCategory[]>([])
   const [selectedMuscles, setSelectedMuscles] = useState<MuscleGroup[]>([])
   const [pickerExercise, setPickerExercise] = useState<Exercise | undefined>()
@@ -238,22 +243,34 @@ export default function WorkoutBuilderView() {
     <div
       style={{
         display: 'grid',
-        gridTemplateColumns: '1fr 380px',
-        height: '100vh',
+        gridTemplateColumns: isMobile ? '1fr' : '1fr 380px',
+        gridTemplateRows: isMobile ? 'auto minmax(0, 1fr)' : undefined,
+        height: isMobile ? 'calc(100dvh - var(--mobile-top-h) - var(--tabbar-h) - var(--safe-bottom))' : '100vh',
         overflow: 'hidden'
       }}
     >
+      {isMobile && (
+        <div className="wb-segmented" role="tablist" aria-label={t('builder.panes_label', { ns: 'workouts' })}>
+          <button type="button" role="tab" aria-selected={pane === 'library'} className={pane === 'library' ? 'is-on' : undefined} onClick={() => setPane('library')}>
+            {t('builder.library', { ns: 'workouts' })}
+          </button>
+          <button type="button" role="tab" aria-selected={pane === 'workout'} className={pane === 'workout' ? 'is-on' : undefined} onClick={() => setPane('workout')}>
+            {t('builder.workout_section', { ns: 'workouts' })}
+            {workoutExercises.length > 0 && <span className="wb-segmented-count">{workoutExercises.length}</span>}
+          </button>
+        </div>
+      )}
       <div
         style={{
-          borderRight: '1px solid var(--border)',
-          display: 'flex',
+          borderRight: isMobile ? 'none' : '1px solid var(--border)',
+          display: isMobile && pane !== 'library' ? 'none' : 'flex',
           flexDirection: 'column',
-          overflow: 'hidden'
+          overflow: isMobile ? 'auto' : 'hidden'
         }}
       >
         <div
           style={{
-            padding: '1.75rem 2rem',
+            padding: isMobile ? '1rem var(--page-pad)' : '1.75rem 2rem',
             borderBottom: '1px solid var(--border)',
             flexShrink: 0
           }}
@@ -339,7 +356,7 @@ export default function WorkoutBuilderView() {
           </div>
         </div>
 
-        <div style={{ flex: 1, overflowY: 'auto', padding: '0.75rem' }}>
+        <div style={{ flex: isMobile ? 'none' : 1, overflowY: isMobile ? 'visible' : 'auto', padding: '0.75rem' }}>
           {filteredExercises.length === 0 ? (
             <div
               style={{
@@ -373,7 +390,7 @@ export default function WorkoutBuilderView() {
           liste en flex: 1 dans une colonne de 100vh tombait à zéro hauteur. */}
       <div
         style={{
-          display: 'flex',
+          display: isMobile && pane !== 'workout' ? 'none' : 'flex',
           flexDirection: 'column',
           overflowY: 'auto',
           overflowX: 'hidden',

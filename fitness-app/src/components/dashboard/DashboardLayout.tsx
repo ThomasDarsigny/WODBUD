@@ -10,6 +10,7 @@ import { useIsMobile } from '../../hooks/useMediaQuery'
 import NavIcon from '../navigation/NavIcon'
 import type { NavIconName } from '../navigation/NavIcon'
 import NavDot from '../navigation/NavDot'
+import MobileTabBar, { type MobileNavItem } from '../navigation/MobileTabBar'
 import { useNotificationStore } from '../../stores/notificationStore'
 
 type NavItem = {
@@ -45,12 +46,9 @@ export default function DashboardLayout({ children }: Props) {
   const { t } = useTranslation(['common', 'workouts'])
   const location = useLocation()
   const [collapsed, setCollapsed] = useState(false)
-  const [drawerOpen, setDrawerOpen] = useState(false)
   const [isAdmin, setIsAdmin] = useState(false)
   const isMobile = useIsMobile()
-  // Dans le tiroir, on veut toujours les libellés : le mode réduit n'a de sens
-  // que sur une barre latérale permanente.
-  const rail = isMobile ? false : collapsed
+  const rail = collapsed
   const online = useOnlineStatus()
 
   useEffect(() => {
@@ -104,6 +102,23 @@ export default function DashboardLayout({ children }: Props) {
     return 0
   }
 
+  // Téléphone : 4 onglets à portée du pouce, le reste dans « Plus ».
+  const label = (item: NavItem) => (item.ns === 'workouts' ? t(item.labelKey, { ns: 'workouts' }) : t(item.labelKey))
+  const TAB_LABELS: Record<string, string> = { workout: 'nav.tab_new', admin: 'nav.tab_admin', classes: 'nav.tab_classes', rank: 'nav.tab_rank' }
+  const tabIds = isAdmin ? ['admin', 'workout', 'session', 'rank'] : ['workout', 'session', 'classes', 'rank']
+  const toMobile = (item: NavItem, short: boolean): MobileNavItem => ({
+    id: item.id,
+    label: short && TAB_LABELS[item.id] ? t(TAB_LABELS[item.id]) : label(item),
+    icon: item.icon,
+    path: item.path,
+    dot: dotFor(item.id)
+  })
+  const tabItems = tabIds
+    .map((id) => navItems.find((i) => i.id === id))
+    .filter((i): i is NavItem => Boolean(i))
+    .map((i) => toMobile(i, true))
+  const moreItems = navItems.filter((i) => !tabIds.includes(i.id)).map((i) => toMobile(i, false))
+
   return (
     <div
       style={{
@@ -114,28 +129,19 @@ export default function DashboardLayout({ children }: Props) {
         fontFamily: 'var(--font-b)'
       }}
     >
-      {/* Sur téléphone la barre latérale sort du flux et devient un tiroir :
-          240 px fixes, c'est les deux tiers d'un écran de 360 px. */}
+      {/* Sur téléphone, pas de barre latérale : barre d'onglets en bas
+          (MobileTabBar), comme une app iOS. */}
+      {!isMobile && (
       <aside
         style={{
-          width: isMobile ? '260px' : rail ? '64px' : '240px',
+          width: rail ? '64px' : '240px',
           flexShrink: 0,
           background: 'var(--dark)',
           borderRight: '1px solid var(--border)',
           display: 'flex',
           flexDirection: 'column',
-          transition: isMobile ? 'transform 0.25s ease' : 'width 0.25s ease',
-          overflow: 'hidden',
-          ...(isMobile
-            ? {
-                position: 'fixed' as const,
-                top: 0,
-                bottom: 0,
-                left: 0,
-                zIndex: 300,
-                transform: drawerOpen ? 'translateX(0)' : 'translateX(-100%)'
-              }
-            : null)
+          transition: 'width 0.25s ease',
+          overflow: 'hidden'
         }}
       >
         <div
@@ -165,7 +171,7 @@ export default function DashboardLayout({ children }: Props) {
             </Link>
           )}
           <button
-            onClick={() => (isMobile ? setDrawerOpen(false) : setCollapsed(!collapsed))}
+            onClick={() => setCollapsed(!collapsed)}
             style={{
               background: 'none',
               border: 'none',
@@ -175,9 +181,9 @@ export default function DashboardLayout({ children }: Props) {
               padding: '0.25rem 0.5rem',
               lineHeight: 1
             }}
-            aria-label={isMobile ? t('nav.close_menu') : 'Toggle sidebar'}
+            aria-label="Toggle sidebar"
           >
-            {isMobile ? '✕' : rail ? '›' : '‹'}
+            {rail ? '›' : '‹'}
           </button>
         </div>
 
@@ -233,7 +239,6 @@ export default function DashboardLayout({ children }: Props) {
                 ) : (
                   <Link
                     to={item.path}
-                    onClick={() => setDrawerOpen(false)}
                     style={{
                       display: 'flex',
                       alignItems: 'center',
@@ -271,20 +276,16 @@ export default function DashboardLayout({ children }: Props) {
         </nav>
 
       </aside>
-
-      {isMobile && drawerOpen && (
-        <div
-          onClick={() => setDrawerOpen(false)}
-          style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 250 }}
-        />
       )}
 
       <main style={{ flex: 1, overflow: 'auto', minWidth: 0, display: 'flex', flexDirection: 'column' }}>
         {isMobile && (
           <div
+            className="wb-mobile-top"
             style={{
               display: 'flex',
               alignItems: 'center',
+              justifyContent: 'center',
               gap: '0.75rem',
               padding: '0.6rem 1rem',
               borderBottom: '1px solid var(--border)',
@@ -295,22 +296,6 @@ export default function DashboardLayout({ children }: Props) {
               zIndex: 100
             }}
           >
-            <button
-              onClick={() => setDrawerOpen(true)}
-              aria-label={t('nav.open_menu')}
-              style={{
-                background: 'none',
-                border: '1px solid var(--border)',
-                color: 'var(--white)',
-                cursor: 'pointer',
-                fontSize: '1rem',
-                lineHeight: 1,
-                padding: '0.5rem 0.7rem',
-                minHeight: 44
-              }}
-            >
-              ☰
-            </button>
             <Link
               to="/"
               style={{
@@ -349,8 +334,10 @@ export default function DashboardLayout({ children }: Props) {
           </div>
         )}
         <ActiveSessionBar basePath="/dashboard" />
-        <div style={{ flex: 1, overflow: 'auto' }}>{children}</div>
+        <div className={isMobile ? 'wb-has-tabbar' : undefined} style={{ flex: 1, overflow: 'auto' }}>{children}</div>
       </main>
+
+      {isMobile && <MobileTabBar primary={tabItems} more={moreItems} />}
 
     </div>
   )

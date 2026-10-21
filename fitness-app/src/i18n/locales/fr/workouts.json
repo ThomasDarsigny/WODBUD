@@ -19,6 +19,7 @@
     "rest": "Repos"
   },
   "builder": {
+    "panes_label": "Panneaux du créateur",
     "library": "Bibliothèque",
     "choose_exercise": "Choisir un exercice",
     "search_placeholder": "Rechercher...",

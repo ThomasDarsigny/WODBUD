@@ -19,6 +19,7 @@
     "rest": "Rest"
   },
   "builder": {
+    "panes_label": "Builder panels",
     "library": "Library",
     "choose_exercise": "Choose an exercise",
     "search_placeholder": "Search...",
