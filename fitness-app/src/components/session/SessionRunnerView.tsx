@@ -15,6 +15,7 @@ import BadgeToken from '../badges/BadgeToken'
 import WorkoutMannequin from '../mannequin/WorkoutMannequin'
 import { GymOverlay, clockText, useClockLabels, useGymClock } from './GymClock'
 import ResultSheet from '../records/ResultSheet'
+import RestBar from './RestBar'
 import { formatSeconds, fromKg, readUnit, type ExerciseResult, type ResultInput } from '../../lib/records'
 
 interface Props {
@@ -220,7 +221,8 @@ function RunnerPanel() {
   const {
     workoutId, workoutName, activityName, items, doneExerciseIds, notes, saving, error,
     pause, resume, toggleExercise, setNotes, finish, discard,
-    pendingResults, addPendingResult, removePendingResult
+    pendingResults, addPendingResult, removePendingResult,
+    setsDone, completeSet, undoSet
   } = useSessionStore()
   const [resultFor, setResultFor] = useState<{ id: string; name: string } | null>(null)
   const closeResult = useCallback(() => setResultFor(null), [])
@@ -371,6 +373,25 @@ function RunnerPanel() {
                   +
                 </button>
                 </div>
+                {(item.sets ?? 0) > 1 && (() => {
+                  const total = item.sets ?? 1
+                  const doneSets = Math.min(total, setsDone[item.id] ?? 0)
+                  return (
+                    <div className="wb-run-sets">
+                      <span className="wb-run-dots" role="img" aria-label={t('session.sets_progress', { done: doneSets, total })}>
+                        {Array.from({ length: total }, (_, i) => <i key={i} className={i < doneSets ? 'is-on' : undefined} />)}
+                      </span>
+                      {doneSets > 0 && (
+                        <button type="button" className="wb-run-undo" onClick={() => undoSet(item.id)} aria-label={t('session.set_undo')}>↶</button>
+                      )}
+                      {doneSets < total && (
+                        <button type="button" className="wb-run-set" onClick={() => { unlockAudio(); completeSet(item.id) }}>
+                          ✓ {t('session.set_done', { n: doneSets + 1, total })}
+                        </button>
+                      )}
+                    </div>
+                  )
+                })()}
                 {mine.length > 0 && (
                   <ul className="wb-run-chips">
                     {mine.map((r) => (
@@ -408,6 +429,8 @@ function RunnerPanel() {
           onClose={closeResult}
         />
       )}
+
+      {!gymOpen && <RestBar />}
 
       {gymOpen && <GymOverlay gym={gym} title={heading} onClose={closeGym} onToggle={toggle} />}
 

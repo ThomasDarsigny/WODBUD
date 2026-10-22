@@ -101,7 +101,15 @@
     "round": "Tour {{round}} / {{total}}",
     "round_open": "Tour {{round}}",
     "sound_on": "Bips activés",
-    "sound_off": "Bips coupés"
+    "sound_off": "Bips coupés",
+    "rest": "Repos",
+    "rest_label": "Repos entre les séries",
+    "rest_minus": "Retirer 15 secondes",
+    "rest_plus": "Ajouter 15 secondes",
+    "rest_skip": "Passer",
+    "set_done": "Série {{n}}/{{total}} faite",
+    "set_undo": "Annuler la dernière série",
+    "sets_progress": "{{done}} séries sur {{total}}"
   },
   "alerts": {
     "cardio_title": "Alternance cardio",

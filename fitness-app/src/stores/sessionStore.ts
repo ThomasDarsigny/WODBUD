@@ -60,7 +60,23 @@ interface PersistedSession {
   doneExerciseIds: string[]
   notes: string
   pendingResults: PendingResult[]
+  /** Séries cochées par exercice (id de la ligne du WOD). */
+  setsDone: Record<string, number>
+  /**
+   * Repos en cours : une heure de fin, pas un compteur — comme le chrono,
+   * il reste juste après un écran verrouillé ou un rechargement.
+   */
+  rest: RestTimer | null
 }
+
+export interface RestTimer {
+  endsAt: number
+  totalMs: number
+  itemId: string
+}
+
+/** Repos par défaut quand le WOD n'en prévoit pas. */
+export const DEFAULT_REST_SECONDS = 90
 
 interface SessionState extends PersistedSession {
   items: SessionExerciseItem[]
@@ -79,6 +95,12 @@ interface SessionState extends PersistedSession {
   pause: () => void
   resume: () => void
   toggleExercise: (id: string) => void
+  /** Coche une série ; lance le repos s'il en reste, termine l'exercice sinon. */
+  completeSet: (itemId: string) => void
+  undoSet: (itemId: string) => void
+  startRest: (itemId: string, seconds: number) => void
+  adjustRest: (deltaSeconds: number) => void
+  skipRest: () => void
   setNotes: (notes: string) => void
   addPendingResult: (input: ResultInput) => void
   removePendingResult: (key: string) => void
@@ -98,7 +120,9 @@ const IDLE: PersistedSession = {
   timer: EMPTY_TIMER,
   doneExerciseIds: [],
   notes: '',
-  pendingResults: []
+  pendingResults: [],
+  setsDone: {},
+  rest: null
 }
 
 function persist(s: PersistedSession) {
@@ -132,7 +156,10 @@ function readPersisted(): PersistedSession | null {
       },
       doneExerciseIds: parsed.doneExerciseIds ?? [],
       notes: parsed.notes ?? '',
-      pendingResults: Array.isArray(parsed.pendingResults) ? parsed.pendingResults : []
+      pendingResults: Array.isArray(parsed.pendingResults) ? parsed.pendingResults : [],
+      setsDone: parsed.setsDone && typeof parsed.setsDone === 'object' ? parsed.setsDone : {},
+      // Un repos terminé pendant que l'app était fermée n'a plus rien à afficher.
+      rest: parsed.rest && parsed.rest.endsAt > Date.now() ? parsed.rest : null
     }
   } catch {
     return null
@@ -201,6 +228,58 @@ export const useSessionStore = create<SessionState>((set, get) => ({
     const timer = resumeTimer(s.timer)
     persist({ ...s, timer })
     set({ timer })
+  },
+
+  completeSet: (itemId) => {
+    const s = get()
+    const item = s.items.find((i) => i.id === itemId)
+    if (!item) return
+    const total = Math.max(1, item.sets ?? 1)
+    const done = Math.min(total, (s.setsDone[itemId] ?? 0) + 1)
+    const setsDone = { ...s.setsDone, [itemId]: done }
+    const finished = done >= total
+    const doneExerciseIds = finished && !s.doneExerciseIds.includes(itemId)
+      ? [...s.doneExerciseIds, itemId]
+      : s.doneExerciseIds
+    // Pas de repos après la dernière série : on passe à l'exercice suivant.
+    const seconds = item.rest_seconds ?? DEFAULT_REST_SECONDS
+    const rest = !finished && seconds > 0
+      ? { endsAt: Date.now() + seconds * 1000, totalMs: seconds * 1000, itemId }
+      : null
+    persist({ ...s, setsDone, doneExerciseIds, rest })
+    set({ setsDone, doneExerciseIds, rest })
+  },
+
+  undoSet: (itemId) => {
+    const s = get()
+    const done = Math.max(0, (s.setsDone[itemId] ?? 0) - 1)
+    const setsDone = { ...s.setsDone, [itemId]: done }
+    const doneExerciseIds = s.doneExerciseIds.filter((x) => x !== itemId)
+    const rest = s.rest?.itemId === itemId ? null : s.rest
+    persist({ ...s, setsDone, doneExerciseIds, rest })
+    set({ setsDone, doneExerciseIds, rest })
+  },
+
+  startRest: (itemId, seconds) => {
+    const s = get()
+    const rest = { endsAt: Date.now() + seconds * 1000, totalMs: seconds * 1000, itemId }
+    persist({ ...s, rest })
+    set({ rest })
+  },
+
+  adjustRest: (delta) => {
+    const s = get()
+    if (!s.rest) return
+    const endsAt = Math.max(Date.now() + 1000, s.rest.endsAt + delta * 1000)
+    const rest = { ...s.rest, endsAt, totalMs: Math.max(1000, s.rest.totalMs + delta * 1000) }
+    persist({ ...s, rest })
+    set({ rest })
+  },
+
+  skipRest: () => {
+    const s = get()
+    persist({ ...s, rest: null })
+    set({ rest: null })
   },
 
   toggleExercise: (id) => {

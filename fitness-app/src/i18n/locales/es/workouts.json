@@ -101,7 +101,15 @@
     "round": "Ronda {{round}} / {{total}}",
     "round_open": "Ronda {{round}}",
     "sound_on": "Pitidos activados",
-    "sound_off": "Pitidos desactivados"
+    "sound_off": "Pitidos desactivados",
+    "rest": "Descanso",
+    "rest_label": "Descanso entre series",
+    "rest_minus": "Quitar 15 segundos",
+    "rest_plus": "Añadir 15 segundos",
+    "rest_skip": "Saltar",
+    "set_done": "Serie {{n}}/{{total}} hecha",
+    "set_undo": "Deshacer la última serie",
+    "sets_progress": "{{done}} de {{total}} series"
   },
   "alerts": {
     "cardio_title": "Alternancia de cardio",

@@ -101,7 +101,15 @@
     "round": "Round {{round}} / {{total}}",
     "round_open": "Round {{round}}",
     "sound_on": "Beeps on",
-    "sound_off": "Beeps off"
+    "sound_off": "Beeps off",
+    "rest": "Rest",
+    "rest_label": "Rest between sets",
+    "rest_minus": "Remove 15 seconds",
+    "rest_plus": "Add 15 seconds",
+    "rest_skip": "Skip",
+    "set_done": "Set {{n}}/{{total}} done",
+    "set_undo": "Undo last set",
+    "sets_progress": "{{done}} of {{total}} sets"
   },
   "alerts": {
     "cardio_title": "Cardio alternation",
