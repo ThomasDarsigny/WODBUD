@@ -794,7 +794,15 @@
     "filter_all": "All",
     "filter_earned": "Earned",
     "filter_locked": "To unlock",
-    "filter_none": "Nothing here yet."
+    "filter_none": "Nothing here yet.",
+    "unlocked_now": "Badge unlocked",
+    "rarity": {
+      "commun": "Common",
+      "rare": "Rare",
+      "epique": "Epic",
+      "legendaire": "Legendary",
+      "mythique": "Mythic"
+    }
   },
   "leaderboard": {
     "title": "Leaderboard",

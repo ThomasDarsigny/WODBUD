@@ -128,8 +128,8 @@ export default function BadgeGrid() {
               const state: BadgeState = at ? 'unlocked' : b.available ? 'locked' : 'soon'
               const isNew = fresh.has(b.key)
               return (
-                <div key={b.key} className={`wb-badge${at ? ' is-earned' : ''}${isNew ? ' is-new' : ''}`}>
-                  <BadgeToken icon={b.icon} state={state} size={56} title={badgeDisplay(b, lang)} />
+                <div key={b.key} className={`wb-badge${at ? ' is-earned' : ''}${isNew ? ' is-new' : ''}`} data-rarity={b.rarity ?? undefined}>
+                  <BadgeToken icon={b.icon} art={b.art} fresh={isNew} state={state} size={64} title={`${badgeDisplay(b, lang)}${b.rarity ? ` · ${t(`badges.rarity.${b.rarity}`)}` : ''}`} />
                   <strong>{badgeDisplay(b, lang)}</strong>
                   <span>{state === 'soon' ? t('badges.soon') : badgeCondition(b, lang)}</span>
                 </div>

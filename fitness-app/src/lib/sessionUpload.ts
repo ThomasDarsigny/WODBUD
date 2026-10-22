@@ -93,16 +93,6 @@ export async function uploadSession(entry: FinishedSession): Promise<SessionSumm
     .eq('id', entry.userId)
     .single()
 
-  // Décerné APRÈS l'insertion : la fonction lit les totaux que le trigger
-  // vient de mettre à jour. Un échec ici ne doit pas perdre la séance,
-  // qui est déjà enregistrée — d'où le repli silencieux.
-  let newBadges: string[] = []
-  try {
-    newBadges = await recalcBadges()
-  } catch {
-    // Les badges seront rattrapés à l'ouverture de « Mon rang ».
-  }
-
   // Les résultats notés partent avec la séance. Un échec ne la perd pas :
   // elle est déjà enregistrée, seuls les résultats seraient à renoter.
   const newRecords: SessionSummary['newRecords'] = []
@@ -117,6 +107,17 @@ export async function uploadSession(entry: FinishedSession): Promise<SessionSumm
     } catch {
       // Voir plus haut : la séance compte quand même.
     }
+  }
+
+  // Décerné APRÈS la séance et ses résultats : la fonction lit les totaux que
+  // le trigger vient de mettre à jour, et les records qu'on vient d'écrire.
+  // Un échec ici ne doit pas perdre la séance, qui est déjà enregistrée —
+  // d'où le repli silencieux.
+  let newBadges: string[] = []
+  try {
+    newBadges = await recalcBadges()
+  } catch {
+    // Les badges seront rattrapés à l'ouverture de « Mon rang ».
   }
 
   const totalMinutes = profile?.total_minutes ?? entry.activeMinutes

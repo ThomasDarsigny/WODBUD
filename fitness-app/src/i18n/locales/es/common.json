@@ -797,7 +797,15 @@
     "filter_all": "Todas",
     "filter_earned": "Obtenidas",
     "filter_locked": "Por desbloquear",
-    "filter_none": "Nada por aquí todavía."
+    "filter_none": "Nada por aquí todavía.",
+    "unlocked_now": "Insignia desbloqueada",
+    "rarity": {
+      "commun": "Común",
+      "rare": "Rara",
+      "epique": "Épica",
+      "legendaire": "Legendaria",
+      "mythique": "Mítica"
+    }
   },
   "leaderboard": {
     "title": "Clasificación",

@@ -1658,3 +1658,43 @@ button.wb-ex-card { display: flex; align-items: center; gap: 0.85rem; padding: 0
 .wb-admin-main strong { font-family: var(--font-d); font-size: 1.2rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.02em; line-height: 1.1; overflow-wrap: anywhere; }
 .wb-admin-tags { display: flex; gap: 0.35rem; flex-wrap: wrap; margin-top: 0.15rem; }
 .wb-admin-actions { display: flex; gap: 0.4rem; flex-shrink: 0; }
+
+/* ─── Badges « Forge » ─────────────────────────────────────────── */
+.wb-badge-art { position: relative; display: inline-block; flex-shrink: 0; isolation: isolate; }
+.wb-badge-art img { display: block; width: 100%; height: 100%; user-select: none; -webkit-user-drag: none; filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.45)); }
+/* Verrouillé : la silhouette reste lisible, la matière s'éteint. */
+.wb-badge-art.is-locked img { filter: grayscale(1) brightness(0.42) contrast(1.15); opacity: 0.9; }
+.wb-badge-art.is-soon img { filter: grayscale(1) brightness(0.35); opacity: 0.45; }
+.wb-badge-lock { position: absolute; right: 2%; bottom: 2%; width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; background: var(--black); border: 1px solid var(--border); color: var(--muted); }
+/* Déblocage : apparition en ressort, puis un reflet balaie le métal. */
+.wb-badge-art.is-fresh { animation: wb-badge-pop 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+.wb-badge-art.is-fresh::after {
+  content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  /* Le reflet est découpé à la silhouette exacte du badge (--art). */
+  -webkit-mask: var(--art) center / contain no-repeat;
+  mask: var(--art) center / contain no-repeat;
+  background: linear-gradient(115deg, transparent 38%, rgba(255, 255, 255, 0.85) 50%, transparent 62%);
+  background-size: 250% 100%; background-position: 150% 0;
+  mix-blend-mode: screen;
+  animation: wb-badge-shine 1.4s 0.45s ease-out both;
+}
+@keyframes wb-badge-pop { 0% { transform: scale(0.4) rotate(-8deg); opacity: 0; } 100% { transform: none; opacity: 1; } }
+@keyframes wb-badge-shine { from { background-position: 150% 0; } to { background-position: -60% 0; } }
+
+/* Grille : la rareté colore discrètement les badges obtenus. */
+.wb-badge[data-rarity='rare'].is-earned { box-shadow: inset 0 0 0 1px rgba(76, 141, 255, 0.35); }
+.wb-badge[data-rarity='epique'].is-earned { box-shadow: inset 0 0 0 1px rgba(168, 107, 255, 0.4); background: radial-gradient(90% 70% at 50% 25%, rgba(139, 92, 246, 0.14), var(--black)); }
+.wb-badge[data-rarity='legendaire'].is-earned { box-shadow: inset 0 0 0 1px rgba(244, 198, 82, 0.45); background: radial-gradient(90% 70% at 50% 25%, rgba(245, 158, 11, 0.14), var(--black)); }
+.wb-badge[data-rarity='mythique'].is-earned { box-shadow: inset 0 0 0 1px rgba(127, 243, 255, 0.5); background: radial-gradient(90% 70% at 50% 25%, rgba(56, 225, 255, 0.16), var(--black)); }
+
+/* Carte « badge débloqué » (page Records). */
+.wb-unlocked { position: relative; display: grid; gap: 0.75rem; padding-right: 3rem; }
+.wb-unlocked .wb-sheet-close { position: absolute; top: 0.75rem; right: 0.75rem; }
+.wb-unlocked-item { display: flex; align-items: center; gap: 0.9rem; }
+.wb-unlocked-item > div { display: grid; gap: 0.15rem; }
+.wb-unlocked-item span { font-family: var(--font-d); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--orange); }
+.wb-unlocked-item strong { font-family: var(--font-d); font-size: 1.5rem; font-weight: 900; text-transform: uppercase; line-height: 1; }
+.wb-unlocked-item em { font-style: normal; font-size: 0.8rem; font-weight: 700; }
+em[data-rarity='commun'] { color: #b3bac2; } em[data-rarity='rare'] { color: #6ea2ff; } em[data-rarity='epique'] { color: #b98cff; }
+em[data-rarity='legendaire'] { color: #f4c652; } em[data-rarity='mythique'] { color: #7ff3ff; }
+@media (prefers-reduced-motion: reduce) { .wb-badge-art.is-fresh, .wb-badge-art.is-fresh::after { animation: none; } }

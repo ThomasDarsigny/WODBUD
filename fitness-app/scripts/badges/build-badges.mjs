@@ -219,7 +219,7 @@ const GLYPHS = {
   // Croissant et étoile (le croissant est découpé par un masque).
   nocturne: (id) => `<path d="${circle(40, 120, 132)}" fill="x" mask="url(#${id}-moon)"/>` + P('M160 80 Q162 94 176 96 Q162 98 160 112 Q158 98 144 96 Q158 94 160 80 Z'),
   // Cible et flèche plantée.
-  sansRelache: () => P(arcBand(32, 46, 0, 359.9)) + P(arcBand(12, 22, 0, 359.9)) + P(circle(6)) + P(poly([[124, 126], [176, 74], [182, 80], [130, 132]], 1)) + P(poly([[170, 66], [190, 60], [184, 80]], 1)),
+  sansRelache: () => ringP(32, 46) + ringP(12, 22) + P(circle(6)) + P(poly([[124, 126], [176, 74], [182, 80], [130, 132]], 1)) + P(poly([[170, 66], [190, 60], [184, 80]], 1)),
   // Diamant brillant : indestructible.
   invincible: () => P(poly([[98, 92], [158, 92], [180, 114], [128, 184], [76, 114]], 2)),
   // Couronne.
@@ -307,7 +307,7 @@ const BADGES = [
   // ── Séries et records ──
   { n: 6, slug: 'premiere-serie', name: 'Première série', cat: 'Séries et records', rarity: 'commun', criterion: 'Effectuer sa première série d’exercices.',
     shape: regular(6, 110, -90, 12), glyph: GLYPHS.premiereSerie },
-  { n: 7, slug: 'perseverance', name: 'Persévérance', cat: 'Séries et records', rarity: 'rare', criterion: 'Effectuer 100 séries.',
+  { n: 7, slug: 'perseverance', name: 'Persévérance', cat: 'Séries et records', rarity: 'epique', criterion: 'Effectuer 100 séries.',
     shape: poly([[34, 46], [222, 46], [222, 150], [128, 236], [34, 150]], 14), glyph: GLYPHS.perseverance, gems: topGem(46) },
   { n: 8, slug: 'volume', name: 'Volume', cat: 'Séries et records', rarity: 'epique', criterion: 'Effectuer 500 séries.',
     shape: rect(26, 26, 204, 204, 46), glyph: GLYPHS.volume, gems: (id) => gemAt(id, 46, 46, 8) + gemAt(id, 210, 46, 8) + gemAt(id, 46, 210, 8) + gemAt(id, 210, 210, 8) },
@@ -322,7 +322,7 @@ const BADGES = [
   { n: 11, slug: 'eveil', name: 'Éveil', cat: 'Progression', rarity: 'commun', criterion: 'Commencer son parcours d’entraînement.',
     // Rose des vents : quatre pointes, comme l'étincelle qu'elle porte.
     shape: star(4, 122, 66, -90, 12), faceScale: 0.8, glyph: (id) => `<g transform="translate(128 128) scale(0.82) translate(-128 -128)">${GLYPHS.eveil(id)}</g>` },
-  { n: 12, slug: 'evolution', name: 'Évolution', cat: 'Progression', rarity: 'rare', criterion: 'Progresser pendant plusieurs semaines.',
+  { n: 12, slug: 'evolution', name: 'Évolution', cat: 'Progression', rarity: 'epique', criterion: 'Progresser pendant plusieurs semaines.',
     shape: regular(4, 120, -90, 16), glyph: GLYPHS.evolution, gems: topGem(22) },
   { n: 13, slug: 'puissance', name: 'Puissance', cat: 'Progression', rarity: 'epique', criterion: 'Atteindre un objectif de performance.',
     face: 'crimson', aura: '#ef4444', accentRing: '#fca5a5', gem: 'ruby',
@@ -355,6 +355,116 @@ const BADGES = [
     ornament: (id) => laurel(id, -1, `url(#${id}-rim)`) + laurel(id, 1, `url(#${id}-rim)`) }
 ]
 
+/* ── Visuels complémentaires pour le catalogue de l'app ─────────────────── */
+// Même système, pour les badges que la collection ne couvrait pas : cardio,
+// équipements, votes, communauté, coach. Silhouettes reprises de la palette
+// de formes, symboles propres.
+
+// Anneau plein : deux cercles en « evenodd ». Un arc de 360° dont les extrémités
+// tombent au même point une fois arrondies n'est pas tracé — le trou disparaît.
+const ringP = (r1, r2_, cx = C, cy = C) => P(`${circle(r2_, cx, cy)} ${circle(r1, cx, cy)}`, ' fill-rule="evenodd"')
+const heart = (s = 1, dx = 0, dy = 0) => {
+  const t = (x, y) => `${r2(C + (x - C) * s + dx)} ${r2(C + (y - C) * s + dy)}`
+  return `M${t(128, 182)} C${t(70, 140)} ${t(62, 104)} ${t(84, 86)} C${t(102, 72)} ${t(122, 80)} ${t(128, 96)} C${t(134, 80)} ${t(154, 72)} ${t(172, 86)} C${t(194, 104)} ${t(186, 140)} ${t(128, 182)} Z`
+}
+const ballot = (x, y, w, h, rot = 0) => {
+  const d = rect(x, y, w, h, 4)
+  const cx = x + w / 2, cy = y + h / 2
+  const check = poly([[x + w * 0.22, y + h * 0.52], [x + w * 0.4, y + h * 0.7], [x + w * 0.78, y + h * 0.3], [x + w * 0.86, y + h * 0.38], [x + w * 0.4, y + h * 0.84], [x + w * 0.14, y + h * 0.6]], 1)
+  return `<g transform="rotate(${rot} ${cx} ${cy})">${P(d)}<path d="${check}" fill="#0b2c8f" opacity="0.85"/></g>`
+}
+/** Décale un fragment de symbole. */
+const at = (dx, dy, html) => `<g transform="translate(${dx} ${dy})">${html}</g>`
+const head = (x, y, s = 1) => P(circle(13 * s, x, y)) + P(`M${x - 22 * s} ${y + 42 * s} Q${x - 22 * s} ${y + 18 * s} ${x} ${y + 18 * s} Q${x + 22 * s} ${y + 18 * s} ${x + 22 * s} ${y + 42 * s} Z`)
+
+const APP_GLYPHS = {
+  chrono: () => ringP(34, 46) + P(rect(118, 70, 20, 12, 3)) + P(rect(122, 62, 12, 10, 2)) + P(poly([[124, 134], [130, 98], [136, 134]], 2)) + P(circle(7, 128, 134)),
+  weekEnd: () => P(rect(78, 82, 100, 92, 10)) + P(rect(92, 70, 10, 22, 3)) + P(rect(154, 70, 10, 22, 3)) +
+    `<path d="${rect(86, 104, 84, 62, 6)}" fill="#0e1013" opacity="0.85"/>` + P(rect(128, 136, 18, 22, 3)) + P(rect(150, 136, 18, 22, 3)),
+  // Kettlebell : anse au-dessus, cloche en dessous.
+  polyvalent: () => at(0, -28, P(arcBand(18, 28, 180, 360))) + P(rect(100, 98, 10, 22, 2)) + P(rect(146, 98, 10, 22, 2)) + P(circle(36, 128, 150)),
+  arsenal: () => `<g transform="rotate(45 128 128)">${P(rect(70, 122, 116, 12, 3))}${P(rect(78, 102, 14, 52, 4))}${P(rect(164, 102, 14, 52, 4))}</g>` +
+    `<g transform="rotate(-45 128 128)">${P(rect(70, 122, 116, 12, 3))}${P(rect(78, 102, 14, 52, 4))}${P(rect(164, 102, 14, 52, 4))}</g>`,
+  souffle: () => P(heart(1, 0, 2)) + `<path d="M80 128 H104 L114 108 L128 150 L140 120 L148 128 H176" fill="none" stroke="#0e1013" stroke-width="7" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/>`,
+  souffleLong: () => P(heart(0.72, 0, 6)) + [0, 1, 2].map((i) => P(rect(52 - i * 4, 104 + i * 16, 36 + i * 4 - i * 8, 10, 5)) + P(rect(168 + i * 4 + i * 4, 104 + i * 16, 36 - i * 4, 10, 5))).join(''),
+  urne: () => P(rect(78, 112, 100, 66, 8)) + `<path d="${rect(104, 124, 48, 6, 3)}" fill="#0e1013" opacity="0.9"/>` + ballot(108, 70, 40, 50, -8),
+  portevoix: () => P(poly([[70, 116], [146, 82], [146, 174], [70, 140]], 4)) + P(rect(60, 112, 16, 32, 4)) + P(rect(88, 140, 14, 30, 4)) +
+    at(28, 0, P(arcBand(34, 42, -40, 40))) + at(28, 0, P(arcBand(50, 58, -34, 34))),
+  bulletin: () => ballot(84, 66, 88, 116, 0),
+  pilier: () => P(rect(88, 82, 80, 12, 3)) + P(rect(104, 94, 48, 70, 3)) + P(rect(82, 164, 92, 14, 3)) + P(poly([[128, 46], [136, 62], [154, 64], [140, 74], [144, 90], [128, 82], [112, 90], [116, 74], [102, 64], [120, 62]], 1)),
+  voixPartout: () => ballot(70, 86, 46, 58, -14) + ballot(140, 86, 46, 58, 14) + ballot(104, 74, 48, 62, 0),
+  // Deux maillons enchaînés.
+  membre: () => `<g transform="rotate(-35 128 128)">${P(rect(70, 112, 70, 34, 17))}${P(rect(116, 112, 70, 34, 17))}` +
+    `<path d="${rect(84, 122, 42, 14, 7)}" fill="#0e1013" opacity="0.9"/><path d="${rect(130, 122, 42, 14, 7)}" fill="#0e1013" opacity="0.9"/></g>`,
+  veteran: () => P(rect(84, 62, 88, 12, 4)) + P(rect(84, 182, 88, 12, 4)) + P('M94 74 H162 C162 110 140 120 136 128 C140 136 162 146 162 182 H94 C94 146 116 136 120 128 C116 120 94 110 94 74 Z') +
+    `<path d="M108 88 H148 C146 104 134 112 128 118 C122 112 110 104 108 88 Z" fill="#0e1013" opacity="0.55"/><path d="M128 140 C138 148 148 158 150 172 H106 C108 158 118 148 128 140 Z" fill="#0e1013" opacity="0.35"/>`,
+  multiBoites: () => at(-26, 0, ringP(24, 33)) + at(26, 0, ringP(24, 33)),
+  // Coupe : vasque, anses, pied.
+  defi: () => P('M92 70 H164 V100 C164 128 148 146 128 148 C108 146 92 128 92 100 Z') + at(-36, -6, P(arcBand(20, 28, 90, 270))) +
+    at(36, -6, P(arcBand(20, 28, -90, 90))) + P(rect(120, 146, 16, 20, 2)) + P(rect(96, 166, 64, 16, 4)),
+  fidele: () => [0, 60, 120, 180, 240, 300].map((a) => { const [x, y] = pt(46, a - 90); return P(circle(9, x, y)) }).join('') +
+    P(star(5, 26, 11, -90, 2)),
+  deuxAns: () => at(-24, 8, P(star(5, 34, 14, -90, 2))) + at(24, -8, P(star(5, 34, 14, -90, 2))),
+  // Sifflet : corps rond, embout, anneau de cordon.
+  sifflet: () => P(circle(30, 112, 138)) + P(rect(112, 108, 72, 22, 6)) + `<circle cx="112" cy="138" r="10" fill="#0e1013" opacity="0.85"/>` + at(-34, -26, P(arcBand(12, 18, 180, 360))),
+  // Compas à pointes sèches et son arc.
+  architecte: () => at(0, 22, P(arcBand(42, 50, 35, 145))) + P(circle(12, 128, 70)) + P(poly([[122, 78], [134, 78], [96, 186], [86, 182]], 2)) + P(poly([[122, 78], [134, 78], [170, 182], [160, 186]], 2)),
+  // Podium et étoile.
+  tribune: () => P(rect(106, 120, 44, 62, 3)) + P(rect(64, 144, 44, 38, 3)) + P(rect(148, 154, 44, 28, 3)) + at(0, -36, P(star(5, 22, 9, -90, 1))),
+  pleinLaBox: () => head(88, 104, 0.82) + head(168, 104, 0.82) + head(128, 90, 1),
+  presence: () => P(rect(78, 82, 100, 92, 10)) + P(rect(92, 70, 10, 22, 3)) + P(rect(154, 70, 10, 22, 3)) +
+    `<path d="${rect(86, 104, 84, 62, 6)}" fill="#0e1013" opacity="0.85"/>` + P(poly([[100, 134], [116, 150], [156, 112], [164, 120], [116, 166], [92, 142]], 2))
+}
+
+const APP_BADGES = [
+  // Durée et horaires
+  { n: 21, slug: 'chrono', name: 'Le long format', cat: 'App · Endurance et horaires', rarity: 'rare', shape: regular(10, 112, -90, 8), glyph: APP_GLYPHS.chrono, gems: topGem(18) },
+  { n: 22, slug: 'week-end', name: 'Guerrier du week-end', cat: 'App · Endurance et horaires', rarity: 'rare', face: 'crimson', accentRing: '#fca5a5', gem: 'ruby', shape: rect(30, 30, 196, 196, 30), glyph: APP_GLYPHS.weekEnd, gems: topGem(30) },
+  // Variété
+  { n: 23, slug: 'polyvalent', name: 'Polyvalent', cat: 'App · Variété et cardio', rarity: 'commun', shape: regular(6, 112, 0, 12), glyph: APP_GLYPHS.polyvalent },
+  { n: 24, slug: 'arsenal', name: 'Touche-à-tout', cat: 'App · Variété et cardio', rarity: 'legendaire', shape: star(8, 112, 90, -67.5, 8), faceScale: 0.8, glyph: APP_GLYPHS.arsenal, ornament: blades, gems: topGem(30, 9) },
+  { n: 25, slug: 'souffle', name: 'Premier kilomètre', cat: 'App · Variété et cardio', rarity: 'commun', shape: circle(106), glyph: APP_GLYPHS.souffle },
+  { n: 26, slug: 'souffle-long', name: 'Souffle long', cat: 'App · Variété et cardio', rarity: 'rare', face: 'crimson', accentRing: '#fca5a5', gem: 'ruby', shape: regular(5, 116, -90, 16), glyph: APP_GLYPHS.souffleLong, gems: topGem(22) },
+  // Votes
+  { n: 27, slug: 'urne', name: 'Voix du groupe', cat: 'App · Votes', rarity: 'commun', shape: rect(30, 30, 196, 196, 44), glyph: APP_GLYPHS.urne },
+  { n: 28, slug: 'porte-voix', name: 'Ambassadeur', cat: 'App · Votes', rarity: 'commun', shape: regular(8, 110, -67.5, 10), glyph: APP_GLYPHS.portevoix },
+  { n: 29, slug: 'bulletin', name: 'Électeur fidèle', cat: 'App · Votes', rarity: 'rare', shape: poly([[44, 22], [212, 22], [232, 128], [212, 234], [44, 234], [24, 128]], 16), glyph: APP_GLYPHS.bulletin, gems: topGem(24) },
+  { n: 30, slug: 'pilier', name: 'Pilier du scrutin', cat: 'App · Votes', rarity: 'epique', shape: regular(6, 114, -90, 10), glyph: APP_GLYPHS.pilier, gems: topGem(16, 9) },
+  { n: 31, slug: 'voix-partout', name: 'Voix partout', cat: 'App · Votes', rarity: 'rare', face: 'cyan', accentRing: '#a5f3fc', gem: 'diamond', shape: star(6, 118, 100, -90, 12), glyph: APP_GLYPHS.voixPartout, gems: topGem(12) },
+  // Communauté
+  { n: 32, slug: 'membre', name: 'Membre', cat: 'App · Communauté', rarity: 'commun', shape: regular(4, 112, -45, 26), glyph: APP_GLYPHS.membre },
+  { n: 33, slug: 'veteran', name: 'Vétéran', cat: 'App · Communauté', rarity: 'epique', shape: poly([[128, 18], [222, 64], [222, 168], [128, 238], [34, 168], [34, 64]], 14), glyph: APP_GLYPHS.veteran, gems: topGem(22, 9) },
+  { n: 34, slug: 'multi-boites', name: 'Multi-boîtes', cat: 'App · Communauté', rarity: 'rare', shape: 'M128 34 C176 34 206 62 230 128 C206 194 176 222 128 222 C80 222 50 194 26 128 C50 62 80 34 128 34 Z', glyph: APP_GLYPHS.multiBoites, gems: topGem(36) },
+  { n: 35, slug: 'defi', name: 'Défi relevé', cat: 'App · Communauté', rarity: 'epique', face: 'crimson', aura: '#ef4444', accentRing: '#fca5a5', gem: 'ruby', shape: star(10, 116, 98, -90, 6), glyph: APP_GLYPHS.defi, gems: topGem(14, 9) },
+  { n: 36, slug: 'fidele', name: 'Fidèle de la commu', cat: 'App · Communauté', rarity: 'rare', face: 'indigo', accentRing: '#c7d2fe', gem: 'amethyst', shape: circle(108), glyph: APP_GLYPHS.fidele, gems: topGem(22) },
+  { n: 37, slug: 'deux-ans', name: 'Deux ans', cat: 'App · Communauté', rarity: 'legendaire', shape: regular(12, 100, -90, 6), faceScale: 0.8, glyph: APP_GLYPHS.deuxAns,
+    ornament: (id) => laurel(id, -1, `url(#${id}-rim)`) + laurel(id, 1, `url(#${id}-rim2)`), gems: topGem(30, 9) },
+  // Coach
+  { n: 38, slug: 'sifflet', name: 'Ouvre-boîte', cat: 'App · Coach', rarity: 'commun', shape: poly([[128, 20], [230, 92], [192, 222], [64, 222], [26, 92]], 18), glyph: APP_GLYPHS.sifflet },
+  { n: 39, slug: 'architecte', name: 'Architecte', cat: 'App · Coach', rarity: 'rare', shape: regular(4, 120, -90, 16), glyph: APP_GLYPHS.architecte, gems: topGem(22) },
+  { n: 40, slug: 'tribune', name: 'Démocratie', cat: 'App · Coach', rarity: 'rare', face: 'cyan', accentRing: '#a5f3fc', gem: 'diamond', shape: 'M28 214 L28 128 A100 100 0 0 1 228 128 L228 214 Q228 228 214 228 L42 228 Q28 228 28 214 Z', glyph: APP_GLYPHS.tribune, gems: topGem(32) },
+  { n: 41, slug: 'plein-la-box', name: 'Plein la box', cat: 'App · Coach', rarity: 'epique', shape: star(7, 116, 96, -90, 8), glyph: APP_GLYPHS.pleinLaBox, gems: topGem(16, 9) },
+  { n: 42, slug: 'presence', name: 'Présent', cat: 'App · Suivi', rarity: 'rare', shape: rect(30, 30, 196, 196, 30), glyph: APP_GLYPHS.presence, gems: topGem(30) }
+].map((b) => ({ ...b, criterion: '', app: true }))
+
+BADGES.push(...APP_BADGES)
+
+/* ── Correspondance avec le catalogue en base ───────────────────────────── */
+// Clé du badge en base → visuel. La rareté vient du visuel.
+
+export const KEY_ART = {
+  streak_3: 'eveil', streak_7: 'constance', streak_30: 'evolution', streak_100: 'invincible',
+  first_wod: 'premier-pas', wod_5: 'habitude', wod_10: 'discipline', wod_30: 'devouement', wod_50: 'perseverance', wod_100: 'machine', wod_250: 'legende',
+  long_45: 'chrono', long_90: 'puissance',
+  weekend: 'week-end', early_1: 'leve-tot', late_1: 'nocturne', week_5: 'sans-relache',
+  gear_3: 'polyvalent', gear_all: 'arsenal', cardio_1: 'souffle', cardio_20: 'souffle-long',
+  vote_1: 'urne', rank_shared: 'porte-voix', vote_25: 'bulletin', vote_50: 'pilier', multi_class_voter: 'voix-partout',
+  joined: 'membre', class_veteran: 'veteran', multi_class: 'multi-boites', community_challenge: 'defi', community_wod_10: 'fidele',
+  year_1: 'transformation', year_2: 'deux-ans',
+  coach_class: 'sifflet', coach_10wod: 'architecte', coach_vote: 'tribune', coach_20: 'plein-la-box',
+  pr: 'record-personnel', pr_10: 'depassement', result_1: 'premiere-serie', results_50: 'volume', attendance: 'presence'
+}
+
 /* ── Assemblage ─────────────────────────────────────────────────────────── */
 
 mkdirSync(OUT, { recursive: true })
@@ -376,7 +486,8 @@ for (const def of BADGES) {
     rarity: RARITY[def.rarity].label,
     rarityOrder: RARITY[def.rarity].order,
     criterion: def.criterion,
-    file: `badges/${def.slug}.svg`
+    file: `badges/${def.slug}.svg`,
+    keys: Object.entries(KEY_ART).filter(([, art]) => art === def.slug).map(([k]) => k)
   })
 }
 writeFileSync(resolve(OUT, 'manifest.json'), JSON.stringify(manifest, null, 2) + '\n')

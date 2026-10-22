@@ -113,7 +113,7 @@ export default function MemberProfileModal({ communityId, userId, onClose }: {
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(84px, 1fr))', gap: '0.9rem', marginBottom: '1rem' }}>
                     {ordered.map((b) => (
                       <div key={b.key} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.35rem', textAlign: 'center' }}>
-                        <BadgeToken icon={b.icon} state='unlocked' size={52} title={badgeDisplay(b, i18n.language)} />
+                        <BadgeToken icon={b.icon} art={b.art} state='unlocked' size={56} title={badgeDisplay(b, i18n.language)} />
                         <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.03em', lineHeight: 1.2 }}>
                           {badgeDisplay(b, i18n.language)}
                         </span>

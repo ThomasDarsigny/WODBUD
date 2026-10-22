@@ -57,12 +57,12 @@ or = accomplissement, prisme = l'exceptionnel.
 | 04 | Dévouement | Régularité | Épique | Terminer 30 séances. | `public/badges/devouement.svg` · `design/badges/png/devouement@512.png` |
 | 05 | Machine | Régularité | Légendaire | Terminer 100 séances. | `public/badges/machine.svg` · `design/badges/png/machine@512.png` |
 | 06 | Première série | Séries et records | Commun | Effectuer sa première série d’exercices. | `public/badges/premiere-serie.svg` · `design/badges/png/premiere-serie@512.png` |
-| 07 | Persévérance | Séries et records | Rare | Effectuer 100 séries. | `public/badges/perseverance.svg` · `design/badges/png/perseverance@512.png` |
+| 07 | Persévérance | Séries et records | Épique | Effectuer 100 séries. | `public/badges/perseverance.svg` · `design/badges/png/perseverance@512.png` |
 | 08 | Volume | Séries et records | Épique | Effectuer 500 séries. | `public/badges/volume.svg` · `design/badges/png/volume@512.png` |
 | 09 | Record personnel | Séries et records | Rare | Battre un record personnel. | `public/badges/record-personnel.svg` · `design/badges/png/record-personnel@512.png` |
 | 10 | Dépassement | Séries et records | Légendaire | Battre 10 records personnels. | `public/badges/depassement.svg` · `design/badges/png/depassement@512.png` |
 | 11 | Éveil | Progression | Commun | Commencer son parcours d’entraînement. | `public/badges/eveil.svg` · `design/badges/png/eveil@512.png` |
-| 12 | Évolution | Progression | Rare | Progresser pendant plusieurs semaines. | `public/badges/evolution.svg` · `design/badges/png/evolution@512.png` |
+| 12 | Évolution | Progression | Épique | Progresser pendant plusieurs semaines. | `public/badges/evolution.svg` · `design/badges/png/evolution@512.png` |
 | 13 | Puissance | Progression | Épique | Atteindre un objectif de performance. | `public/badges/puissance.svg` · `design/badges/png/puissance@512.png` |
 | 14 | Constance | Progression | Rare | S’entraîner plusieurs semaines consécutives. | `public/badges/constance.svg` · `design/badges/png/constance@512.png` |
 | 15 | Transformation | Progression | Légendaire | Atteindre un objectif important de progression. | `public/badges/transformation.svg` · `design/badges/png/transformation@512.png` |
@@ -117,3 +117,64 @@ node scripts/badges/build-board.mjs    # planche HTML
 
 Les PNG et la planche PNG sont des captures des SVG (navigateur, fond
 transparent) ; à refaire après toute modification.
+
+## 8. Intégration dans l'app (migration 046)
+
+Fusion avec le catalogue existant : les 34 badges en base sont conservés
+(ainsi que ceux déjà gagnés) et reçoivent chacun un visuel ; 22 visuels
+complémentaires ont été dessinés dans le même système pour ceux que la
+collection ne couvrait pas (cardio, équipements, votes, communauté, coach).
+8 badges mesurables sont ajoutés : `wod_5`, `wod_30`, `early_1`, `late_1`,
+`week_5`, `result_1`, `pr_10`, `results_50` ; `pr` devient atteignable.
+
+La rareté suit la vraie difficulté : Évolution (30 jours d'affilée) et
+Persévérance (50 séances) passent d'« Rare » à « Épique ».
+
+Côté base : colonnes `badges.art` (nom du visuel) et `badges.rarity`.
+Côté app : `BadgeToken` affiche `/badges/<art>.svg` (gris + cadenas tant que
+le badge est verrouillé, apparition et reflet au déblocage).
+
+| Clé(s) en base | Visuel | Rareté | Fichier |
+|---|---|---|---|
+| `first_wod` | Premier pas | Commun | `public/badges/premier-pas.svg` |
+| `wod_5` | Habitude | Commun | `public/badges/habitude.svg` |
+| `wod_10` | Discipline | Rare | `public/badges/discipline.svg` |
+| `wod_30` | Dévouement | Épique | `public/badges/devouement.svg` |
+| `wod_100` | Machine | Légendaire | `public/badges/machine.svg` |
+| `result_1` | Première série | Commun | `public/badges/premiere-serie.svg` |
+| `wod_50` | Persévérance | Épique | `public/badges/perseverance.svg` |
+| `results_50` | Volume | Épique | `public/badges/volume.svg` |
+| `pr` | Record personnel | Rare | `public/badges/record-personnel.svg` |
+| `pr_10` | Dépassement | Légendaire | `public/badges/depassement.svg` |
+| `streak_3` | Éveil | Commun | `public/badges/eveil.svg` |
+| `streak_30` | Évolution | Épique | `public/badges/evolution.svg` |
+| `long_90` | Puissance | Épique | `public/badges/puissance.svg` |
+| `streak_7` | Constance | Rare | `public/badges/constance.svg` |
+| `year_1` | Transformation | Légendaire | `public/badges/transformation.svg` |
+| `early_1` | Lève-tôt | Rare | `public/badges/leve-tot.svg` |
+| `late_1` | Nocturne | Rare | `public/badges/nocturne.svg` |
+| `week_5` | Sans relâche | Épique | `public/badges/sans-relache.svg` |
+| `streak_100` | Invincible | Mythique | `public/badges/invincible.svg` |
+| `wod_250` | Légende | Mythique | `public/badges/legende.svg` |
+| `long_45` | Le long format | Rare | `public/badges/chrono.svg` |
+| `weekend` | Guerrier du week-end | Rare | `public/badges/week-end.svg` |
+| `gear_3` | Polyvalent | Commun | `public/badges/polyvalent.svg` |
+| `gear_all` | Touche-à-tout | Légendaire | `public/badges/arsenal.svg` |
+| `cardio_1` | Premier kilomètre | Commun | `public/badges/souffle.svg` |
+| `cardio_20` | Souffle long | Rare | `public/badges/souffle-long.svg` |
+| `vote_1` | Voix du groupe | Commun | `public/badges/urne.svg` |
+| `rank_shared` | Ambassadeur | Commun | `public/badges/porte-voix.svg` |
+| `vote_25` | Électeur fidèle | Rare | `public/badges/bulletin.svg` |
+| `vote_50` | Pilier du scrutin | Épique | `public/badges/pilier.svg` |
+| `multi_class_voter` | Voix partout | Rare | `public/badges/voix-partout.svg` |
+| `joined` | Membre | Commun | `public/badges/membre.svg` |
+| `class_veteran` | Vétéran | Épique | `public/badges/veteran.svg` |
+| `multi_class` | Multi-boîtes | Rare | `public/badges/multi-boites.svg` |
+| `community_challenge` | Défi relevé | Épique | `public/badges/defi.svg` |
+| `community_wod_10` | Fidèle de la commu | Rare | `public/badges/fidele.svg` |
+| `year_2` | Deux ans | Légendaire | `public/badges/deux-ans.svg` |
+| `coach_class` | Ouvre-boîte | Commun | `public/badges/sifflet.svg` |
+| `coach_10wod` | Architecte | Rare | `public/badges/architecte.svg` |
+| `coach_vote` | Démocratie | Rare | `public/badges/tribune.svg` |
+| `coach_20` | Plein la box | Épique | `public/badges/plein-la-box.svg` |
+| `attendance` | Présent | Rare | `public/badges/presence.svg` |

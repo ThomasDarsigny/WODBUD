@@ -794,7 +794,15 @@
     "filter_all": "Tous",
     "filter_earned": "Obtenus",
     "filter_locked": "À débloquer",
-    "filter_none": "Rien ici pour l’instant."
+    "filter_none": "Rien ici pour l’instant.",
+    "unlocked_now": "Badge débloqué",
+    "rarity": {
+      "commun": "Commun",
+      "rare": "Rare",
+      "epique": "Épique",
+      "legendaire": "Légendaire",
+      "mythique": "Mythique"
+    }
   },
   "leaderboard": {
     "title": "Classement",

@@ -7,7 +7,10 @@
     "rarity": "Commun",
     "rarityOrder": 1,
     "criterion": "Terminer sa première séance.",
-    "file": "badges/premier-pas.svg"
+    "file": "badges/premier-pas.svg",
+    "keys": [
+      "first_wod"
+    ]
   },
   {
     "n": 2,
@@ -17,7 +20,10 @@
     "rarity": "Commun",
     "rarityOrder": 1,
     "criterion": "Terminer 5 séances.",
-    "file": "badges/habitude.svg"
+    "file": "badges/habitude.svg",
+    "keys": [
+      "wod_5"
+    ]
   },
   {
     "n": 3,
@@ -27,7 +33,10 @@
     "rarity": "Rare",
     "rarityOrder": 2,
     "criterion": "Terminer 10 séances.",
-    "file": "badges/discipline.svg"
+    "file": "badges/discipline.svg",
+    "keys": [
+      "wod_10"
+    ]
   },
   {
     "n": 4,
@@ -37,7 +46,10 @@
     "rarity": "Épique",
     "rarityOrder": 3,
     "criterion": "Terminer 30 séances.",
-    "file": "badges/devouement.svg"
+    "file": "badges/devouement.svg",
+    "keys": [
+      "wod_30"
+    ]
   },
   {
     "n": 5,
@@ -47,7 +59,10 @@
     "rarity": "Légendaire",
     "rarityOrder": 4,
     "criterion": "Terminer 100 séances.",
-    "file": "badges/machine.svg"
+    "file": "badges/machine.svg",
+    "keys": [
+      "wod_100"
+    ]
   },
   {
     "n": 6,
@@ -57,17 +72,23 @@
     "rarity": "Commun",
     "rarityOrder": 1,
     "criterion": "Effectuer sa première série d’exercices.",
-    "file": "badges/premiere-serie.svg"
+    "file": "badges/premiere-serie.svg",
+    "keys": [
+      "result_1"
+    ]
   },
   {
     "n": 7,
     "slug": "perseverance",
     "name": "Persévérance",
     "category": "Séries et records",
-    "rarity": "Rare",
-    "rarityOrder": 2,
+    "rarity": "Épique",
+    "rarityOrder": 3,
     "criterion": "Effectuer 100 séries.",
-    "file": "badges/perseverance.svg"
+    "file": "badges/perseverance.svg",
+    "keys": [
+      "wod_50"
+    ]
   },
   {
     "n": 8,
@@ -77,7 +98,10 @@
     "rarity": "Épique",
     "rarityOrder": 3,
     "criterion": "Effectuer 500 séries.",
-    "file": "badges/volume.svg"
+    "file": "badges/volume.svg",
+    "keys": [
+      "results_50"
+    ]
   },
   {
     "n": 9,
@@ -87,7 +111,10 @@
     "rarity": "Rare",
     "rarityOrder": 2,
     "criterion": "Battre un record personnel.",
-    "file": "badges/record-personnel.svg"
+    "file": "badges/record-personnel.svg",
+    "keys": [
+      "pr"
+    ]
   },
   {
     "n": 10,
@@ -97,7 +124,10 @@
     "rarity": "Légendaire",
     "rarityOrder": 4,
     "criterion": "Battre 10 records personnels.",
-    "file": "badges/depassement.svg"
+    "file": "badges/depassement.svg",
+    "keys": [
+      "pr_10"
+    ]
   },
   {
     "n": 11,
@@ -107,17 +137,23 @@
     "rarity": "Commun",
     "rarityOrder": 1,
     "criterion": "Commencer son parcours d’entraînement.",
-    "file": "badges/eveil.svg"
+    "file": "badges/eveil.svg",
+    "keys": [
+      "streak_3"
+    ]
   },
   {
     "n": 12,
     "slug": "evolution",
     "name": "Évolution",
     "category": "Progression",
-    "rarity": "Rare",
-    "rarityOrder": 2,
+    "rarity": "Épique",
+    "rarityOrder": 3,
     "criterion": "Progresser pendant plusieurs semaines.",
-    "file": "badges/evolution.svg"
+    "file": "badges/evolution.svg",
+    "keys": [
+      "streak_30"
+    ]
   },
   {
     "n": 13,
@@ -127,7 +163,10 @@
     "rarity": "Épique",
     "rarityOrder": 3,
     "criterion": "Atteindre un objectif de performance.",
-    "file": "badges/puissance.svg"
+    "file": "badges/puissance.svg",
+    "keys": [
+      "long_90"
+    ]
   },
   {
     "n": 14,
@@ -137,7 +176,10 @@
     "rarity": "Rare",
     "rarityOrder": 2,
     "criterion": "S’entraîner plusieurs semaines consécutives.",
-    "file": "badges/constance.svg"
+    "file": "badges/constance.svg",
+    "keys": [
+      "streak_7"
+    ]
   },
   {
     "n": 15,
@@ -147,7 +189,10 @@
     "rarity": "Légendaire",
     "rarityOrder": 4,
     "criterion": "Atteindre un objectif important de progression.",
-    "file": "badges/transformation.svg"
+    "file": "badges/transformation.svg",
+    "keys": [
+      "year_1"
+    ]
   },
   {
     "n": 16,
@@ -157,7 +202,10 @@
     "rarity": "Rare",
     "rarityOrder": 2,
     "criterion": "Terminer une séance tôt le matin.",
-    "file": "badges/leve-tot.svg"
+    "file": "badges/leve-tot.svg",
+    "keys": [
+      "early_1"
+    ]
   },
   {
     "n": 17,
@@ -167,7 +215,10 @@
     "rarity": "Rare",
     "rarityOrder": 2,
     "criterion": "Terminer une séance tard le soir.",
-    "file": "badges/nocturne.svg"
+    "file": "badges/nocturne.svg",
+    "keys": [
+      "late_1"
+    ]
   },
   {
     "n": 18,
@@ -177,7 +228,10 @@
     "rarity": "Épique",
     "rarityOrder": 3,
     "criterion": "Atteindre un objectif hebdomadaire exigeant.",
-    "file": "badges/sans-relache.svg"
+    "file": "badges/sans-relache.svg",
+    "keys": [
+      "week_5"
+    ]
   },
   {
     "n": 19,
@@ -187,7 +241,10 @@
     "rarity": "Mythique",
     "rarityOrder": 5,
     "criterion": "Maintenir une longue série de jours d’entraînement.",
-    "file": "badges/invincible.svg"
+    "file": "badges/invincible.svg",
+    "keys": [
+      "streak_100"
+    ]
   },
   {
     "n": 20,
@@ -197,6 +254,295 @@
     "rarity": "Mythique",
     "rarityOrder": 5,
     "criterion": "Accomplir un défi particulièrement difficile.",
-    "file": "badges/legende.svg"
+    "file": "badges/legende.svg",
+    "keys": [
+      "wod_250"
+    ]
+  },
+  {
+    "n": 21,
+    "slug": "chrono",
+    "name": "Le long format",
+    "category": "App · Endurance et horaires",
+    "rarity": "Rare",
+    "rarityOrder": 2,
+    "criterion": "",
+    "file": "badges/chrono.svg",
+    "keys": [
+      "long_45"
+    ]
+  },
+  {
+    "n": 22,
+    "slug": "week-end",
+    "name": "Guerrier du week-end",
+    "category": "App · Endurance et horaires",
+    "rarity": "Rare",
+    "rarityOrder": 2,
+    "criterion": "",
+    "file": "badges/week-end.svg",
+    "keys": [
+      "weekend"
+    ]
+  },
+  {
+    "n": 23,
+    "slug": "polyvalent",
+    "name": "Polyvalent",
+    "category": "App · Variété et cardio",
+    "rarity": "Commun",
+    "rarityOrder": 1,
+    "criterion": "",
+    "file": "badges/polyvalent.svg",
+    "keys": [
+      "gear_3"
+    ]
+  },
+  {
+    "n": 24,
+    "slug": "arsenal",
+    "name": "Touche-à-tout",
+    "category": "App · Variété et cardio",
+    "rarity": "Légendaire",
+    "rarityOrder": 4,
+    "criterion": "",
+    "file": "badges/arsenal.svg",
+    "keys": [
+      "gear_all"
+    ]
+  },
+  {
+    "n": 25,
+    "slug": "souffle",
+    "name": "Premier kilomètre",
+    "category": "App · Variété et cardio",
+    "rarity": "Commun",
+    "rarityOrder": 1,
+    "criterion": "",
+    "file": "badges/souffle.svg",
+    "keys": [
+      "cardio_1"
+    ]
+  },
+  {
+    "n": 26,
+    "slug": "souffle-long",
+    "name": "Souffle long",
+    "category": "App · Variété et cardio",
+    "rarity": "Rare",
+    "rarityOrder": 2,
+    "criterion": "",
+    "file": "badges/souffle-long.svg",
+    "keys": [
+      "cardio_20"
+    ]
+  },
+  {
+    "n": 27,
+    "slug": "urne",
+    "name": "Voix du groupe",
+    "category": "App · Votes",
+    "rarity": "Commun",
+    "rarityOrder": 1,
+    "criterion": "",
+    "file": "badges/urne.svg",
+    "keys": [
+      "vote_1"
+    ]
+  },
+  {
+    "n": 28,
+    "slug": "porte-voix",
+    "name": "Ambassadeur",
+    "category": "App · Votes",
+    "rarity": "Commun",
+    "rarityOrder": 1,
+    "criterion": "",
+    "file": "badges/porte-voix.svg",
+    "keys": [
+      "rank_shared"
+    ]
+  },
+  {
+    "n": 29,
+    "slug": "bulletin",
+    "name": "Électeur fidèle",
+    "category": "App · Votes",
+    "rarity": "Rare",
+    "rarityOrder": 2,
+    "criterion": "",
+    "file": "badges/bulletin.svg",
+    "keys": [
+      "vote_25"
+    ]
+  },
+  {
+    "n": 30,
+    "slug": "pilier",
+    "name": "Pilier du scrutin",
+    "category": "App · Votes",
+    "rarity": "Épique",
+    "rarityOrder": 3,
+    "criterion": "",
+    "file": "badges/pilier.svg",
+    "keys": [
+      "vote_50"
+    ]
+  },
+  {
+    "n": 31,
+    "slug": "voix-partout",
+    "name": "Voix partout",
+    "category": "App · Votes",
+    "rarity": "Rare",
+    "rarityOrder": 2,
+    "criterion": "",
+    "file": "badges/voix-partout.svg",
+    "keys": [
+      "multi_class_voter"
+    ]
+  },
+  {
+    "n": 32,
+    "slug": "membre",
+    "name": "Membre",
+    "category": "App · Communauté",
+    "rarity": "Commun",
+    "rarityOrder": 1,
+    "criterion": "",
+    "file": "badges/membre.svg",
+    "keys": [
+      "joined"
+    ]
+  },
+  {
+    "n": 33,
+    "slug": "veteran",
+    "name": "Vétéran",
+    "category": "App · Communauté",
+    "rarity": "Épique",
+    "rarityOrder": 3,
+    "criterion": "",
+    "file": "badges/veteran.svg",
+    "keys": [
+      "class_veteran"
+    ]
+  },
+  {
+    "n": 34,
+    "slug": "multi-boites",
+    "name": "Multi-boîtes",
+    "category": "App · Communauté",
+    "rarity": "Rare",
+    "rarityOrder": 2,
+    "criterion": "",
+    "file": "badges/multi-boites.svg",
+    "keys": [
+      "multi_class"
+    ]
+  },
+  {
+    "n": 35,
+    "slug": "defi",
+    "name": "Défi relevé",
+    "category": "App · Communauté",
+    "rarity": "Épique",
+    "rarityOrder": 3,
+    "criterion": "",
+    "file": "badges/defi.svg",
+    "keys": [
+      "community_challenge"
+    ]
+  },
+  {
+    "n": 36,
+    "slug": "fidele",
+    "name": "Fidèle de la commu",
+    "category": "App · Communauté",
+    "rarity": "Rare",
+    "rarityOrder": 2,
+    "criterion": "",
+    "file": "badges/fidele.svg",
+    "keys": [
+      "community_wod_10"
+    ]
+  },
+  {
+    "n": 37,
+    "slug": "deux-ans",
+    "name": "Deux ans",
+    "category": "App · Communauté",
+    "rarity": "Légendaire",
+    "rarityOrder": 4,
+    "criterion": "",
+    "file": "badges/deux-ans.svg",
+    "keys": [
+      "year_2"
+    ]
+  },
+  {
+    "n": 38,
+    "slug": "sifflet",
+    "name": "Ouvre-boîte",
+    "category": "App · Coach",
+    "rarity": "Commun",
+    "rarityOrder": 1,
+    "criterion": "",
+    "file": "badges/sifflet.svg",
+    "keys": [
+      "coach_class"
+    ]
+  },
+  {
+    "n": 39,
+    "slug": "architecte",
+    "name": "Architecte",
+    "category": "App · Coach",
+    "rarity": "Rare",
+    "rarityOrder": 2,
+    "criterion": "",
+    "file": "badges/architecte.svg",
+    "keys": [
+      "coach_10wod"
+    ]
+  },
+  {
+    "n": 40,
+    "slug": "tribune",
+    "name": "Démocratie",
+    "category": "App · Coach",
+    "rarity": "Rare",
+    "rarityOrder": 2,
+    "criterion": "",
+    "file": "badges/tribune.svg",
+    "keys": [
+      "coach_vote"
+    ]
+  },
+  {
+    "n": 41,
+    "slug": "plein-la-box",
+    "name": "Plein la box",
+    "category": "App · Coach",
+    "rarity": "Épique",
+    "rarityOrder": 3,
+    "criterion": "",
+    "file": "badges/plein-la-box.svg",
+    "keys": [
+      "coach_20"
+    ]
+  },
+  {
+    "n": 42,
+    "slug": "presence",
+    "name": "Présent",
+    "category": "App · Suivi",
+    "rarity": "Rare",
+    "rarityOrder": 2,
+    "criterion": "",
+    "file": "badges/presence.svg",
+    "keys": [
+      "attendance"
+    ]
   }
 ]

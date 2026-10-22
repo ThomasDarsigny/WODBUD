@@ -28,6 +28,21 @@ export interface Badge {
   threshold: number | null
   /** false = défini mais rien ne le mesure encore. Affiché « à venir ». */
   available: boolean
+  /** Visuel de la collection « Forge » : public/badges/<art>.svg (046). */
+  art: string | null
+  rarity: BadgeRarity | null
+}
+
+/** Cinq raretés ; elles se lisent dans le visuel (matière, ornements, halo). */
+export type BadgeRarity = 'commun' | 'rare' | 'epique' | 'legendaire' | 'mythique'
+
+export const BADGE_RARITY_ORDER: Record<BadgeRarity, number> = {
+  commun: 1, rare: 2, epique: 3, legendaire: 4, mythique: 5
+}
+
+/** Chemin du visuel, ou null pour un badge sans visuel (pictogramme de repli). */
+export function badgeArtUrl(badge: Pick<Badge, 'art'>): string | null {
+  return badge.art ? `/badges/${badge.art}.svg` : null
 }
 
 export type BadgeFamily =

@@ -467,7 +467,7 @@ function SessionRewards({ badgeKeys, previousMinutes, totalMinutes }: {
           <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
             {badges.map((b) => (
               <div key={b.key} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.4rem', width: 96, textAlign: 'center' }}>
-                <BadgeToken icon={b.icon} state="unlocked" size={56} title={badgeDisplay(b, i18n.language)} />
+                <BadgeToken icon={b.icon} art={b.art} fresh state="unlocked" size={72} title={badgeDisplay(b, i18n.language)} />
                 <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', fontWeight: 800, letterSpacing: '0.04em', textTransform: 'uppercase', lineHeight: 1.2 }}>
                   {badgeDisplay(b, i18n.language)}
                 </span>

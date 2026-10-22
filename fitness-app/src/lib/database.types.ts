@@ -403,6 +403,7 @@ export type Database = {
       }
       badges: {
         Row: {
+          art: string | null
           available: boolean
           condition_en: string
           condition_es: string
@@ -414,9 +415,11 @@ export type Database = {
           icon: string
           key: string
           position: number
+          rarity: string | null
           threshold: number | null
         }
         Insert: {
+          art?: string | null
           available?: boolean
           condition_en: string
           condition_es: string
@@ -428,9 +431,11 @@ export type Database = {
           icon: string
           key: string
           position: number
+          rarity?: string | null
           threshold?: number | null
         }
         Update: {
+          art?: string | null
           available?: boolean
           condition_en?: string
           condition_es?: string
@@ -442,6 +447,7 @@ export type Database = {
           icon?: string
           key?: string
           position?: number
+          rarity?: string | null
           threshold?: number | null
         }
         Relationships: []

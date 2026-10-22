@@ -11,6 +11,8 @@ import ConfirmButton from '../ui/ConfirmButton'
 import Skeleton from '../ui/Skeleton'
 import ProgressChart, { type ChartPoint } from './ProgressChart'
 import ResultSheet from './ResultSheet'
+import BadgeToken from '../badges/BadgeToken'
+import { badgeDisplay, fetchBadgesByKeys, recalcBadges, type Badge } from '../../lib/badges'
 
 type Metric = 'weight' | 'e1rm' | 'reps' | 'time'
 
@@ -60,9 +62,18 @@ export default function RecordsView() {
   )
   const w = (kg: number) => `${fromKg(kg, unit)} ${unit}`
 
+  // Un résultat peut débloquer Premier résultat, Record personnel,
+  // Dépassement… : on le dit tout de suite, sur la page où il a été mérité.
+  const [unlocked, setUnlocked] = useState<Badge[]>([])
   const onAdd = async (input: ResultInput) => {
     await addResults([input])
     reload()
+    try {
+      const keys = await recalcBadges()
+      if (keys.length) setUnlocked(await fetchBadgesByKeys(keys))
+    } catch {
+      // Les badges seront rattrapés à l'ouverture de « Mon rang ».
+    }
   }
 
   const record = selected ? records.find((r) => r.exerciseId === selected) : undefined
@@ -90,6 +101,22 @@ export default function RecordsView() {
       <button type="button" className="wb-rec-add" onClick={() => setSheet(true)}>
         + {t('records.add')}
       </button>
+
+      {unlocked.length > 0 && (
+        <div className="wb-card wb-card--accent wb-unlocked" role="status">
+          {unlocked.map((b) => (
+            <div key={b.key} className="wb-unlocked-item">
+              <BadgeToken icon={b.icon} art={b.art} fresh state="unlocked" size={72} title={badgeDisplay(b, i18n.language)} />
+              <div>
+                <span>{t('badges.unlocked_now')}</span>
+                <strong>{badgeDisplay(b, i18n.language)}</strong>
+                {b.rarity && <em data-rarity={b.rarity}>{t(`badges.rarity.${b.rarity}`)}</em>}
+              </div>
+            </div>
+          ))}
+          <button type="button" className="wb-sheet-close" onClick={() => setUnlocked([])} aria-label={t('actions.close')}>✕</button>
+        </div>
+      )}
 
       {error && <p className="wb-rec-error" role="alert">{error}</p>}
 
