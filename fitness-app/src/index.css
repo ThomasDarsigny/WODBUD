@@ -1628,3 +1628,23 @@ button.wb-ex-card { display: flex; align-items: center; gap: 0.85rem; padding: 0
 .wb-ai-box textarea::placeholder { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 .wb-class-tabs { margin-bottom: 1.1rem; }
+
+/* ─── Communauté : en-tête, fil, classement, membres ───────────── */
+.wb-commu-hero { display: grid; gap: 0.6rem; }
+.wb-commu-hero .wb-ph-tag { margin: 0; }
+.wb-commu-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.3rem; }
+.wb-commu-actions .wb-btn { flex: 1 1 auto; }
+.wb-btn--secondary.is-on { border-color: var(--orange); color: var(--orange); }
+.wb-feed-item { display: flex; gap: 0.75rem; align-items: flex-start; padding: 0.85rem 0.9rem; }
+.wb-react { display: inline-flex; align-items: center; gap: 0.2rem; min-height: 36px; padding: 0 0.7rem; border-radius: 999px; border: 1px solid var(--border); background: transparent; color: var(--white); font-size: 0.875rem; cursor: pointer; transition: transform 0.15s var(--press), background-color 0.15s ease; }
+.wb-react[aria-pressed='true'] { border-color: var(--orange); background: rgba(255, 90, 31, 0.12); }
+.wb-react:active { transform: scale(0.92); }
+.wb-board-row.is-me { background: rgba(255, 90, 31, 0.07); }
+.wb-board-place { flex-shrink: 0; width: 30px; height: 30px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-family: var(--font-d); font-weight: 900; font-size: 1rem; color: var(--muted); }
+.wb-board-place[data-place='1'] { background: #f5c542; color: #1a1406; }
+.wb-board-place[data-place='2'] { background: #c9ced6; color: #14161a; }
+.wb-board-place[data-place='3'] { background: #d08a4e; color: #1a0f06; }
+.wb-board-name { flex: 1; min-width: 0; font-weight: 700; font-size: 0.98rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.wb-board-min { flex-shrink: 0; font-family: var(--font-d); font-weight: 800; font-size: 1rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.wb-member-row { display: flex; align-items: center; gap: 0.75rem; padding: 0.6rem 0.9rem; min-height: 60px; flex-wrap: wrap; }
+@media (prefers-reduced-motion: reduce) { .wb-react:active { transform: none; } }

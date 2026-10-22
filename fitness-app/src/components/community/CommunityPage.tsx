@@ -8,7 +8,7 @@ import { inviteLink } from '../../lib/communitySocial'
 import { getLocalUser } from '../../lib/currentUser'
 import EmptyState from '../ui/EmptyState'
 import Skeleton from '../ui/Skeleton'
-import { btnPrimary, btnSecondary } from '../../styles/ui'
+import { btnPrimary } from '../../styles/ui'
 import CommunityFeed from './CommunityFeed'
 import CommunityChallenges from './CommunityChallenges'
 import CommunityLeaderboard from './CommunityLeaderboard'
@@ -117,12 +117,12 @@ export default function CommunityPage() {
   }
 
   return (
-    <div style={{ padding: 'var(--page-pad)', maxWidth: 820 }}>
-      <Link to={`${basePath}/communities`} style={{ color: 'var(--muted)', fontSize: '0.8125rem', textDecoration: 'none' }}>
-        ← {t('community.back')}
+    <div className="wb-page" style={{ maxWidth: 820 }}>
+      <Link to={`${basePath}/communities`} className="wb-rec-back" style={{ marginBottom: '-0.5rem' }}>
+        ‹ {t('community.back')}
       </Link>
 
-      <header style={{ margin: '0.75rem 0 1.25rem' }}>
+      <header className="wb-card wb-card--accent wb-commu-hero">
         <p className="wb-ph-tag">
           {t('community.member_count', { count: members?.length ?? community.member_count ?? 0 })}
           {isOwner ? ` · ${t('community.role_owner')}` : isAdmin ? ` · ${t('community.role_admin')}` : ''}
@@ -130,33 +130,31 @@ export default function CommunityPage() {
         <h1 className="wb-ph-h1">
           {community.name}
         </h1>
-        {community.description && <p style={{ color: 'var(--muted)', margin: '0.5rem 0 0', lineHeight: 1.5 }}>{community.description}</p>}
+        {community.description && <p className="wb-cardio-hint">{community.description}</p>}
 
-        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '1rem' }}>
+        <div className="wb-commu-actions">
           {!isOwner && (
-            <button onClick={() => { void toggleMembership() }} disabled={busy} style={{ ...(isMember ? btnSecondary : btnPrimary), opacity: busy ? 0.6 : 1 }}>
+            <button type="button" className={`wb-btn ${isMember ? 'wb-btn--secondary' : 'wb-btn--primary'}`} onClick={() => { void toggleMembership() }} disabled={busy}>
               {isMember ? t('community.leave') : t('community.join')}
             </button>
           )}
           {isMember && (
-            <button onClick={() => { void toggleShare() }} disabled={busy || !me} aria-pressed={sharing}
-              style={{ ...btnSecondary, color: sharing ? 'var(--orange)' : 'var(--white)', borderColor: sharing ? 'var(--orange)' : undefined, opacity: busy ? 0.6 : 1 }}>
+            <button type="button" className={`wb-btn wb-btn--secondary${sharing ? ' is-on' : ''}`} onClick={() => { void toggleShare() }} disabled={busy || !me} aria-pressed={sharing}>
               {sharing ? `✓ ${t('community.rank_shared')}` : t('community.share_rank')}
             </button>
           )}
-          <button onClick={() => { void copyInvite() }} style={btnSecondary}>
-            {copied ? `✓ ${t('community.invite_copied')}` : `🔗 ${t('community.invite')}`}
+          <button type="button" className="wb-btn wb-btn--secondary" onClick={() => { void copyInvite() }}>
+            {copied ? `✓ ${t('community.invite_copied')}` : t('community.invite')}
           </button>
         </div>
-        {isMember && !sharing && <p style={{ color: 'var(--muted)', fontSize: '0.8125rem', margin: '0.6rem 0 0', lineHeight: 1.5 }}>{t('community.share_rank_hint')}</p>}
+        {isMember && !sharing && <p className="wb-set-hint">{t('community.share_rank_hint')}</p>}
       </header>
 
       {error && <Notice tone='error'>{error}</Notice>}
 
-      <div role='tablist' style={{ display: 'flex', gap: 0, borderBottom: '1px solid var(--border)', marginBottom: '1.25rem', overflowX: 'auto' }}>
+      <div role='tablist' className='wb-chips' aria-label={community.name}>
         {TABS.map((k) => (
-          <button key={k} role='tab' aria-selected={tab === k} onClick={() => setTab(k)}
-            style={{ fontFamily: 'var(--font-d)', fontSize: '0.8125rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.7rem 0.9rem', background: 'none', border: 'none', borderBottom: `2px solid ${tab === k ? 'var(--orange)' : 'transparent'}`, color: tab === k ? 'var(--white)' : 'var(--muted)', cursor: 'pointer', whiteSpace: 'nowrap' }}>
+          <button key={k} type='button' role='tab' aria-selected={tab === k} className={`wb-chip${tab === k ? ' is-on' : ''}`} onClick={() => setTab(k)}>
             {t(`community.tab_${k}`)}
           </button>
         ))}

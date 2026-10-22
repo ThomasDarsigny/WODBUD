@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 
 export function SectionLabel({ children }: { children: ReactNode }) {
   return (
-    <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--muted)', margin: '0 0 0.6rem' }}>
+    <p style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--white)', margin: '0 0 0.6rem' }}>
       {children}
     </p>
   )
@@ -24,7 +24,7 @@ export function Avatar({ name, url, size = 36 }: { name: string; url: string | n
 
 export function Notice({ children, tone = 'muted' }: { children: ReactNode; tone?: 'muted' | 'error' }) {
   return (
-    <p role={tone === 'error' ? 'alert' : undefined} style={{ color: tone === 'error' ? 'var(--orange)' : 'var(--muted)', fontSize: '0.8125rem', lineHeight: 1.5, margin: '0 0 1rem' }}>
+    <p role={tone === 'error' ? 'alert' : undefined} style={{ color: tone === 'error' ? 'var(--orange)' : 'var(--muted)', fontSize: '0.875rem', lineHeight: 1.5, margin: '0 0 1rem' }}>
       {children}
     </p>
   )
@@ -44,4 +44,4 @@ export function useTimeAgo() {
   }
 }
 
-export const cardBox = { border: '1px solid var(--border)', background: 'var(--dark)', padding: '0.85rem 1rem' } as const
+export const cardBox = { border: '1px solid var(--border)', background: 'var(--dark)', padding: '1rem', borderRadius: 16 } as const

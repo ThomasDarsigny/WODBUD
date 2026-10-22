@@ -5,7 +5,7 @@ import { badgeDisplay, fetchBadgesByKeys, type Badge } from '../../lib/badges'
 import { rankDisplay } from '../../lib/ranks'
 import { useRankStore } from '../../stores/rankStore'
 import Skeleton from '../ui/Skeleton'
-import { Avatar, cardBox, Notice, useTimeAgo } from './communityUi'
+import { Avatar, Notice, useTimeAgo } from './communityUi'
 
 /** Séances, badges et rangs des membres qui partagent, 30 derniers jours. */
 export default function CommunityFeed({ communityId, onOpenMember }: {
@@ -76,14 +76,14 @@ export default function CommunityFeed({ communityId, onOpenMember }: {
   return (
     <>
       {error && <Notice tone='error'>{error}</Notice>}
-      <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+      <ul className='wb-list wb-stagger'>
         {events.map((ev) => (
-          <li key={ev.event_key} style={{ ...cardBox, display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
+          <li key={ev.event_key} className='wb-feed-item'>
             <button onClick={() => onOpenMember(ev.user_id)} aria-label={ev.display_name} style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}>
-              <Avatar name={ev.display_name} url={ev.avatar_url} />
+              <Avatar name={ev.display_name} url={ev.avatar_url} size={40} />
             </button>
             <div style={{ minWidth: 0, flex: 1 }}>
-              <p style={{ margin: 0, fontSize: '0.875rem', lineHeight: 1.45 }}>
+              <p style={{ margin: 0, fontSize: '0.95rem', lineHeight: 1.45 }}>
                 <button onClick={() => onOpenMember(ev.user_id)} style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', color: 'var(--white)', fontWeight: 700, font: 'inherit' }}>
                   {ev.display_name}
                 </button>{' '}
@@ -100,7 +100,7 @@ export default function CommunityFeed({ communityId, onOpenMember }: {
                       onClick={() => { void react(ev, key) }}
                       aria-pressed={mine}
                       aria-label={t(`community.react_${key}`)}
-                      style={{ border: `1px solid ${mine ? 'var(--orange)' : 'var(--border)'}`, borderRadius: 12, background: mine ? 'rgba(255,77,0,0.1)' : 'transparent', color: 'var(--white)', padding: '0.15rem 0.5rem', fontSize: '0.8125rem', cursor: 'pointer', minHeight: 30 }}
+                      className='wb-react'
                     >
                       {glyph}{count > 0 ? ` ${count}` : ''}
                     </button>

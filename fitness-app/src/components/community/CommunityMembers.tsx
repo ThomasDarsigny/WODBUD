@@ -44,16 +44,16 @@ export default function CommunityMembers({ communityId, members, isMember, isOwn
   return (
     <div>
       {error && <Notice tone='error'>{error}</Notice>}
-      <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+      <ul className='wb-list wb-stagger'>
         {members.map((m) => {
           const rank = m.share_rank && m.rank_key ? ranks.find((r) => r.key === m.rank_key) : undefined
           const canModerate = isAdmin && !m.is_me && !m.is_owner
           return (
-            <li key={m.user_id} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', border: '1px solid var(--border)', borderRadius: 12, background: 'var(--dark)', padding: '0.5rem 0.75rem', flexWrap: 'wrap' }}>
+            <li key={m.user_id} className='wb-member-row'>
               <button onClick={() => onOpenMember(m.user_id)} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flex: '1 1 200px', minWidth: 0, background: 'none', border: 'none', padding: 0, cursor: 'pointer', color: 'var(--white)', textAlign: 'left' }}>
                 <Avatar name={m.display_name} url={m.avatar_url} />
                 <span style={{ minWidth: 0 }}>
-                  <span style={{ display: 'block', fontFamily: 'var(--font-d)', fontSize: '0.9375rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.03em', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  <span className='wb-board-name' style={{ display: 'block' }}>
                     {m.display_name}
                     {m.is_me && <span style={{ color: 'var(--orange)', fontSize: '0.6875rem', marginLeft: '0.4rem' }}>{t('community.you')}</span>}
                   </span>

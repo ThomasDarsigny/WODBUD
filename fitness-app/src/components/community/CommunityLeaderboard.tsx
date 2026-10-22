@@ -46,14 +46,14 @@ export default function CommunityLeaderboard({ communityId, members, onOpenMembe
 
   return (
     <div>
-      <div role='tablist' style={{ display: 'flex', gap: '0.4rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
+      <div role='tablist' className='wb-segmented' style={{ margin: '0 0 1rem' }}>
         {(['week', 'month', 'all'] as Period[]).map((p) => (
           <button
             key={p}
             role='tab'
             aria-selected={period === p}
             onClick={() => setPeriod(p)}
-            style={{ fontFamily: 'var(--font-d)', fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.4rem 0.8rem', cursor: 'pointer', color: period === p ? 'var(--black)' : 'var(--muted)', background: period === p ? 'var(--orange)' : 'transparent', border: `1px solid ${period === p ? 'var(--orange)' : 'var(--border)'}`, borderRadius: 12 }}
+            className={period === p ? 'is-on' : undefined}
           >
             {t(`community.period_${p}`)}
           </button>
@@ -67,7 +67,7 @@ export default function CommunityLeaderboard({ communityId, members, onOpenMembe
       ) : list.length === 0 ? (
         <Notice>{t('community.leaderboard_empty')}</Notice>
       ) : (
-        <ol style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+        <ol className='wb-list wb-stagger'>
           {list.map((row, i) => {
             // Ex æquo : même place pour les mêmes minutes.
             const place = list.findIndex((r) => r.minutes === row.minutes) + 1
@@ -77,13 +77,13 @@ export default function CommunityLeaderboard({ communityId, members, onOpenMembe
               <li key={row.user_id}>
                 <button
                   onClick={() => onOpenMember(row.user_id)}
-                  style={{ width: '100%', textAlign: 'left', display: 'flex', alignItems: 'center', gap: '0.75rem', border: `1px solid ${row.is_me ? 'rgba(255,77,0,0.45)' : 'var(--border)'}`, borderRadius: 12, background: row.is_me ? 'rgba(255,77,0,0.06)' : 'var(--dark)', padding: '0.6rem 0.75rem', cursor: 'pointer', color: 'var(--white)' }}
+                  className={`wb-row wb-board-row${row.is_me ? ' is-me' : ''}`}
                 >
-                  <span style={{ fontFamily: 'var(--font-d)', fontSize: '1rem', fontWeight: 900, width: '1.5rem', textAlign: 'center', color: place === 1 ? 'var(--orange)' : 'var(--muted)', flexShrink: 0 }}>
+                  <span className='wb-board-place' data-place={place <= 3 ? place : undefined}>
                     {place}
                   </span>
                   <Avatar name={row.display_name} url={row.avatar_url} />
-                  <span style={{ flex: 1, minWidth: 0, fontFamily: 'var(--font-d)', fontSize: '0.9375rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.03em', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  <span className='wb-board-name'>
                     {row.display_name}
                     {row.is_me && <span style={{ color: 'var(--orange)', fontSize: '0.6875rem', marginLeft: '0.4rem' }}>{t('community.you')}</span>}
                   </span>
@@ -92,7 +92,7 @@ export default function CommunityLeaderboard({ communityId, members, onOpenMembe
                       {rankDisplay(rank, i18n.language)}
                     </span>
                   )}
-                  <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.875rem', color: i === 0 ? 'var(--orange)' : 'var(--muted)', fontVariantNumeric: 'tabular-nums', flexShrink: 0 }}>
+                  <span className='wb-board-min' style={{ color: i === 0 ? 'var(--orange)' : undefined }}>
                     {t('community.stat_minutes', { count: row.minutes })}
                   </span>
                 </button>
