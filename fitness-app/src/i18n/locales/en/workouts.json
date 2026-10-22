@@ -154,6 +154,8 @@
     "plan_start": "Start",
     "plan_done": "Done",
     "plan_overdue": "Overdue",
-    "plan_tag": "Planned"
+    "plan_tag": "Planned",
+    "stat_sessions": "Sessions in total",
+    "stat_minutes": "Active minutes"
   }
 }

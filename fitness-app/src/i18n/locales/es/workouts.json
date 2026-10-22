@@ -154,6 +154,8 @@
     "plan_start": "Empezar",
     "plan_done": "Hecho",
     "plan_overdue": "Atrasada",
-    "plan_tag": "Planificada"
+    "plan_tag": "Planificada",
+    "stat_sessions": "Sesiones en total",
+    "stat_minutes": "Minutos activos"
   }
 }

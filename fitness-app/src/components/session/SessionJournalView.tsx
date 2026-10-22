@@ -10,6 +10,8 @@ import EmptyState from '../ui/EmptyState'
 import ConfirmButton from '../ui/ConfirmButton'
 import Skeleton from '../ui/Skeleton'
 import { label, text, field as inputStyle, textarea as textareaStyle, btnPrimary as actionBtnStyle, btnSecondary as ghostBtnStyle } from '../../styles/ui'
+import { AnimatedNumber } from '../ui/motion'
+import { formatMinutes } from '../../lib/ranks'
 
 /**
  * Journal des séances.
@@ -94,28 +96,26 @@ export default function SessionJournalView() {
   }
 
   return (
-    <div style={{ padding: 'var(--page-pad)', maxWidth: 880 }}>
-      <div style={{ marginBottom: 'var(--s6)' }}>
-        <p style={{ ...label, color: 'var(--orange)', letterSpacing: '0.28em', marginBottom: 'var(--s1)' }}>
-          {t('journal.tag')}
-        </p>
-        <h1 style={{ fontFamily: 'var(--font-d)', fontSize: text.h1, fontWeight: 900, textTransform: 'uppercase', lineHeight: 1.05, margin: 0 }}>
-          {t('journal.title')}
-        </h1>
-        {!loading && entries.length > 0 && (
-          <p style={{ color: 'var(--muted)', marginTop: 'var(--s2)', marginBottom: 0 }}>
-            {t('journal.summary', { count: entries.length, minutes: totalMinutes })}
-          </p>
-        )}
-      </div>
+    <div className="wb-page">
+      <header className="wb-ph">
+        <div>
+          <p className="wb-ph-tag">{t('journal.tag')}</p>
+          <h1>{t('journal.title')}</h1>
+        </div>
+      </header>
 
-      <section style={{ marginBottom: 'var(--s6)' }}>
-        <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 'var(--s3)', marginBottom: 'var(--s3)', flexWrap: 'wrap' }}>
-          <h2 style={{ ...label, color: 'var(--white)', fontSize: text.sm, margin: 0 }}>
-            {t('journal.upcoming_title')}
-          </h2>
-          <button onClick={() => setShowScheduleForm((v) => !v)} style={{ ...ghostBtnStyle, fontSize: '0.75rem' }}>
-            {showScheduleForm ? t('actions.cancel', { ns: 'common' }) : t('journal.schedule_add')}
+      {!loading && entries.length > 0 && (
+        <div className="wb-stats wb-stats--2">
+          <div className="wb-stat"><strong><AnimatedNumber value={entries.length} /></strong><span>{t('journal.stat_sessions')}</span></div>
+          <div className="wb-stat wb-stat--accent"><strong><AnimatedNumber value={totalMinutes} format={formatMinutes} /></strong><span>{t('journal.stat_minutes')}</span></div>
+        </div>
+      )}
+
+      <section className="wb-home-sec">
+        <div className="wb-sec">
+          <h2>{t('journal.upcoming_title')}</h2>
+          <button type="button" onClick={() => setShowScheduleForm((v) => !v)}>
+            {showScheduleForm ? t('actions.cancel', { ns: 'common' }) : `+ ${t('journal.schedule_add')}`}
           </button>
         </div>
 
@@ -128,129 +128,87 @@ export default function SessionJournalView() {
         )}
 
         {loadingUpcoming ? (
-          <Skeleton height={52} lines={1} />
+          <Skeleton height={60} lines={1} />
         ) : upcoming.length === 0 ? (
-          !showScheduleForm && (
-            <p style={{ color: 'var(--muted)', fontSize: text.sm, margin: 0 }}>{t('journal.upcoming_empty')}</p>
-          )
+          !showScheduleForm && <p className="wb-muted-line">{t('journal.upcoming_empty')}</p>
         ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 1, background: 'var(--border)', border: '1px solid var(--border)' }}>
+          <ul className="wb-list wb-stagger">
             {upcoming.map((e) => {
               const done = e.session_id !== null
               const overdue = !done && e.scheduled_date < today
               const startable = !done && e.scheduled_date <= today
               return (
-                <article key={e.id} style={{ background: 'var(--dark)', padding: 'var(--s4)', display: 'flex', gap: 'var(--s4)', alignItems: 'flex-start', flexWrap: 'wrap' }}>
-                  <span style={{ color: done ? '#22c55e' : 'var(--orange)', display: 'flex', marginTop: 2, flexShrink: 0 }}>
-                    <NavIcon name="calendar" size={20} />
-                  </span>
-                  <div style={{ flex: '1 1 180px', minWidth: 0 }}>
-                    <p style={{ fontFamily: 'var(--font-d)', fontSize: text.h2, fontWeight: 800, letterSpacing: '0.02em', textTransform: 'uppercase', lineHeight: 1.15, margin: 0, color: done ? 'var(--muted)' : undefined }}>
-                      {e.title ?? e.workout_title ?? t('journal.free_session')}
-                    </p>
-                    <p style={{ ...label, display: 'block', marginTop: 'var(--s1)' }}>
-                      {new Date(`${e.scheduled_date}T00:00:00`).toLocaleDateString(i18n.language, {
-                        weekday: 'long', day: 'numeric', month: 'long'
-                      })}
-                      {e.class_name && <span> · {e.class_name}</span>}
-                      {overdue && <span style={{ color: 'var(--orange)' }}> · {t('journal.plan_overdue')}</span>}
-                    </p>
-                    {e.notes && (
-                      <p style={{ fontSize: text.sm, color: 'var(--muted)', lineHeight: 1.5, margin: 'var(--s2) 0 0' }}>
-                        {e.notes}
-                      </p>
-                    )}
-                  </div>
-                  <div style={{ display: 'flex', gap: 'var(--s2)', flexShrink: 0, alignItems: 'center' }}>
-                    {done ? (
-                      <span style={{ ...label, display: 'inline', color: '#22c55e', border: '1px solid rgba(34,197,94,0.35)', padding: '0.35rem 0.6rem' }}>
-                        ✓ {t('journal.plan_done')}
+                <li key={e.id}>
+                  <div className="wb-row wb-row--top">
+                    <span className="wb-row-icon" data-tone={done ? 'green' : undefined}><NavIcon name="calendar" size={20} /></span>
+                    <span className="wb-row-main">
+                      <strong>{e.title ?? e.workout_title ?? t('journal.free_session')}</strong>
+                      <span>
+                        {new Date(`${e.scheduled_date}T00:00:00`).toLocaleDateString(i18n.language, { weekday: 'long', day: 'numeric', month: 'long' })}
+                        {e.class_name ? ` · ${e.class_name}` : ''}
                       </span>
-                    ) : (
-                      <>
-                        {startable && (
-                          <button onClick={() => handleStartPlan(e)} style={{ ...actionBtnStyle, fontSize: '0.75rem' }}>
-                            ▶ {t('journal.plan_start')}
-                          </button>
-                        )}
-                        <ConfirmButton
-                          onConfirm={() => handleDeleteUpcoming(e.id)}
-                          title={t('journal.delete_scheduled')}
-                          style={{ ...ghostBtnStyle, fontSize: '0.75rem', color: 'rgba(255,77,0,0.8)', borderColor: 'rgba(255,77,0,0.35)' }}
-                        >
-                          ✕
-                        </ConfirmButton>
-                      </>
-                    )}
+                      {e.notes && <span className="wb-row-note">{e.notes}</span>}
+                      {overdue && <span className="wb-pill wb-pill--orange wb-row-pill">{t('journal.plan_overdue')}</span>}
+                    </span>
+                    <span className="wb-row-actions">
+                      {done ? (
+                        <span className="wb-pill wb-pill--green">✓ {t('journal.plan_done')}</span>
+                      ) : (
+                        <>
+                          {startable && (
+                            <button type="button" className="wb-btn wb-btn--primary wb-btn--sm" onClick={() => handleStartPlan(e)}>
+                              ▶ {t('journal.plan_start')}
+                            </button>
+                          )}
+                          <ConfirmButton
+                            onConfirm={() => handleDeleteUpcoming(e.id)}
+                            title={t('journal.delete_scheduled')}
+                            style={{ minHeight: 40, minWidth: 40, padding: '0 0.7rem', borderRadius: 10, border: '1px solid var(--border)', background: 'transparent', color: 'var(--muted)', cursor: 'pointer' }}
+                          >
+                            ✕
+                          </ConfirmButton>
+                        </>
+                      )}
+                    </span>
                   </div>
-                </article>
+                </li>
               )
             })}
-          </div>
+          </ul>
         )}
       </section>
-
-      <h2 style={{ ...label, color: 'var(--white)', fontSize: text.sm, margin: '0 0 var(--s3)' }}>
-        {t('journal.past_title')}
-      </h2>
 
       {loading ? (
         <Skeleton height={68} lines={4} />
       ) : error ? (
-        <div style={{ border: '1px solid rgba(255,90,31,0.35)', background: 'rgba(255,90,31,0.08)', padding: 'var(--s4)', color: 'var(--orange)' }}>
-          {error}
-        </div>
+        <div className="wb-rec-error" role="alert">{error}</div>
       ) : entries.length === 0 ? (
-        <EmptyState
-          icon="session"
-          title={t('journal.empty')}
-          hint={t('journal.empty_hint')}
-        />
+        <EmptyState icon="session" title={t('journal.empty')} hint={t('journal.empty_hint')} />
       ) : (
         months.map((month) => (
-          <section key={month.key} style={{ marginBottom: 'var(--s6)' }}>
-            <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 'var(--s3)', marginBottom: 'var(--s3)', flexWrap: 'wrap' }}>
-              <h2 style={{ ...label, color: 'var(--white)', fontSize: text.sm, margin: 0 }}>
-                {month.label}
-              </h2>
-              <span style={{ ...label, fontVariantNumeric: 'tabular-nums', display: 'inline' }}>
-                {t('journal.month_summary', { count: month.entries.length, minutes: month.minutes })}
-              </span>
+          <section key={month.key} className="wb-home-sec">
+            <div className="wb-sec">
+              <h2 className="wb-cap">{month.label}</h2>
+              <span className="wb-sec-meta">{t('journal.month_summary', { count: month.entries.length, minutes: month.minutes })}</span>
             </div>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 1, background: 'var(--border)', border: '1px solid var(--border)' }}>
+            <ul className="wb-list wb-stagger">
               {month.entries.map((e) => (
-                <article
-                  key={e.id}
-                  style={{ background: 'var(--dark)', padding: 'var(--s4)', display: 'flex', gap: 'var(--s4)', alignItems: 'flex-start' }}
-                >
-                  <span style={{ color: 'var(--orange)', display: 'flex', marginTop: 2, flexShrink: 0 }}>
-                    <NavIcon name={KIND_ICON[e.kind]} size={20} />
-                  </span>
-
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <p style={{ fontFamily: 'var(--font-d)', fontSize: text.h2, fontWeight: 800, letterSpacing: '0.02em', textTransform: 'uppercase', lineHeight: 1.15, margin: 0 }}>
-                      {e.title ?? t('journal.free_session')}
-                    </p>
-                    <p style={{ ...label, display: 'block', marginTop: 'var(--s1)' }}>
-                      {new Date(e.performed_at).toLocaleDateString(i18n.language, {
-                        weekday: 'long', day: 'numeric', month: 'long'
-                      })}
-                      {e.planned && <span style={{ color: '#22c55e' }}> · ✓ {t('journal.plan_tag')}</span>}
-                    </p>
-                    {e.notes && (
-                      <p style={{ fontSize: text.sm, color: 'var(--muted)', lineHeight: 1.5, margin: 'var(--s2) 0 0' }}>
-                        {e.notes}
-                      </p>
-                    )}
+                <li key={e.id}>
+                  <div className="wb-row wb-row--top">
+                    <span className="wb-row-icon"><NavIcon name={KIND_ICON[e.kind]} size={20} /></span>
+                    <span className="wb-row-main">
+                      <strong>{e.title ?? t('journal.free_session')}</strong>
+                      <span>
+                        {new Date(e.performed_at).toLocaleDateString(i18n.language, { weekday: 'long', day: 'numeric', month: 'long' })}
+                        {e.planned ? ` · ✓ ${t('journal.plan_tag')}` : ''}
+                      </span>
+                      {e.notes && <span className="wb-row-note">{e.notes}</span>}
+                    </span>
+                    <span className="wb-row-side">{t('journal.minutes', { minutes: e.active_minutes })}</span>
                   </div>
-
-                  <span style={{ fontFamily: 'var(--font-d)', fontSize: text.h2, fontWeight: 900, color: 'var(--white)', fontVariantNumeric: 'tabular-nums', flexShrink: 0 }}>
-                    {t('journal.minutes', { minutes: e.active_minutes })}
-                  </span>
-                </article>
+                </li>
               ))}
-            </div>
+            </ul>
           </section>
         ))
       )}
@@ -292,7 +250,7 @@ function ScheduleForm({ savedWorkouts, onCancel, onSaved }: {
   }
 
   return (
-    <div style={{ border: '1px solid var(--border)', background: 'var(--dark)', padding: 'var(--s4)', marginBottom: 'var(--s4)', display: 'flex', flexDirection: 'column', gap: 'var(--s3)' }}>
+    <div className="wb-card" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--s3)' }}>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 'var(--s3)' }}>
         <label style={{ display: 'flex', flexDirection: 'column', gap: 'var(--s1)' }}>
           <span style={label}>{t('journal.schedule_date')}</span>

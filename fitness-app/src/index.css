@@ -1413,3 +1413,65 @@ button.wb-row:active, a.wb-row:active { background: var(--surface); }
 .wb-plan-main { flex: 1 1 180px; min-width: 0; display: grid; gap: 0.2rem; }
 .wb-plan-main strong { font-family: var(--font-d); font-size: 1.35rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.02em; line-height: 1.05; }
 .wb-plan-main span { color: var(--muted); font-size: 0.85rem; }
+
+/* ─── Séance : choix ───────────────────────────────────────────── */
+button.wb-pick-free { display: flex; align-items: center; gap: 1rem; padding: 1.2rem 1.1rem; }
+.wb-pick-free > span:last-child { display: grid; gap: 0.2rem; }
+.wb-pick-free strong { font-family: var(--font-d); font-size: 1.6rem; font-weight: 900; text-transform: uppercase; line-height: 1; }
+.wb-pick-free small { color: var(--muted); font-size: 0.875rem; }
+.wb-pick-play { flex-shrink: 0; width: 52px; height: 52px; border-radius: 50%; background: var(--orange); color: var(--black); display: inline-flex; align-items: center; justify-content: center; font-size: 1.2rem; padding-left: 3px; }
+.wb-pick-go { flex-shrink: 0; width: 36px; height: 36px; border-radius: 50%; background: rgba(255, 90, 31, 0.14); color: var(--orange); display: inline-flex; align-items: center; justify-content: center; font-size: 0.8rem; padding-left: 2px; }
+.wb-cardio { display: grid; gap: 0.9rem; }
+.wb-cardio-hint { margin: 0; color: var(--muted); font-size: 0.875rem; line-height: 1.5; }
+
+/* ─── Séance en cours ──────────────────────────────────────────── */
+.wb-card-head { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; margin-bottom: 0.8rem; }
+.wb-card-title { display: block; font-family: var(--font-b); font-size: 1rem; font-weight: 700; margin: 0 0 0.7rem; color: var(--white); }
+.wb-card-head .wb-card-title { margin: 0; }
+.wb-run-main { display: grid; gap: 0.15rem; }
+.wb-run-main.is-running { border-color: rgba(255, 90, 31, 0.4); background: radial-gradient(130% 100% at 100% 0%, rgba(255, 90, 31, 0.12), transparent 60%), var(--dark); }
+.wb-run-head { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; }
+.wb-run-title { margin: 0; font-family: var(--font-d); font-size: 1.3rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.02em; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.wb-run-clock { font-family: var(--font-d); font-size: clamp(4rem, 22vw, 6.5rem); font-weight: 900; line-height: 0.95; font-variant-numeric: tabular-nums; margin: 0.4rem 0 0.1rem; color: var(--muted); }
+.wb-run-main.is-running .wb-run-clock { color: var(--white); }
+.wb-run-meta { margin: 0; font-size: 0.8rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.wb-run-note { margin: 0.6rem 0 0; font-size: 0.8125rem; color: var(--muted); line-height: 1.45; }
+.wb-run-gym { border-radius: var(--r-lg); }
+.wb-run-result { border-radius: var(--r-md); }
+.wb-run-items { display: grid; gap: 0.5rem; }
+.wb-run-check {
+  display: flex; align-items: center; gap: 0.75rem; width: 100%; min-height: 52px; padding: 0.55rem 0.8rem;
+  border-radius: var(--r-md); border: 1px solid var(--border); background: var(--black); color: var(--white); text-align: left; cursor: pointer;
+  transition: background-color 0.18s ease, border-color 0.18s ease;
+}
+.wb-run-check[aria-pressed='true'] { border-color: rgba(74, 222, 128, 0.4); background: rgba(74, 222, 128, 0.06); color: var(--muted); }
+.wb-run-tick { flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%; border: 2px solid var(--line-fn); display: inline-flex; align-items: center; justify-content: center; font-weight: 900; font-size: 0.85rem; color: var(--black); transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s var(--press); }
+.wb-run-check[aria-pressed='true'] .wb-run-tick { background: #4ade80; border-color: #4ade80; transform: scale(1.05); }
+.wb-run-name { flex: 1; min-width: 0; font-weight: 600; font-size: 0.98rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.wb-run-check[aria-pressed='true'] .wb-run-name { text-decoration: line-through; }
+.wb-run-detail { flex-shrink: 0; color: var(--muted); font-size: 0.85rem; font-variant-numeric: tabular-nums; }
+.wb-run-actions { margin-top: 1rem; }
+.wb-btn--danger.is-armed { background: #ef4444; border-color: #ef4444; color: #0b0a09; }
+.wb-run-prs { border-radius: var(--r-lg); }
+
+.wb-run-done { position: relative; border-color: rgba(74, 222, 128, 0.4); background: radial-gradient(130% 100% at 50% 0%, rgba(74, 222, 128, 0.12), transparent 60%), var(--dark); padding: 1.5rem 1.2rem; }
+.wb-run-done-big { margin: 0; font-family: var(--font-d); font-size: clamp(2.4rem, 11vw, 3.4rem); font-weight: 900; line-height: 1; color: #4ade80; }
+
+/* ─── Lignes riches (journal, plans) ───────────────────────────── */
+.wb-row--top { align-items: flex-start; }
+.wb-row--top .wb-row-side, .wb-row--top .wb-row-actions { align-self: center; }
+.wb-row-main .wb-row-note { white-space: normal; line-height: 1.45; margin-top: 0.15rem; }
+.wb-row-main .wb-row-pill { justify-self: start; margin-top: 0.3rem; color: var(--orange); }
+.wb-row-actions { flex-shrink: 0; display: inline-flex; align-items: center; gap: 0.4rem; }
+.wb-row-icon[data-tone='green'] { background: rgba(74, 222, 128, 0.12); color: #4ade80; }
+.wb-sec h2.wb-cap::first-letter { text-transform: uppercase; }
+.wb-sec-meta { font-size: 0.8rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.wb-muted-line { margin: 0; color: var(--muted); font-size: 0.9rem; }
+
+/* Grilles de page : une piste qui ne s'élargit jamais au contenu (rangées de
+   puces défilantes, titres longs) — sinon toute la page déborde. */
+.wb-page, .wb-home-sec, .wb-cardio, .wb-grid { grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 640px) { .wb-grid--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); } .wb-grid--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.wb-grid--auto { grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr)); }
+.wb-stats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.wb-stats--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }

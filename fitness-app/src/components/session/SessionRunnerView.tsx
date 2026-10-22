@@ -16,6 +16,7 @@ import WorkoutMannequin from '../mannequin/WorkoutMannequin'
 import { GymOverlay, clockText, useClockLabels, useGymClock } from './GymClock'
 import ResultSheet from '../records/ResultSheet'
 import RestBar from './RestBar'
+import NavIcon from '../navigation/NavIcon'
 import { formatSeconds, fromKg, readUnit, type ExerciseResult, type ResultInput } from '../../lib/records'
 import { Celebrate, Pop } from '../ui/motion'
 
@@ -39,17 +40,16 @@ export default function SessionRunnerView({ basePath }: Props) {
   )
 }
 
-function Shell({ tag, title, children }: { tag: string; title: string; children: ReactNode }) {
+function Shell({ tag, title, subtitle, children }: { tag: string; title: string; subtitle?: string; children: ReactNode }) {
   return (
-    <div style={{ padding: 'var(--page-pad)', maxWidth: 880 }}>
-      <div style={{ marginBottom: '1.75rem' }}>
-        <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'var(--orange)', marginBottom: '0.35rem' }}>
-          {tag}
-        </p>
-        <h1 style={{ fontFamily: 'var(--font-d)', fontSize: '1.75rem', fontWeight: 900, textTransform: 'uppercase', lineHeight: 1.05, letterSpacing: '0.03em', margin: 0 }}>
-          {title}
-        </h1>
-      </div>
+    <div className="wb-page">
+      <header className="wb-ph">
+        <div>
+          <p className="wb-ph-tag">{tag}</p>
+          <h1>{title}</h1>
+          {subtitle && <p className="wb-ph-sub">{subtitle}</p>}
+        </div>
+      </header>
       {children}
     </div>
   )
@@ -65,65 +65,47 @@ function SessionPicker() {
   useEffect(() => { fetchWorkouts() }, [fetchWorkouts])
 
   return (
-    <Shell tag={t('session.page_tag')} title={t('session.picker_title')}>
-      <p style={{ color: 'var(--muted)', marginTop: '-1rem', marginBottom: '1.5rem' }}>
-        {t('session.picker_subtitle')}
-      </p>
-
-      <QuickLogPanel />
-
+    <Shell tag={t('session.page_tag')} title={t('session.picker_title')} subtitle={t('session.picker_subtitle')}>
       <button
+        type="button"
+        className="wb-card wb-card--accent wb-pick-free"
         onClick={() => { unlockAudio(); startSession(null, t('session.free_session')) }}
-        style={{
-          width: '100%', textAlign: 'left', cursor: 'pointer',
-          border: '1px solid rgba(255,77,0,0.35)', background: 'rgba(255,77,0,0.06)',
-          padding: '1.15rem 1.25rem', marginBottom: '1.75rem', color: 'var(--white)'
-        }}
       >
-        <span style={{ display: 'block', fontFamily: 'var(--font-d)', fontSize: '1.25rem', fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--orange)' }}>
-          ▶ {t('session.free_session')}
-        </span>
-        <span style={{ display: 'block', color: 'var(--muted)', fontSize: '0.8125rem', marginTop: '0.3rem' }}>
-          {t('session.free_session_hint')}
+        <span className="wb-pick-play" aria-hidden="true">▶</span>
+        <span>
+          <strong>{t('session.free_session')}</strong>
+          <small>{t('session.free_session_hint')}</small>
         </span>
       </button>
 
-      <h2 style={{ fontFamily: 'var(--font-d)', fontSize: '0.9375rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', margin: '0 0 0.9rem' }}>
-        {t('session.choose_workout')}
-      </h2>
-
-      {savedWorkouts.length === 0 ? (
-        <div style={{ padding: '1.5rem', border: '1px solid var(--border)', background: 'var(--dark)', color: 'var(--muted)', textAlign: 'center', fontFamily: 'var(--font-d)', fontSize: '0.8125rem', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-          {t('session.no_workouts')}
-        </div>
-      ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '0.7rem' }}>
-          {savedWorkouts.map((w) => (
-            <button
-              key={w.id}
-              onClick={() => { unlockAudio(); startSession(w.id, w.name) }}
-              style={{
-                textAlign: 'left', cursor: 'pointer', color: 'var(--white)',
-                border: '1px solid var(--border)', background: 'var(--dark)', padding: '0.95rem 1rem'
-              }}
-            >
-              <span style={{ display: 'block', fontFamily: 'var(--font-d)', fontSize: '1.25rem', fontWeight: 800, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
-                {w.name}
-              </span>
-              <span style={{ display: 'flex', gap: '0.4rem', marginTop: '0.5rem', flexWrap: 'wrap' }}>
-                <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--orange)', border: '1px solid var(--border)', padding: '0.16rem 0.43rem' }}>
-                  {t(METHOD_I18N_KEYS[w.method], { ns: 'common' })}
-                </span>
-                {w.duration_minutes ? (
-                  <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--muted)', border: '1px solid var(--border)', padding: '0.16rem 0.43rem' }}>
-                    {w.duration_minutes} {t('fields.duration_unit_min')}
+      <section className="wb-home-sec">
+        <div className="wb-sec"><h2>{t('session.choose_workout')}</h2></div>
+        {savedWorkouts.length === 0 ? (
+          <div className="wb-empty">
+            <strong>{t('session.no_workouts')}</strong>
+          </div>
+        ) : (
+          <ul className="wb-list wb-stagger">
+            {savedWorkouts.map((w) => (
+              <li key={w.id}>
+                <button type="button" className="wb-row" onClick={() => { unlockAudio(); startSession(w.id, w.name) }}>
+                  <span className="wb-row-icon"><NavIcon name="bolt" size={20} /></span>
+                  <span className="wb-row-main">
+                    <strong>{w.name}</strong>
+                    <span>
+                      {t(METHOD_I18N_KEYS[w.method], { ns: 'common' })}
+                      {w.duration_minutes ? ` · ${w.duration_minutes} ${t('fields.duration_unit_min')}` : ''}
+                    </span>
                   </span>
-                ) : null}
-              </span>
-            </button>
-          ))}
-        </div>
-      )}
+                  <span className="wb-pick-go" aria-hidden="true">▶</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+
+      <QuickLogPanel />
     </Shell>
   )
 }
@@ -151,67 +133,29 @@ function QuickLogPanel() {
     activities.find((a) => a.id === selectedId)?.name ?? t('session.log_other')
 
   return (
-    <div style={{ border: '1px solid var(--border)', background: 'var(--dark)', padding: '1.25rem', marginBottom: '1.75rem' }}>
-      <h2 style={{ fontFamily: 'var(--font-d)', fontSize: '0.9375rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', margin: '0 0 0.4rem' }}>
-        {t('session.log_title')}
-      </h2>
-      <p style={{ color: 'var(--muted)', fontSize: '0.8125rem', margin: '0 0 1.1rem', lineHeight: 1.5 }}>
-        {t('session.log_subtitle')}
-      </p>
-
-      <FieldLabel>{t('session.log_activity')}</FieldLabel>
-      <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap', marginBottom: '1rem' }}>
-        {activities.map((a) => (
-          <Chip key={a.id} label={a.name} active={selectedId === a.id} onClick={() => setActivityId(a.id)} />
-        ))}
-        <Chip label={t('session.log_other')} active={selectedId === null} onClick={() => setActivityId(null)} />
+    <section className="wb-home-sec">
+      <div className="wb-sec"><h2>{t('session.log_title')}</h2></div>
+      <div className="wb-card wb-cardio">
+        <p className="wb-cardio-hint">{t('session.log_subtitle')}</p>
+        <div className="wb-chips" role="group" aria-label={t('session.log_activity')}>
+          {activities.map((a) => (
+            <button key={a.id} type="button" className="wb-chip" aria-pressed={selectedId === a.id} onClick={() => setActivityId(a.id)}>
+              {a.name}
+            </button>
+          ))}
+          <button type="button" className="wb-chip" aria-pressed={selectedId === null} onClick={() => setActivityId(null)}>
+            {t('session.log_other')}
+          </button>
+        </div>
+        <button
+          type="button"
+          className="wb-btn wb-btn--primary wb-btn--block wb-btn--lg"
+          onClick={() => { unlockAudio(); startActivity(selectedId, selectedName) }}
+        >
+          ▶ {t('session.log_start')}
+        </button>
       </div>
-
-      <button
-        onClick={() => { unlockAudio(); startActivity(selectedId, selectedName) }}
-        style={{
-          width: '100%',
-          minHeight: 52,
-          fontFamily: 'var(--font-d)',
-          fontSize: '1.25rem',
-          fontWeight: 900,
-          letterSpacing: '0.14em',
-          textTransform: 'uppercase',
-          color: 'var(--black)',
-          background: 'var(--orange)',
-          border: '1px solid var(--orange)',
-          cursor: 'pointer'
-        }}
-      >
-        {t('session.log_start')}
-      </button>
-    </div>
-  )
-}
-
-function FieldLabel({ children }: { children: ReactNode }) {
-  return (
-    <label style={{ display: 'block', fontFamily: 'var(--font-d)', fontSize: '0.6875rem', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '0.35rem' }}>
-      {children}
-    </label>
-  )
-}
-
-function Chip({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
-  return (
-    <button
-      onClick={onClick}
-      style={{
-        fontFamily: 'var(--font-d)', fontSize: '0.6875rem', fontWeight: 700, letterSpacing: '0.08em',
-        textTransform: 'uppercase',
-        color: active ? 'var(--black)' : 'var(--muted)',
-        background: active ? 'var(--orange)' : 'transparent',
-        border: `1px solid ${active ? 'var(--orange)' : 'var(--border)'}`,
-        padding: '0.35rem 0.7rem', cursor: 'pointer'
-      }}
-    >
-      {label}
-    </button>
+    </section>
   )
 }
 
@@ -246,38 +190,26 @@ function RunnerPanel() {
 
   return (
     <>
-      <div style={{ border: `1px solid ${running ? 'rgba(255,77,0,0.35)' : 'var(--border)'}`, background: running ? 'rgba(255,77,0,0.05)' : 'var(--dark)', padding: '1.5rem', marginBottom: '1.25rem' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: '1rem', flexWrap: 'wrap' }}>
-          <p style={{ fontFamily: 'var(--font-d)', fontSize: '1.25rem', fontWeight: 800, letterSpacing: '0.06em', textTransform: 'uppercase', margin: 0, color: 'var(--white)' }}>
-            {heading}
-          </p>
-          <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: running ? 'var(--orange)' : 'var(--muted)', border: `1px solid ${running ? 'rgba(255,77,0,0.4)' : 'var(--border)'}`, padding: '0.14rem 0.5rem' }}>
+      <div className={`wb-card wb-run-main${running ? ' is-running' : ''}`}>
+        <div className="wb-run-head">
+          <p className="wb-run-title">{heading}</p>
+          <span className={`wb-pill${running ? ' wb-pill--orange' : ''}`}>
             {running ? `● ${t('session.running')}` : `❚❚ ${t('session.paused')}`}
           </span>
         </div>
 
-        <div style={{ fontFamily: 'var(--font-d)', fontSize: 'clamp(3rem, 13vw, 5.5rem)', fontWeight: 900, lineHeight: 1, letterSpacing: '0.02em', color: running ? 'var(--white)' : 'var(--muted)', margin: '0.9rem 0 0.2rem', fontVariantNumeric: 'tabular-nums' }}>
-          {clockText(clock)}
-        </div>
+        <div className="wb-run-clock">{clockText(clock)}</div>
         {withFormat && (
           <p className="wb-run-phase" data-phase={running ? clock.phase : 'paused'}>
             {labels.phase}{labels.round ? ` · ${labels.round}` : ''}
           </p>
         )}
-        <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--muted)', margin: 0 }}>
+        <p className="wb-run-meta">
           {withFormat ? `${t('session.active_time')} ${formatClock(active)} · ` : `${t('session.active_time')} · `}{t('session.wall_time')} {formatClock(wall)}
         </p>
 
-        {!running && (
-          <p style={{ color: 'var(--muted)', fontSize: '0.8125rem', marginTop: '0.8rem', marginBottom: 0 }}>
-            {t('session.paused_note')}
-          </p>
-        )}
-        {active < 30000 && (
-          <p style={{ color: 'var(--muted)', fontSize: '0.8125rem', marginTop: '0.8rem', marginBottom: 0, opacity: 0.8 }}>
-            {t('session.zero_warning')}
-          </p>
-        )}
+        {!running && <p className="wb-run-note">{t('session.paused_note')}</p>}
+        {active < 30000 && <p className="wb-run-note">{t('session.zero_warning')}</p>}
 
         <button type="button" className="wb-run-gym" onClick={() => { unlockAudio(); setGymOpen(true) }}>
           <span aria-hidden="true">⛶</span> {t('session.gym_mode')}
@@ -306,31 +238,21 @@ function RunnerPanel() {
             {confirmDiscard ? t('session.discard_confirm') : t('session.discard')}
           </ActionButton>
         </div>
-        {confirmDiscard && (
-          <p style={{ color: 'var(--muted)', fontSize: '0.8125rem', marginTop: '0.6rem', marginBottom: 0 }}>
-            {t('session.discard_hint')}
-          </p>
-        )}
+        {confirmDiscard && <p className="wb-run-note">{t('session.discard_hint')}</p>}
       </div>
 
-      {workoutId && (<div style={{ border: '1px solid var(--border)', background: 'var(--dark)', padding: '1.25rem', marginBottom: '1.25rem' }}>
-        <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--muted)', margin: '0 0 0.6rem' }}>
-          {t('mannequin.title', { ns: 'common' })}
-        </p>
+      {workoutId && (<div className="wb-card">
+        <p className="wb-card-title">{t('mannequin.title', { ns: 'common' })}</p>
         <WorkoutMannequin key={workoutId} workoutId={workoutId} />
       </div>)}
 
       {items.length > 0 && (
-        <div style={{ border: '1px solid var(--border)', background: 'var(--dark)', padding: '1.25rem', marginBottom: '1.25rem' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '0.9rem' }}>
-            <h2 style={{ fontFamily: 'var(--font-d)', fontSize: '0.9375rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', margin: 0 }}>
-              {t('session.checklist')}
-            </h2>
-            <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.8125rem', letterSpacing: '0.1em', color: 'var(--muted)' }}>
-              {t('session.checklist_progress', { done: doneCount, total: items.length })}
-            </span>
+        <div className="wb-card">
+          <div className="wb-card-head">
+            <p className="wb-card-title">{t('session.checklist')}</p>
+            <span className="wb-pill">{t('session.checklist_progress', { done: doneCount, total: items.length })}</span>
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+          <div className="wb-run-items">
             {items.map((item) => {
               const done = doneExerciseIds.includes(item.id)
               const detail = [
@@ -342,28 +264,10 @@ function RunnerPanel() {
               return (
                 <div key={item.id} className="wb-run-item">
                 <div className="wb-run-item-row">
-                <button
-                  onClick={() => toggleExercise(item.id)}
-                  aria-pressed={done}
-                  style={{
-                    display: 'flex', alignItems: 'center', gap: '0.7rem', textAlign: 'left', cursor: 'pointer',
-                    border: `1px solid ${done ? 'rgba(34,197,94,0.35)' : 'var(--border)'}`,
-                    background: done ? 'rgba(34,197,94,0.06)' : 'transparent',
-                    padding: '0.6rem 0.8rem', width: '100%',
-                    color: done ? 'var(--muted)' : 'var(--white)'
-                  }}
-                >
-                  <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.9375rem', color: done ? '#22c55e' : 'var(--muted)', flexShrink: 0 }}>
-                    {done ? '✓' : '○'}
-                  </span>
-                  <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.8125rem', letterSpacing: '0.05em', textTransform: 'uppercase', textDecoration: done ? 'line-through' : 'none' }}>
-                    {item.name}
-                  </span>
-                  {detail && (
-                    <span style={{ marginLeft: 'auto', color: 'var(--muted)', fontSize: '0.8125rem', flexShrink: 0 }}>
-                      {detail}
-                    </span>
-                  )}
+                <button type="button" className="wb-run-check" onClick={() => toggleExercise(item.id)} aria-pressed={done}>
+                  <span className="wb-run-tick" aria-hidden="true">{done ? '✓' : ''}</span>
+                  <span className="wb-run-name">{item.name}</span>
+                  {detail && <span className="wb-run-detail">{detail}</span>}
                 </button>
                 <button
                   type="button"
@@ -410,11 +314,10 @@ function RunnerPanel() {
         </div>
       )}
 
-      <div style={{ border: '1px solid var(--border)', background: 'var(--dark)', padding: '1.25rem' }}>
-        <label style={{ display: 'block', fontFamily: 'var(--font-d)', fontSize: '0.6875rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '0.6rem' }}>
-          {t('session.notes_label')}
-        </label>
+      <div className="wb-card">
+        <label htmlFor="wb-session-notes" className="wb-card-title">{t('session.notes_label')}</label>
         <textarea
+          id="wb-session-notes"
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
           placeholder={t('session.notes_placeholder')}
@@ -436,7 +339,7 @@ function RunnerPanel() {
       {gymOpen && <GymOverlay gym={gym} title={heading} onClose={closeGym} onToggle={toggle} />}
 
       {error && (
-        <div style={{ marginTop: '0.9rem', padding: '0.65rem 0.9rem', background: 'rgba(255,77,0,0.1)', border: '1px solid rgba(255,77,0,0.3)', color: 'var(--orange)', fontSize: '0.8125rem' }}>
+        <div className="wb-rec-error" role="alert">
           {error}
         </div>
       )}
@@ -455,10 +358,10 @@ function SummaryPanel({ basePath }: { basePath: string }) {
 
   return (
     <Shell tag={t('session.page_tag')} title={summary.offline ? t('offline.done_title', { ns: 'common' }) : t('session.done_title')}>
-      <div style={{ position: 'relative', border: '1px solid rgba(34,197,94,0.35)', background: 'rgba(34,197,94,0.06)', padding: '1.75rem' }}>
+      <div className="wb-card wb-run-done">
         {!summary.offline && <Celebrate big={summary.newRecords.length > 0 || summary.newBadges.length > 0} />}
         <Pop>
-          <p style={{ fontFamily: 'var(--font-d)', fontSize: 'clamp(2rem, 8vw, 3rem)', fontWeight: 900, color: '#22c55e', margin: 0, lineHeight: 1 }}>
+          <p className="wb-run-done-big">
             {t('session.done_minutes', { count: summary.activeMinutes })}
           </p>
         </Pop>
@@ -589,11 +492,7 @@ function resultText(r: ResultInput | ExerciseResult): string {
 }
 
 function Stat({ label }: { label: string }) {
-  return (
-    <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--muted)', border: '1px solid var(--border)', padding: '0.25rem 0.6rem' }}>
-      {label}
-    </span>
-  )
+  return <span className="wb-pill">{label}</span>
 }
 
 function ActionButton({ children, onClick, variant, disabled }: {
@@ -602,23 +501,9 @@ function ActionButton({ children, onClick, variant, disabled }: {
   variant: 'primary' | 'ghost' | 'danger'
   disabled?: boolean
 }) {
-  const palette = {
-    primary: { color: 'var(--black)', background: 'var(--orange)', border: '1px solid var(--orange)' },
-    ghost: { color: 'var(--white)', background: 'transparent', border: '1px solid var(--border)' },
-    danger: { color: 'var(--black)', background: '#ef4444', border: '1px solid #ef4444' }
-  }[variant]
-
+  const cls = { primary: 'wb-btn--primary', ghost: 'wb-btn--secondary', danger: 'wb-btn--danger is-armed' }[variant]
   return (
-    <button
-      onClick={onClick}
-      disabled={disabled}
-      style={{
-        fontFamily: 'var(--font-d)', fontSize: '0.8125rem', fontWeight: 700, letterSpacing: '0.1em',
-        textTransform: 'uppercase', padding: '0.7rem 1.3rem', minHeight: 48,
-        cursor: disabled ? 'not-allowed' : 'pointer', opacity: disabled ? 0.55 : 1,
-        ...palette
-      }}
-    >
+    <button type="button" className={`wb-btn ${cls}`} onClick={onClick} disabled={disabled}>
       {children}
     </button>
   )
