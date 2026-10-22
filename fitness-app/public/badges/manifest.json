@@ -1,0 +1,202 @@
+[
+  {
+    "n": 1,
+    "slug": "premier-pas",
+    "name": "Premier pas",
+    "category": "Régularité",
+    "rarity": "Commun",
+    "rarityOrder": 1,
+    "criterion": "Terminer sa première séance.",
+    "file": "badges/premier-pas.svg"
+  },
+  {
+    "n": 2,
+    "slug": "habitude",
+    "name": "Habitude",
+    "category": "Régularité",
+    "rarity": "Commun",
+    "rarityOrder": 1,
+    "criterion": "Terminer 5 séances.",
+    "file": "badges/habitude.svg"
+  },
+  {
+    "n": 3,
+    "slug": "discipline",
+    "name": "Discipline",
+    "category": "Régularité",
+    "rarity": "Rare",
+    "rarityOrder": 2,
+    "criterion": "Terminer 10 séances.",
+    "file": "badges/discipline.svg"
+  },
+  {
+    "n": 4,
+    "slug": "devouement",
+    "name": "Dévouement",
+    "category": "Régularité",
+    "rarity": "Épique",
+    "rarityOrder": 3,
+    "criterion": "Terminer 30 séances.",
+    "file": "badges/devouement.svg"
+  },
+  {
+    "n": 5,
+    "slug": "machine",
+    "name": "Machine",
+    "category": "Régularité",
+    "rarity": "Légendaire",
+    "rarityOrder": 4,
+    "criterion": "Terminer 100 séances.",
+    "file": "badges/machine.svg"
+  },
+  {
+    "n": 6,
+    "slug": "premiere-serie",
+    "name": "Première série",
+    "category": "Séries et records",
+    "rarity": "Commun",
+    "rarityOrder": 1,
+    "criterion": "Effectuer sa première série d’exercices.",
+    "file": "badges/premiere-serie.svg"
+  },
+  {
+    "n": 7,
+    "slug": "perseverance",
+    "name": "Persévérance",
+    "category": "Séries et records",
+    "rarity": "Rare",
+    "rarityOrder": 2,
+    "criterion": "Effectuer 100 séries.",
+    "file": "badges/perseverance.svg"
+  },
+  {
+    "n": 8,
+    "slug": "volume",
+    "name": "Volume",
+    "category": "Séries et records",
+    "rarity": "Épique",
+    "rarityOrder": 3,
+    "criterion": "Effectuer 500 séries.",
+    "file": "badges/volume.svg"
+  },
+  {
+    "n": 9,
+    "slug": "record-personnel",
+    "name": "Record personnel",
+    "category": "Séries et records",
+    "rarity": "Rare",
+    "rarityOrder": 2,
+    "criterion": "Battre un record personnel.",
+    "file": "badges/record-personnel.svg"
+  },
+  {
+    "n": 10,
+    "slug": "depassement",
+    "name": "Dépassement",
+    "category": "Séries et records",
+    "rarity": "Légendaire",
+    "rarityOrder": 4,
+    "criterion": "Battre 10 records personnels.",
+    "file": "badges/depassement.svg"
+  },
+  {
+    "n": 11,
+    "slug": "eveil",
+    "name": "Éveil",
+    "category": "Progression",
+    "rarity": "Commun",
+    "rarityOrder": 1,
+    "criterion": "Commencer son parcours d’entraînement.",
+    "file": "badges/eveil.svg"
+  },
+  {
+    "n": 12,
+    "slug": "evolution",
+    "name": "Évolution",
+    "category": "Progression",
+    "rarity": "Rare",
+    "rarityOrder": 2,
+    "criterion": "Progresser pendant plusieurs semaines.",
+    "file": "badges/evolution.svg"
+  },
+  {
+    "n": 13,
+    "slug": "puissance",
+    "name": "Puissance",
+    "category": "Progression",
+    "rarity": "Épique",
+    "rarityOrder": 3,
+    "criterion": "Atteindre un objectif de performance.",
+    "file": "badges/puissance.svg"
+  },
+  {
+    "n": 14,
+    "slug": "constance",
+    "name": "Constance",
+    "category": "Progression",
+    "rarity": "Rare",
+    "rarityOrder": 2,
+    "criterion": "S’entraîner plusieurs semaines consécutives.",
+    "file": "badges/constance.svg"
+  },
+  {
+    "n": 15,
+    "slug": "transformation",
+    "name": "Transformation",
+    "category": "Progression",
+    "rarity": "Légendaire",
+    "rarityOrder": 4,
+    "criterion": "Atteindre un objectif important de progression.",
+    "file": "badges/transformation.svg"
+  },
+  {
+    "n": 16,
+    "slug": "leve-tot",
+    "name": "Lève-tôt",
+    "category": "Défis",
+    "rarity": "Rare",
+    "rarityOrder": 2,
+    "criterion": "Terminer une séance tôt le matin.",
+    "file": "badges/leve-tot.svg"
+  },
+  {
+    "n": 17,
+    "slug": "nocturne",
+    "name": "Nocturne",
+    "category": "Défis",
+    "rarity": "Rare",
+    "rarityOrder": 2,
+    "criterion": "Terminer une séance tard le soir.",
+    "file": "badges/nocturne.svg"
+  },
+  {
+    "n": 18,
+    "slug": "sans-relache",
+    "name": "Sans relâche",
+    "category": "Défis",
+    "rarity": "Épique",
+    "rarityOrder": 3,
+    "criterion": "Atteindre un objectif hebdomadaire exigeant.",
+    "file": "badges/sans-relache.svg"
+  },
+  {
+    "n": 19,
+    "slug": "invincible",
+    "name": "Invincible",
+    "category": "Défis",
+    "rarity": "Mythique",
+    "rarityOrder": 5,
+    "criterion": "Maintenir une longue série de jours d’entraînement.",
+    "file": "badges/invincible.svg"
+  },
+  {
+    "n": 20,
+    "slug": "legende",
+    "name": "Légende",
+    "category": "Défis",
+    "rarity": "Mythique",
+    "rarityOrder": 5,
+    "criterion": "Accomplir un défi particulièrement difficile.",
+    "file": "badges/legende.svg"
+  }
+]
