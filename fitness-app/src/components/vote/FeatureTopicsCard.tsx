@@ -79,7 +79,7 @@ export default function FeatureTopicsCard({ admin = false }: { admin?: boolean }
 
   return (
     <section style={{ ...card, padding: '1.25rem', marginBottom: '1.5rem' }}>
-      <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'var(--orange)', margin: '0 0 0.35rem' }}>
+      <p className="wb-ph-tag">
         {t('feature_topics.tag')}
       </p>
       <h2 style={{ fontFamily: 'var(--font-d)', fontSize: '1.25rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.03em', margin: 0 }}>

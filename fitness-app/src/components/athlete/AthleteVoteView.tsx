@@ -136,7 +136,7 @@ export default function AthleteVoteView() {
     <div style={{ padding: 'var(--page-pad)', paddingBottom: '7rem' }}>
       <div style={{ marginBottom: '2rem' }}>
         <BackButton onClick={() => navigate('/athlete')} label={t('actions.back')} />
-        <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'var(--orange)', marginBottom: '0.4rem' }}>
+        <p className="wb-ph-tag">
           {t('vote.tag')}
         </p>
         <h1 style={{ fontFamily: 'var(--font-d)', fontSize: '1.75rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.02em', margin: 0 }}>

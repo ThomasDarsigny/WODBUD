@@ -123,11 +123,11 @@ export default function CommunityPage() {
       </Link>
 
       <header style={{ margin: '0.75rem 0 1.25rem' }}>
-        <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'var(--orange)', margin: '0 0 0.35rem' }}>
+        <p className="wb-ph-tag">
           {t('community.member_count', { count: members?.length ?? community.member_count ?? 0 })}
           {isOwner ? ` · ${t('community.role_owner')}` : isAdmin ? ` · ${t('community.role_admin')}` : ''}
         </p>
-        <h1 style={{ fontFamily: 'var(--font-d)', fontSize: '1.75rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.03em', lineHeight: 1.05, margin: 0, overflowWrap: 'anywhere' }}>
+        <h1 className="wb-ph-h1">
           {community.name}
         </h1>
         {community.description && <p style={{ color: 'var(--muted)', margin: '0.5rem 0 0', lineHeight: 1.5 }}>{community.description}</p>}

@@ -157,7 +157,7 @@ export default function JoinClassPage() {
         {step === 'signup' && (
           <>
             <div style={{ marginBottom: '1.75rem', textAlign: 'center' }}>
-              <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'var(--orange)', marginBottom: '0.35rem' }}>
+              <p className="wb-ph-tag">
                 {t('join.invited_tag')}
               </p>
               <h2 style={{ fontFamily: 'var(--font-d)', fontSize: '1.75rem', fontWeight: 900, textTransform: 'uppercase', margin: 0 }}>
@@ -188,7 +188,7 @@ export default function JoinClassPage() {
         {step === 'login' && (
           <>
             <div style={{ marginBottom: '1.75rem', textAlign: 'center' }}>
-              <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'var(--orange)', marginBottom: '0.35rem' }}>
+              <p className="wb-ph-tag">
                 {t('join.invited_tag')}
               </p>
               <h2 style={{ fontFamily: 'var(--font-d)', fontSize: '1.75rem', fontWeight: 900, textTransform: 'uppercase', margin: 0 }}>

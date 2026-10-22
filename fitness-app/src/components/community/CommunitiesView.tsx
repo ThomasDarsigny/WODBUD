@@ -55,10 +55,10 @@ export default function CommunitiesView() {
     <div style={{ padding: 'var(--page-pad)', minHeight: '100%' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '1rem', flexWrap: 'wrap', marginBottom: '1.5rem' }}>
         <div>
-          <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'var(--orange)', marginBottom: '0.35rem' }}>
+          <p className="wb-ph-tag">
             {t('community.tag')}
           </p>
-          <h1 style={{ fontFamily: 'var(--font-d)', fontSize: '1.75rem', fontWeight: 900, textTransform: 'uppercase', lineHeight: 1.05, letterSpacing: '0.03em', margin: 0 }}>
+          <h1 className="wb-ph-h1">
             {t('community.title')}
           </h1>
           <p style={{ color: 'var(--muted)', marginTop: '0.45rem' }}>{t('community.subtitle')}</p>
@@ -69,7 +69,7 @@ export default function CommunitiesView() {
       </div>
 
       {error && (
-        <div style={{ marginBottom: '1rem', padding: '0.65rem 0.9rem', background: 'rgba(255,77,0,0.1)', border: '1px solid rgba(255,77,0,0.3)', color: 'var(--orange)', fontSize: '0.8125rem' }}>
+        <div className="wb-rec-error" role="alert" style={{ marginBottom: '1rem' }}>
           {error}
         </div>
       )}
@@ -107,10 +107,10 @@ export default function CommunitiesView() {
               aria-label={c.name}
               onClick={() => open(c.id)}
               onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(c.id) } }}
-              style={{ border: '1px solid var(--border)', borderLeft: '2px solid var(--orange)', background: 'var(--dark)', padding: '1.1rem', display: 'flex', flexDirection: 'column', gap: '0.6rem', cursor: 'pointer' }}
+              className="wb-card wb-commu-card"
             >
               <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '0.5rem' }}>
-                <p style={{ fontFamily: 'var(--font-d)', fontSize: '1.0625rem', fontWeight: 800, letterSpacing: '0.02em', textTransform: 'uppercase', margin: 0 }}>
+                <p style={{ fontFamily: 'var(--font-d)', fontSize: '1.35rem', fontWeight: 900, letterSpacing: '0.01em', textTransform: 'uppercase', lineHeight: 1.05, margin: 0 }}>
                   {c.name}
                 </p>
                 {c.created_by === userId && (
@@ -196,7 +196,7 @@ function CreateCommunityModal({ onClose, onCreate }: {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        style={{ background: 'var(--black)', border: '1px solid var(--border)', maxWidth: 420, width: '100%', padding: '1.5rem' }}
+        style={{ background: 'var(--dark)', border: '1px solid var(--border)', borderRadius: 20, maxWidth: 420, width: '100%', padding: '1.5rem' }}
       >
         <h2 style={{ fontFamily: 'var(--font-d)', fontSize: '1.375rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.04em', margin: '0 0 1.25rem' }}>
           {t('community.create')}

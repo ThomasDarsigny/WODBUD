@@ -86,7 +86,7 @@ export default function ClassesView() {
         background: 'var(--dark)'
       }}>
         <div style={{ padding: '1.5rem 1.25rem 1rem', borderBottom: '1px solid var(--border)' }}>
-          <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'var(--orange)', marginBottom: '0.3rem' }}>
+          <p className="wb-ph-tag">
             {t('classes.tag')}
           </p>
           <h2 style={{ fontFamily: 'var(--font-d)', fontSize: '1.75rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.03em', margin: 0 }}>

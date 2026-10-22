@@ -73,10 +73,10 @@ export default function VoteView() {
   return (
     <div style={{ padding: 'var(--page-pad)', minHeight: '100%' }}>
       <div style={{ marginBottom: '1.5rem' }}>
-        <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'var(--orange)', marginBottom: '0.35rem' }}>
+        <p className="wb-ph-tag">
           {t('nav.vote')}
         </p>
-        <h1 style={{ fontFamily: 'var(--font-d)', fontSize: '1.75rem', fontWeight: 900, textTransform: 'uppercase', lineHeight: 1.05, letterSpacing: '0.03em', margin: 0 }}>
+        <h1 className="wb-ph-h1">
           {t('vote_view.title')}
         </h1>
         <p style={{ color: 'var(--muted)', marginTop: '0.45rem' }}>
