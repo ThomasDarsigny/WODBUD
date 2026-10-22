@@ -26,6 +26,10 @@ i18n
   .use(LanguageDetector)       // langue du navigateur
   .use(initReactI18next)
   .init({
+    // Hors navigateur (prérendu de la landing au build), la langue est fixée :
+    // sans ça, le détecteur lit la langue de Node — anglais sur Vercel — et
+    // le rendu synchrone se suspend en attendant le fichier anglais.
+    ...(typeof window === 'undefined' ? { lng: 'fr' } : {}),
     fallbackLng: 'fr',         // langue par défaut
     supportedLngs: ['fr', 'en', 'es'],
     defaultNS: 'common',
