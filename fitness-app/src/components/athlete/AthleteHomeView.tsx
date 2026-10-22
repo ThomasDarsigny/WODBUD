@@ -1,26 +1,27 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import NavIcon, { type NavIconName } from '../navigation/NavIcon'
+import NavIcon from '../navigation/NavIcon'
 import EmptyState from '../ui/EmptyState'
 import { useClassStore } from '../../stores/classStore'
 import { useExerciseStore } from '../../stores/exerciseStore'
 import type { VoteSession, Class } from '../../types'
-import { CATEGORY_I18N_KEYS, MUSCLE_GROUP_I18N_KEYS } from '../../types'
 import Skeleton from '../ui/Skeleton'
 import { getLocalUser } from '../../lib/currentUser'
 import ClassLeaderboard from '../rank/ClassLeaderboard'
 import OnboardingCard from '../onboarding/OnboardingCard'
 import FeatureTopicsCard from '../vote/FeatureTopicsCard'
 import { isVoteSessionOpen } from '../../lib/voteSessions'
-import { fetchUpcoming, localDate, type ScheduledEntry } from '../../lib/scheduledWorkouts'
 import { useSessionStore } from '../../stores/sessionStore'
-void CATEGORY_I18N_KEYS
-void MUSCLE_GROUP_I18N_KEYS
+import { unlockAudio } from '../../lib/gymCues'
+import TodayPlans from '../home/TodayPlans'
+import { MyWeekStats, useMyWeek } from '../home/MyWeek'
 
 export default function AthleteHomeView() {
-  const { t } = useTranslation(['common', 'exercises'])
+  const { t, i18n } = useTranslation(['common', 'exercises'])
   const navigate = useNavigate()
+  const me = useMyWeek()
+  const sessionRunning = useSessionStore((s) => s.timer.startedAt !== null)
   const { classes, fetchMyClasses } = useClassStore()
   const { exercises, fetchExercises } = useExerciseStore()
 
@@ -61,138 +62,61 @@ export default function AthleteHomeView() {
 
   const exerciseMap = new Map(exercises.map((e) => [e.id, e]))
 
+  const today = new Date().toLocaleDateString(i18n.language, { weekday: 'long', day: 'numeric', month: 'long' })
+
   return (
-    <div style={{ padding: 'var(--page-pad)', maxWidth: 900 }}>
-      <div style={{ marginBottom: '2.5rem' }}>
-        <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'var(--orange)', marginBottom: '0.4rem' }}>
-          {t('athlete.welcome_tag')}
-        </p>
-        <h1 style={{ fontFamily: 'var(--font-d)', fontSize: '1.75rem', fontWeight: 900, textTransform: 'uppercase', lineHeight: 1, letterSpacing: '0.02em', margin: 0 }}>
-          {t('athlete.welcome_title')}
-        </h1>
-      </div>
+    <div className="wb-page">
+      <header className="wb-ph">
+        <div>
+          <p className="wb-ph-tag">{today}</p>
+          <h1>{me?.firstName ? t('home.hello', { name: me.firstName }) : t('athlete.welcome_title')}</h1>
+        </div>
+      </header>
+
+      <Link to="/athlete/session" className="wb-btn wb-btn--primary wb-btn--lg" onClick={unlockAudio}>
+        ▶ {sessionRunning ? t('home.resume_session') : t('home.start_session')}
+      </Link>
+
+      <MyWeekStats me={me} />
+
+      <TodayPlans basePath="/athlete" />
 
       <OnboardingCard area="athlete" />
 
-      <TodayPlans />
+      {/* Votes ouverts : la section n'existe que s'il y a de quoi voter. */}
+      {(loadingSessions || openSessions.length > 0) && (
+        <section className="wb-home-sec">
+          <div className="wb-sec"><h2>{t('athlete.section_votes')}</h2></div>
+          {loadingSessions ? (
+            <Skeleton height={72} />
+          ) : (
+            <div className="wb-grid">
+              {openSessions.map((session) => (
+                <VoteSessionCard
+                  key={session.id}
+                  session={session}
+                  exerciseMap={exerciseMap}
+                  hasVoted={(userVotesBySession[session.id]?.length ?? 0) > 0}
+                  onVote={() => navigate(`/athlete/vote/${session.id}`)}
+                />
+              ))}
+            </div>
+          )}
+        </section>
+      )}
 
-      {/* Active votes */}
-      <section style={{ marginBottom: '2.5rem' }}>
-        <SectionHeader icon="vote" title={t('athlete.section_votes')} />
-        {loadingSessions ? (
-          <LoadingRow />
-        ) : openSessions.length === 0 ? (
-          <EmptyState compact icon="vote" title={t('athlete.no_votes')} hint={t('athlete.no_votes_hint')} />
+      <section className="wb-home-sec">
+        <div className="wb-sec"><h2>{t('athlete.section_classes')}</h2></div>
+        {classes.length === 0 ? (
+          <EmptyState compact icon="classes" title={t('athlete.no_classes')} hint={t('athlete.no_classes_hint')} />
         ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-            {openSessions.map((session) => (
-              <VoteSessionCard
-                key={session.id}
-                session={session}
-                exerciseMap={exerciseMap}
-                hasVoted={(userVotesBySession[session.id]?.length ?? 0) > 0}
-                onVote={() => navigate(`/athlete/vote/${session.id}`)}
-              />
-            ))}
+          <div className="wb-grid wb-grid--2">
+            {classes.map((cls) => <ClassCard key={cls.id} cls={cls} currentUserId={userId} />)}
           </div>
         )}
       </section>
 
       <FeatureTopicsCard />
-
-      {/* My classes */}
-      <section>
-        <SectionHeader icon="classes" title={t('athlete.section_classes')} />
-        {classes.length === 0 ? (
-          <EmptyState compact icon="classes" title={t('athlete.no_classes')} hint={t('athlete.no_classes_hint')} />
-        ) : (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: '0.75rem' }}>
-            {classes.map((cls) => <ClassCard key={cls.id} cls={cls} currentUserId={userId} />)}
-          </div>
-        )}
-      </section>
-    </div>
-  )
-}
-
-/**
- * Rappel du jour : ce que l'athlète (ou son coach) a prévu aujourd'hui et
- * qu'il n'a pas encore fait. N'apparaît pas du tout s'il n'y a rien — un
- * bandeau « rien de prévu » sur l'accueil serait du bruit.
- */
-function TodayPlans() {
-  const { t } = useTranslation(['common', 'workouts'])
-  const navigate = useNavigate()
-  const startSession = useSessionStore((s) => s.startSession)
-  const sessionRunning = useSessionStore((s) => s.timer.startedAt !== null)
-  const [plans, setPlans] = useState<ScheduledEntry[]>([])
-
-  useEffect(() => {
-    let mounted = true
-    const today = localDate()
-    fetchUpcoming()
-      .then((rows) => {
-        if (mounted) setPlans(rows.filter((r) => r.scheduled_date === today && r.session_id === null))
-      })
-      .catch(() => {})
-    return () => { mounted = false }
-  }, [])
-
-  if (plans.length === 0) return null
-
-  function start(p: ScheduledEntry) {
-    if (!sessionRunning) {
-      startSession(p.workout_id, p.title ?? p.workout_title ?? t('journal.free_session', { ns: 'workouts' }), p.id)
-    }
-    navigate('/athlete/session')
-  }
-
-  return (
-    <section style={{ marginBottom: '2.5rem' }}>
-      <SectionHeader icon="calendar" title={t('athlete.section_today')} />
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-        {plans.map((p) => (
-          <div key={p.id} style={{ border: '1px solid rgba(255,77,0,0.35)', background: 'rgba(255,77,0,0.06)', padding: '1rem 1.1rem', display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-            <div style={{ flex: '1 1 180px', minWidth: 0 }}>
-              <p style={{ fontFamily: 'var(--font-d)', fontSize: '1.25rem', fontWeight: 800, letterSpacing: '0.04em', textTransform: 'uppercase', margin: 0 }}>
-                {p.title ?? p.workout_title ?? t('journal.free_session', { ns: 'workouts' })}
-              </p>
-              {(p.class_name || p.notes) && (
-                <p style={{ color: 'var(--muted)', fontSize: '0.8125rem', margin: '0.3rem 0 0', lineHeight: 1.5 }}>
-                  {[p.class_name, p.notes].filter(Boolean).join(' · ')}
-                </p>
-              )}
-            </div>
-            <button
-              onClick={() => start(p)}
-              style={{ fontFamily: 'var(--font-d)', fontSize: '0.8125rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.7rem 1.3rem', color: 'var(--black)', background: 'var(--orange)', border: '1px solid var(--orange)', cursor: 'pointer', flexShrink: 0 }}
-            >
-              ▶ {t('journal.plan_start', { ns: 'workouts' })}
-            </button>
-          </div>
-        ))}
-      </div>
-    </section>
-  )
-}
-
-function SectionHeader({ icon, title }: { icon: NavIconName; title: string }) {
-  return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '0.55rem', marginBottom: '1rem' }}>
-      <span style={{ color: 'var(--orange)', display: 'flex' }}>
-        <NavIcon name={icon} size={19} />
-      </span>
-      <h2 style={{ fontFamily: 'var(--font-d)', fontSize: '1rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', margin: 0 }}>
-        {title}
-      </h2>
-    </div>
-  )
-}
-
-function LoadingRow() {
-  return (
-    <div style={{ padding: 'var(--s4) 0' }}>
-      <Skeleton height={72} lines={2} />
     </div>
   )
 }
@@ -205,56 +129,24 @@ function VoteSessionCard({ session, exerciseMap, hasVoted, onVote }: {
 }) {
   const { t } = useTranslation(['common', 'exercises'])
   return (
-    <div style={{
-      border: `1px solid ${hasVoted ? 'rgba(34,197,94,0.3)' : 'rgba(255,77,0,0.3)'}`,
-      background: hasVoted ? 'rgba(34,197,94,0.04)' : 'rgba(255,77,0,0.05)',
-      padding: '1.1rem 1.25rem',
-      display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap'
-    }}>
-      <div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.1rem' }}>
-          <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.9375rem', fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--white)', margin: 0 }}>
-            {session.title}
-          </p>
-          {hasVoted && (
-            <span style={{
-              fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.15em', textTransform: 'uppercase',
-              color: '#22c55e', border: '1px solid rgba(34,197,94,0.35)', background: 'rgba(34,197,94,0.08)',
-              padding: '0.1rem 0.4rem', flexShrink: 0
-            }}>
-              ✓ {t('vote.voted')}
-            </span>
-          )}
+    <div className={`wb-card${hasVoted ? '' : ' wb-card--accent'} wb-vote-card`}>
+      <div className="wb-vote-main">
+        <div className="wb-vote-title">
+          <strong>{session.title}</strong>
+          {hasVoted && <span className="wb-pill wb-pill--green">✓ {t('vote.voted')}</span>}
         </div>
-        <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap', marginTop: '0.5rem' }}>
-          {session.exercise_options.slice(0, 5).map((exId) => {
+        <div className="wb-vote-opts">
+          {session.exercise_options.slice(0, 4).map((exId) => {
             const ex = exerciseMap.get(exId)
-            if (!ex) return null
-            return (
-              <span key={exId} style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--orange)', border: '1px solid rgba(255,77,0,0.25)', padding: '0.15rem 0.45rem' }}>
-                {ex.name}
-              </span>
-            )
+            return ex ? <span key={exId} className="wb-pill">{ex.name}</span> : null
           })}
-          {session.exercise_options.length > 5 && (
-            <span style={{ fontSize: '0.8125rem', color: 'var(--muted)' }}>+{session.exercise_options.length - 5}</span>
-          )}
+          {session.exercise_options.length > 4 && <span className="wb-ex-more">+{session.exercise_options.length - 4}</span>}
         </div>
         {session.deadline && (
-          <p style={{ color: 'var(--muted)', fontSize: '0.8125rem', marginTop: '0.4rem' }}>
-            {t('classes.deadline')}: {new Date(session.deadline).toLocaleDateString()}
-          </p>
+          <span className="wb-vote-deadline">{t('classes.deadline')} : {new Date(session.deadline).toLocaleDateString()}</span>
         )}
       </div>
-      <button
-        onClick={onVote}
-        style={{
-          fontFamily: 'var(--font-d)', fontSize: '0.6875rem', fontWeight: 700, letterSpacing: '0.1em',
-          textTransform: 'uppercase', color: 'var(--black)',
-          background: hasVoted ? 'rgba(34,197,94,0.85)' : 'var(--orange)',
-          border: 'none', padding: '0.6rem 1.25rem', cursor: 'pointer', flexShrink: 0
-        }}
-      >
+      <button type="button" className={`wb-btn ${hasVoted ? 'wb-btn--secondary' : 'wb-btn--primary'}`} onClick={onVote}>
         {hasVoted ? t('vote.modify') : t('athlete.vote_cta')}
       </button>
     </div>
@@ -263,50 +155,24 @@ function VoteSessionCard({ session, exerciseMap, hasVoted, onVote }: {
 
 function ClassCard({ cls, currentUserId }: { cls: Class; currentUserId: string | null }) {
   const { t } = useTranslation('common')
-  // Replié par défaut : la carte sert d'abord à rappeler l'horaire. Le
-  // classement se charge seulement si on le demande, ce qui évite autant de
-  // requêtes que de cours à l'ouverture de l'écran.
+  // Replié par défaut : le classement se charge seulement si on le demande,
+  // ce qui évite autant de requêtes que de cours à l'ouverture de l'écran.
   const [showBoard, setShowBoard] = useState(false)
 
   return (
-    <div style={{ border: '1px solid var(--border)', background: 'var(--dark)', padding: '1rem 1.25rem' }}>
-      <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.9375rem', fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--white)', margin: 0 }}>
-        {cls.name}
-      </p>
-      {cls.schedule && (
-        <p style={{ color: 'var(--muted)', fontSize: '0.8125rem', marginTop: '0.3rem' }}>{cls.schedule}</p>
-      )}
-      {cls.description && (
-        <p style={{ color: 'var(--muted)', fontSize: '0.8125rem', marginTop: '0.3rem' }}>{cls.description}</p>
-      )}
-
-      <button
-        onClick={() => setShowBoard((v) => !v)}
-        aria-expanded={showBoard}
-        style={{
-          marginTop: '0.75rem',
-          fontFamily: 'var(--font-d)',
-          fontSize: '0.6875rem',
-          fontWeight: 700,
-          letterSpacing: '0.14em',
-          textTransform: 'uppercase',
-          color: showBoard ? 'var(--orange)' : 'var(--muted)',
-          background: 'transparent',
-          border: '1px solid var(--border)',
-          padding: '0.4rem 0.7rem',
-          minHeight: 36,
-          cursor: 'pointer'
-        }}
-      >
-        {showBoard ? t('leaderboard.hide') : t('leaderboard.title')}
-      </button>
-
-      {showBoard && (
-        <div style={{ marginTop: '0.75rem' }}>
-          <ClassLeaderboard classId={cls.id} currentUserId={currentUserId} />
+    <div className="wb-card wb-class-card">
+      <div className="wb-class-head">
+        <span className="wb-row-icon"><NavIcon name="classes" size={20} /></span>
+        <div>
+          <strong>{cls.name}</strong>
+          {cls.schedule && <span>{cls.schedule}</span>}
         </div>
-      )}
+      </div>
+      {cls.description && <p className="wb-cardio-hint">{cls.description}</p>}
+      <button type="button" className="wb-wod-toggle" onClick={() => setShowBoard((v) => !v)} aria-expanded={showBoard}>
+        <span aria-hidden="true">{showBoard ? '▾' : '▸'}</span> {showBoard ? t('leaderboard.hide') : t('leaderboard.title')}
+      </button>
+      {showBoard && <ClassLeaderboard classId={cls.id} currentUserId={currentUserId} />}
     </div>
   )
 }
-

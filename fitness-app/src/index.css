@@ -1558,3 +1558,18 @@ button.wb-ex-card { display: flex; align-items: center; gap: 0.85rem; padding: 0
 .wb-badge strong { font-family: var(--font-d); font-size: 0.8rem; font-weight: 800; letter-spacing: 0.02em; text-transform: uppercase; line-height: 1.15; color: var(--muted); overflow-wrap: anywhere; }
 .wb-badge.is-earned strong { color: var(--white); }
 .wb-badge span { font-size: 0.7rem; color: var(--muted); line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+/* ─── Accueil athlète : votes et cours ─────────────────────────── */
+.wb-vote-card { display: flex; align-items: center; gap: 0.9rem; flex-wrap: wrap; }
+.wb-vote-main { flex: 1 1 200px; min-width: 0; display: grid; gap: 0.5rem; }
+.wb-vote-title { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+.wb-vote-title strong { font-family: var(--font-d); font-size: 1.25rem; font-weight: 900; text-transform: uppercase; line-height: 1.05; }
+.wb-vote-opts { display: flex; gap: 0.35rem; flex-wrap: wrap; align-items: center; }
+.wb-vote-deadline { font-size: 0.8rem; color: var(--muted); }
+.wb-class-card { display: grid; gap: 0.6rem; align-content: start; }
+.wb-class-head { display: flex; align-items: center; gap: 0.75rem; }
+.wb-class-head > div { display: grid; gap: 0.1rem; min-width: 0; }
+.wb-class-head strong { font-family: var(--font-d); font-size: 1.2rem; font-weight: 900; text-transform: uppercase; line-height: 1.05; }
+.wb-class-head span { font-size: 0.82rem; color: var(--muted); }
+
+.wb-page > .wb-onb { margin-bottom: 0; }
