@@ -899,5 +899,18 @@
     "history": "Historial",
     "new_pr_one": "Nuevo récord",
     "new_pr_other": "Nuevos récords"
+  },
+  "offline": {
+    "offline": "Sin conexión — puedes entrenar, tu sesión se enviará al volver la red.",
+    "offline_pending_one": "Sin conexión — {{count}} sesión espera la red.",
+    "offline_pending_other": "Sin conexión — {{count}} sesiones esperan la red.",
+    "sending_one": "Enviando {{count}} sesión hecha sin conexión…",
+    "sending_other": "Enviando {{count}} sesiones hechas sin conexión…",
+    "synced_one": "{{count}} sesión sin conexión guardada.",
+    "synced_other": "{{count}} sesiones sin conexión guardadas.",
+    "rejected_one": "{{count}} sesión sin conexión rechazada: más de 12 h sin red, no cuenta.",
+    "rejected_other": "{{count}} sesiones sin conexión rechazadas: más de 12 h sin red, no cuentan.",
+    "done_title": "Sesión guardada en el teléfono",
+    "done_hint": "Sin red: la sesión se guarda aquí y se enviará en cuanto vuelva la conexión (dentro de 12 h). Tus minutos, rango e insignias se actualizarán entonces."
   }
 }

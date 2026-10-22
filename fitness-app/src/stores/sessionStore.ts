@@ -2,8 +2,6 @@ import { create } from 'zustand'
 import i18n from '../i18n'
 import { supabase } from '../lib/supabase'
 import { getLocalUser } from '../lib/currentUser'
-import { recalcBadges } from '../lib/badges'
-import { linkSessionToPlan, localDate } from '../lib/scheduledWorkouts'
 import {
   EMPTY_TIMER,
   activeMs,
@@ -15,7 +13,8 @@ import {
   type SessionTimer
 } from '../lib/sessionTimer'
 import type { WorkoutFormat } from '../lib/workoutClock'
-import { addResults, fetchMyResults, isNewRecord, type ExerciseResult, type ResultInput } from '../lib/records'
+import type { ResultInput } from '../lib/records'
+import { enqueue, isNetworkError, uploadSession, type FinishedSession, type SessionSummary } from '../lib/sessionUpload'
 import type { WorkoutMethod } from '../types'
 
 const STORAGE_KEY = 'wodbud_active_session'
@@ -31,20 +30,7 @@ export interface SessionExerciseItem {
   rest_seconds?: number | null
 }
 
-export interface SessionSummary {
-  activeMinutes: number
-  totalMinutes: number
-  currentStreak: number
-  /** Clés des badges débloqués PAR cette séance. Vide la plupart du temps. */
-  newBadges: string[]
-  /**
-   * Total AVANT la séance. Permet de comparer le rang d'avant et d'après sans
-   * une requête de plus : le trigger ajoute exactement `activeMinutes`.
-   */
-  previousMinutes: number
-  /** Records battus pendant la séance, avec le nom du mouvement. */
-  newRecords: Array<{ name: string; result: ExerciseResult }>
-}
+export type { SessionSummary }
 
 /** Résultat noté pendant la séance, enregistré avec elle à la fin. */
 export interface PendingResult extends ResultInput {
@@ -321,86 +307,46 @@ export const useSessionStore = create<SessionState>((set, get) => ({
     if (s.timer.startedAt === null) throw new Error(i18n.t('errors.generic', { ns: 'common' }))
 
     set({ saving: true, error: null })
+    let entry: FinishedSession | null = null
     try {
       const userId = await getCurrentUserId()
       const now = Date.now()
-      const activeMinutes = toActiveMinutes(activeMs(s.timer, now))
-      const durationMinutes = Math.round(wallClockMs(s.timer, now) / 60000)
-
-      const { data: inserted, error } = await supabase.from('workout_sessions').insert({
-        user_id: userId,
-        workout_id: s.workoutId,
-        // Renseigné quand la séance est une activité cardio chronométrée.
-        activity_exercise_id: s.activityId,
-        started_at: s.timer.startedAt,
-        ended_at: new Date(now).toISOString(),
-        performed_at: s.timer.startedAt,
-        duration_minutes: durationMinutes,
-        active_minutes: activeMinutes,
-        notes: s.notes.trim() || null
-      }).select('id').single()
-      if (error) throw error
-
-      await linkSessionToPlan({
-        sessionId: inserted.id,
-        scheduledId: s.scheduledId,
+      entry = {
+        id: crypto.randomUUID(),
+        userId,
         workoutId: s.workoutId,
-        date: localDate(new Date(s.timer.startedAt))
-      })
-
-      // Le trigger wodbud_recalc_profile_totals s'exécute dans la même
-      // transaction que l'insertion : la lecture qui suit voit déjà les totaux
-      // à jour, aucun calcul de rang n'est refait côté client.
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('total_minutes, current_streak')
-        .eq('id', userId)
-        .single()
-
-      // Décerné APRÈS l'insertion : la fonction lit les totaux que le trigger
-      // vient de mettre à jour. Un échec ici ne doit pas perdre la séance,
-      // qui est déjà enregistrée — d'où le repli silencieux.
-      let newBadges: string[] = []
-      try {
-        newBadges = await recalcBadges()
-      } catch {
-        // Les badges seront rattrapés à l'ouverture de « Mon rang ».
+        activityId: s.activityId,
+        scheduledId: s.scheduledId,
+        startedAt: s.timer.startedAt,
+        endedAt: new Date(now).toISOString(),
+        activeMinutes: toActiveMinutes(activeMs(s.timer, now)),
+        durationMinutes: Math.round(wallClockMs(s.timer, now) / 60000),
+        notes: s.notes.trim() || null,
+        results: s.pendingResults.map((r) => ({
+          id: crypto.randomUUID(),
+          exerciseId: r.exerciseId, weightKg: r.weightKg, reps: r.reps, seconds: r.seconds, notes: r.notes
+        })),
+        names: Object.fromEntries(s.items.map((i) => [i.exerciseId, i.name]))
       }
 
-      // Les résultats notés partent avec la séance. Un échec ne la perd pas :
-      // elle est déjà enregistrée, seuls les résultats seraient à renoter.
-      const newRecords: SessionSummary['newRecords'] = []
-      if (s.pendingResults.length) {
-        try {
-          const ids = new Set(s.pendingResults.map((r) => r.exerciseId))
-          const previous = (await fetchMyResults()).filter((r) => ids.has(r.exerciseId))
-          const saved = await addResults(s.pendingResults.map((r) => ({
-            exerciseId: r.exerciseId, weightKg: r.weightKg, reps: r.reps, seconds: r.seconds, notes: r.notes, sessionId: inserted.id
-          })))
-          const nameOf = new Map(s.items.map((i) => [i.exerciseId, i.name]))
-          for (const r of saved) {
-            if (isNewRecord(previous, r)) newRecords.push({ name: nameOf.get(r.exerciseId) ?? '—', result: r })
-          }
-        } catch {
-          // Voir plus haut : la séance compte quand même.
-        }
-      }
-
-      const totalMinutes = profile?.total_minutes ?? activeMinutes
-      const summary: SessionSummary = {
-        activeMinutes,
-        totalMinutes,
-        currentStreak: profile?.current_streak ?? 0,
-        newBadges,
-        newRecords,
-        previousMinutes: Math.max(0, totalMinutes - activeMinutes)
-      }
-
+      const summary = navigator.onLine ? await uploadSession(entry) : queueOffline(entry)
       persist({ ...IDLE })
       set({ ...IDLE, items: [], format: null, saving: false, lastSummary: summary })
       return summary
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : i18n.t('errors.generic', { ns: 'common' })
+      // Réseau tombé pendant l'envoi : la séance attend dans la file plutôt
+      // que de rester bloquée sur un bouton « Terminer » qui échoue.
+      if (entry && isNetworkError(err)) {
+        const summary = queueOffline(entry)
+        persist({ ...IDLE })
+        set({ ...IDLE, items: [], format: null, saving: false, lastSummary: summary })
+        return summary
+      }
+      const message = err instanceof Error
+        ? err.message
+        : typeof err === 'object' && err && 'message' in err
+          ? String((err as { message: unknown }).message)
+          : i18n.t('errors.generic', { ns: 'common' })
       set({ saving: false, error: message })
       throw err
     }
@@ -428,6 +374,20 @@ export const useSessionStore = create<SessionState>((set, get) => ({
   },
 
 }))
+
+function queueOffline(entry: FinishedSession): SessionSummary {
+  enqueue(entry)
+  window.dispatchEvent(new Event('wodbud:outbox'))
+  return {
+    activeMinutes: entry.activeMinutes,
+    totalMinutes: 0,
+    currentStreak: 0,
+    newBadges: [],
+    newRecords: [],
+    previousMinutes: 0,
+    offline: true
+  }
+}
 
 /** Vrai si une séance est en cours (démarrée et non terminée). */
 export function selectSessionActive(s: SessionState): boolean {

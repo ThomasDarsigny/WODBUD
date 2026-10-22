@@ -896,5 +896,18 @@
     "history": "History",
     "new_pr_one": "New record",
     "new_pr_other": "New records"
+  },
+  "offline": {
+    "offline": "Offline — you can train, your session will be sent when you are back online.",
+    "offline_pending_one": "Offline — {{count}} session is waiting for the network.",
+    "offline_pending_other": "Offline — {{count}} sessions are waiting for the network.",
+    "sending_one": "Sending {{count}} offline session…",
+    "sending_other": "Sending {{count}} offline sessions…",
+    "synced_one": "{{count}} offline session saved.",
+    "synced_other": "{{count}} offline sessions saved.",
+    "rejected_one": "{{count}} offline session refused: over 12 h without network, it does not count.",
+    "rejected_other": "{{count}} offline sessions refused: over 12 h without network, they do not count.",
+    "done_title": "Session kept on this phone",
+    "done_hint": "No network: the session is kept here and will be sent as soon as you are back online (within 12 h). Your minutes, rank and badges will update then."
   }
 }

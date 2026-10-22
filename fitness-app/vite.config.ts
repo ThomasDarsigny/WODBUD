@@ -60,7 +60,9 @@ export default defineConfig({
               cacheName: 'supabase-rest-v1',
               networkTimeoutSeconds: 4,
               expiration: {
-                maxEntries: 60,
+                // Bibliothèque, WODs, plans, records : de quoi lancer une
+                // séance au sous-sol sans réseau.
+                maxEntries: 200,
                 maxAgeSeconds: 60 * 60 * 24 * 7   // 7 jours
               },
               cacheableResponse: {

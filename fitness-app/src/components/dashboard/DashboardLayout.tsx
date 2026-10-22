@@ -4,7 +4,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { supabase } from '../../lib/supabase'
 import { isCurrentUserAdmin } from '../../lib/access'
-import { useOnlineStatus } from '../../hooks/useOnlineStatus'
+import OfflineBanner from '../session/OfflineBanner'
 import ActiveSessionBar from '../session/ActiveSessionBar'
 import { useIsMobile } from '../../hooks/useMediaQuery'
 import NavIcon from '../navigation/NavIcon'
@@ -51,7 +51,6 @@ export default function DashboardLayout({ children }: Props) {
   const [isAdmin, setIsAdmin] = useState(false)
   const isMobile = useIsMobile()
   const rail = collapsed
-  const online = useOnlineStatus()
 
   useEffect(() => {
     let mounted = true
@@ -314,27 +313,7 @@ export default function DashboardLayout({ children }: Props) {
             </Link>
           </div>
         )}
-        {!online && (
-          <div
-            style={{
-              background: 'rgba(255,77,0,0.12)',
-              borderBottom: '1px solid rgba(255,77,0,0.3)',
-              padding: '0.5rem 1.5rem',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              fontFamily: 'var(--font-d)',
-              fontSize: '0.6875rem',
-              letterSpacing: '0.1em',
-              textTransform: 'uppercase',
-              color: 'var(--orange)',
-              flexShrink: 0
-            }}
-          >
-            <span style={{ fontSize: '0.9375rem' }}>◌</span>
-            Mode hors-ligne — donnees en cache
-          </div>
-        )}
+        <OfflineBanner />
         <ActiveSessionBar basePath="/dashboard" />
         <div className={isMobile ? 'wb-has-tabbar' : undefined} style={{ flex: 1, overflow: 'auto' }}>
           {/* Accueil du coach : les premiers pas, au-dessus de la bibliothèque. */}

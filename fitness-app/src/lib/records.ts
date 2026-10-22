@@ -20,6 +20,8 @@ export interface ExerciseResult {
 }
 
 export interface ResultInput {
+  /** Fourni par la file hors ligne : un renvoi ne crée pas de doublon. */
+  id?: string
   exerciseId: string
   sessionId?: string | null
   weightKg?: number | null
@@ -181,9 +183,11 @@ export async function fetchMyResults(exerciseId?: string): Promise<ExerciseResul
 
 export async function addResults(inputs: ResultInput[]): Promise<ExerciseResult[]> {
   if (inputs.length === 0) return []
+  // Upsert sans mise à jour : renvoyer le même résultat ne fait rien.
   const { data, error } = await supabase
     .from('exercise_results')
-    .insert(inputs.map((i) => ({
+    .upsert(inputs.map((i) => ({
+      id: i.id ?? crypto.randomUUID(),
       exercise_id: i.exerciseId,
       session_id: i.sessionId ?? null,
       weight_kg: i.weightKg ?? null,
@@ -191,7 +195,7 @@ export async function addResults(inputs: ResultInput[]): Promise<ExerciseResult[
       seconds: i.seconds ?? null,
       ...(i.performedAt ? { performed_at: i.performedAt } : {}),
       notes: i.notes?.trim() || null
-    })))
+    })), { onConflict: 'id', ignoreDuplicates: true })
     .select(COLS)
   if (error) throw error
   return ((data ?? []) as Row[]).map(fromRow)

@@ -896,5 +896,18 @@
     "history": "Historique",
     "new_pr_one": "Nouveau record",
     "new_pr_other": "Nouveaux records"
+  },
+  "offline": {
+    "offline": "Hors ligne — tu peux faire ta séance, elle sera envoyée au retour du réseau.",
+    "offline_pending_one": "Hors ligne — {{count}} séance attend le réseau.",
+    "offline_pending_other": "Hors ligne — {{count}} séances attendent le réseau.",
+    "sending_one": "Envoi de {{count}} séance faite hors ligne…",
+    "sending_other": "Envoi de {{count}} séances faites hors ligne…",
+    "synced_one": "{{count}} séance hors ligne enregistrée.",
+    "synced_other": "{{count}} séances hors ligne enregistrées.",
+    "rejected_one": "{{count}} séance hors ligne refusée : plus de 12 h sans réseau, elle ne compte pas.",
+    "rejected_other": "{{count}} séances hors ligne refusées : plus de 12 h sans réseau, elles ne comptent pas.",
+    "done_title": "Séance gardée sur le téléphone",
+    "done_hint": "Pas de réseau : la séance est gardée ici et sera envoyée dès le retour du réseau (dans les 12 h). Tes minutes, ton rang et tes badges se mettront à jour à ce moment-là."
   }
 }
