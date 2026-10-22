@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import EmptyState from '../ui/EmptyState'
 import WorkoutMannequin from '../mannequin/WorkoutMannequin'
@@ -8,9 +8,10 @@ import { useSessionStore } from '../../stores/sessionStore'
 import { getLocalUser } from '../../lib/currentUser'
 import type { WorkoutMethod } from '../../types'
 import { METHOD_I18N_KEYS } from '../../types'
+import { unlockAudio } from '../../lib/gymCues'
 
 export default function WorkoutsLibraryView() {
-  const { t } = useTranslation(['common', 'workouts'])
+  const { t, i18n } = useTranslation(['common', 'workouts'])
   const { savedWorkouts, fetchWorkouts, workoutsFromCache, error } = useWorkoutStore()
   const startSession = useSessionStore((s) => s.startSession)
   const navigate = useNavigate()
@@ -40,55 +41,38 @@ export default function WorkoutsLibraryView() {
   }, [savedWorkouts, search, methodFilter, t])
 
   return (
-    <div style={{ padding: 'var(--page-pad)', minHeight: '100%' }}>
-      <div style={{ marginBottom: '1.5rem' }}>
-        <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'var(--orange)', marginBottom: '0.35rem' }}>
-          {t('nav.library')}
-        </p>
-        <h1 style={{ fontFamily: 'var(--font-d)', fontSize: '1.75rem', fontWeight: 900, textTransform: 'uppercase', lineHeight: 1.05, letterSpacing: '0.03em', margin: 0 }}>
-          {t('library.title')}
-        </h1>
-        <p style={{ color: 'var(--muted)', marginTop: '0.45rem' }}>
-          {t('library.subtitle', { count: savedWorkouts.length })}
-        </p>
-      </div>
+    <div className="wb-page wb-page--wide">
+      <header className="wb-ph">
+        <div>
+          <p className="wb-ph-tag">{t('nav.library')}</p>
+          <h1>{t('library.title')}</h1>
+          <p className="wb-ph-sub">{t('library.subtitle', { count: savedWorkouts.length })}</p>
+        </div>
+        <Link to="/dashboard/workout" className="wb-btn wb-btn--primary">+ {t('home.new_wod')}</Link>
+      </header>
 
-      {/* Search + method filters */}
-      <div style={{ marginBottom: '1rem', display: 'flex', flexDirection: 'column', gap: '0.7rem' }}>
+      <div className="wb-search">
         <input
+          type="search"
+          className="wb-input"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder={t('library.search_placeholder')}
-          style={{
-            width: '100%',
-            background: 'var(--dark)',
-            border: '1px solid var(--border)',
-            color: 'var(--white)',
-            padding: '0.65rem 0.9rem',
-            fontFamily: 'var(--font-b)',
-            fontSize: '0.9375rem',
-            outline: 'none',
-            boxSizing: 'border-box'
-          }}
+          aria-label={t('library.search_placeholder')}
         />
-        <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
-          <FilterChip label={t('library.all_types')} active={methodFilter === 'all'} onClick={() => setMethodFilter('all')} />
-          {(Object.keys(METHOD_I18N_KEYS) as WorkoutMethod[]).map((m) => (
-            <FilterChip
-              key={m}
-              label={t(METHOD_I18N_KEYS[m], { ns: 'common' })}
-              active={methodFilter === m}
-              onClick={() => setMethodFilter(methodFilter === m ? 'all' : m)}
-            />
-          ))}
-        </div>
+      </div>
+      <div className="wb-chips" role="group" aria-label={t('library.all_types')}>
+        <button type="button" className="wb-chip" aria-pressed={methodFilter === 'all'} onClick={() => setMethodFilter('all')}>
+          {t('library.all_types')}
+        </button>
+        {(Object.keys(METHOD_I18N_KEYS) as WorkoutMethod[]).map((m) => (
+          <button key={m} type="button" className="wb-chip" aria-pressed={methodFilter === m} onClick={() => setMethodFilter(methodFilter === m ? 'all' : m)}>
+            {t(METHOD_I18N_KEYS[m], { ns: 'common' })}
+          </button>
+        ))}
       </div>
 
-      {workoutsFromCache && (
-        <p style={{ color: 'var(--muted)', fontSize: '0.6875rem', marginBottom: '0.75rem', fontFamily: 'var(--font-d)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-          ◌ {t('library.from_cache')}
-        </p>
-      )}
+      {workoutsFromCache && <p className="wb-muted-line">◌ {t('library.from_cache')}</p>}
 
       {filtered.length === 0 ? (
         <EmptyState
@@ -97,101 +81,44 @@ export default function WorkoutsLibraryView() {
           hint={savedWorkouts.length === 0 ? t('library.empty_hint') : t('library.no_results_hint')}
         />
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '0.75rem' }}>
+        <div className="wb-grid wb-grid--auto wb-stagger">
           {filtered.map((w) => {
             const isTemplate = currentUserId != null && w.created_by != null && w.created_by !== currentUserId
+            const open = musclesOpenId === w.id
             return (
-              <div key={w.id} style={{ border: '1px solid var(--border)', background: 'var(--dark)', padding: '1rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '0.5rem' }}>
-                  <p style={{ fontFamily: 'var(--font-d)', fontSize: '1.25rem', fontWeight: 800, letterSpacing: '0.04em', textTransform: 'uppercase', color: 'var(--white)', margin: 0 }}>
-                    {w.name}
-                  </p>
-                  <span style={{
-                    fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase',
-                    color: isTemplate ? 'var(--orange)' : 'var(--muted)',
-                    border: `1px solid ${isTemplate ? 'rgba(255,77,0,0.35)' : 'var(--border)'}`,
-                    background: isTemplate ? 'rgba(255,77,0,0.08)' : 'transparent',
-                    padding: '0.12rem 0.4rem', whiteSpace: 'nowrap', flexShrink: 0
-                  }}>
+              <article key={w.id} className="wb-card wb-wod">
+                <div className="wb-wod-head">
+                  <h2>{w.name}</h2>
+                  <span className={`wb-pill${isTemplate ? ' wb-pill--orange' : ''}`}>
                     {isTemplate ? t('library.badge_template') : t('library.badge_mine')}
                   </span>
                 </div>
-
-                <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
-                  <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--orange)', border: '1px solid var(--border)', padding: '0.16rem 0.43rem' }}>
-                    {t(METHOD_I18N_KEYS[w.method], { ns: 'common' })}
-                  </span>
-                  {w.duration_minutes ? (
-                    <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--muted)', border: '1px solid var(--border)', padding: '0.16rem 0.43rem' }}>
-                      {w.duration_minutes} {t('fields.duration_unit_min', { ns: 'workouts' })}
-                    </span>
-                  ) : null}
+                <div className="wb-wod-tags">
+                  <span className="wb-pill wb-pill--orange">{t(METHOD_I18N_KEYS[w.method], { ns: 'common' })}</span>
+                  {w.duration_minutes ? <span className="wb-pill">{w.duration_minutes} {t('fields.duration_unit_min', { ns: 'workouts' })}</span> : null}
+                  <span className="wb-wod-date">{new Date(w.created_at).toLocaleDateString(i18n.language, { day: 'numeric', month: 'short' })}</span>
                 </div>
+                {w.notes ? <p className="wb-wod-notes">{w.notes}</p> : null}
 
-                {w.notes ? (
-                  <p style={{ color: 'var(--muted)', fontSize: '0.8125rem', margin: 0, lineHeight: 1.4 }}>{w.notes}</p>
-                ) : null}
-
-                <p style={{ color: 'var(--muted)', fontSize: '0.8125rem', margin: 0, opacity: 0.7 }}>
-                  {new Date(w.created_at).toLocaleDateString()}
-                </p>
-
-                <button
-                  onClick={() => setMusclesOpenId(musclesOpenId === w.id ? null : w.id)}
-                  aria-expanded={musclesOpenId === w.id}
-                  style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--muted)', background: 'transparent', border: '1px solid var(--border)', padding: '0.5rem 0.9rem', cursor: 'pointer', textAlign: 'left' }}
-                >
-                  {musclesOpenId === w.id ? '▾' : '▸'} {t('mannequin.title', { ns: 'common' })}
+                <button type="button" className="wb-wod-toggle" onClick={() => setMusclesOpenId(open ? null : w.id)} aria-expanded={open}>
+                  <span aria-hidden="true">{open ? '▾' : '▸'}</span> {t('mannequin.title', { ns: 'common' })}
                 </button>
-                {musclesOpenId === w.id && <WorkoutMannequin key={w.id} workoutId={w.id} height={220} />}
+                {open && <WorkoutMannequin key={w.id} workoutId={w.id} height={220} />}
 
                 <button
-                  onClick={() => {
-                    startSession(w.id, w.name)
-                    navigate('/dashboard/session')
-                  }}
-                  style={{
-                    marginTop: 'auto', fontFamily: 'var(--font-d)', fontSize: '0.6875rem', fontWeight: 700,
-                    letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--black)',
-                    background: 'var(--orange)', border: 'none', padding: '0.5rem 0.9rem', cursor: 'pointer'
-                  }}
+                  type="button"
+                  className="wb-btn wb-btn--primary wb-btn--block"
+                  onClick={() => { unlockAudio(); startSession(w.id, w.name); navigate('/dashboard/session') }}
                 >
                   ▶ {t('session.start', { ns: 'workouts' })}
                 </button>
-              </div>
+              </article>
             )
           })}
         </div>
       )}
 
-      {error && !workoutsFromCache && (
-        <div style={{ marginTop: '0.9rem', padding: '0.65rem 0.9rem', background: 'rgba(255,77,0,0.1)', border: '1px solid rgba(255,77,0,0.3)', color: 'var(--orange)', fontSize: '0.8125rem' }}>
-          {error}
-        </div>
-      )}
+      {error && !workoutsFromCache && <div className="wb-rec-error" role="alert">{error}</div>}
     </div>
-  )
-}
-
-function FilterChip({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
-  return (
-    <button
-      onClick={onClick}
-      style={{
-        fontFamily: 'var(--font-d)',
-        fontSize: '0.6875rem',
-        fontWeight: 700,
-        letterSpacing: '0.1em',
-        textTransform: 'uppercase',
-        color: active ? 'var(--black)' : 'var(--muted)',
-        background: active ? 'var(--orange)' : 'transparent',
-        border: `1px solid ${active ? 'var(--orange)' : 'var(--border)'}`,
-        padding: '0.35rem 0.7rem',
-        cursor: 'pointer',
-        transition: 'all 0.15s'
-      }}
-    >
-      {label}
-    </button>
   )
 }

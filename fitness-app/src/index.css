@@ -1475,3 +1475,45 @@ button.wb-pick-free { display: flex; align-items: center; gap: 1rem; padding: 1.
 .wb-grid--auto { grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr)); }
 .wb-stats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .wb-stats--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+/* ─── Bibliothèque de WODs ─────────────────────────────────────── */
+.wb-wod { display: flex; flex-direction: column; gap: 0.7rem; }
+.wb-wod-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 0.6rem; }
+.wb-wod-head h2 { margin: 0; font-family: var(--font-d); font-size: 1.45rem; font-weight: 900; text-transform: uppercase; line-height: 1.02; letter-spacing: 0.01em; min-width: 0; overflow-wrap: anywhere; }
+.wb-wod-tags { display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; }
+.wb-wod-date { margin-left: auto; font-size: 0.78rem; color: var(--muted); }
+.wb-wod-notes { margin: 0; font-size: 0.875rem; color: var(--muted); line-height: 1.5; }
+.wb-wod-toggle { align-self: flex-start; min-height: 40px; padding: 0; background: none; border: none; color: var(--muted); font-weight: 600; font-size: 0.875rem; cursor: pointer; }
+.wb-wod .wb-btn { margin-top: auto; }
+
+/* ─── Bibliothèque d'exercices ─────────────────────────────────── */
+.wb-ph-count { font-family: var(--font-b); font-size: 1rem; font-weight: 600; color: var(--muted); letter-spacing: 0; vertical-align: middle; margin-left: 0.4rem; }
+.wb-ex-warn { display: flex; align-items: flex-start; gap: 0.75rem; }
+.wb-ex-warn > span { color: var(--orange); display: flex; margin-top: 2px; }
+.wb-ex-warn p { margin: 0; flex: 1; font-size: 0.875rem; line-height: 1.5; }
+.wb-ex-filters { display: grid; gap: 0.6rem; grid-template-columns: minmax(0, 1fr); }
+.wb-ex-searchrow { display: flex; gap: 0.5rem; }
+.wb-ex-searchrow .wb-search { flex: 1; min-width: 0; }
+.wb-ex-ftoggle { flex-shrink: 0; letter-spacing: 0.04em; }
+.wb-ex-ftoggle.is-active { border-color: var(--orange); color: var(--orange); }
+.wb-ex-fpanel { display: grid; gap: 1rem; grid-template-columns: minmax(0, 1fr); overflow: hidden; }
+.wb-ex-fgroup { display: grid; gap: 0.45rem; min-width: 0; }
+.wb-ex-fgroup > span { font-size: 0.85rem; font-weight: 700; color: var(--white); }
+.wb-ex-fpanel .wb-chips { margin: 0 -1.1rem; padding-left: 1.1rem; padding-right: 1.1rem; }
+@media (min-width: 769px) { .wb-ex-fpanel .wb-chips { margin: 0; padding: 0; } }
+.wb-ex-count { display: flex; align-items: center; justify-content: space-between; font-size: 0.8125rem; color: var(--muted); }
+.wb-ex-count button { min-height: 36px; background: none; border: none; color: var(--orange); font-weight: 600; cursor: pointer; padding: 0; }
+
+.wb-ex-grid { grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 700px) { .wb-ex-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1100px) { .wb-ex-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+button.wb-ex-card { display: flex; align-items: center; gap: 0.85rem; padding: 0.6rem; }
+.wb-ex-thumb { position: relative; flex-shrink: 0; width: 84px; height: 84px; border-radius: var(--r-md); overflow: hidden; background: var(--black); display: flex; align-items: center; justify-content: center; }
+.wb-ex-thumb video { width: 100%; height: 100%; object-fit: cover; }
+.wb-ex-play { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: #fff; background: linear-gradient(transparent, rgba(0, 0, 0, 0.35)); }
+.wb-ex-novideo { color: var(--line-fn); display: flex; }
+.wb-ex-body { flex: 1; min-width: 0; display: grid; gap: 0.25rem; }
+.wb-ex-cat { font-family: var(--font-d); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--orange); }
+.wb-ex-body strong { font-family: var(--font-d); font-size: 1.15rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.02em; line-height: 1.1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.wb-ex-muscles { display: flex; align-items: center; gap: 0.35rem; flex-wrap: wrap; }
+.wb-ex-more { font-size: 0.75rem; color: var(--muted); }

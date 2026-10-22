@@ -23,7 +23,6 @@ import { useIsMobile } from '../../hooks/useMediaQuery'
 import { btnPrimary as emptyActionStyle } from '../../styles/ui'
 import { SkeletonCards } from '../ui/Skeleton'
 import { isCurrentUserAdmin } from '../../lib/access'
-import ExerciseMuscleMannequin from '../mannequin/ExerciseMuscleMannequin'
 
 type FilterCategory = ExerciseCategory | 'all'
 
@@ -107,120 +106,30 @@ export default function ExercisesView() {
   ]
 
   return (
-    <div style={{ padding: 'var(--page-pad)', minHeight: '100%' }}>
+    <div className="wb-page wb-page--wide">
       {/* L'exercice est enregistré mais sa vidéo ne l'est pas. Le formulaire
           s'est déjà fermé, donc l'avertissement vit ici, pas dans la modale. */}
       {videoWarning && (
-        <div
-          role="status"
-          style={{
-            display: 'flex',
-            alignItems: 'flex-start',
-            gap: '0.75rem',
-            border: '1px solid rgba(255, 77, 0, 0.35)',
-            background: 'rgba(255, 77, 0, 0.07)',
-            padding: '0.85rem 1rem',
-            marginBottom: '1.25rem'
-          }}
-        >
-          <span style={{ color: 'var(--orange)', flexShrink: 0, display: 'flex', marginTop: 2 }}>
-            <NavIcon name="video" size={18} />
-          </span>
-          <p style={{ margin: 0, flex: 1, fontSize: '0.8125rem', lineHeight: 1.55 }}>
-            {videoWarning}
-          </p>
-          <button
-            onClick={dismissVideoWarning}
-            style={{
-              fontFamily: 'var(--font-d)',
-              fontSize: '0.6875rem',
-              fontWeight: 700,
-              letterSpacing: '0.12em',
-              textTransform: 'uppercase',
-              background: 'transparent',
-              border: '1px solid var(--border)',
-              color: 'var(--muted)',
-              padding: '0.35rem 0.7rem',
-              minHeight: 44,
-              cursor: 'pointer',
-              flexShrink: 0
-            }}
-          >
+        <div role="status" className="wb-card wb-card--accent wb-ex-warn">
+          <span aria-hidden="true"><NavIcon name="video" size={18} /></span>
+          <p>{videoWarning}</p>
+          <button type="button" className="wb-btn wb-btn--secondary wb-btn--sm" onClick={dismissVideoWarning}>
             {t('actions.close', { ns: 'common' })}
           </button>
         </div>
       )}
 
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'flex-end',
-          justifyContent: 'space-between',
-          marginBottom: '2rem',
-          flexWrap: 'wrap',
-          gap: '1rem'
-        }}
-      >
+      <header className="wb-ph">
         <div>
-          <p
-            style={{
-              fontFamily: 'var(--font-d)',
-              fontSize: '0.6875rem',
-              letterSpacing: '0.28em',
-              textTransform: 'uppercase',
-              color: 'var(--orange)',
-              marginBottom: '0.4rem'
-            }}
-          >
-            {t('builder.library', { ns: 'workouts' })}
-          </p>
-          <h1
-            style={{
-              fontFamily: 'var(--font-d)',
-              fontSize: '1.75rem',
-              fontWeight: 900,
-              textTransform: 'uppercase',
-              lineHeight: 1,
-              letterSpacing: '0.02em'
-            }}
-          >
-            {t('title', { ns: 'exercises' })}
-            <span
-              style={{
-                fontFamily: 'var(--font-d)',
-                fontSize: '1rem',
-                fontWeight: 400,
-                color: 'var(--muted)',
-                marginLeft: '0.75rem'
-              }}
-            >
-              {exercises.length}
-            </span>
-          </h1>
+          <p className="wb-ph-tag">{t('builder.library', { ns: 'workouts' })}</p>
+          <h1>{t('title', { ns: 'exercises' })} <span className="wb-ph-count">{exercises.length}</span></h1>
         </div>
         {isAdmin && (
-          <button
-            onClick={() => {
-              setEditingExercise(undefined)
-              setShowForm(true)
-            }}
-            style={{
-              fontFamily: 'var(--font-d)',
-              fontWeight: 700,
-              fontSize: '0.9375rem',
-              letterSpacing: '0.12em',
-              textTransform: 'uppercase',
-              color: 'var(--black)',
-              background: 'var(--orange)',
-              padding: '0.7rem 1.5rem',
-              border: 'none',
-              cursor: 'pointer'
-            }}
-          >
+          <button type="button" className="wb-btn wb-btn--primary" onClick={() => { setEditingExercise(undefined); setShowForm(true) }}>
             + {t('new', { ns: 'exercises' })}
           </button>
         )}
-      </div>
+      </header>
 
       <FilterPanel
         search={search}
@@ -315,15 +224,7 @@ export default function ExercisesView() {
           }
         />
       ) : (
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-            gap: '1px',
-            background: 'var(--border)',
-            border: '1px solid var(--border)'
-          }}
-        >
+        <div className="wb-grid wb-ex-grid wb-stagger">
           {filtered.map((exercise) => (
             <ExerciseCard
               key={exercise.id}
@@ -355,138 +256,36 @@ export default function ExercisesView() {
   )
 }
 
+/**
+ * Carte compacte : vignette, catégorie, nom, muscles. Le mannequin et la
+ * vidéo complète vivent dans la fiche — sur téléphone, la liste doit se
+ * parcourir d'un coup de pouce.
+ */
 function ExerciseCard({ exercise, onClick }: { exercise: Exercise; onClick: () => void }) {
   const { t } = useTranslation(['common'])
-  const [hovered, setHovered] = useState(false)
-
   return (
-    <button
-      onClick={onClick}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{
-        background: hovered ? 'var(--surface)' : 'var(--dark)',
-        border: 'none',
-        padding: '1.25rem 1.5rem',
-        textAlign: 'left',
-        cursor: 'pointer',
-        transition: 'background 0.15s',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '0.5rem'
-      }}
-    >
-      <div
-        style={{
-          width: '100%',
-          height: 110,
-          background: 'var(--black)',
-          marginBottom: '0.25rem',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          overflow: 'hidden',
-          position: 'relative'
-        }}
-      >
+    <button type="button" className="wb-card wb-ex-card" onClick={onClick}>
+      <span className="wb-ex-thumb">
         {exercise.video_url ? (
-          <video
-            src={exercise.video_url}
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-            muted
-            preload='metadata'
-          />
+          <>
+            <video src={exercise.video_url} muted preload="metadata" />
+            <span className="wb-ex-play" aria-hidden="true"><NavIcon name="play" size={22} strokeWidth={1.75} /></span>
+          </>
         ) : (
-          <span style={{ opacity: 0.2, display: 'flex' }}><NavIcon name="video" size={32} /></span>
+          <span className="wb-ex-novideo" aria-hidden="true"><NavIcon name="exercises" size={26} /></span>
         )}
-        {exercise.video_url && (
-          <div
-            style={{
-              position: 'absolute',
-              inset: 0,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              background: 'rgba(0,0,0,0.3)',
-              opacity: hovered ? 1 : 0,
-              transition: 'opacity 0.15s'
-            }}
-          >
-            <span style={{ color: 'var(--white)', display: 'flex' }}><NavIcon name="play" size={34} strokeWidth={1.5} /></span>
-          </div>
-        )}
-      </div>
-
-      <span
-        style={{
-          fontFamily: 'var(--font-d)',
-          fontSize: '0.6875rem',
-          letterSpacing: '0.2em',
-          textTransform: 'uppercase',
-          color: 'var(--orange)'
-        }}
-      >
-        {t(CATEGORY_I18N_KEYS[exercise.category], { ns: 'common' })}
       </span>
-
-      <h3
-        style={{
-          fontFamily: 'var(--font-d)',
-          fontSize: '1rem',
-          fontWeight: 700,
-          textTransform: 'uppercase',
-          letterSpacing: '0.04em',
-          color: 'var(--white)',
-          margin: 0
-        }}
-      >
-        {exercise.name}
-      </h3>
-
-      <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', flexWrap: 'wrap' }}>
-        <span
-          style={{
-            fontFamily: 'var(--font-d)',
-            fontSize: '0.6875rem',
-            letterSpacing: '0.1em',
-            textTransform: 'uppercase',
-            color: 'var(--orange)',
-            background: 'rgba(255,77,0,0.1)',
-            border: '1px solid rgba(255,77,0,0.25)',
-            padding: '0.15rem 0.5rem'
-          }}
-        >
-          {t(MUSCLE_GROUP_I18N_KEYS[exercise.primary_muscle], { ns: 'common' })}
+      <span className="wb-ex-body">
+        <span className="wb-ex-cat">{t(CATEGORY_I18N_KEYS[exercise.category], { ns: 'common' })}</span>
+        <strong>{exercise.name}</strong>
+        <span className="wb-ex-muscles">
+          <span className="wb-pill wb-pill--orange">{t(MUSCLE_GROUP_I18N_KEYS[exercise.primary_muscle], { ns: 'common' })}</span>
+          {exercise.secondary_muscles.slice(0, 1).map((m) => (
+            <span key={m} className="wb-pill">{t(MUSCLE_GROUP_I18N_KEYS[m], { ns: 'common' })}</span>
+          ))}
+          {exercise.secondary_muscles.length > 1 && <span className="wb-ex-more">+{exercise.secondary_muscles.length - 1}</span>}
         </span>
-        {exercise.secondary_muscles.slice(0, 2).map((m) => (
-          <span
-            key={m}
-            style={{
-              fontFamily: 'var(--font-d)',
-              fontSize: '0.6875rem',
-              letterSpacing: '0.08em',
-              textTransform: 'uppercase',
-              color: 'var(--muted)',
-              border: '1px solid var(--border)',
-              padding: '0.15rem 0.4rem'
-            }}
-          >
-            {t(MUSCLE_GROUP_I18N_KEYS[m], { ns: 'common' })}
-          </span>
-        ))}
-        {exercise.secondary_muscles.length > 2 && (
-          <span style={{ fontSize: '0.8125rem', color: 'var(--muted)' }}>
-            +{exercise.secondary_muscles.length - 2}
-          </span>
-        )}
-      </div>
-
-      <ExerciseMuscleMannequin
-        primaryMuscle={exercise.primary_muscle}
-        secondaryMuscles={exercise.secondary_muscles}
-        tertiaryMuscles={exercise.tertiary_muscles}
-        height={78}
-      />
+      </span>
     </button>
   )
 }
@@ -521,131 +320,50 @@ function FilterPanel({
   const [open, setOpen] = useState(!isMobile)
 
   return (
-    <div style={{ marginBottom: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-      <input
-        value={search}
-        onChange={(e) => onSearch(e.target.value)}
-        placeholder={searchPlaceholder}
-        style={{
-          width: '100%',
-          background: 'var(--dark)',
-          border: '1px solid var(--border)',
-          color: 'var(--white)',
-          padding: '0.8rem 1rem',
-          fontFamily: 'var(--font-b)',
-          fontSize: '1rem',
-          outline: 'none',
-          boxSizing: 'border-box'
-        }}
-      />
-
-      <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
+    <div className="wb-ex-filters">
+      <div className="wb-ex-searchrow">
+        <div className="wb-search">
+          <input
+            type="search"
+            className="wb-input"
+            value={search}
+            onChange={(e) => onSearch(e.target.value)}
+            placeholder={searchPlaceholder}
+            aria-label={searchPlaceholder}
+          />
+        </div>
         <button
-          type='button'
+          type="button"
+          className={`wb-btn wb-btn--secondary wb-ex-ftoggle${activeCount > 0 ? ' is-active' : ''}`}
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
-          style={{
-            flex: '1 1 auto',
-            minHeight: 44,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: '0.6rem',
-            fontFamily: 'var(--font-d)',
-            fontSize: '0.8125rem',
-            fontWeight: 700,
-            letterSpacing: '0.1em',
-            textTransform: 'uppercase',
-            padding: '0.6rem 1rem',
-            border: `1px solid ${activeCount > 0 ? 'var(--orange)' : 'var(--border)'}`,
-            background: activeCount > 0 ? 'rgba(255,77,0,0.08)' : 'var(--dark)',
-            color: activeCount > 0 ? 'var(--orange)' : 'var(--white)',
-            cursor: 'pointer'
-          }}
         >
-          <span>
-            {t('fields.filters', { ns: 'exercises' })}
-            {activeCount > 0 ? ` (${activeCount})` : ''}
-          </span>
-          <span style={{ fontSize: '0.8125rem' }}>{open ? '▲' : '▼'}</span>
+          {t('fields.filters', { ns: 'exercises' })}
+          {activeCount > 0 && <span className="wb-segmented-count">{activeCount}</span>}
         </button>
-
-        {activeCount > 0 && (
-          <button
-            type='button'
-            onClick={onReset}
-            style={{
-              minHeight: 44,
-              fontFamily: 'var(--font-d)',
-              fontSize: '0.6875rem',
-              fontWeight: 700,
-              letterSpacing: '0.1em',
-              textTransform: 'uppercase',
-              padding: '0.6rem 1rem',
-              border: '1px solid var(--border)',
-              background: 'transparent',
-              color: 'var(--muted)',
-              cursor: 'pointer',
-              whiteSpace: 'nowrap'
-            }}
-          >
-            {t('actions.reset', { ns: 'common' })}
-          </button>
-        )}
       </div>
 
-      {open && (
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '1.1rem',
-            border: '1px solid var(--border)',
-            background: 'var(--dark)',
-            padding: '1.1rem'
-          }}
-        >
-          {children}
-        </div>
-      )}
+      {open && <div className="wb-card wb-ex-fpanel">{children}</div>}
 
-      <p
-        style={{
-          margin: 0,
-          fontFamily: 'var(--font-d)',
-          fontSize: '0.6875rem',
-          letterSpacing: '0.1em',
-          textTransform: 'uppercase',
-          color: 'var(--muted)'
-        }}
-      >
-        {resultCount} {t('fields.results', { ns: 'exercises' })}
-      </p>
+      <div className="wb-ex-count">
+        <span>{resultCount} {t('fields.results', { ns: 'exercises' })}</span>
+        {activeCount > 0 && (
+          <button type="button" onClick={onReset}>{t('actions.reset', { ns: 'common' })}</button>
+        )}
+      </div>
     </div>
   )
 }
 
 /**
  * Le libellé passe AU-DESSUS des pastilles, pas à côté.
- * Sur téléphone, un libellé de 4,5 rem à gauche laissait une colonne trop
- * étroite : les pastilles se mettaient en escalier, une ou deux par ligne.
+ * Sur téléphone, un libellé à gauche laissait une colonne trop étroite.
  */
 function FilterGroup({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-      <span
-        style={{
-          fontFamily: 'var(--font-d)',
-          fontSize: '0.6875rem',
-          fontWeight: 700,
-          letterSpacing: '0.18em',
-          textTransform: 'uppercase',
-          color: 'var(--orange)'
-        }}
-      >
-        {label}
-      </span>
-      <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>{children}</div>
+    <div className="wb-ex-fgroup">
+      <span>{label}</span>
+      <div className="wb-chips">{children}</div>
     </div>
   )
 }
@@ -661,29 +379,11 @@ function FilterChip({
   accent?: string
   onClick: () => void
 }) {
-  const color = accent ?? 'var(--orange)'
+  // Un type de mouvement garde sa couleur une fois choisi.
+  const style = active && accent ? { background: accent, borderColor: accent } : undefined
   return (
-    <button
-      type='button'
-      onClick={onClick}
-      style={{
-        fontFamily: 'var(--font-d)',
-        fontSize: '0.8125rem',
-        fontWeight: 700,
-        letterSpacing: '0.06em',
-        textTransform: 'uppercase',
-        // 38 px de haut : sous ~36 px une pastille devient difficile à viser au pouce.
-        minHeight: 44,
-        padding: '0.5rem 0.85rem',
-        border: `1px solid ${active ? color : 'var(--border)'}`,
-        background: active ? `${accent ? accent + '22' : 'rgba(255,77,0,0.1)'}` : 'transparent',
-        color: active ? color : 'var(--muted)',
-        cursor: 'pointer',
-        transition: 'all 0.15s'
-      }}
-    >
+    <button type="button" className="wb-chip" aria-pressed={active} onClick={onClick} style={style}>
       {label}
     </button>
   )
 }
-

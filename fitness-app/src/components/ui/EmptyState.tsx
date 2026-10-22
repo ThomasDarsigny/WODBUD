@@ -35,6 +35,7 @@ export default function EmptyState({ icon, title, hint, action, compact = false 
         gap: '0.8rem',
         padding: compact ? '1.9rem 1.2rem' : '3.2rem 1.5rem',
         border: '1px dashed var(--border)',
+        borderRadius: 16,
         background: 'var(--dark)'
       }}
     >
@@ -44,8 +45,8 @@ export default function EmptyState({ icon, title, hint, action, compact = false 
           placeItems: 'center',
           width: compact ? 42 : 54,
           height: compact ? 42 : 54,
-          border: '1px solid rgba(255, 77, 0, 0.3)',
-          background: 'rgba(255, 77, 0, 0.07)',
+          borderRadius: 14,
+          background: 'rgba(255, 77, 0, 0.12)',
           color: 'var(--orange)',
           flexShrink: 0
         }}
@@ -56,11 +57,9 @@ export default function EmptyState({ icon, title, hint, action, compact = false 
       <p
         style={{
           margin: 0,
-          fontFamily: 'var(--font-d)',
-          fontSize: compact ? '0.92rem' : '1.05rem',
-          fontWeight: 800,
-          letterSpacing: '0.07em',
-          textTransform: 'uppercase',
+          fontFamily: 'var(--font-b)',
+          fontSize: compact ? '0.98rem' : '1.08rem',
+          fontWeight: 700,
           color: 'var(--white)'
         }}
       >
@@ -72,8 +71,8 @@ export default function EmptyState({ icon, title, hint, action, compact = false 
           style={{
             margin: 0,
             color: 'var(--muted)',
-            fontSize: '0.8125rem',
-            lineHeight: 1.6,
+            fontSize: '0.875rem',
+            lineHeight: 1.55,
             maxWidth: '40ch'
           }}
         >
