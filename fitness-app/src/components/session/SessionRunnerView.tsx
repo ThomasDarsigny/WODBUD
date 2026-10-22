@@ -1,10 +1,11 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useSessionStore } from '../../stores/sessionStore'
 import { useWorkoutStore } from '../../stores/workoutStore'
-import { activeMs, formatClock, isRunning, wallClockMs } from '../../lib/sessionTimer'
+import { formatClock } from '../../lib/sessionTimer'
+import { unlockAudio } from '../../lib/gymCues'
 import { METHOD_I18N_KEYS } from '../../types'
 import { textarea as textareaStyle } from '../../styles/ui'
 import { badgeDisplay, fetchBadgesByKeys, type Badge } from '../../lib/badges'
@@ -12,6 +13,7 @@ import { computeProgress, rankDisplay } from '../../lib/ranks'
 import { useRankStore } from '../../stores/rankStore'
 import BadgeToken from '../badges/BadgeToken'
 import WorkoutMannequin from '../mannequin/WorkoutMannequin'
+import { GymOverlay, clockText, useClockLabels, useGymClock } from './GymClock'
 
 interface Props {
   /** '/dashboard' côté coach, '/athlete' côté athlète. */
@@ -67,7 +69,7 @@ function SessionPicker() {
       <QuickLogPanel />
 
       <button
-        onClick={() => startSession(null, t('session.free_session'))}
+        onClick={() => { unlockAudio(); startSession(null, t('session.free_session')) }}
         style={{
           width: '100%', textAlign: 'left', cursor: 'pointer',
           border: '1px solid rgba(255,77,0,0.35)', background: 'rgba(255,77,0,0.06)',
@@ -95,7 +97,7 @@ function SessionPicker() {
           {savedWorkouts.map((w) => (
             <button
               key={w.id}
-              onClick={() => startSession(w.id, w.name)}
+              onClick={() => { unlockAudio(); startSession(w.id, w.name) }}
               style={{
                 textAlign: 'left', cursor: 'pointer', color: 'var(--white)',
                 border: '1px solid var(--border)', background: 'var(--dark)', padding: '0.95rem 1rem'
@@ -162,7 +164,7 @@ function QuickLogPanel() {
       </div>
 
       <button
-        onClick={() => startActivity(selectedId, selectedName)}
+        onClick={() => { unlockAudio(); startActivity(selectedId, selectedName) }}
         style={{
           width: '100%',
           minHeight: 52,
@@ -214,39 +216,21 @@ function Chip({ label, active, onClick }: { label: string; active: boolean; onCl
 function RunnerPanel() {
   const { t } = useTranslation(['workouts', 'common'])
   const {
-    workoutId, workoutName, activityName, timer, items, doneExerciseIds, notes, saving, error,
+    workoutId, workoutName, activityName, items, doneExerciseIds, notes, saving, error,
     pause, resume, toggleExercise, setNotes, finish, discard
   } = useSessionStore()
 
   // Une séance cardio n'a pas de WOD : c'est le nom de l'activité qui titre.
   const heading = activityName || workoutName
 
-  const [now, setNow] = useState(() => Date.now())
   const [confirmDiscard, setConfirmDiscard] = useState(false)
+  const [gymOpen, setGymOpen] = useState(false)
+  const closeGym = useCallback(() => setGymOpen(false), [])
 
-  const running = isRunning(timer)
-
-  // Le tick ne sert qu'à réafficher : la valeur vient toujours d'un écart
-  // d'horodatage, donc un intervalle étranglé en arrière-plan ne fausse rien.
-  useEffect(() => {
-    if (!running) return
-    const id = window.setInterval(() => setNow(Date.now()), 1000)
-    return () => window.clearInterval(id)
-  }, [running])
-
-  // Au retour d'un écran verrouillé, on resynchronise immédiatement.
-  useEffect(() => {
-    const sync = () => setNow(Date.now())
-    document.addEventListener('visibilitychange', sync)
-    window.addEventListener('focus', sync)
-    return () => {
-      document.removeEventListener('visibilitychange', sync)
-      window.removeEventListener('focus', sync)
-    }
-  }, [])
-
-  const active = activeMs(timer, now)
-  const wall = wallClockMs(timer, now)
+  const gym = useGymClock()
+  const { clock, active, wall, running, withFormat, sound, setSound } = gym
+  const labels = useClockLabels(clock)
+  const toggle = () => { unlockAudio(); if (running) pause(); else resume() }
   const doneCount = useMemo(
     () => items.filter((i) => doneExerciseIds.includes(i.id)).length,
     [items, doneExerciseIds]
@@ -265,10 +249,15 @@ function RunnerPanel() {
         </div>
 
         <div style={{ fontFamily: 'var(--font-d)', fontSize: 'clamp(3rem, 13vw, 5.5rem)', fontWeight: 900, lineHeight: 1, letterSpacing: '0.02em', color: running ? 'var(--white)' : 'var(--muted)', margin: '0.9rem 0 0.2rem', fontVariantNumeric: 'tabular-nums' }}>
-          {formatClock(active)}
+          {clockText(clock)}
         </div>
+        {withFormat && (
+          <p className="wb-run-phase" data-phase={running ? clock.phase : 'paused'}>
+            {labels.phase}{labels.round ? ` · ${labels.round}` : ''}
+          </p>
+        )}
         <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--muted)', margin: 0 }}>
-          {t('session.active_time')} · {t('session.wall_time')} {formatClock(wall)}
+          {withFormat ? `${t('session.active_time')} ${formatClock(active)} · ` : `${t('session.active_time')} · `}{t('session.wall_time')} {formatClock(wall)}
         </p>
 
         {!running && (
@@ -282,8 +271,21 @@ function RunnerPanel() {
           </p>
         )}
 
-        <div style={{ display: 'flex', gap: '0.6rem', marginTop: '1.3rem', flexWrap: 'wrap' }}>
-          <ActionButton onClick={running ? pause : resume} variant="ghost">
+        <button type="button" className="wb-run-gym" onClick={() => { unlockAudio(); setGymOpen(true) }}>
+          <span aria-hidden="true">⛶</span> {t('session.gym_mode')}
+          <small>{t('session.gym_hint')}</small>
+        </button>
+        <button
+          type="button"
+          className="wb-run-sound"
+          onClick={() => setSound(!sound)}
+          aria-pressed={sound}
+        >
+          {sound ? `🔊 ${t('session.sound_on')}` : `🔇 ${t('session.sound_off')}`}
+        </button>
+
+        <div className="wb-run-actions">
+          <ActionButton onClick={toggle} variant="ghost">
             {running ? `❚❚ ${t('session.pause')}` : `▶ ${t('session.resume')}`}
           </ActionButton>
           <ActionButton onClick={() => { void finish() }} variant="primary" disabled={saving}>
@@ -371,6 +373,8 @@ function RunnerPanel() {
           style={textareaStyle}
         />
       </div>
+
+      {gymOpen && <GymOverlay gym={gym} title={heading} onClose={closeGym} onToggle={toggle} />}
 
       {error && (
         <div style={{ marginTop: '0.9rem', padding: '0.65rem 0.9rem', background: 'rgba(255,77,0,0.1)', border: '1px solid rgba(255,77,0,0.3)', color: 'var(--orange)', fontSize: '0.8125rem' }}>
@@ -519,7 +523,7 @@ function ActionButton({ children, onClick, variant, disabled }: {
       disabled={disabled}
       style={{
         fontFamily: 'var(--font-d)', fontSize: '0.8125rem', fontWeight: 700, letterSpacing: '0.1em',
-        textTransform: 'uppercase', padding: '0.7rem 1.3rem',
+        textTransform: 'uppercase', padding: '0.7rem 1.3rem', minHeight: 48,
         cursor: disabled ? 'not-allowed' : 'pointer', opacity: disabled ? 0.55 : 1,
         ...palette
       }}

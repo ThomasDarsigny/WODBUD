@@ -91,7 +91,17 @@
     "log_start": "Commencer",
     "new_rank": "Nouveau rang",
     "new_badges_one": "Nouveau badge",
-    "new_badges_other": "Nouveaux badges"
+    "new_badges_other": "Nouveaux badges",
+    "gym_mode": "Mode salle",
+    "gym_hint": "Chrono plein écran, lisible de loin. L'écran reste allumé.",
+    "gym_exit": "Quitter le mode salle",
+    "phase_work": "Effort",
+    "phase_rest": "Repos",
+    "phase_done": "Terminé",
+    "round": "Tour {{round}} / {{total}}",
+    "round_open": "Tour {{round}}",
+    "sound_on": "Bips activés",
+    "sound_off": "Bips coupés"
   },
   "alerts": {
     "cardio_title": "Alternance cardio",

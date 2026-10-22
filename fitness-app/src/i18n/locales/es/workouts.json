@@ -91,7 +91,17 @@
     "log_start": "Empezar",
     "new_rank": "Nuevo rango",
     "new_badges_one": "Nueva insignia",
-    "new_badges_other": "Nuevas insignias"
+    "new_badges_other": "Nuevas insignias",
+    "gym_mode": "Modo box",
+    "gym_hint": "Cronómetro a pantalla completa, legible de lejos. La pantalla sigue encendida.",
+    "gym_exit": "Salir del modo box",
+    "phase_work": "Trabajo",
+    "phase_rest": "Descanso",
+    "phase_done": "Terminado",
+    "round": "Ronda {{round}} / {{total}}",
+    "round_open": "Ronda {{round}}",
+    "sound_on": "Pitidos activados",
+    "sound_off": "Pitidos desactivados"
   },
   "alerts": {
     "cardio_title": "Alternancia de cardio",

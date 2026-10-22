@@ -91,7 +91,17 @@
     "log_start": "Start",
     "new_rank": "New rank",
     "new_badges_one": "New badge",
-    "new_badges_other": "New badges"
+    "new_badges_other": "New badges",
+    "gym_mode": "Gym mode",
+    "gym_hint": "Full-screen timer you can read from afar. The screen stays on.",
+    "gym_exit": "Exit gym mode",
+    "phase_work": "Work",
+    "phase_rest": "Rest",
+    "phase_done": "Done",
+    "round": "Round {{round}} / {{total}}",
+    "round_open": "Round {{round}}",
+    "sound_on": "Beeps on",
+    "sound_off": "Beeps off"
   },
   "alerts": {
     "cardio_title": "Cardio alternation",

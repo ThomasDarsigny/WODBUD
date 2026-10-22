@@ -14,6 +14,8 @@ import {
   wallClockMs,
   type SessionTimer
 } from '../lib/sessionTimer'
+import type { WorkoutFormat } from '../lib/workoutClock'
+import type { WorkoutMethod } from '../types'
 
 const STORAGE_KEY = 'wodbud_active_session'
 
@@ -67,6 +69,8 @@ interface PersistedSession {
 
 interface SessionState extends PersistedSession {
   items: SessionExerciseItem[]
+  /** Format du WOD (AMRAP 12, EMOM 10…), relu avec les exercices. */
+  format: WorkoutFormat | null
   activities: TimedActivity[]
   loadingItems: boolean
   saving: boolean
@@ -146,6 +150,7 @@ async function getCurrentUserId(): Promise<string> {
 export const useSessionStore = create<SessionState>((set, get) => ({
   ...IDLE,
   items: [],
+  format: null,
   activities: [],
   loadingItems: false,
   saving: false,
@@ -168,7 +173,7 @@ export const useSessionStore = create<SessionState>((set, get) => ({
       timer: startTimer()
     }
     persist(next)
-    set({ ...next, items: [], error: null, lastSummary: null })
+    set({ ...next, items: [], format: null, error: null, lastSummary: null })
     if (workoutId) void get().loadItems(workoutId)
   },
 
@@ -180,7 +185,7 @@ export const useSessionStore = create<SessionState>((set, get) => ({
       timer: startTimer()
     }
     persist(next)
-    set({ ...next, items: [], error: null, lastSummary: null })
+    set({ ...next, items: [], format: null, error: null, lastSummary: null })
   },
 
   pause: () => {
@@ -215,6 +220,17 @@ export const useSessionStore = create<SessionState>((set, get) => ({
 
   loadItems: async (workoutId) => {
     set({ loadingItems: true })
+    // Le format passe à part : une erreur ici (WOD d'une communauté quittée,
+    // par exemple) laisse simplement le chrono simple.
+    void supabase
+      .from('workouts')
+      .select('method, duration_minutes')
+      .eq('id', workoutId)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (!data || get().workoutId !== workoutId) return
+        set({ format: { method: data.method as WorkoutMethod, durationMinutes: data.duration_minutes ?? null } })
+      })
     try {
       const { data: rows, error } = await supabase
         .from('workout_exercises')
@@ -334,7 +350,7 @@ export const useSessionStore = create<SessionState>((set, get) => ({
       }
 
       persist({ ...IDLE })
-      set({ ...IDLE, items: [], saving: false, lastSummary: summary })
+      set({ ...IDLE, items: [], format: null, saving: false, lastSummary: summary })
       return summary
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : i18n.t('errors.generic', { ns: 'common' })
@@ -345,7 +361,7 @@ export const useSessionStore = create<SessionState>((set, get) => ({
 
   discard: () => {
     persist({ ...IDLE })
-    set({ ...IDLE, items: [], error: null })
+    set({ ...IDLE, items: [], format: null, error: null })
   },
 
   clearSummary: () => set({ lastSummary: null }),

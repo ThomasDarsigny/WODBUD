@@ -860,3 +860,212 @@ label {
     max-width: 720px;
   }
 }
+
+/* ─── Séance en salle : chrono de format, mode salle ───────────────── */
+.wb-run-phase {
+  font-family: var(--font-d);
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin: 0 0 0.3rem;
+}
+.wb-run-phase[data-phase='rest'] { color: #38bdf8; }
+.wb-run-phase[data-phase='done'] { color: #4ade80; }
+.wb-run-phase[data-phase='paused'] { color: var(--muted); }
+
+.wb-run-gym {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem 0.5rem;
+  width: 100%;
+  min-height: 56px;
+  margin-top: 1.2rem;
+  padding: 0.8rem 1rem;
+  border: 1px solid var(--orange);
+  background: var(--orange);
+  color: var(--black);
+  font-family: var(--font-d);
+  font-size: 1.15rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-align: left;
+  cursor: pointer;
+}
+.wb-run-gym small {
+  flex-basis: 100%;
+  font-family: var(--font-b, inherit);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+  opacity: 0.8;
+}
+
+.wb-run-sound {
+  margin-top: 0.6rem;
+  min-height: 40px;
+  padding: 0.4rem 0.2rem;
+  border: none;
+  background: none;
+  color: var(--muted);
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.wb-run-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+  margin-top: 0.8rem;
+}
+.wb-run-actions > button:last-child { grid-column: 1 / -1; }
+
+@media (min-width: 640px) {
+  .wb-run-gym { width: auto; }
+  .wb-run-actions { display: flex; flex-wrap: wrap; }
+}
+
+.wb-gym {
+  --gym-bg: #ff5a1f;
+  --gym-ink: #0b0a09;
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  padding: calc(var(--safe-top, 0px) + 0.75rem) 1rem calc(var(--safe-bottom, 0px) + 1rem);
+  background: var(--gym-bg);
+  color: var(--gym-ink);
+  transition: background-color 0.35s ease;
+  overscroll-behavior: contain;
+  touch-action: manipulation;
+}
+.wb-gym[data-phase='rest'] { --gym-bg: #0ea5e9; }
+.wb-gym[data-phase='done'] { --gym-bg: #22c55e; }
+.wb-gym[data-phase='paused'] { --gym-bg: #1c1917; --gym-ink: #e7e5e4; }
+
+.wb-gym-top {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.wb-gym-title {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-d);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 1.05rem;
+  line-height: 1.1;
+}
+.wb-gym-title span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.wb-gym-title small { font-size: 0.8rem; letter-spacing: 0.16em; opacity: 0.75; }
+
+.wb-gym-icon {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.18);
+  color: inherit;
+  font-size: 1.15rem;
+  cursor: pointer;
+}
+.wb-gym[data-phase='paused'] .wb-gym-icon { background: rgba(255, 255, 255, 0.1); }
+
+.wb-gym-center {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 0;
+}
+.wb-gym-phase {
+  font-family: var(--font-d);
+  font-weight: 900;
+  font-size: clamp(1.4rem, 7vw, 3rem);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin: 0;
+}
+.wb-gym-clock {
+  font-family: var(--font-d);
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+  line-height: 0.9;
+  font-size: min(30vw, 42vh);
+  letter-spacing: -0.01em;
+  margin: 0.1em 0;
+}
+.wb-gym-round {
+  font-family: var(--font-d);
+  font-weight: 800;
+  font-size: clamp(1.2rem, 6vw, 2.4rem);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin: 0;
+}
+.wb-gym-bar {
+  width: min(80%, 520px);
+  height: 8px;
+  margin-top: 1.1rem;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.18);
+  overflow: hidden;
+}
+.wb-gym-bar span {
+  display: block;
+  height: 100%;
+  background: currentColor;
+  transform-origin: left;
+  transition: transform 0.25s linear;
+}
+.wb-gym-active {
+  margin: 0.9rem 0 0;
+  font-size: 0.85rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+
+.wb-gym-main {
+  min-height: 72px;
+  border: none;
+  border-radius: 18px;
+  background: var(--gym-ink);
+  color: var(--gym-bg);
+  font-family: var(--font-d);
+  font-size: 1.5rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.wb-gym[data-phase='paused'] .wb-gym-main { background: #ff5a1f; color: #0b0a09; }
+
+/* Téléphone couché : le chrono prend la largeur, le bouton passe à droite. */
+@media (orientation: landscape) and (max-height: 520px) {
+  .wb-gym { flex-direction: row; flex-wrap: wrap; align-items: stretch; }
+  .wb-gym-top { flex-basis: 100%; }
+  .wb-gym-center { flex: 1; }
+  .wb-gym-phase { font-size: 1.2rem; }
+  .wb-gym-clock { font-size: min(20vw, 46vh); }
+  .wb-gym-round { font-size: 1.1rem; }
+  .wb-gym-bar { margin-top: 0.6rem; }
+  .wb-gym-active { display: none; }
+  .wb-gym-main { align-self: center; width: 9rem; min-height: 9rem; font-size: 1.1rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wb-gym, .wb-gym-bar span { transition: none; }
+}
