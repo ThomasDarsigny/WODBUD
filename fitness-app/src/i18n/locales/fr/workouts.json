@@ -43,7 +43,9 @@
     "cardio_sequence_message": "On vient de solliciter le {{previousZone}} avec \"{{previousExercise}}\". Pour alterner les zones, on recommande {{expectedCardio}}. Veux-tu vraiment ajouter \"{{exercise}}\" même si cette zone vient d'être travaillée ?",
     "rest48_warning_message": "Alerte 48h : {{muscle}} déjà travaillé {{lastText}}. Reprise conseillée à partir de {{recommendedText}} (reste environ {{hoursRemaining}}h).",
     "recently": "récemment",
-    "in_about_hours": "dans environ {{hours}}h"
+    "in_about_hours": "dans environ {{hours}}h",
+    "draft_restored": "Brouillon repris ({{when}}) — gardé automatiquement sur cet appareil.",
+    "draft_discard": "Effacer"
   },
   "reminders": {
     "theme_inactive": "Tu n'as pas fait de séance {{theme}} depuis {{days}} jours"

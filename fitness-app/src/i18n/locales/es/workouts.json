@@ -43,7 +43,9 @@
     "cardio_sequence_message": "Acabas de trabajar el {{previousZone}} con \"{{previousExercise}}\". Para alternar zonas, recomendamos {{expectedCardio}}. ¿Quieres agregar \"{{exercise}}\" igualmente aunque esa zona se entrenó hace poco?",
     "rest48_warning_message": "Alerta de 48h: {{muscle}} se trabajó {{lastText}}. Se recomienda retomarlo a partir de {{recommendedText}} (quedan aprox. {{hoursRemaining}}h).",
     "recently": "hace poco",
-    "in_about_hours": "en unas {{hours}}h"
+    "in_about_hours": "en unas {{hours}}h",
+    "draft_restored": "Borrador recuperado ({{when}}) — guardado automáticamente en este dispositivo.",
+    "draft_discard": "Borrar"
   },
   "reminders": {
     "theme_inactive": "No has hecho una sesión de {{theme}} desde hace {{days}} días"

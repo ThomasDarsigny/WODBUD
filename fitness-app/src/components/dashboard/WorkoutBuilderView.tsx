@@ -14,7 +14,7 @@ import { pdfFileName } from '../pdf/pdfTokens'
 import { useIsMobile } from '../../hooks/useMediaQuery'
 
 export default function WorkoutBuilderView() {
-  const { t } = useTranslation(['workouts', 'common'])
+  const { t, i18n } = useTranslation(['workouts', 'common'])
   const { exercises, fetchExercises } = useExerciseStore()
   const {
     name,
@@ -32,6 +32,7 @@ export default function WorkoutBuilderView() {
     updateExerciseConfig,
     saveWorkout,
     resetDraft,
+    draftRestoredAt,
     loadingSave,
     error
   } = useWorkoutStore()
@@ -563,6 +564,13 @@ export default function WorkoutBuilderView() {
             }}
           >
             {missing && (workoutExercises.length === 0 || !name.trim()) ? missing : error}
+          </div>
+        )}
+        {draftRestoredAt && (
+          <div className="wb-draft" role="status">
+            <span aria-hidden="true">↺</span>
+            <span>{t('builder.draft_restored', { ns: 'workouts', when: new Date(draftRestoredAt).toLocaleString(i18n.language, { weekday: 'short', hour: '2-digit', minute: '2-digit' }) })}</span>
+            <button type="button" onClick={resetDraft}>{t('builder.draft_discard', { ns: 'workouts' })}</button>
           </div>
         )}
         <div

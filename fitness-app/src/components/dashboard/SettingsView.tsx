@@ -14,6 +14,7 @@ import { uploadAvatar } from '../../lib/avatar'
 import { previewAccountDeletion, confirmAccountDeletion, type DeletionImpact } from '../../lib/accountDeletion'
 import { clearAuthSessionCookies } from '../../lib/authSessionCookies'
 import { field as inputStyle, btnAccent as buttonStyle } from '../../styles/ui'
+import { clearWorkoutDraft } from '../../stores/workoutStore'
 
 const LANGS: Array<{ code: string; key: string }> = [
   { code: 'fr', key: 'language.fr' },
@@ -172,6 +173,7 @@ export default function SettingsView() {
   // reste du compte, pour libérer la barre.
   async function logout() {
     setBusy('logout')
+    clearWorkoutDraft()
     try { await supabase.auth.signOut() } catch { /* session déjà expirée */ }
     try { await clearAuthSessionCookies() } catch { /* ignore */ }
     navigate('/login')
@@ -575,6 +577,7 @@ function DeleteAccountModal({ onClose }: { onClose: () => void }) {
     setError(null)
     try {
       await confirmAccountDeletion()
+      clearWorkoutDraft()
       try { await supabase.auth.signOut() } catch { /* le compte n'existe déjà plus */ }
       try { await clearAuthSessionCookies() } catch { /* idem */ }
       navigate('/login')

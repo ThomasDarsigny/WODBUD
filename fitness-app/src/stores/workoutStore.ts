@@ -211,6 +211,8 @@ interface WorkoutBuilderState {
   loadingSave: boolean
   error: string | null
   workoutsFromCache: boolean
+  /** Heure du brouillon repris au chargement (null = départ à neuf). */
+  draftRestoredAt: number | null
   setName: (name: string) => void
   setMethod: (method: WorkoutMethod) => void
   setDuration: (min: number | undefined) => void
@@ -256,8 +258,73 @@ const EMPTY_EXERCISE: Exercise = {
   updated_at: ''
 }
 
+/* ── Brouillon automatique ──────────────────────────────────────────────── */
+
+// Un WOD en cours de création survit à une app fermée, un onglet tué par le
+// système ou un rechargement : il est gardé sur l'appareil à chaque
+// modification, et effacé quand le WOD est enregistré ou remis à zéro.
+const DRAFT_KEY = 'wodbud_workout_draft'
+
+type DraftFields = Pick<WorkoutBuilderState, 'name' | 'method' | 'durationMinutes' | 'notes' | 'exercises'>
+
+function isEmptyDraft(d: DraftFields): boolean {
+  return !d.name.trim() && d.exercises.length === 0 && !d.notes.trim() && d.durationMinutes === undefined
+}
+
+function readDraft(): (DraftFields & { savedAt: number }) | null {
+  try {
+    const raw = localStorage.getItem(DRAFT_KEY)
+    if (!raw) return null
+    const d = JSON.parse(raw) as Partial<DraftFields> & { savedAt?: number }
+    if (!Array.isArray(d.exercises)) return null
+    const draft = {
+      name: typeof d.name === 'string' ? d.name : '',
+      method: (d.method ?? 'custom') as WorkoutMethod,
+      durationMinutes: typeof d.durationMinutes === 'number' ? d.durationMinutes : undefined,
+      notes: typeof d.notes === 'string' ? d.notes : '',
+      exercises: d.exercises,
+      savedAt: typeof d.savedAt === 'number' ? d.savedAt : Date.now()
+    }
+    return isEmptyDraft(draft) ? null : draft
+  } catch {
+    return null
+  }
+}
+
+function writeDraft(d: DraftFields): void {
+  try {
+    if (isEmptyDraft(d)) localStorage.removeItem(DRAFT_KEY)
+    else {
+      // Seulement les champs du WOD : pas la liste des WODs ni l'état d'écran.
+      const { name, method, durationMinutes, notes, exercises } = d
+      localStorage.setItem(DRAFT_KEY, JSON.stringify({ name, method, durationMinutes, notes, exercises, savedAt: Date.now() }))
+    }
+  } catch {
+    // Mode privé ou quota plein : le brouillon vit seulement en mémoire.
+  }
+}
+
+/** À la déconnexion : le brouillon d'un compte ne doit pas apparaître dans un autre. */
+export function clearWorkoutDraft(): void {
+  try { localStorage.removeItem(DRAFT_KEY) } catch { /* rien à effacer */ }
+  useWorkoutStore.setState({ ...DEFAULT_DRAFT, draftRestoredAt: null })
+}
+
+const restored = typeof window === 'undefined' ? null : readDraft()
+
 export const useWorkoutStore = create<WorkoutBuilderState>((set, get) => ({
   ...DEFAULT_DRAFT,
+  ...(restored
+    ? {
+        name: restored.name,
+        method: restored.method,
+        durationMinutes: restored.durationMinutes,
+        notes: restored.notes,
+        exercises: restored.exercises,
+        muscleAlerts: computeMuscleAlerts(restored.exercises)
+      }
+    : {}),
+  draftRestoredAt: restored?.savedAt ?? null,
   savedWorkouts: [],
   loadingSave: false,
   error: null,
@@ -371,7 +438,7 @@ export const useWorkoutStore = create<WorkoutBuilderState>((set, get) => ({
     set({ exercises, muscleAlerts: computeMuscleAlerts(exercises) })
   },
 
-  resetDraft: () => set({ ...DEFAULT_DRAFT }),
+  resetDraft: () => set({ ...DEFAULT_DRAFT, draftRestoredAt: null }),
 
   saveWorkout: async () => {
     const { name, method, durationMinutes, notes, exercises } = get()
@@ -423,7 +490,7 @@ export const useWorkoutStore = create<WorkoutBuilderState>((set, get) => ({
       set((s) => {
         const updated = [saved, ...s.savedWorkouts]
         saveToCache('workouts', updated)
-        return { savedWorkouts: updated, loadingSave: false, ...DEFAULT_DRAFT }
+        return { savedWorkouts: updated, loadingSave: false, ...DEFAULT_DRAFT, draftRestoredAt: null }
       })
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : i18n.t('errors.generic', { ns: 'common' })
@@ -467,3 +534,12 @@ export const useWorkoutStore = create<WorkoutBuilderState>((set, get) => ({
 }))
 
 export { EMPTY_EXERCISE }
+
+// Écriture différée : taper un nom ne réécrit pas le stockage à chaque touche.
+let draftTimer: ReturnType<typeof setTimeout> | undefined
+useWorkoutStore.subscribe((s, prev) => {
+  if (s.name === prev.name && s.method === prev.method && s.durationMinutes === prev.durationMinutes &&
+      s.notes === prev.notes && s.exercises === prev.exercises) return
+  clearTimeout(draftTimer)
+  draftTimer = setTimeout(() => writeDraft(s), 400)
+})

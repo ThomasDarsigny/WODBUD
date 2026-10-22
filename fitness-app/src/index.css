@@ -1276,3 +1276,9 @@ label {
   .wb-stagger > * { animation: none; }
   .wb-rec-card:active, .wb-onb-step:active, .wb-run-set:active, .wb-rec-add:active, .wb-run-gym:active { transform: none; }
 }
+
+/* ─── Créateur : brouillon repris ──────────────────────────────── */
+.wb-draft { display: flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0.6rem 0.4rem 1rem; border-top: 1px solid var(--border); background: rgba(56, 189, 248, 0.08); color: var(--muted); font-size: 0.8rem; line-height: 1.35; }
+.wb-draft > span:first-child { color: #38bdf8; }
+.wb-draft > span:nth-child(2) { flex: 1; }
+.wb-draft button { min-height: 40px; padding: 0 0.6rem; border: none; background: none; color: #38bdf8; font-weight: 700; cursor: pointer; }
