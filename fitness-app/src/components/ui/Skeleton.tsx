@@ -69,7 +69,7 @@ export function SkeletonCards({ count = 6 }: { count?: number }) {
         <div
           key={i}
           style={{
-            border: '1px solid var(--border)',
+            border: '1px solid var(--border)', borderRadius: 12,
             background: 'var(--dark)',
             padding: 'var(--s4)',
             display: 'flex',

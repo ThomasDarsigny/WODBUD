@@ -166,7 +166,7 @@ export default function AdminDashboardView() {
             flex: 1,
             minWidth: 260,
             background: 'var(--dark)',
-            border: '1px solid var(--border)',
+            border: '1px solid var(--border)', borderRadius: 12,
             color: 'var(--white)',
             padding: '0.65rem 0.9rem',
             fontFamily: 'var(--font-b)',
@@ -179,7 +179,7 @@ export default function AdminDashboardView() {
       {loading ? (
         <div
           style={{
-            border: '1px solid var(--border)',
+            border: '1px solid var(--border)', borderRadius: 12,
             background: 'var(--dark)',
             padding: 'var(--s4)'
           }}
@@ -187,7 +187,7 @@ export default function AdminDashboardView() {
           <Skeleton height={40} lines={5} />
         </div>
       ) : (
-        <div style={{ border: '1px solid var(--border)', background: 'var(--dark)' }}>
+        <div style={{ border: '1px solid var(--border)', borderRadius: 12, background: 'var(--dark)' }}>
           {filtered.length === 0 ? (
             <div style={{ padding: '2.3rem 1rem', textAlign: 'center', color: 'var(--muted)' }}>
               {t('admin.empty', { ns: 'exercises' })}
@@ -265,7 +265,7 @@ export default function AdminDashboardView() {
             marginTop: '0.9rem',
             padding: '0.65rem 0.9rem',
             background: 'rgba(255,77,0,0.1)',
-            border: '1px solid rgba(255,77,0,0.3)',
+            border: '1px solid rgba(255,77,0,0.3)', borderRadius: 12,
             color: 'var(--orange)',
             fontSize: '0.8125rem'
           }}
@@ -300,7 +300,7 @@ function StatCard({ label, value, emphasize = false }: { label: string; value: s
   return (
     <div
       style={{
-        border: `1px solid ${emphasize ? 'rgba(255,77,0,0.35)' : 'var(--border)'}`,
+        border: `1px solid ${emphasize ? 'rgba(255,77,0,0.35)' : 'var(--border)'}`, borderRadius: 12,
         background: emphasize ? 'rgba(255,77,0,0.07)' : 'var(--dark)',
         padding: '0.8rem 0.9rem'
       }}
@@ -355,7 +355,7 @@ function Chip({
         letterSpacing: '0.09em',
         textTransform: 'uppercase',
         color,
-        border: `1px solid ${border}`,
+        border: `1px solid ${border}`, borderRadius: 12,
         background: bg,
         padding: '0.16rem 0.43rem'
       }}

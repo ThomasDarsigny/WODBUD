@@ -187,12 +187,12 @@ export default function ClassesView() {
             </div>
 
             {/* Invite section */}
-            <div style={{ background: 'var(--dark)', border: '1px solid var(--border)', padding: '1.25rem', marginBottom: '1.5rem' }}>
+            <div style={{ background: 'var(--dark)', border: '1px solid var(--border)', borderRadius: 12, padding: '1.25rem', marginBottom: '1.5rem' }}>
               <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--orange)', marginBottom: '0.75rem' }}>
                 {t('classes.invite_label')}
               </p>
               <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', alignItems: 'center', marginBottom: '0.75rem' }}>
-                <code style={{ flex: 1, minWidth: 0, background: 'var(--black)', border: '1px solid var(--border)', padding: '0.5rem 0.75rem', fontSize: '0.8125rem', color: 'var(--muted)', fontFamily: 'monospace', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                <code style={{ flex: 1, minWidth: 0, background: 'var(--black)', border: '1px solid var(--border)', borderRadius: 12, padding: '0.5rem 0.75rem', fontSize: '0.8125rem', color: 'var(--muted)', fontFamily: 'monospace', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                   {inviteUrl}
                 </code>
                 <button onClick={() => navigator.clipboard.writeText(inviteUrl)} style={actionBtnStyle}>
@@ -210,28 +210,16 @@ export default function ClassesView() {
             </div>
 
             {/* Tabs */}
-            {/* Cinq onglets : ils défilent sur téléphone plutôt que de déborder. */}
-            <div className="wb-class-tabs" style={{ display: 'flex', gap: '0', borderBottom: '1px solid var(--border)', marginBottom: '1.25rem', overflowX: 'auto', scrollbarWidth: 'none' }}>
+            {/* Cinq onglets en puces : elles défilent sur téléphone plutôt que de déborder. */}
+            <div className="wb-chips wb-class-tabs" role="tablist" aria-label={t('classes.title')}>
               {(['followup', 'members', 'planning', 'leaderboard', 'votes'] as const).map((tab) => (
                 <button
                   key={tab}
+                  type="button"
+                  role="tab"
+                  aria-selected={activeTab === tab}
+                  className={`wb-chip${activeTab === tab ? ' is-on' : ''}`}
                   onClick={() => setActiveTab(tab)}
-                  style={{
-                    fontFamily: 'var(--font-d)',
-                    fontSize: '0.8125rem',
-                    letterSpacing: '0.12em',
-                    textTransform: 'uppercase',
-                    padding: '0.65rem 1rem',
-                    minHeight: 44,
-                    whiteSpace: 'nowrap',
-                    flexShrink: 0,
-                    border: 'none',
-                    borderBottom: `2px solid ${activeTab === tab ? 'var(--orange)' : 'transparent'}`,
-                    background: 'transparent',
-                    color: activeTab === tab ? 'var(--white)' : 'var(--muted)',
-                    cursor: 'pointer',
-                    marginBottom: '-1px'
-                  }}
                 >
                   {t(`classes.tab_${tab}`)}
                 </button>
@@ -328,7 +316,7 @@ function MembersTab({ classId, members, onRemove }: {
   }
 
   return (
-    <div style={{ border: '1px solid var(--border)', background: 'var(--dark)' }}>
+    <div style={{ border: '1px solid var(--border)', borderRadius: 12, background: 'var(--dark)' }}>
       {members.map((m) => (
         <div key={m.athlete_id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.75rem 1rem', borderBottom: '1px solid var(--border)' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
@@ -403,7 +391,7 @@ function VotesTab({ sessions, voteResults, onCreateVote, onCloseSession, onDelet
             const totalVotes = results.reduce((sum, r) => sum + r.votes, 0)
 
             return (
-              <div key={session.id} style={{ border: '1px solid var(--border)', background: 'var(--dark)', padding: '1rem', marginBottom: '0.75rem' }}>
+              <div key={session.id} style={{ border: '1px solid var(--border)', borderRadius: 12, background: 'var(--dark)', padding: '1rem', marginBottom: '0.75rem' }}>
                 {/* Header */}
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem' }}>
                   <div>
@@ -414,7 +402,7 @@ function VotesTab({ sessions, voteResults, onCreateVote, onCloseSession, onDelet
                       <span style={{
                         fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.15em', textTransform: 'uppercase',
                         color: isVoteSessionOpen(session) ? '#22c55e' : 'var(--muted)',
-                        border: `1px solid ${isVoteSessionOpen(session) ? 'rgba(34,197,94,0.35)' : 'var(--border)'}`,
+                        border: `1px solid ${isVoteSessionOpen(session) ? 'rgba(34,197,94,0.35)' : 'var(--border)'}`, borderRadius: 12,
                         background: isVoteSessionOpen(session) ? 'rgba(34,197,94,0.08)' : 'transparent',
                         padding: '0.1rem 0.4rem'
                       }}>
@@ -612,7 +600,7 @@ function CreateVoteModal({ classId, exercises, onClose, onCreate }: {
             placeholder={t('search', { ns: 'exercises' })}
             style={{ ...inputStyle, marginBottom: '0.5rem' }}
           />
-          <div style={{ maxHeight: 300, overflowY: 'auto', border: '1px solid var(--border)', background: 'var(--black)' }}>
+          <div style={{ maxHeight: 300, overflowY: 'auto', border: '1px solid var(--border)', borderRadius: 12, background: 'var(--black)' }}>
             {filtered.map((ex) => {
               const isSelected = selected.has(ex.id)
               return (
@@ -667,7 +655,7 @@ function ModalOverlay({ children, onClose, wide = false }: { children: React.Rea
       onClick={(e) => { if (e.target === e.currentTarget) onClose() }}
       style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 200, padding: '1rem' }}
     >
-      <div style={{ background: 'var(--dark)', border: '1px solid var(--border)', padding: 'var(--page-pad)', width: '100%', maxWidth: wide ? 640 : 460, maxHeight: '90vh', overflowY: 'auto' }}>
+      <div style={{ background: 'var(--dark)', border: '1px solid var(--border)', borderRadius: 12, padding: 'var(--page-pad)', width: '100%', maxWidth: wide ? 640 : 460, maxHeight: '90vh', overflowY: 'auto' }}>
         {children}
       </div>
     </div>

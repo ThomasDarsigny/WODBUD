@@ -53,7 +53,7 @@ export default function CommunityLeaderboard({ communityId, members, onOpenMembe
             role='tab'
             aria-selected={period === p}
             onClick={() => setPeriod(p)}
-            style={{ fontFamily: 'var(--font-d)', fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.4rem 0.8rem', cursor: 'pointer', color: period === p ? 'var(--black)' : 'var(--muted)', background: period === p ? 'var(--orange)' : 'transparent', border: `1px solid ${period === p ? 'var(--orange)' : 'var(--border)'}` }}
+            style={{ fontFamily: 'var(--font-d)', fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', padding: '0.4rem 0.8rem', cursor: 'pointer', color: period === p ? 'var(--black)' : 'var(--muted)', background: period === p ? 'var(--orange)' : 'transparent', border: `1px solid ${period === p ? 'var(--orange)' : 'var(--border)'}`, borderRadius: 12 }}
           >
             {t(`community.period_${p}`)}
           </button>
@@ -77,7 +77,7 @@ export default function CommunityLeaderboard({ communityId, members, onOpenMembe
               <li key={row.user_id}>
                 <button
                   onClick={() => onOpenMember(row.user_id)}
-                  style={{ width: '100%', textAlign: 'left', display: 'flex', alignItems: 'center', gap: '0.75rem', border: `1px solid ${row.is_me ? 'rgba(255,77,0,0.45)' : 'var(--border)'}`, background: row.is_me ? 'rgba(255,77,0,0.06)' : 'var(--dark)', padding: '0.6rem 0.75rem', cursor: 'pointer', color: 'var(--white)' }}
+                  style={{ width: '100%', textAlign: 'left', display: 'flex', alignItems: 'center', gap: '0.75rem', border: `1px solid ${row.is_me ? 'rgba(255,77,0,0.45)' : 'var(--border)'}`, borderRadius: 12, background: row.is_me ? 'rgba(255,77,0,0.06)' : 'var(--dark)', padding: '0.6rem 0.75rem', cursor: 'pointer', color: 'var(--white)' }}
                 >
                   <span style={{ fontFamily: 'var(--font-d)', fontSize: '1rem', fontWeight: 900, width: '1.5rem', textAlign: 'center', color: place === 1 ? 'var(--orange)' : 'var(--muted)', flexShrink: 0 }}>
                     {place}
@@ -88,7 +88,7 @@ export default function CommunityLeaderboard({ communityId, members, onOpenMembe
                     {row.is_me && <span style={{ color: 'var(--orange)', fontSize: '0.6875rem', marginLeft: '0.4rem' }}>{t('community.you')}</span>}
                   </span>
                   {rank && (
-                    <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: rank.color, border: `1px solid ${rank.color}`, padding: '0.1rem 0.4rem', flexShrink: 0 }}>
+                    <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: rank.color, border: `1px solid ${rank.color}`, borderRadius: 12, padding: '0.1rem 0.4rem', flexShrink: 0 }}>
                       {rankDisplay(rank, i18n.language)}
                     </span>
                   )}

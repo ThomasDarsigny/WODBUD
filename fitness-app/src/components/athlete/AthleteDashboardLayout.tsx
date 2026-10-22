@@ -85,7 +85,7 @@ export default function AthleteDashboardLayout({ children }: Props) {
 
         {!rail && (
           <div style={{ padding: '0.6rem 1.5rem 0.4rem', borderBottom: '1px solid var(--border)' }}>
-            <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--orange)', border: '1px solid rgba(255,77,0,0.3)', padding: '0.1rem 0.4rem' }}>
+            <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--orange)', border: '1px solid rgba(255,77,0,0.3)', borderRadius: 12, padding: '0.1rem 0.4rem' }}>
               {t('athlete.role_label')}
             </span>
           </div>

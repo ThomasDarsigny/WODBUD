@@ -423,7 +423,7 @@ export default function SettingsView() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
             {socialLinks.map((link, i) => (
               <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--orange)', border: '1px solid var(--border)', padding: '0.2rem 0.5rem', flexShrink: 0 }}>
+                <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--orange)', border: '1px solid var(--border)', borderRadius: 12, padding: '0.2rem 0.5rem', flexShrink: 0 }}>
                   {t(`community.social_platform_${link.platform}`)}
                 </span>
                 <a href={link.url} target='_blank' rel='noreferrer' style={{ color: 'var(--muted)', fontSize: '0.8125rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1 }}>
@@ -480,7 +480,7 @@ export default function SettingsView() {
           <button
             type='button'
             onClick={() => setDeleteModalOpen(true)}
-            style={{ ...buttonStyle, background: 'transparent', color: '#ef4444', border: '1px solid rgba(239,68,68,0.4)', alignSelf: 'flex-start' }}
+            style={{ ...buttonStyle, background: 'transparent', color: '#ef4444', border: '1px solid rgba(239,68,68,0.4)', borderRadius: 12, alignSelf: 'flex-start' }}
           >
             {t('settings.delete_account')}
           </button>
@@ -571,7 +571,7 @@ function DeleteAccountModal({ onClose }: { onClose: () => void }) {
       aria-modal='true'
       style={{ position: 'fixed', inset: 0, zIndex: 200, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(4px)', padding: '1rem' }}
     >
-      <div style={{ background: 'var(--black)', border: '1px solid rgba(239,68,68,0.4)', maxWidth: 480, width: '100%', padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+      <div style={{ background: 'var(--black)', border: '1px solid rgba(239,68,68,0.4)', borderRadius: 12, maxWidth: 480, width: '100%', padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
         <h2 style={{ fontFamily: 'var(--font-d)', fontSize: '1.0625rem', letterSpacing: '0.04em', textTransform: 'uppercase', color: '#ef4444', margin: 0 }}>
           {t('settings.delete_account')}
         </h2>
@@ -591,7 +591,7 @@ function DeleteAccountModal({ onClose }: { onClose: () => void }) {
             </ul>
 
             {hasThirdPartyImpact && (
-              <div style={{ border: '1px solid rgba(239,68,68,0.4)', background: 'rgba(239,68,68,0.08)', padding: '0.75rem', fontSize: '0.8125rem', color: '#ef4444', display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
+              <div style={{ border: '1px solid rgba(239,68,68,0.4)', borderRadius: 12, background: 'rgba(239,68,68,0.08)', padding: '0.75rem', fontSize: '0.8125rem', color: '#ef4444', display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
                 {impact.athletesAffected > 0 && <span>{t('settings.delete_impact_athletes', { count: impact.athletesAffected })}</span>}
                 {impact.communityMembersAffected > 0 && <span>{t('settings.delete_impact_community_members', { count: impact.communityMembersAffected })}</span>}
               </div>
@@ -614,7 +614,7 @@ function DeleteAccountModal({ onClose }: { onClose: () => void }) {
         )}
 
         <div style={{ display: 'flex', gap: '0.6rem', justifyContent: 'flex-end' }}>
-          <button type='button' onClick={onClose} disabled={deleting} style={{ ...buttonStyle, background: 'transparent', color: 'var(--muted)', border: '1px solid var(--border)' }}>
+          <button type='button' onClick={onClose} disabled={deleting} style={{ ...buttonStyle, background: 'transparent', color: 'var(--muted)', border: '1px solid var(--border)', borderRadius: 12 }}>
             {t('actions.cancel')}
           </button>
           <button

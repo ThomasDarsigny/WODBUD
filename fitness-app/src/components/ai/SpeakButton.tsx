@@ -46,7 +46,7 @@ export default function SpeakButton({ text }: { text: string }) {
       title={speaking ? t('ai.stop') : t('ai.speak')}
       style={{
         background: 'transparent',
-        border: `1px solid ${speaking ? 'var(--orange)' : 'var(--border)'}`,
+        border: `1px solid ${speaking ? 'var(--orange)' : 'var(--border)'}`, borderRadius: 12,
         color: speaking ? 'var(--orange)' : 'var(--muted)',
         cursor: 'pointer',
         fontFamily: 'var(--font-d)',

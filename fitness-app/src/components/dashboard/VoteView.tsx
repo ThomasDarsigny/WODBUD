@@ -104,7 +104,7 @@ export default function VoteView() {
             const totalVotes = results.reduce((sum, r) => sum + r.votes, 0)
 
             return (
-              <div key={session.id} style={{ border: '1px solid var(--border)', background: 'var(--dark)', padding: '1rem' }}>
+              <div key={session.id} style={{ border: '1px solid var(--border)', borderRadius: 12, background: 'var(--dark)', padding: '1rem' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem', gap: '0.5rem', flexWrap: 'wrap' }}>
                   <div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
@@ -114,7 +114,7 @@ export default function VoteView() {
                       <span style={{
                         fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.15em', textTransform: 'uppercase',
                         color: isVoteSessionOpen(session) ? '#22c55e' : 'var(--muted)',
-                        border: `1px solid ${isVoteSessionOpen(session) ? 'rgba(34,197,94,0.35)' : 'var(--border)'}`,
+                        border: `1px solid ${isVoteSessionOpen(session) ? 'rgba(34,197,94,0.35)' : 'var(--border)'}`, borderRadius: 12,
                         background: isVoteSessionOpen(session) ? 'rgba(34,197,94,0.08)' : 'transparent',
                         padding: '0.1rem 0.4rem'
                       }}>

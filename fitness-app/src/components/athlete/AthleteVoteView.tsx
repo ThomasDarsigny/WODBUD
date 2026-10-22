@@ -153,7 +153,7 @@ export default function AthleteVoteView() {
       </div>
 
       {confirmedOptionId && (
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap', background: 'rgba(34,197,94,0.07)', border: '1px solid rgba(34,197,94,0.3)', padding: '0.75rem 1rem', marginBottom: '1.25rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap', background: 'rgba(34,197,94,0.07)', border: '1px solid rgba(34,197,94,0.3)', borderRadius: 12, padding: '0.75rem 1rem', marginBottom: '1.25rem' }}>
           <span style={{ color: '#22c55e', fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
             ✓ {t('vote.already_voted')}
           </span>
@@ -179,14 +179,14 @@ export default function AthleteVoteView() {
       )}
 
       {showResults && (
-        <div style={{ marginTop: '2rem', border: '1px solid var(--border)', background: 'var(--dark)', padding: '1.25rem' }}>
+        <div style={{ marginTop: '2rem', border: '1px solid var(--border)', borderRadius: 12, background: 'var(--dark)', padding: '1.25rem' }}>
           <SectionTitle>{t('vote.results_title')}</SectionTitle>
           <VoteResultsBars results={results} emptyLabel={t('vote.no_options')} />
         </div>
       )}
 
       {error && (
-        <div style={{ marginTop: '1rem', padding: '0.65rem 0.9rem', background: 'rgba(255,77,0,0.1)', border: '1px solid rgba(255,77,0,0.3)', color: 'var(--orange)', fontSize: '0.8125rem' }}>
+        <div style={{ marginTop: '1rem', padding: '0.65rem 0.9rem', background: 'rgba(255,77,0,0.1)', border: '1px solid rgba(255,77,0,0.3)', borderRadius: 12, color: 'var(--orange)', fontSize: '0.8125rem' }}>
           {error}
         </div>
       )}
@@ -227,7 +227,7 @@ function VoteCard({ option, exercise, selected, confirmed, onSelect }: {
       aria-pressed={selected}
       style={{
         background: selected ? `${option.color}14` : 'var(--dark)',
-        border: `1px solid ${selected ? option.color : 'var(--border)'}`,
+        border: `1px solid ${selected ? option.color : 'var(--border)'}`, borderRadius: 12,
         outline: selected ? `1px solid ${option.color}` : 'none',
         outlineOffset: '-2px',
         padding: '1rem 1.15rem', textAlign: 'left', cursor: 'pointer',
@@ -243,7 +243,7 @@ function VoteCard({ option, exercise, selected, confirmed, onSelect }: {
           {exercise ? t(CATEGORY_I18N_KEYS[exercise.category]) : `#${option.position}`}
         </span>
         {confirmed && (
-          <span style={{ marginLeft: 'auto', fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#22c55e', border: '1px solid rgba(34,197,94,0.35)', padding: '0.08rem 0.35rem' }}>
+          <span style={{ marginLeft: 'auto', fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#22c55e', border: '1px solid rgba(34,197,94,0.35)', borderRadius: 12, padding: '0.08rem 0.35rem' }}>
             ✓ {t('vote.your_choice')}
           </span>
         )}
@@ -263,7 +263,7 @@ function VoteCard({ option, exercise, selected, confirmed, onSelect }: {
       </h3>
 
       {exercise && (
-        <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: option.color, border: `1px solid ${option.color}59`, padding: '0.14rem 0.45rem', alignSelf: 'flex-start' }}>
+        <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: option.color, border: `1px solid ${option.color}59`, borderRadius: 12, padding: '0.14rem 0.45rem', alignSelf: 'flex-start' }}>
           {t(MUSCLE_GROUP_I18N_KEYS[exercise.primary_muscle])}
         </span>
       )}

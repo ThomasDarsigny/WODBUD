@@ -166,7 +166,7 @@ function TopicRow({ topic, total, admin, busy, onVote, onStatus, onDelete }: {
   const accent = topic.is_mine ? 'var(--orange)' : topic.status === 'done' ? '#22c55e' : 'var(--border)'
 
   return (
-    <div style={{ border: `1px solid ${accent}`, background: topic.is_mine ? 'rgba(255,77,0,0.06)' : 'var(--black)', padding: '0.8rem 0.9rem' }}>
+    <div style={{ border: `1px solid ${accent}`, borderRadius: 12, background: topic.is_mine ? 'rgba(255,77,0,0.06)' : 'var(--black)', padding: '0.8rem 0.9rem' }}>
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '0.75rem', flexWrap: 'wrap' }}>
         <div style={{ minWidth: 0, flex: '1 1 200px' }}>
           <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.9375rem', fontWeight: 800, letterSpacing: '0.04em', textTransform: 'uppercase', margin: 0 }}>
@@ -216,7 +216,7 @@ function TopicRow({ topic, total, admin, busy, onVote, onStatus, onDelete }: {
       </div>
 
       <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginTop: '0.6rem' }}>
-        <div style={{ flex: 1, height: 6, background: 'var(--dark)', border: '1px solid var(--border)', overflow: 'hidden' }}>
+        <div style={{ flex: 1, height: 6, background: 'var(--dark)', border: '1px solid var(--border)', borderRadius: 12, overflow: 'hidden' }}>
           <div style={{ height: '100%', width: `${pct}%`, background: topic.is_mine ? 'var(--orange)' : 'var(--muted)', transition: 'width 0.4s ease' }} />
         </div>
         <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.75rem', letterSpacing: '0.08em', color: 'var(--muted)', whiteSpace: 'nowrap', fontVariantNumeric: 'tabular-nums' }}>

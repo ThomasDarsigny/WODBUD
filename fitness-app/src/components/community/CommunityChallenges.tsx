@@ -113,7 +113,7 @@ export default function CommunityChallenges({ communityId, isAdmin }: { communit
                     </ConfirmButton>
                   )}
                 </div>
-                <div style={{ height: 8, background: 'var(--black)', border: '1px solid var(--border)', margin: '0.7rem 0 0.35rem', overflow: 'hidden' }}>
+                <div style={{ height: 8, background: 'var(--black)', border: '1px solid var(--border)', borderRadius: 12, margin: '0.7rem 0 0.35rem', overflow: 'hidden' }}>
                   <div style={{ height: '100%', width: `${pct}%`, background: reached ? '#22c55e' : 'var(--orange)', transition: 'width 0.4s ease' }} />
                 </div>
                 <p style={{ margin: 0, fontSize: '0.75rem', color: 'var(--muted)', fontVariantNumeric: 'tabular-nums' }}>

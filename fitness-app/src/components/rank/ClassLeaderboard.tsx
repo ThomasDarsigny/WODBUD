@@ -60,7 +60,7 @@ export default function ClassLeaderboard({ classId, currentUserId }: {
               cursor: 'pointer',
               color: period === p ? 'var(--orange)' : 'var(--muted)',
               background: 'transparent',
-              border: `1px solid ${period === p ? 'var(--orange)' : 'var(--border)'}`
+              border: `1px solid ${period === p ? 'var(--orange)' : 'var(--border)'}`, borderRadius: 12
             }}
           >
             {t(`leaderboard.period_${p}`)}
@@ -87,7 +87,7 @@ export default function ClassLeaderboard({ classId, currentUserId }: {
 function Board({ rows, currentUserId }: { rows: LeaderboardRow[]; currentUserId?: string | null }) {
   const { t } = useTranslation('common')
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 1, background: 'var(--border)', border: '1px solid var(--border)' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 1, background: 'var(--border)', border: '1px solid var(--border)', borderRadius: 12 }}>
       {rows.map((row) => {
         const isMe = currentUserId != null && row.userId === currentUserId
         const isFirst = row.position === 1

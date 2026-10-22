@@ -203,7 +203,7 @@ export default function ExerciseFormModal({ exercise, onClose }: Props) {
       <div
         style={{
           background: 'var(--dark)',
-          border: '1px solid var(--border)',
+          border: '1px solid var(--border)', borderRadius: 12,
           width: '100%',
           maxWidth: 680,
           maxHeight: '90vh',
@@ -308,7 +308,7 @@ export default function ExerciseFormModal({ exercise, onClose }: Props) {
                       letterSpacing: '0.1em',
                       textTransform: 'uppercase',
                       padding: '0.35rem 0.8rem',
-                      border: `1px solid ${selected ? MOVEMENT_TYPE_COLORS[mv] : 'var(--border)'}`,
+                      border: `1px solid ${selected ? MOVEMENT_TYPE_COLORS[mv] : 'var(--border)'}`, borderRadius: 12,
                       background: selected ? MOVEMENT_TYPE_COLORS[mv] + '22' : 'transparent',
                       color: selected ? MOVEMENT_TYPE_COLORS[mv] : 'var(--muted)',
                       cursor: 'pointer',
@@ -369,7 +369,7 @@ export default function ExerciseFormModal({ exercise, onClose }: Props) {
                       fontSize: '0.8125rem',
                       letterSpacing: '0.08em',
                       padding: '0.3rem 0.7rem',
-                      border: `1px solid ${selected ? 'var(--orange)' : 'var(--border)'}`,
+                      border: `1px solid ${selected ? 'var(--orange)' : 'var(--border)'}`, borderRadius: 12,
                       background: selected ? 'rgba(255,77,0,0.12)' : 'transparent',
                       color: selected ? 'var(--orange)' : 'var(--muted)',
                       cursor: 'pointer',
@@ -435,7 +435,7 @@ export default function ExerciseFormModal({ exercise, onClose }: Props) {
                       letterSpacing: '0.1em',
                       textTransform: 'uppercase',
                       padding: '0.3rem 0.7rem',
-                      border: `1px solid ${selected ? 'var(--orange)' : 'var(--border)'}`,
+                      border: `1px solid ${selected ? 'var(--orange)' : 'var(--border)'}`, borderRadius: 12,
                       background: selected ? 'rgba(255,77,0,0.12)' : 'transparent',
                       color: selected ? 'var(--orange)' : 'var(--muted)',
                       cursor: 'pointer',
@@ -558,7 +558,7 @@ export default function ExerciseFormModal({ exercise, onClose }: Props) {
             <div
               style={{
                 background: 'rgba(255,77,0,0.1)',
-                border: '1px solid rgba(255,77,0,0.3)',
+                border: '1px solid rgba(255,77,0,0.3)', borderRadius: 12,
                 padding: '0.75rem 1rem',
                 color: 'var(--orange)',
                 fontSize: '0.8125rem'
@@ -582,7 +582,7 @@ export default function ExerciseFormModal({ exercise, onClose }: Props) {
               style={{
                 ...btnStyle,
                 background: 'transparent',
-                border: '1px solid var(--border)',
+                border: '1px solid var(--border)', borderRadius: 12,
                 color: 'var(--muted)'
               }}
             >

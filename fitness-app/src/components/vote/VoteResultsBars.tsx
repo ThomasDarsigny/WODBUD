@@ -48,7 +48,7 @@ export default function VoteResultsBars({ results, emptyLabel }: {
               {r.percentage.toFixed(1)}% · {r.votes} {r.votes === 1 ? t('classes.vote_singular') : t('classes.vote_plural')}
             </span>
           </div>
-          <div style={{ height: 6, background: 'var(--black)', border: '1px solid var(--border)', overflow: 'hidden' }}>
+          <div style={{ height: 6, background: 'var(--black)', border: '1px solid var(--border)', borderRadius: 12, overflow: 'hidden' }}>
             <div style={{
               height: '100%',
               width: `${Math.max(0, Math.min(100, r.percentage))}%`,

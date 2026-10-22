@@ -126,7 +126,7 @@ function PlanList({ heading, plans, planTitle, planDate, onDelete, muted }: {
   return (
     <section style={{ marginBottom: 'var(--s5)' }}>
       <h3 style={{ ...label, color: 'var(--white)', margin: '0 0 var(--s2)' }}>{heading}</h3>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 1, background: 'var(--border)', border: '1px solid var(--border)' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 1, background: 'var(--border)', border: '1px solid var(--border)', borderRadius: 12 }}>
         {plans.map((p) => {
           const allDone = p.total > 0 && p.done === p.total
           return (
@@ -141,7 +141,7 @@ function PlanList({ heading, plans, planTitle, planDate, onDelete, muted }: {
                 )}
               </div>
               <span
-                style={{ ...label, display: 'inline', fontVariantNumeric: 'tabular-nums', color: allDone ? '#22c55e' : 'var(--white)', border: `1px solid ${allDone ? 'rgba(34,197,94,0.35)' : 'var(--border)'}`, padding: '0.35rem 0.6rem', flexShrink: 0 }}
+                style={{ ...label, display: 'inline', fontVariantNumeric: 'tabular-nums', color: allDone ? '#22c55e' : 'var(--white)', border: `1px solid ${allDone ? 'rgba(34,197,94,0.35)' : 'var(--border)'}`, borderRadius: 12, padding: '0.35rem 0.6rem', flexShrink: 0 }}
               >
                 {t('classes.plan_progress', { done: p.done, total: p.total })}
               </span>
@@ -199,7 +199,7 @@ function PlanForm({ classId, savedWorkouts, onCancel, onSaved }: {
   }
 
   return (
-    <div style={{ border: '1px solid var(--border)', background: 'var(--dark)', padding: 'var(--s4)', marginBottom: 'var(--s4)', display: 'flex', flexDirection: 'column', gap: 'var(--s3)' }}>
+    <div style={{ border: '1px solid var(--border)', borderRadius: 12, background: 'var(--dark)', padding: 'var(--s4)', marginBottom: 'var(--s4)', display: 'flex', flexDirection: 'column', gap: 'var(--s3)' }}>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 'var(--s3)' }}>
         <label style={{ display: 'flex', flexDirection: 'column', gap: 'var(--s1)' }}>
           <span style={label}>{t('journal.schedule_date', { ns: 'workouts' })}</span>

@@ -54,7 +54,7 @@ export default function MemberProfileModal({ communityId, userId, onClose }: {
     <div role='dialog' aria-modal='true' aria-label={profile?.display_name ?? ''} onClick={onClose}
       style={{ position: 'fixed', inset: 0, zIndex: 300, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(4px)', padding: '1rem' }}>
       <div onClick={(e) => e.stopPropagation()}
-        style={{ background: 'var(--black)', border: '1px solid var(--border)', maxWidth: 520, width: '100%', maxHeight: '90vh', overflowY: 'auto', padding: '1.5rem' }}>
+        style={{ background: 'var(--black)', border: '1px solid var(--border)', borderRadius: 12, maxWidth: 520, width: '100%', maxHeight: '90vh', overflowY: 'auto', padding: '1.5rem' }}>
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
           <button onClick={onClose} aria-label={t('actions.close')} style={{ background: 'none', border: 'none', color: 'var(--muted)', fontSize: '1.25rem', cursor: 'pointer', lineHeight: 1 }}>✕</button>
         </div>
@@ -84,12 +84,12 @@ export default function MemberProfileModal({ communityId, userId, onClose }: {
             ) : (
               <>
                 {rank && (
-                  <div style={{ border: `1px solid ${rank.color}`, background: `${rank.color}14`, padding: '0.9rem 1rem', marginBottom: '1rem' }}>
+                  <div style={{ border: `1px solid ${rank.color}`, borderRadius: 12, background: `${rank.color}14`, padding: '0.9rem 1rem', marginBottom: '1rem' }}>
                     <p style={{ margin: 0, fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--muted)' }}>{t('community.profile_rank')}</p>
                     <p style={{ margin: '0.15rem 0 0', fontFamily: 'var(--font-d)', fontSize: '1.5rem', fontWeight: 900, textTransform: 'uppercase', color: rank.color }}>{rankDisplay(rank, i18n.language)}</p>
                     {progress?.next && (
                       <>
-                        <div style={{ height: 6, background: 'var(--black)', border: '1px solid var(--border)', margin: '0.6rem 0 0.3rem', overflow: 'hidden' }}>
+                        <div style={{ height: 6, background: 'var(--black)', border: '1px solid var(--border)', borderRadius: 12, margin: '0.6rem 0 0.3rem', overflow: 'hidden' }}>
                           <div style={{ height: '100%', width: `${Math.round(progress.ratio * 100)}%`, background: rank.color }} />
                         </div>
                         <p style={{ margin: 0, fontSize: '0.75rem', color: 'var(--muted)' }}>
@@ -142,7 +142,7 @@ export default function MemberProfileModal({ communityId, userId, onClose }: {
 
 function Stat({ value, label }: { value: number; label: string }) {
   return (
-    <div style={{ border: '1px solid var(--border)', background: 'var(--dark)', padding: '0.6rem', textAlign: 'center' }}>
+    <div style={{ border: '1px solid var(--border)', borderRadius: 12, background: 'var(--dark)', padding: '0.6rem', textAlign: 'center' }}>
       <p style={{ margin: 0, fontFamily: 'var(--font-d)', fontSize: '1.375rem', fontWeight: 900, fontVariantNumeric: 'tabular-nums' }}>{value}</p>
       <p style={{ margin: '0.1rem 0 0', fontSize: '0.6875rem', color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{label}</p>
     </div>

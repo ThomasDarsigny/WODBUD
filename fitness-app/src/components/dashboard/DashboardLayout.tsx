@@ -228,7 +228,7 @@ export default function DashboardLayout({ children }: Props) {
                               letterSpacing: '0.15em',
                               textTransform: 'uppercase',
                               color: 'var(--orange)',
-                              border: '1px solid rgba(255,77,0,0.3)',
+                              border: '1px solid rgba(255,77,0,0.3)', borderRadius: 12,
                               padding: '0.1rem 0.35rem'
                             }}
                           >

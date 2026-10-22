@@ -160,7 +160,7 @@ export default function Mannequin2D({ loads, height = 340, bothViews = false, on
                 textTransform: 'uppercase',
                 minHeight: 44,
                 padding: '0.45rem 0.6rem',
-                border: `1px solid ${view === v ? 'var(--orange, #ff5a1f)' : 'var(--border, #2e2a26)'}`,
+                border: `1px solid ${view === v ? 'var(--orange, #ff5a1f)' : 'var(--border, #2e2a26)'}`, borderRadius: 12,
                 background: view === v ? 'rgba(255,90,31,0.12)' : 'transparent',
                 color: view === v ? 'var(--orange, #ff5a1f)' : 'var(--muted, #9d958a)',
                 cursor: 'pointer'
@@ -196,7 +196,7 @@ export default function Mannequin2D({ loads, height = 340, bothViews = false, on
       {selected && (
         <div
           style={{
-            border: '1px solid var(--border, #2a2a2a)',
+            border: '1px solid var(--border, #2a2a2a)', borderRadius: 12,
             padding: '0.6rem 0.75rem',
             background: 'var(--surf, rgba(255,255,255,0.02))'
           }}

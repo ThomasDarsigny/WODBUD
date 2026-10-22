@@ -57,7 +57,7 @@ export default function ExerciseDetailModal({
       <div
         style={{
           background: 'var(--dark)',
-          border: '1px solid var(--border)',
+          border: '1px solid var(--border)', borderRadius: 12,
           width: '100%',
           maxWidth: 620,
           maxHeight: '90vh',
@@ -166,7 +166,7 @@ export default function ExerciseDetailModal({
                   ...tagStyle,
                   background: 'rgba(255,77,0,0.15)',
                   color: 'var(--orange)',
-                  border: '1px solid rgba(255,77,0,0.35)'
+                  border: '1px solid rgba(255,77,0,0.35)', borderRadius: 12
                 }}
               >
                 ● {t(MUSCLE_GROUP_I18N_KEYS[exercise.primary_muscle], { ns: 'common' })}
@@ -174,7 +174,7 @@ export default function ExerciseDetailModal({
               {exercise.secondary_muscles.map((m) => (
                 <span
                   key={m}
-                  style={{ ...tagStyle, color: 'var(--muted)', border: '1px solid var(--border)' }}
+                  style={{ ...tagStyle, color: 'var(--muted)', border: '1px solid var(--border)', borderRadius: 12 }}
                 >
                   {t(MUSCLE_GROUP_I18N_KEYS[m], { ns: 'common' })}
                 </span>
@@ -228,7 +228,7 @@ export default function ExerciseDetailModal({
                     }}
                     style={{
                       ...btnStyle,
-                      border: '1px solid var(--border)',
+                      border: '1px solid var(--border)', borderRadius: 12,
                       color: 'var(--white)',
                       background: 'transparent'
                     }}
@@ -241,7 +241,7 @@ export default function ExerciseDetailModal({
                     onClick={() => setShowDeleteConfirm((prev) => !prev)}
                     style={{
                       ...btnStyle,
-                      border: '1px solid rgba(255,60,60,0.3)',
+                      border: '1px solid rgba(255,60,60,0.3)', borderRadius: 12,
                       color: '#ff5555',
                       background: showDeleteConfirm ? 'rgba(255,60,60,0.14)' : 'transparent'
                     }}
@@ -257,7 +257,7 @@ export default function ExerciseDetailModal({
             <div
               style={{
                 marginTop: '0.4rem',
-                border: '1px solid rgba(255,60,60,0.35)',
+                border: '1px solid rgba(255,60,60,0.35)', borderRadius: 12,
                 background: 'rgba(255,60,60,0.08)',
                 padding: '0.9rem',
                 display: 'grid',
@@ -286,7 +286,7 @@ export default function ExerciseDetailModal({
                   disabled={deleting}
                   style={{
                     ...btnStyle,
-                    border: '1px solid var(--border)',
+                    border: '1px solid var(--border)', borderRadius: 12,
                     background: 'transparent',
                     color: 'var(--muted)'
                   }}
@@ -298,7 +298,7 @@ export default function ExerciseDetailModal({
                   disabled={deleting}
                   style={{
                     ...btnStyle,
-                    border: '1px solid rgba(255,60,60,0.5)',
+                    border: '1px solid rgba(255,60,60,0.5)', borderRadius: 12,
                     background: '#8d1f1f',
                     color: '#fff1f1',
                     opacity: deleting ? 0.65 : 1

@@ -1626,3 +1626,5 @@ button.wb-ex-card { display: flex; align-items: center; gap: 0.85rem; padding: 0
 @media (max-width: 768px) { .wb-ai { min-height: calc(100dvh - var(--mobile-top-h) - var(--tabbar-h) - var(--safe-bottom)); } }
 .wb-ai-compose { position: sticky; bottom: 0; z-index: 2; }
 .wb-ai-box textarea::placeholder { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.wb-class-tabs { margin-bottom: 1.1rem; }

@@ -100,7 +100,7 @@ export default function CommunityFeed({ communityId, onOpenMember }: {
                       onClick={() => { void react(ev, key) }}
                       aria-pressed={mine}
                       aria-label={t(`community.react_${key}`)}
-                      style={{ border: `1px solid ${mine ? 'var(--orange)' : 'var(--border)'}`, background: mine ? 'rgba(255,77,0,0.1)' : 'transparent', color: 'var(--white)', padding: '0.15rem 0.5rem', fontSize: '0.8125rem', cursor: 'pointer', minHeight: 30 }}
+                      style={{ border: `1px solid ${mine ? 'var(--orange)' : 'var(--border)'}`, borderRadius: 12, background: mine ? 'rgba(255,77,0,0.1)' : 'transparent', color: 'var(--white)', padding: '0.15rem 0.5rem', fontSize: '0.8125rem', cursor: 'pointer', minHeight: 30 }}
                     >
                       {glyph}{count > 0 ? ` ${count}` : ''}
                     </button>

@@ -285,7 +285,7 @@ export default function OcrImportSection({ existingNames }: Props) {
   const allImported = rows.length > 0 && rows.every((r) => r.status === 'done' || r.status === 'duplicate' || r.status === 'similar')
 
   return (
-    <div style={{ marginBottom: '1.5rem', border: '1px solid var(--border)', background: 'var(--dark)' }}>
+    <div style={{ marginBottom: '1.5rem', border: '1px solid var(--border)', borderRadius: 12, background: 'var(--dark)' }}>
       {/* Header — always visible */}
       <button
         onClick={() => setOpen((v) => !v)}
@@ -383,7 +383,7 @@ export default function OcrImportSection({ existingNames }: Props) {
           {files.length > 0 && rows.length === 0 && (
             <div style={{ marginBottom: '1rem' }}>
               {files.map((f) => (
-                <div key={f.name} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.4rem 0.6rem', background: 'var(--black)', border: '1px solid var(--border)', marginBottom: '0.3rem' }}>
+                <div key={f.name} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.4rem 0.6rem', background: 'var(--black)', border: '1px solid var(--border)', borderRadius: 12, marginBottom: '0.3rem' }}>
                   <span style={{ fontFamily: 'var(--font-b)', fontSize: '0.8125rem', color: 'var(--muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                     {f.name}
                   </span>
@@ -423,14 +423,14 @@ export default function OcrImportSection({ existingNames }: Props) {
           )}
 
           {error && (
-            <div style={{ marginTop: '0.75rem', padding: '0.6rem 0.9rem', background: 'rgba(255,77,0,0.08)', border: '1px solid rgba(255,77,0,0.3)', color: 'var(--orange)', fontSize: '0.8125rem' }}>
+            <div style={{ marginTop: '0.75rem', padding: '0.6rem 0.9rem', background: 'rgba(255,77,0,0.08)', border: '1px solid rgba(255,77,0,0.3)', borderRadius: 12, color: 'var(--orange)', fontSize: '0.8125rem' }}>
               {error}
             </div>
           )}
 
           {/* Fichiers en échec — analyse seulement, avant tout import */}
           {failedItems.length > 0 && (
-            <div style={{ marginTop: rows.length > 0 ? '0.75rem' : 0, marginBottom: '0.75rem', border: '1px solid rgba(255,77,0,0.3)', background: 'rgba(255,77,0,0.05)', padding: '0.75rem 0.9rem' }}>
+            <div style={{ marginTop: rows.length > 0 ? '0.75rem' : 0, marginBottom: '0.75rem', border: '1px solid rgba(255,77,0,0.3)', borderRadius: 12, background: 'rgba(255,77,0,0.05)', padding: '0.75rem 0.9rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.4rem' }}>
                 <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--orange)' }}>
                   {failedItems.length} fichier{failedItems.length > 1 ? 's' : ''} en échec
@@ -456,26 +456,26 @@ export default function OcrImportSection({ existingNames }: Props) {
             <div style={{ marginTop: '0.5rem' }}>
               {/* Summary chips */}
               <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '0.75rem', alignItems: 'center' }}>
-                <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#22c55e', border: '1px solid rgba(34,197,94,0.35)', padding: '0.15rem 0.45rem' }}>
+                <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#22c55e', border: '1px solid rgba(34,197,94,0.35)', borderRadius: 12, padding: '0.15rem 0.45rem' }}>
                   {rows.length} exercices extraits
                 </span>
                 {dupeCount > 0 && (
-                  <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#f59e0b', border: '1px solid rgba(245,158,11,0.35)', padding: '0.15rem 0.45rem' }}>
+                  <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#f59e0b', border: '1px solid rgba(245,158,11,0.35)', borderRadius: 12, padding: '0.15rem 0.45rem' }}>
                     {dupeCount} déjà existants
                   </span>
                 )}
                 {similarCount > 0 && (
-                  <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#60a5fa', border: '1px solid rgba(96,165,250,0.35)', padding: '0.15rem 0.45rem' }}>
+                  <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#60a5fa', border: '1px solid rgba(96,165,250,0.35)', borderRadius: 12, padding: '0.15rem 0.45rem' }}>
                     {similarCount} noms proches d'un exercice existant
                   </span>
                 )}
                 {doneCount > 0 && (
-                  <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#22c55e', border: '1px solid rgba(34,197,94,0.35)', padding: '0.15rem 0.45rem' }}>
+                  <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#22c55e', border: '1px solid rgba(34,197,94,0.35)', borderRadius: 12, padding: '0.15rem 0.45rem' }}>
                     ✓ {doneCount} importés
                   </span>
                 )}
                 {errorCount > 0 && (
-                  <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--orange)', border: '1px solid rgba(255,77,0,0.35)', padding: '0.15rem 0.45rem' }}>
+                  <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--orange)', border: '1px solid rgba(255,77,0,0.35)', borderRadius: 12, padding: '0.15rem 0.45rem' }}>
                     ✕ {errorCount} erreurs
                   </span>
                 )}
@@ -494,7 +494,7 @@ export default function OcrImportSection({ existingNames }: Props) {
                 ))}
               </div>
 
-              <div style={{ border: '1px solid var(--border)', borderTop: 'none', maxHeight: 340, overflowY: 'auto' }}>
+              <div style={{ border: '1px solid var(--border)', borderRadius: 12, borderTop: 'none', maxHeight: 340, overflowY: 'auto' }}>
                 {rows.map((row) => {
                   const isEditable = row.status === 'pending' || row.status === 'duplicate' || row.status === 'similar'
                   const statusColor =
@@ -620,7 +620,7 @@ export default function OcrImportSection({ existingNames }: Props) {
               )}
 
               {allImported && (
-                <div style={{ marginTop: '0.75rem', padding: '0.65rem 0.9rem', background: 'rgba(34,197,94,0.07)', border: '1px solid rgba(34,197,94,0.3)', color: '#22c55e', fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+                <div style={{ marginTop: '0.75rem', padding: '0.65rem 0.9rem', background: 'rgba(34,197,94,0.07)', border: '1px solid rgba(34,197,94,0.3)', borderRadius: 12, color: '#22c55e', fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
                   ✓ Import terminé — {doneCount} exercice{doneCount !== 1 ? 's' : ''} ajouté{doneCount !== 1 ? 's' : ''} à la bibliothèque.
                 </div>
               )}

@@ -49,7 +49,7 @@ export default function CommunityMembers({ communityId, members, isMember, isOwn
           const rank = m.share_rank && m.rank_key ? ranks.find((r) => r.key === m.rank_key) : undefined
           const canModerate = isAdmin && !m.is_me && !m.is_owner
           return (
-            <li key={m.user_id} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', border: '1px solid var(--border)', background: 'var(--dark)', padding: '0.5rem 0.75rem', flexWrap: 'wrap' }}>
+            <li key={m.user_id} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', border: '1px solid var(--border)', borderRadius: 12, background: 'var(--dark)', padding: '0.5rem 0.75rem', flexWrap: 'wrap' }}>
               <button onClick={() => onOpenMember(m.user_id)} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flex: '1 1 200px', minWidth: 0, background: 'none', border: 'none', padding: 0, cursor: 'pointer', color: 'var(--white)', textAlign: 'left' }}>
                 <Avatar name={m.display_name} url={m.avatar_url} />
                 <span style={{ minWidth: 0 }}>
@@ -64,7 +64,7 @@ export default function CommunityMembers({ communityId, members, isMember, isOwn
                 </span>
               </button>
               {rank && (
-                <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: rank.color, border: `1px solid ${rank.color}`, padding: '0.1rem 0.4rem' }}>
+                <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: rank.color, border: `1px solid ${rank.color}`, borderRadius: 12, padding: '0.1rem 0.4rem' }}>
                   {rankDisplay(rank, i18n.language)}
                 </span>
               )}
