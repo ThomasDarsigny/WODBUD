@@ -1224,3 +1224,27 @@ label {
 }
 .wb-rest-body .wb-rest-skip { background: #0b0a09; color: #0ea5e9; padding: 0 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; }
 @media (prefers-reduced-motion: reduce) { .wb-rest, .wb-rest-bar span, .wb-run-dots i { animation: none; transition: none; } }
+
+/* ─── Suivi des athlètes (coach) ───────────────────────────────── */
+.wb-class-tabs::-webkit-scrollbar { display: none; }
+.wb-fu { display: grid; gap: 1rem; }
+.wb-fu-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
+.wb-fu-stats > div { display: grid; gap: 0.2rem; padding: 0.8rem 0.75rem; border-radius: 12px; background: var(--dark); border: 1px solid var(--border); }
+.wb-fu-stats strong { font-family: var(--font-d); font-size: 1.9rem; font-weight: 900; line-height: 1; font-variant-numeric: tabular-nums; }
+.wb-fu-stats strong small { font-size: 0.95rem; color: var(--muted); font-weight: 700; }
+.wb-fu-stats span { font-size: 0.72rem; color: var(--muted); line-height: 1.25; }
+.wb-fu-stats > div[data-tone='warn'] { border-color: rgba(255, 90, 31, 0.45); background: rgba(255, 90, 31, 0.08); }
+.wb-fu-stats > div[data-tone='warn'] strong { color: var(--orange); }
+.wb-segmented.wb-fu-filter { margin: 0; }
+.wb-fu-list { list-style: none; border: 1px solid var(--border); border-radius: 12px; background: var(--dark); }
+.wb-fu-list li { display: flex; align-items: center; gap: 0.75rem; padding: 0.7rem 0.8rem; min-height: 64px; }
+.wb-fu-list li + li { border-top: 1px solid var(--border); }
+.wb-fu-main { flex: 1; min-width: 0; display: grid; gap: 0.15rem; }
+.wb-fu-main strong { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.wb-fu-main span { font-size: 0.8rem; color: var(--muted); }
+.wb-fu-side { display: grid; justify-items: end; gap: 0.25rem; flex-shrink: 0; }
+.wb-fu-pill { font-size: 0.72rem; font-weight: 700; padding: 0.2rem 0.55rem; border-radius: 999px; white-space: nowrap; background: rgba(74, 222, 128, 0.12); color: #4ade80; }
+.wb-fu-pill[data-status='idle'] { background: rgba(255, 90, 31, 0.14); color: var(--orange); }
+.wb-fu-pill[data-status='never'] { background: var(--surface); color: var(--muted); }
+.wb-fu-streak { font-size: 0.72rem; color: var(--muted); }
+.wb-fu-note { font-size: 0.75rem; color: var(--muted); line-height: 1.5; }

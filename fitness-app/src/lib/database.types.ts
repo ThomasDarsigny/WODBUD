@@ -1813,6 +1813,21 @@ export type Database = {
           isSetofReturn: true
         }
       }
+      get_class_followup: {
+        Args: { p_class_id: string }
+        Returns: {
+          athlete_id: string
+          avatar_url: string
+          current_streak: number
+          full_name: string
+          joined_at: string
+          last_session_at: string
+          minutes_30d: number
+          minutes_7d: number
+          sessions_30d: number
+          sessions_7d: number
+        }[]
+      }
       get_class_leaderboard_since: {
         Args: { p_class_id: string; p_since: string }
         Returns: {

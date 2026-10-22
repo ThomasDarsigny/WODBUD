@@ -14,6 +14,8 @@ import Skeleton from '../ui/Skeleton'
 import ClassLeaderboard from '../rank/ClassLeaderboard'
 import ClassPlanningTab from './ClassPlanningTab'
 import { isVoteSessionOpen, voteSessionKind } from '../../lib/voteSessions'
+import ClassFollowup from './ClassFollowup'
+import { useIsMobile } from '../../hooks/useMediaQuery'
 
 const BASE_URL = window.location.origin
 
@@ -26,7 +28,11 @@ export default function ClassesView() {
   const [selectedClass, setSelectedClass] = useState<Class | null>(null)
   const [showQR, setShowQR] = useState(false)
   const [showVoteModal, setShowVoteModal] = useState(false)
-  const [activeTab, setActiveTab] = useState<'members' | 'planning' | 'votes' | 'leaderboard'>('members')
+  const [activeTab, setActiveTab] = useState<'followup' | 'members' | 'planning' | 'votes' | 'leaderboard'>('followup')
+  // Téléphone : la liste OU le cours, jamais les deux côte à côte.
+  const isMobile = useIsMobile()
+  const showList = !isMobile || !selectedClass
+  const showDetail = !isMobile || Boolean(selectedClass)
 
   useEffect(() => { fetchClasses() }, [fetchClasses])
   useEffect(() => { fetchExercises() }, [fetchExercises])
@@ -43,7 +49,7 @@ export default function ClassesView() {
   function handleSelectClass(cls: Class) {
     setSelectedClass(cls)
     setShowQR(false)
-    setActiveTab('members')
+    setActiveTab('followup')
   }
 
   async function handleDeleteClass(cls: Class) {
@@ -54,8 +60,9 @@ export default function ClassesView() {
   return (
     <div style={{ display: 'flex', height: '100%', minHeight: 0 }}>
       {/* Left panel — class list */}
+      {showList && (
       <div style={{
-        width: 280,
+        width: isMobile ? '100%' : 280,
         flexShrink: 0,
         borderRight: '1px solid var(--border)',
         display: 'flex',
@@ -122,15 +129,22 @@ export default function ClassesView() {
         <div style={{ padding: '1rem 1.25rem', borderTop: '1px solid var(--border)' }}>
           <button
             onClick={() => setShowCreateClass(true)}
-            style={{ width: '100%', fontFamily: 'var(--font-d)', fontSize: '0.6875rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--black)', background: 'var(--orange)', border: 'none', padding: '0.65rem', cursor: 'pointer' }}
+            style={{ width: '100%', fontFamily: 'var(--font-d)', fontSize: '0.6875rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--black)', background: 'var(--orange)', border: 'none', padding: '0.65rem', minHeight: 48, cursor: 'pointer' }}
           >
             + {t('classes.create')}
           </button>
         </div>
       </div>
+      )}
 
       {/* Right panel — class detail */}
-      <div style={{ flex: 1, overflow: 'auto', padding: 'var(--page-pad)' }}>
+      {showDetail && (
+      <div style={{ flex: 1, minWidth: 0, overflow: 'auto', padding: 'var(--page-pad)' }}>
+        {isMobile && selectedClass && (
+          <button type="button" className="wb-auth-link" onClick={() => setSelectedClass(null)} style={{ background: 'none', border: 'none', padding: 0, fontWeight: 600, cursor: 'pointer', marginBottom: '0.25rem' }}>
+            ‹ {t('classes.title')}
+          </button>
+        )}
         {!selectedClass ? (
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'var(--muted)', gap: '1rem' }}>
             <span style={{ opacity: 0.3, display: 'flex' }}><NavIcon name="classes" size={46} /></span>
@@ -180,8 +194,9 @@ export default function ClassesView() {
             </div>
 
             {/* Tabs */}
-            <div style={{ display: 'flex', gap: '0', borderBottom: '1px solid var(--border)', marginBottom: '1.25rem' }}>
-              {(['members', 'planning', 'votes', 'leaderboard'] as const).map((tab) => (
+            {/* Cinq onglets : ils défilent sur téléphone plutôt que de déborder. */}
+            <div className="wb-class-tabs" style={{ display: 'flex', gap: '0', borderBottom: '1px solid var(--border)', marginBottom: '1.25rem', overflowX: 'auto', scrollbarWidth: 'none' }}>
+              {(['followup', 'members', 'planning', 'leaderboard', 'votes'] as const).map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
@@ -190,7 +205,10 @@ export default function ClassesView() {
                     fontSize: '0.8125rem',
                     letterSpacing: '0.12em',
                     textTransform: 'uppercase',
-                    padding: '0.65rem 1.25rem',
+                    padding: '0.65rem 1rem',
+                    minHeight: 44,
+                    whiteSpace: 'nowrap',
+                    flexShrink: 0,
                     border: 'none',
                     borderBottom: `2px solid ${activeTab === tab ? 'var(--orange)' : 'transparent'}`,
                     background: 'transparent',
@@ -203,6 +221,10 @@ export default function ClassesView() {
                 </button>
               ))}
             </div>
+
+            {activeTab === 'followup' && (
+              <ClassFollowup classId={selectedClass.id} />
+            )}
 
             {/* Members tab */}
             {activeTab === 'members' && (
@@ -237,6 +259,7 @@ export default function ClassesView() {
           </>
         )}
       </div>
+      )}
 
       {/* Modal: create class */}
       {showCreateClass && (

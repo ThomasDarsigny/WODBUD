@@ -578,7 +578,8 @@
     "plan_upcoming": "À venir",
     "plan_past": "Deux dernières semaines",
     "plan_progress": "{{done}}/{{total}} fait",
-    "plan_delete": "Retirer pour tout le cours"
+    "plan_delete": "Retirer pour tout le cours",
+    "tab_followup": "Suivi"
   },
   "athlete": {
     "role_label": "Athlète",
@@ -909,5 +910,32 @@
     "rejected_other": "{{count}} séances hors ligne refusées : plus de 12 h sans réseau, elles ne comptent pas.",
     "done_title": "Séance gardée sur le téléphone",
     "done_hint": "Pas de réseau : la séance est gardée ici et sera envoyée dès le retour du réseau (dans les 12 h). Tes minutes, ton rang et tes badges se mettront à jour à ce moment-là."
+  },
+  "followup": {
+    "stat_active": "Actifs cette semaine",
+    "stat_idle": "À relancer",
+    "stat_minutes": "Minutes cette semaine",
+    "filter": "Filtrer les athlètes",
+    "filter_all": "Tous",
+    "filter_idle": "À relancer",
+    "filter_active": "Actifs",
+    "none_idle": "Personne à relancer : tout le monde s’est entraîné cette semaine.",
+    "none_active": "Aucun athlète ne s’est entraîné cette semaine.",
+    "no_name": "Athlète sans nom",
+    "never": "Aucune séance depuis son inscription",
+    "week_one": "{{sessions}} séance · {{minutes}} min cette semaine",
+    "week_other": "{{sessions}} séances · {{minutes}} min cette semaine",
+    "month_one": "{{count}} en 30 j",
+    "month_other": "{{count}} en 30 j",
+    "today": "Aujourd’hui",
+    "days_ago_one": "Il y a {{count}} j",
+    "days_ago_other": "Il y a {{count}} j",
+    "idle_days_one": "Absent {{count}} j",
+    "idle_days_other": "Absent {{count}} j",
+    "never_short": "Jamais venu",
+    "streak_unit": "j",
+    "empty_title": "Aucun athlète inscrit",
+    "empty_hint": "Partage le lien d’invitation ci-dessus pour remplir ton cours.",
+    "privacy": "Tu vois seulement des comptes (séances, minutes, série) : le contenu des séances de tes athlètes reste privé."
   }
 }

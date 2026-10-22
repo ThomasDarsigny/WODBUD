@@ -578,7 +578,8 @@
     "plan_upcoming": "Upcoming",
     "plan_past": "Last two weeks",
     "plan_progress": "{{done}}/{{total}} done",
-    "plan_delete": "Remove for the whole class"
+    "plan_delete": "Remove for the whole class",
+    "tab_followup": "Follow-up"
   },
   "athlete": {
     "role_label": "Athlete",
@@ -909,5 +910,32 @@
     "rejected_other": "{{count}} offline sessions refused: over 12 h without network, they do not count.",
     "done_title": "Session kept on this phone",
     "done_hint": "No network: the session is kept here and will be sent as soon as you are back online (within 12 h). Your minutes, rank and badges will update then."
+  },
+  "followup": {
+    "stat_active": "Active this week",
+    "stat_idle": "To check in on",
+    "stat_minutes": "Minutes this week",
+    "filter": "Filter athletes",
+    "filter_all": "All",
+    "filter_idle": "Check in",
+    "filter_active": "Active",
+    "none_idle": "Nobody to check in on: everyone trained this week.",
+    "none_active": "No athlete trained this week.",
+    "no_name": "Unnamed athlete",
+    "never": "No session since joining",
+    "week_one": "{{sessions}} session · {{minutes}} min this week",
+    "week_other": "{{sessions}} sessions · {{minutes}} min this week",
+    "month_one": "{{count}} in 30 d",
+    "month_other": "{{count}} in 30 d",
+    "today": "Today",
+    "days_ago_one": "{{count}} d ago",
+    "days_ago_other": "{{count}} d ago",
+    "idle_days_one": "Away {{count}} d",
+    "idle_days_other": "Away {{count}} d",
+    "never_short": "Never came",
+    "streak_unit": "d",
+    "empty_title": "No athletes yet",
+    "empty_hint": "Share the invite link above to fill your class.",
+    "privacy": "You only see counts (sessions, minutes, streak): your athletes’ session details stay private."
   }
 }

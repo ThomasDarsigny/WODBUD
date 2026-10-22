@@ -581,7 +581,8 @@
     "plan_upcoming": "Próximas",
     "plan_past": "Últimas dos semanas",
     "plan_progress": "{{done}}/{{total}} hecho",
-    "plan_delete": "Quitar para toda la clase"
+    "plan_delete": "Quitar para toda la clase",
+    "tab_followup": "Seguimiento"
   },
   "athlete": {
     "role_label": "Atleta",
@@ -912,5 +913,32 @@
     "rejected_other": "{{count}} sesiones sin conexión rechazadas: más de 12 h sin red, no cuentan.",
     "done_title": "Sesión guardada en el teléfono",
     "done_hint": "Sin red: la sesión se guarda aquí y se enviará en cuanto vuelva la conexión (dentro de 12 h). Tus minutos, rango e insignias se actualizarán entonces."
+  },
+  "followup": {
+    "stat_active": "Activos esta semana",
+    "stat_idle": "Por contactar",
+    "stat_minutes": "Minutos esta semana",
+    "filter": "Filtrar atletas",
+    "filter_all": "Todos",
+    "filter_idle": "Contactar",
+    "filter_active": "Activos",
+    "none_idle": "Nadie por contactar: todos entrenaron esta semana.",
+    "none_active": "Ningún atleta entrenó esta semana.",
+    "no_name": "Atleta sin nombre",
+    "never": "Ninguna sesión desde que se unió",
+    "week_one": "{{sessions}} sesión · {{minutes}} min esta semana",
+    "week_other": "{{sessions}} sesiones · {{minutes}} min esta semana",
+    "month_one": "{{count}} en 30 d",
+    "month_other": "{{count}} en 30 d",
+    "today": "Hoy",
+    "days_ago_one": "Hace {{count}} d",
+    "days_ago_other": "Hace {{count}} d",
+    "idle_days_one": "Ausente {{count}} d",
+    "idle_days_other": "Ausente {{count}} d",
+    "never_short": "Nunca vino",
+    "streak_unit": "d",
+    "empty_title": "Aún no hay atletas",
+    "empty_hint": "Comparte el enlace de invitación de arriba para llenar tu clase.",
+    "privacy": "Solo ves conteos (sesiones, minutos, racha): el contenido de las sesiones de tus atletas sigue siendo privado."
   }
 }
