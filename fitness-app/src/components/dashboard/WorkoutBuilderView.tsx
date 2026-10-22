@@ -5,7 +5,7 @@ import EmptyState from '../ui/EmptyState'
 import { useExerciseStore } from '../../stores/exerciseStore'
 import { useWorkoutStore } from '../../stores/workoutStore'
 import type { Exercise, WorkoutExercise, MuscleAlert, WorkoutMethod, ExerciseCategory, MuscleGroup } from '../../types'
-import { METHOD_I18N_KEYS, MUSCLE_GROUP_I18N_KEYS, CATEGORY_LABELS, MUSCLE_GROUP_LABELS } from '../../types'
+import { METHOD_I18N_KEYS, MUSCLE_GROUP_I18N_KEYS, CATEGORY_I18N_KEYS, CATEGORY_LABELS, MUSCLE_GROUP_LABELS } from '../../types'
 import ExerciseDetailModal from '../exercises/ExerciseDetailModal'
 import Mannequin2D from '../mannequin/Mannequin2D'
 import { computeMuscleLoads } from '../../lib/muscleLoad'
@@ -303,41 +303,32 @@ export default function WorkoutBuilderView() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder={t('builder.search_placeholder', { ns: 'workouts' })}
-            style={{
-              width: '100%',
-              background: 'var(--black)',
-              border: '1px solid var(--border)', borderRadius: 12,
-              color: 'var(--white)',
-              padding: '0.6rem 0.9rem',
-              fontFamily: 'var(--font-b)',
-              fontSize: '0.9375rem',
-              outline: 'none'
-            }}
+            className="wb-input"
           />
           <div style={{ marginTop: '1rem', display: 'grid', gap: '0.8rem' }}>
             <div>
-              <div style={smallLabelStyle}>Filtrer par categorie</div>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.45rem', marginTop: '0.55rem' }}>
-                {Object.entries(CATEGORY_LABELS).map(([category, label]) => (
+              <div className="wb-ex-fgroup"><span>{t('fields.filter_category', { ns: 'exercises' })}</span></div>
+              <div className="wb-chips" style={{ marginTop: '0.45rem' }}>
+                {(Object.keys(CATEGORY_LABELS) as ExerciseCategory[]).map((category) => (
                   <FilterChip
                     key={category}
-                    active={selectedCategories.includes(category as ExerciseCategory)}
-                    onClick={() => toggleCategory(category as ExerciseCategory)}
-                    label={label}
+                    active={selectedCategories.includes(category)}
+                    onClick={() => toggleCategory(category)}
+                    label={t(CATEGORY_I18N_KEYS[category], { ns: 'common' })}
                   />
                 ))}
               </div>
             </div>
 
             <div>
-              <div style={smallLabelStyle}>Filtrer par muscle</div>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.45rem', marginTop: '0.55rem' }}>
-                {Object.entries(MUSCLE_GROUP_LABELS).map(([muscle, label]) => (
+              <div className="wb-ex-fgroup"><span>{t('fields.primary_muscle', { ns: 'exercises' })}</span></div>
+              <div className="wb-chips" style={{ marginTop: '0.45rem' }}>
+                {(Object.keys(MUSCLE_GROUP_LABELS) as MuscleGroup[]).map((muscle) => (
                   <FilterChip
                     key={muscle}
-                    active={selectedMuscles.includes(muscle as MuscleGroup)}
-                    onClick={() => toggleMuscle(muscle as MuscleGroup)}
-                    label={label}
+                    active={selectedMuscles.includes(muscle)}
+                    onClick={() => toggleMuscle(muscle)}
+                    label={t(MUSCLE_GROUP_I18N_KEYS[muscle], { ns: 'common' })}
                   />
                 ))}
               </div>
@@ -1257,20 +1248,7 @@ function FilterChip({
   label: string
 }) {
   return (
-    <button
-      onClick={onClick}
-      style={{
-        fontFamily: 'var(--font-d)',
-        fontSize: '0.6875rem',
-        letterSpacing: '0.08em',
-        textTransform: 'uppercase',
-        padding: '0.45rem 0.65rem',
-        border: `1px solid ${active ? 'rgba(255,77,0,0.45)' : 'var(--border)'}`, borderRadius: 12,
-        background: active ? 'rgba(255,77,0,0.12)' : 'var(--black)',
-        color: active ? 'var(--orange)' : 'var(--muted)',
-        cursor: 'pointer'
-      }}
-    >
+    <button type="button" className="wb-chip" aria-pressed={active} onClick={onClick}>
       {label}
     </button>
   )

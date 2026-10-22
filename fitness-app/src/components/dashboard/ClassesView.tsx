@@ -145,7 +145,7 @@ export default function ClassesView() {
         <div style={{ padding: '1rem 1.25rem', borderTop: '1px solid var(--border)' }}>
           <button
             onClick={() => setShowCreateClass(true)}
-            style={{ width: '100%', fontFamily: 'var(--font-d)', fontSize: '0.6875rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--black)', background: 'var(--orange)', border: 'none', padding: '0.65rem', minHeight: 48, cursor: 'pointer' }}
+            style={{ width: '100%', fontFamily: 'var(--font-d)', fontSize: '0.6875rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--black)', background: 'var(--orange)', border: 'none', padding: '0.65rem', minHeight: 48, borderRadius: 12, cursor: 'pointer' }}
           >
             + {t('classes.create')}
           </button>
