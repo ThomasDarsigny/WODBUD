@@ -232,12 +232,13 @@ export default function SettingsView() {
   }
 
   return (
-    <div style={{ padding: '1.5rem', maxWidth: 720, display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-      <header>
-        <h1 style={{ fontFamily: 'var(--font-d)', fontSize: '1.25rem', letterSpacing: '0.08em', textTransform: 'uppercase', margin: 0 }}>
-          {t('settings.title')}
-        </h1>
-        <p style={{ color: 'var(--muted)', fontSize: '0.8125rem', margin: '0.25rem 0 0' }}>{t('settings.subtitle')}</p>
+    <div className="wb-page" style={{ maxWidth: 720 }}>
+      <header className="wb-ph">
+        <div>
+          <p className="wb-ph-tag">{t('nav.settings')}</p>
+          <h1>{t('settings.title')}</h1>
+          <p className="wb-ph-sub">{t('settings.subtitle')}</p>
+        </div>
       </header>
 
       {notice && (
@@ -247,7 +248,8 @@ export default function SettingsView() {
             border: `1px solid ${notice.kind === 'ok' ? '#4ade80' : '#ef4444'}`,
             color: notice.kind === 'ok' ? '#4ade80' : '#ef4444',
             padding: '0.6rem 0.8rem',
-            fontSize: '0.8125rem'
+            fontSize: '0.875rem',
+            borderRadius: 12
           }}
         >
           {notice.text}
@@ -492,52 +494,26 @@ export default function SettingsView() {
 
 function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <section style={{ border: '1px solid var(--border)', padding: '1rem 1.25rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-      <h2
-        style={{
-          fontFamily: 'var(--font-d)',
-          fontSize: '0.6875rem',
-          letterSpacing: '0.16em',
-          textTransform: 'uppercase',
-          color: 'var(--muted)',
-          margin: 0
-        }}
-      >
-        {title}
-      </h2>
-      {children}
+    <section className="wb-home-sec">
+      <div className="wb-sec"><h2>{title}</h2></div>
+      <div className="wb-card wb-set-card">{children}</div>
     </section>
   )
 }
 
 function Row({ label, hint, children }: { label: string; hint?: string; children: ReactNode }) {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
-      <span style={{ fontSize: '0.8125rem', fontWeight: 600 }}>{label}</span>
+    <div className="wb-set-row">
+      <span className="wb-set-label">{label}</span>
       {children}
-      {hint && <span style={{ fontSize: '0.8125rem', color: 'var(--muted)' }}>{hint}</span>}
+      {hint && <span className="wb-set-hint">{hint}</span>}
     </div>
   )
 }
 
 function Chip({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
   return (
-    <button
-      type='button'
-      onClick={onClick}
-      style={{
-        fontFamily: 'var(--font-d)',
-        fontSize: '0.6875rem',
-        letterSpacing: '0.1em',
-        textTransform: 'uppercase',
-        padding: '0.35rem 0.8rem',
-        border: `1px solid ${active ? 'var(--orange)' : 'var(--border)'}`,
-        background: active ? 'rgba(255,77,0,0.12)' : 'transparent',
-        color: active ? 'var(--orange)' : 'var(--muted)',
-        cursor: 'pointer',
-        transition: 'all 0.15s'
-      }}
-    >
+    <button type='button' className='wb-chip' aria-pressed={active} onClick={onClick}>
       {label}
     </button>
   )
