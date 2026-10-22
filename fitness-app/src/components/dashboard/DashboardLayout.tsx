@@ -32,6 +32,7 @@ const NAV_ITEMS: NavItem[] = [
   { id: 'session', labelKey: 'nav.session', icon: 'session', path: '/dashboard/session' },
   { id: 'journal', labelKey: 'nav.journal', icon: 'calendar', path: '/dashboard/journal' },
   { id: 'rank', labelKey: 'nav.rank', icon: 'rank', path: '/dashboard/rank' },
+  { id: 'records', labelKey: 'nav.records', icon: 'records', path: '/dashboard/records' },
   { id: 'classes', labelKey: 'nav.classes', icon: 'classes', path: '/dashboard/classes' },
   { id: 'ai', labelKey: 'nav.ai', icon: 'ai', path: '/dashboard/ai' },
   { id: 'vote', labelKey: 'nav.vote', icon: 'vote', path: '/dashboard/vote' },

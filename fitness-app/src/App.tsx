@@ -29,6 +29,7 @@ const CommunityInviteRedirect = lazy(() => import('./pages/CommunityInviteRedire
 const SessionRunnerView = lazy(() => import('./components/session/SessionRunnerView'))
 const RankView = lazy(() => import('./components/rank/RankView'))
 const SessionJournalView = lazy(() => import('./components/session/SessionJournalView'))
+const RecordsView = lazy(() => import('./components/records/RecordsView'))
 const PrivacyPolicyPage = lazy(() => import('./pages/PrivacyPolicyPage'))
 const SharedRankPage = lazy(() => import('./pages/SharedRankPage'))
 const AthleteHomeView = lazy(() => import('./components/athlete/AthleteHomeView'))
@@ -361,6 +362,17 @@ function App() {
         />
 
         <Route
+          path="/dashboard/records"
+          element={
+            <ProtectedRoute>
+              <DashboardLayout>
+                <RecordsView />
+              </DashboardLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
           path="/dashboard/journal"
           element={
             <ProtectedRoute>
@@ -437,6 +449,16 @@ function App() {
             <ProtectedRoute>
               <AthleteDashboardLayout>
                 <SessionRunnerView basePath="/athlete" />
+              </AthleteDashboardLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/athlete/records"
+          element={
+            <ProtectedRoute>
+              <AthleteDashboardLayout>
+                <RecordsView />
               </AthleteDashboardLayout>
             </ProtectedRoute>
           }

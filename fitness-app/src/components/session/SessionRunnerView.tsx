@@ -14,6 +14,8 @@ import { useRankStore } from '../../stores/rankStore'
 import BadgeToken from '../badges/BadgeToken'
 import WorkoutMannequin from '../mannequin/WorkoutMannequin'
 import { GymOverlay, clockText, useClockLabels, useGymClock } from './GymClock'
+import ResultSheet from '../records/ResultSheet'
+import { formatSeconds, fromKg, readUnit, type ExerciseResult, type ResultInput } from '../../lib/records'
 
 interface Props {
   /** '/dashboard' côté coach, '/athlete' côté athlète. */
@@ -217,8 +219,11 @@ function RunnerPanel() {
   const { t } = useTranslation(['workouts', 'common'])
   const {
     workoutId, workoutName, activityName, items, doneExerciseIds, notes, saving, error,
-    pause, resume, toggleExercise, setNotes, finish, discard
+    pause, resume, toggleExercise, setNotes, finish, discard,
+    pendingResults, addPendingResult, removePendingResult
   } = useSessionStore()
+  const [resultFor, setResultFor] = useState<{ id: string; name: string } | null>(null)
+  const closeResult = useCallback(() => setResultFor(null), [])
 
   // Une séance cardio n'a pas de WOD : c'est le nom de l'activité qui titre.
   const heading = activityName || workoutName
@@ -330,9 +335,11 @@ function RunnerPanel() {
                 item.reps ?? null,
                 item.weight ?? null
               ].filter(Boolean).join(' ')
+              const mine = pendingResults.filter((r) => r.exerciseId === item.exerciseId)
               return (
+                <div key={item.id} className="wb-run-item">
+                <div className="wb-run-item-row">
                 <button
-                  key={item.id}
                   onClick={() => toggleExercise(item.id)}
                   aria-pressed={done}
                   style={{
@@ -355,6 +362,26 @@ function RunnerPanel() {
                     </span>
                   )}
                 </button>
+                <button
+                  type="button"
+                  className="wb-run-result"
+                  onClick={() => setResultFor({ id: item.exerciseId, name: item.name })}
+                  aria-label={t('records.add_for', { ns: 'common', name: item.name })}
+                >
+                  +
+                </button>
+                </div>
+                {mine.length > 0 && (
+                  <ul className="wb-run-chips">
+                    {mine.map((r) => (
+                      <li key={r.key}>
+                        <span>🏋 {resultText(r)}</span>
+                        <button type="button" onClick={() => removePendingResult(r.key)} aria-label={t('actions.delete', { ns: 'common' })}>✕</button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                </div>
               )
             })}
           </div>
@@ -373,6 +400,14 @@ function RunnerPanel() {
           style={textareaStyle}
         />
       </div>
+
+      {resultFor && (
+        <ResultSheet
+          exercise={{ id: resultFor.id, name: resultFor.name, timeBased: false }}
+          onSubmit={(input) => addPendingResult(input)}
+          onClose={closeResult}
+        />
+      )}
 
       {gymOpen && <GymOverlay gym={gym} title={heading} onClose={closeGym} onToggle={toggle} />}
 
@@ -404,6 +439,17 @@ function SummaryPanel({ basePath }: { basePath: string }) {
           <Stat label={t('session.done_total', { total: summary.totalMinutes })} />
           <Stat label={t('session.done_streak', { days: summary.currentStreak })} />
         </div>
+
+        {summary.newRecords.length > 0 && (
+          <div className="wb-run-prs">
+            <p>{t('records.new_pr', { ns: 'common', count: summary.newRecords.length })}</p>
+            <ul>
+              {summary.newRecords.map(({ name, result }) => (
+                <li key={result.id}><strong>{name}</strong> <span>{resultText(result)}</span></li>
+              ))}
+            </ul>
+          </div>
+        )}
 
         <SessionRewards
           badgeKeys={summary.newBadges}
@@ -495,6 +541,17 @@ function SessionRewards({ badgeKeys, previousMinutes, totalMinutes }: {
       )}
     </div>
   )
+}
+
+/** Résultat lisible, dans l'unité choisie par l'athlète. */
+function resultText(r: ResultInput | ExerciseResult): string {
+  const unit = readUnit()
+  if (r.weightKg != null) {
+    const w = `${fromKg(r.weightKg, unit)} ${unit}`
+    return r.reps && r.reps > 1 ? `${w} × ${r.reps}` : w
+  }
+  if (r.seconds != null) return formatSeconds(r.seconds)
+  return `${r.reps ?? 0} reps`
 }
 
 function Stat({ label }: { label: string }) {

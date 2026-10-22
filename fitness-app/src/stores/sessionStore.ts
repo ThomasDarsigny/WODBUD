@@ -15,6 +15,7 @@ import {
   type SessionTimer
 } from '../lib/sessionTimer'
 import type { WorkoutFormat } from '../lib/workoutClock'
+import { addResults, fetchMyResults, isNewRecord, type ExerciseResult, type ResultInput } from '../lib/records'
 import type { WorkoutMethod } from '../types'
 
 const STORAGE_KEY = 'wodbud_active_session'
@@ -41,6 +42,13 @@ export interface SessionSummary {
    * une requête de plus : le trigger ajoute exactement `activeMinutes`.
    */
   previousMinutes: number
+  /** Records battus pendant la séance, avec le nom du mouvement. */
+  newRecords: Array<{ name: string; result: ExerciseResult }>
+}
+
+/** Résultat noté pendant la séance, enregistré avec elle à la fin. */
+export interface PendingResult extends ResultInput {
+  key: string
 }
 
 /** Activité mesurée en durée : course, corde à sauter, rameur. */
@@ -65,6 +73,7 @@ interface PersistedSession {
   timer: SessionTimer
   doneExerciseIds: string[]
   notes: string
+  pendingResults: PendingResult[]
 }
 
 interface SessionState extends PersistedSession {
@@ -85,6 +94,8 @@ interface SessionState extends PersistedSession {
   resume: () => void
   toggleExercise: (id: string) => void
   setNotes: (notes: string) => void
+  addPendingResult: (input: ResultInput) => void
+  removePendingResult: (key: string) => void
   loadItems: (workoutId: string) => Promise<void>
   finish: () => Promise<SessionSummary>
   discard: () => void
@@ -100,7 +111,8 @@ const IDLE: PersistedSession = {
   scheduledId: null,
   timer: EMPTY_TIMER,
   doneExerciseIds: [],
-  notes: ''
+  notes: '',
+  pendingResults: []
 }
 
 function persist(s: PersistedSession) {
@@ -133,7 +145,8 @@ function readPersisted(): PersistedSession | null {
         runningSince: parsed.timer.runningSince ?? null
       },
       doneExerciseIds: parsed.doneExerciseIds ?? [],
-      notes: parsed.notes ?? ''
+      notes: parsed.notes ?? '',
+      pendingResults: Array.isArray(parsed.pendingResults) ? parsed.pendingResults : []
     }
   } catch {
     return null
@@ -216,6 +229,20 @@ export const useSessionStore = create<SessionState>((set, get) => ({
   setNotes: (notes) => {
     persist({ ...get(), notes })
     set({ notes })
+  },
+
+  addPendingResult: (input) => {
+    const s = get()
+    const pendingResults = [...s.pendingResults, { ...input, key: `${Date.now()}-${Math.random().toString(36).slice(2, 7)}` }]
+    persist({ ...s, pendingResults })
+    set({ pendingResults })
+  },
+
+  removePendingResult: (key) => {
+    const s = get()
+    const pendingResults = s.pendingResults.filter((r) => r.key !== key)
+    persist({ ...s, pendingResults })
+    set({ pendingResults })
   },
 
   loadItems: async (workoutId) => {
@@ -340,12 +367,32 @@ export const useSessionStore = create<SessionState>((set, get) => ({
         // Les badges seront rattrapés à l'ouverture de « Mon rang ».
       }
 
+      // Les résultats notés partent avec la séance. Un échec ne la perd pas :
+      // elle est déjà enregistrée, seuls les résultats seraient à renoter.
+      const newRecords: SessionSummary['newRecords'] = []
+      if (s.pendingResults.length) {
+        try {
+          const ids = new Set(s.pendingResults.map((r) => r.exerciseId))
+          const previous = (await fetchMyResults()).filter((r) => ids.has(r.exerciseId))
+          const saved = await addResults(s.pendingResults.map((r) => ({
+            exerciseId: r.exerciseId, weightKg: r.weightKg, reps: r.reps, seconds: r.seconds, notes: r.notes, sessionId: inserted.id
+          })))
+          const nameOf = new Map(s.items.map((i) => [i.exerciseId, i.name]))
+          for (const r of saved) {
+            if (isNewRecord(previous, r)) newRecords.push({ name: nameOf.get(r.exerciseId) ?? '—', result: r })
+          }
+        } catch {
+          // Voir plus haut : la séance compte quand même.
+        }
+      }
+
       const totalMinutes = profile?.total_minutes ?? activeMinutes
       const summary: SessionSummary = {
         activeMinutes,
         totalMinutes,
         currentStreak: profile?.current_streak ?? 0,
         newBadges,
+        newRecords,
         previousMinutes: Math.max(0, totalMinutes - activeMinutes)
       }
 

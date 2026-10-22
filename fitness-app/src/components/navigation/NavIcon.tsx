@@ -33,6 +33,7 @@ export type NavIconName =
   | 'star'
   | 'clock'
   | 'community'
+  | 'records'
 
 /** Un tracé par icône. Plusieurs sous-tracés séparés par un espace. */
 const PATHS: Record<NavIconName, string[]> = {
@@ -60,6 +61,8 @@ const PATHS: Record<NavIconName, string[]> = {
   // Loupe : « rien ne correspond au filtre », pas « rien n'existe »
   search: ['M10.8 17.6a6.8 6.8 0 1 0 0-13.6 6.8 6.8 0 0 0 0 13.6z', 'M15.7 15.7 20.5 20.5'],
   // Calendrier : les cours et les échéances
+  // Courbe qui monte : la progression.
+  records: ['M3.5 17.5 9 12l3.5 3.5 8-8', 'M15 7.5h5.5V13', 'M3.5 20.5h17'],
   calendar: ['M4.5 6.5h15a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1h-15a1 1 0 0 1-1-1v-12a1 1 0 0 1 1-1z', 'M8 3.5v5', 'M16 3.5v5', 'M3.5 11.5h17'],
   // Caméra : emplacement d'une vidéo de démonstration, remplie ou non
   video: ['M3.5 6.5h11a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1h-11a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1z', 'M15.5 10.4 21 7.4v9.2l-5.5-3z'],
