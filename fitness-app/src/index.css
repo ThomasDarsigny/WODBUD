@@ -1698,3 +1698,44 @@ button.wb-ex-card { display: flex; align-items: center; gap: 0.85rem; padding: 0
 em[data-rarity='commun'] { color: #b3bac2; } em[data-rarity='rare'] { color: #6ea2ff; } em[data-rarity='epique'] { color: #b98cff; }
 em[data-rarity='legendaire'] { color: #f4c652; } em[data-rarity='mythique'] { color: #7ff3ff; }
 @media (prefers-reduced-motion: reduce) { .wb-badge-art.is-fresh, .wb-badge-art.is-fresh::after { animation: none; } }
+
+/* ─── Insignes de rang « Forge » ───────────────────────────────── */
+.wb-rank-emblem { display: inline-block; flex-shrink: 0; }
+.wb-rank-emblem img { display: block; width: 100%; height: 100%; user-select: none; -webkit-user-drag: none; filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.5)); }
+.wb-rank-emblem.is-dimmed img { filter: grayscale(1) brightness(0.45) contrast(1.1); opacity: 0.75; }
+
+/* ─── Montée en rang (plein écran) ─────────────────────────────── */
+.wb-rankup {
+  position: fixed; inset: 0; z-index: 1100; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 1rem; padding: calc(var(--safe-top, 0px) + 1.5rem) 1.25rem calc(var(--safe-bottom, 0px) + 1.5rem);
+  background: radial-gradient(120% 80% at 50% 38%, color-mix(in srgb, var(--rank) 30%, #0b0a0c), #060507 70%);
+  color: #f5f2ec; text-align: center; overflow: hidden;
+  animation: wb-fade 0.35s ease both;
+}
+.wb-rankup-glow { position: absolute; left: 50%; top: 38%; width: 520px; height: 520px; transform: translate(-50%, -50%); border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--rank) 55%, transparent), transparent 62%); filter: blur(6px); opacity: 0.8; }
+.wb-rankup-rays { position: absolute; left: 50%; top: 38%; width: 160vmax; height: 160vmax; transform: translate(-50%, -50%);
+  background: repeating-conic-gradient(from 0deg, color-mix(in srgb, var(--rank) 26%, transparent) 0deg 6deg, transparent 6deg 18deg);
+  -webkit-mask: radial-gradient(circle, #000 0, #000 6%, transparent 24%); mask: radial-gradient(circle, #000 0, #000 6%, transparent 24%);
+  animation: wb-rankup-spin 24s linear infinite; opacity: 0.7; }
+@keyframes wb-rankup-spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
+.wb-rankup-stage { position: relative; width: 220px; height: 220px; display: grid; place-items: center; }
+.wb-rankup-stage > * { grid-area: 1 / 1; }
+.wb-rankup-emblem { position: relative; display: grid; place-items: center; }
+.wb-rankup-emblem.is-new::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  -webkit-mask: var(--art) center / contain no-repeat; mask: var(--art) center / contain no-repeat;
+  background: linear-gradient(115deg, transparent 38%, rgba(255, 255, 255, 0.9) 50%, transparent 62%);
+  background-size: 250% 100%; background-position: 150% 0; mix-blend-mode: screen;
+  animation: wb-badge-shine 1.3s 1.05s ease-out both;
+}
+.wb-rankup-flash { width: 260px; height: 260px; border-radius: 50%; background: radial-gradient(circle, #fff 0, color-mix(in srgb, var(--rank) 60%, #fff) 30%, transparent 65%); pointer-events: none; }
+.wb-rankup-spark { position: absolute; left: 50%; top: 50%; margin: -3px 0 0 -3px; border-radius: 50%; box-shadow: 0 0 10px currentColor; pointer-events: none; }
+.wb-rankup-text { position: relative; display: grid; justify-items: center; gap: 0.4rem; max-width: 30rem; }
+.wb-rankup-tag { margin: 0; font-family: var(--font-d); font-size: 0.85rem; font-weight: 800; letter-spacing: 0.32em; text-transform: uppercase; color: color-mix(in srgb, var(--rank) 70%, #fff); }
+.wb-rankup h2 { margin: 0; font-family: var(--font-d); font-size: clamp(3rem, 15vw, 5rem); font-weight: 900; line-height: 0.92; text-transform: uppercase; letter-spacing: 0.01em;
+  color: var(--rank); text-shadow: 0 0 28px color-mix(in srgb, var(--rank) 60%, transparent); }
+.wb-rankup-motto { margin: 0.2rem 0 0; font-size: 1.05rem; font-style: italic; color: rgba(245, 242, 236, 0.8); }
+.wb-rankup-actions { display: grid; gap: 0.6rem; width: min(100%, 320px); margin-top: 1.1rem; }
+.wb-rankup .wb-btn--ghost { color: #f5f2ec; border-color: rgba(255, 255, 255, 0.3); }
+@media (prefers-reduced-motion: reduce) { .wb-rankup, .wb-rankup-rays, .wb-rankup-emblem.is-new::after { animation: none; } }

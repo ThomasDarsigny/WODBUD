@@ -3,7 +3,9 @@ import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRankStore } from '../../stores/rankStore'
 import { computeProgress, formatMinutes, rankDisplay, rankMotto } from '../../lib/ranks'
-import RankBadge from './RankBadge'
+import RankBadge, { RankEmblem } from './RankBadge'
+import RankUpCelebration from './RankUpCelebration'
+import { useSearchParams } from 'react-router-dom'
 import BadgeGrid from '../badges/BadgeGrid'
 import { useNotificationStore } from '../../stores/notificationStore'
 import { AnimatedNumber } from '../ui/motion'
@@ -23,6 +25,13 @@ export default function RankView() {
   const lang = i18n.language
   const minutes = profile?.total_minutes ?? 0
   const progress = useMemo(() => computeProgress(ranks, minutes), [ranks, minutes])
+
+  // Développement seulement : /dashboard/rank?apercu-montee=<clé> rejoue la
+  // célébration de montée en rang sans avoir à cumuler les minutes.
+  const [params, setParams] = useSearchParams()
+  const previewKey = import.meta.env.DEV ? params.get('apercu-montee') : null
+  const previewTo = previewKey ? ranks.find((r) => r.key === previewKey) ?? null : null
+  const previewFrom = previewTo ? ranks.find((r) => r.position === previewTo.position - 1) ?? null : null
 
   const shareUrl = shareToken ? `${window.location.origin}/rang/${shareToken}` : null
 
@@ -92,7 +101,7 @@ export default function RankView() {
             const isCurrent = progress.current?.key === r.key
             return (
               <li key={r.key} className={`wb-ladder${reached ? ' is-reached' : ''}${isCurrent ? ' is-current' : ''}`} style={isCurrent ? { background: `${r.color}14` } : undefined}>
-                <span className="wb-ladder-hex" style={{ borderColor: reached ? r.color : undefined, background: reached ? `${r.color}33` : undefined }} />
+                <RankEmblem rank={r} size={34} dimmed={!reached} />
                 <span className="wb-ladder-name" style={{ color: reached ? r.color : undefined }}>{rankDisplay(r, lang)}</span>
                 <span className="wb-ladder-side">{reached ? t('rank.reached') : t('rank.from', { amount: formatMinutes(r.min_minutes) })}</span>
               </li>
@@ -132,6 +141,8 @@ export default function RankView() {
       </section>
 
       {error && <div className="wb-rec-error" role="alert">{error}</div>}
+
+      {previewTo && <RankUpCelebration from={previewFrom} to={previewTo} onClose={() => setParams({})} />}
     </div>
   )
 }

@@ -79,6 +79,8 @@ const mirrorX = (pts) => pts.map(([x, y]) => [2 * C - x, y])
 // un métal de symbole. La lumière vient toujours d'en haut à gauche.
 
 const M = {
+  iron: ['#b4b9bf', '#6b7178', '#2b2f34', '#8d939a', '#3a3f45'],
+  platinum: ['#ffffff', '#e4ebf2', '#a3b4c6', '#f6f9fc', '#7f91a6'],
   steel: ['#f5f7f9', '#b3bac2', '#5f666e', '#cfd4da', '#6d747c'],
   silver: ['#ffffff', '#e1e5ea', '#9aa2ab', '#f3f5f7', '#8b939c'],
   titanium: ['#e6e9ee', '#8f97a4', '#3f4552', '#b7bec9', '#545b67'],
@@ -112,7 +114,8 @@ function defs(id, b) {
   return [
     lin('rim', M[b.rim], 0.1, 0, 0.9, 1),
     lin('rim2', M[b.rim2 ?? b.rim], 0.9, 0, 0.1, 1),
-    rad('face', FACE[b.face]),
+    // Face : un émail du catalogue, ou trois teintes fournies (rangs).
+    rad('face', Array.isArray(b.face) ? b.face : FACE[b.face]),
     lin('glyph', M[b.metal], 0.2, 0, 0.8, 1),
     lin('edge', ['#ffffff', '#ffffff00', '#00000000', '#000000'], 0, 0, 0, 1),
     rad('sheen', ['#ffffffaa', '#ffffff00'], 0.4, 0.15, 0.6),
@@ -492,3 +495,106 @@ for (const def of BADGES) {
 }
 writeFileSync(resolve(OUT, 'manifest.json'), JSON.stringify(manifest, null, 2) + '\n')
 console.log(`${manifest.length} badges → ${OUT}`)
+
+/* ══ Insignes de rang ═══════════════════════════════════════════════════════
+   Même système que les badges, mais une seule silhouette — l'hexagone, qui
+   est l'identité des rangs — et une échelle de matières : la progression se
+   voit dans le métal, les ornements et le halo, pas dans un numéro. La
+   couleur propre à chaque rang (en base) teinte l'émail. */
+
+const RANK_OUT = resolve(import.meta.dirname, '../../public/ranks')
+
+const shade = (hex, f) => {
+  const n = parseInt(hex.slice(1), 16)
+  const ch = [(n >> 16) & 255, (n >> 8) & 255, n & 255].map((c) => Math.round(f < 0 ? c * (1 + f) : c + (255 - c) * f))
+  return '#' + ch.map((c) => c.toString(16).padStart(2, '0')).join('')
+}
+const enamel = (hex) => [shade(hex, 0.25), shade(hex, -0.45), shade(hex, -0.85)]
+
+const RANK_GLYPHS = {
+  // Un chevron : le premier galon.
+  recrue: () => P(poly([[84, 142], [128, 100], [172, 142], [172, 166], [128, 124], [84, 166]], 3)),
+  // Étincelle de flamme : le corps se réchauffe.
+  warmup: () => `<g transform="translate(128 132) scale(0.78) translate(-128 -124)">${P('M128 62 C150 90 174 108 168 142 C164 166 148 182 128 184 C108 182 92 166 88 142 C84 118 102 104 110 84 C116 100 122 108 128 114 C124 96 122 80 128 62 Z')}</g>`,
+  // Deux galons.
+  regulier: () => [96, 130].map((y) => P(poly([[84, y + 22], [128, y - 6], [172, y + 22], [172, y + 42], [128, y + 14], [84, y + 42]], 3))).join(''),
+  // Engrenage.
+  machine: () => P(`${gear(8, 48, 38, 3)} ${circle(16)}`, ' fill-rule="evenodd"'),
+  // Trois griffures.
+  bete: () => [-30, 0, 30].map((dx) => P(poly([[112 + dx, 76], [124 + dx, 76], [146 + dx, 180], [140 + dx, 184]], 2))).join(''),
+  // Cornes : deux croissants qui montent d'un front.
+  monstre: () => P(rect(86, 140, 84, 22, 8)) + P('M96 142 C78 120 76 92 92 72 C92 96 104 118 120 140 Z') + P('M160 142 C178 120 180 92 164 72 C164 96 152 118 136 140 Z'),
+  // Bulldozer : la lame devant, la chenille dessous.
+  bulldozer: () => P(poly([[62, 74], [194, 74], [186, 110], [70, 110]], 4)) + P(rect(116, 108, 24, 18, 2)) +
+    P(`${rect(66, 124, 124, 54, 27)} ${rect(78, 136, 100, 30, 15)}`, ' fill-rule="evenodd"') +
+    `<g opacity="0.95">${[96, 128, 160].map((x) => P(circle(10, x, 151))).join('')}</g>`,
+  // Étoile de légende.
+  legende: () => P(star(5, 54, 22, -90, 3)),
+  // Ailes de phénix : le temps a abandonné.
+  immortel: () => {
+    const wing = [[124, 150], [70, 96], [92, 100], [62, 74], [96, 84], [84, 58], [124, 104]]
+    return P(poly(wing, 3)) + P(poly(mirrorX(wing), 3)) + P('M128 92 C138 108 142 124 138 146 C136 160 132 172 128 180 C124 172 120 160 118 146 C114 124 118 108 128 92 Z')
+  },
+  // Couronne sertie.
+  boss_final: () => P(poly([[80, 152], [72, 92], [104, 122], [128, 78], [152, 122], [184, 92], [176, 152]], 3)) + P(rect(78, 156, 100, 18, 5))
+}
+
+// L'échelle des matières, rang par rang.
+const RANKS = [
+  { key: 'recrue', color: '#8b8680', rim: 'iron', metal: 'steel', sheen: 0.22 },
+  { key: 'warmup', color: '#5eead4', rim: 'steel', metal: 'silver', sheen: 0.26 },
+  { key: 'regulier', color: '#38bdf8', rim: 'bronze', metal: 'bronze', sheen: 0.28, gem: 'topaz' },
+  { key: 'machine', color: '#818cf8', rim: 'silver', metal: 'silver', sheen: 0.3, gem: 'sapphire', doubleRim: true, rim2: 'steel' },
+  { key: 'bete', color: '#a78bfa', rim: 'silver', rim2: 'titanium', metal: 'silver', doubleRim: true, gem: 'amethyst', aura: '#a78bfa' },
+  { key: 'monstre', color: '#f472b6', rim: 'gold', rim2: 'bronze', metal: 'gold', doubleRim: true, gem: 'ruby', aura: '#f472b6' },
+  { key: 'bulldozer', color: '#fb923c', rim: 'gold', rim2: 'bronze', metal: 'gold', doubleRim: true, gem: 'ruby', aura: '#fb923c', blades: true },
+  { key: 'legende', color: '#facc15', rim: 'platinum', rim2: 'gold', metal: 'gold', doubleRim: true, gem: 'sapphire', aura: '#facc15', laurels: true, rays: 16 },
+  { key: 'immortel', color: '#f87171', rim: 'platinum', rim2: 'whiteGold', metal: 'platinum', doubleRim: true, gem: 'diamond', aura: '#f87171', wings: true, rays: 20 },
+  { key: 'boss_final', color: '#ff4d00', rim: 'gold', rim2: 'whiteGold', metal: 'gold', doubleRim: true, gem: 'diamond', prism: true, aura: '#ff6a2b', crown: true, rays: 28, mythic: true }
+]
+
+const HEX = regular(6, 108, -90, 10)
+const hexVertices = Array.from({ length: 6 }, (_, i) => pt(108, -90 + 60 * i))
+
+mkdirSync(RANK_OUT, { recursive: true })
+RANKS.forEach((r, i) => {
+  const tier = i + 1
+  const id = `rank-${r.key}`
+  const ornaments = []
+  if (r.blades) ornaments.push(blades(id))
+  if (r.laurels) ornaments.push(laurel(id, -1, `url(#${id}-rim2)`) + laurel(id, 1, `url(#${id}-rim2)`))
+  if (r.wings) {
+    const w = [[44, 100], [4, 64], [26, 108], [0, 122], [34, 136], [10, 162], [52, 150]]
+    ornaments.push(`<path d="${poly(w, 3)}" fill="url(#${id}-rim)" stroke="${DARK_EDGE}" stroke-width="2.4"/><path d="${poly(mirrorX(w), 3)}" fill="url(#${id}-rim2)" stroke="${DARK_EDGE}" stroke-width="2.4"/>`)
+  }
+  if (r.crown) {
+    // Pointes de couronne au-dessus de l'hexagone : le dernier palier.
+    ornaments.push([[-34, 30], [0, 6], [34, 30]].map(([dx, y]) => `<path d="${poly([[C + dx - 12, 40], [C + dx, y], [C + dx + 12, 40]], 2)}" fill="url(#${id}-rim)" stroke="${DARK_EDGE}" stroke-width="2"/>`).join(''))
+  }
+  const gems = (gid) => {
+    if (!r.gem) return ''
+    // De 1 gemme (sommet) à 6 (tous les sommets) selon le rang.
+    const count = tier <= 3 ? 1 : tier <= 5 ? 2 : tier <= 7 ? 3 : 6
+    const idx = count === 1 ? [0] : count === 2 ? [2, 4] : count === 3 ? [0, 2, 4] : [0, 1, 2, 3, 4, 5]
+    return idx.map((k) => { const [x, y] = hexVertices[k]; return gemAt(gid, x + (C - x) * 0.04, y + (C - y) * 0.04, tier >= 8 ? 9 : 7) }).join('')
+  }
+  const b = {
+    slug: id,
+    name: r.key,
+    shape: HEX,
+    faceScale: r.doubleRim ? 0.8 : 0.84,
+    face: enamel(r.color),
+    accentRing: tier >= 3 ? shade(r.color, 0.45) : undefined,
+    rim: r.rim, rim2: r.rim2, doubleRim: r.doubleRim, metal: r.metal,
+    gem: r.gem, prism: r.prism, glyphPrism: false,
+    aura: r.aura, auraR: 124 + (tier >= 8 ? 3 : 0),
+    sheen: r.sheen ?? 0.32,
+    ornament: ornaments.length ? () => ornaments.join('') : undefined,
+    gems,
+    rays: r.rays ? rays(id, r.rays, 98, 127, r.mythic ? '#ffe2c2' : shade(r.color, 0.5), r.mythic ? 0.6 : 0.4) : ''
+  }
+  const glyphFn = RANK_GLYPHS[r.key]
+  b.glyph = (gid) => glyphFn(gid).replaceAll('fill="x"', r.mythic ? `fill="url(#${gid}-prism)"` : '')
+  writeFileSync(resolve(RANK_OUT, `${r.key}.svg`), render(b))
+})
+console.log(`${RANKS.length} rangs → ${RANK_OUT}`)

@@ -178,3 +178,28 @@ le badge est verrouillé, apparition et reflet au déblocage).
 | `coach_vote` | Démocratie | Rare | `public/badges/tribune.svg` |
 | `coach_20` | Plein la box | Épique | `public/badges/plein-la-box.svg` |
 | `attendance` | Présent | Rare | `public/badges/presence.svg` |
+
+## 9. Insignes de rang
+
+Les 10 rangs ont leur propre série dans le même système, générée par le même
+script (`public/ranks/<clé>.svg`). Une seule silhouette — l'hexagone, identité
+des rangs — et une échelle de matières qui monte avec le rang ; la couleur
+du rang (en base) teinte l'émail, et chaque rang porte son symbole.
+
+| # | Rang | Matière du rebord | Symbole | Ornements |
+|---|---|---|---|---|
+| 1 | Recrue | Fer | Un galon | — |
+| 2 | Warm-up | Acier | Flamme | — |
+| 3 | Régulier | Bronze | Deux galons | 1 topaze |
+| 4 | Machine | Argent, double rebord | Engrenage | 2 saphirs |
+| 5 | Bête | Argent et titane | Trois griffures | 2 améthystes, halo |
+| 6 | Monstre | Or et bronze | Cornes | 3 rubis, halo |
+| 7 | Bulldozer | Or et bronze | Lame et chenille | 3 rubis, lames, halo |
+| 8 | Légende | Platine et or | Étoile | 6 saphirs, lauriers, rayons |
+| 9 | Immortel | Platine et or blanc | Ailes de phénix | 6 diamants, ailes, rayons |
+| 10 | Boss Final | Or et or blanc | Couronne prismatique | 6 diamants, couronne, 28 rayons |
+
+La montée en rang se joue en plein écran (`RankUpCelebration`) : l'ancien
+insigne se dissout, éclat, le nouveau surgit dans ses rayons et ses
+particules, puis le nom et la devise. En développement,
+`/dashboard/rank?apercu-montee=<clé>` la rejoue.

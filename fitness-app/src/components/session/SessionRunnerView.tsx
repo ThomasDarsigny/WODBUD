@@ -19,6 +19,8 @@ import RestBar from './RestBar'
 import NavIcon from '../navigation/NavIcon'
 import { formatSeconds, fromKg, readUnit, type ExerciseResult, type ResultInput } from '../../lib/records'
 import { Celebrate, Pop } from '../ui/motion'
+import { RankEmblem } from '../rank/RankBadge'
+import RankUpCelebration from '../rank/RankUpCelebration'
 
 interface Props {
   /** '/dashboard' côté coach, '/athlete' côté athlète. */
@@ -389,6 +391,7 @@ function SummaryPanel({ basePath }: { basePath: string }) {
         )}
 
         <SessionRewards
+          basePath={basePath}
           badgeKeys={summary.newBadges}
           previousMinutes={summary.previousMinutes}
           totalMinutes={summary.totalMinutes}
@@ -413,7 +416,8 @@ function SummaryPanel({ basePath }: { basePath: string }) {
  * pas trois écrans plus loin. Le composant ne s'affiche que s'il y a vraiment
  * quelque chose à annoncer — un bandeau « rien de neuf » serait pire que rien.
  */
-function SessionRewards({ badgeKeys, previousMinutes, totalMinutes }: {
+function SessionRewards({ badgeKeys, previousMinutes, totalMinutes, basePath }: {
+  basePath: string
   badgeKeys: string[]
   previousMinutes: number
   totalMinutes: number
@@ -440,6 +444,9 @@ function SessionRewards({ badgeKeys, previousMinutes, totalMinutes }: {
   const before = ranks.length ? computeProgress(ranks, previousMinutes).current : null
   const after = ranks.length ? computeProgress(ranks, totalMinutes).current : null
   const rankedUp = Boolean(after && before?.key !== after.key)
+  // La célébration plein écran ne s'affiche qu'une fois ; la carte reste.
+  const [celebrated, setCelebrated] = useState(false)
+  const navigate = useNavigate()
 
   if (!rankedUp && badges.length === 0) return null
 
@@ -447,7 +454,7 @@ function SessionRewards({ badgeKeys, previousMinutes, totalMinutes }: {
     <div style={{ marginTop: '1.5rem', paddingTop: '1.25rem', borderTop: '1px solid rgba(34,197,94,0.25)' }}>
       {rankedUp && after && (
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: badges.length ? '1.1rem' : 0 }}>
-          <span style={{ width: 26, height: 26, flexShrink: 0, border: `2px solid ${after.color}`, background: `${after.color}33`, display: 'inline-block', clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)' }} />
+          <RankEmblem rank={after} size={56} />
           <span>
             <span style={{ display: 'block', fontFamily: 'var(--font-d)', fontSize: '0.6875rem', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--muted)' }}>
               {t('session.new_rank')}
@@ -457,6 +464,15 @@ function SessionRewards({ badgeKeys, previousMinutes, totalMinutes }: {
             </span>
           </span>
         </div>
+      )}
+
+      {rankedUp && after && !celebrated && (
+        <RankUpCelebration
+          from={before}
+          to={after}
+          onClose={() => setCelebrated(true)}
+          onSeeRank={() => { setCelebrated(true); navigate(`${basePath}/rank`) }}
+        />
       )}
 
       {badges.length > 0 && (

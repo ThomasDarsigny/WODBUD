@@ -111,7 +111,8 @@
     "rest_skip": "Skip",
     "set_done": "Set {{n}}/{{total}} done",
     "set_undo": "Undo last set",
-    "sets_progress": "{{done}} of {{total}} sets"
+    "sets_progress": "{{done}} of {{total}} sets",
+    "rankup_continue": "Continue"
   },
   "alerts": {
     "cardio_title": "Cardio alternation",

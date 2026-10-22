@@ -111,7 +111,8 @@
     "rest_skip": "Saltar",
     "set_done": "Serie {{n}}/{{total}} hecha",
     "set_undo": "Deshacer la última serie",
-    "sets_progress": "{{done}} de {{total}} series"
+    "sets_progress": "{{done}} de {{total}} series",
+    "rankup_continue": "Continuar"
   },
   "alerts": {
     "cardio_title": "Alternancia de cardio",

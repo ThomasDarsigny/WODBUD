@@ -55,7 +55,7 @@ export type BadgeFamily =
   | 'coach'
   | 'suivi'
 
-/** Ordre d'affichage des familles. `suivi` en dernier : rien n'y est atteignable. */
+/** Ordre d'affichage des familles. `suivi` (records, résultats) en dernier. */
 export const BADGE_FAMILIES: BadgeFamily[] = [
   'assiduite',
   'volume',

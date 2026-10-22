@@ -7,6 +7,7 @@ import { useRankStore } from '../../stores/rankStore'
 import ConfirmButton from '../ui/ConfirmButton'
 import { btnDanger, btnSmall } from '../../styles/ui'
 import { Avatar, Notice } from './communityUi'
+import { RankEmblem } from '../rank/RankBadge'
 
 /**
  * Membres, et modération : le propriétaire nomme ou retire des co-admins ;
@@ -64,8 +65,8 @@ export default function CommunityMembers({ communityId, members, isMember, isOwn
                 </span>
               </button>
               {rank && (
-                <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: rank.color, border: `1px solid ${rank.color}`, borderRadius: 12, padding: '0.1rem 0.4rem' }}>
-                  {rankDisplay(rank, i18n.language)}
+                <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: rank.color, border: `1px solid ${rank.color}`, borderRadius: 999, padding: '0.1rem 0.5rem 0.1rem 0.2rem', display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}>
+                  <RankEmblem rank={rank} size={18} />{rankDisplay(rank, i18n.language)}
                 </span>
               )}
               {canModerate && (
