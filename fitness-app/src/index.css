@@ -1179,3 +1179,17 @@ label {
 .wb-net[data-kind='synced'] { background: rgba(34, 197, 94, 0.1); border-bottom-color: rgba(34, 197, 94, 0.3); color: #4ade80; }
 .wb-net button { width: 32px; height: 32px; min-height: 32px; border: none; background: none; color: inherit; cursor: pointer; flex-shrink: 0; }
 .wb-run-offline { margin: 1rem 0 0; color: var(--muted); font-size: 0.875rem; line-height: 1.5; max-width: 52ch; }
+
+/* ─── Audit mobile : cibles tactiles d'au moins 44 px ─────────────── */
+.wb-auth-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--orange);
+  text-decoration: none;
+}
+.wb-mobile-top a { display: inline-flex; align-items: center; min-height: 44px; }
+.wb-onb-hide { width: 44px; height: 44px; min-height: 44px; }
+@media (pointer: coarse) {
+  .wb-segmented button { min-height: 40px; }
+}

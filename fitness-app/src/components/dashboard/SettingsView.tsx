@@ -453,7 +453,7 @@ export default function SettingsView() {
       </Section>
 
       <Section title={t('settings.privacy')}>
-        <Link to='/confidentialite' style={{ color: 'var(--orange)', fontSize: '0.8125rem' }}>
+        <Link to='/confidentialite' className="wb-auth-link" style={{ fontSize: '0.8125rem' }}>
           {t('settings.privacy_link')}
         </Link>
       </Section>

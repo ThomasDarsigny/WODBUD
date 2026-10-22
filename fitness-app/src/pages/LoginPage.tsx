@@ -102,12 +102,12 @@ export default function LoginPage() {
         </div>
 
         <div style={{ marginTop: '1.25rem', display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-          <Link to="/signup" style={{ color: 'var(--orange)', textDecoration: 'none' }}>
+          <Link to="/signup" className="wb-auth-link">
             {t('auth_ui.create_account')}
           </Link>
           {/* Pas de landing dans l'app installée : le lien n'y mènerait nulle part. */}
           {!isInstalledApp() && (
-            <Link to="/" style={{ color: 'var(--orange)', textDecoration: 'none' }}>
+            <Link to="/" className="wb-auth-link">
               {t('auth_ui.back_home')}
             </Link>
           )}
