@@ -16,6 +16,7 @@ import ClassPlanningTab from './ClassPlanningTab'
 import { isVoteSessionOpen, voteSessionKind } from '../../lib/voteSessions'
 import ClassFollowup from './ClassFollowup'
 import { useIsMobile } from '../../hooks/useMediaQuery'
+import { useSearchParams } from 'react-router-dom'
 
 const BASE_URL = window.location.origin
 
@@ -35,6 +36,21 @@ export default function ClassesView() {
   const showDetail = !isMobile || Boolean(selectedClass)
 
   useEffect(() => { fetchClasses() }, [fetchClasses])
+
+  // Lien direct depuis l'accueil : /dashboard/classes?c=<id>.
+  // La sélection se fait au rendu (pas d'effet en cascade) ; l'URL est
+  // nettoyée ensuite, pour que « retour » ne rouvre pas le même cours.
+  const [params, setParams] = useSearchParams()
+  const wanted = params.get('c')
+  const [linkHandled, setLinkHandled] = useState<string | null>(null)
+  if (wanted && wanted !== linkHandled && classes.length > 0) {
+    setLinkHandled(wanted)
+    const found = classes.find((c) => c.id === wanted)
+    if (found) { setSelectedClass(found); setActiveTab('followup') }
+  }
+  useEffect(() => {
+    if (wanted && wanted === linkHandled) setParams({}, { replace: true })
+  }, [wanted, linkHandled, setParams])
   useEffect(() => { fetchExercises() }, [fetchExercises])
 
   useEffect(() => {

@@ -22,7 +22,9 @@
     "close_menu": "Fermer le menu",
     "journal": "Journal",
     "communities": "Communautés",
-    "records": "Records"
+    "records": "Records",
+    "today": "Aujourd'hui",
+    "tab_today": "Accueil"
   },
   "library": {
     "title": "Bibliothèque de workouts",
@@ -937,5 +939,26 @@
     "empty_title": "Aucun athlète inscrit",
     "empty_hint": "Partage le lien d’invitation ci-dessus pour remplir ton cours.",
     "privacy": "Tu vois seulement des comptes (séances, minutes, série) : le contenu des séances de tes athlètes reste privé."
+  },
+  "home": {
+    "title": "Aujourd'hui",
+    "hello": "Salut {{name}}",
+    "start_session": "Démarrer une séance",
+    "resume_session": "Reprendre la séance",
+    "new_wod": "Créer un WOD",
+    "days_unit": " j",
+    "stat_streak": "Série en cours",
+    "stat_week_minutes": "Minutes, 7 derniers jours",
+    "stat_week_sessions": "Séances, 7 derniers jours",
+    "today_plans": "Prévu aujourd’hui",
+    "my_classes": "Mes cours",
+    "my_records": "Mes derniers résultats",
+    "see_all": "Tout voir",
+    "no_class_title": "Pas encore de cours",
+    "no_class_hint": "Crée un cours pour inviter tes athlètes et suivre leur assiduité.",
+    "class_line_one": "{{count}} athlète · {{active}} actif cette semaine",
+    "class_line_other": "{{count}} athlètes · {{active}} actifs cette semaine",
+    "to_check_one": "{{count}} à relancer",
+    "to_check_other": "{{count}} à relancer"
   }
 }

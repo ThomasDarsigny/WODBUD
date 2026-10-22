@@ -11,7 +11,6 @@ import NavIcon from '../navigation/NavIcon'
 import type { NavIconName } from '../navigation/NavIcon'
 import NavDot from '../navigation/NavDot'
 import MobileTabBar, { type MobileNavItem } from '../navigation/MobileTabBar'
-import OnboardingCard from '../onboarding/OnboardingCard'
 import { useNotificationStore } from '../../stores/notificationStore'
 import { PageTransition } from '../ui/motion'
 
@@ -27,6 +26,7 @@ type NavItem = {
 
 const NAV_ITEMS: NavItem[] = [
   { id: 'admin', labelKey: 'nav.admin', icon: 'admin', path: '/dashboard/admin' },
+  { id: 'today', labelKey: 'nav.today', icon: 'home', path: '/dashboard/today' },
   { id: 'exercises', labelKey: 'nav.exercises', icon: 'exercises', path: '/dashboard/exercises' },
   { id: 'workout', labelKey: 'new', ns: 'workouts', icon: 'workout', path: '/dashboard/workout' },
   { id: 'library', labelKey: 'nav.library', icon: 'library', path: '/dashboard/workouts' },
@@ -87,7 +87,7 @@ export default function DashboardLayout({ children }: Props) {
   const navItems = useMemo(() => {
     return NAV_ITEMS.filter((item) => {
       if (item.id === 'admin') return isAdmin
-      if (item.id === 'ai' || item.id === 'classes') return !isAdmin
+      if (item.id === 'ai' || item.id === 'classes' || item.id === 'today') return !isAdmin
       return true
     })
   }, [isAdmin])
@@ -106,8 +106,8 @@ export default function DashboardLayout({ children }: Props) {
 
   // Téléphone : 4 onglets à portée du pouce, le reste dans « Plus ».
   const label = (item: NavItem) => (item.ns === 'workouts' ? t(item.labelKey, { ns: 'workouts' }) : t(item.labelKey))
-  const TAB_LABELS: Record<string, string> = { workout: 'nav.tab_new', admin: 'nav.tab_admin', classes: 'nav.tab_classes', rank: 'nav.tab_rank' }
-  const tabIds = isAdmin ? ['admin', 'workout', 'session', 'rank'] : ['workout', 'session', 'classes', 'rank']
+  const TAB_LABELS: Record<string, string> = { today: 'nav.tab_today', workout: 'nav.tab_new', admin: 'nav.tab_admin', classes: 'nav.tab_classes', rank: 'nav.tab_rank' }
+  const tabIds = isAdmin ? ['admin', 'workout', 'session', 'rank'] : ['today', 'workout', 'session', 'classes']
   const toMobile = (item: NavItem, short: boolean): MobileNavItem => ({
     id: item.id,
     label: short && TAB_LABELS[item.id] ? t(TAB_LABELS[item.id]) : label(item),
@@ -317,12 +317,6 @@ export default function DashboardLayout({ children }: Props) {
         <OfflineBanner />
         <ActiveSessionBar basePath="/dashboard" />
         <div className={isMobile ? 'wb-has-tabbar' : undefined} style={{ flex: 1, overflow: 'auto' }}>
-          {/* Accueil du coach : les premiers pas, au-dessus de la bibliothèque. */}
-          {location.pathname === '/dashboard/exercises' && (
-            <div style={{ padding: 'var(--page-pad) var(--page-pad) 0' }}>
-              <OnboardingCard area="coach" />
-            </div>
-          )}
           <PageTransition>{children}</PageTransition>
         </div>
       </main>

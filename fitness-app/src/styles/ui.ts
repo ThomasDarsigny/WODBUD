@@ -9,8 +9,13 @@ import type { CSSProperties } from 'react'
  * Importer d'ici plutôt que retaper est ce qui empêche l'incohérence de revenir.
  *
  * Les valeurs viennent du système documenté : échelle typographique à 7 crans,
- * espacement en base 4 px, contrastes vérifiés AA, angles vifs.
+ * espacement en base 4 px, contrastes vérifiés AA. Depuis la refonte « sport
+ * arrondi », coins arrondis partout (jetons --r-* dans index.css) ; les
+ * nouveaux écrans utilisent de préférence les classes .wb-btn, .wb-card…
  */
+
+/** Rayons — miroir des jetons CSS --r-sm / --r-md / --r-lg. */
+export const radius = { sm: 10, md: 12, lg: 16 } as const
 
 /* ── Typographie ─────────────────────────────────────────────────────
    Règle unique : les capitales espacées appartiennent à `label` et au
@@ -104,11 +109,12 @@ export const helpText: CSSProperties = {
 export const btnBase: CSSProperties = {
   fontFamily: 'var(--font-d)',
   fontSize: text.sm,
-  fontWeight: 700,
-  letterSpacing: '0.12em',
+  fontWeight: 800,
+  letterSpacing: '0.08em',
   textTransform: 'uppercase',
   padding: `0 ${space.s5}`,
   minHeight: 44,
+  borderRadius: radius.md,
   display: 'inline-flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -160,8 +166,9 @@ export const btnSmall: CSSProperties = {
   ...btnSecondary,
   fontSize: text.label,
   padding: `0 ${space.s3}`,
-  minHeight: 36,
-  letterSpacing: '0.1em'
+  minHeight: 40,
+  letterSpacing: '0.06em',
+  borderRadius: radius.sm
 }
 
 /* ── Surfaces ────────────────────────────────────────────────────────
@@ -172,7 +179,8 @@ export const btnSmall: CSSProperties = {
 export const card: CSSProperties = {
   border: '1px solid var(--border)',
   background: 'var(--dark)',
-  padding: space.s4
+  padding: space.s4,
+  borderRadius: radius.lg
 }
 
 /** Carte cliquable : le liseré orange remplace l'ombre. */
@@ -186,7 +194,8 @@ export const cardInteractive: CSSProperties = {
 export const panel: CSSProperties = {
   border: '1px solid var(--border)',
   background: 'var(--surface)',
-  padding: space.s5
+  padding: space.s5,
+  borderRadius: radius.lg
 }
 
 /* ── Formulaires ─────────────────────────────────────────────────── */
@@ -198,6 +207,7 @@ export const field: CSSProperties = {
   color: 'var(--white)',
   padding: `0 ${space.s3}`,
   minHeight: 44,
+  borderRadius: radius.md,
   fontFamily: 'var(--font-b)',
   fontSize: text.body,
   transition: `border-color ${motion}`
@@ -238,11 +248,12 @@ export const badge: CSSProperties = {
   fontWeight: 700,
   letterSpacing: '0.14em',
   textTransform: 'uppercase',
-  padding: '0.12rem 0.5rem',
+  padding: '0.18rem 0.6rem',
   display: 'inline-block',
   whiteSpace: 'nowrap',
   color: 'var(--muted)',
-  border: '1px solid var(--border)'
+  border: '1px solid var(--border)',
+  borderRadius: 999
 }
 
 /** Étiquette sans couleur : la teinte vient du point d'appel (muscles, méthodes). */
@@ -252,9 +263,10 @@ export const badgeBase: CSSProperties = {
   fontWeight: 700,
   letterSpacing: '0.14em',
   textTransform: 'uppercase',
-  padding: '0.2rem 0.55rem',
+  padding: '0.2rem 0.6rem',
   display: 'inline-block',
-  whiteSpace: 'nowrap'
+  whiteSpace: 'nowrap',
+  borderRadius: 999
 }
 
 export const badgeAccent: CSSProperties = {

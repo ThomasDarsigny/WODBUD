@@ -22,7 +22,9 @@
     "close_menu": "Close menu",
     "journal": "Journal",
     "communities": "Communities",
-    "records": "Records"
+    "records": "Records",
+    "today": "Today",
+    "tab_today": "Home"
   },
   "library": {
     "title": "Workout library",
@@ -937,5 +939,26 @@
     "empty_title": "No athletes yet",
     "empty_hint": "Share the invite link above to fill your class.",
     "privacy": "You only see counts (sessions, minutes, streak): your athletes’ session details stay private."
+  },
+  "home": {
+    "title": "Today",
+    "hello": "Hi {{name}}",
+    "start_session": "Start a session",
+    "resume_session": "Resume session",
+    "new_wod": "Create a WOD",
+    "days_unit": " d",
+    "stat_streak": "Current streak",
+    "stat_week_minutes": "Minutes, last 7 days",
+    "stat_week_sessions": "Sessions, last 7 days",
+    "today_plans": "Planned today",
+    "my_classes": "My classes",
+    "my_records": "My latest results",
+    "see_all": "See all",
+    "no_class_title": "No class yet",
+    "no_class_hint": "Create a class to invite your athletes and follow their attendance.",
+    "class_line_one": "{{count}} athlete · {{active}} active this week",
+    "class_line_other": "{{count}} athletes · {{active}} active this week",
+    "to_check_one": "{{count}} to check in",
+    "to_check_other": "{{count}} to check in"
   }
 }

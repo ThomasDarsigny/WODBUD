@@ -22,7 +22,9 @@
     "close_menu": "Cerrar el menú",
     "journal": "Diario",
     "communities": "Comunidades",
-    "records": "Récords"
+    "records": "Récords",
+    "today": "Hoy",
+    "tab_today": "Inicio"
   },
   "library": {
     "title": "Biblioteca de workouts",
@@ -940,5 +942,26 @@
     "empty_title": "Aún no hay atletas",
     "empty_hint": "Comparte el enlace de invitación de arriba para llenar tu clase.",
     "privacy": "Solo ves conteos (sesiones, minutos, racha): el contenido de las sesiones de tus atletas sigue siendo privado."
+  },
+  "home": {
+    "title": "Hoy",
+    "hello": "Hola {{name}}",
+    "start_session": "Empezar una sesión",
+    "resume_session": "Reanudar la sesión",
+    "new_wod": "Crear un WOD",
+    "days_unit": " d",
+    "stat_streak": "Racha actual",
+    "stat_week_minutes": "Minutos, últimos 7 días",
+    "stat_week_sessions": "Sesiones, últimos 7 días",
+    "today_plans": "Previsto hoy",
+    "my_classes": "Mis clases",
+    "my_records": "Mis últimos resultados",
+    "see_all": "Ver todo",
+    "no_class_title": "Aún no hay clases",
+    "no_class_hint": "Crea una clase para invitar a tus atletas y seguir su asistencia.",
+    "class_line_one": "{{count}} atleta · {{active}} activo esta semana",
+    "class_line_other": "{{count}} atletas · {{active}} activos esta semana",
+    "to_check_one": "{{count}} por contactar",
+    "to_check_other": "{{count}} por contactar"
   }
 }

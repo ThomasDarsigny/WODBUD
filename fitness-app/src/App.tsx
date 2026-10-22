@@ -30,6 +30,7 @@ const SessionRunnerView = lazy(() => import('./components/session/SessionRunnerV
 const RankView = lazy(() => import('./components/rank/RankView'))
 const SessionJournalView = lazy(() => import('./components/session/SessionJournalView'))
 const RecordsView = lazy(() => import('./components/records/RecordsView'))
+const CoachTodayView = lazy(() => import('./components/home/CoachTodayView'))
 const PrivacyPolicyPage = lazy(() => import('./pages/PrivacyPolicyPage'))
 const SharedRankPage = lazy(() => import('./pages/SharedRankPage'))
 const AthleteHomeView = lazy(() => import('./components/athlete/AthleteHomeView'))
@@ -128,7 +129,7 @@ function DashboardHomeRedirect() {
       } = await supabase.auth.getSession()
 
       if (!mounted) return
-      setTarget(session && (await isCurrentUserAdmin()) ? '/dashboard/admin' : '/dashboard/exercises')
+      setTarget(session && (await isCurrentUserAdmin()) ? '/dashboard/admin' : '/dashboard/today')
     }
 
     resolveTarget()
@@ -356,6 +357,17 @@ function App() {
             <ProtectedRoute>
               <DashboardLayout>
                 <SessionRunnerView basePath="/dashboard" />
+              </DashboardLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/dashboard/today"
+          element={
+            <ProtectedRoute>
+              <DashboardLayout>
+                <CoachTodayView />
               </DashboardLayout>
             </ProtectedRoute>
           }
