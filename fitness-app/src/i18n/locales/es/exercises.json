@@ -76,7 +76,10 @@
     "video_ok": "Video OK",
     "complete": "Completar",
     "view": "Ver",
-    "empty": "No se encontraron ejercicios."
+    "empty": "No se encontraron ejercicios.",
+    "filter_all": "Todos",
+    "filter_todo": "Por completar",
+    "filter_done": "Completos"
   },
   "detail": {
     "no_video": "No hay video disponible",

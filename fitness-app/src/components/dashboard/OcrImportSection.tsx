@@ -285,26 +285,25 @@ export default function OcrImportSection({ existingNames }: Props) {
   const allImported = rows.length > 0 && rows.every((r) => r.status === 'done' || r.status === 'duplicate' || r.status === 'similar')
 
   return (
-    <div style={{ marginBottom: '1.5rem', border: '1px solid var(--border)', borderRadius: 12, background: 'var(--dark)' }}>
+    <div style={{ border: '1px solid var(--border)', borderRadius: 16, background: 'var(--dark)', overflow: 'hidden' }}>
       {/* Header — always visible */}
       <button
         onClick={() => setOpen((v) => !v)}
         style={{
           width: '100%', display: 'flex', alignItems: 'center', gap: '0.75rem',
-          padding: '0.85rem 1rem', background: 'none', border: 'none', cursor: 'pointer',
-          textAlign: 'left'
+          padding: '0.9rem 1rem', minHeight: 60, background: 'none', border: 'none', cursor: 'pointer',
+          textAlign: 'left', color: 'var(--white)'
         }}
       >
         <span style={{
-          fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.18em',
-          textTransform: 'uppercase', color: 'var(--black)', background: 'var(--orange)',
-          padding: '0.2rem 0.5rem', flexShrink: 0
+          fontFamily: 'var(--font-d)', fontSize: '0.75rem', fontWeight: 800, letterSpacing: '0.08em',
+          color: 'var(--black)', background: 'var(--orange)', borderRadius: 999,
+          padding: '0.25rem 0.6rem', flexShrink: 0
         }}>
           OCR
         </span>
         <span style={{
-          fontFamily: 'var(--font-d)', fontSize: '0.8125rem', fontWeight: 700,
-          letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--white)'
+          fontSize: '0.95rem', fontWeight: 700, color: 'var(--white)', lineHeight: 1.35
         }}>
           Import rapide — Photos ou PDF de feuilles d'entraînement
         </span>
@@ -345,13 +344,13 @@ export default function OcrImportSection({ existingNames }: Props) {
               }}
               onClick={() => inputRef.current?.click()}
               style={{
-                border: `2px dashed ${dragOver ? 'var(--orange)' : 'var(--border)'}`,
+                border: `2px dashed ${dragOver ? 'var(--orange)' : 'var(--border)'}`, borderRadius: 16,
                 background: dragOver ? 'rgba(255,77,0,0.05)' : 'var(--black)',
                 padding: 'var(--page-pad)', textAlign: 'center', cursor: 'pointer',
                 transition: 'all 0.15s', marginBottom: '1rem'
               }}
             >
-              <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--muted)', margin: 0 }}>
+              <p style={{ fontSize: '0.95rem', fontWeight: 600, color: 'var(--white)', margin: 0 }}>
                 Ou dépose tes photos ou PDF ici
               </p>
               <p style={{ color: 'var(--muted)', fontSize: '0.8125rem', marginTop: '0.4rem', opacity: 0.6 }}>

@@ -7,7 +7,6 @@ import ExerciseFormModal from '../exercises/ExerciseFormModal'
 import ExerciseDetailModal from '../exercises/ExerciseDetailModal'
 import OcrImportSection from './OcrImportSection'
 import FeatureTopicsCard from '../vote/FeatureTopicsCard'
-import { btnPrimary as actionBtnStyle, btnSecondary as ghostBtnStyle } from '../../styles/ui'
 import Skeleton from '../ui/Skeleton'
 
 export default function AdminDashboardView() {
@@ -15,6 +14,7 @@ export default function AdminDashboardView() {
   const { exercises, loading, error, fetchExercises, deleteExercise } = useExerciseStore()
 
   const [search, setSearch] = useState('')
+  const [completion, setCompletion] = useState<'all' | 'todo' | 'done'>('all')
   const [showForm, setShowForm] = useState(false)
   const [editingExercise, setEditingExercise] = useState<Exercise | undefined>()
   const [detailExercise, setDetailExercise] = useState<Exercise | undefined>()
@@ -37,6 +37,9 @@ export default function AdminDashboardView() {
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase()
     const list = exercises.filter((e) => {
+      const complete = Boolean(e.video_url) && e.description.trim().length > 0
+      if (completion === 'todo' && complete) return false
+      if (completion === 'done' && !complete) return false
       if (!q) return true
       return (
         e.name.toLowerCase().includes(q) ||
@@ -52,7 +55,7 @@ export default function AdminDashboardView() {
       if (scoreA !== scoreB) return scoreB - scoreA
       return a.name.localeCompare(b.name)
     })
-  }, [exercises, search, t])
+  }, [exercises, search, completion, t])
 
   async function handleDelete(exercise: Exercise) {
     await deleteExercise(exercise.id)
@@ -64,81 +67,19 @@ export default function AdminDashboardView() {
   }
 
   return (
-    <div style={{ padding: 'var(--page-pad)', minHeight: '100%' }}>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'flex-end',
-          gap: '1rem',
-          marginBottom: '1.5rem',
-          flexWrap: 'wrap'
-        }}
-      >
+    <div className="wb-page wb-page--wide">
+      <header className="wb-ph">
         <div>
-          <p
-            style={{
-              fontFamily: 'var(--font-d)',
-              fontSize: '0.6875rem',
-              letterSpacing: '0.28em',
-              textTransform: 'uppercase',
-              color: 'var(--orange)',
-              marginBottom: '0.35rem'
-            }}
-          >
-            {t('admin.backoffice', { ns: 'exercises' })}
-          </p>
-          <h1
-            style={{
-              fontFamily: 'var(--font-d)',
-              fontSize: '1.75rem',
-              fontWeight: 900,
-              textTransform: 'uppercase',
-              lineHeight: 1.05,
-              letterSpacing: '0.03em'
-            }}
-          >
-            {t('admin.title', { ns: 'exercises' })}
-          </h1>
-          <p style={{ color: 'var(--muted)', marginTop: '0.45rem' }}>
-            {t('admin.subtitle', { ns: 'exercises' })}
-          </p>
+          <p className="wb-ph-tag">{t('admin.backoffice', { ns: 'exercises' })}</p>
+          <h1>{t('admin.title', { ns: 'exercises' })}</h1>
+          <p className="wb-ph-sub">{t('admin.subtitle', { ns: 'exercises' })}</p>
         </div>
-
-        <button
-          onClick={() => {
-            setEditingExercise(undefined)
-            setShowForm(true)
-          }}
-          style={{
-            fontFamily: 'var(--font-d)',
-            fontWeight: 700,
-            fontSize: '0.8125rem',
-            letterSpacing: '0.12em',
-            textTransform: 'uppercase',
-            color: 'var(--black)',
-            background: 'var(--orange)',
-            padding: '0.7rem 1.4rem',
-            border: 'none',
-            cursor: 'pointer'
-          }}
-        >
+        <button type="button" className="wb-btn wb-btn--primary" onClick={() => { setEditingExercise(undefined); setShowForm(true) }}>
           + {t('add', { ns: 'exercises' })}
         </button>
-      </div>
+      </header>
 
-      <FeatureTopicsCard admin />
-
-      <OcrImportSection existingNames={existingNames} />
-
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))',
-          gap: '0.75rem',
-          marginBottom: '1.25rem'
-        }}
-      >
+      <div className="wb-admin-stats">
         <StatCard label={t('admin.total', { ns: 'exercises' })} value={String(total)} />
         <StatCard label={t('admin.with_video', { ns: 'exercises' })} value={`${withVideo}/${total || 0}`} />
         <StatCard label={t('admin.with_description', { ns: 'exercises' })} value={`${withDescription}/${total || 0}`} />
@@ -149,130 +90,67 @@ export default function AdminDashboardView() {
         />
       </div>
 
-      <div
-        style={{
-          marginBottom: '1rem',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '0.7rem',
-          flexWrap: 'wrap'
-        }}
-      >
-        <input
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder={t('admin.search_placeholder', { ns: 'exercises' })}
-          style={{
-            flex: 1,
-            minWidth: 260,
-            background: 'var(--dark)',
-            border: '1px solid var(--border)', borderRadius: 12,
-            color: 'var(--white)',
-            padding: '0.65rem 0.9rem',
-            fontFamily: 'var(--font-b)',
-            fontSize: '0.9375rem',
-            outline: 'none'
-          }}
-        />
-      </div>
+      <FeatureTopicsCard admin />
 
-      {loading ? (
-        <div
-          style={{
-            border: '1px solid var(--border)', borderRadius: 12,
-            background: 'var(--dark)',
-            padding: 'var(--s4)'
-          }}
-        >
-          <Skeleton height={40} lines={5} />
+      <OcrImportSection existingNames={existingNames} />
+
+      <section className="wb-home-sec">
+        <div className="wb-sec"><h2>{t('title', { ns: 'exercises' })}</h2></div>
+        <div className="wb-search">
+          <input
+            type="search"
+            className="wb-input"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder={t('admin.search_placeholder', { ns: 'exercises' })}
+            aria-label={t('admin.search_placeholder', { ns: 'exercises' })}
+          />
         </div>
-      ) : (
-        <div style={{ border: '1px solid var(--border)', borderRadius: 12, background: 'var(--dark)' }}>
-          {filtered.length === 0 ? (
-            <div style={{ padding: '2.3rem 1rem', textAlign: 'center', color: 'var(--muted)' }}>
-              {t('admin.empty', { ns: 'exercises' })}
-            </div>
-          ) : (
-            filtered.map((exercise) => {
+
+        <div className="wb-segmented" role="tablist" aria-label={t('admin.to_complete', { ns: 'exercises' })} style={{ margin: 0 }}>
+          {(['all', 'todo', 'done'] as const).map((k) => (
+            <button key={k} type="button" role="tab" aria-selected={completion === k} className={completion === k ? 'is-on' : undefined} onClick={() => setCompletion(k)}>
+              {t(`admin.filter_${k}`, { ns: 'exercises' })}
+            </button>
+          ))}
+        </div>
+
+        {loading ? (
+          <Skeleton height={56} lines={5} />
+        ) : filtered.length === 0 ? (
+          <div className="wb-empty"><p>{t('admin.empty', { ns: 'exercises' })}</p></div>
+        ) : (
+          <ul className="wb-list">
+            {filtered.map((exercise) => {
               const missingVideo = !exercise.video_url
               const missingDescription = exercise.description.trim().length === 0
-
               return (
-                <div
-                  key={exercise.id}
-                  style={{
-                    display: 'grid',
-                    gridTemplateColumns: 'minmax(0, 1fr) auto',
-                    gap: '0.8rem',
-                    padding: '0.9rem 1rem',
-                    borderBottom: '1px solid var(--border)',
-                    alignItems: 'center'
-                  }}
-                >
-                  <div style={{ minWidth: 0 }}>
-                    <div style={{ display: 'flex', gap: '0.45rem', alignItems: 'center', flexWrap: 'wrap' }}>
-                      <p
-                        style={{
-                          fontFamily: 'var(--font-d)',
-                          fontSize: '1.25rem',
-                          fontWeight: 800,
-                          letterSpacing: '0.06em',
-                          textTransform: 'uppercase',
-                          color: 'var(--white)',
-                          margin: 0
-                        }}
-                      >
-                        {exercise.name}
-                      </p>
-                      <span
-                        style={{
-                          fontFamily: 'var(--font-d)',
-                          fontSize: '0.6875rem',
-                          letterSpacing: '0.12em',
-                          textTransform: 'uppercase',
-                          color: 'var(--orange)'
-                        }}
-                      >
-                        {t(CATEGORY_I18N_KEYS[exercise.category], { ns: 'common' })}
-                      </span>
-                    </div>
-
-                    <div style={{ marginTop: '0.28rem', display: 'flex', gap: '0.35rem', flexWrap: 'wrap' }}>
+                <li key={exercise.id} className="wb-admin-row">
+                  <div className="wb-admin-main">
+                    <span className="wb-ex-cat">{t(CATEGORY_I18N_KEYS[exercise.category], { ns: 'common' })}</span>
+                    <strong>{exercise.name}</strong>
+                    <div className="wb-admin-tags">
                       <Chip ok={!missingDescription} label={missingDescription ? t('admin.missing_description', { ns: 'exercises' }) : t('admin.description_ok', { ns: 'exercises' })} />
                       <Chip ok={!missingVideo} label={missingVideo ? t('admin.missing_video', { ns: 'exercises' }) : t('admin.video_ok', { ns: 'exercises' })} />
                       <Chip ok label={t(MUSCLE_GROUP_I18N_KEYS[exercise.primary_muscle], { ns: 'common' })} subtle />
                     </div>
                   </div>
-
-                  <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
-                    <button onClick={() => setDetailExercise(exercise)} style={ghostBtnStyle}>
+                  <div className="wb-admin-actions">
+                    <button type="button" className="wb-btn wb-btn--secondary wb-btn--sm" onClick={() => setDetailExercise(exercise)}>
                       {t('admin.view', { ns: 'exercises' })}
                     </button>
-                    <button onClick={() => openEdit(exercise)} style={actionBtnStyle}>
+                    <button type="button" className="wb-btn wb-btn--primary wb-btn--sm" onClick={() => openEdit(exercise)}>
                       {t('admin.complete', { ns: 'exercises' })}
                     </button>
                   </div>
-                </div>
+                </li>
               )
-            })
-          )}
-        </div>
-      )}
+            })}
+          </ul>
+        )}
+      </section>
 
-      {error && (
-        <div
-          style={{
-            marginTop: '0.9rem',
-            padding: '0.65rem 0.9rem',
-            background: 'rgba(255,77,0,0.1)',
-            border: '1px solid rgba(255,77,0,0.3)', borderRadius: 12,
-            color: 'var(--orange)',
-            fontSize: '0.8125rem'
-          }}
-        >
-          {error}
-        </div>
-      )}
+      {error && <div className="wb-rec-error" role="alert">{error}</div>}
 
       {showForm && (
         <ExerciseFormModal
@@ -298,38 +176,9 @@ export default function AdminDashboardView() {
 
 function StatCard({ label, value, emphasize = false }: { label: string; value: string; emphasize?: boolean }) {
   return (
-    <div
-      style={{
-        border: `1px solid ${emphasize ? 'rgba(255,77,0,0.35)' : 'var(--border)'}`, borderRadius: 12,
-        background: emphasize ? 'rgba(255,77,0,0.07)' : 'var(--dark)',
-        padding: '0.8rem 0.9rem'
-      }}
-    >
-      <p
-        style={{
-          fontFamily: 'var(--font-d)',
-          fontSize: '0.6875rem',
-          letterSpacing: '0.14em',
-          textTransform: 'uppercase',
-          color: 'var(--muted)',
-          marginBottom: '0.2rem'
-        }}
-      >
-        {label}
-      </p>
-      <p
-        style={{
-          fontFamily: 'var(--font-d)',
-          fontSize: '1.75rem',
-          fontWeight: 900,
-          fontVariantNumeric: 'tabular-nums',
-          letterSpacing: '0.02em',
-          color: emphasize ? 'var(--orange)' : 'var(--white)',
-          margin: 0
-        }}
-      >
-        {value}
-      </p>
+    <div className={`wb-stat${emphasize ? ' wb-stat--accent' : ''}`}>
+      <strong>{value}</strong>
+      <span>{label}</span>
     </div>
   )
 }
@@ -343,25 +192,7 @@ function Chip({
   label: string
   subtle?: boolean
 }) {
-  const color = subtle ? 'var(--muted)' : ok ? '#22c55e' : '#f59e0b'
-  const border = subtle ? 'var(--border)' : ok ? 'rgba(34,197,94,0.35)' : 'rgba(245,158,11,0.35)'
-  const bg = subtle ? 'transparent' : ok ? 'rgba(34,197,94,0.08)' : 'rgba(245,158,11,0.08)'
-
-  return (
-    <span
-      style={{
-        fontFamily: 'var(--font-d)',
-        fontSize: '0.6875rem',
-        letterSpacing: '0.09em',
-        textTransform: 'uppercase',
-        color,
-        border: `1px solid ${border}`, borderRadius: 12,
-        background: bg,
-        padding: '0.16rem 0.43rem'
-      }}
-    >
-      {label}
-    </span>
-  )
+  // Vert : fait. Ambre : à compléter. Neutre : simple information.
+  const tone = subtle ? '' : ok ? ' wb-pill--green' : ' wb-pill--amber'
+  return <span className={`wb-pill${tone}`}>{label}</span>
 }
-

@@ -76,7 +76,10 @@
     "video_ok": "Vidéo OK",
     "complete": "Compléter",
     "view": "Voir",
-    "empty": "Aucun exercice trouvé."
+    "empty": "Aucun exercice trouvé.",
+    "filter_all": "Tous",
+    "filter_todo": "À compléter",
+    "filter_done": "Complets"
   },
   "detail": {
     "no_video": "Aucune vidéo disponible",

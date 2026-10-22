@@ -1648,3 +1648,13 @@ button.wb-ex-card { display: flex; align-items: center; gap: 0.85rem; padding: 0
 .wb-board-min { flex-shrink: 0; font-family: var(--font-d); font-weight: 800; font-size: 1rem; color: var(--muted); font-variant-numeric: tabular-nums; }
 .wb-member-row { display: flex; align-items: center; gap: 0.75rem; padding: 0.6rem 0.9rem; min-height: 60px; flex-wrap: wrap; }
 @media (prefers-reduced-motion: reduce) { .wb-react:active { transform: none; } }
+
+/* ─── Admin ────────────────────────────────────────────────────── */
+.wb-admin-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.55rem; }
+@media (min-width: 900px) { .wb-admin-stats { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.wb-pill--amber { background: rgba(245, 158, 11, 0.14); color: #f5b041; }
+.wb-admin-row { display: flex; align-items: center; gap: 0.75rem; padding: 0.85rem 0.9rem; flex-wrap: wrap; }
+.wb-admin-main { flex: 1 1 220px; min-width: 0; display: grid; gap: 0.25rem; }
+.wb-admin-main strong { font-family: var(--font-d); font-size: 1.2rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.02em; line-height: 1.1; overflow-wrap: anywhere; }
+.wb-admin-tags { display: flex; gap: 0.35rem; flex-wrap: wrap; margin-top: 0.15rem; }
+.wb-admin-actions { display: flex; gap: 0.4rem; flex-shrink: 0; }

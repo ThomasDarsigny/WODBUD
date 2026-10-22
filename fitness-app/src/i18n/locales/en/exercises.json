@@ -76,7 +76,10 @@
     "video_ok": "Video OK",
     "complete": "Complete",
     "view": "View",
-    "empty": "No exercises found."
+    "empty": "No exercises found.",
+    "filter_all": "All",
+    "filter_todo": "To complete",
+    "filter_done": "Complete"
   },
   "detail": {
     "no_video": "No video available",
