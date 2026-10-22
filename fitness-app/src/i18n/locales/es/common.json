@@ -793,7 +793,11 @@
       "communaute": "Comunidad",
       "coach": "Lado coach",
       "suivi": "Aún no medible"
-    }
+    },
+    "filter_all": "Todas",
+    "filter_earned": "Obtenidas",
+    "filter_locked": "Por desbloquear",
+    "filter_none": "Nada por aquí todavía."
   },
   "leaderboard": {
     "title": "Clasificación",

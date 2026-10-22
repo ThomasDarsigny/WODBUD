@@ -790,7 +790,11 @@
       "communaute": "Communauté",
       "coach": "Côté coach",
       "suivi": "Bientôt mesurable"
-    }
+    },
+    "filter_all": "Tous",
+    "filter_earned": "Obtenus",
+    "filter_locked": "À débloquer",
+    "filter_none": "Rien ici pour l’instant."
   },
   "leaderboard": {
     "title": "Classement",

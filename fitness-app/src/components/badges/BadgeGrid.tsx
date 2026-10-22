@@ -14,7 +14,6 @@ import {
 import BadgeToken, { type BadgeState } from './BadgeToken'
 import EmptyState from '../ui/EmptyState'
 import Skeleton from '../ui/Skeleton'
-import { label, text } from '../../styles/ui'
 
 /**
  * Collection de badges.
@@ -32,6 +31,7 @@ export default function BadgeGrid() {
   const [unlocked, setUnlocked] = useState<Map<string, string>>(new Map())
   const [fresh, setFresh] = useState<Set<string>>(new Set())
   const [loading, setLoading] = useState(true)
+  const [filter, setFilter] = useState<'all' | 'earned' | 'locked'>('all')
 
   useEffect(() => {
     let cancelled = false
@@ -91,106 +91,47 @@ export default function BadgeGrid() {
     return <EmptyState compact icon="rank" title={t('badges.empty')} hint={t('badges.empty_hint')} />
   }
 
+  const shown = groups
+    .map((g) => ({
+      ...g,
+      badges: g.badges.filter((b) => filter === 'all' || (filter === 'earned' ? unlocked.has(b.key) : !unlocked.has(b.key)))
+    }))
+    .filter((g) => g.badges.length > 0)
+
   return (
-    <div>
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'baseline',
-          gap: 'var(--s3)',
-          marginBottom: 'var(--s5)',
-          flexWrap: 'wrap'
-        }}
-      >
-        <span
-          style={{
-            fontFamily: 'var(--font-d)',
-            fontSize: text.h2,
-            fontWeight: 900,
-            color: 'var(--orange)',
-            fontVariantNumeric: 'tabular-nums'
-          }}
-        >
-          {earned} / {total}
-        </span>
-        <span style={{ ...label, display: 'inline' }}>{t('badges.unlocked_count')}</span>
+    <div className="wb-badges">
+      <div className="wb-badges-head">
+        <strong>{earned}<small>/{total}</small></strong>
+        <span>{t('badges.unlocked_count')}</span>
       </div>
 
       {fresh.size > 0 && (
-        <p
-          role="status"
-          style={{
-            border: '1px solid rgba(255, 90, 31, 0.35)',
-            background: 'rgba(255, 90, 31, 0.08)',
-            padding: 'var(--s3) var(--s4)',
-            marginBottom: 'var(--s5)',
-            fontSize: text.body
-          }}
-        >
-          {t('badges.newly_unlocked', { count: fresh.size })}
-        </p>
+        <p role="status" className="wb-badges-fresh">{t('badges.newly_unlocked', { count: fresh.size })}</p>
       )}
 
-      {groups.map((g) => (
-        <section key={g.family} style={{ marginBottom: 'var(--s6)' }}>
-          <h3 style={{ ...label, marginBottom: 'var(--s3)' }}>
-            {t(BADGE_FAMILY_I18N_KEYS[g.family])}
-          </h3>
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))',
-              gap: 'var(--s4)'
-            }}
-          >
+      <div className="wb-segmented wb-badges-filter" role="tablist" aria-label={t('badges.title')}>
+        {(['all', 'earned', 'locked'] as const).map((f) => (
+          <button key={f} type="button" role="tab" aria-selected={filter === f} className={filter === f ? 'is-on' : undefined} onClick={() => setFilter(f)}>
+            {t(`badges.filter_${f}`)}
+          </button>
+        ))}
+      </div>
+
+      {shown.length === 0 && <p className="wb-muted-line">{t('badges.filter_none')}</p>}
+
+      {shown.map((g) => (
+        <section key={g.family} className="wb-badges-family">
+          <h3>{t(BADGE_FAMILY_I18N_KEYS[g.family])}</h3>
+          <div className="wb-badges-grid">
             {g.badges.map((b) => {
               const at = unlocked.get(b.key)
               const state: BadgeState = at ? 'unlocked' : b.available ? 'locked' : 'soon'
               const isNew = fresh.has(b.key)
               return (
-                <div
-                  key={b.key}
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    textAlign: 'center',
-                    gap: 'var(--s2)',
-                    padding: 'var(--s3)',
-                    border: `1px solid ${isNew ? 'var(--orange)' : 'transparent'}`
-                  }}
-                >
-                  <BadgeToken
-                    icon={b.icon}
-                    state={state}
-                    size={72}
-                    title={badgeDisplay(b, lang)}
-                  />
-                  <span
-                    style={{
-                      fontFamily: 'var(--font-d)',
-                      fontSize: text.sm,
-                      fontWeight: 800,
-                      letterSpacing: '0.04em',
-                      textTransform: 'uppercase',
-                      lineHeight: 1.2,
-                      color: at ? 'var(--white)' : 'var(--muted)'
-                    }}
-                  >
-                    {badgeDisplay(b, lang)}
-                  </span>
-                  <span
-                    style={{
-                      fontSize: text.sm,
-                      color: 'var(--muted)',
-                      lineHeight: 1.4
-                    }}
-                  >
-                    {badgeCondition(b, lang)}
-                  </span>
-                  {state === 'soon' && (
-                    <span style={{ ...label, color: 'var(--line-fn)' }}>{t('badges.soon')}</span>
-                  )}
+                <div key={b.key} className={`wb-badge${at ? ' is-earned' : ''}${isNew ? ' is-new' : ''}`}>
+                  <BadgeToken icon={b.icon} state={state} size={56} title={badgeDisplay(b, lang)} />
+                  <strong>{badgeDisplay(b, lang)}</strong>
+                  <span>{state === 'soon' ? t('badges.soon') : badgeCondition(b, lang)}</span>
                 </div>
               )
             })}
