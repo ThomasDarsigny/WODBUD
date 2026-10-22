@@ -4,6 +4,7 @@ import { supabase } from '../../lib/supabase'
 import { Avatar } from '../community/communityUi'
 import Skeleton from '../ui/Skeleton'
 import EmptyState from '../ui/EmptyState'
+import { AnimatedNumber } from '../ui/motion'
 
 interface Row {
   athlete_id: string
@@ -72,9 +73,9 @@ export default function ClassFollowup({ classId }: { classId: string }) {
   return (
     <section className="wb-fu">
       <div className="wb-fu-stats">
-        <div><strong>{active}<small>/{rows.length}</small></strong><span>{t('followup.stat_active')}</span></div>
-        <div data-tone={idle ? 'warn' : undefined}><strong>{idle}</strong><span>{t('followup.stat_idle')}</span></div>
-        <div><strong>{minutes7}</strong><span>{t('followup.stat_minutes')}</span></div>
+        <div><strong><AnimatedNumber value={active} /><small>/{rows.length}</small></strong><span>{t('followup.stat_active')}</span></div>
+        <div data-tone={idle ? 'warn' : undefined}><strong><AnimatedNumber value={idle} /></strong><span>{t('followup.stat_idle')}</span></div>
+        <div><strong><AnimatedNumber value={minutes7} /></strong><span>{t('followup.stat_minutes')}</span></div>
       </div>
 
       <div className="wb-segmented wb-fu-filter" role="tablist" aria-label={t('followup.filter')}>
@@ -89,7 +90,7 @@ export default function ClassFollowup({ classId }: { classId: string }) {
       {shown.length === 0 ? (
         <p className="wb-rec-hint">{t(filter === 'idle' ? 'followup.none_idle' : 'followup.none_active')}</p>
       ) : (
-        <ul className="wb-fu-list">
+        <ul className="wb-fu-list wb-stagger">
           {shown.map((r) => {
             const name = r.full_name || t('followup.no_name')
             return (

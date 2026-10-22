@@ -1248,3 +1248,31 @@ label {
 .wb-fu-pill[data-status='never'] { background: var(--surface); color: var(--muted); }
 .wb-fu-streak { font-size: 0.72rem; color: var(--muted); }
 .wb-fu-note { font-size: 0.75rem; color: var(--muted); line-height: 1.5; }
+
+/* ─── Mouvement de l'app (signature de la landing, version quotidienne) ─ */
+@keyframes wb-rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+.wb-stagger > * { animation: wb-rise 0.45s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.wb-stagger > *:nth-child(2) { animation-delay: 40ms; }
+.wb-stagger > *:nth-child(3) { animation-delay: 80ms; }
+.wb-stagger > *:nth-child(4) { animation-delay: 120ms; }
+.wb-stagger > *:nth-child(5) { animation-delay: 160ms; }
+.wb-stagger > *:nth-child(6) { animation-delay: 200ms; }
+.wb-stagger > *:nth-child(7) { animation-delay: 240ms; }
+.wb-stagger > *:nth-child(n + 8) { animation-delay: 280ms; }
+
+.wb-confetti { position: absolute; left: 50%; top: 3.2rem; width: 0; height: 0; pointer-events: none; z-index: 2; }
+.wb-confetti span { position: absolute; left: 0; top: 0; border-radius: 2px; }
+
+/* Cartes touchables : elles s'enfoncent légèrement, comme un bouton iOS. */
+.wb-rec-card, .wb-fu-list li, .wb-onb-step, .wb-run-set, .wb-rec-add, .wb-run-gym {
+  transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.18s ease, border-color 0.18s ease;
+}
+.wb-rec-card:active, .wb-onb-step:active, .wb-run-set:active, .wb-rec-add:active, .wb-run-gym:active { transform: scale(0.975); }
+@media (hover: hover) {
+  .wb-rec-card:hover { border-color: rgba(255, 90, 31, 0.45); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wb-stagger > * { animation: none; }
+  .wb-rec-card:active, .wb-onb-step:active, .wb-run-set:active, .wb-rec-add:active, .wb-run-gym:active { transform: none; }
+}

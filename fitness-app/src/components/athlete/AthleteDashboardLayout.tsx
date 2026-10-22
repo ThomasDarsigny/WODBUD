@@ -10,6 +10,7 @@ import type { NavIconName } from '../navigation/NavIcon'
 import NavDot from '../navigation/NavDot'
 import MobileTabBar from '../navigation/MobileTabBar'
 import { useNotificationStore } from '../../stores/notificationStore'
+import { PageTransition } from '../ui/motion'
 
 interface Props {
   children: ReactNode
@@ -125,7 +126,7 @@ export default function AthleteDashboardLayout({ children }: Props) {
         )}
         <OfflineBanner />
         <ActiveSessionBar basePath="/athlete" />
-        <div className={isMobile ? 'wb-has-tabbar' : undefined} style={{ flex: 1, overflow: 'auto' }}>{children}</div>
+        <div className={isMobile ? 'wb-has-tabbar' : undefined} style={{ flex: 1, overflow: 'auto' }}><PageTransition>{children}</PageTransition></div>
       </main>
 
       {isMobile && <MobileTabBar primary={tabItems} more={moreItems} />}

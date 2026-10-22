@@ -17,6 +17,7 @@ import { GymOverlay, clockText, useClockLabels, useGymClock } from './GymClock'
 import ResultSheet from '../records/ResultSheet'
 import RestBar from './RestBar'
 import { formatSeconds, fromKg, readUnit, type ExerciseResult, type ResultInput } from '../../lib/records'
+import { Celebrate, Pop } from '../ui/motion'
 
 interface Props {
   /** '/dashboard' côté coach, '/athlete' côté athlète. */
@@ -454,10 +455,13 @@ function SummaryPanel({ basePath }: { basePath: string }) {
 
   return (
     <Shell tag={t('session.page_tag')} title={summary.offline ? t('offline.done_title', { ns: 'common' }) : t('session.done_title')}>
-      <div style={{ border: '1px solid rgba(34,197,94,0.35)', background: 'rgba(34,197,94,0.06)', padding: '1.75rem' }}>
-        <p style={{ fontFamily: 'var(--font-d)', fontSize: 'clamp(2rem, 8vw, 3rem)', fontWeight: 900, color: '#22c55e', margin: 0, lineHeight: 1 }}>
-          {t('session.done_minutes', { count: summary.activeMinutes })}
-        </p>
+      <div style={{ position: 'relative', border: '1px solid rgba(34,197,94,0.35)', background: 'rgba(34,197,94,0.06)', padding: '1.75rem' }}>
+        {!summary.offline && <Celebrate big={summary.newRecords.length > 0 || summary.newBadges.length > 0} />}
+        <Pop>
+          <p style={{ fontFamily: 'var(--font-d)', fontSize: 'clamp(2rem, 8vw, 3rem)', fontWeight: 900, color: '#22c55e', margin: 0, lineHeight: 1 }}>
+            {t('session.done_minutes', { count: summary.activeMinutes })}
+          </p>
+        </Pop>
         {summary.offline ? (
           // Totaux, rang et badges viennent du serveur : on ne les invente pas.
           <p className="wb-run-offline">{t('offline.done_hint', { ns: 'common' })}</p>
@@ -469,14 +473,16 @@ function SummaryPanel({ basePath }: { basePath: string }) {
         )}
 
         {summary.newRecords.length > 0 && (
+          <Pop delay={0.25}>
           <div className="wb-run-prs">
             <p>{t('records.new_pr', { ns: 'common', count: summary.newRecords.length })}</p>
-            <ul>
+            <ul className="wb-stagger">
               {summary.newRecords.map(({ name, result }) => (
                 <li key={result.id}><strong>{name}</strong> <span>{resultText(result)}</span></li>
               ))}
             </ul>
           </div>
+          </Pop>
         )}
 
         <SessionRewards

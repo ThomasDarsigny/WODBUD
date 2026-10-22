@@ -7,6 +7,7 @@ import RankBadge from './RankBadge'
 import { field } from '../../styles/ui'
 import BadgeGrid from '../badges/BadgeGrid'
 import { useNotificationStore } from '../../stores/notificationStore'
+import { AnimatedNumber } from '../ui/motion'
 
 export default function RankView() {
   // Ouvrir cet écran, c'est avoir vu ses badges et son rang : les pastilles
@@ -68,7 +69,7 @@ export default function RankView() {
           )}
 
           <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '1.2rem' }}>
-            <StatBlock value={formatMinutes(minutes)} label={t('rank.total_minutes')} />
+            <StatBlock value={<AnimatedNumber value={minutes} format={formatMinutes} />} label={t('rank.total_minutes')} />
             <StatBlock value={t('rank.days', { count: profile?.current_streak ?? 0 })} label={t('rank.current_streak')} />
             <StatBlock value={t('rank.days', { count: profile?.longest_streak ?? 0 })} label={t('rank.longest_streak')} />
           </div>
@@ -191,7 +192,7 @@ export default function RankView() {
   )
 }
 
-function StatBlock({ value, label }: { value: string; label: string }) {
+function StatBlock({ value, label }: { value: ReactNode; label: string }) {
   return (
     <div style={{ border: '1px solid var(--border)', padding: '0.55rem 0.85rem', minWidth: 96 }}>
       <div style={{ fontFamily: 'var(--font-d)', fontSize: '1.25rem', fontWeight: 900, color: 'var(--white)', lineHeight: 1.1, fontVariantNumeric: 'tabular-nums' }}>

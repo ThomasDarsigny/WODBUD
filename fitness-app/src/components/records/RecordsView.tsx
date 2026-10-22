@@ -110,7 +110,7 @@ export default function RecordsView() {
       ) : records.length === 0 ? (
         <EmptyState icon="star" title={t('records.empty_title')} hint={t('records.empty_hint')} />
       ) : (
-        <ul className="wb-rec-list">
+        <ul className="wb-rec-list wb-stagger">
           {records.map((r) => (
             <li key={r.exerciseId}>
               <button type="button" className="wb-rec-card" onClick={() => setParams({ ex: r.exerciseId })}>
@@ -221,7 +221,7 @@ function RecordDetail({ record, results, unit, fmtDate, onDelete }: {
       )}
 
       <h2 className="wb-rec-sub">{t('records.history')}</h2>
-      <ul className="wb-rec-history">
+      <ul className="wb-rec-history wb-stagger">
         {results.map((r) => (
           <li key={r.id}>
             <span className="wb-rec-hval">

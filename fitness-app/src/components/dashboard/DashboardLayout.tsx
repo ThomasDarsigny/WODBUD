@@ -13,6 +13,7 @@ import NavDot from '../navigation/NavDot'
 import MobileTabBar, { type MobileNavItem } from '../navigation/MobileTabBar'
 import OnboardingCard from '../onboarding/OnboardingCard'
 import { useNotificationStore } from '../../stores/notificationStore'
+import { PageTransition } from '../ui/motion'
 
 type NavItem = {
   id: string
@@ -322,7 +323,7 @@ export default function DashboardLayout({ children }: Props) {
               <OnboardingCard area="coach" />
             </div>
           )}
-          {children}
+          <PageTransition>{children}</PageTransition>
         </div>
       </main>
 
