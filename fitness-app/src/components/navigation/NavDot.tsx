@@ -32,7 +32,7 @@ export default function NavDot({ count, compact = false }: {
         background: 'var(--orange)',
         color: 'var(--black)',
         fontFamily: 'var(--font-d)',
-        fontSize: '0.625rem',
+        fontSize: '0.6875rem',
         fontWeight: 900,
         letterSpacing: '0.02em',
         fontVariantNumeric: 'tabular-nums',

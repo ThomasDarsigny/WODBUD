@@ -2,6 +2,8 @@
   "app_name": "WODBUD",
   "nav": {
     "more": "Plus",
+    "new_items_one": "{{count}} nouveauté",
+    "new_items_other": "{{count}} nouveautés",
     "main": "Navigation principale",
     "tab_new": "Créer",
     "tab_admin": "Admin",

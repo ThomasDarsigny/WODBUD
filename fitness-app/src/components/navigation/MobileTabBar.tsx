@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { motion, useDragControls, type PanInfo } from 'motion/react'
 import NavIcon, { type NavIconName } from './NavIcon'
 
 export interface MobileNavItem {
@@ -34,6 +35,12 @@ export default function MobileTabBar({ primary, more }: { primary: MobileNavItem
   const isActive = (path: string) => pathname === path || (path !== '/athlete' && pathname.startsWith(`${path}/`))
   const moreActive = more.some((i) => isActive(i.path))
   const moreDots = more.reduce((n, i) => n + (i.dot ?? 0), 0)
+  // La poignée se tire vers le bas pour fermer, comme une feuille iOS. Le
+  // glisser part de la poignée et de l'en-tête seulement : la liste défile.
+  const drag = useDragControls()
+  const onDragEnd = (_: unknown, info: PanInfo) => {
+    if (info.offset.y > 90 || info.velocity.y > 600) setSheetOpen(false)
+  }
 
   useEffect(() => {
     if (!sheetOpen) return
@@ -65,6 +72,7 @@ export default function MobileTabBar({ primary, more }: { primary: MobileNavItem
                 {(item.dot ?? 0) > 0 && <span className="wb-tab-dot" aria-hidden="true" />}
               </span>
               <span className="wb-tab-label">{item.label}</span>
+              {(item.dot ?? 0) > 0 && <span className="wb-sr">{t('nav.new_items', { count: item.dot })}</span>}
             </Link>
           )
         })}
@@ -84,20 +92,29 @@ export default function MobileTabBar({ primary, more }: { primary: MobileNavItem
             {moreDots > 0 && <span className="wb-tab-dot" aria-hidden="true" />}
           </span>
           <span className="wb-tab-label">{t('nav.more')}</span>
+          {moreDots > 0 && <span className="wb-sr">{t('nav.new_items', { count: moreDots })}</span>}
         </button>
       </nav>
 
       {sheetOpen && (
         <div className="wb-sheet-backdrop" onClick={() => setSheetOpen(false)}>
-          <div
+          <motion.div
             className="wb-sheet"
             role="dialog"
             aria-modal="true"
             aria-label={t('nav.more')}
             onClick={(e) => e.stopPropagation()}
+            drag="y"
+            dragListener={false}
+            dragControls={drag}
+            dragConstraints={{ top: 0, bottom: 0 }}
+            dragElastic={{ top: 0, bottom: 1 }}
+            onDragEnd={onDragEnd}
           >
-            <div className="wb-sheet-grabber" aria-hidden="true" />
-            <div className="wb-sheet-head">
+            <div className="wb-sheet-handle" onPointerDown={(e) => drag.start(e)}>
+              <div className="wb-sheet-grabber" aria-hidden="true" />
+            </div>
+            <div className="wb-sheet-head" onPointerDown={(e) => drag.start(e)}>
               <h2>{t('nav.more')}</h2>
               <button type="button" className="wb-sheet-close" onClick={() => setSheetOpen(false)} aria-label={t('nav.close_menu')}>
                 ✕
@@ -118,7 +135,7 @@ export default function MobileTabBar({ primary, more }: { primary: MobileNavItem
                 )
               })}
             </ul>
-          </div>
+          </motion.div>
         </div>
       )}
     </>

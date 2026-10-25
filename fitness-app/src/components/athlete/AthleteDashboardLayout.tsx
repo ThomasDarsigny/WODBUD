@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useEffect, useState } from 'react'
 import OfflineBanner from '../session/OfflineBanner'
 import ActiveSessionBar from '../session/ActiveSessionBar'
+import { markScrolled } from '../../lib/scrollEdge'
 import { useIsMobile } from '../../hooks/useMediaQuery'
 import NavIcon from '../navigation/NavIcon'
 import type { NavIconName } from '../navigation/NavIcon'
@@ -117,16 +118,22 @@ export default function AthleteDashboardLayout({ children }: Props) {
       )}
 
       <main style={{ flex: 1, overflow: 'auto', minWidth: 0, display: 'flex', flexDirection: 'column' }}>
-        {isMobile && (
-          <div className="wb-mobile-top" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem', padding: '0.6rem 1rem', borderBottom: '1px solid var(--border)', background: 'var(--dark)', flexShrink: 0, position: 'sticky', top: 0, zIndex: 100 }}>
-            <Link to="/" style={{ fontFamily: 'var(--font-d)', fontWeight: 900, fontSize: '1.25rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--white)', textDecoration: 'none' }}>
-              WOD<span style={{ color: 'var(--orange)' }}>BUD</span>
-            </Link>
+        {/* Barre du haut en verre : le contenu défile dessous (même conteneur de
+            défilement) et s'estompe contre elle une fois qu'on a défilé. */}
+        <div className={isMobile ? 'wb-scroller wb-has-tabbar' : 'wb-scroller'} onScroll={markScrolled}>
+          <div className="wb-topgroup">
+            {isMobile && (
+              <div className="wb-mobile-top">
+                <Link to="/" style={{ fontFamily: 'var(--font-d)', fontWeight: 900, fontSize: '1.25rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--white)', textDecoration: 'none' }}>
+                  WOD<span style={{ color: 'var(--orange)' }}>BUD</span>
+                </Link>
+              </div>
+            )}
+            <OfflineBanner />
+            <ActiveSessionBar basePath="/athlete" />
           </div>
-        )}
-        <OfflineBanner />
-        <ActiveSessionBar basePath="/athlete" />
-        <div className={isMobile ? 'wb-has-tabbar' : undefined} style={{ flex: 1, overflow: 'auto' }}><PageTransition>{children}</PageTransition></div>
+          <PageTransition>{children}</PageTransition>
+        </div>
       </main>
 
       {isMobile && <MobileTabBar primary={tabItems} more={moreItems} />}
