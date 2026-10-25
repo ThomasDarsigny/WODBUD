@@ -93,7 +93,8 @@ export default function FeatureBento() {
 
       <TiltCard className={`${s.tile} ${s.tileRank}`} intensity={0.5}>
         <div className={s.rankArt} aria-hidden="true">
-          <span className={s.rankHex}>7</span>
+          {/* Le vrai insigne du 7e rang (Bulldozer), comme dans l'app. */}
+          <img className={s.rankEmblem} src="/ranks/bulldozer.svg" alt="" width={92} height={92} loading="lazy" decoding="async" />
           <div className={s.rankLadder}>
             {Array.from({ length: 10 }, (_, i) => (
               <motion.i

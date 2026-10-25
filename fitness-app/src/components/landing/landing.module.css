@@ -1438,13 +1438,24 @@
   filter: blur(20px);
 }
 
+/* Téléphone : texte compact, pour laisser au téléphone le plus de hauteur
+   possible ; la barre de progression suffit à situer l'étape. */
+@media (max-width: 959px) {
+  .storyTitle { font-size: clamp(1.55rem, 6.4vw, 2.6rem); margin-bottom: 0.45rem; }
+  .storyStep { min-height: 5.6rem; }
+  .storyStep h3 { font-size: clamp(1.2rem, 4.8vw, 1.8rem); }
+  .storyStep p { font-size: 0.9rem; line-height: 1.45; }
+  .storyDots { display: none; }
+  .storyBar { margin-top: 0.4rem; }
+}
+
 /* Le téléphone se règle sur la hauteur disponible, jamais plus large que l'écran. */
 .storyPhone {
   position: relative;
   height: 100%;
-  max-height: 640px;
+  max-height: 760px;
   aspect-ratio: 0.47;
-  max-width: 78vw;
+  max-width: 88vw;
   display: flex;
   align-items: center;
   will-change: transform;
@@ -1497,7 +1508,7 @@
   }
 
   .storyPhone {
-    height: min(78svh, 680px);
+    height: min(82svh, 800px);
   }
 }
 
@@ -1839,19 +1850,11 @@
   height: 92px;
 }
 
-.rankHex {
-  width: 64px;
-  height: 72px;
+.rankEmblem {
+  width: 92px;
+  height: 92px;
   flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
-  background: linear-gradient(160deg, #ffb38f, var(--orange) 55%, var(--orange-dim));
-  font-family: var(--font-d);
-  font-size: 1.8rem;
-  font-weight: 900;
-  color: var(--black);
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.5));
 }
 
 .rankLadder {

@@ -3,7 +3,7 @@ import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRankStore } from '../../stores/rankStore'
 import { computeProgress, formatMinutes, rankDisplay, rankMotto } from '../../lib/ranks'
-import RankBadge, { RankEmblem } from './RankBadge'
+import { RankEmblem } from './RankBadge'
 import RankUpCelebration from './RankUpCelebration'
 import { useSearchParams } from 'react-router-dom'
 import BadgeGrid from '../badges/BadgeGrid'
@@ -62,7 +62,8 @@ export default function RankView() {
       {/* Insigne + progression */}
       <section className="wb-card wb-card--accent wb-rank-hero">
         <div className="wb-rank-top">
-          {progress.current && <RankBadge rank={progress.current} lang={lang} size={112} />}
+          {/* L'insigne seul : le nom est déjà écrit en grand juste à côté. */}
+          {progress.current && <RankEmblem rank={progress.current} lang={lang} size={120} />}
           <div className="wb-rank-id">
             {progress.current && <strong style={{ color: progress.current.color }}>{rankDisplay(progress.current, lang)}</strong>}
             {progress.current && rankMotto(progress.current, lang) && <span>« {rankMotto(progress.current, lang)} »</span>}

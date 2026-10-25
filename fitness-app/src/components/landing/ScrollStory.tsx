@@ -5,11 +5,14 @@ import PhoneFrame from './PhoneFrame'
 import s from './landing.module.css'
 
 const IMAGES = ['builder', 'session', 'rank'] as const
+/** Défilement accordé à chaque écran, en hauteurs d'écran : de quoi lire le texte. */
+const SCREEN_SCROLL = 160
 
 /**
- * Récit au défilement, façon pages produit : la section fait trois écrans
- * de haut, son contenu reste collé pendant qu'on défile, et chaque tiers
- * du défilement change l'écran du téléphone et le texte.
+ * Récit au défilement, façon pages produit : le contenu reste collé pendant
+ * qu'on défile, et chaque tiers du défilement change l'écran du téléphone et
+ * le texte. Chaque écran dispose d'environ 1,6 hauteur d'écran de défilement :
+ * à une seule, les textes défilaient trop vite pour être lus.
  */
 export default function ScrollStory() {
   const { t } = useTranslation('common')
@@ -34,7 +37,7 @@ export default function ScrollStory() {
   const bar = useTransform(scrollYProgress, [0, 1], ['0%', '100%'])
 
   return (
-    <section ref={ref} className={s.story} id="app" style={{ height: `${IMAGES.length * 100 + 20}svh` }}>
+    <section ref={ref} className={s.story} id="app" style={{ height: `${IMAGES.length * SCREEN_SCROLL + 40}svh` }}>
       <div className={s.storySticky}>
         <div className={s.storyCopy}>
           <p className={s.sectionTag}>{t('landing.showcase.tag')}</p>
