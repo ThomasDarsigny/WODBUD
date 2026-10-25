@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { FormEvent } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { supabase } from '../lib/supabase'
 import { usePageMeta } from '../hooks/usePageMeta'
@@ -17,6 +17,10 @@ export default function SignupPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [notice, setNotice] = useState<string | null>(null)
+  // Compte créé, courriel de confirmation envoyé : on attend la validation.
+  const [sentTo, setSentTo] = useState<string | null>(null)
+  const [resent, setResent] = useState(false)
+  const navigate = useNavigate()
 
   const baseInputStyle = {
     width: '100%',
@@ -39,7 +43,7 @@ export default function SignupPage() {
 
     setIsSubmitting(true)
 
-    const { error: signupError } = await supabase.auth.signUp({
+    const { data: signed, error: signupError } = await supabase.auth.signUp({
       email: email.trim(),
       password,
       options: {
@@ -56,7 +60,47 @@ export default function SignupPage() {
       return
     }
 
-    setNotice(t('auth_ui.signup_success'))
+    // Sans confirmation de courriel, la session est déjà ouverte : on passe
+    // directement aux questions. Sinon, le lien du courriel y mènera.
+    if (signed.session) {
+      navigate('/bienvenue', { replace: true })
+      return
+    }
+    setSentTo(email.trim())
+  }
+
+  async function resend() {
+    if (!sentTo) return
+    const { error: resendError } = await supabase.auth.resend({
+      type: 'signup',
+      email: sentTo,
+      options: { emailRedirectTo: `${window.location.origin}/entraineur_dashboard` }
+    })
+    if (resendError) setError(resendError.message)
+    else setResent(true)
+  }
+
+  if (sentTo) {
+    return (
+      <main style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', background: 'var(--black)', color: 'var(--white)', padding: 'var(--page-pad)' }}>
+        <div className="wb-auth-wrap">
+          <div className="wb-auth-logo" aria-hidden="true">WOD<span>BUD</span></div>
+          <section className="wb-auth-card wb-check-mail" style={{ width: '100%', maxWidth: 520, border: '1px solid var(--border)', background: 'var(--dark)', padding: 'var(--page-pad)' }}>
+            <span className="wb-check-mail-icon" aria-hidden="true">✉</span>
+            <h1 className="wb-auth-title" style={{ margin: 0 }}>{t('welcome.check_title')}</h1>
+            <p style={{ color: 'var(--muted)', lineHeight: 1.55, margin: 0 }}>
+              {t('welcome.check_body', { email: sentTo })}
+            </p>
+            <p style={{ color: 'var(--muted)', fontSize: '0.875rem', margin: 0 }}>{t('welcome.check_next')}</p>
+            {error && <p className="wb-rec-error" role="alert">{error}</p>}
+            <button type="button" className="wb-btn wb-btn--secondary" onClick={() => { void resend() }} disabled={resent}>
+              {resent ? `✓ ${t('welcome.resent')}` : t('welcome.resend')}
+            </button>
+            <Link to="/login" className="wb-auth-link">{t('auth_ui.have_account_action')}</Link>
+          </section>
+        </div>
+      </main>
+    )
   }
 
 

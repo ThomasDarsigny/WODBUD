@@ -1188,7 +1188,10 @@ export type Database = {
           id: string
           language: string
           longest_streak: number
+          onboarded_at: string | null
+          onboarding: Json
           rank_seen_key: string | null
+          role: string | null
           segment: string | null
           social_links: Json
           theme_pref: string
@@ -1203,7 +1206,10 @@ export type Database = {
           id: string
           language?: string
           longest_streak?: number
+          onboarded_at?: string | null
+          onboarding?: Json
           rank_seen_key?: string | null
+          role?: string | null
           segment?: string | null
           social_links?: Json
           theme_pref?: string
@@ -1218,7 +1224,10 @@ export type Database = {
           id?: string
           language?: string
           longest_streak?: number
+          onboarded_at?: string | null
+          onboarding?: Json
           rank_seen_key?: string | null
+          role?: string | null
           segment?: string | null
           social_links?: Json
           theme_pref?: string

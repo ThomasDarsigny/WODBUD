@@ -31,6 +31,7 @@ const RankView = lazy(() => import('./components/rank/RankView'))
 const SessionJournalView = lazy(() => import('./components/session/SessionJournalView'))
 const RecordsView = lazy(() => import('./components/records/RecordsView'))
 const CoachTodayView = lazy(() => import('./components/home/CoachTodayView'))
+const WelcomePage = lazy(() => import('./pages/WelcomePage'))
 const PrivacyPolicyPage = lazy(() => import('./pages/PrivacyPolicyPage'))
 const SharedRankPage = lazy(() => import('./pages/SharedRankPage'))
 const AthleteHomeView = lazy(() => import('./components/athlete/AthleteHomeView'))
@@ -38,12 +39,18 @@ const AthleteVoteView = lazy(() => import('./components/athlete/AthleteVoteView'
 const JoinClassPage = lazy(() => import('./pages/JoinClassPage'))
 import { useSessionStore } from './stores/sessionStore'
 import { isInstalledApp } from './lib/platform'
+import { fetchMyRole, homeFor } from './lib/profileRole'
 
-function ProtectedRoute({ children, adminOnly = false }: { children: ReactNode; adminOnly?: boolean }) {
+/**
+ * Garde des écrans connectés. `requireRole` : un compte qui n'a pas encore dit
+ * s'il est coach ou athlète passe d'abord par « Bienvenue » (047).
+ */
+function ProtectedRoute({ children, adminOnly = false, requireRole = true }: { children: ReactNode; adminOnly?: boolean; requireRole?: boolean }) {
   const { t } = useTranslation('common')
   const [loading, setLoading] = useState(true)
   const [authenticated, setAuthenticated] = useState(false)
   const [admin, setAdmin] = useState(false)
+  const [needsRole, setNeedsRole] = useState(false)
 
   useEffect(() => {
     let mounted = true
@@ -55,8 +62,14 @@ function ProtectedRoute({ children, adminOnly = false }: { children: ReactNode; 
 
       if (!mounted) return
       setAuthenticated(Boolean(session))
-      setAdmin(session ? await isCurrentUserAdmin() : false)
-      setLoading(false)
+      const isAdmin = session ? await isCurrentUserAdmin() : false
+      setAdmin(isAdmin)
+      if (session && requireRole && !isAdmin) {
+        // Le rôle ne bloque jamais l'app sur une erreur réseau : on laisse passer.
+        const mine = await fetchMyRole().catch(() => null)
+        if (mounted) setNeedsRole(Boolean(mine && mine.role === null))
+      }
+      if (mounted) setLoading(false)
     }
 
     bootstrap()
@@ -81,7 +94,7 @@ function ProtectedRoute({ children, adminOnly = false }: { children: ReactNode; 
       mounted = false
       subscription.unsubscribe()
     }
-  }, [])
+  }, [requireRole])
 
   if (loading) {
     return (
@@ -107,6 +120,10 @@ function ProtectedRoute({ children, adminOnly = false }: { children: ReactNode; 
     return <Navigate to="/dashboard/exercises" replace />
   }
 
+  if (needsRole && requireRole) {
+    return <Navigate to="/bienvenue" replace />
+  }
+
   return <>{children}</>
 }
 
@@ -129,7 +146,11 @@ function DashboardHomeRedirect() {
       } = await supabase.auth.getSession()
 
       if (!mounted) return
-      setTarget(session && (await isCurrentUserAdmin()) ? '/dashboard/admin' : '/dashboard/today')
+      if (!session) { setTarget('/login'); return }
+      if (await isCurrentUserAdmin()) { setTarget('/dashboard/admin'); return }
+      // Coach → son accueil, athlète → le sien, pas encore répondu → Bienvenue.
+      const mine = await fetchMyRole().catch(() => null)
+      if (mounted) setTarget(mine ? homeFor(mine.role) : '/dashboard/today')
     }
 
     resolveTarget()
@@ -216,6 +237,18 @@ function App() {
         <Route path="/landing" element={<WebOnlyLanding />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
+
+        <Route
+          path="/bienvenue"
+          element={
+            // Clé propre : sans elle, React réutilise la garde de la route
+            // précédente (même place dans l'arbre) avec son ancien état, et
+            // /bienvenue ↔ espace se renvoient l'un à l'autre.
+            <ProtectedRoute key="welcome" requireRole={false}>
+              <WelcomePage />
+            </ProtectedRoute>
+          }
+        />
 
         <Route
           path="/entraineur_dashboard"
