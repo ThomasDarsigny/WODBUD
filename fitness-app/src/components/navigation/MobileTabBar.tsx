@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { motion, useDragControls, type PanInfo } from 'motion/react'
 import NavIcon, { type NavIconName } from './NavIcon'
+import { useBackToClose } from '../../hooks/useBackToClose'
 
 export interface MobileNavItem {
   id: string
@@ -28,9 +29,12 @@ export default function MobileTabBar({ primary, more }: { primary: MobileNavItem
   const { t } = useTranslation('common')
   const { pathname } = useLocation()
   // La feuille est liée à l'écran où on l'a ouverte : changer d'écran la ferme.
+  // Ses liens la ferment aussi pour de bon (sinon « retour » vers cet écran
+  // la rouvrirait) et remplacent l'entrée d'historique de la feuille ouverte.
   const [sheetPath, setSheetPath] = useState<string | null>(null)
   const sheetOpen = sheetPath === pathname
   const setSheetOpen = (open: boolean) => setSheetPath(open ? pathname : null)
+  useBackToClose(sheetOpen, () => setSheetPath(null))
 
   const isActive = (path: string) => pathname === path || (path !== '/athlete' && pathname.startsWith(`${path}/`))
   const moreActive = more.some((i) => isActive(i.path))
@@ -125,7 +129,7 @@ export default function MobileTabBar({ primary, more }: { primary: MobileNavItem
                 const active = isActive(item.path)
                 return (
                   <li key={item.id}>
-                    <Link to={item.path} onClick={tap} className={`wb-sheet-row${active ? ' is-active' : ''}`} aria-current={active ? 'page' : undefined}>
+                    <Link to={item.path} replace onClick={() => { tap(); setSheetPath(null) }} className={`wb-sheet-row${active ? ' is-active' : ''}`} aria-current={active ? 'page' : undefined}>
                       <span className="wb-sheet-icon"><NavIcon name={item.icon} size={20} /></span>
                       <span className="wb-sheet-label">{item.label}</span>
                       {(item.dot ?? 0) > 0 && <span className="wb-sheet-badge">{item.dot}</span>}

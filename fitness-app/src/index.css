@@ -1881,3 +1881,16 @@ em[data-rarity='legendaire'] { color: #f4c652; } em[data-rarity='mythique'] { co
   }
   .wb-tabbar { border-top-width: 1px; }
 }
+
+/* ─── Android : barres opaques ───────────────────────────────────
+   Pas de flou (coûteux sur les téléphones modestes, étranger à Android) :
+   des surfaces pleines, et le fondu de bord garde la séparation au défilement. */
+.is-android .wb-tabbar,
+.is-android .wb-mobile-top,
+.is-android .wb-sheet {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+.is-android .wb-tabbar,
+.is-android .wb-sheet { background: var(--dark); }
+.is-android .wb-mobile-top { background: var(--black); }

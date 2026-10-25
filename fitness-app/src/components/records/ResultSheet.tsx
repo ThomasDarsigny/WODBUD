@@ -7,6 +7,7 @@ import {
   fetchExerciseOptions, parseDuration, readUnit, toKg, writeUnit,
   type ExerciseOption, type ResultInput, type WeightUnit
 } from '../../lib/records'
+import { useBackToClose } from '../../hooks/useBackToClose'
 
 type Kind = 'load' | 'reps' | 'time'
 
@@ -21,6 +22,7 @@ interface Props {
 
 /** Feuille « Noter un résultat » : une charge, des répétitions ou un temps. */
 export default function ResultSheet({ exercise, withDate = false, onSubmit, onClose }: Props) {
+  useBackToClose(true, onClose)
   const { t } = useTranslation('common')
   const [options, setOptions] = useState<ExerciseOption[]>([])
   const [query, setQuery] = useState('')

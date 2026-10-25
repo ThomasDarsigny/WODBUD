@@ -17,6 +17,7 @@ import { isVoteSessionOpen, voteSessionKind } from '../../lib/voteSessions'
 import ClassFollowup from './ClassFollowup'
 import { useIsMobile } from '../../hooks/useMediaQuery'
 import { useSearchParams } from 'react-router-dom'
+import { useBackToClose } from '../../hooks/useBackToClose'
 
 const BASE_URL = window.location.origin
 
@@ -650,6 +651,7 @@ function CreateVoteModal({ classId, exercises, onClose, onCreate }: {
 }
 
 function ModalOverlay({ children, onClose, wide = false }: { children: React.ReactNode; onClose: () => void; wide?: boolean }) {
+  useBackToClose(true, onClose)
   return (
     <div
       onClick={(e) => { if (e.target === e.currentTarget) onClose() }}

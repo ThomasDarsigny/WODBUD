@@ -4,6 +4,7 @@ import NavIcon from '../navigation/NavIcon'
 import type { Exercise } from '../../types'
 import { CATEGORY_I18N_KEYS, MUSCLE_GROUP_I18N_KEYS } from '../../types'
 import { label as labelStyle, badgeBase as tagStyle, btnBase as btnStyle } from '../../styles/ui'
+import { useBackToClose } from '../../hooks/useBackToClose'
 
 interface Props {
   exercise: Exercise
@@ -22,6 +23,7 @@ export default function ExerciseDetailModal({
   onDelete,
   inWorkoutBuilder = false
 }: Props) {
+  useBackToClose(true, onClose)
   const { t } = useTranslation(['exercises', 'common'])
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [deleting, setDeleting] = useState(false)

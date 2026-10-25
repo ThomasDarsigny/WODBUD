@@ -7,6 +7,7 @@ import { useRankStore } from '../../stores/rankStore'
 import BadgeToken from '../badges/BadgeToken'
 import Skeleton from '../ui/Skeleton'
 import { Avatar, Notice, SectionLabel } from './communityUi'
+import { useBackToClose } from '../../hooks/useBackToClose'
 
 /** Profil d'un membre, vu depuis une communauté : rang et badges s'il les partage. */
 export default function MemberProfileModal({ communityId, userId, onClose }: {
@@ -14,6 +15,7 @@ export default function MemberProfileModal({ communityId, userId, onClose }: {
   userId: string
   onClose: () => void
 }) {
+  useBackToClose(true, onClose)
   const { t, i18n } = useTranslation('common')
   const { ranks, fetchAll } = useRankStore()
   const [profile, setProfile] = useState<MemberProfile | null | undefined>(undefined)

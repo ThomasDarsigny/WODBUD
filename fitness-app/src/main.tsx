@@ -5,8 +5,10 @@ import { registerSW } from 'virtual:pwa-register'
 import App from './App'
 import './index.css'
 import { initTheme, readStoredTheme } from './lib/theme'
+import { markPlatform } from './lib/platform'
 
 initTheme(readStoredTheme())
+markPlatform()
 
 if (import.meta.env.PROD) {
   const updateSW = registerSW({

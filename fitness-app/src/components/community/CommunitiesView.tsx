@@ -10,6 +10,7 @@ import EmptyState from '../ui/EmptyState'
 import Skeleton from '../ui/Skeleton'
 import NavIcon from '../navigation/NavIcon'
 import { btnPrimary as actionBtnStyle, btnSecondary as ghostBtnStyle, field as inputStyle, textarea as textareaStyle } from '../../styles/ui'
+import { useBackToClose } from '../../hooks/useBackToClose'
 
 /**
  * Communautés — ouvertes à la création pour tout compte (voir la migration
@@ -168,6 +169,7 @@ function CreateCommunityModal({ onClose, onCreate }: {
   onClose: () => void
   onCreate: (data: { name: string; description: string | null }) => Promise<void>
 }) {
+  useBackToClose(true, onClose)
   const { t } = useTranslation('common')
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')

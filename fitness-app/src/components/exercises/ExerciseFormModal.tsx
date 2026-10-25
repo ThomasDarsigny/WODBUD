@@ -28,6 +28,7 @@ import {
 } from '../../types'
 import { useExerciseStore } from '../../stores/exerciseStore'
 import { field as inputStyle, btnBase as btnStyle, textarea as textareaStyle } from '../../styles/ui'
+import { useBackToClose } from '../../hooks/useBackToClose'
 
 interface Props {
   exercise?: Exercise
@@ -61,6 +62,7 @@ function extractErrorMessage(err: unknown, fallbackMessage: string): string {
 }
 
 export default function ExerciseFormModal({ exercise, onClose }: Props) {
+  useBackToClose(true, onClose)
   const { t } = useTranslation(['exercises', 'common'])
   const { createExercise, updateExercise } = useExerciseStore()
   const isEdit = !!exercise

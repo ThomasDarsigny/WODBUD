@@ -6,6 +6,7 @@ import { activeMs, formatClock, isRunning, wallClockMs } from '../../lib/session
 import { countdownSecond, hasFormatClock, workoutClock, type ClockState } from '../../lib/workoutClock'
 import { holdScreenAwake, playCue, readSoundPref, unlockAudio, writeSoundPref } from '../../lib/gymCues'
 import { METHOD_I18N_KEYS } from '../../types'
+import { useBackToClose } from '../../hooks/useBackToClose'
 
 /**
  * Horloge vivante de la séance : rafraîchit l'affichage, déclenche les bips
@@ -99,6 +100,7 @@ interface OverlayProps {
  * de fond dit la phase avant même qu'on lise un chiffre.
  */
 export function GymOverlay({ gym, title, onClose, onToggle }: OverlayProps) {
+  useBackToClose(true, onClose)
   const { t } = useTranslation(['workouts', 'common'])
   const format = useSessionStore((s) => s.format)
   const { clock, running, withFormat, sound, setSound } = gym

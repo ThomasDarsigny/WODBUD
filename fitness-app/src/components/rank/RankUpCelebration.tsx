@@ -5,6 +5,7 @@ import { motion, useReducedMotion } from 'motion/react'
 import { rankDisplay, rankMotto, type Rank } from '../../lib/ranks'
 import { playCue, readSoundPref } from '../../lib/gymCues'
 import { RankEmblem, rankArtUrl } from './RankBadge'
+import { useBackToClose } from '../../hooks/useBackToClose'
 
 const EASE = [0.16, 1, 0.3, 1] as const
 
@@ -22,6 +23,7 @@ export default function RankUpCelebration({ from, to, onClose, onSeeRank }: {
   onClose: () => void
   onSeeRank?: () => void
 }) {
+  useBackToClose(true, onClose)
   const { t, i18n } = useTranslation(['workouts', 'common'])
   const reduce = useReducedMotion()
   const closeRef = useRef<HTMLButtonElement>(null)

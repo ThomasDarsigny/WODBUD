@@ -16,6 +16,7 @@ import { clearAuthSessionCookies } from '../../lib/authSessionCookies'
 import { field as inputStyle, btnAccent as buttonStyle } from '../../styles/ui'
 import { clearWorkoutDraft } from '../../stores/workoutStore'
 import { clearRoleCache, fetchMyRole, homeFor, setMyRole, type ProfileRole } from '../../lib/profileRole'
+import { useBackToClose } from '../../hooks/useBackToClose'
 
 const LANGS: Array<{ code: string; key: string }> = [
   { code: 'fr', key: 'language.fr' },
@@ -557,6 +558,7 @@ function Chip({ label, active, onClick }: { label: string; active: boolean; onCl
  * action qu'aucun « annuler » ne peut défaire.
  */
 function DeleteAccountModal({ onClose }: { onClose: () => void }) {
+  useBackToClose(true, onClose)
   const { t } = useTranslation('common')
   const navigate = useNavigate()
   const [impact, setImpact] = useState<DeletionImpact | null>(null)
