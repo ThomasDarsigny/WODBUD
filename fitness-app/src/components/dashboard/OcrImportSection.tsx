@@ -324,7 +324,7 @@ export default function OcrImportSection({ existingNames }: Props) {
                 onClick={() => cameraInputRef.current?.click()}
                 style={{ ...actionBtnStyle, display: 'flex', alignItems: 'center', gap: '0.4rem' }}
               >
-                📷 Prendre une photo
+                 Prendre une photo
               </button>
               <button onClick={() => inputRef.current?.click()} style={ghostBtnStyle}>
                 Choisir des fichiers (photos, PDF)
@@ -351,7 +351,7 @@ export default function OcrImportSection({ existingNames }: Props) {
               }}
             >
               <p style={{ fontSize: '0.95rem', fontWeight: 600, color: 'var(--white)', margin: 0 }}>
-                Ou dépose tes photos ou PDF ici
+                Déposer images
               </p>
               <p style={{ color: 'var(--muted)', fontSize: '0.8125rem', marginTop: '0.4rem', opacity: 0.6 }}>
                 JPG · PNG · WEBP · PDF (chaque page est analysée séparément) — feuilles d'entraînement des 6 dernières années
