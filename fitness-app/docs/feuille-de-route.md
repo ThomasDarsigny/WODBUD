@@ -63,7 +63,7 @@ Fil conducteur : *WODBUD, c'est comme avoir un entraîneur chef* — pour le cen
 
 1. ✅ **Centres et rôles** (fait : migration 048) : modèle de données (centre, membres avec rôle, invitations d'entraîneurs), écran Bienvenue Centre / Membre / Perso, équipement à l'inscription. Tout le reste en dépend.
 2. ✅ **Base d'exercices des centres** (fait : migration 049) : création par les chefs, photo ou vidéo de référence, détection des doublons, file de validation WODBUD (corriger, publier, notifier l'auteur).
-3. **Import CSV / PDF / photos par les centres**, avec comptage des occurrences pour la liste des vidéos à tourner.
+3. ✅ **Import CSV / PDF / photos par les centres** (fait : migration 050), avec comptage des occurrences pour la liste des vidéos à tourner.
 4. **Filtre par équipement** dans le créateur de WOD.
 5. **Progression / régression** : liens entre exercices, puis l'action « trop facile / à adapter ».
 6. **Engagement** : suggestions et support, invitations, note de l'entraînement, avatar de l'IA.

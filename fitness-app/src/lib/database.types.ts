@@ -916,6 +916,64 @@ export type Database = {
           },
         ]
       }
+      exercise_mentions: {
+        Row: {
+          center_id: string | null
+          created_at: string
+          created_by: string
+          exercise_id: string | null
+          id: string
+          name: string
+          name_normalized: string
+          occurrences: number
+          source: string
+        }
+        Insert: {
+          center_id?: string | null
+          created_at?: string
+          created_by: string
+          exercise_id?: string | null
+          id?: string
+          name: string
+          name_normalized: string
+          occurrences?: number
+          source: string
+        }
+        Update: {
+          center_id?: string | null
+          created_at?: string
+          created_by?: string
+          exercise_id?: string | null
+          id?: string
+          name?: string
+          name_normalized?: string
+          occurrences?: number
+          source?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "exercise_mentions_center_id_fkey"
+            columns: ["center_id"]
+            isOneToOne: false
+            referencedRelation: "centers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "exercise_mentions_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "exercise_mentions_exercise_id_fkey"
+            columns: ["exercise_id"]
+            isOneToOne: false
+            referencedRelation: "exercises"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       exercise_methods: {
         Row: {
           exercise_id: string
@@ -2234,6 +2292,17 @@ export type Database = {
           rank_key: string
           social_links: Json
           total_minutes: number
+        }[]
+      }
+      get_video_priorities: {
+        Args: { p_limit?: number }
+        Returns: {
+          exercise_id: string
+          has_video: boolean
+          in_common: boolean
+          name: string
+          sources: number
+          total: number
         }[]
       }
       is_admin: { Args: never; Returns: boolean }

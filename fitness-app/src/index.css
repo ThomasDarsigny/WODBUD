@@ -1609,6 +1609,43 @@ button.wb-ex-card { display: flex; align-items: center; gap: 0.85rem; padding: 0
 .wb-review-desc { grid-column: 1 / -1; margin: 0; color: var(--muted); font-size: 0.875rem; line-height: 1.55; white-space: pre-line; }
 .wb-review-empty { padding: 1rem; color: var(--muted); }
 .wb-review-ok { margin: 0 0 0.75rem; color: #6ee7a8; font-size: 0.875rem; }
+
+/* ─── Import d'exercices et priorité des vidéos (050) ─────────────── */
+.wb-imp { padding: 0; overflow: hidden; margin-bottom: 1rem; }
+.wb-imp-head { display: flex; align-items: center; gap: 0.8rem; width: 100%; min-height: 64px; padding: 0.8rem 1rem; background: none; border: none; color: var(--white); text-align: left; cursor: pointer; font: inherit; }
+.wb-imp-tag { flex-shrink: 0; padding: 0.25rem 0.6rem; border-radius: 999px; background: var(--orange); color: var(--black); font-family: var(--font-d); font-size: 0.75rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
+.wb-imp-title { flex: 1; min-width: 0; display: grid; gap: 0.1rem; }
+.wb-imp-title strong { font-size: 0.98rem; }
+.wb-imp-title small { color: var(--muted); font-size: 0.8125rem; }
+.wb-imp-body { display: grid; gap: 0.8rem; padding: 0 1rem 1rem; border-top: 1px solid var(--border); padding-top: 1rem; }
+.wb-imp-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.wb-imp-fail { display: grid; gap: 0.3rem; padding: 0.75rem 0.9rem; border-radius: var(--r-md); border: 1px solid rgba(255, 90, 31, 0.35); background: rgba(255, 90, 31, 0.06); }
+.wb-imp-fail p { margin: 0; color: var(--orange); font-weight: 600; font-size: 0.875rem; }
+.wb-imp-fail small { color: var(--muted); font-size: 0.8rem; overflow-wrap: anywhere; }
+.wb-imp-fail .wb-btn { justify-self: start; }
+.wb-imp-summary { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.wb-imp-summary .wb-chip { pointer-events: none; }
+.wb-imp-summary .wb-chip.is-err { border-color: rgba(255, 90, 31, 0.5); color: var(--orange); }
+.wb-imp-rows { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.5rem; max-height: 60vh; overflow-y: auto; overscroll-behavior: contain; }
+.wb-imp-row { display: grid; gap: 0.45rem; padding: 0.7rem; border-radius: var(--r-md); border: 1px solid var(--border); background: var(--black); }
+.wb-imp-row.is-linked { opacity: 0.75; }
+.wb-imp-row.is-done { border-color: rgba(110, 231, 168, 0.4); }
+.wb-imp-row.is-error { border-color: rgba(255, 90, 31, 0.5); }
+.wb-imp-line { display: flex; align-items: center; gap: 0.5rem; }
+.wb-imp-name { flex: 1; min-width: 0; font-weight: 700; }
+.wb-imp-count { flex-shrink: 0; min-width: 2.6rem; text-align: center; padding: 0.25rem 0.5rem; border-radius: 999px; background: rgba(255, 90, 31, 0.12); color: var(--orange); font-family: var(--font-d); font-weight: 800; font-variant-numeric: tabular-nums; }
+.wb-imp-match { display: flex; align-items: flex-start; gap: 0.5rem; color: var(--muted); font-size: 0.8125rem; line-height: 1.4; cursor: pointer; }
+.wb-imp-match input { margin-top: 0.15rem; accent-color: var(--orange); width: 18px; height: 18px; flex-shrink: 0; }
+.wb-imp-fields { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0.4rem; }
+.wb-imp-status { font-size: 0.8rem; color: var(--muted); overflow-wrap: anywhere; }
+.wb-imp-row.is-done .wb-imp-status { color: #6ee7a8; }
+.wb-imp-row.is-error .wb-imp-status { color: #ff9b8f; }
+.wb-imp-done { display: grid; gap: 0.6rem; padding: 0.8rem 0.9rem; border-radius: var(--r-md); border: 1px solid rgba(110, 231, 168, 0.35); background: rgba(110, 231, 168, 0.06); }
+.wb-imp-done p { margin: 0; color: #6ee7a8; font-size: 0.9rem; }
+.wb-imp-done .wb-btn { justify-self: start; }
+.wb-prio { margin: 0; padding: 0; list-style: none; }
+.wb-prio li + li { border-top: 1px solid var(--border); }
+.wb-prio-rank { flex-shrink: 0; width: 1.8rem; text-align: center; font-family: var(--font-d); font-weight: 900; font-size: 1.1rem; color: var(--muted); font-variant-numeric: tabular-nums; }
 .wb-ex-body strong { font-family: var(--font-d); font-size: 1.15rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.02em; line-height: 1.1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .wb-ex-muscles { display: flex; align-items: center; gap: 0.35rem; flex-wrap: wrap; }
 .wb-ex-more { font-size: 0.75rem; color: var(--muted); }

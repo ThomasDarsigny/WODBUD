@@ -19,6 +19,7 @@ import {
 import type { BodyRegion, MovementType, TrainingMethod } from '../../types'
 import ExerciseFormModal from '../exercises/ExerciseFormModal'
 import ExerciseDetailModal from '../exercises/ExerciseDetailModal'
+import ExerciseImport from '../exercises/ExerciseImport'
 import { useIsMobile } from '../../hooks/useMediaQuery'
 import { btnPrimary as emptyActionStyle } from '../../styles/ui'
 import { SkeletonCards } from '../ui/Skeleton'
@@ -135,6 +136,11 @@ export default function ExercisesView() {
           </button>
         )}
       </header>
+
+      {/* Import des exercices du centre (CSV, PDF, photos) : proprio et chefs. */}
+      {centerLead && !isAdmin && myCenter && (
+        <ExerciseImport existing={exercises} centerId={myCenter.center.id} />
+      )}
 
       <FilterPanel
         search={search}

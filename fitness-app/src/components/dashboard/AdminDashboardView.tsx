@@ -5,8 +5,9 @@ import type { Exercise } from '../../types'
 import { CATEGORY_I18N_KEYS, MUSCLE_GROUP_I18N_KEYS } from '../../types'
 import ExerciseFormModal from '../exercises/ExerciseFormModal'
 import ExerciseDetailModal from '../exercises/ExerciseDetailModal'
-import OcrImportSection from './OcrImportSection'
+import ExerciseImport from '../exercises/ExerciseImport'
 import ExerciseReviewQueue from './ExerciseReviewQueue'
+import VideoPriorities from './VideoPriorities'
 import FeatureTopicsCard from '../vote/FeatureTopicsCard'
 import Skeleton from '../ui/Skeleton'
 
@@ -23,10 +24,6 @@ export default function AdminDashboardView() {
   useEffect(() => {
     fetchExercises()
   }, [fetchExercises])
-
-  // Noms bruts : OcrImportSection normalise lui-même (accents, casse,
-  // pluriels proches) pour la détection de doublons.
-  const existingNames = useMemo(() => exercises.map((e) => e.name), [exercises])
 
   const total = exercises.length
   const withVideo = useMemo(() => exercises.filter((e) => !!e.video_url).length, [exercises])
@@ -93,9 +90,11 @@ export default function AdminDashboardView() {
 
       <ExerciseReviewQueue onEdit={openEdit} />
 
+      <VideoPriorities onEdit={openEdit} />
+
       <FeatureTopicsCard admin />
 
-      <OcrImportSection existingNames={existingNames} />
+      <ExerciseImport existing={exercises.filter((e) => !e.center_id)} centerId={null} />
 
       <section className="wb-home-sec">
         <div className="wb-sec"><h2>{t('title', { ns: 'exercises' })}</h2></div>

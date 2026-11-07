@@ -20,7 +20,8 @@ const corsHeaders = {
  * La clé Gemini vit ici, pas dans le bundle client : un VITE_GEMINI_API_KEY
  * finit dans le JavaScript servi à tout le monde, donc lisible et volable par
  * n'importe qui. Même patron que r2-presign : JWT vérifié, puis appartenance
- * à `admin_users`.
+ * à `admin_users` — ou, depuis 050, rôle de proprio ou d'entraîneur chef du
+ * centre passé en `center_id` (import des exercices d'un centre).
  *
  * Un seul fichier par appel — le client garde le contrôle de la progression
  * et de la reprise par fichier en cas d'échec partiel d'un lot.
@@ -28,12 +29,14 @@ const corsHeaders = {
 
 const DEFAULT_MODEL = 'gemini-3.5-flash'
 
-const OCR_PROMPT = `Analyse cette feuille d'entraînement CrossFit/fitness. Extrait TOUS les exercices mentionnés.
+const OCR_PROMPT = `Analyse cette feuille d'entraînement CrossFit/fitness. Extrait TOUS les exercices mentionnés, une seule fois chacun.
 
 Réponds UNIQUEMENT avec un tableau JSON valide (pas de markdown, pas de texte autour).
 
 Format exact :
-[{"name":"Nom exercice","category":"strength","primary_muscle":"core","description":"Description courte en français"}]
+[{"name":"Nom exercice","category":"strength","primary_muscle":"core","description":"Description courte en français","occurrences":1}]
+
+occurrences : le nombre de fois que l'exercice apparaît sur la feuille (au moins 1). Compte chaque séance, bloc ou ligne où il revient, pas les répétitions ni les séries.
 
 Valeurs de category : strength (force/charges), olympic (haltérophilie/mouvements olympiques), gymnastics (gymnastic/corps), cardio (endurance/course), mobility (mobilité/étirements), accessory (accessoire).
 Valeurs de primary_muscle : chest, back, traps, shoulders, biceps, triceps, forearms, core, obliques, lower_back, glutes, quads, hamstrings, adductors, calves, tibialis, cardio_upper, cardio_lower.
@@ -133,20 +136,32 @@ Deno.serve(async (req: Request) => {
       })
     }
 
+    const { base64, mimeType, center_id: centerId } = await req.json()
+
     const { data: adminRow, error: adminError } = await adminClient
       .from('admin_users')
       .select('user_id')
       .eq('user_id', user.id)
       .maybeSingle()
 
-    if (adminError || !adminRow) {
-      return new Response(JSON.stringify({ error: 'Acces admin requis' }), {
+    let allowed = !adminError && Boolean(adminRow)
+    if (!allowed && typeof centerId === 'string' && centerId) {
+      const { data: member } = await adminClient
+        .from('center_members')
+        .select('role')
+        .eq('center_id', centerId)
+        .eq('user_id', user.id)
+        .maybeSingle()
+      allowed = member?.role === 'owner' || member?.role === 'head_coach'
+    }
+
+    if (!allowed) {
+      return new Response(JSON.stringify({ error: 'Acces admin ou entraineur chef requis' }), {
         status: 403,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       })
     }
 
-    const { base64, mimeType } = await req.json()
     if (!base64 || !mimeType) {
       return new Response(JSON.stringify({ error: 'Parametres manquants' }), {
         status: 400,

@@ -1,7 +1,8 @@
 # Import OCR — feuilles d'entraînement
 
-Le tableau de bord admin a une section « Import rapide » qui lit des photos ou
-des PDF de feuilles d'entraînement (au crayon, imprimées, peu importe) et en
+Le tableau de bord admin — et, depuis la migration 050, l'écran Exercices du
+proprio et des entraîneurs chefs d'un centre — a une section « Importer des
+exercices » qui lit des CSV, des photos ou des PDF de feuilles d'entraînement (au crayon, imprimées, peu importe) et en
 extrait les exercices via Gemini, pour peupler la bibliothèque sans tout
 retaper à la main. Utile pour rattraper plusieurs années d'archives d'un coup.
 
@@ -14,7 +15,13 @@ lire dans les DevTools et consommer ton quota.
 
 `supabase/functions/ocr-import` fait l'appel côté serveur, avec le même patron
 que `r2-presign` : le JWT de la requête est vérifié, puis l'appartenance à
-`admin_users`. La clé Gemini ne quitte jamais Supabase.
+`admin_users` — ou le rôle de proprio / entraîneur chef du centre passé en
+`center_id`. La clé Gemini ne quitte jamais Supabase. Les CSV sont lus dans le
+navigateur, sans passer par la fonction.
+
+Chaque exercice trouvé est compté (`occurrences`), fusionné s'il revient, puis
+relié à l'exercice existant quand il y en a un. Ces mentions alimentent la
+liste « Vidéos à tourner en priorité » de l'admin (migration 050).
 
 ## Activer la fonction
 
