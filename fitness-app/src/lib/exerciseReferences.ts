@@ -13,7 +13,7 @@ import { getLocalUser } from './currentUser'
 const BUCKET = 'exercise-references'
 export const MAX_REFERENCES = 3
 export const MAX_VIDEO_SECONDS = 60
-const MAX_UPLOAD_BYTES = 60 * 1024 * 1024
+const MAX_UPLOAD_BYTES = 50 * 1024 * 1024
 /** Sous ce poids, une vidéo part telle quelle : la réencoder coûterait plus qu'elle ne rapporte. */
 const KEEP_VIDEO_BELOW = 20 * 1024 * 1024
 

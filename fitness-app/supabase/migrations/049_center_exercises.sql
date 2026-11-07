@@ -156,11 +156,11 @@ create policy "exercise_references: ajouter" on public.exercise_references
 create policy "exercise_references: supprimer" on public.exercise_references
   for delete using (public.can_edit_exercise(exercise_id));
 
--- Compartiment fermé : chemin <exercise_id>/<fichier>. 60 Mo au plus — l'app
+-- Compartiment fermé : chemin <exercise_id>/<fichier>. 50 Mo au plus (plafond du forfait gratuit) — l'app
 -- compresse la vidéo en 720p avant l'envoi (≈ 20 Mo la minute).
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
 values (
-  'exercise-references', 'exercise-references', false, 62914560,
+  'exercise-references', 'exercise-references', false, 52428800,
   array['image/jpeg', 'image/png', 'image/webp', 'video/mp4', 'video/webm', 'video/quicktime']
 )
 on conflict (id) do nothing;

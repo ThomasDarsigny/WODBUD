@@ -1,0 +1,95 @@
+name: Base de données — sauvegarde et visite
+
+# Deux tâches quotidiennes pour la base Supabase (forfait gratuit) :
+#   - visite : une vraie requête à l'API, pour que le projet ne soit jamais
+#     mis en pause pour inactivité ;
+#   - sauvegarde : un export complet (rôles, schéma, données), CHIFFRÉ avant
+#     d'être gardé 30 jours comme artefact. Le dépôt est public : sans
+#     chiffrement, n'importe quel compte GitHub pourrait télécharger la base.
+# Mode d'emploi, secrets à créer et restauration : fitness-app/docs/sauvegardes.md
+
+'on':
+  schedule:
+    - cron: '17 7 * * *'   # sauvegarde, ~3 h à Québec
+    - cron: '0 12 * * *'   # visite, ~8 h à Québec
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: db-maintenance
+  cancel-in-progress: false
+
+jobs:
+  keepalive:
+    name: Visite de la base
+    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '0 12 * * *'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Requête à l'API
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_ANON_KEY" ]; then
+            echo "::error::Secrets SUPABASE_URL et SUPABASE_ANON_KEY manquants (voir fitness-app/docs/sauvegardes.md)."
+            exit 1
+          fi
+          # Lecture d'un exercice de la base commune (publique) : compte comme activité.
+          curl -fsS --retry 3 --max-time 30 -o /dev/null \
+            "$SUPABASE_URL/rest/v1/exercises?select=id&limit=1" \
+            -H "apikey: $SUPABASE_ANON_KEY" -H "Authorization: Bearer $SUPABASE_ANON_KEY"
+          echo "Base visitée."
+
+  backup:
+    name: Sauvegarde chiffrée
+    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '17 7 * * *'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Vérifier les secrets
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+          BACKUP_PASSPHRASE: ${{ secrets.BACKUP_PASSPHRASE }}
+        run: |
+          if [ -z "$SUPABASE_DB_URL" ] || [ -z "$BACKUP_PASSPHRASE" ]; then
+            echo "::error::Secrets SUPABASE_DB_URL et BACKUP_PASSPHRASE manquants (voir fitness-app/docs/sauvegardes.md)."
+            exit 1
+          fi
+
+      - name: Installer la CLI Supabase
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Exporter la base
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        run: |
+          mkdir -p dump
+          supabase db dump --db-url "$SUPABASE_DB_URL" -f dump/roles.sql --role-only
+          supabase db dump --db-url "$SUPABASE_DB_URL" -f dump/schema.sql
+          supabase db dump --db-url "$SUPABASE_DB_URL" -f dump/data.sql --use-copy --data-only
+          ls -l dump
+
+      - name: Chiffrer (AES-256)
+        id: pack
+        env:
+          BACKUP_PASSPHRASE: ${{ secrets.BACKUP_PASSPHRASE }}
+        run: |
+          name="wodbud-db-$(date -u +%F)"
+          tar -czf backup.tgz -C dump .
+          gpg --batch --yes --pinentry-mode loopback \
+            --passphrase-file <(printf '%s' "$BACKUP_PASSPHRASE") \
+            --symmetric --cipher-algo AES256 -o "$name.tgz.gpg" backup.tgz
+          # Rien en clair ne doit rester sur le runner, ni partir en artefact.
+          rm -rf dump backup.tgz
+          echo "name=$name" >> "$GITHUB_OUTPUT"
+
+      - name: Garder 30 jours
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.pack.outputs.name }}
+          path: ${{ steps.pack.outputs.name }}.tgz.gpg
+          retention-days: 30
+          if-no-files-found: error
