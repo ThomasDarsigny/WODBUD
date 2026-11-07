@@ -1,71 +1,73 @@
-# Import OCR — feuilles d'entraînement
+# Import d'exercices — CSV, PDF et photos de feuilles
 
 Le tableau de bord admin — et, depuis la migration 050, l'écran Exercices du
 proprio et des entraîneurs chefs d'un centre — a une section « Importer des
-exercices » qui lit des CSV, des photos ou des PDF de feuilles d'entraînement (au crayon, imprimées, peu importe) et en
-extrait les exercices via Gemini, pour peupler la bibliothèque sans tout
-retaper à la main. Utile pour rattraper plusieurs années d'archives d'un coup.
+exercices » qui lit des CSV, des photos ou des PDF de feuilles d'entraînement
+(au crayon, imprimées, peu importe) et en extrait les exercices, pour peupler
+la bibliothèque sans tout retaper à la main. Utile pour rattraper plusieurs
+années d'archives d'un coup.
 
-## Pourquoi une Edge Function
+## Qui lit quoi
 
-La première version appelait Gemini directement depuis le navigateur, avec la
-clé dans `VITE_GEMINI_API_KEY`. N'importe quelle variable préfixée `VITE_` finit
-en clair dans le JavaScript servi à tout le monde — n'importe qui aurait pu la
-lire dans les DevTools et consommer ton quota.
+- **CSV** : lu dans le navigateur (`src/lib/exerciseImport.ts`), sans passer par
+  le serveur. Colonnes reconnues en français, anglais ou espagnol ; seule la
+  colonne du nom est obligatoire ; virgule ou point-virgule (export d'Excel en
+  français).
+- **Photos et PDF** : lus par **Claude** dans la fonction Edge
+  `supabase/functions/ocr-import`. Un PDF est d'abord rendu en une image par
+  page dans le navigateur (`src/lib/pdfToImages.ts`), ce qui donne la
+  progression page par page et la reprise des seules pages en échec.
 
-`supabase/functions/ocr-import` fait l'appel côté serveur, avec le même patron
-que `r2-presign` : le JWT de la requête est vérifié, puis l'appartenance à
-`admin_users` — ou le rôle de proprio / entraîneur chef du centre passé en
-`center_id`. La clé Gemini ne quitte jamais Supabase. Les CSV sont lus dans le
-navigateur, sans passer par la fonction.
+## Pourquoi une fonction Edge
 
-Chaque exercice trouvé est compté (`occurrences`), fusionné s'il revient, puis
-relié à l'exercice existant quand il y en a un. Ces mentions alimentent la
-liste « Vidéos à tourner en priorité » de l'admin (migration 050).
+Une clé dans une variable `VITE_*` finit en clair dans le JavaScript servi à
+tout le monde. La fonction fait l'appel côté serveur : le jeton de la requête
+est vérifié, puis l'appartenance à `admin_users` — ou le rôle de proprio /
+entraîneur chef du centre passé en `center_id`. La clé Anthropic ne quitte
+jamais Supabase.
+
+La réponse de Claude est une **sortie structurée** (schéma JSON imposé :
+nom, catégorie, muscle principal, description, occurrences) : elle respecte
+toujours le format, il n'y a pas de texte libre à interpréter.
 
 ## Activer la fonction
 
-1. **Clé Gemini.** [Google AI Studio](https://aistudio.google.com/apikey) →
-   créer une clé.
-2. **Secrets.** Supabase → Edge Functions → Secrets :
-   - `GEMINI_API_KEY` — la clé de l'étape 1.
-   - `GEMINI_MODEL` — optionnel. Sans lui, la fonction utilise un modèle Flash
-     stable codé en dur. Google publie une nouvelle version Flash tous les
-     deux ou trois mois et finit par retirer les anciennes ; si l'import se
-     met à échouer avec une erreur 404 sur le modèle, c'est probablement ça —
-     vérifie [la liste des modèles](https://ai.google.dev/gemini-api/docs/models)
-     et pose la nouvelle valeur ici, sans redéployer.
+1. **Clé Anthropic** : [console Anthropic](https://platform.claude.com) →
+   API keys. C'est la même clé que l'assistant IA.
+2. **Secrets** — Supabase → Edge Functions → Secrets :
+   - `ANTHROPIC_API_KEY` — la clé de l'étape 1.
+   - `CLAUDE_OCR_MODEL` — facultatif. Par défaut `claude-haiku-5-5` (rapide,
+     environ 0,0005 $ la feuille). Si les feuilles écrites à la main sont mal
+     lues, poser `claude-sonnet-5-5` (environ 0,01 $ la feuille) — sans
+     redéployer.
 3. **Déploiement** (CLI Supabase, depuis `fitness-app/`) :
    ```
    supabase functions deploy ocr-import
    ```
 
-Sans `GEMINI_API_KEY`, la fonction répond 500 et le bouton « Analyser » affiche
-l'erreur — l'admin le voit tout de suite, pas de comportement silencieux.
+Sans `ANTHROPIC_API_KEY`, la fonction répond 500 et l'écran d'import affiche
+l'erreur avec un bouton « Réessayer » — pas de comportement silencieux.
 
-## Ce que fait vraiment le composant
+## Ce que fait l'import
 
-- **Images et PDF.** Un PDF est rendu en une image par page dans le navigateur
-  (`src/lib/pdfToImages.ts`, via `pdfjs-dist`) avant l'envoi — Gemini ne reçoit
-  jamais le PDF lui-même, seulement les pages en JPEG. Une feuille scannée en
-  plusieurs pages n'a donc pas besoin d'être découpée à la main.
-- **Un appel par image**, en séquence, avec 4 tentatives et un backoff
-  (500 ms, 1 s, 2 s) côté fonction sur les erreurs 429/5xx — attendu quand on
-  avale six ans de feuilles d'un coup plutôt qu'une seule photo.
-- **Reprise sur échec.** Les fichiers qui échouent (PDF corrompu, timeout,
-  quota) sont listés à part avec un bouton « Réessayer » qui ne retraite que
-  ceux-là. Une fois importés, les exercices en erreur ont aussi un bouton de
-  reprise, ligne par ligne regroupée.
-- **Doublons.** `src/lib/textSimilarity.ts` normalise les noms (accents,
-  casse, ponctuation) avant de comparer : un nom identique une fois normalisé
-  est un doublon certain, décoché d'office. Un nom à 1-2 caractères près
-  (« Squat » / « Squats ») est marqué « PROCHE » — signalé, mais laissé au
-  choix du coach, parce que deux mouvements différents peuvent porter des noms
-  voisins.
+- **Un appel par image**, en séquence. Le SDK d'Anthropic reprend lui-même
+  les erreurs 429 et 5xx (jusqu'à 4 tentatives, attente croissante) — attendu
+  quand on avale six ans de feuilles d'un coup.
+- **Comptage** : chaque exercice est compté (`occurrences` : combien de fois
+  il revient sur la feuille), puis fusionné s'il revient dans plusieurs
+  fichiers.
+- **Doublons** : `src/lib/textSimilarity.ts` normalise les noms (accents,
+  casse, ponctuation). Un nom identique ou très proche d'un exercice existant
+  est **relié** à cet exercice au lieu d'être recréé ; une case permet de le
+  créer quand même s'il s'agit d'un autre mouvement.
+- **Mentions** : chaque exercice trouvé est enregistré dans
+  `exercise_mentions` (migration 050). Additionnées sur tous les centres, elles
+  donnent la liste « Vidéos à tourner en priorité » de l'admin.
+- **Relecture** : chaque nom est affiché et modifiable avant l'enregistrement ;
+  un exercice mal lu se corrige sur place.
 
 ## Limites en vigueur
 
-Côté fonction : ~25 Mo par image encodée en base64 (soit une image source
-d'environ 18 Mo), 4 tentatives par image. Côté client : 60 pages par PDF —
-au-delà, c'est probablement le mauvais fichier plutôt qu'une vraie feuille
-d'entraînement.
+Côté fonction : ~25 Mo par image encodée en base64, 4 tentatives par image,
+JPEG, PNG, GIF, WEBP ou PDF. Côté client : 60 pages par PDF — au-delà, c'est
+probablement le mauvais fichier plutôt qu'une vraie feuille d'entraînement.

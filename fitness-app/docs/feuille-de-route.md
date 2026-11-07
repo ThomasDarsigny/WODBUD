@@ -79,7 +79,7 @@ Fil conducteur : *WODBUD, c'est comme avoir un entraîneur chef* — pour le cen
 
 ## Toujours en suspens (technique)
 - [ ] Supabase : activer « Confirm email » et « Leaked password protection ».
-- [ ] Clés : `ANTHROPIC_API_KEY` (assistant IA), `GEMINI_API_KEY` (OCR), clés R2 (vidéos).
+- [ ] Clés : `ANTHROPIC_API_KEY` (assistant IA et lecture des feuilles — Gemini n'est plus utilisé), clés R2 (vidéos).
 - [ ] Emballage App Store / Play Store avec Capacitor, et notifications natives (Apple, Firebase).
 - [ ] Logo officiel d'Apple sur le bouton « Continuer avec Apple ».
 - [ ] Suivi des erreurs et statistiques d'usage.

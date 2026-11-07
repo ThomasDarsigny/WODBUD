@@ -1,150 +1,97 @@
-// @ts-ignore Edge Function Deno remote import
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import Anthropic from 'npm:@anthropic-ai/sdk@1.3.0'
+import { createClient } from 'npm:@supabase/supabase-js@2'
 
-declare const Deno: {
-  serve: (handler: (req: Request) => Response | Promise<Response>) => void
-  env: {
-    get(name: string): string | undefined
-  }
-}
+/**
+ * Lecture d'une feuille d'entraînement (photo, ou page de PDF déjà rendue en
+ * image côté client) par Claude.
+ *
+ * La clé Anthropic vit ici, pas dans le bundle client : une variable VITE_*
+ * finit dans le JavaScript servi à tout le monde. Accès : JWT vérifié, puis
+ * appartenance à `admin_users` — ou rôle de proprio / entraîneur chef du
+ * centre passé en `center_id` (import des exercices d'un centre, 050).
+ *
+ * Un seul fichier par appel : le client garde la progression et la reprise
+ * fichier par fichier en cas d'échec partiel d'un lot.
+ *
+ * Modèle : Claude Haiku 5.5 par défaut (rapide, environ 0,0005 $ la feuille).
+ * Si l'écriture à la main est mal lue, poser le secret CLAUDE_OCR_MODEL à
+ * `claude-sonnet-5-5` suffit — sans redéployer.
+ */
+
+const DEFAULT_MODEL = 'claude-haiku-5-5'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type'
 }
 
-/**
- * Analyse OCR d'une feuille d'entraînement (image ou page de PDF déjà rendue
- * en image côté client) via Gemini.
- *
- * La clé Gemini vit ici, pas dans le bundle client : un VITE_GEMINI_API_KEY
- * finit dans le JavaScript servi à tout le monde, donc lisible et volable par
- * n'importe qui. Même patron que r2-presign : JWT vérifié, puis appartenance
- * à `admin_users` — ou, depuis 050, rôle de proprio ou d'entraîneur chef du
- * centre passé en `center_id` (import des exercices d'un centre).
- *
- * Un seul fichier par appel — le client garde le contrôle de la progression
- * et de la reprise par fichier en cas d'échec partiel d'un lot.
- */
+const json = (body: unknown, status = 200) =>
+  new Response(JSON.stringify(body), { status, headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
 
-const DEFAULT_MODEL = 'gemini-3.5-flash'
+const CATEGORIES = ['strength', 'olympic', 'gymnastics', 'cardio', 'mobility', 'accessory']
+const MUSCLES = [
+  'chest', 'back', 'traps', 'shoulders', 'biceps', 'triceps', 'forearms', 'core', 'obliques', 'lower_back',
+  'glutes', 'quads', 'hamstrings', 'adductors', 'calves', 'tibialis', 'cardio_upper', 'cardio_lower'
+]
 
-const OCR_PROMPT = `Analyse cette feuille d'entraînement CrossFit/fitness. Extrait TOUS les exercices mentionnés, une seule fois chacun.
-
-Réponds UNIQUEMENT avec un tableau JSON valide (pas de markdown, pas de texte autour).
-
-Format exact :
-[{"name":"Nom exercice","category":"strength","primary_muscle":"core","description":"Description courte en français","occurrences":1}]
-
-occurrences : le nombre de fois que l'exercice apparaît sur la feuille (au moins 1). Compte chaque séance, bloc ou ligne où il revient, pas les répétitions ni les séries.
-
-Valeurs de category : strength (force/charges), olympic (haltérophilie/mouvements olympiques), gymnastics (gymnastic/corps), cardio (endurance/course), mobility (mobilité/étirements), accessory (accessoire).
-Valeurs de primary_muscle : chest, back, traps, shoulders, biceps, triceps, forearms, core, obliques, lower_back, glutes, quads, hamstrings, adductors, calves, tibialis, cardio_upper, cardio_lower.
-
-Si aucun exercice trouvé, retourne [].`
-
-function sleep(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms))
-}
-
-/**
- * Gemini répond parfois 429 (quota par minute) ou 503 (surcharge) sous
- * volume — attendu ici puisque le but est d'avaler des années de feuilles
- * d'un coup. On retente avec un backoff plutôt que de faire échouer le
- * fichier et d'obliger un import manuel.
- */
-async function callGeminiWithRetry(
-  apiKey: string,
-  model: string,
-  base64: string,
-  mimeType: string,
-  attempts = 4
-): Promise<unknown> {
-  let lastError: Error = new Error('Echec Gemini')
-
-  for (let i = 0; i < attempts; i++) {
-    const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ parts: [{ inlineData: { mimeType, data: base64 } }, { text: OCR_PROMPT }] }],
-          generationConfig: { temperature: 0.1 }
-        })
+// Sortie structurée : la réponse respecte toujours ce schéma, plus besoin de
+// chercher un tableau JSON dans du texte libre.
+const OUTPUT_SCHEMA = {
+  type: 'object',
+  properties: {
+    exercises: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          name: { type: 'string' },
+          category: { type: 'string', enum: CATEGORIES },
+          primary_muscle: { type: 'string', enum: MUSCLES },
+          description: { type: 'string' },
+          occurrences: { type: 'integer' }
+        },
+        required: ['name', 'category', 'primary_muscle', 'description', 'occurrences'],
+        additionalProperties: false
       }
-    )
-
-    if (res.ok) return res.json()
-
-    const retryable = res.status === 429 || res.status >= 500
-    const body = await res.json().catch(() => ({}))
-    const detail = (body as { error?: { message?: string } })?.error?.message
-    lastError = new Error(detail ?? `Erreur API Gemini (${res.status})`)
-
-    if (!retryable || i === attempts - 1) throw lastError
-    await sleep(500 * 2 ** i) // 500ms, 1s, 2s
-  }
-
-  throw lastError
+    }
+  },
+  required: ['exercises'],
+  additionalProperties: false
 }
+
+const PROMPT = `Voici une feuille d'entraînement (CrossFit, haltérophilie, fitness), imprimée ou écrite à la main.
+
+Relève chaque exercice mentionné, une seule fois chacun :
+- name : le nom de l'exercice tel qu'un coach l'écrirait, corrigé s'il est mal orthographié (« Trusters » devient « Thrusters »), sans charges, répétitions ni séries.
+- category : strength (force, charges), olympic (haltérophilie), gymnastics (poids du corps, gymnastique), cardio (endurance, course, rameur), mobility (mobilité, étirements), accessory (accessoire).
+- primary_muscle : le muscle principal sollicité.
+- description : une phrase courte en français sur l'exécution, ou une chaîne vide si tu n'es pas sûr.
+- occurrences : combien de fois l'exercice revient sur la feuille (chaque séance, bloc ou ligne où il apparaît ; au moins 1). Ne compte pas les répétitions ni les séries.
+
+Ignore les dates, les noms de personnes, les temps et les scores. Si la feuille ne contient aucun exercice, renvoie une liste vide.`
+
+const IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'] as const
+type ImageType = (typeof IMAGE_TYPES)[number]
 
 Deno.serve(async (req: Request) => {
-  if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: corsHeaders })
-  }
+  if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders })
 
   try {
-    const authHeader = req.headers.get('Authorization')
-    const token = authHeader?.replace(/^Bearer\s+/i, '').trim()
-
-    if (!token) {
-      return new Response(JSON.stringify({ error: 'Authentification requise' }), {
-        status: 401,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-      })
-    }
+    const token = req.headers.get('Authorization')?.replace(/^Bearer\s+/i, '').trim()
+    if (!token) return json({ error: 'Authentification requise' }, 401)
 
     const supabaseUrl = Deno.env.get('SUPABASE_URL')
     const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
-    const geminiKey = Deno.env.get('GEMINI_API_KEY')
-    const model = Deno.env.get('GEMINI_MODEL') || DEFAULT_MODEL
-
-    if (!supabaseUrl || !serviceRoleKey) {
-      return new Response(JSON.stringify({ error: 'Secrets Supabase manquants' }), {
-        status: 500,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-      })
-    }
-    if (!geminiKey) {
-      return new Response(JSON.stringify({ error: 'Secret GEMINI_API_KEY manquant' }), {
-        status: 500,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-      })
-    }
+    if (!supabaseUrl || !serviceRoleKey) return json({ error: 'Secrets Supabase manquants' }, 500)
 
     const adminClient = createClient(supabaseUrl, serviceRoleKey)
-    const {
-      data: { user },
-      error: userError
-    } = await adminClient.auth.getUser(token)
-
-    if (userError || !user) {
-      return new Response(JSON.stringify({ error: 'Session invalide' }), {
-        status: 401,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-      })
-    }
+    const { data: { user }, error: userError } = await adminClient.auth.getUser(token)
+    if (userError || !user) return json({ error: 'Session invalide' }, 401)
 
     const { base64, mimeType, center_id: centerId } = await req.json()
 
-    const { data: adminRow, error: adminError } = await adminClient
-      .from('admin_users')
-      .select('user_id')
-      .eq('user_id', user.id)
-      .maybeSingle()
-
-    let allowed = !adminError && Boolean(adminRow)
+    const { data: adminRow } = await adminClient.from('admin_users').select('user_id').eq('user_id', user.id).maybeSingle()
+    let allowed = Boolean(adminRow)
     if (!allowed && typeof centerId === 'string' && centerId) {
       const { data: member } = await adminClient
         .from('center_members')
@@ -154,46 +101,43 @@ Deno.serve(async (req: Request) => {
         .maybeSingle()
       allowed = member?.role === 'owner' || member?.role === 'head_coach'
     }
+    if (!allowed) return json({ error: 'Acces admin ou entraineur chef requis' }, 403)
 
-    if (!allowed) {
-      return new Response(JSON.stringify({ error: 'Acces admin ou entraineur chef requis' }), {
-        status: 403,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-      })
-    }
+    if (!base64 || !mimeType) return json({ error: 'Parametres manquants' }, 400)
+    const isPdf = mimeType === 'application/pdf'
+    if (!isPdf && !IMAGE_TYPES.includes(mimeType)) return json({ error: `Format non pris en charge : ${mimeType}` }, 400)
+    // ~25 Mo en base64 : large pour une feuille, sans laisser passer une
+    // photo oubliée en pleine résolution.
+    if (base64.length > 34_000_000) return json({ error: 'Fichier trop lourd (max ~25 Mo)' }, 400)
 
-    if (!base64 || !mimeType) {
-      return new Response(JSON.stringify({ error: 'Parametres manquants' }), {
-        status: 400,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-      })
-    }
+    // Après les droits : une personne sans accès n'apprend rien de la configuration.
+    if (!Deno.env.get('ANTHROPIC_API_KEY')) return json({ error: 'Secret ANTHROPIC_API_KEY manquant' }, 500)
 
-    // ~25MB en base64 : large pour une feuille scannée, sans exposer la
-    // fonction à un fichier oublié en pleine résolution photo.
-    if (base64.length > 34_000_000) {
-      return new Response(JSON.stringify({ error: 'Image trop lourde (max ~25MB)' }), {
-        status: 400,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-      })
-    }
+    // 429 et 5xx sont repris par le SDK (attente croissante) : avaler des
+    // années de feuilles d'un coup peut toucher la limite par minute.
+    const client = new Anthropic({ maxRetries: 4 })
+    const source = isPdf
+      ? { type: 'document' as const, source: { type: 'base64' as const, media_type: 'application/pdf' as const, data: base64 } }
+      : { type: 'image' as const, source: { type: 'base64' as const, media_type: mimeType as ImageType, data: base64 } }
 
-    const data = (await callGeminiWithRetry(geminiKey, model, base64, mimeType)) as {
-      candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>
-    }
-    const text = data?.candidates?.[0]?.content?.parts?.[0]?.text ?? '[]'
-    const jsonMatch = text.match(/\[[\s\S]*\]/)
-    const rows = jsonMatch ? JSON.parse(jsonMatch[0]) : []
-
-    return new Response(JSON.stringify({ rows }), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+    const response = await client.messages.create({
+      model: Deno.env.get('CLAUDE_OCR_MODEL') || DEFAULT_MODEL,
+      max_tokens: 16000,
+      // Relever une liste n'est pas un problème de raisonnement : effort bas.
+      output_config: { effort: 'low', format: { type: 'json_schema', schema: OUTPUT_SCHEMA } },
+      messages: [{ role: 'user', content: [source, { type: 'text', text: PROMPT }] }]
     })
+
+    if (response.stop_reason === 'refusal') return json({ error: 'Feuille refusée par le modèle' }, 422)
+    if (response.stop_reason === 'max_tokens') return json({ error: 'Feuille trop chargée : coupe-la en plusieurs photos' }, 422)
+
+    const text = response.content.find((b) => b.type === 'text')
+    const parsed = text?.type === 'text' ? JSON.parse(text.text) : { exercises: [] }
+    return json({ rows: parsed.exercises ?? [] })
   } catch (err) {
     console.error('ocr-import error:', err)
-    const message = err instanceof Error ? err.message : 'Erreur serveur'
-    return new Response(JSON.stringify({ error: message }), {
-      status: 500,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-    })
+    if (err instanceof Anthropic.RateLimitError) return json({ error: 'Trop de feuilles d’un coup : réessaie dans une minute' }, 429)
+    if (err instanceof Anthropic.APIError) return json({ error: `Erreur Claude (${err.status ?? '?'}) : ${err.message}` }, 502)
+    return json({ error: err instanceof Error ? err.message : 'Erreur serveur' }, 500)
   }
 })
