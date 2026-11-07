@@ -15,7 +15,8 @@ import { previewAccountDeletion, confirmAccountDeletion, type DeletionImpact } f
 import { clearAuthSessionCookies } from '../../lib/authSessionCookies'
 import { field as inputStyle, btnAccent as buttonStyle } from '../../styles/ui'
 import { clearWorkoutDraft } from '../../stores/workoutStore'
-import { clearRoleCache, fetchMyRole, homeFor, setMyRole, type ProfileRole } from '../../lib/profileRole'
+import { clearRoleCache } from '../../lib/profileRole'
+import CenterSettings from '../center/CenterSettings'
 import { useBackToClose } from '../../hooks/useBackToClose'
 
 const LANGS: Array<{ code: string; key: string }> = [
@@ -33,24 +34,6 @@ const THEMES: Array<{ value: ThemePref; key: string }> = [
 export default function SettingsView() {
   const { t, i18n } = useTranslation(['common'])
   const navigate = useNavigate()
-  // Coach ou athlète (047) : décide de l'espace où l'on arrive.
-  const [myRole, setMyRoleState] = useState<ProfileRole | null>(null)
-  useEffect(() => {
-    let mounted = true
-    fetchMyRole().then((r) => { if (mounted) setMyRoleState(r?.role ?? null) }).catch(() => {})
-    return () => { mounted = false }
-  }, [])
-  async function changeRole(next: ProfileRole) {
-    if (next === myRole) return
-    try {
-      await setMyRole(next)
-      setMyRoleState(next)
-      navigate(homeFor(next))
-    } catch {
-      setNotice({ kind: 'err', text: t('errors.generic') })
-    }
-  }
-
   const [theme, setTheme] = useState<ThemePref>(readStoredTheme())
   const [mannequin, setMannequin] = useState<MannequinBody>(readBodyPref)
   const [currentEmail, setCurrentEmail] = useState('')
@@ -312,14 +295,7 @@ export default function SettingsView() {
         </Row>
       </Section>
 
-      <Section title={t('settings.space')}>
-        <Row label={t('settings.role')} hint={t('settings.role_hint')}>
-          <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
-            <Chip label={t('welcome.coach')} active={myRole === 'coach'} onClick={() => { void changeRole('coach') }} />
-            <Chip label={t('welcome.athlete')} active={myRole === 'athlete'} onClick={() => { void changeRole('athlete') }} />
-          </div>
-        </Row>
-      </Section>
+      <CenterSettings onNotice={setNotice} />
 
       <Section title={t('settings.account')}>
         <Row label={t('settings.avatar')} hint={t('settings.avatar_hint')}>

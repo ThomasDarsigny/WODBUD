@@ -452,6 +452,131 @@ export type Database = {
         }
         Relationships: []
       }
+      center_invites: {
+        Row: {
+          center_id: string
+          created_at: string
+          created_by: string
+          expires_at: string | null
+          max_uses: number | null
+          revoked_at: string | null
+          role: string
+          token: string
+          uses: number
+        }
+        Insert: {
+          center_id: string
+          created_at?: string
+          created_by: string
+          expires_at?: string | null
+          max_uses?: number | null
+          revoked_at?: string | null
+          role: string
+          token?: string
+          uses?: number
+        }
+        Update: {
+          center_id?: string
+          created_at?: string
+          created_by?: string
+          expires_at?: string | null
+          max_uses?: number | null
+          revoked_at?: string | null
+          role?: string
+          token?: string
+          uses?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "center_invites_center_id_fkey"
+            columns: ["center_id"]
+            isOneToOne: false
+            referencedRelation: "centers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "center_invites_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      center_members: {
+        Row: {
+          center_id: string
+          joined_at: string
+          role: string
+          user_id: string
+        }
+        Insert: {
+          center_id: string
+          joined_at?: string
+          role: string
+          user_id: string
+        }
+        Update: {
+          center_id?: string
+          joined_at?: string
+          role?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "center_members_center_id_fkey"
+            columns: ["center_id"]
+            isOneToOne: false
+            referencedRelation: "centers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "center_members_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      centers: {
+        Row: {
+          created_at: string
+          equipment: string[]
+          group_size: string | null
+          id: string
+          name: string
+          owner_id: string
+          venue: string | null
+        }
+        Insert: {
+          created_at?: string
+          equipment?: string[]
+          group_size?: string | null
+          id?: string
+          name: string
+          owner_id: string
+          venue?: string | null
+        }
+        Update: {
+          created_at?: string
+          equipment?: string[]
+          group_size?: string | null
+          id?: string
+          name?: string
+          owner_id?: string
+          venue?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "centers_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       class_members: {
         Row: {
           athlete_id: string
@@ -535,6 +660,7 @@ export type Database = {
       }
       classes: {
         Row: {
+          center_id: string | null
           coach_id: string
           created_at: string
           description: string | null
@@ -544,6 +670,7 @@ export type Database = {
           schedule: string | null
         }
         Insert: {
+          center_id?: string | null
           coach_id: string
           created_at?: string
           description?: string | null
@@ -553,6 +680,7 @@ export type Database = {
           schedule?: string | null
         }
         Update: {
+          center_id?: string | null
           coach_id?: string
           created_at?: string
           description?: string | null
@@ -562,6 +690,13 @@ export type Database = {
           schedule?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "classes_center_id_fkey"
+            columns: ["center_id"]
+            isOneToOne: false
+            referencedRelation: "centers"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "classes_coach_id_fkey"
             columns: ["coach_id"]
@@ -1184,6 +1319,7 @@ export type Database = {
           badges_seen_at: string | null
           created_at: string
           current_streak: number
+          equipment: string[]
           full_name: string | null
           id: string
           language: string
@@ -1202,6 +1338,7 @@ export type Database = {
           badges_seen_at?: string | null
           created_at?: string
           current_streak?: number
+          equipment?: string[]
           full_name?: string | null
           id: string
           language?: string
@@ -1220,6 +1357,7 @@ export type Database = {
           badges_seen_at?: string | null
           created_at?: string
           current_streak?: number
+          equipment?: string[]
           full_name?: string | null
           id?: string
           language?: string
@@ -1810,9 +1948,45 @@ export type Database = {
       }
     }
     Functions: {
+      accept_center_invite: {
+        Args: { p_token: string }
+        Returns: {
+          center_id: string
+          role: string
+        }[]
+      }
+      center_role: { Args: { p_center: string }; Returns: string }
+      create_center: {
+        Args: {
+          p_equipment?: string[]
+          p_group_size?: string
+          p_name: string
+          p_venue?: string
+        }
+        Returns: string
+      }
+      get_center_invite: {
+        Args: { p_token: string }
+        Returns: {
+          center_name: string
+          role: string
+          valid: boolean
+        }[]
+      }
+      get_center_team: {
+        Args: { p_center: string }
+        Returns: {
+          avatar_url: string
+          full_name: string
+          joined_at: string
+          role: string
+          user_id: string
+        }[]
+      }
       get_class_by_invite_token: {
         Args: { p_token: string }
         Returns: {
+          center_id: string | null
           coach_id: string
           created_at: string
           description: string | null
@@ -1966,6 +2140,8 @@ export type Database = {
       }
       is_admin: { Args: never; Returns: boolean }
       is_admin_authored: { Args: { p_uid: string }; Returns: boolean }
+      is_center_lead: { Args: { p_center: string }; Returns: boolean }
+      is_center_staff: { Args: { p_center: string }; Returns: boolean }
       is_class_coach: { Args: { p_class_id: string }; Returns: boolean }
       is_class_member: { Args: { p_class_id: string }; Returns: boolean }
       is_community_admin: { Args: { p_community: string }; Returns: boolean }

@@ -212,6 +212,8 @@ export interface Class {
   coach_id: string
   invite_token: string
   created_at: string
+  /** Centre du cours (048) : rempli par la base à la création. */
+  center_id: string | null
 }
 
 export type ClassInsert = Pick<Class, 'name' | 'description' | 'schedule'>

@@ -37,9 +37,11 @@ const SharedRankPage = lazy(() => import('./pages/SharedRankPage'))
 const AthleteHomeView = lazy(() => import('./components/athlete/AthleteHomeView'))
 const AthleteVoteView = lazy(() => import('./components/athlete/AthleteVoteView'))
 const JoinClassPage = lazy(() => import('./pages/JoinClassPage'))
+const CenterJoinPage = lazy(() => import('./pages/CenterJoinPage'))
 import { useSessionStore } from './stores/sessionStore'
 import { isInstalledApp } from './lib/platform'
 import { fetchMyRole, homeFor } from './lib/profileRole'
+import { readPendingInvite } from './lib/center'
 
 /**
  * Garde des écrans connectés. `requireRole` : un compte qui n'a pas encore dit
@@ -147,8 +149,11 @@ function DashboardHomeRedirect() {
 
       if (!mounted) return
       if (!session) { setTarget('/login'); return }
+      // Un lien d'invitation ouvert avant la connexion : on y retourne.
+      const pending = readPendingInvite()
+      if (pending) { setTarget(`/rejoindre/${pending}`); return }
       if (await isCurrentUserAdmin()) { setTarget('/dashboard/admin'); return }
-      // Coach → son accueil, athlète → le sien, pas encore répondu → Bienvenue.
+      // Centre → son accueil, membre ou perso → l'espace athlète, pas encore répondu → Bienvenue.
       const mine = await fetchMyRole().catch(() => null)
       if (mounted) setTarget(mine ? homeFor(mine.role) : '/dashboard/today')
     }
@@ -432,6 +437,7 @@ function App() {
         <Route path="/privacy" element={<PrivacyPolicyPage />} />
 
         <Route path="/join/:token" element={<JoinClassPage />} />
+        <Route path="/rejoindre/:token" element={<CenterJoinPage />} />
         <Route path="/rang/:token" element={<SharedRankPage />} />
         <Route path="/rank/:token" element={<SharedRankPage />} />
 

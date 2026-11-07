@@ -2,20 +2,19 @@ import { supabase } from './supabase'
 import { getLocalUser } from './currentUser'
 
 /**
- * Rôle choisi à l'inscription (047) : il décide de l'espace où l'on arrive.
- * `null` = pas encore répondu → l'écran « Bienvenue » pose la question.
+ * Profil choisi à l'inscription (048) : centre, membre d'un centre ou perso.
+ * Il ne décide que de l'espace d'arrivée ; les droits dans un centre viennent
+ * de center_members. `null` = pas encore répondu → l'écran « Bienvenue ».
  */
-export type ProfileRole = 'coach' | 'athlete'
+export type ProfileRole = 'center' | 'member' | 'perso'
 
 export interface OnboardingAnswers {
-  /** Coach : où il coache. */
+  /** Centre : type de lieu. */
   venue?: 'box' | 'gym' | 'independent' | 'online'
-  /** Coach : taille du groupe. */
+  /** Centre : taille du groupe. */
   groupSize?: '1-10' | '11-30' | '31-100' | '100+'
-  /** Athlète : objectif principal. */
+  /** Membre ou perso : objectif principal. */
   goal?: 'strength' | 'endurance' | 'weight' | 'competition' | 'health'
-  /** Athlète : arrivé avec un lien d'invitation de son coach. */
-  hasCoach?: boolean
 }
 
 // Chaque route protégée monte sa propre garde : sans cache, on relirait le
@@ -33,42 +32,56 @@ export async function fetchMyRole(): Promise<{ userId: string; role: ProfileRole
   return cache
 }
 
-export async function saveMyRole(role: ProfileRole, answers: OnboardingAnswers): Promise<void> {
+export async function saveMyRole(role: ProfileRole, answers: OnboardingAnswers, equipment?: string[]): Promise<void> {
   const { data } = await getLocalUser()
   const user = data.user
   if (!user) throw new Error('not_authenticated')
   const { error } = await supabase
     .from('profiles')
-    .update({ role, onboarding: answers as never, onboarded_at: new Date().toISOString() })
+    .update({
+      role,
+      onboarding: answers as never,
+      onboarded_at: new Date().toISOString(),
+      ...(equipment ? { equipment } : {})
+    })
     .eq('id', user.id)
   if (error) throw error
   cache = { userId: user.id, role }
 }
 
-/** Change de rôle depuis les réglages, sans toucher aux réponses d'accueil. */
-export async function setMyRole(role: ProfileRole): Promise<void> {
+/** Après une invitation acceptée ou un centre créé, la base a fixé le profil. */
+export function rememberRole(userId: string, role: ProfileRole): void {
+  cache = { userId, role }
+}
+
+export async function fetchMyEquipment(): Promise<string[]> {
+  const { data } = await getLocalUser()
+  const user = data.user
+  if (!user) return []
+  const { data: row, error } = await supabase.from('profiles').select('equipment').eq('id', user.id).maybeSingle()
+  if (error) throw error
+  return row?.equipment ?? []
+}
+
+export async function saveMyEquipment(equipment: string[]): Promise<void> {
   const { data } = await getLocalUser()
   const user = data.user
   if (!user) throw new Error('not_authenticated')
-  const { error } = await supabase.from('profiles').update({ role }).eq('id', user.id)
+  const { error } = await supabase.from('profiles').update({ equipment }).eq('id', user.id)
   if (error) throw error
-  cache = { userId: user.id, role }
 }
 
 /** Espace d'arrivée selon le rôle. */
 export const homeFor = (role: ProfileRole | null): string =>
-  role === 'athlete' ? '/athlete' : role === 'coach' ? '/dashboard/today' : '/bienvenue'
+  role === 'center' ? '/dashboard/today' : role ? '/athlete' : '/bienvenue'
 
 /** À la déconnexion : le rôle d'un compte ne doit pas suivre le suivant. */
 export function clearRoleCache(): void {
   cache = null
 }
 
-/** Accepte un lien complet (https://…/join/abc) ou le code seul. */
+/** Lien d'invitation à un cours (…/join/abc) : le code seul est celui d'un centre. */
 export function inviteTokenFrom(text: string): string | null {
-  const t = text.trim()
-  if (!t) return null
-  const m = t.match(/\/join\/([A-Za-z0-9_-]+)/)
-  if (m) return m[1]
-  return /^[A-Za-z0-9_-]{6,}$/.test(t) ? t : null
+  const m = text.trim().match(/\/join\/([A-Za-z0-9_-]+)/)
+  return m ? m[1] : null
 }

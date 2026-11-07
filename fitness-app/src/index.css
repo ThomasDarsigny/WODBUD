@@ -1837,6 +1837,25 @@ em[data-rarity='legendaire'] { color: #f4c652; } em[data-rarity='mythique'] { co
 .wb-welcome-invite input[aria-invalid='true'] + small { color: #ff9b8f; }
 
 /* ─── Vérifie ton courriel ─────────────────────────────────────── */
+/* ─── Centres (048) : équipement, invitation, équipe ────────────── */
+.wb-equip { display: grid; gap: 0.7rem; min-width: 0; }
+.wb-equip-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.45rem; }
+.wb-equip-actions .wb-chip { border-style: dashed; }
+.wb-equip-count { margin-left: auto; color: var(--muted); font-size: 0.8125rem; font-variant-numeric: tabular-nums; }
+.wb-equip-hint { margin: 0; color: var(--muted); font-size: 0.8125rem; }
+.wb-equip-list { margin: 0; color: var(--white); font-size: 0.9rem; line-height: 1.6; }
+.wb-center-join-art { justify-self: center; filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.55)); }
+.wb-center-join-auth { display: grid; gap: 0.6rem; }
+.wb-team { margin: 0.3rem 0 0; padding: 0; list-style: none; border-top: 1px solid var(--border); }
+.wb-team-row { min-height: 56px; padding-left: 0; padding-right: 0; border-bottom: 1px solid var(--border); }
+.wb-team-row:last-child { border-bottom: none; }
+.wb-team-avatar { flex-shrink: 0; width: 36px; height: 36px; border-radius: 50%; overflow: hidden; display: inline-flex; align-items: center; justify-content: center; background: var(--surface); color: var(--muted); font-weight: 700; }
+.wb-team-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.wb-team-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
+.wb-team-actions { display: flex; align-items: center; gap: 0.4rem; flex-shrink: 0; }
+.wb-team-role { width: auto; min-width: 0; max-width: 11rem; padding-right: 2rem; }
+.wb-team-badge { pointer-events: none; flex-shrink: 0; }
+
 .wb-check-mail { display: grid; gap: 0.9rem; justify-items: start; border-radius: var(--r-xl, 20px); }
 .wb-check-mail-icon { width: 56px; height: 56px; border-radius: 16px; display: inline-flex; align-items: center; justify-content: center; font-size: 1.6rem; background: rgba(255, 90, 31, 0.14); color: var(--orange); }
 
