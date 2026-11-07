@@ -985,6 +985,48 @@ export type Database = {
           },
         ]
       }
+      exercise_references: {
+        Row: {
+          created_at: string
+          created_by: string
+          exercise_id: string
+          id: string
+          kind: string
+          path: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          exercise_id: string
+          id?: string
+          kind: string
+          path: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          exercise_id?: string
+          id?: string
+          kind?: string
+          path?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "exercise_references_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "exercise_references_exercise_id_fkey"
+            columns: ["exercise_id"]
+            isOneToOne: false
+            referencedRelation: "exercises"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       exercise_results: {
         Row: {
           created_at: string
@@ -1123,13 +1165,20 @@ export type Database = {
         Row: {
           body_region: string
           category: string
+          center_id: string | null
           created_at: string
           created_by: string | null
           description: string | null
+          equipment: string[]
           id: string
           is_time_based: boolean
+          level: string | null
           movement_type: string | null
           name: string
+          origin_center_id: string | null
+          published_at: string | null
+          review_status: string | null
+          reviewed_by: string | null
           secondary_movements: string[]
           updated_at: string
           video_path: string | null
@@ -1138,13 +1187,20 @@ export type Database = {
         Insert: {
           body_region: string
           category: string
+          center_id?: string | null
           created_at?: string
           created_by?: string | null
           description?: string | null
+          equipment?: string[]
           id?: string
           is_time_based?: boolean
+          level?: string | null
           movement_type?: string | null
           name: string
+          origin_center_id?: string | null
+          published_at?: string | null
+          review_status?: string | null
+          reviewed_by?: string | null
           secondary_movements?: string[]
           updated_at?: string
           video_path?: string | null
@@ -1153,19 +1209,33 @@ export type Database = {
         Update: {
           body_region?: string
           category?: string
+          center_id?: string | null
           created_at?: string
           created_by?: string | null
           description?: string | null
+          equipment?: string[]
           id?: string
           is_time_based?: boolean
+          level?: string | null
           movement_type?: string | null
           name?: string
+          origin_center_id?: string | null
+          published_at?: string | null
+          review_status?: string | null
+          reviewed_by?: string | null
           secondary_movements?: string[]
           updated_at?: string
           video_path?: string | null
           video_url?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "exercises_center_id_fkey"
+            columns: ["center_id"]
+            isOneToOne: false
+            referencedRelation: "centers"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "exercises_created_by_fkey"
             columns: ["created_by"]
@@ -1179,6 +1249,20 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "movement_types"
             referencedColumns: ["key"]
+          },
+          {
+            foreignKeyName: "exercises_origin_center_id_fkey"
+            columns: ["origin_center_id"]
+            isOneToOne: false
+            referencedRelation: "centers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "exercises_reviewed_by_fkey"
+            columns: ["reviewed_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -1955,6 +2039,8 @@ export type Database = {
           role: string
         }[]
       }
+      can_edit_exercise: { Args: { p_exercise: string }; Returns: boolean }
+      can_edit_exercise_path: { Args: { p_name: string }; Returns: boolean }
       center_role: { Args: { p_center: string }; Returns: string }
       create_center: {
         Args: {
@@ -2115,6 +2201,18 @@ export type Database = {
           workout_id: string
         }[]
       }
+      get_exercise_review_queue: {
+        Args: never
+        Returns: {
+          author_name: string
+          center_name: string
+          created_at: string
+          exercise_id: string
+          name: string
+          references_count: number
+          review_status: string
+        }[]
+      }
       get_feature_topics: {
         Args: never
         Returns: {
@@ -2147,6 +2245,10 @@ export type Database = {
       is_community_admin: { Args: { p_community: string }; Returns: boolean }
       is_community_member: { Args: { p_community: string }; Returns: boolean }
       is_community_owner: { Args: { p_community: string }; Returns: boolean }
+      review_center_exercise: {
+        Args: { p_decision: string; p_exercise: string }
+        Returns: undefined
+      }
       wodbud_check_push_cron_secret: {
         Args: { p_secret: string }
         Returns: boolean

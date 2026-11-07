@@ -9,6 +9,8 @@ import type {
   BodyRegion,
   Exercise,
   ExerciseInsert,
+  ExerciseLevel,
+  ExerciseReviewStatus,
   ExerciseUpdate,
   MovementType,
   MuscleGroup,
@@ -37,6 +39,11 @@ type ExerciseRow = {
   secondary_movements: MovementType[] | null
   video_url: string | null
   video_path: string | null
+  center_id: string | null
+  origin_center_id: string | null
+  review_status: ExerciseReviewStatus | null
+  level: ExerciseLevel | null
+  equipment: string[] | null
   created_at: string
   updated_at: string
   exercise_muscles?: ExerciseMuscleRow[]
@@ -277,6 +284,11 @@ export const useExerciseStore = create<ExerciseState>((set, get) => ({
         methods: row.exercise_methods?.map((m) => m.method_key) ?? [],
         video_url: row.video_url ?? null,
         video_path: row.video_path ?? null,
+        center_id: row.center_id ?? null,
+        origin_center_id: row.origin_center_id ?? null,
+        review_status: row.review_status ?? null,
+        level: row.level ?? null,
+        equipment: row.equipment ?? [],
         created_at: row.created_at,
         updated_at: row.updated_at
       }))
@@ -308,7 +320,14 @@ export const useExerciseStore = create<ExerciseState>((set, get) => ({
           body_region: data.body_region ?? getBodyRegionFromPrimaryMuscle(data.primary_muscle),
           movement_type: data.movement_type ?? null,
           secondary_movements: data.secondary_movements ?? [],
-          created_by: userId
+          level: data.level ?? null,
+          equipment: data.equipment ?? [],
+          created_by: userId,
+          // Exercice d'un centre (049) : utilisable tout de suite chez lui,
+          // en attente de relecture par WODBUD.
+          ...(data.center_id
+            ? { center_id: data.center_id, origin_center_id: data.center_id, review_status: 'pending' }
+            : {})
         })
         .select()
         .single()
@@ -377,6 +396,9 @@ export const useExerciseStore = create<ExerciseState>((set, get) => ({
 
       const exercise: Exercise = {
         ...data,
+        center_id: row.center_id,
+        origin_center_id: row.origin_center_id,
+        review_status: row.review_status as ExerciseReviewStatus | null,
         id: row.id,
         video_url,
         video_path,
@@ -439,6 +461,8 @@ export const useExerciseStore = create<ExerciseState>((set, get) => ({
       if (data.secondary_movements !== undefined) {
         updatePayload.secondary_movements = data.secondary_movements
       }
+      if (data.level !== undefined) updatePayload.level = data.level
+      if (data.equipment !== undefined) updatePayload.equipment = data.equipment
       if (videoFile && video_path !== previousKey) {
         updatePayload.video_url = video_url
         updatePayload.video_path = video_path

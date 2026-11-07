@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useMemo } from 'react'
 import type { FormEvent, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import NavIcon from '../navigation/NavIcon'
@@ -7,6 +7,7 @@ import type {
   Exercise,
   ExerciseCategory,
   ExerciseInsert,
+  ExerciseLevel,
   MovementType,
   MuscleGroup,
   TrainingMethod
@@ -16,6 +17,7 @@ import {
   BODY_REGION_I18N_KEYS,
   CATEGORY_I18N_KEYS,
   CORE_MUSCLES,
+  EXERCISE_LEVELS,
   LOWER_MUSCLES,
   MOVEMENT_TYPES,
   MOVEMENT_TYPE_COLORS,
@@ -29,10 +31,20 @@ import {
 import { useExerciseStore } from '../../stores/exerciseStore'
 import { field as inputStyle, btnBase as btnStyle, textarea as textareaStyle } from '../../styles/ui'
 import { useBackToClose } from '../../hooks/useBackToClose'
+import EquipmentPicker from '../center/EquipmentPicker'
+import { cleanEquipment, type EquipmentId } from '../../lib/equipment'
+import { matchAgainstExisting, normalizeExerciseName } from '../../lib/textSimilarity'
+import { checkReference, MAX_REFERENCES, ReferenceMediaError, referenceKind, uploadReferences } from '../../lib/exerciseReferences'
 
 interface Props {
   exercise?: Exercise
   onClose: () => void
+  /** WODBUD : base commune et vidéo officielle. Sinon, exercice d'un centre. */
+  isAdmin?: boolean
+  /** Centre où créer l'exercice (proprio ou entraîneur chef). */
+  centerId?: string
+  /** « Utiliser celui-là » sur un doublon : ouvre l'exercice existant. */
+  onUseExisting?: (exercise: Exercise) => void
 }
 
 const MUSCLE_OPTIONS = Object.entries(MUSCLE_GROUP_I18N_KEYS) as [MuscleGroup, string][]
@@ -61,11 +73,15 @@ function extractErrorMessage(err: unknown, fallbackMessage: string): string {
   return fallbackMessage
 }
 
-export default function ExerciseFormModal({ exercise, onClose }: Props) {
+export default function ExerciseFormModal({ exercise, onClose, isAdmin = false, centerId, onUseExisting }: Props) {
   useBackToClose(true, onClose)
   const { t } = useTranslation(['exercises', 'common'])
-  const { createExercise, updateExercise } = useExerciseStore()
+  const { createExercise, updateExercise, exercises } = useExerciseStore()
   const isEdit = !!exercise
+  // Exercice de centre : champs exigés pour la relecture WODBUD, média de
+  // référence privé, pas de vidéo officielle (WODBUD seulement).
+  const asCenter = !isAdmin
+  const canAttach = asCenter && (!exercise || exercise.review_status === 'pending')
 
   const [name, setName] = useState(exercise?.name ?? '')
   const [description, setDescription] = useState(exercise?.description ?? '')
@@ -84,6 +100,23 @@ export default function ExerciseFormModal({ exercise, onClose }: Props) {
   const [videoPreview, setVideoPreview] = useState<string | null>(exercise?.video_url ?? null)
   const [uploading, setUploading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [level, setLevel] = useState<ExerciseLevel | null>(exercise?.level ?? null)
+  const [equipment, setEquipment] = useState<EquipmentId[]>(cleanEquipment(exercise?.equipment))
+  const [refFiles, setRefFiles] = useState<File[]>([])
+  const [progress, setProgress] = useState<string | null>(null)
+  // Exercice déjà créé mais média pas encore envoyé : le bouton ne fait plus
+  // que réessayer l'envoi.
+  const [createdId, setCreatedId] = useState<string | null>(null)
+  const refInput = useRef<HTMLInputElement>(null)
+
+  // Doublons : à la création, les noms semblables déjà visibles (base
+  // commune et exercices du centre) — on propose d'utiliser l'existant.
+  const duplicates = useMemo(() => {
+    if (isEdit || name.trim().length < 3) return []
+    return exercises
+      .filter((e) => matchAgainstExisting(name, [normalizeExerciseName(e.name)]) !== 'none')
+      .slice(0, 3)
+  }, [exercises, name, isEdit])
 
   const videoRef = useRef<HTMLInputElement>(null)
   const dragRef = useRef(false)
@@ -147,15 +180,65 @@ export default function ExerciseFormModal({ exercise, onClose }: Props) {
     return 'full'
   }
 
+  async function addReferences(list: FileList | null) {
+    if (!list) return
+    setError(null)
+    const next = [...refFiles]
+    for (const file of Array.from(list)) {
+      if (next.length >= MAX_REFERENCES) break
+      try {
+        await checkReference(file)
+        next.push(file)
+      } catch (err) {
+        const code = err instanceof ReferenceMediaError ? err.code : 'unreadable'
+        setError(t(`form.ref_error_${code}`, { ns: 'exercises' }))
+      }
+    }
+    setRefFiles(next)
+  }
+
+  async function sendReferences(exerciseId: string) {
+    if (!refFiles.length) return
+    await uploadReferences(exerciseId, refFiles, (i, phase, p) => {
+      setProgress(
+        phase === 'compress'
+          ? t('form.ref_compressing', { ns: 'exercises', n: i + 1, total: refFiles.length, pct: Math.round(p * 100) })
+          : t('form.ref_uploading', { ns: 'exercises', n: i + 1, total: refFiles.length })
+      )
+    })
+  }
+
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
     setError(null)
+    if (createdId) {
+      setUploading(true)
+      try {
+        await sendReferences(createdId)
+        onClose()
+      } catch (err: unknown) {
+        setError(t('form.ref_upload_failed', { ns: 'exercises', reason: extractErrorMessage(err, '') }))
+      } finally {
+        setUploading(false)
+        setProgress(null)
+      }
+      return
+    }
     if (!name.trim()) {
       setError(t('form.name_required', { ns: 'exercises' }))
       return
     }
+    if (asCenter && !description.trim()) {
+      setError(t('form.technique_required', { ns: 'exercises' }))
+      return
+    }
+    if (asCenter && !level) {
+      setError(t('form.level_required', { ns: 'exercises' }))
+      return
+    }
 
     setUploading(true)
+    let savedId: string | null = null
     try {
       const data: ExerciseInsert = {
         name: name.trim(),
@@ -170,19 +253,31 @@ export default function ExerciseFormModal({ exercise, onClose }: Props) {
         tertiary_muscles: tertiaryMuscles.filter(
           (m) => m !== primaryMuscle && !secondaryMuscles.includes(m)
         ),
-        video_url: videoPreview && !videoPreview.startsWith('blob:') ? videoPreview : null
+        video_url: videoPreview && !videoPreview.startsWith('blob:') ? videoPreview : null,
+        level,
+        equipment,
+        ...(!isEdit && asCenter && centerId ? { center_id: centerId } : {})
       }
 
       if (isEdit && exercise) {
-        await updateExercise(exercise.id, data, videoFile ?? undefined)
+        await updateExercise(exercise.id, data, isAdmin ? videoFile ?? undefined : undefined)
+        savedId = exercise.id
       } else {
-        await createExercise(data, videoFile ?? undefined)
+        savedId = (await createExercise(data, isAdmin ? videoFile ?? undefined : undefined)).id
       }
+      if (canAttach && refFiles.length) await sendReferences(savedId)
       onClose()
     } catch (err: unknown) {
-      setError(extractErrorMessage(err, t('errors.generic', { ns: 'common' })))
+      if (savedId && refFiles.length) {
+        // L'exercice est enregistré ; seul le média a échoué.
+        setCreatedId(savedId)
+        setError(t('form.ref_upload_failed', { ns: 'exercises', reason: extractErrorMessage(err, '') }))
+      } else {
+        setError(extractErrorMessage(err, t('errors.generic', { ns: 'common' })))
+      }
     } finally {
       setUploading(false)
+      setProgress(null)
     }
   }
 
@@ -265,9 +360,26 @@ export default function ExerciseFormModal({ exercise, onClose }: Props) {
               required
               style={inputStyle}
             />
+            {duplicates.length > 0 && (
+              <div className="wb-exf-dupes" role="status">
+                <p>{t('form.duplicates', { ns: 'exercises' })}</p>
+                {duplicates.map((d) => (
+                  <button
+                    key={d.id}
+                    type="button"
+                    className="wb-chip"
+                    onClick={() => (onUseExisting ? onUseExisting(d) : onClose())}
+                  >
+                    {t('form.use_existing', { ns: 'exercises', name: d.name })}
+                  </button>
+                ))}
+              </div>
+            )}
           </Field>
 
-          <Field label={t('fields.instructions', { ns: 'exercises' })}>
+          {asCenter && !isEdit && <p className="wb-exf-note">{t('form.center_note', { ns: 'exercises' })}</p>}
+
+          <Field label={`${t('detail.tech_instructions', { ns: 'exercises' })}${asCenter ? ' *' : ''}`}>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
@@ -275,6 +387,20 @@ export default function ExerciseFormModal({ exercise, onClose }: Props) {
               rows={3}
               style={textareaStyle}
             />
+          </Field>
+
+          <Field label={`${t('fields.level', { ns: 'exercises' })}${asCenter ? ' *' : ''}`}>
+            <div className="wb-welcome-chips">
+              {EXERCISE_LEVELS.map((lv) => (
+                <button key={lv} type="button" className="wb-chip" aria-pressed={level === lv} onClick={() => setLevel(level === lv ? null : lv)}>
+                  {t(`levels.${lv}`, { ns: 'exercises' })}
+                </button>
+              ))}
+            </div>
+          </Field>
+
+          <Field label={t('fields.equipment', { ns: 'exercises' })}>
+            <EquipmentPicker value={equipment} onChange={setEquipment} />
           </Field>
 
           <Field label={t('fields.category', { ns: 'exercises' })}>
@@ -482,6 +608,38 @@ export default function ExerciseFormModal({ exercise, onClose }: Props) {
             </div>
           </Field>
 
+          {canAttach && (
+            <Field label={t('form.ref_title', { ns: 'exercises' })}>
+              <p className="wb-exf-hint">{t('form.ref_hint', { ns: 'exercises' })}</p>
+              {refFiles.length > 0 && (
+                <ul className="wb-exf-refs">
+                  {refFiles.map((f, i) => (
+                    <li key={`${f.name}-${i}`}>
+                      <NavIcon name={referenceKind(f) === 'video' ? 'video' : 'exercises'} size={18} />
+                      <span>{f.name}</span>
+                      <small>{(f.size / 1024 / 1024).toFixed(1)} Mo</small>
+                      <button type="button" aria-label={t('actions.delete', { ns: 'common' })} onClick={() => setRefFiles((l) => l.filter((_, j) => j !== i))}>✕</button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {refFiles.length < MAX_REFERENCES && !createdId && (
+                <button type="button" className="wb-btn wb-btn--secondary" onClick={() => refInput.current?.click()}>
+                  + {t('form.ref_add', { ns: 'exercises' })}
+                </button>
+              )}
+              <input
+                ref={refInput}
+                type="file"
+                accept="image/*,video/*"
+                multiple
+                hidden
+                onChange={(e) => { void addReferences(e.target.files); e.target.value = '' }}
+              />
+            </Field>
+          )}
+
+          {isAdmin && (
           <Field label={t('fields.video', { ns: 'exercises' })}>
             <div
               onDragOver={(e) => {
@@ -555,6 +713,9 @@ export default function ExerciseFormModal({ exercise, onClose }: Props) {
               />
             </div>
           </Field>
+          )}
+
+          {progress && <p className="wb-exf-progress" role="status">{progress}</p>}
 
           {error && (
             <div
@@ -602,6 +763,8 @@ export default function ExerciseFormModal({ exercise, onClose }: Props) {
             >
               {uploading
                 ? t('form.saving', { ns: 'exercises' })
+                : createdId
+                  ? t('form.ref_retry', { ns: 'exercises' })
                 : isEdit
                   ? t('form.save_edit', { ns: 'exercises' })
                   : t('form.save_new', { ns: 'exercises' })}

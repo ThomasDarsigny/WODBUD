@@ -28,7 +28,9 @@
     "all": "Todos",
     "filters": "Filtros",
     "results": "resultados",
-    "filter_category": "Categoría"
+    "filter_category": "Categoría",
+    "level": "Nivel",
+    "equipment": "Equipamiento"
   },
   "categories": {
     "strength": "Fuerza",
@@ -59,7 +61,23 @@
     "video_size_error": "Tamaño máximo: 200 MB",
     "save_new": "Crear ejercicio",
     "save_edit": "Actualizar",
-    "saving": "Guardando..."
+    "saving": "Guardando...",
+    "center_note": "Se puede usar de inmediato en tu centro. El equipo de WODBUD lo revisará y podrá añadirlo a la base común con un vídeo oficial.",
+    "technique_required": "Añade las indicaciones técnicas: sirven para la revisión.",
+    "level_required": "Elige un nivel.",
+    "duplicates": "Ya existe un ejercicio parecido:",
+    "use_existing": "Ver «{{name}}»",
+    "ref_title": "Foto o vídeo de referencia",
+    "ref_hint": "Muestra el movimiento al equipo de WODBUD (vídeo de 60 s como máximo, grabado con el móvil). Privado: solo WODBUD lo ve, para grabar el vídeo oficial.",
+    "ref_add": "Añadir una foto o un vídeo",
+    "ref_compressing": "Preparando el vídeo {{n}}/{{total}}: {{pct}} % (deja la pantalla encendida)",
+    "ref_uploading": "Enviando {{n}}/{{total}}…",
+    "ref_upload_failed": "El ejercicio está guardado, pero no se pudo enviar el archivo. {{reason}}",
+    "ref_retry": "Reintentar el envío",
+    "ref_error_too_long": "Vídeo demasiado largo: 60 segundos como máximo.",
+    "ref_error_too_big": "Archivo demasiado pesado, incluso comprimido. Prueba un vídeo más corto.",
+    "ref_error_unsupported": "Elige una foto o un vídeo.",
+    "ref_error_unreadable": "No se puede leer este archivo."
   },
   "admin": {
     "title": "Panel de administración",
@@ -102,5 +120,32 @@
   "empty_filtered_hint": "Ningún ejercicio cumple todos estos filtros. Quita uno para ampliar.",
   "warnings": {
     "video_upload_skipped": "Ejercicio guardado, pero el vídeo no se subió. {{reason}}"
+  },
+  "levels": {
+    "beginner": "Principiante",
+    "intermediate": "Intermedio",
+    "advanced": "Avanzado"
+  },
+  "center_badge": {
+    "center": "Mi centro",
+    "pending": "En revisión"
+  },
+  "review": {
+    "title": "Ejercicios de los centros por revisar",
+    "hint": "Mira los archivos, corrige si hace falta y publica en la base común (se avisa al autor) o déjalo en su centro. Los archivos de referencia se borran tras la decisión.",
+    "announce": "Anunciar las novedades",
+    "announced_one": "Anuncio enviado: {{count}} ejercicio nuevo esta semana.",
+    "announced_other": "Anuncio enviado: {{count}} ejercicios nuevos esta semana.",
+    "nothing_new": "Nada nuevo esta semana: no se envió ningún anuncio.",
+    "empty": "Nada que revisar por ahora.",
+    "media_one": "{{count}} archivo",
+    "media_other": "{{count}} archivos",
+    "no_media": "Sin archivos adjuntos.",
+    "no_description": "Sin indicaciones.",
+    "edit": "Corregir",
+    "keep_private": "Dejar en el centro",
+    "publish": "Publicar",
+    "published": "«{{name}}» está publicado en la base común.",
+    "kept": "«{{name}}» se queda en su centro."
   }
 }

@@ -23,6 +23,7 @@ import { useIsMobile } from '../../hooks/useMediaQuery'
 import { btnPrimary as emptyActionStyle } from '../../styles/ui'
 import { SkeletonCards } from '../ui/Skeleton'
 import { isCurrentUserAdmin } from '../../lib/access'
+import { fetchMyCenter, isLead, type MyCenter } from '../../lib/center'
 
 type FilterCategory = ExerciseCategory | 'all'
 
@@ -39,11 +40,14 @@ export default function ExercisesView() {
   const [showForm, setShowForm] = useState(false)
   const [editingExercise, setEditingExercise] = useState<Exercise | undefined>()
   const [detailExercise, setDetailExercise] = useState<Exercise | undefined>()
-  // Écriture sur `exercises` réservée aux admins (RLS `exercises_admin_write`,
-  // migrations 022-023) : sans ce contrôle, un coach verrait des boutons
-  // « Nouvel exercice », « Modifier », « Supprimer » qui échouent
-  // silencieusement en base.
+  // Qui écrit (RLS, 049) : WODBUD partout ; le proprio et les entraîneurs
+  // chefs dans leur centre, sur les exercices pas encore publiés. Sans ce
+  // contrôle, les autres verraient des boutons qui échouent en base.
   const [isAdmin, setIsAdmin] = useState(false)
+  const [myCenter, setMyCenter] = useState<MyCenter | null>(null)
+  const centerLead = Boolean(myCenter && isLead(myCenter.role))
+  const canCreate = isAdmin || centerLead
+  const canEdit = (e: Exercise) => isAdmin || (centerLead && Boolean(e.center_id) && e.center_id === myCenter?.center.id)
 
   useEffect(() => {
     fetchExercises()
@@ -52,6 +56,7 @@ export default function ExercisesView() {
   useEffect(() => {
     let mounted = true
     isCurrentUserAdmin().then((v) => { if (mounted) setIsAdmin(v) })
+    fetchMyCenter().then((c) => { if (mounted) setMyCenter(c) }).catch(() => {})
     return () => { mounted = false }
   }, [])
 
@@ -124,7 +129,7 @@ export default function ExercisesView() {
           <p className="wb-ph-tag">{t('builder.library', { ns: 'workouts' })}</p>
           <h1>{t('title', { ns: 'exercises' })} <span className="wb-ph-count">{exercises.length}</span></h1>
         </div>
-        {isAdmin && (
+        {canCreate && (
           <button type="button" className="wb-btn wb-btn--primary" onClick={() => { setEditingExercise(undefined); setShowForm(true) }}>
             + {t('new', { ns: 'exercises' })}
           </button>
@@ -238,6 +243,13 @@ export default function ExercisesView() {
       {showForm && (
         <ExerciseFormModal
           exercise={editingExercise}
+          isAdmin={isAdmin}
+          centerId={isAdmin ? undefined : myCenter?.center.id}
+          onUseExisting={(existing) => {
+            setShowForm(false)
+            setEditingExercise(undefined)
+            setDetailExercise(existing)
+          }}
           onClose={() => {
             setShowForm(false)
             setEditingExercise(undefined)
@@ -248,8 +260,8 @@ export default function ExercisesView() {
         <ExerciseDetailModal
           exercise={detailExercise}
           onClose={() => setDetailExercise(undefined)}
-          onEdit={isAdmin ? handleEdit : undefined}
-          onDelete={isAdmin ? handleDelete : undefined}
+          onEdit={canEdit(detailExercise) ? handleEdit : undefined}
+          onDelete={canEdit(detailExercise) ? handleDelete : undefined}
         />
       )}
     </div>
@@ -262,7 +274,7 @@ export default function ExercisesView() {
  * parcourir d'un coup de pouce.
  */
 function ExerciseCard({ exercise, onClick }: { exercise: Exercise; onClick: () => void }) {
-  const { t } = useTranslation(['common'])
+  const { t } = useTranslation(['common', 'exercises'])
   return (
     <button type="button" className="wb-card wb-ex-card" onClick={onClick}>
       <span className="wb-ex-thumb">
@@ -276,7 +288,14 @@ function ExerciseCard({ exercise, onClick }: { exercise: Exercise; onClick: () =
         )}
       </span>
       <span className="wb-ex-body">
-        <span className="wb-ex-cat">{t(CATEGORY_I18N_KEYS[exercise.category], { ns: 'common' })}</span>
+        <span className="wb-ex-cat">
+          {t(CATEGORY_I18N_KEYS[exercise.category], { ns: 'common' })}
+          {exercise.center_id && (
+            <span className={`wb-ex-badge${exercise.review_status === 'pending' ? ' is-pending' : ''}`}>
+              {exercise.review_status === 'pending' ? t('center_badge.pending', { ns: 'exercises' }) : t('center_badge.center', { ns: 'exercises' })}
+            </span>
+          )}
+        </span>
         <strong>{exercise.name}</strong>
         <span className="wb-ex-muscles">
           <span className="wb-pill wb-pill--orange">{t(MUSCLE_GROUP_I18N_KEYS[exercise.primary_muscle], { ns: 'common' })}</span>

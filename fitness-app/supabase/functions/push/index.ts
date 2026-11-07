@@ -14,6 +14,11 @@ import webpush from 'npm:web-push@3.6.7'
  *   x-cron-secret vérifié contre le secret stocké dans Vault.
  * - { type: 'test' } : notification de test vers ses propres appareils,
  *   depuis les paramètres (jeton de l'utilisateur).
+ * - { type: 'exercise_published', exercise_id } : l'équipe WODBUD a publié
+ *   l'exercice d'un centre dans la base commune ; son auteur est averti.
+ * - { type: 'library_update' } : WODBUD annonce les nouveautés de la base
+ *   d'exercices (7 derniers jours) à tous les abonnés.
+ *   Ces deux-là : jeton d'un admin (admin_users).
  *
  * Un abonnement que le service push déclare expiré (404/410) est supprimé :
  * c'est un téléphone désinstallé ou une permission retirée.
@@ -153,6 +158,58 @@ async function classEvent(admin: SupabaseClient, userId: string, input: { class_
   return json(await sendToUsers(admin, build))
 }
 
+async function isAdmin(admin: SupabaseClient, userId: string): Promise<boolean> {
+  const { data } = await admin.from('admin_users').select('user_id').eq('user_id', userId).maybeSingle()
+  return Boolean(data)
+}
+
+async function exercisePublished(admin: SupabaseClient, exerciseId: string | undefined) {
+  if (!exerciseId) return json({ error: 'Requête invalide' }, 400)
+  const { data: ex } = await admin
+    .from('exercises')
+    .select('name, created_by, review_status')
+    .eq('id', exerciseId)
+    .maybeSingle()
+  if (!ex || ex.review_status !== 'published' || !ex.created_by) return json({ error: 'Exercice introuvable' }, 404)
+  const build = new Map<string, (l: Lang) => Payload>([[ex.created_by as string, (l) => ({
+    title: { fr: 'Exercice ajouté à WODBUD', en: 'Exercise added to WODBUD', es: 'Ejercicio añadido a WODBUD' }[l],
+    body: {
+      fr: `« ${ex.name} » fait maintenant partie de la base commune. Merci !`,
+      en: `“${ex.name}” is now part of the shared library. Thank you!`,
+      es: `«${ex.name}» ya forma parte de la base común. ¡Gracias!`
+    }[l],
+    url: '/dashboard/exercises',
+    tag: `exercise-${exerciseId}`
+  })]])
+  return json(await sendToUsers(admin, build))
+}
+
+async function libraryUpdate(admin: SupabaseClient) {
+  const since = new Date(Date.now() - 7 * 24 * 3600 * 1000).toISOString()
+  const [{ count: published }, { count: created }] = await Promise.all([
+    admin.from('exercises').select('id', { count: 'exact', head: true }).eq('review_status', 'published').gte('published_at', since),
+    admin.from('exercises').select('id', { count: 'exact', head: true }).is('center_id', null).is('review_status', null).gte('created_at', since)
+  ])
+  const total = (published ?? 0) + (created ?? 0)
+  if (total === 0) return json({ exercises: 0, sent: 0, removed: 0 })
+
+  const { data: subs } = await admin.from('push_subscriptions').select('user_id')
+  const build = new Map<string, (l: Lang) => Payload>()
+  for (const s of subs ?? []) {
+    build.set(s.user_id as string, (l) => ({
+      title: { fr: 'Nouveautés dans la base d’exercices', en: 'New in the exercise library', es: 'Novedades en la base de ejercicios' }[l],
+      body: {
+        fr: `${total} nouvel${total > 1 ? 's' : ''} exercice${total > 1 ? 's' : ''} cette semaine.`,
+        en: `${total} new exercise${total > 1 ? 's' : ''} this week.`,
+        es: `${total} ejercicio${total > 1 ? 's' : ''} nuevo${total > 1 ? 's' : ''} esta semana.`
+      }[l],
+      url: '/dashboard/exercises',
+      tag: `library-${since.slice(0, 10)}`
+    }))
+  }
+  return json({ exercises: total, ...(await sendToUsers(admin, build)) })
+}
+
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: cors })
   if (req.method !== 'POST') return json({ error: 'Méthode non permise' }, 405)
@@ -174,6 +231,16 @@ Deno.serve(async (req) => {
       const { data: ok } = await admin.rpc('wodbud_check_push_cron_secret', { p_secret: secret })
       if (ok !== true) return json({ error: 'Interdit' }, 403)
       return json(await daily(admin))
+    }
+
+    if (body.type === 'exercise_published' || body.type === 'library_update') {
+      const token = (req.headers.get('Authorization') ?? '').replace(/^Bearer\s+/i, '')
+      const { data: { user } } = await admin.auth.getUser(token)
+      if (!user) return json({ error: 'Non authentifié' }, 401)
+      if (!(await isAdmin(admin, user.id))) return json({ error: 'Réservé à WODBUD' }, 403)
+      return body.type === 'exercise_published'
+        ? await exercisePublished(admin, body.exercise_id)
+        : await libraryUpdate(admin)
     }
 
     if (body.type === 'class' || body.type === 'test') {

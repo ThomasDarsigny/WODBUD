@@ -1582,6 +1582,33 @@ button.wb-ex-card { display: flex; align-items: center; gap: 0.85rem; padding: 0
 .wb-ex-novideo { color: var(--line-fn); display: flex; }
 .wb-ex-body { flex: 1; min-width: 0; display: grid; gap: 0.25rem; }
 .wb-ex-cat { font-family: var(--font-d); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--orange); }
+.wb-ex-badge { display: inline-block; margin-left: 0.45rem; padding: 0.1rem 0.45rem; border-radius: 999px; border: 1px solid var(--line-fn); color: var(--white); font-size: 0.6875rem; letter-spacing: 0.08em; vertical-align: 1px; }
+.wb-ex-badge.is-pending { border-color: rgba(255, 90, 31, 0.6); color: var(--orange); }
+
+/* ─── Exercices des centres (049) : formulaire, fiche, relecture ─── */
+.wb-exf-note { margin: 0; padding: 0.75rem 0.9rem; border-radius: var(--r-md); background: rgba(255, 90, 31, 0.08); border: 1px solid rgba(255, 90, 31, 0.25); color: var(--white); font-size: 0.875rem; line-height: 1.5; }
+.wb-exf-hint { margin: 0; color: var(--muted); font-size: 0.8125rem; line-height: 1.5; }
+.wb-exf-dupes { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; margin-top: 0.4rem; }
+.wb-exf-dupes p { margin: 0; width: 100%; color: var(--orange); font-size: 0.8125rem; }
+.wb-exf-refs { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.4rem; }
+.wb-exf-refs li { display: flex; align-items: center; gap: 0.6rem; padding: 0.5rem 0.7rem; border-radius: var(--r-md); background: var(--black); border: 1px solid var(--border); color: var(--muted); }
+.wb-exf-refs span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--white); font-size: 0.875rem; }
+.wb-exf-refs small { font-size: 0.75rem; font-variant-numeric: tabular-nums; }
+.wb-exf-refs button { min-height: 32px; min-width: 32px; border: none; background: none; color: var(--muted); cursor: pointer; }
+.wb-exf-progress { margin: 0; color: var(--orange); font-size: 0.875rem; font-variant-numeric: tabular-nums; }
+.wb-ex-facts { display: flex; flex-wrap: wrap; gap: 1.25rem; }
+.wb-ex-facts > div { display: grid; gap: 0.4rem; align-content: start; }
+.wb-ex-equip { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+.wb-review { padding: 0; margin: 0; list-style: none; }
+.wb-review-item { display: grid; gap: 0.7rem; padding: 0.9rem; border-bottom: 1px solid var(--border); }
+.wb-review-item:last-child { border-bottom: none; }
+.wb-review-head { display: flex; align-items: center; gap: 0.75rem; }
+.wb-review-actions { display: flex; flex-wrap: wrap; gap: 0.45rem; justify-content: flex-end; }
+.wb-review-media { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 0.5rem; }
+.wb-review-media video, .wb-review-media img { width: 100%; aspect-ratio: 9 / 16; object-fit: cover; border-radius: var(--r-md); background: var(--black); }
+.wb-review-desc { grid-column: 1 / -1; margin: 0; color: var(--muted); font-size: 0.875rem; line-height: 1.55; white-space: pre-line; }
+.wb-review-empty { padding: 1rem; color: var(--muted); }
+.wb-review-ok { margin: 0 0 0.75rem; color: #6ee7a8; font-size: 0.875rem; }
 .wb-ex-body strong { font-family: var(--font-d); font-size: 1.15rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.02em; line-height: 1.1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .wb-ex-muscles { display: flex; align-items: center; gap: 0.35rem; flex-wrap: wrap; }
 .wb-ex-more { font-size: 0.75rem; color: var(--muted); }

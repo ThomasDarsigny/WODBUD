@@ -28,7 +28,9 @@
     "all": "All",
     "filters": "Filters",
     "results": "results",
-    "filter_category": "Category"
+    "filter_category": "Category",
+    "level": "Level",
+    "equipment": "Equipment"
   },
   "categories": {
     "strength": "Strength",
@@ -59,7 +61,23 @@
     "video_size_error": "Max size: 200 MB",
     "save_new": "Create exercise",
     "save_edit": "Update",
-    "saving": "Saving..."
+    "saving": "Saving...",
+    "center_note": "Usable right away in your gym. The WODBUD team will review it, then may add it to the shared library with an official video.",
+    "technique_required": "Add the technique cues: they’re used for the review.",
+    "level_required": "Choose a level.",
+    "duplicates": "A similar exercise already exists:",
+    "use_existing": "See “{{name}}”",
+    "ref_title": "Reference photo or video",
+    "ref_hint": "Show the movement to the WODBUD team (video up to 60 s, filmed on your phone). Private: only WODBUD sees it, to shoot the official video.",
+    "ref_add": "Add a photo or video",
+    "ref_compressing": "Preparing video {{n}}/{{total}}: {{pct}}% (keep the screen on)",
+    "ref_uploading": "Uploading {{n}}/{{total}}…",
+    "ref_upload_failed": "The exercise is saved, but the media couldn’t be uploaded. {{reason}}",
+    "ref_retry": "Retry upload",
+    "ref_error_too_long": "Video too long: 60 seconds max.",
+    "ref_error_too_big": "File too large, even compressed. Try a shorter video.",
+    "ref_error_unsupported": "Choose a photo or a video.",
+    "ref_error_unreadable": "This file can’t be read."
   },
   "admin": {
     "title": "Admin dashboard",
@@ -102,5 +120,32 @@
   "empty_filtered_hint": "No exercise matches all these filters. Drop one to widen the search.",
   "warnings": {
     "video_upload_skipped": "Exercise saved, but the video wasn't uploaded. {{reason}}"
+  },
+  "levels": {
+    "beginner": "Beginner",
+    "intermediate": "Intermediate",
+    "advanced": "Advanced"
+  },
+  "center_badge": {
+    "center": "My gym",
+    "pending": "In review"
+  },
+  "review": {
+    "title": "Gym exercises to review",
+    "hint": "Check the media, fix what’s needed, then publish to the shared library (the author is notified) or keep it in its gym. Reference media are deleted after the decision.",
+    "announce": "Announce what’s new",
+    "announced_one": "Announcement sent: {{count}} new exercise this week.",
+    "announced_other": "Announcement sent: {{count}} new exercises this week.",
+    "nothing_new": "Nothing new this week: no announcement sent.",
+    "empty": "Nothing to review right now.",
+    "media_one": "{{count}} media",
+    "media_other": "{{count}} media",
+    "no_media": "No media attached.",
+    "no_description": "No cues.",
+    "edit": "Edit",
+    "keep_private": "Keep in gym",
+    "publish": "Publish",
+    "published": "“{{name}}” is published in the shared library.",
+    "kept": "“{{name}}” stays in its gym."
   }
 }

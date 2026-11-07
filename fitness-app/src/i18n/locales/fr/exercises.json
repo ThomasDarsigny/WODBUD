@@ -28,7 +28,9 @@
     "all": "Tous",
     "filters": "Filtres",
     "results": "résultats",
-    "filter_category": "Catégorie"
+    "filter_category": "Catégorie",
+    "level": "Niveau",
+    "equipment": "Équipement"
   },
   "categories": {
     "strength": "Force",
@@ -59,7 +61,23 @@
     "video_size_error": "Taille max : 200 MB",
     "save_new": "Créer l'exercice",
     "save_edit": "Mettre à jour",
-    "saving": "Enregistrement..."
+    "saving": "Enregistrement...",
+    "center_note": "Utilisable tout de suite dans ton centre. L’équipe WODBUD le relira, puis pourra l’ajouter à la base commune avec une vidéo officielle.",
+    "technique_required": "Ajoute les consignes techniques : elles servent à la relecture.",
+    "level_required": "Choisis un niveau.",
+    "duplicates": "Un exercice semblable existe déjà :",
+    "use_existing": "Voir « {{name}} »",
+    "ref_title": "Photo ou vidéo de référence",
+    "ref_hint": "Montre le mouvement à l’équipe WODBUD (vidéo de 60 s au plus, filmée au téléphone). Privé : seule WODBUD le voit, pour tourner la vidéo officielle.",
+    "ref_add": "Ajouter une photo ou une vidéo",
+    "ref_compressing": "Préparation de la vidéo {{n}}/{{total}} : {{pct}} % (garde l’écran ouvert)",
+    "ref_uploading": "Envoi {{n}}/{{total}}…",
+    "ref_upload_failed": "L’exercice est enregistré, mais le média n’a pas pu être envoyé. {{reason}}",
+    "ref_retry": "Réessayer l’envoi",
+    "ref_error_too_long": "Vidéo trop longue : 60 secondes au plus.",
+    "ref_error_too_big": "Fichier trop lourd, même compressé. Essaie une vidéo plus courte.",
+    "ref_error_unsupported": "Choisis une photo ou une vidéo.",
+    "ref_error_unreadable": "Ce fichier ne peut pas être lu."
   },
   "admin": {
     "title": "Dashboard admin",
@@ -102,5 +120,32 @@
   "empty_filtered_hint": "Aucun exercice ne coche tous ces filtres. Enlèves-en un pour élargir.",
   "warnings": {
     "video_upload_skipped": "Exercice enregistré, mais la vidéo n'a pas été téléversée. {{reason}}"
+  },
+  "levels": {
+    "beginner": "Débutant",
+    "intermediate": "Intermédiaire",
+    "advanced": "Avancé"
+  },
+  "center_badge": {
+    "center": "Mon centre",
+    "pending": "En relecture"
+  },
+  "review": {
+    "title": "Exercices des centres à relire",
+    "hint": "Regarde les médias, corrige au besoin, puis publie dans la base commune (l’auteur est averti) ou laisse l’exercice à son centre. Les médias de référence sont supprimés après la décision.",
+    "announce": "Annoncer les nouveautés",
+    "announced_one": "Annonce envoyée : {{count}} nouvel exercice cette semaine.",
+    "announced_other": "Annonce envoyée : {{count}} nouveaux exercices cette semaine.",
+    "nothing_new": "Rien de nouveau cette semaine : aucune annonce envoyée.",
+    "empty": "Rien à relire pour l’instant.",
+    "media_one": "{{count}} média",
+    "media_other": "{{count}} médias",
+    "no_media": "Aucun média joint.",
+    "no_description": "Pas de consignes.",
+    "edit": "Corriger",
+    "keep_private": "Laisser au centre",
+    "publish": "Publier",
+    "published": "« {{name}} » est publié dans la base commune.",
+    "kept": "« {{name}} » reste dans son centre."
   }
 }

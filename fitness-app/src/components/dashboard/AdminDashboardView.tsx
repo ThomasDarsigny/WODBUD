@@ -6,6 +6,7 @@ import { CATEGORY_I18N_KEYS, MUSCLE_GROUP_I18N_KEYS } from '../../types'
 import ExerciseFormModal from '../exercises/ExerciseFormModal'
 import ExerciseDetailModal from '../exercises/ExerciseDetailModal'
 import OcrImportSection from './OcrImportSection'
+import ExerciseReviewQueue from './ExerciseReviewQueue'
 import FeatureTopicsCard from '../vote/FeatureTopicsCard'
 import Skeleton from '../ui/Skeleton'
 
@@ -90,6 +91,8 @@ export default function AdminDashboardView() {
         />
       </div>
 
+      <ExerciseReviewQueue onEdit={openEdit} />
+
       <FeatureTopicsCard admin />
 
       <OcrImportSection existingNames={existingNames} />
@@ -155,6 +158,7 @@ export default function AdminDashboardView() {
       {showForm && (
         <ExerciseFormModal
           exercise={editingExercise}
+          isAdmin
           onClose={() => {
             setShowForm(false)
             setEditingExercise(undefined)

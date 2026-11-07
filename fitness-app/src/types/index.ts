@@ -125,9 +125,22 @@ export interface Exercise {
   tertiary_muscles: MuscleGroup[]
   video_url: string | null
   video_path?: string | null
+  /** Centre propriétaire (049) : null = base commune WODBUD. */
+  center_id?: string | null
+  /** Centre qui l'a proposé, gardé après la publication dans la base commune. */
+  origin_center_id?: string | null
+  /** Relecture WODBUD d'un exercice de centre ; null pour ceux de WODBUD. */
+  review_status?: ExerciseReviewStatus | null
+  level?: ExerciseLevel | null
+  /** Identifiants de lib/equipment ; vide = poids du corps. */
+  equipment?: string[]
   created_at: string
   updated_at: string
 }
+
+export type ExerciseLevel = 'beginner' | 'intermediate' | 'advanced'
+export const EXERCISE_LEVELS: ExerciseLevel[] = ['beginner', 'intermediate', 'advanced']
+export type ExerciseReviewStatus = 'pending' | 'published' | 'private'
 
 export type ExerciseInsert = Omit<Exercise, 'id' | 'created_at' | 'updated_at'>
 export type ExerciseUpdate = Partial<ExerciseInsert>

@@ -184,6 +184,27 @@ export default function ExerciseDetailModal({
             </div>
           </div>
 
+          {(exercise.level || (exercise.equipment?.length ?? 0) > 0) && (
+            <div className="wb-ex-facts">
+              {exercise.level && (
+                <div>
+                  <p style={labelStyle}>{t('fields.level', { ns: 'exercises' })}</p>
+                  <span className="wb-pill wb-pill--orange">{t(`levels.${exercise.level}`, { ns: 'exercises' })}</span>
+                </div>
+              )}
+              {(exercise.equipment?.length ?? 0) > 0 && (
+                <div>
+                  <p style={labelStyle}>{t('fields.equipment', { ns: 'exercises' })}</p>
+                  <div className="wb-ex-equip">
+                    {exercise.equipment!.map((e) => (
+                      <span key={e} className="wb-pill">{t(`equipment.items.${e}`, { ns: 'common' })}</span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
           {exercise.description && (
             <div>
               <p style={labelStyle}>{t('detail.tech_instructions', { ns: 'exercises' })}</p>
