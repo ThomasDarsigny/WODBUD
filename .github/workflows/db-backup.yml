@@ -36,10 +36,13 @@ jobs:
             echo "::error::Secrets SUPABASE_URL et SUPABASE_ANON_KEY manquants (voir fitness-app/docs/sauvegardes.md)."
             exit 1
           fi
-          # Lecture d'un exercice de la base commune (publique) : compte comme activité.
-          curl -fsS --retry 3 --max-time 30 -o /dev/null \
-            "$SUPABASE_URL/rest/v1/exercises?select=id&limit=1" \
-            -H "apikey: $SUPABASE_ANON_KEY" -H "Authorization: Bearer $SUPABASE_ANON_KEY"
+          # Les tables sont fermées aux visiteurs anonymes (036) : on appelle la
+          # seule fonction qui leur est ouverte, l'aperçu d'une invitation, avec
+          # un code bidon. Elle interroge vraiment la base et ne renvoie rien.
+          curl -fsS --retry 3 --max-time 30 -o /dev/null -X POST \
+            "$SUPABASE_URL/rest/v1/rpc/get_center_invite" \
+            -H "apikey: $SUPABASE_ANON_KEY" -H "Content-Type: application/json" \
+            -d '{"p_token":"visite-quotidienne"}'
           echo "Base visitée."
 
   backup:
