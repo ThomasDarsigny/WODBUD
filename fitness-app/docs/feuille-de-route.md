@@ -64,10 +64,46 @@ Fil conducteur : *WODBUD, c'est comme avoir un entraîneur chef* — pour le cen
 1. ✅ **Centres et rôles** (fait : migration 048) : modèle de données (centre, membres avec rôle, invitations d'entraîneurs), écran Bienvenue Centre / Membre / Perso, équipement à l'inscription. Tout le reste en dépend.
 2. ✅ **Base d'exercices des centres** (fait : migration 049) : création par les chefs, photo ou vidéo de référence, détection des doublons, file de validation WODBUD (corriger, publier, notifier l'auteur).
 3. ✅ **Import CSV / PDF / photos par les centres** (fait : migration 050), avec comptage des occurrences pour la liste des vidéos à tourner.
-4. **Filtre par équipement** dans le créateur de WOD.
-5. **Progression / régression** : liens entre exercices, puis l'action « trop facile / à adapter ».
-6. **Engagement** : suggestions et support, invitations, note de l'entraînement, avatar de l'IA.
-7. **Landing** : page de choix du profil, trois pages ciblées, nouvelle phrase, animations premium.
+### 4. Filtre par équipement
+- [x] 4.1 Liste d'équipement complète, par familles, et équipement requis renseigné sur les exercices de la base commune (migration 051).
+- [ ] 4.2 Lire l'équipement disponible dans le créateur de WOD (celui du centre, sinon celui du compte).
+- [ ] 4.3 Afficher d'abord les exercices faisables, avec une pastille « Équipement manquant » sur les autres.
+- [ ] 4.4 Ajouter le filtre « Seulement ce que j'ai » dans le créateur.
+- [ ] 4.5 Ajouter le même filtre dans la bibliothèque d'exercices.
+- [ ] 4.6 Signaler à la relecture WODBUD les exercices importés sans équipement.
+
+### 5. Progression / régression
+- [ ] 5.1 Base de données : relier deux exercices (plus dur, plus facile, adaptation pour une zone du corps).
+- [ ] 5.2 Écran pour que WODBUD et les chefs créent ces liens.
+- [ ] 5.3 Afficher les variantes liées sur la fiche d'un exercice.
+- [ ] 5.4 Calcul de la charge : +5 % haut du corps, +10 % bas du corps, arrondi aux disques.
+- [ ] 5.5 Action « Trop facile » dans le créateur : nouvelle charge ou variante plus dure.
+- [ ] 5.6 Action « À adapter » : choisir la zone (épaule, genou, dos…) et recevoir des exercices qui la sollicitent moins.
+
+### 6. Engagement
+- [ ] 6.1 Bouton Inviter avec le partage du téléphone (communautés et cours).
+- [ ] 6.2 Notification push quand la personne invitée a déjà WODBUD.
+- [ ] 6.3 Formulaire de support vers WODBUD dans les réglages.
+- [ ] 6.4 Boîte à suggestions : un membre écrit à son centre.
+- [ ] 6.5 Boîte de réception des suggestions pour le centre.
+- [ ] 6.6 Noter l'entraînement à la fin d'une séance.
+- [ ] 6.7 Vue des WODs préférés pour le centre.
+- [ ] 6.8 Dessiner 6 à 8 avatars « Forge » pour l'IA.
+- [ ] 6.9 Choix de l'avatar et du ton (motivant, calme, militaire, humoristique), appliqué à l'assistant.
+
+### 7. Landing
+- [ ] 7.1 Ajouter la phrase après « Fini le bricolage. » (gain de temps, moins de maux de tête).
+- [ ] 7.2 Première page qui demande le profil.
+- [ ] 7.3 Page `/centres` (la priorité du client).
+- [ ] 7.4 Page `/membres`.
+- [ ] 7.5 Page `/perso`.
+- [ ] 7.6 Prérendu et référencement des trois pages.
+- [ ] 7.7 Section des avantages avec animations premium.
+
+### 8. Travail d'équipe dans un centre
+- [ ] 8.1 Le proprio et les chefs voient tous les cours du centre.
+- [ ] 8.2 Les WODs sont partagés dans l'équipe du centre.
+- [ ] 8.3 Un chef peut assigner un cours à un entraîneur.
 
 ## À définir avec le client
 - [ ] **Facturation** : qui paie et comment (par membre, par entraîneur, prix fixe).
@@ -83,4 +119,7 @@ Fil conducteur : *WODBUD, c'est comme avoir un entraîneur chef* — pour le cen
 - [ ] Emballage App Store / Play Store avec Capacitor, et notifications natives (Apple, Firebase).
 - [ ] Logo officiel d'Apple sur le bouton « Continuer avec Apple ».
 - [ ] Suivi des erreurs et statistiques d'usage.
-- [ ] Modification non commitée dans `OcrImportSection.tsx`.
+- [ ] Essai d'une invitation avec deux vrais comptes (membre et entraîneur).
+- [ ] Essai de la lecture de feuilles réelles avec Claude, une fois la clé ajoutée.
+- [ ] Retirer les données de test en production (centre « Box Test WODBUD », ses exercices et mentions).
+- [ ] Retirer les exercices parasites de la base commune (`test`, `test 1`, `test 2` ×2, `simple test`, `avant-bras`, `biceps`, `epaules`).

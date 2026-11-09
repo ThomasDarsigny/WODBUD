@@ -77,7 +77,8 @@
     "ref_error_too_long": "Video too long: 60 seconds max.",
     "ref_error_too_big": "File too large, even compressed. Try a shorter video.",
     "ref_error_unsupported": "Choose a photo or a video.",
-    "ref_error_unreadable": "This file can’t be read."
+    "ref_error_unreadable": "This file can’t be read.",
+    "equipment_required": "Choose the equipment, or “Bodyweight” if none is needed."
   },
   "admin": {
     "title": "Admin dashboard",

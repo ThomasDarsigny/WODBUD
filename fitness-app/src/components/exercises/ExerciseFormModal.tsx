@@ -236,6 +236,10 @@ export default function ExerciseFormModal({ exercise, onClose, isAdmin = false, 
       setError(t('form.level_required', { ns: 'exercises' }))
       return
     }
+    if (asCenter && equipment.length === 0) {
+      setError(t('form.equipment_required', { ns: 'exercises' }))
+      return
+    }
 
     setUploading(true)
     let savedId: string | null = null
@@ -399,8 +403,8 @@ export default function ExerciseFormModal({ exercise, onClose, isAdmin = false, 
             </div>
           </Field>
 
-          <Field label={t('fields.equipment', { ns: 'exercises' })}>
-            <EquipmentPicker value={equipment} onChange={setEquipment} />
+          <Field label={`${t('fields.equipment', { ns: 'exercises' })}${asCenter ? ' *' : ''}`}>
+            <EquipmentPicker value={equipment} onChange={setEquipment} forExercise />
           </Field>
 
           <Field label={t('fields.category', { ns: 'exercises' })}>

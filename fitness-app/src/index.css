@@ -1903,6 +1903,10 @@ em[data-rarity='legendaire'] { color: #f4c652; } em[data-rarity='mythique'] { co
 /* ─── Vérifie ton courriel ─────────────────────────────────────── */
 /* ─── Centres (048) : équipement, invitation, équipe ────────────── */
 .wb-equip { display: grid; gap: 0.7rem; min-width: 0; }
+.wb-equip-group { border-top: 1px solid var(--border); padding-top: 0.55rem; }
+.wb-equip-group summary { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; min-height: 44px; font-weight: 700; font-size: 0.95rem; cursor: pointer; }
+.wb-equip-group[open] summary { margin-bottom: 0.4rem; }
+.wb-equip-badge { min-width: 1.5rem; padding: 0.1rem 0.45rem; border-radius: 999px; text-align: center; background: rgba(255, 90, 31, 0.14); color: var(--orange); font-size: 0.8125rem; font-variant-numeric: tabular-nums; }
 .wb-equip-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.45rem; }
 .wb-equip-actions .wb-chip { border-style: dashed; }
 .wb-equip-count { margin-left: auto; color: var(--muted); font-size: 0.8125rem; font-variant-numeric: tabular-nums; }

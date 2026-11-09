@@ -77,7 +77,8 @@
     "ref_error_too_long": "Vidéo trop longue : 60 secondes au plus.",
     "ref_error_too_big": "Fichier trop lourd, même compressé. Essaie une vidéo plus courte.",
     "ref_error_unsupported": "Choisis une photo ou une vidéo.",
-    "ref_error_unreadable": "Ce fichier ne peut pas être lu."
+    "ref_error_unreadable": "Ce fichier ne peut pas être lu.",
+    "equipment_required": "Indique l’équipement, ou « Poids du corps » s’il n’en faut aucun."
   },
   "admin": {
     "title": "Dashboard admin",
