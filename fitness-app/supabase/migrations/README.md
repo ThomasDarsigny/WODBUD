@@ -63,3 +63,4 @@ enregistré en base, il faudrait d'abord le réparer.
 | `054_center_shared_wods.sql` | WODs partagés dans l'équipe d'un centre (proprio, chefs, entraîneurs) en lecture : `shares_center_staff` ; seul l'auteur modifie. Les membres ne voient rien de plus. |
 | `055_assign_class_coach.sql` | `assign_class_coach` : le proprio ou un chef confie un cours du centre à un entraîneur de l'équipe (les votes du cours suivent). |
 | `056_invite_notifications.sql` | Inviter quelqu'un qui a déjà WODBUD par notification : `invite_notifications` (une par personne et par cours ou communauté, 30 par jour et par invitant, service role seulement) ; `wodbud_user_id_by_email` réservé au service role. |
+| `057_support_messages.sql` | Support WODBUD : `support_messages` (bogue, question, idée, autre ; contexte page/langue/plateforme ; 10 par jour et par personne) ; `get_support_inbox` réservé aux admins (nom et courriel pour répondre). |

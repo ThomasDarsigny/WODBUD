@@ -17,6 +17,7 @@ import { field as inputStyle, btnAccent as buttonStyle } from '../../styles/ui'
 import { clearWorkoutDraft } from '../../stores/workoutStore'
 import { clearRoleCache } from '../../lib/profileRole'
 import CenterSettings from '../center/CenterSettings'
+import SupportForm from '../support/SupportForm'
 import { useBackToClose } from '../../hooks/useBackToClose'
 
 const LANGS: Array<{ code: string; key: string }> = [
@@ -477,6 +478,12 @@ export default function SettingsView() {
           >
             {t('actions.logout')}
           </button>
+        </Row>
+      </Section>
+
+      <Section title={t('support.title')}>
+        <Row label={t('support.label')} hint={t('support.hint')}>
+          <SupportForm />
         </Row>
       </Section>
 

@@ -1814,6 +1814,57 @@ export type Database = {
           },
         ]
       }
+      support_messages: {
+        Row: {
+          context: Json
+          created_at: string
+          handled_at: string | null
+          handled_by: string | null
+          id: string
+          kind: string
+          message: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          context?: Json
+          created_at?: string
+          handled_at?: string | null
+          handled_by?: string | null
+          id?: string
+          kind: string
+          message: string
+          status?: string
+          user_id?: string
+        }
+        Update: {
+          context?: Json
+          created_at?: string
+          handled_at?: string | null
+          handled_by?: string | null
+          id?: string
+          kind?: string
+          message?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "support_messages_handled_by_fkey"
+            columns: ["handled_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "support_messages_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       themes: {
         Row: {
           color: string
@@ -2424,6 +2475,19 @@ export type Database = {
           rank_key: string
           social_links: Json
           total_minutes: number
+        }[]
+      }
+      get_support_inbox: {
+        Args: { p_status?: string }
+        Returns: {
+          author_email: string
+          author_name: string
+          context: Json
+          created_at: string
+          id: string
+          kind: string
+          message: string
+          status: string
         }[]
       }
       get_video_priorities: {

@@ -1348,5 +1348,32 @@
     "send": "Envoyer",
     "sent": "C’est envoyé. Si cette personne a un compte WODBUD, elle vient de recevoir une notification avec le lien.",
     "too_many": "Tu as envoyé beaucoup d’invitations aujourd’hui. Réessaie demain, ou partage le lien."
+  },
+  "support": {
+    "title": "Aide et support",
+    "label": "Écrire à WODBUD",
+    "hint": "Un bogue, une question, une idée : l’équipe WODBUD lit tout.",
+    "kind": "Type de message",
+    "kinds": {
+      "bug": "Bogue",
+      "question": "Question",
+      "idea": "Idée",
+      "other": "Autre"
+    },
+    "message": "Ton message",
+    "placeholder_bug": "Qu’est-ce qui ne marche pas ? Qu’est-ce que tu faisais juste avant ?",
+    "placeholder_question": "Ta question…",
+    "placeholder_idea": "Ce qui te ferait gagner du temps…",
+    "placeholder_other": "Ton message…",
+    "reply_by_email": "On te répond par courriel.",
+    "send": "Envoyer",
+    "sent": "Merci ! Ton message est bien parti. On te répond par courriel.",
+    "too_many": "Tu as envoyé beaucoup de messages aujourd’hui. Réessaie demain.",
+    "inbox_title": "Support",
+    "inbox_empty": "Aucun message.",
+    "status_new": "Nouveaux",
+    "status_done": "Traités",
+    "reply": "Répondre",
+    "mark_done": "Traité"
   }
 }

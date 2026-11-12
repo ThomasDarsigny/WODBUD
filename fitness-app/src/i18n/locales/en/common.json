@@ -1348,5 +1348,32 @@
     "send": "Send",
     "sent": "Sent. If this person has a WODBUD account, they just received a notification with the link.",
     "too_many": "You’ve sent a lot of invitations today. Try again tomorrow, or share the link."
+  },
+  "support": {
+    "title": "Help and support",
+    "label": "Write to WODBUD",
+    "hint": "A bug, a question, an idea: the WODBUD team reads everything.",
+    "kind": "Message type",
+    "kinds": {
+      "bug": "Bug",
+      "question": "Question",
+      "idea": "Idea",
+      "other": "Other"
+    },
+    "message": "Your message",
+    "placeholder_bug": "What isn’t working? What were you doing just before?",
+    "placeholder_question": "Your question…",
+    "placeholder_idea": "What would save you time…",
+    "placeholder_other": "Your message…",
+    "reply_by_email": "We reply by email.",
+    "send": "Send",
+    "sent": "Thanks! Your message was sent. We’ll reply by email.",
+    "too_many": "You’ve sent a lot of messages today. Try again tomorrow.",
+    "inbox_title": "Support",
+    "inbox_empty": "No messages.",
+    "status_new": "New",
+    "status_done": "Handled",
+    "reply": "Reply",
+    "mark_done": "Handled"
   }
 }

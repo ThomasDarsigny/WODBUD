@@ -1351,5 +1351,32 @@
     "send": "Enviar",
     "sent": "Enviado. Si esta persona tiene una cuenta WODBUD, acaba de recibir una notificación con el enlace.",
     "too_many": "Has enviado muchas invitaciones hoy. Inténtalo mañana o comparte el enlace."
+  },
+  "support": {
+    "title": "Ayuda y soporte",
+    "label": "Escribir a WODBUD",
+    "hint": "Un error, una pregunta, una idea: el equipo de WODBUD lo lee todo.",
+    "kind": "Tipo de mensaje",
+    "kinds": {
+      "bug": "Error",
+      "question": "Pregunta",
+      "idea": "Idea",
+      "other": "Otro"
+    },
+    "message": "Tu mensaje",
+    "placeholder_bug": "¿Qué no funciona? ¿Qué estabas haciendo justo antes?",
+    "placeholder_question": "Tu pregunta…",
+    "placeholder_idea": "Lo que te ahorraría tiempo…",
+    "placeholder_other": "Tu mensaje…",
+    "reply_by_email": "Te respondemos por correo.",
+    "send": "Enviar",
+    "sent": "¡Gracias! Tu mensaje se envió. Te responderemos por correo.",
+    "too_many": "Has enviado muchos mensajes hoy. Inténtalo mañana.",
+    "inbox_title": "Soporte",
+    "inbox_empty": "Ningún mensaje.",
+    "status_new": "Nuevos",
+    "status_done": "Atendidos",
+    "reply": "Responder",
+    "mark_done": "Atendido"
   }
 }
