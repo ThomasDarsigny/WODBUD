@@ -464,7 +464,9 @@ function queueOffline(entry: FinishedSession): SessionSummary {
     newBadges: [],
     newRecords: [],
     previousMinutes: 0,
-    offline: true
+    offline: true,
+    sessionId: entry.id,
+    workoutId: entry.workoutId
   }
 }
 

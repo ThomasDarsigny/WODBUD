@@ -176,5 +176,17 @@
     "adapt": "Adapt",
     "which_zone": "Which area hurts?",
     "no_adaptation": "No adaptation linked for: {{zone}}. Ask your coach, or link one in the exercise sheet (“Variations” section)."
+  },
+  "rating": {
+    "title": "Rate this workout",
+    "hint": "Your opinion helps your gym keep the WODs people love.",
+    "star_one": "{{count}} star",
+    "star_other": "{{count}} stars",
+    "label_1": "Not for me",
+    "label_2": "Meh",
+    "label_3": "Okay",
+    "label_4": "Very good",
+    "label_5": "Excellent!",
+    "error": "The rating couldn’t be saved. Try again."
   }
 }

@@ -176,5 +176,17 @@
     "adapt": "Adaptar",
     "which_zone": "¿Qué zona duele?",
     "no_adaptation": "Ninguna adaptación vinculada para: {{zone}}. Pregunta a tu entrenador o vincula una en la ficha del ejercicio (sección «Variantes»)."
+  },
+  "rating": {
+    "title": "Valora este entrenamiento",
+    "hint": "Tu opinión ayuda a tu centro a mantener los WODs que gustan.",
+    "star_one": "{{count}} estrella",
+    "star_other": "{{count}} estrellas",
+    "label_1": "No es para mí",
+    "label_2": "Regular",
+    "label_3": "Correcto",
+    "label_4": "Muy bueno",
+    "label_5": "¡Excelente!",
+    "error": "No se pudo guardar la valoración. Inténtalo de nuevo."
   }
 }

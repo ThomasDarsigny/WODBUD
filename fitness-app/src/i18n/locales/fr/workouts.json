@@ -176,5 +176,17 @@
     "adapt": "À adapter",
     "which_zone": "Quelle zone fait mal ?",
     "no_adaptation": "Aucune adaptation reliée pour : {{zone}}. Demande à ton entraîneur ou relie-en une dans la fiche de l’exercice (section « Variantes »)."
+  },
+  "rating": {
+    "title": "Note cet entraînement",
+    "hint": "Ton avis aide ton centre à garder les WODs qui plaisent.",
+    "star_one": "{{count}} étoile",
+    "star_other": "{{count}} étoiles",
+    "label_1": "Pas pour moi",
+    "label_2": "Bof",
+    "label_3": "Correct",
+    "label_4": "Très bon",
+    "label_5": "Excellent !",
+    "error": "La note n’a pas pu être enregistrée. Réessaie."
   }
 }

@@ -47,6 +47,9 @@ export interface SessionSummary {
   newRecords: Array<{ name: string; result: ExerciseResult }>
   /** Vrai si la séance attend le réseau : totaux et badges viendront après. */
   offline: boolean
+  /** Séance enregistrée et WOD suivi (null pour une séance libre) : pour la noter (6.6). */
+  sessionId: string
+  workoutId: string | null
 }
 
 export function isNetworkError(err: unknown): boolean {
@@ -128,7 +131,9 @@ export async function uploadSession(entry: FinishedSession): Promise<SessionSumm
     newBadges,
     newRecords,
     previousMinutes: Math.max(0, totalMinutes - entry.activeMinutes),
-    offline: false
+    offline: false,
+    sessionId: entry.id,
+    workoutId: entry.workoutId
   }
 }
 

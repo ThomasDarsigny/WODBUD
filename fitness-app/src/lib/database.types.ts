@@ -2167,6 +2167,8 @@ export type Database = {
           id: string
           notes: string | null
           performed_at: string
+          rated_at: string | null
+          rating: number | null
           started_at: string | null
           user_id: string
           workout_id: string | null
@@ -2179,6 +2181,8 @@ export type Database = {
           id?: string
           notes?: string | null
           performed_at?: string
+          rated_at?: string | null
+          rating?: number | null
           started_at?: string | null
           user_id: string
           workout_id?: string | null
@@ -2191,6 +2195,8 @@ export type Database = {
           id?: string
           notes?: string | null
           performed_at?: string
+          rated_at?: string | null
+          rating?: number | null
           started_at?: string | null
           user_id?: string
           workout_id?: string | null
