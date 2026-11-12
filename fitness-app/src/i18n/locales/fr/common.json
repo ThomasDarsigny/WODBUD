@@ -39,7 +39,13 @@
     "badge_template": "Modèle",
     "badge_mine": "Mon workout",
     "empty_hint": "Crée ta première séance dans le constructeur, puis retrouve-la ici pour la relancer.",
-    "no_results_hint": "Essaie un autre mot-clé, ou enlève le filtre de type."
+    "no_results_hint": "Essaie un autre mot-clé, ou enlève le filtre de type.",
+    "source": "Provenance",
+    "source_all": "Tous",
+    "source_mine": "Les miens",
+    "source_team": "Équipe",
+    "source_wodbud": "WODBUD",
+    "badge_team": "Équipe · {{name}}"
   },
   "vote_view": {
     "title": "Tous les votes",

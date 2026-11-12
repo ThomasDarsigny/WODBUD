@@ -39,7 +39,13 @@
     "badge_template": "Template",
     "badge_mine": "My workout",
     "empty_hint": "Build your first workout in the builder, then find it here to run it again.",
-    "no_results_hint": "Try another keyword, or clear the type filter."
+    "no_results_hint": "Try another keyword, or clear the type filter.",
+    "source": "Source",
+    "source_all": "All",
+    "source_mine": "Mine",
+    "source_team": "Team",
+    "source_wodbud": "WODBUD",
+    "badge_team": "Team · {{name}}"
   },
   "vote_view": {
     "title": "All votes",

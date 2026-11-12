@@ -2405,6 +2405,7 @@ export type Database = {
         Args: { p_decision: string; p_exercise: string }
         Returns: undefined
       }
+      shares_center_staff: { Args: { p_user: string }; Returns: boolean }
       wodbud_check_push_cron_secret: {
         Args: { p_secret: string }
         Returns: boolean

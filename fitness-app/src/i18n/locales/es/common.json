@@ -39,7 +39,13 @@
     "badge_template": "Plantilla",
     "badge_mine": "Mi workout",
     "empty_hint": "Crea tu primera sesión en el constructor y vuelve aquí para repetirla.",
-    "no_results_hint": "Prueba otra palabra clave o quita el filtro de tipo."
+    "no_results_hint": "Prueba otra palabra clave o quita el filtro de tipo.",
+    "source": "Origen",
+    "source_all": "Todos",
+    "source_mine": "Los míos",
+    "source_team": "Equipo",
+    "source_wodbud": "WODBUD",
+    "badge_team": "Equipo · {{name}}"
   },
   "vote_view": {
     "title": "Todos los votos",

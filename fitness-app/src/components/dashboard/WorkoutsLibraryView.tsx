@@ -9,6 +9,9 @@ import { getLocalUser } from '../../lib/currentUser'
 import type { WorkoutMethod } from '../../types'
 import { METHOD_I18N_KEYS } from '../../types'
 import { unlockAudio } from '../../lib/gymCues'
+import { fetchMyCenter, fetchTeam, isStaff } from '../../lib/center'
+
+type Source = 'all' | 'mine' | 'team' | 'wodbud'
 
 export default function WorkoutsLibraryView() {
   const { t, i18n } = useTranslation(['common', 'workouts'])
@@ -20,11 +23,31 @@ export default function WorkoutsLibraryView() {
   const [search, setSearch] = useState('')
   const [methodFilter, setMethodFilter] = useState<WorkoutMethod | 'all'>('all')
   const [musclesOpenId, setMusclesOpenId] = useState<string | null>(null)
+  const [source, setSource] = useState<Source>('all')
+  // Équipe du centre (054) : ses WODs sont visibles ; on affiche le nom de l'auteur.
+  const [team, setTeam] = useState<Map<string, string> | null>(null)
 
   useEffect(() => {
     fetchWorkouts()
     getLocalUser().then(({ data }) => setCurrentUserId(data.user?.id ?? null))
   }, [fetchWorkouts])
+
+  useEffect(() => {
+    let alive = true
+    fetchMyCenter()
+      .then(async (mine) => {
+        if (!mine || !isStaff(mine.role)) return
+        const members = await fetchTeam(mine.center.id)
+        if (alive) setTeam(new Map(members.filter((m) => isStaff(m.role)).map((m) => [m.user_id, m.full_name ?? '—'])))
+      })
+      .catch(() => {})
+    return () => { alive = false }
+  }, [])
+
+  const sourceOf = (createdBy: string | null | undefined): Exclude<Source, 'all'> => {
+    if (!createdBy || createdBy === currentUserId) return 'mine'
+    return team?.has(createdBy) ? 'team' : 'wodbud'
+  }
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase()
@@ -36,9 +59,12 @@ export default function WorkoutsLibraryView() {
         methodLabel.includes(q) ||
         w.method.toLowerCase().includes(q)
       const matchesMethod = methodFilter === 'all' || w.method === methodFilter
-      return matchesSearch && matchesMethod
+      const matchesSource = source === 'all' || sourceOf(w.created_by) === source
+      return matchesSearch && matchesMethod && matchesSource
     })
-  }, [savedWorkouts, search, methodFilter, t])
+    // sourceOf dépend de team et currentUserId, listés ici.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [savedWorkouts, search, methodFilter, source, team, currentUserId, t])
 
   return (
     <div className="wb-page wb-page--wide">
@@ -72,6 +98,16 @@ export default function WorkoutsLibraryView() {
         ))}
       </div>
 
+      {team && (
+        <div className="wb-chips" role="group" aria-label={t('library.source')}>
+          {(['all', 'mine', 'team', 'wodbud'] as Source[]).map((s) => (
+            <button key={s} type="button" className="wb-chip" aria-pressed={source === s} onClick={() => setSource(s)}>
+              {t(`library.source_${s}`)}
+            </button>
+          ))}
+        </div>
+      )}
+
       {workoutsFromCache && <p className="wb-muted-line">◌ {t('library.from_cache')}</p>}
 
       {filtered.length === 0 ? (
@@ -83,14 +119,17 @@ export default function WorkoutsLibraryView() {
       ) : (
         <div className="wb-grid wb-grid--auto wb-stagger">
           {filtered.map((w) => {
-            const isTemplate = currentUserId != null && w.created_by != null && w.created_by !== currentUserId
+            const from = currentUserId ? sourceOf(w.created_by) : 'mine'
+            const isTemplate = from !== 'mine'
             const open = musclesOpenId === w.id
             return (
               <article key={w.id} className="wb-card wb-wod">
                 <div className="wb-wod-head">
                   <h2>{w.name}</h2>
-                  <span className={`wb-pill${isTemplate ? ' wb-pill--orange' : ''}`}>
-                    {isTemplate ? t('library.badge_template') : t('library.badge_mine')}
+                  <span className={`wb-pill${from === 'wodbud' ? ' wb-pill--orange' : ''}${from === 'team' ? ' wb-pill--team' : ''}`}>
+                    {from === 'team'
+                      ? t('library.badge_team', { name: team?.get(w.created_by ?? '') })
+                      : isTemplate ? t('library.badge_template') : t('library.badge_mine')}
                   </span>
                 </div>
                 <div className="wb-wod-tags">

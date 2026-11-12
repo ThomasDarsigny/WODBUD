@@ -102,7 +102,7 @@ Fil conducteur : *WODBUD, c'est comme avoir un entraîneur chef* — pour le cen
 
 ### 8. Travail d'équipe dans un centre
 - [x] 8.1 Le proprio et les chefs voient tous les cours du centre (entraîneur, membres, prochaine séance ; lecture seulement — migration 053).
-- [ ] 8.2 Les WODs sont partagés dans l'équipe du centre.
+- [x] 8.2 Les WODs sont partagés dans l'équipe du centre (automatique, lecture seulement ; filtre « Équipe » et nom de l'auteur dans la bibliothèque — migration 054).
 - [ ] 8.3 Un chef peut assigner un cours à un entraîneur.
 
 ## À définir avec le client
