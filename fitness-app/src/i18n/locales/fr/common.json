@@ -171,7 +171,8 @@
     "social_platform_instagram": "Instagram",
     "social_platform_x": "X",
     "social_platform_autre": "Autre",
-    "social_remove": "Retirer"
+    "social_remove": "Retirer",
+    "invite_text": "Rejoins la communauté « {{name}} » sur WODBUD"
   },
   "actions": {
     "save": "Enregistrer",
@@ -767,7 +768,9 @@
     "coach": "Entraîneur",
     "coach_me": "{{name}} (toi)",
     "assigned": "« {{name}} » est maintenant confié à {{coach}}.",
-    "center_empty": "Le centre n’a encore aucun cours."
+    "center_empty": "Le centre n’a encore aucun cours.",
+    "invite": "Inviter",
+    "invite_text": "Rejoins mon cours « {{name}} » sur WODBUD"
   },
   "athlete": {
     "role_label": "Athlète",

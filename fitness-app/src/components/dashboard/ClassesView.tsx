@@ -19,6 +19,7 @@ import { useIsMobile } from '../../hooks/useMediaQuery'
 import { useSearchParams } from 'react-router-dom'
 import { useBackToClose } from '../../hooks/useBackToClose'
 import CenterClassesList from '../center/CenterClassesList'
+import { shareLink } from '../../lib/shareLink'
 
 const BASE_URL = window.location.origin
 
@@ -30,6 +31,7 @@ export default function ClassesView() {
   const [showCreateClass, setShowCreateClass] = useState(false)
   const [selectedClass, setSelectedClass] = useState<Class | null>(null)
   const [showQR, setShowQR] = useState(false)
+  const [copied, setCopied] = useState(false)
   const [showVoteModal, setShowVoteModal] = useState(false)
   const [activeTab, setActiveTab] = useState<'followup' | 'members' | 'planning' | 'votes' | 'leaderboard'>('followup')
   // Téléphone : la liste OU le cours, jamais les deux côte à côte.
@@ -198,7 +200,21 @@ export default function ClassesView() {
                 <code style={{ flex: 1, minWidth: 0, background: 'var(--black)', border: '1px solid var(--border)', borderRadius: 12, padding: '0.5rem 0.75rem', fontSize: '0.8125rem', color: 'var(--muted)', fontFamily: 'monospace', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                   {inviteUrl}
                 </code>
-                <button onClick={() => navigator.clipboard.writeText(inviteUrl)} style={actionBtnStyle}>
+                <button
+                  type="button"
+                  onClick={async () => {
+                    const outcome = await shareLink({ title: selectedClass.name, text: t('classes.invite_text', { name: selectedClass.name }), url: inviteUrl })
+                    if (outcome === 'copied') { setCopied(true); setTimeout(() => setCopied(false), 2500) }
+                  }}
+                  style={actionBtnStyle}
+                >
+                  {copied ? `✓ ${t('community.invite_copied')}` : t('classes.invite')}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { void navigator.clipboard.writeText(inviteUrl).then(() => { setCopied(true); setTimeout(() => setCopied(false), 2500) }).catch(() => {}) }}
+                  style={ghostBtnStyle}
+                >
                   {t('classes.copy_link')}
                 </button>
                 <button onClick={() => setShowQR(!showQR)} style={ghostBtnStyle}>

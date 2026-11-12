@@ -171,7 +171,8 @@
     "social_platform_instagram": "Instagram",
     "social_platform_x": "X",
     "social_platform_autre": "Other",
-    "social_remove": "Remove"
+    "social_remove": "Remove",
+    "invite_text": "Join the “{{name}}” community on WODBUD"
   },
   "actions": {
     "save": "Save",
@@ -767,7 +768,9 @@
     "coach": "Coach",
     "coach_me": "{{name}} (you)",
     "assigned": "“{{name}}” is now assigned to {{coach}}.",
-    "center_empty": "The center has no class yet."
+    "center_empty": "The center has no class yet.",
+    "invite": "Invite",
+    "invite_text": "Join my class “{{name}}” on WODBUD"
   },
   "athlete": {
     "role_label": "Athlete",

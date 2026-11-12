@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
+import { shareLink } from '../../lib/shareLink'
 import EquipmentPicker from './EquipmentPicker'
 import { cleanEquipment, BOX_PRESET, HOME_PRESET, type EquipmentId } from '../../lib/equipment'
 import { fetchMyEquipment, saveMyEquipment } from '../../lib/profileRole'
@@ -55,21 +56,9 @@ export default function CenterSettings({ onNotice }: { onNotice: Notice }) {
 
   async function share(token: string, title: string) {
     const url = inviteUrl(token)
-    try {
-      if (navigator.share) {
-        await navigator.share({ title, text: title, url })
-        return
-      }
-    } catch (err) {
-      // Partage annulé par la personne : rien à signaler.
-      if (err instanceof DOMException && err.name === 'AbortError') return
-    }
-    try {
-      await navigator.clipboard.writeText(url)
-      onNotice({ kind: 'ok', text: t('center.link_copied') })
-    } catch {
-      onNotice({ kind: 'ok', text: url })
-    }
+    const outcome = await shareLink({ title, text: title, url })
+    if (outcome === 'copied') onNotice({ kind: 'ok', text: t('center.link_copied') })
+    else if (outcome === 'failed') onNotice({ kind: 'ok', text: url })
   }
 
   async function run(action: () => Promise<void>, okText?: string) {

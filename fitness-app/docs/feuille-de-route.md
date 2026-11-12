@@ -81,7 +81,7 @@ Fil conducteur : *WODBUD, c'est comme avoir un entraîneur chef* — pour le cen
 - [x] 5.6 Action « À adapter » : choisir la zone (épaule, genou, dos…) et recevoir des exercices qui la sollicitent moins (adaptations reliées par WODBUD ou le centre ; sans lien, l'app le dit plutôt que de deviner).
 
 ### 6. Engagement
-- [ ] 6.1 Bouton Inviter avec le partage du téléphone (communautés et cours).
+- [x] 6.1 Bouton Inviter avec le partage du téléphone (communautés, cours et équipe du centre ; message prérempli, sinon lien copié).
 - [ ] 6.2 Notification push quand la personne invitée a déjà WODBUD.
 - [ ] 6.3 Formulaire de support vers WODBUD dans les réglages.
 - [ ] 6.4 Boîte à suggestions : un membre écrit à son centre.

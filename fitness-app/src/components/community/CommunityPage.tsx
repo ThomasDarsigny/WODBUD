@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Link, useLocation, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { shareLink } from '../../lib/shareLink'
 import { useCommunityStore } from '../../stores/communityStore'
 import { useRankStore } from '../../stores/rankStore'
 import { fetchCommunityMembers, setShareRank, type CommunityMember } from '../../lib/communityMembers'
@@ -102,17 +103,11 @@ export default function CommunityPage() {
   }
 
   async function copyInvite() {
-    const url = inviteLink(id)
-    try {
-      if (navigator.share) {
-        await navigator.share({ title: community?.name, url })
-      } else {
-        await navigator.clipboard.writeText(url)
-        setCopied(true)
-        setTimeout(() => setCopied(false), 2500)
-      }
-    } catch {
-      // Partage annulé par l'utilisateur : rien à signaler.
+    const name = community?.name ?? 'WODBUD'
+    const outcome = await shareLink({ title: name, text: t('community.invite_text', { name }), url: inviteLink(id) })
+    if (outcome === 'copied') {
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2500)
     }
   }
 
