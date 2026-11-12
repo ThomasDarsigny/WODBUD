@@ -73,7 +73,7 @@ Fil conducteur : *WODBUD, c'est comme avoir un entraîneur chef* — pour le cen
 - [x] 4.6 Signaler à la relecture WODBUD les exercices importés sans équipement (et sans niveau ni consignes) ; publication bloquée tant que c'est incomplet.
 
 ### 5. Progression / régression
-- [ ] 5.1 Base de données : relier deux exercices (plus dur, plus facile, adaptation pour une zone du corps).
+- [x] 5.1 Base de données : relier deux exercices (plus dur, plus facile, adaptation pour une zone du corps).
 - [ ] 5.2 Écran pour que WODBUD et les chefs créent ces liens.
 - [ ] 5.3 Afficher les variantes liées sur la fiche d'un exercice.
 - [ ] 5.4 Calcul de la charge : +5 % haut du corps, +10 % bas du corps, arrondi aux disques.

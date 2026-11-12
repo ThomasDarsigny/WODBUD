@@ -916,6 +916,68 @@ export type Database = {
           },
         ]
       }
+      exercise_links: {
+        Row: {
+          center_id: string | null
+          created_at: string
+          created_by: string
+          from_exercise_id: string
+          id: string
+          kind: string
+          to_exercise_id: string
+          zone: string | null
+        }
+        Insert: {
+          center_id?: string | null
+          created_at?: string
+          created_by: string
+          from_exercise_id: string
+          id?: string
+          kind: string
+          to_exercise_id: string
+          zone?: string | null
+        }
+        Update: {
+          center_id?: string | null
+          created_at?: string
+          created_by?: string
+          from_exercise_id?: string
+          id?: string
+          kind?: string
+          to_exercise_id?: string
+          zone?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "exercise_links_center_id_fkey"
+            columns: ["center_id"]
+            isOneToOne: false
+            referencedRelation: "centers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "exercise_links_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "exercise_links_from_exercise_id_fkey"
+            columns: ["from_exercise_id"]
+            isOneToOne: false
+            referencedRelation: "exercises"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "exercise_links_to_exercise_id_fkey"
+            columns: ["to_exercise_id"]
+            isOneToOne: false
+            referencedRelation: "exercises"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       exercise_mentions: {
         Row: {
           center_id: string | null
@@ -2269,6 +2331,17 @@ export type Database = {
           name: string
           references_count: number
           review_status: string
+        }[]
+      }
+      get_exercise_variants: {
+        Args: { p_exercise: string }
+        Returns: {
+          center_id: string
+          exercise_id: string
+          kind: string
+          link_id: string
+          name: string
+          zone: string
         }[]
       }
       get_feature_topics: {
