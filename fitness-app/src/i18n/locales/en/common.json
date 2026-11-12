@@ -1375,5 +1375,21 @@
     "status_done": "Handled",
     "reply": "Reply",
     "mark_done": "Handled"
+  },
+  "suggestions": {
+    "title": "Suggestion box · {{name}}",
+    "hint": "An idea about classes, the schedule, equipment? Your gym gets it directly.",
+    "message": "Your suggestion",
+    "placeholder": "What would make your gym even better…",
+    "anonymous": "Send anonymously",
+    "anonymous_hint": "The team won’t see your name.",
+    "signed_hint": "The team will see your name.",
+    "send": "Send",
+    "sent": "Thanks! {{name}} received your suggestion.",
+    "too_many": "You’ve sent a lot of suggestions today. Try again tomorrow.",
+    "mine": "Your latest suggestions",
+    "status_new": "Pending",
+    "status_done": "Handled",
+    "anonymous_short": "anonymous"
   }
 }

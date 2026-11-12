@@ -18,6 +18,7 @@ import { clearWorkoutDraft } from '../../stores/workoutStore'
 import { clearRoleCache } from '../../lib/profileRole'
 import CenterSettings from '../center/CenterSettings'
 import SupportForm from '../support/SupportForm'
+import CenterSuggestionForm from '../center/CenterSuggestionForm'
 import { useBackToClose } from '../../hooks/useBackToClose'
 
 const LANGS: Array<{ code: string; key: string }> = [
@@ -297,6 +298,8 @@ export default function SettingsView() {
       </Section>
 
       <CenterSettings onNotice={setNotice} />
+
+      <CenterSuggestionForm />
 
       <Section title={t('settings.account')}>
         <Row label={t('settings.avatar')} hint={t('settings.avatar_hint')}>

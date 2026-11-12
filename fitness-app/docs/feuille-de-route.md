@@ -84,7 +84,7 @@ Fil conducteur : *WODBUD, c'est comme avoir un entraîneur chef* — pour le cen
 - [x] 6.1 Bouton Inviter avec le partage du téléphone (communautés, cours et équipe du centre ; message prérempli, sinon lien copié).
 - [x] 6.2 Notification push quand la personne invitée a déjà WODBUD (par son courriel ; même réponse que le compte existe ou non ; anti-spam — migration 056).
 - [x] 6.3 Formulaire de support vers WODBUD dans les réglages, et boîte de réception dans l'admin (répondre par courriel, marquer traité — migration 057).
-- [ ] 6.4 Boîte à suggestions : un membre écrit à son centre.
+- [x] 6.4 Boîte à suggestions : un membre écrit à son centre (dans ses réglages ; en son nom ou anonyme ; il voit si c'est traité — migration 058).
 - [ ] 6.5 Boîte de réception des suggestions pour le centre.
 - [ ] 6.6 Noter l'entraînement à la fin d'une séance.
 - [ ] 6.7 Vue des WODs préférés pour le centre.

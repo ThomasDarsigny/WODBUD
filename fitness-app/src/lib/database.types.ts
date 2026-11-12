@@ -539,6 +539,64 @@ export type Database = {
           },
         ]
       }
+      center_suggestions: {
+        Row: {
+          anonymous: boolean
+          center_id: string
+          created_at: string
+          handled_at: string | null
+          handled_by: string | null
+          id: string
+          message: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          anonymous?: boolean
+          center_id: string
+          created_at?: string
+          handled_at?: string | null
+          handled_by?: string | null
+          id?: string
+          message: string
+          status?: string
+          user_id?: string
+        }
+        Update: {
+          anonymous?: boolean
+          center_id?: string
+          created_at?: string
+          handled_at?: string | null
+          handled_by?: string | null
+          id?: string
+          message?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "center_suggestions_center_id_fkey"
+            columns: ["center_id"]
+            isOneToOne: false
+            referencedRelation: "centers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "center_suggestions_handled_by_fkey"
+            columns: ["handled_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "center_suggestions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       centers: {
         Row: {
           created_at: string
@@ -2289,6 +2347,17 @@ export type Database = {
           valid: boolean
         }[]
       }
+      get_center_suggestions: {
+        Args: { p_center: string; p_status?: string }
+        Returns: {
+          anonymous: boolean
+          author_name: string
+          created_at: string
+          id: string
+          message: string
+          status: string
+        }[]
+      }
       get_center_team: {
         Args: { p_center: string }
         Returns: {
@@ -2513,6 +2582,10 @@ export type Database = {
       is_community_owner: { Args: { p_community: string }; Returns: boolean }
       review_center_exercise: {
         Args: { p_decision: string; p_exercise: string }
+        Returns: undefined
+      }
+      set_center_suggestion_status: {
+        Args: { p_id: string; p_status: string }
         Returns: undefined
       }
       shares_center_staff: { Args: { p_user: string }; Returns: boolean }

@@ -1375,5 +1375,21 @@
     "status_done": "Traités",
     "reply": "Répondre",
     "mark_done": "Traité"
+  },
+  "suggestions": {
+    "title": "Boîte à suggestions · {{name}}",
+    "hint": "Une idée pour les cours, l’horaire, l’équipement ? Ton centre la reçoit directement.",
+    "message": "Ta suggestion",
+    "placeholder": "Ce qui rendrait ton centre encore meilleur…",
+    "anonymous": "Envoyer anonymement",
+    "anonymous_hint": "L’équipe ne verra pas ton nom.",
+    "signed_hint": "L’équipe verra ton nom.",
+    "send": "Envoyer",
+    "sent": "Merci ! {{name}} a reçu ta suggestion.",
+    "too_many": "Tu as envoyé beaucoup de suggestions aujourd’hui. Réessaie demain.",
+    "mine": "Tes dernières suggestions",
+    "status_new": "En attente",
+    "status_done": "Traitée",
+    "anonymous_short": "anonyme"
   }
 }

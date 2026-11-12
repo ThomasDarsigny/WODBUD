@@ -1378,5 +1378,21 @@
     "status_done": "Atendidos",
     "reply": "Responder",
     "mark_done": "Atendido"
+  },
+  "suggestions": {
+    "title": "Buzón de sugerencias · {{name}}",
+    "hint": "¿Una idea sobre las clases, el horario, el equipamiento? Tu centro la recibe directamente.",
+    "message": "Tu sugerencia",
+    "placeholder": "Lo que haría tu centro aún mejor…",
+    "anonymous": "Enviar de forma anónima",
+    "anonymous_hint": "El equipo no verá tu nombre.",
+    "signed_hint": "El equipo verá tu nombre.",
+    "send": "Enviar",
+    "sent": "¡Gracias! {{name}} recibió tu sugerencia.",
+    "too_many": "Has enviado muchas sugerencias hoy. Inténtalo mañana.",
+    "mine": "Tus últimas sugerencias",
+    "status_new": "Pendiente",
+    "status_done": "Atendida",
+    "anonymous_short": "anónima"
   }
 }
