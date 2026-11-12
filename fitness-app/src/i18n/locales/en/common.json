@@ -584,7 +584,14 @@
     "plan_past": "Last two weeks",
     "plan_progress": "{{done}}/{{total}} done",
     "plan_delete": "Remove for the whole class",
-    "tab_followup": "Follow-up"
+    "tab_followup": "Follow-up",
+    "center_title": "Center classes · {{name}}",
+    "center_empty": "No other coach has a class yet.",
+    "center_no_coach": "No coach",
+    "center_members_one": "{{count}} member",
+    "center_members_other": "{{count}} members",
+    "center_next": "Next session: {{date}}",
+    "center_nothing_planned": "Nothing planned"
   },
   "athlete": {
     "role_label": "Athlete",

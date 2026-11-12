@@ -18,6 +18,7 @@ import ClassFollowup from './ClassFollowup'
 import { useIsMobile } from '../../hooks/useMediaQuery'
 import { useSearchParams } from 'react-router-dom'
 import { useBackToClose } from '../../hooks/useBackToClose'
+import CenterClassesList from '../center/CenterClassesList'
 
 const BASE_URL = window.location.origin
 
@@ -141,6 +142,7 @@ export default function ClassesView() {
               )
             })
           )}
+          <CenterClassesList />
         </div>
 
         <div style={{ padding: '1rem 1.25rem', borderTop: '1px solid var(--border)' }}>

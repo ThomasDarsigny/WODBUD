@@ -2171,6 +2171,19 @@ export type Database = {
         }
         Returns: string
       }
+      get_center_classes: {
+        Args: { p_center: string }
+        Returns: {
+          class_id: string
+          coach_id: string
+          coach_name: string
+          created_at: string
+          members_count: number
+          name: string
+          next_plan_date: string
+          schedule: string
+        }[]
+      }
       get_center_invite: {
         Args: { p_token: string }
         Returns: {
@@ -2383,6 +2396,7 @@ export type Database = {
       is_center_lead: { Args: { p_center: string }; Returns: boolean }
       is_center_staff: { Args: { p_center: string }; Returns: boolean }
       is_class_coach: { Args: { p_class_id: string }; Returns: boolean }
+      is_class_lead: { Args: { p_class_id: string }; Returns: boolean }
       is_class_member: { Args: { p_class_id: string }; Returns: boolean }
       is_community_admin: { Args: { p_community: string }; Returns: boolean }
       is_community_member: { Args: { p_community: string }; Returns: boolean }

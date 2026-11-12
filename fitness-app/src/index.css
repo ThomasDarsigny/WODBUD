@@ -1607,6 +1607,14 @@ button.wb-ex-card { display: flex; align-items: center; gap: 0.85rem; padding: 0
 .wb-adapt { border-color: rgba(120, 160, 255, 0.35); background: rgba(120, 160, 255, 0.05); }
 .wb-adapt .wb-tooeasy-head { color: #9db7ff; }
 .wb-adapt-tag { color: #9db7ff; }
+.wb-cclasses { padding: 1rem 1.25rem; border-top: 1px solid var(--border); }
+.wb-cclasses-title { margin: 0 0 0.6rem; font-family: var(--font-d); font-size: 0.6875rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--orange); }
+.wb-cclasses-empty { margin: 0; font-size: 0.8125rem; color: var(--muted); }
+.wb-cclasses ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.5rem; }
+.wb-cclasses li { display: grid; gap: 0.15rem; padding: 0.6rem 0.75rem; border-radius: var(--r-md); background: var(--surface); }
+.wb-cclasses li strong { font-family: var(--font-d); font-size: 0.875rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--white); }
+.wb-cclasses li span { font-size: 0.8125rem; color: var(--muted); }
+.wb-cclasses .wb-cclasses-next { font-size: 0.75rem; }
 .wb-links { display: grid; gap: 0.6rem; padding-top: 1rem; border-top: 1px solid var(--border); }
 .wb-links-head { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; }
 .wb-links-title { margin: 0; font-family: var(--font-d); font-size: 0.6875rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
