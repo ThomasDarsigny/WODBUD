@@ -1454,6 +1454,48 @@ export type Database = {
           },
         ]
       }
+      invite_notifications: {
+        Row: {
+          created_at: string
+          id: string
+          recipient_id: string
+          sender_id: string
+          target_id: string
+          target_kind: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          recipient_id: string
+          sender_id: string
+          target_id: string
+          target_kind: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          recipient_id?: string
+          sender_id?: string
+          target_id?: string
+          target_kind?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invite_notifications_recipient_id_fkey"
+            columns: ["recipient_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "invite_notifications_sender_id_fkey"
+            columns: ["sender_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       movement_types: {
         Row: {
           description_fr: string | null
@@ -2416,6 +2458,7 @@ export type Database = {
       }
       wodbud_rank_for_minutes: { Args: { p_minutes: number }; Returns: string }
       wodbud_recalc_badges: { Args: { p_user?: string }; Returns: string[] }
+      wodbud_user_id_by_email: { Args: { p_email: string }; Returns: string }
       wodbud_vote_color: { Args: { p_position: number }; Returns: string }
     }
     Enums: {

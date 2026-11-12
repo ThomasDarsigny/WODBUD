@@ -82,7 +82,7 @@ Fil conducteur : *WODBUD, c'est comme avoir un entraîneur chef* — pour le cen
 
 ### 6. Engagement
 - [x] 6.1 Bouton Inviter avec le partage du téléphone (communautés, cours et équipe du centre ; message prérempli, sinon lien copié).
-- [ ] 6.2 Notification push quand la personne invitée a déjà WODBUD.
+- [x] 6.2 Notification push quand la personne invitée a déjà WODBUD (par son courriel ; même réponse que le compte existe ou non ; anti-spam — migration 056).
 - [ ] 6.3 Formulaire de support vers WODBUD dans les réglages.
 - [ ] 6.4 Boîte à suggestions : un membre écrit à son centre.
 - [ ] 6.5 Boîte de réception des suggestions pour le centre.

@@ -1340,5 +1340,13 @@
     "remove_of": "Retirer {{name}}",
     "remove_confirm": "Retirer {{name}} du centre ?",
     "removed": "Retiré du centre."
+  },
+  "invite": {
+    "has_app": "Elle a déjà WODBUD ? Envoie-lui une notification",
+    "email_label": "Courriel de son compte WODBUD",
+    "email_placeholder": "prenom@exemple.com",
+    "send": "Envoyer",
+    "sent": "C’est envoyé. Si cette personne a un compte WODBUD, elle vient de recevoir une notification avec le lien.",
+    "too_many": "Tu as envoyé beaucoup d’invitations aujourd’hui. Réessaie demain, ou partage le lien."
   }
 }

@@ -19,6 +19,10 @@ import webpush from 'npm:web-push@3.6.7'
  * - { type: 'library_update' } : WODBUD annonce les nouveautés de la base
  *   d'exercices (7 derniers jours) à tous les abonnés.
  *   Ces deux-là : jeton d'un admin (admin_users).
+ * - { type: 'invite', target_kind: 'class' | 'community', target_id, email } :
+ *   inviter quelqu'un qui a déjà WODBUD (056). Jeton du coach du cours ou
+ *   d'un membre de la communauté. Réponse identique que le compte existe ou
+ *   non ; une notification par personne et par cible ; 30 par jour au plus.
  *
  * Un abonnement que le service push déclare expiré (404/410) est supprimé :
  * c'est un téléphone désinstallé ou une permission retirée.
@@ -158,6 +162,70 @@ async function classEvent(admin: SupabaseClient, userId: string, input: { class_
   return json(await sendToUsers(admin, build))
 }
 
+const INVITES_PER_DAY = 30
+
+async function invite(
+  admin: SupabaseClient,
+  userId: string,
+  input: { target_kind?: string; target_id?: string; email?: string }
+) {
+  const { target_kind, target_id } = input
+  const email = (input.email ?? '').trim()
+  if ((target_kind !== 'class' && target_kind !== 'community') || !target_id || !email.includes('@') || email.length > 254) {
+    return json({ error: 'Requête invalide' }, 400)
+  }
+
+  // Droits de l'invitant, nom et lien de la cible.
+  let name: string
+  let url: string
+  if (target_kind === 'class') {
+    const { data: cls } = await admin.from('classes').select('name, coach_id, invite_token').eq('id', target_id).maybeSingle()
+    if (!cls || cls.coach_id !== userId) return json({ error: 'Réservé au coach du cours' }, 403)
+    name = cls.name as string
+    url = `/join/${cls.invite_token as string}`
+  } else {
+    const [{ data: com }, { data: me }] = await Promise.all([
+      admin.from('communities').select('name').eq('id', target_id).maybeSingle(),
+      admin.from('community_members').select('user_id').eq('community_id', target_id).eq('user_id', userId).maybeSingle()
+    ])
+    if (!com || !me) return json({ error: 'Réservé aux membres de la communauté' }, 403)
+    name = com.name as string
+    url = `/communities/${target_id}`
+  }
+
+  const since = new Date(Date.now() - 24 * 3600 * 1000).toISOString()
+  const { count } = await admin.from('invite_notifications').select('id', { count: 'exact', head: true }).eq('sender_id', userId).gte('created_at', since)
+  if ((count ?? 0) >= INVITES_PER_DAY) return json({ error: 'Trop d’invitations aujourd’hui' }, 429)
+
+  // À partir d'ici, toujours la même réponse : on ne révèle pas qui a un compte.
+  const done = json({ ok: true })
+  const { data: recipient } = await admin.rpc('wodbud_user_id_by_email', { p_email: email })
+  if (!recipient || recipient === userId) return done
+
+  const { data: already } = target_kind === 'class'
+    ? await admin.from('class_members').select('athlete_id').eq('class_id', target_id).eq('athlete_id', recipient).maybeSingle()
+    : await admin.from('community_members').select('user_id').eq('community_id', target_id).eq('user_id', recipient).maybeSingle()
+  if (already) return done
+
+  const { error: dup } = await admin.from('invite_notifications').insert({
+    sender_id: userId, recipient_id: recipient, target_kind, target_id
+  })
+  if (dup) return done // déjà invité à cette cible : pas de deuxième notification
+
+  const { data: sender } = await admin.from('profiles').select('full_name').eq('id', userId).maybeSingle()
+  const who = ((sender?.full_name as string | null) ?? '').trim().split(/\s+/)[0] || 'WODBUD'
+  const build = new Map<string, (l: Lang) => Payload>([[recipient as string, (l) => ({
+    title: { fr: 'Invitation', en: 'Invitation', es: 'Invitación' }[l],
+    body: target_kind === 'class'
+      ? { fr: `${who} t’invite au cours « ${name} »`, en: `${who} invites you to the class “${name}”`, es: `${who} te invita a la clase «${name}»` }[l]
+      : { fr: `${who} t’invite dans la communauté « ${name} »`, en: `${who} invites you to the “${name}” community`, es: `${who} te invita a la comunidad «${name}»` }[l],
+    url,
+    tag: `invite-${target_kind}-${target_id}`
+  })]])
+  await sendToUsers(admin, build)
+  return done
+}
+
 async function isAdmin(admin: SupabaseClient, userId: string): Promise<boolean> {
   const { data } = await admin.from('admin_users').select('user_id').eq('user_id', userId).maybeSingle()
   return Boolean(data)
@@ -243,11 +311,12 @@ Deno.serve(async (req) => {
         : await libraryUpdate(admin)
     }
 
-    if (body.type === 'class' || body.type === 'test') {
+    if (body.type === 'class' || body.type === 'test' || body.type === 'invite') {
       const token = (req.headers.get('Authorization') ?? '').replace(/^Bearer\s+/i, '')
       const { data: { user } } = await admin.auth.getUser(token)
       if (!user) return json({ error: 'Non authentifié' }, 401)
       if (body.type === 'class') return await classEvent(admin, user.id, body)
+      if (body.type === 'invite') return await invite(admin, user.id, body)
 
       const build = new Map<string, (l: Lang) => Payload>([[user.id, (l) => ({
         title: 'WODBUD',

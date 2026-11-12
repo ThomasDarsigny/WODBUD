@@ -1340,5 +1340,13 @@
     "remove_of": "Remove {{name}}",
     "remove_confirm": "Remove {{name}} from the gym?",
     "removed": "Removed from the gym."
+  },
+  "invite": {
+    "has_app": "Already on WODBUD? Send them a notification",
+    "email_label": "Email of their WODBUD account",
+    "email_placeholder": "name@example.com",
+    "send": "Send",
+    "sent": "Sent. If this person has a WODBUD account, they just received a notification with the link.",
+    "too_many": "You’ve sent a lot of invitations today. Try again tomorrow, or share the link."
   }
 }

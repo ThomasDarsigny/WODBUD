@@ -1609,6 +1609,12 @@ button.wb-ex-card { display: flex; align-items: center; gap: 0.85rem; padding: 0
 .wb-adapt-tag { color: #9db7ff; }
 .wb-pill--team { background: rgba(120, 160, 255, 0.14); color: #9db7ff; }
 .wb-role-card.is-suggested { border-color: var(--orange); box-shadow: 0 0 0 1px var(--orange) inset; }
+.wb-invite-toggle { margin-top: 0.75rem; padding: 0; border: none; background: none; color: var(--orange); font: inherit; font-size: 0.875rem; font-weight: 600; cursor: pointer; text-align: left; min-height: 44px; }
+.wb-invite-email { display: grid; gap: 0.4rem; margin-top: 0.9rem; }
+.wb-invite-email label { font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.wb-invite-row { display: flex; gap: 0.5rem; }
+.wb-invite-row .wb-input { flex: 1; min-width: 0; }
+.wb-invite-email .wb-review-ok, .wb-invite-email .wb-rec-error { margin: 0.2rem 0 0; }
 .wb-cclasses { padding: 1rem 1.25rem; border-top: 1px solid var(--border); }
 .wb-cclasses-title { margin: 0 0 0.6rem; font-family: var(--font-d); font-size: 0.6875rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--orange); }
 .wb-cclasses-empty { margin: 0; font-size: 0.8125rem; color: var(--muted); }

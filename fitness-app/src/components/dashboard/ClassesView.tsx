@@ -20,6 +20,7 @@ import { useSearchParams } from 'react-router-dom'
 import { useBackToClose } from '../../hooks/useBackToClose'
 import CenterClassesList from '../center/CenterClassesList'
 import { shareLink } from '../../lib/shareLink'
+import InviteByEmail from '../invite/InviteByEmail'
 
 const BASE_URL = window.location.origin
 
@@ -226,6 +227,7 @@ export default function ClassesView() {
                   <QRCodeSVG value={inviteUrl} size={160} />
                 </div>
               )}
+              <InviteByEmail key={selectedClass.id} kind="class" targetId={selectedClass.id} />
             </div>
 
             {/* Tabs */}

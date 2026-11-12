@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { Link, useLocation, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { shareLink } from '../../lib/shareLink'
+import InviteByEmail from '../invite/InviteByEmail'
 import { useCommunityStore } from '../../stores/communityStore'
 import { useRankStore } from '../../stores/rankStore'
 import { fetchCommunityMembers, setShareRank, type CommunityMember } from '../../lib/communityMembers'
@@ -143,6 +144,7 @@ export default function CommunityPage() {
           </button>
         </div>
         {isMember && !sharing && <p className="wb-set-hint">{t('community.share_rank_hint')}</p>}
+        {isMember && <InviteByEmail kind="community" targetId={id} />}
       </header>
 
       {error && <Notice tone='error'>{error}</Notice>}
