@@ -1190,7 +1190,10 @@
     "class_line_one": "{{count}} atleta · {{active}} activo esta semana",
     "class_line_other": "{{count}} atletas · {{active}} activos esta semana",
     "to_check_one": "{{count}} por contactar",
-    "to_check_other": "{{count}} por contactar"
+    "to_check_other": "{{count}} por contactar",
+    "today_wod": "WOD del día",
+    "today_do": "Hacer este WOD",
+    "today_sets": "series"
   },
   "welcome": {
     "hello": "¡Hola {{name}}!",

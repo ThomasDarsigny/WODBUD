@@ -1187,7 +1187,10 @@
     "class_line_one": "{{count}} athlète · {{active}} actif cette semaine",
     "class_line_other": "{{count}} athlètes · {{active}} actifs cette semaine",
     "to_check_one": "{{count}} à relancer",
-    "to_check_other": "{{count}} à relancer"
+    "to_check_other": "{{count}} à relancer",
+    "today_wod": "WOD du jour",
+    "today_do": "Faire ce WOD",
+    "today_sets": "séries"
   },
   "welcome": {
     "hello": "Salut {{name}} !",

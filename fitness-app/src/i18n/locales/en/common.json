@@ -1187,7 +1187,10 @@
     "class_line_one": "{{count}} athlete · {{active}} active this week",
     "class_line_other": "{{count}} athletes · {{active}} active this week",
     "to_check_one": "{{count}} to check in",
-    "to_check_other": "{{count}} to check in"
+    "to_check_other": "{{count}} to check in",
+    "today_wod": "WOD of the day",
+    "today_do": "Do this WOD",
+    "today_sets": "sets"
   },
   "welcome": {
     "hello": "Hi {{name}}!",

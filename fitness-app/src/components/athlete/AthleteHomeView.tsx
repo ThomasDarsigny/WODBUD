@@ -14,7 +14,7 @@ import FeatureTopicsCard from '../vote/FeatureTopicsCard'
 import { isVoteSessionOpen } from '../../lib/voteSessions'
 import { useSessionStore } from '../../stores/sessionStore'
 import { unlockAudio } from '../../lib/gymCues'
-import TodayPlans from '../home/TodayPlans'
+import TodayWod from '../home/TodayWod'
 import { MyWeekStats, useMyWeek } from '../home/MyWeek'
 
 export default function AthleteHomeView() {
@@ -73,13 +73,14 @@ export default function AthleteHomeView() {
         </div>
       </header>
 
+      {/* Le WOD du jour de mon cours passe avant tout le reste (1.3). */}
+      <TodayWod />
+
       <Link to="/athlete/session" className="wb-btn wb-btn--primary wb-btn--lg" onClick={unlockAudio}>
         ▶ {sessionRunning ? t('home.resume_session') : t('home.start_session')}
       </Link>
 
       <MyWeekStats me={me} />
-
-      <TodayPlans basePath="/athlete" />
 
       <OnboardingCard area="athlete" />
 
