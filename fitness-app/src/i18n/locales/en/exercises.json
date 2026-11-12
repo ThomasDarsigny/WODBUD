@@ -206,5 +206,35 @@
     "to_shoot": "To shoot",
     "empty": "No imports yet: the list will fill up with the gyms’ imports.",
     "all_done": "Every mentioned exercise has its video."
+  },
+  "links": {
+    "title": "Variations",
+    "add": "Link",
+    "empty": "No linked variation yet.",
+    "kind": "Link type",
+    "zone": "Body area",
+    "search": "Search an exercise…",
+    "no_match": "No exercise found.",
+    "exists": "This link already exists.",
+    "remove": "Remove the link with {{name}}",
+    "adapt_zone": "Adaptation · {{zone}}",
+    "kinds": {
+      "harder": "Harder",
+      "easier": "Easier",
+      "adaptation": "Adaptation"
+    },
+    "zones": {
+      "shoulder": "Shoulder",
+      "elbow": "Elbow",
+      "wrist": "Wrist",
+      "neck": "Neck",
+      "back": "Back",
+      "hip": "Hip",
+      "knee": "Knee",
+      "ankle": "Ankle"
+    },
+    "explain_harder": "The chosen exercise will be suggested when {{name}} gets too easy.",
+    "explain_easier": "The chosen exercise will be suggested when {{name}} is too hard.",
+    "explain_adaptation": "The chosen exercise will replace {{name}} when this area hurts."
   }
 }

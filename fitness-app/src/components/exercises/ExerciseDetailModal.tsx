@@ -5,6 +5,7 @@ import type { Exercise } from '../../types'
 import { CATEGORY_I18N_KEYS, MUSCLE_GROUP_I18N_KEYS } from '../../types'
 import { label as labelStyle, badgeBase as tagStyle, btnBase as btnStyle } from '../../styles/ui'
 import { useBackToClose } from '../../hooks/useBackToClose'
+import ExerciseLinksEditor from './ExerciseLinksEditor'
 
 interface Props {
   exercise: Exercise
@@ -13,6 +14,8 @@ interface Props {
   onEdit?: (exercise: Exercise) => void
   onDelete?: (exercise: Exercise) => Promise<void> | void
   inWorkoutBuilder?: boolean
+  /** Portée des liens modifiables : null = WODBUD, un id = ce centre ; absent = pas de modification. */
+  linkScope?: string | null
 }
 
 export default function ExerciseDetailModal({
@@ -21,7 +24,8 @@ export default function ExerciseDetailModal({
   onAddToWorkout,
   onEdit,
   onDelete,
-  inWorkoutBuilder = false
+  inWorkoutBuilder = false,
+  linkScope
 }: Props) {
   useBackToClose(true, onClose)
   const { t } = useTranslation(['exercises', 'common'])
@@ -220,6 +224,8 @@ export default function ExerciseDetailModal({
               </p>
             </div>
           )}
+
+          {linkScope !== undefined && !inWorkoutBuilder && <ExerciseLinksEditor exercise={exercise} scope={linkScope} />}
 
           <div
             style={{

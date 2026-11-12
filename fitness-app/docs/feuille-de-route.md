@@ -74,7 +74,7 @@ Fil conducteur : *WODBUD, c'est comme avoir un entraîneur chef* — pour le cen
 
 ### 5. Progression / régression
 - [x] 5.1 Base de données : relier deux exercices (plus dur, plus facile, adaptation pour une zone du corps).
-- [ ] 5.2 Écran pour que WODBUD et les chefs créent ces liens.
+- [x] 5.2 Écran pour que WODBUD et les chefs créent ces liens (section « Variantes » de la fiche d'exercice).
 - [ ] 5.3 Afficher les variantes liées sur la fiche d'un exercice.
 - [ ] 5.4 Calcul de la charge : +5 % haut du corps, +10 % bas du corps, arrondi aux disques.
 - [ ] 5.5 Action « Trop facile » dans le créateur : nouvelle charge ou variante plus dure.

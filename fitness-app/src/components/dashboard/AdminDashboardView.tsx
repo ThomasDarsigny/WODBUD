@@ -171,6 +171,7 @@ export default function AdminDashboardView() {
           onClose={() => setDetailExercise(undefined)}
           onEdit={openEdit}
           onDelete={handleDelete}
+          linkScope={detailExercise.center_id ? undefined : null}
         />
       )}
     </div>

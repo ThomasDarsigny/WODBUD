@@ -54,6 +54,12 @@ export default function ExercisesView() {
   const centerLead = Boolean(myCenter && isLead(myCenter.role))
   const canCreate = isAdmin || centerLead
   const canEdit = (e: Exercise) => isAdmin || (centerLead && Boolean(e.center_id) && e.center_id === myCenter?.center.id)
+  // Liens de progression : WODBUD sur la base commune, un chef sur la base commune et son centre.
+  const linkScope = (e: Exercise): string | null | undefined => {
+    if (isAdmin) return e.center_id ? undefined : null
+    if (centerLead && myCenter && (!e.center_id || e.center_id === myCenter.center.id)) return myCenter.center.id
+    return undefined
+  }
 
   useEffect(() => {
     fetchExercises()
@@ -286,6 +292,7 @@ export default function ExercisesView() {
           onClose={() => setDetailExercise(undefined)}
           onEdit={canEdit(detailExercise) ? handleEdit : undefined}
           onDelete={canEdit(detailExercise) ? handleDelete : undefined}
+          linkScope={linkScope(detailExercise)}
         />
       )}
     </div>

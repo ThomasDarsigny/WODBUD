@@ -206,5 +206,35 @@
     "to_shoot": "Por grabar",
     "empty": "Aún no hay importaciones: la lista se llenará con las de los centros.",
     "all_done": "Todos los ejercicios mencionados tienen su vídeo."
+  },
+  "links": {
+    "title": "Variantes",
+    "add": "Vincular",
+    "empty": "Todavía no hay variantes vinculadas.",
+    "kind": "Tipo de vínculo",
+    "zone": "Zona del cuerpo",
+    "search": "Buscar un ejercicio…",
+    "no_match": "No se encontró ningún ejercicio.",
+    "exists": "Este vínculo ya existe.",
+    "remove": "Quitar el vínculo con {{name}}",
+    "adapt_zone": "Adaptación · {{zone}}",
+    "kinds": {
+      "harder": "Más difícil",
+      "easier": "Más fácil",
+      "adaptation": "Adaptación"
+    },
+    "zones": {
+      "shoulder": "Hombro",
+      "elbow": "Codo",
+      "wrist": "Muñeca",
+      "neck": "Cuello",
+      "back": "Espalda",
+      "hip": "Cadera",
+      "knee": "Rodilla",
+      "ankle": "Tobillo"
+    },
+    "explain_harder": "El ejercicio elegido se propondrá cuando {{name}} resulte demasiado fácil.",
+    "explain_easier": "El ejercicio elegido se propondrá cuando {{name}} sea demasiado difícil.",
+    "explain_adaptation": "El ejercicio elegido reemplazará a {{name}} cuando esta zona duela."
   }
 }

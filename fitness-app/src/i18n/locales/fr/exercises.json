@@ -206,5 +206,35 @@
     "to_shoot": "À tourner",
     "empty": "Aucun import encore : la liste se remplira avec les imports des centres.",
     "all_done": "Tous les exercices mentionnés ont leur vidéo."
+  },
+  "links": {
+    "title": "Variantes",
+    "add": "Relier",
+    "empty": "Aucune variante reliée pour l’instant.",
+    "kind": "Type de lien",
+    "zone": "Zone du corps",
+    "search": "Chercher un exercice…",
+    "no_match": "Aucun exercice trouvé.",
+    "exists": "Ce lien existe déjà.",
+    "remove": "Retirer le lien avec {{name}}",
+    "adapt_zone": "Adaptation · {{zone}}",
+    "kinds": {
+      "harder": "Plus dur",
+      "easier": "Plus facile",
+      "adaptation": "Adaptation"
+    },
+    "zones": {
+      "shoulder": "Épaule",
+      "elbow": "Coude",
+      "wrist": "Poignet",
+      "neck": "Cou",
+      "back": "Dos",
+      "hip": "Hanche",
+      "knee": "Genou",
+      "ankle": "Cheville"
+    },
+    "explain_harder": "L’exercice choisi sera proposé quand {{name}} devient trop facile.",
+    "explain_easier": "L’exercice choisi sera proposé quand {{name}} est trop difficile.",
+    "explain_adaptation": "L’exercice choisi remplacera {{name}} quand cette zone fait mal."
   }
 }
