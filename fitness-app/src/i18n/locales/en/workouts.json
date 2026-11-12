@@ -172,6 +172,9 @@
     "harder": "Harder",
     "replace": "Replace with {{name}}",
     "no_load": "Enter a numeric load (e.g. 60kg) to get the next one.",
-    "no_variant": "No harder variation is linked to this exercise."
+    "no_variant": "No harder variation is linked to this exercise.",
+    "adapt": "Adapt",
+    "which_zone": "Which area hurts?",
+    "no_adaptation": "No adaptation linked for: {{zone}}. Ask your coach, or link one in the exercise sheet (“Variations” section)."
   }
 }

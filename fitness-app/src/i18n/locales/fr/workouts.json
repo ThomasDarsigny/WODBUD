@@ -172,6 +172,9 @@
     "harder": "Plus dur",
     "replace": "Remplacer par {{name}}",
     "no_load": "Indique une charge en chiffres (ex. 60kg) pour recevoir la suivante.",
-    "no_variant": "Aucune variante plus dure n’est reliée à cet exercice."
+    "no_variant": "Aucune variante plus dure n’est reliée à cet exercice.",
+    "adapt": "À adapter",
+    "which_zone": "Quelle zone fait mal ?",
+    "no_adaptation": "Aucune adaptation reliée pour : {{zone}}. Demande à ton entraîneur ou relie-en une dans la fiche de l’exercice (section « Variantes »)."
   }
 }

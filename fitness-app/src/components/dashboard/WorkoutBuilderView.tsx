@@ -16,6 +16,7 @@ import { useIsMobile } from '../../hooks/useMediaQuery'
 import { useAvailableEquipment } from '../../hooks/useAvailableEquipment'
 import { missingEquipment, type EquipmentId } from '../../lib/equipment'
 import TooEasyPanel from '../workouts/TooEasyPanel'
+import AdaptPanel from '../workouts/AdaptPanel'
 
 export default function WorkoutBuilderView() {
   const { t, i18n } = useTranslation(['workouts', 'common'])
@@ -1082,7 +1083,7 @@ function WorkoutExerciseSlot({
 }) {
   const { t } = useTranslation('workouts')
   const [expanded, setExpanded] = useState(false)
-  const [tooEasy, setTooEasy] = useState(false)
+  const [panel, setPanel] = useState<'easy' | 'adapt' | null>(null)
 
   const borderColor =
     alert?.level === 'danger'
@@ -1244,17 +1245,28 @@ function WorkoutExerciseSlot({
             />
           </div>
           <div style={{ gridColumn: '1 / -1' }}>
-            {tooEasy ? (
+            {panel === 'easy' ? (
               <TooEasyPanel
                 workoutExercise={we}
-                onLoad={(weight) => { onUpdate({ weight }); setTooEasy(false) }}
-                onReplace={(exercise) => { onReplace(exercise); setTooEasy(false) }}
-                onClose={() => setTooEasy(false)}
+                onLoad={(weight) => { onUpdate({ weight }); setPanel(null) }}
+                onReplace={(exercise) => { onReplace(exercise); setPanel(null) }}
+                onClose={() => setPanel(null)}
+              />
+            ) : panel === 'adapt' ? (
+              <AdaptPanel
+                workoutExercise={we}
+                onReplace={(exercise) => { onReplace(exercise); setPanel(null) }}
+                onClose={() => setPanel(null)}
               />
             ) : (
-              <button type="button" className="wb-chip wb-tooeasy-btn" onClick={() => setTooEasy(true)}>
-                {t('progression.too_easy')}
-              </button>
+              <div className="wb-links-chips">
+                <button type="button" className="wb-chip wb-tooeasy-btn" onClick={() => setPanel('easy')}>
+                  {t('progression.too_easy')}
+                </button>
+                <button type="button" className="wb-chip wb-tooeasy-btn" onClick={() => setPanel('adapt')}>
+                  {t('progression.adapt')}
+                </button>
+              </div>
             )}
           </div>
           <div style={{ gridColumn: '1 / -1' }}>
