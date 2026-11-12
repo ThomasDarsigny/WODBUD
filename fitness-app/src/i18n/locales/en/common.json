@@ -486,13 +486,13 @@
         }
       },
       "perso": {
-        "meta_title": "WODBUD solo — WODs that fit your equipment",
-        "meta_description": "Tell us what equipment you have: WODBUD suggests doable exercises, structured WODs and AI to help you progress.",
+        "meta_title": "WODBUD solo — your sessions, your records, your progress",
+        "meta_description": "Free session or ready-made WOD, guided timer, log, records and ranks, communities: WODBUD has your back when you train on your own.",
         "hero": {
           "tag": "For training on your own",
-          "title_line1": "Your coach,",
+          "title_line1": "Your training,",
           "title_em": "at home or at the gym.",
-          "subtitle": "Tell us what equipment you have: WODBUD suggests doable exercises, structured WODs and AI to help you progress.",
+          "subtitle": "Start a free session or a ready-made WOD, let the timer guide you, and watch your records and rank climb, on your own or with a community.",
           "cta": "Get started"
         }
       }
@@ -574,6 +574,43 @@
             "icon": "vote",
             "title": "Your opinion counts",
             "text": "Your coach opens a vote: pick the exercises for the next session."
+          }
+        ]
+      },
+      "perso": {
+        "tag": "For you",
+        "title": "On your own, never without a plan.",
+        "lead": "Everything to train regularly and see your progress, at home or at the gym.",
+        "items": [
+          {
+            "icon": "play",
+            "title": "Free session or ready WOD",
+            "text": "Start a free session or one of the WODs suggested by WODBUD, in one tap."
+          },
+          {
+            "icon": "clock",
+            "title": "Timer and rest",
+            "text": "The clock, rest periods and sound cues guide you to the last rep."
+          },
+          {
+            "icon": "calendar",
+            "title": "Your log",
+            "text": "Every session is logged: duration, exercises and notes."
+          },
+          {
+            "icon": "records",
+            "title": "Your records",
+            "text": "Your records are calculated automatically, in kg or lb."
+          },
+          {
+            "icon": "rank",
+            "title": "Ranks to earn",
+            "text": "Rank up with your training minutes."
+          },
+          {
+            "icon": "community",
+            "title": "Communities",
+            "text": "Join a community: challenges, leaderboard and a shared WOD to stay motivated."
           }
         ]
       }

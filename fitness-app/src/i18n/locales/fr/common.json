@@ -486,13 +486,13 @@
         }
       },
       "perso": {
-        "meta_title": "WODBUD perso — des WODs adaptés à ton équipement",
-        "meta_description": "Dis quel équipement tu as : WODBUD te propose des exercices faisables, des WODs structurés et une IA pour progresser.",
+        "meta_title": "WODBUD perso — tes séances, tes records, ta progression",
+        "meta_description": "Séance libre ou WOD prêt, minuteur guidé, journal, records et rangs, communautés : WODBUD t’accompagne quand tu t’entraînes seul.",
         "hero": {
           "tag": "Pour t’entraîner seul",
-          "title_line1": "Ton coach,",
+          "title_line1": "Ton entraînement,",
           "title_em": "à la maison comme au gym.",
-          "subtitle": "Dis quel équipement tu as : WODBUD te propose des exercices faisables, des WODs structurés et une IA pour t’aider à progresser.",
+          "subtitle": "Lance une séance libre ou un WOD prêt, laisse le minuteur te guider, et regarde tes records et ton rang grimper, seul ou avec une communauté.",
           "cta": "Commencer"
         }
       }
@@ -574,6 +574,43 @@
             "icon": "vote",
             "title": "Ton avis compte",
             "text": "Ton entraîneur ouvre un vote : choisis les exercices de la prochaine séance."
+          }
+        ]
+      },
+      "perso": {
+        "tag": "Pour toi",
+        "title": "Seul, mais jamais sans plan.",
+        "lead": "De quoi t’entraîner régulièrement et voir tes progrès, à la maison comme au gym.",
+        "items": [
+          {
+            "icon": "play",
+            "title": "Séance libre ou WOD prêt",
+            "text": "Lance une séance libre ou un des WODs proposés par WODBUD, en un toucher."
+          },
+          {
+            "icon": "clock",
+            "title": "Minuteur et repos",
+            "text": "Le chrono, les temps de repos et les signaux sonores te guident jusqu’à la dernière répétition."
+          },
+          {
+            "icon": "calendar",
+            "title": "Ton journal",
+            "text": "Chaque séance est notée : durée, exercices et notes."
+          },
+          {
+            "icon": "records",
+            "title": "Tes records",
+            "text": "Tes records se calculent tout seuls, en kg ou en lb."
+          },
+          {
+            "icon": "rank",
+            "title": "Des rangs à gagner",
+            "text": "Monte de rang avec tes minutes d’entraînement."
+          },
+          {
+            "icon": "community",
+            "title": "Des communautés",
+            "text": "Rejoins une communauté : défis, classement et WOD partagé pour rester motivé."
           }
         ]
       }

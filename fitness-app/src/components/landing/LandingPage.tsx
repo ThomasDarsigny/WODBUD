@@ -157,7 +157,7 @@ export default function LandingPage({ profile }: { profile: LandingProfile }) {
         ))}
       </section>
 
-      {profile !== 'perso' && <ProfileHighlights profile={profile} />}
+      <ProfileHighlights profile={profile} />
 
       <ScrollStory />
 
