@@ -50,7 +50,8 @@
     "equipment_center_other": "{{name}} equipment: {{count}} items",
     "equipment_home_one": "Your equipment: {{count}} item",
     "equipment_home_other": "Your equipment: {{count}} items",
-    "equipment_edit": "Edit"
+    "equipment_edit": "Edit",
+    "missing_equipment": "Missing equipment: {{list}}"
   },
   "reminders": {
     "theme_inactive": "You haven't done a {{theme}} session in {{days}} days"

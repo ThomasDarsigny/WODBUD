@@ -14,6 +14,7 @@ import { label as smallLabelStyle, fieldCompact as miniInputStyle, field as sele
 import { pdfFileName } from '../pdf/pdfTokens'
 import { useIsMobile } from '../../hooks/useMediaQuery'
 import { useAvailableEquipment } from '../../hooks/useAvailableEquipment'
+import { missingEquipment, type EquipmentId } from '../../lib/equipment'
 
 export default function WorkoutBuilderView() {
   const { t, i18n } = useTranslation(['workouts', 'common'])
@@ -95,6 +96,20 @@ export default function WorkoutBuilderView() {
 
     return matchesSearch && matchesCategory && matchesMuscle
   })
+
+  // Faisables d'abord (tri stable : l'ordre alphabétique est gardé dans
+  // chaque groupe). Sans équipement connu, la liste reste telle quelle.
+  const missingById = useMemo(() => {
+    const map = new Map<string, EquipmentId[]>()
+    if (!available) return map
+    for (const e of exercises) map.set(e.id, missingEquipment(e.equipment, available.equipment))
+    return map
+  }, [exercises, available])
+  const sortedExercises = available
+    ? [...filteredExercises].sort(
+        (a, b) => Number((missingById.get(a.id)?.length ?? 0) > 0) - Number((missingById.get(b.id)?.length ?? 0) > 0)
+      )
+    : filteredExercises
 
   const hasActiveFilters = selectedCategories.length > 0 || selectedMuscles.length > 0
 
@@ -381,10 +396,11 @@ export default function WorkoutBuilderView() {
             </div>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-              {filteredExercises.map((exercise) => (
+              {sortedExercises.map((exercise) => (
                 <PickerExerciseRow
                   key={exercise.id}
                   exercise={exercise}
+                  missing={missingById.get(exercise.id) ?? []}
                   onClick={() => setPickerExercise(exercise)}
                   alreadyAdded={workoutExercises.some((we) => we.exercise.id === exercise.id)}
                 />
@@ -931,11 +947,14 @@ export default function WorkoutBuilderView() {
 function PickerExerciseRow({
   exercise,
   onClick,
-  alreadyAdded
+  alreadyAdded,
+  missing
 }: {
   exercise: Exercise
   onClick: () => void
   alreadyAdded: boolean
+  /** Équipement requis absent du centre (ou de la maison). */
+  missing: EquipmentId[]
 }) {
   const { t } = useTranslation('workouts')
   const [hovered, setHovered] = useState(false)
@@ -1010,6 +1029,11 @@ function PickerExerciseRow({
         >
           {t(MUSCLE_GROUP_I18N_KEYS[exercise.primary_muscle], { ns: 'common' })}
         </p>
+        {missing.length > 0 && (
+          <span className="wb-missing-equip">
+            {t('builder.missing_equipment', { list: missing.map((m) => t(`equipment.items.${m}`, { ns: 'common' })).join(', ') })}
+          </span>
+        )}
       </div>
 
       <span

@@ -50,7 +50,8 @@
     "equipment_center_other": "Équipement de {{name}} : {{count}} éléments",
     "equipment_home_one": "Ton équipement : {{count}} élément",
     "equipment_home_other": "Ton équipement : {{count}} éléments",
-    "equipment_edit": "Modifier"
+    "equipment_edit": "Modifier",
+    "missing_equipment": "Équipement manquant : {{list}}"
   },
   "reminders": {
     "theme_inactive": "Tu n'as pas fait de séance {{theme}} depuis {{days}} jours"
