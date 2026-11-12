@@ -108,6 +108,24 @@ Fil conducteur : *WODBUD, c'est comme avoir un entraîneur chef* — pour le cen
 ### Comptes perso (provisoire)
 - [x] Les comptes perso ont le créateur de WOD, leurs WODs, la bibliothèque d'exercices (filtre « Seulement ce que j'ai ») et l'assistant IA dans leur espace. Décision provisoire : à revoir avec le client.
 
+## Transformation (audit du 12 novembre 2026)
+
+Rapport : audit produit publié le 12 novembre. Branche de travail : `sprint`. Une unité à la fois, validée dans le navigateur, puis rapport avant la suivante.
+
+### Phase 0 · Mise en sécurité
+- [x] 0.1 Un compte ne modifie que ses propres champs de profil ; minutes, séries et segment restent aux déclencheurs (migration 062).
+- [x] 0.2 Plus aucune fonction exécutable sans compte, sauf les trois d'invitation et de partage ; les futures fonctions ne sont plus exposées à `anon` ni à `public` par défaut (migration 063).
+- [x] 0.3 Dix tables héritées `app_*` supprimées après export hors dépôt (migration 064).
+- [ ] 0.4 Activer « Leaked password protection » dans Supabase Auth (réglage du tableau de bord).
+- [ ] 0.5 Domaine et clés (ANTHROPIC_API_KEY, R2) : reportés à plus tard, décision du 12 novembre.
+
+### Phase 1 · La boucle athlète : score et tableau blanc
+- [ ] 1.1 Modèle de score par méthode (temps, rounds + reps, charge, répétitions) et RX / scaled.
+- [ ] 1.2 Saisie du score en fin de séance, en trois touchers.
+- [ ] 1.3 WOD du jour de ma classe en tête de l'accueil athlète.
+- [ ] 1.4 Tableau blanc par classe et par jour : scores, RX / scaled, réactions.
+- [ ] 1.5 Benchmarks livrés par WODBUD et historique « la dernière fois ».
+
 ## À définir avec le client
 - [ ] **Facturation** : qui paie et comment (par membre, par entraîneur, prix fixe).
 - [ ] **Forfaits d'abonnement** (« balancer les bundles ») : ce qui est inclus dans chaque palier.

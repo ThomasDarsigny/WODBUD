@@ -68,3 +68,6 @@ enregistré en base, il faudrait d'abord le réparer.
 | `059_session_rating.sql` | Note d'un entraînement (1 à 5) et sa date sur `workout_sessions`, sous les règles d'accès des séances. |
 | `060_center_favorite_wods.sql` | `get_center_favorite_wods` : WODs de l'équipe d'un centre classés selon les notes des gens du centre (moyenne à partir de 3 notes, jamais qui a noté quoi) ; réservé à l'équipe. |
 | `061_ai_persona.sql` | Avatar (8 « Forge ») et ton (motivant, calme, militaire, humoristique) de l'assistant IA sur `profiles` ; lus par `ai-coach`. |
+| `062_profiles_column_guard.sql` | `authenticated` ne modifie plus que ses propres champs de `profiles` (droits par colonne en insert/update) ; minutes, séries, segment et `created_at` réservés aux déclencheurs et au service role. |
+| `063_revoke_anon_functions.sql` | Plus aucune fonction exécutable sans compte sauf `get_center_invite`, `get_class_by_invite_token`, `get_shared_rank` ; les futures fonctions ne sont plus exposées à `anon` par défaut. |
+| `064_drop_legacy_app_tables.sql` | Suppression des dix tables `app_*` d'une version précédente (nutrition, poids, journaux), sans code ni règle d'accès ; export JSON conservé hors dépôt avant application. |
