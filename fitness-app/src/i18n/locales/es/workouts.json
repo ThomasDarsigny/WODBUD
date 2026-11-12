@@ -188,5 +188,35 @@
     "label_4": "Muy bueno",
     "label_5": "¡Excelente!",
     "error": "No se pudo guardar la valoración. Inténtalo de nuevo."
+  },
+  "score": {
+    "title": "Tu marca",
+    "type": "Tipo de marca",
+    "types": {
+      "time": "Tiempo",
+      "rounds_reps": "Rondas + reps",
+      "reps": "Repeticiones",
+      "load": "Carga"
+    },
+    "time_label": "Tiempo (mm:ss)",
+    "rounds_label": "Rondas completas",
+    "reps_extra_label": "Reps de la ronda empezada",
+    "reps_label": "Repeticiones totales",
+    "load_label": "Carga ({{unit}})",
+    "reps_opt_label": "Reps (opcional)",
+    "capped": "Tiempo límite alcanzado",
+    "reps_done_label": "Reps hechas al límite",
+    "rx": "RX o adaptado",
+    "rx_rx": "RX",
+    "rx_scaled": "Adaptado",
+    "rx_hint_rx": "Tal como está prescrito: cargas y movimientos del WOD.",
+    "rx_hint_scaled": "Carga, movimiento o volumen adaptado.",
+    "save": "Guardar marca",
+    "saved_title": "Marca guardada",
+    "change": "Cambiar",
+    "bad_time": "Escribe un tiempo como 12:34.",
+    "bad_rounds": "Escribe el número de rondas.",
+    "bad_reps": "Escribe el número de repeticiones.",
+    "bad_load": "Escribe una carga."
   }
 }

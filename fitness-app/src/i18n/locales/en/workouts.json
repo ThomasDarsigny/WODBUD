@@ -188,5 +188,35 @@
     "label_4": "Very good",
     "label_5": "Excellent!",
     "error": "The rating couldn’t be saved. Try again."
+  },
+  "score": {
+    "title": "Your score",
+    "type": "Score type",
+    "types": {
+      "time": "Time",
+      "rounds_reps": "Rounds + reps",
+      "reps": "Reps",
+      "load": "Load"
+    },
+    "time_label": "Time (mm:ss)",
+    "rounds_label": "Full rounds",
+    "reps_extra_label": "Reps of the last round",
+    "reps_label": "Total reps",
+    "load_label": "Load ({{unit}})",
+    "reps_opt_label": "Reps (optional)",
+    "capped": "Time cap reached",
+    "reps_done_label": "Reps done at the cap",
+    "rx": "RX or scaled",
+    "rx_rx": "RX",
+    "rx_scaled": "Scaled",
+    "rx_hint_rx": "As prescribed: the WOD’s loads and movements.",
+    "rx_hint_scaled": "Load, movement or volume adapted.",
+    "save": "Save score",
+    "saved_title": "Score saved",
+    "change": "Edit",
+    "bad_time": "Enter a time like 12:34.",
+    "bad_rounds": "Enter the number of rounds.",
+    "bad_reps": "Enter the number of reps.",
+    "bad_load": "Enter a load."
   }
 }

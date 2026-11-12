@@ -3,6 +3,7 @@ import type { ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import RateWorkout from './RateWorkout'
+import ScoreEntry from './ScoreEntry'
 import { useSessionStore } from '../../stores/sessionStore'
 import { useWorkoutStore } from '../../stores/workoutStore'
 import { formatClock } from '../../lib/sessionTimer'
@@ -391,7 +392,8 @@ function SummaryPanel({ basePath }: { basePath: string }) {
           </Pop>
         )}
 
-        {/* Note du WOD : seulement quand la séance est déjà enregistrée et suit un WOD. */}
+        {/* Score puis note du WOD : seulement quand la séance est déjà enregistrée et suit un WOD. */}
+        {!summary.offline && summary.workoutId && <ScoreEntry sessionId={summary.sessionId} workoutId={summary.workoutId} />}
         {!summary.offline && summary.workoutId && <RateWorkout sessionId={summary.sessionId} />}
 
         <SessionRewards

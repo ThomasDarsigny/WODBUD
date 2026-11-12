@@ -188,5 +188,35 @@
     "label_4": "Très bon",
     "label_5": "Excellent !",
     "error": "La note n’a pas pu être enregistrée. Réessaie."
+  },
+  "score": {
+    "title": "Ton score",
+    "type": "Type de score",
+    "types": {
+      "time": "Temps",
+      "rounds_reps": "Rounds + reps",
+      "reps": "Répétitions",
+      "load": "Charge"
+    },
+    "time_label": "Temps (mm:ss)",
+    "rounds_label": "Rounds complets",
+    "reps_extra_label": "Reps du round entamé",
+    "reps_label": "Répétitions totales",
+    "load_label": "Charge ({{unit}})",
+    "reps_opt_label": "Reps (facultatif)",
+    "capped": "Temps limite atteint (cap)",
+    "reps_done_label": "Reps faites au cap",
+    "rx": "RX ou adapté",
+    "rx_rx": "RX",
+    "rx_scaled": "Adapté",
+    "rx_hint_rx": "Tel que prescrit : charges et mouvements du WOD.",
+    "rx_hint_scaled": "Charge, mouvement ou volume adapté.",
+    "save": "Enregistrer le score",
+    "saved_title": "Score enregistré",
+    "change": "Modifier",
+    "bad_time": "Entre un temps comme 12:34.",
+    "bad_rounds": "Entre le nombre de rounds.",
+    "bad_reps": "Entre le nombre de répétitions.",
+    "bad_load": "Entre une charge."
   }
 }

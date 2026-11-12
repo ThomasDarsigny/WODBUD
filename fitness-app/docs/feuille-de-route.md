@@ -120,8 +120,8 @@ Rapport : audit produit publié le 12 novembre. Branche de travail : `sprint`. U
 - [ ] 0.5 Domaine et clés (ANTHROPIC_API_KEY, R2) : reportés à plus tard, décision du 12 novembre.
 
 ### Phase 1 · La boucle athlète : score et tableau blanc
-- [ ] 1.1 Modèle de score par méthode (temps, rounds + reps, charge, répétitions) et RX / scaled.
-- [ ] 1.2 Saisie du score en fin de séance, en trois touchers.
+- [x] 1.1 Modèle de score par méthode (temps avec cap, rounds + reps, charge, répétitions) et RX / adapté (migration 065, `lib/scores.ts` testé).
+- [x] 1.2 Saisie du score en fin de séance (écran de bilan ; champs selon la méthode du WOD ; RX ou adapté ; modifiable).
 - [ ] 1.3 WOD du jour de ma classe en tête de l'accueil athlète.
 - [ ] 1.4 Tableau blanc par classe et par jour : scores, RX / scaled, réactions.
 - [ ] 1.5 Benchmarks livrés par WODBUD et historique « la dernière fois ».

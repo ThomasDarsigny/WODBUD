@@ -1835,6 +1835,79 @@ export type Database = {
           },
         ]
       }
+      workout_scores: {
+        Row: {
+          capped: boolean
+          created_at: string
+          id: string
+          load_kg: number | null
+          note: string | null
+          reps: number | null
+          rounds: number | null
+          rx: string
+          score_type: string
+          seconds: number | null
+          session_id: string
+          updated_at: string
+          user_id: string
+          workout_id: string
+        }
+        Insert: {
+          capped?: boolean
+          created_at?: string
+          id?: string
+          load_kg?: number | null
+          note?: string | null
+          reps?: number | null
+          rounds?: number | null
+          rx?: string
+          score_type: string
+          seconds?: number | null
+          session_id: string
+          updated_at?: string
+          user_id?: string
+          workout_id: string
+        }
+        Update: {
+          capped?: boolean
+          created_at?: string
+          id?: string
+          load_kg?: number | null
+          note?: string | null
+          reps?: number | null
+          rounds?: number | null
+          rx?: string
+          score_type?: string
+          seconds?: number | null
+          session_id?: string
+          updated_at?: string
+          user_id?: string
+          workout_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "workout_scores_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: true
+            referencedRelation: "workout_sessions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "workout_scores_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "workout_scores_workout_id_fkey"
+            columns: ["workout_id"]
+            isOneToOne: false
+            referencedRelation: "workouts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       workout_sessions: {
         Row: {
           active_minutes: number
