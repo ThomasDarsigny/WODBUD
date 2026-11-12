@@ -16,6 +16,7 @@ import { useIsMobile } from '../../hooks/useMediaQuery'
 import { useAvailableEquipment } from '../../hooks/useAvailableEquipment'
 import { missingEquipment, type EquipmentId } from '../../lib/equipment'
 import TooEasyPanel from '../workouts/TooEasyPanel'
+import { useSpaceBase } from '../../hooks/useSpaceBase'
 import AdaptPanel from '../workouts/AdaptPanel'
 
 export default function WorkoutBuilderView() {
@@ -75,6 +76,7 @@ export default function WorkoutBuilderView() {
   // Équipement sous la main (centre, sinon compte) : sert à proposer d'abord
   // les exercices faisables.
   const available = useAvailableEquipment()
+  const base = useSpaceBase()
   const [onlyDoable, setOnlyDoable] = useState(false)
 
   const normalizedSearch = search.trim().toLowerCase()
@@ -337,7 +339,7 @@ export default function WorkoutBuilderView() {
                   ? t('builder.equipment_center', { ns: 'workouts', name: available.centerName, count: available.equipment.length })
                   : t('builder.equipment_home', { ns: 'workouts', count: available.equipment.length })}
               </span>
-              <Link to="/dashboard/settings">{t('builder.equipment_edit', { ns: 'workouts' })}</Link>
+              <Link to={`${base}/settings`}>{t('builder.equipment_edit', { ns: 'workouts' })}</Link>
             </p>
           )}
           {available && (

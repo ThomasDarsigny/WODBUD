@@ -12,6 +12,7 @@ import NavDot from '../navigation/NavDot'
 import MobileTabBar from '../navigation/MobileTabBar'
 import { useNotificationStore } from '../../stores/notificationStore'
 import { PageTransition } from '../ui/motion'
+import { fetchMyRole } from '../../lib/profileRole'
 
 interface Props {
   children: ReactNode
@@ -24,8 +25,25 @@ export default function AthleteDashboardLayout({ children }: Props) {
   const isMobile = useIsMobile()
   const rail = collapsed
 
+  // Compte perso : il a aussi les outils pour bâtir ses propres WODs
+  // (créateur, ses WODs, exercices, IA). Décision provisoire du client.
+  const [perso, setPerso] = useState(false)
+  useEffect(() => {
+    let alive = true
+    fetchMyRole().then((r) => { if (alive) setPerso(r?.role === 'perso') }).catch(() => {})
+    return () => { alive = false }
+  }, [])
+
+  const tools: Array<{ id: string; labelKey: string; icon: NavIconName; path: string }> = perso ? [
+    { id: 'workout', labelKey: 'nav.tab_new', icon: 'workout', path: '/athlete/workout' },
+    { id: 'library', labelKey: 'nav.library', icon: 'library', path: '/athlete/workouts' },
+    { id: 'exercises', labelKey: 'nav.exercises', icon: 'exercises', path: '/athlete/exercises' },
+    { id: 'ai', labelKey: 'nav.ai', icon: 'ai', path: '/athlete/ai' }
+  ] : []
+
   const navItems: Array<{ id: string; labelKey: string; icon: NavIconName; path: string }> = [
     { id: 'home', labelKey: 'athlete.nav_home', icon: 'home', path: '/athlete' },
+    ...tools,
     { id: 'session', labelKey: 'nav.session', icon: 'session', path: '/athlete/session' },
     { id: 'journal', labelKey: 'nav.journal', icon: 'calendar', path: '/athlete/journal' },
     { id: 'rank', labelKey: 'nav.rank', icon: 'rank', path: '/athlete/rank' },
@@ -47,7 +65,8 @@ export default function AthleteDashboardLayout({ children }: Props) {
   }
 
   // Téléphone : accueil, séance, journal, rang en onglets ; le reste dans « Plus ».
-  const tabIds = ['home', 'session', 'journal', 'rank']
+  // Perso : « Créer » prend la place de « Journal » (qui passe dans « Plus »).
+  const tabIds = perso ? ['home', 'workout', 'session', 'rank'] : ['home', 'session', 'journal', 'rank']
   const toMobile = (item: (typeof navItems)[number]) => ({
     id: item.id,
     label: item.id === 'rank' ? t('nav.tab_rank') : t(item.labelKey),

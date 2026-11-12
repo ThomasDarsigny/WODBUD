@@ -10,6 +10,7 @@ import type { WorkoutMethod } from '../../types'
 import { METHOD_I18N_KEYS } from '../../types'
 import { unlockAudio } from '../../lib/gymCues'
 import { fetchMyCenter, fetchTeam, isStaff } from '../../lib/center'
+import { useSpaceBase } from '../../hooks/useSpaceBase'
 
 type Source = 'all' | 'mine' | 'team' | 'wodbud'
 
@@ -18,6 +19,7 @@ export default function WorkoutsLibraryView() {
   const { savedWorkouts, fetchWorkouts, workoutsFromCache, error } = useWorkoutStore()
   const startSession = useSessionStore((s) => s.startSession)
   const navigate = useNavigate()
+  const base = useSpaceBase()
 
   const [currentUserId, setCurrentUserId] = useState<string | null>(null)
   const [search, setSearch] = useState('')
@@ -74,7 +76,7 @@ export default function WorkoutsLibraryView() {
           <h1>{t('library.title')}</h1>
           <p className="wb-ph-sub">{t('library.subtitle', { count: savedWorkouts.length })}</p>
         </div>
-        <Link to="/dashboard/workout" className="wb-btn wb-btn--primary">+ {t('home.new_wod')}</Link>
+        <Link to={`${base}/workout`} className="wb-btn wb-btn--primary">+ {t('home.new_wod')}</Link>
       </header>
 
       <div className="wb-search">
@@ -147,7 +149,7 @@ export default function WorkoutsLibraryView() {
                 <button
                   type="button"
                   className="wb-btn wb-btn--primary wb-btn--block"
-                  onClick={() => { unlockAudio(); startSession(w.id, w.name); navigate('/dashboard/session') }}
+                  onClick={() => { unlockAudio(); startSession(w.id, w.name); navigate(`${base}/session`) }}
                 >
                   ▶ {t('session.start', { ns: 'workouts' })}
                 </button>

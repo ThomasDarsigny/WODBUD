@@ -470,6 +470,46 @@ function App() {
         />
 
         <Route
+          path="/athlete/workout"
+          element={
+            <ProtectedRoute>
+              <AthleteDashboardLayout>
+                <WorkoutBuilderView />
+              </AthleteDashboardLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/athlete/workouts"
+          element={
+            <ProtectedRoute>
+              <AthleteDashboardLayout>
+                <WorkoutsLibraryView />
+              </AthleteDashboardLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/athlete/exercises"
+          element={
+            <ProtectedRoute>
+              <AthleteDashboardLayout>
+                <ExercisesView />
+              </AthleteDashboardLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/athlete/ai"
+          element={
+            <ProtectedRoute>
+              <AthleteDashboardLayout>
+                <AiCoachView />
+              </AthleteDashboardLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/athlete/settings"
           element={
             <ProtectedRoute>

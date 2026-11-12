@@ -105,6 +105,9 @@ Fil conducteur : *WODBUD, c'est comme avoir un entraîneur chef* — pour le cen
 - [x] 8.2 Les WODs sont partagés dans l'équipe du centre (automatique, lecture seulement ; filtre « Équipe » et nom de l'auteur dans la bibliothèque — migration 054).
 - [x] 8.3 Un chef peut assigner un cours à un entraîneur (choix dans « Cours du centre » ; migration 055).
 
+### Comptes perso (provisoire)
+- [x] Les comptes perso ont le créateur de WOD, leurs WODs, la bibliothèque d'exercices (filtre « Seulement ce que j'ai ») et l'assistant IA dans leur espace. Décision provisoire : à revoir avec le client.
+
 ## À définir avec le client
 - [ ] **Facturation** : qui paie et comment (par membre, par entraîneur, prix fixe).
 - [ ] **Forfaits d'abonnement** (« balancer les bundles ») : ce qui est inclus dans chaque palier.
