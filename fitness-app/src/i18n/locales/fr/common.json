@@ -960,7 +960,34 @@
       "Quels exercices pour travailler les ischio-jambiers ?",
       "Crée un WOD AMRAP de 20 minutes",
       "Exercices de mobilité pour les épaules"
-    ]
+    ],
+    "persona_edit": "Personnaliser",
+    "persona_title": "Personnaliser l’assistant",
+    "persona_avatar": "Avatar",
+    "persona_tone": "Ton",
+    "persona_save": "Enregistrer",
+    "avatars": {
+      "forge": "Forge",
+      "titan": "Titan",
+      "zen": "Zen",
+      "sergent": "Sergent",
+      "eclair": "Éclair",
+      "robot": "Robot",
+      "kettlebell": "Kettlebell",
+      "flamme": "Flamme"
+    },
+    "tones": {
+      "motivating": "Motivant",
+      "calm": "Calme",
+      "military": "Militaire",
+      "funny": "Humoristique"
+    },
+    "tone_hint": {
+      "motivating": "Énergique et encourageant.",
+      "calm": "Posé, rassurant, axé sur la technique.",
+      "military": "Direct et exigeant, jamais insultant.",
+      "funny": "Une touche d’humour, sans perdre en clarté."
+    }
   },
   "badges": {
     "title": "Mes badges",

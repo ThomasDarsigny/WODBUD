@@ -963,7 +963,34 @@
       "¿Qué ejercicios trabajan los isquiotibiales?",
       "Crea un WOD AMRAP de 20 minutos",
       "Ejercicios de movilidad para los hombros"
-    ]
+    ],
+    "persona_edit": "Personalizar",
+    "persona_title": "Personalizar el asistente",
+    "persona_avatar": "Avatar",
+    "persona_tone": "Tono",
+    "persona_save": "Guardar",
+    "avatars": {
+      "forge": "Forja",
+      "titan": "Titán",
+      "zen": "Zen",
+      "sergent": "Sargento",
+      "eclair": "Rayo",
+      "robot": "Robot",
+      "kettlebell": "Kettlebell",
+      "flamme": "Llama"
+    },
+    "tones": {
+      "motivating": "Motivador",
+      "calm": "Tranquilo",
+      "military": "Militar",
+      "funny": "Divertido"
+    },
+    "tone_hint": {
+      "motivating": "Enérgico y alentador.",
+      "calm": "Sereno, tranquilizador, centrado en la técnica.",
+      "military": "Directo y exigente, nunca ofensivo.",
+      "funny": "Un toque de humor, sin perder claridad."
+    }
   },
   "badges": {
     "title": "Mis insignias",

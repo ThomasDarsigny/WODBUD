@@ -88,8 +88,8 @@ Fil conducteur : *WODBUD, c'est comme avoir un entraîneur chef* — pour le cen
 - [x] 6.5 Boîte de réception des suggestions pour le centre (accueil de l'équipe ; nom masqué si anonyme ; traiter ou rouvrir).
 - [x] 6.6 Noter l'entraînement à la fin d'une séance (5 étoiles sur l'écran de bilan d'une séance faite à partir d'un WOD — migration 059).
 - [x] 6.7 Vue des WODs préférés pour le centre (accueil de l'équipe ; moyenne à partir de 3 notes, anonyme — migration 060).
-- [ ] 6.8 Dessiner 6 à 8 avatars « Forge » pour l'IA.
-- [ ] 6.9 Choix de l'avatar et du ton (motivant, calme, militaire, humoristique), appliqué à l'assistant.
+- [x] 6.8 Dessiner 6 à 8 avatars « Forge » pour l'IA (8 avatars générés par `scripts/avatars/build-avatars.mjs` dans `public/avatars`).
+- [x] 6.9 Choix de l'avatar et du ton (motivant, calme, militaire, humoristique), appliqué à l'assistant (bouton « Personnaliser » ; `ai-coach` lit le ton — migration 061).
 
 ### 7. Landing
 - [x] 7.1 Ajouter la phrase après « Fini le bricolage. » (gain de temps, moins de maux de tête).

@@ -960,7 +960,34 @@
       "Which exercises target the hamstrings?",
       "Build a 20-minute AMRAP WOD",
       "Shoulder mobility exercises"
-    ]
+    ],
+    "persona_edit": "Customize",
+    "persona_title": "Customize the assistant",
+    "persona_avatar": "Avatar",
+    "persona_tone": "Tone",
+    "persona_save": "Save",
+    "avatars": {
+      "forge": "Forge",
+      "titan": "Titan",
+      "zen": "Zen",
+      "sergent": "Sergeant",
+      "eclair": "Lightning",
+      "robot": "Robot",
+      "kettlebell": "Kettlebell",
+      "flamme": "Flame"
+    },
+    "tones": {
+      "motivating": "Motivating",
+      "calm": "Calm",
+      "military": "Military",
+      "funny": "Funny"
+    },
+    "tone_hint": {
+      "motivating": "Energetic and encouraging.",
+      "calm": "Steady, reassuring, focused on technique.",
+      "military": "Direct and demanding, never insulting.",
+      "funny": "A touch of humor, without losing clarity."
+    }
   },
   "badges": {
     "title": "My badges",

@@ -3,6 +3,8 @@ import type { KeyboardEvent as ReactKeyboardEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { supabase } from '../../lib/supabase'
 import SpeakButton from '../ai/SpeakButton'
+import AiPersonaPicker from '../ai/AiPersonaPicker'
+import { avatarUrl, DEFAULT_PERSONA, fetchPersona, type AiPersona } from '../../lib/aiPersona'
 
 interface Message {
   role: 'user' | 'assistant'
@@ -17,6 +19,14 @@ export default function AiCoachView() {
   const [error, setError] = useState<string | null>(null)
   const bottomRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
+  const [persona, setPersona] = useState<AiPersona>(DEFAULT_PERSONA)
+  const [editing, setEditing] = useState(false)
+
+  useEffect(() => {
+    let alive = true
+    fetchPersona().then((p) => { if (alive) setPersona(p) }).catch(() => {})
+    return () => { alive = false }
+  }, [])
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -65,12 +75,17 @@ export default function AiCoachView() {
   return (
     <div className="wb-ai">
       <header className="wb-ai-head">
-        <span className="wb-ai-avatar" aria-hidden="true">AI</span>
-        <div>
+        <img className="wb-ai-avatar wb-ai-avatar--img" src={avatarUrl(persona.avatar)} alt="" width={44} height={44} />
+        <div style={{ flex: 1, minWidth: 0 }}>
           <h1>{t('ai.name')}</h1>
-          <p>{t('ai.subtitle')}</p>
+          <p>{t('ai.subtitle')} · {t(`ai.tones.${persona.tone}`)}</p>
         </div>
+        <button type="button" className="wb-btn wb-btn--secondary wb-btn--sm" aria-expanded={editing} onClick={() => setEditing((v) => !v)}>
+          {t('ai.persona_edit')}
+        </button>
       </header>
+
+      {editing && <AiPersonaPicker value={persona} onSaved={setPersona} onClose={() => setEditing(false)} />}
 
       <div className="wb-ai-thread">
         {messages.length === 0 && (
@@ -89,6 +104,7 @@ export default function AiCoachView() {
             <div className="wb-ai-bubble">
               {msg.role === 'assistant' && (
                 <span className="wb-ai-who">
+                  <img src={avatarUrl(persona.avatar)} alt="" width={20} height={20} className="wb-ai-who-img" />
                   {t('ai.name')}
                   <SpeakButton text={msg.content} />
                 </span>

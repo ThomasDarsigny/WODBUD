@@ -26,6 +26,14 @@ type ExerciseRow = {
   exercise_muscles: Array<{ role: string; muscle_groups: { name_key: string } | null }> | null
 }
 
+/** Façon de parler choisie par la personne (6.9). */
+const TONES: Record<string, string> = {
+  motivating: 'motivant et énergique : encourage, pousse à donner le meilleur, phrases courtes et positives.',
+  calm: 'calme et posé : rassurant, explique sans presser, met l’accent sur la technique et la récupération.',
+  military: 'sergent instructeur : direct, ordres brefs, exigeant mais jamais insultant ni humiliant.',
+  funny: 'humoristique : une touche d’humour léger et bienveillant, sans jamais rendre le conseil moins clair.'
+}
+
 Deno.serve(async (req: Request) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders })
 
@@ -47,6 +55,10 @@ Deno.serve(async (req: Request) => {
 
     const { message, history } = (await req.json()) as { message: string; history?: Anthropic.MessageParam[] }
     if (typeof message !== 'string' || !message.trim()) return json({ error: 'Message vide' }, 400)
+
+    // Ton choisi par la personne (061) : la forme change, pas le fond.
+    const { data: persona } = await userClient.from('profiles').select('ai_tone').eq('id', user.id).maybeSingle()
+    const tone = TONES[(persona?.ai_tone as string | undefined) ?? 'motivating'] ?? TONES.motivating
 
     const { data: exercises, error: exError } = await userClient
       .from('exercises')
@@ -76,7 +88,9 @@ Règles:
 - Quand tu proposes des exercices, utilise exactement les noms de la bibliothèque ci-dessus
 - Si un exercice pertinent n'est pas dans la bibliothèque, signale-le clairement
 - Pour les programmes, précise sets/reps/repos quand c'est pertinent
-- Adapte tes recommandations au contexte CrossFit/functional fitness de WODBUD`
+- Adapte tes recommandations au contexte CrossFit/functional fitness de WODBUD
+- Ton : ${tone}
+- Le ton ne change jamais la sécurité : charges, douleurs et contre-indications restent traitées sérieusement`
 
     const client = new Anthropic()
     const response = await client.messages.create({

@@ -1619,6 +1619,8 @@ export type Database = {
       }
       profiles: {
         Row: {
+          ai_avatar: string
+          ai_tone: string
           avatar_url: string | null
           badges_seen_at: string | null
           created_at: string
@@ -1638,6 +1640,8 @@ export type Database = {
           total_minutes: number
         }
         Insert: {
+          ai_avatar?: string
+          ai_tone?: string
           avatar_url?: string | null
           badges_seen_at?: string | null
           created_at?: string
@@ -1657,6 +1661,8 @@ export type Database = {
           total_minutes?: number
         }
         Update: {
+          ai_avatar?: string
+          ai_tone?: string
           avatar_url?: string | null
           badges_seen_at?: string | null
           created_at?: string
