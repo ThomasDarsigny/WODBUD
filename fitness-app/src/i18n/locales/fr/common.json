@@ -1390,6 +1390,14 @@
     "mine": "Tes dernières suggestions",
     "status_new": "En attente",
     "status_done": "Traitée",
-    "anonymous_short": "anonyme"
+    "anonymous_short": "anonyme",
+    "inbox_title": "Suggestions des membres",
+    "filter_new": "Nouvelles",
+    "filter_done": "Traitées",
+    "inbox_empty": "Aucune nouvelle suggestion. Tes membres peuvent t’écrire depuis leurs réglages.",
+    "inbox_empty_done": "Aucune suggestion traitée.",
+    "anonymous_label": "Anonyme",
+    "mark_done": "Traitée",
+    "reopen": "Rouvrir"
   }
 }

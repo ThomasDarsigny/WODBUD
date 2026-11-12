@@ -1390,6 +1390,14 @@
     "mine": "Your latest suggestions",
     "status_new": "Pending",
     "status_done": "Handled",
-    "anonymous_short": "anonymous"
+    "anonymous_short": "anonymous",
+    "inbox_title": "Member suggestions",
+    "filter_new": "New",
+    "filter_done": "Handled",
+    "inbox_empty": "No new suggestions. Your members can write to you from their settings.",
+    "inbox_empty_done": "No handled suggestions.",
+    "anonymous_label": "Anonymous",
+    "mark_done": "Handled",
+    "reopen": "Reopen"
   }
 }

@@ -85,7 +85,7 @@ Fil conducteur : *WODBUD, c'est comme avoir un entraîneur chef* — pour le cen
 - [x] 6.2 Notification push quand la personne invitée a déjà WODBUD (par son courriel ; même réponse que le compte existe ou non ; anti-spam — migration 056).
 - [x] 6.3 Formulaire de support vers WODBUD dans les réglages, et boîte de réception dans l'admin (répondre par courriel, marquer traité — migration 057).
 - [x] 6.4 Boîte à suggestions : un membre écrit à son centre (dans ses réglages ; en son nom ou anonyme ; il voit si c'est traité — migration 058).
-- [ ] 6.5 Boîte de réception des suggestions pour le centre.
+- [x] 6.5 Boîte de réception des suggestions pour le centre (accueil de l'équipe ; nom masqué si anonyme ; traiter ou rouvrir).
 - [ ] 6.6 Noter l'entraînement à la fin d'une séance.
 - [ ] 6.7 Vue des WODs préférés pour le centre.
 - [ ] 6.8 Dessiner 6 à 8 avatars « Forge » pour l'IA.

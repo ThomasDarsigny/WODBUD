@@ -1393,6 +1393,14 @@
     "mine": "Tus últimas sugerencias",
     "status_new": "Pendiente",
     "status_done": "Atendida",
-    "anonymous_short": "anónima"
+    "anonymous_short": "anónima",
+    "inbox_title": "Sugerencias de los miembros",
+    "filter_new": "Nuevas",
+    "filter_done": "Atendidas",
+    "inbox_empty": "Ninguna sugerencia nueva. Tus miembros pueden escribirte desde sus ajustes.",
+    "inbox_empty_done": "Ninguna sugerencia atendida.",
+    "anonymous_label": "Anónimo",
+    "mark_done": "Atendida",
+    "reopen": "Reabrir"
   }
 }

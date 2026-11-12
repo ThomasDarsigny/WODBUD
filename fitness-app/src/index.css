@@ -1379,6 +1379,10 @@ label {
 .wb-sec { display: flex; align-items: baseline; justify-content: space-between; gap: 0.75rem; margin: 0.4rem 0 -0.35rem; }
 .wb-sec h2 { font-family: var(--font-b); font-size: 1.05rem; font-weight: 700; letter-spacing: 0; text-transform: none; margin: 0; }
 .wb-sec a, .wb-sec button { display: inline-flex; align-items: center; color: var(--orange); font-size: 0.875rem; font-weight: 600; text-decoration: none; background: none; border: none; cursor: pointer; min-height: 44px; padding: 0; }
+.wb-sec:has(.wb-chip) { align-items: center; flex-wrap: wrap; }
+/* Puces de filtre dans un titre de section : elles gardent leur forme de puce. */
+.wb-sec .wb-chip { min-height: 40px; padding: 0 0.95rem; border: 1px solid var(--border); border-radius: 999px; background: var(--dark); color: var(--muted); }
+.wb-sec .wb-chip[aria-pressed='true'] { background: var(--orange); border-color: var(--orange); color: var(--black); }
 
 /* ── Cartes ───────────────────────────────────────────────────────── */
 .wb-card { background: var(--dark); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 1.1rem; }
