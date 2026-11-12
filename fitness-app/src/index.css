@@ -1596,6 +1596,14 @@ button.wb-ex-card { display: flex; align-items: center; gap: 0.85rem; padding: 0
 .wb-exf-refs small { font-size: 0.75rem; font-variant-numeric: tabular-nums; }
 .wb-exf-refs button { min-height: 32px; min-width: 32px; border: none; background: none; color: var(--muted); cursor: pointer; }
 .wb-exf-progress { margin: 0; color: var(--orange); font-size: 0.875rem; font-variant-numeric: tabular-nums; }
+.wb-tooeasy-btn { min-height: 40px; }
+.wb-tooeasy { display: grid; gap: 0.45rem; padding: 0.7rem; border-radius: var(--r-md); border: 1px solid rgba(255, 77, 0, 0.35); background: rgba(255, 77, 0, 0.06); }
+.wb-tooeasy-head { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; color: var(--orange); font-size: 0.875rem; }
+.wb-tooeasy-close { width: 40px; height: 40px; border: none; background: transparent; color: var(--muted); cursor: pointer; }
+.wb-tooeasy-opt { display: flex; align-items: center; justify-content: space-between; gap: 0.6rem; min-height: 44px; padding: 0 0.8rem; border-radius: var(--r-md); border: 1px solid var(--border); background: var(--dark); color: var(--white); font: inherit; font-size: 0.9rem; text-align: left; cursor: pointer; }
+.wb-tooeasy-opt:hover { border-color: var(--orange); }
+.wb-tooeasy-tag { flex-shrink: 0; font-size: 0.75rem; font-weight: 700; color: var(--orange); }
+.wb-tooeasy .wb-set-hint { margin: 0; }
 .wb-links { display: grid; gap: 0.6rem; padding-top: 1rem; border-top: 1px solid var(--border); }
 .wb-links-head { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; }
 .wb-links-title { margin: 0; font-family: var(--font-d); font-size: 0.6875rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }

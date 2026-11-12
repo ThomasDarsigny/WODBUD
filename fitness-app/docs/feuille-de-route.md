@@ -77,7 +77,7 @@ Fil conducteur : *WODBUD, c'est comme avoir un entraîneur chef* — pour le cen
 - [x] 5.2 Écran pour que WODBUD et les chefs créent ces liens (section « Variantes » de la fiche d'exercice).
 - [x] 5.3 Afficher les variantes liées sur la fiche d'un exercice (pour tout le monde, aussi dans le créateur ; un nom ouvre la fiche de la variante).
 - [x] 5.4 Calcul de la charge : +5 % haut du corps, +10 % bas du corps, arrondi aux disques (kg ou lb ; haltères et kettlebells selon le râtelier ; toujours au moins un saut).
-- [ ] 5.5 Action « Trop facile » dans le créateur : nouvelle charge ou variante plus dure.
+- [x] 5.5 Action « Trop facile » dans le créateur : nouvelle charge ou variante plus dure (le remplacement garde séries, reps, repos et notes).
 - [ ] 5.6 Action « À adapter » : choisir la zone (épaule, genou, dos…) et recevoir des exercices qui la sollicitent moins.
 
 ### 6. Engagement

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { loadStep, nextLoad, progressionRate } from './progression'
+import { bumpLoadText, loadStep, nextLoad, parseLoad, progressionRate } from './progression'
 import type { EquipmentId } from './equipment'
 
 const squat = { body_region: 'lower' as const, primary_muscle: 'quads' as const, equipment: ['barbell', 'plates', 'rack'] as EquipmentId[] }
@@ -41,5 +41,23 @@ describe('progression', () => {
 
   it('refuse une charge nulle', () => {
     expect(nextLoad(0, squat)).toBeNull()
+  })
+})
+
+describe('charge saisie', () => {
+  it('lit les formats courants', () => {
+    expect(parseLoad('60kg', 'lb')).toEqual({ value: 60, unit: 'kg', explicit: true })
+    expect(parseLoad(' 135 lbs', 'kg')).toEqual({ value: 135, unit: 'lb', explicit: true })
+    expect(parseLoad('62,5', 'kg')).toEqual({ value: 62.5, unit: 'kg', explicit: false })
+    expect(parseLoad('BW', 'kg')).toBeNull()
+    expect(parseLoad('70%1RM', 'kg')).toBeNull()
+  })
+
+  it('garde la façon d’écrire', () => {
+    expect(bumpLoadText('100kg', squat, 'kg')).toBe('110kg')
+    expect(bumpLoadText('60', press, 'kg')).toBe('62.5')
+    expect(bumpLoadText('57,5kg', press, 'kg')).toBe('60kg')
+    expect(bumpLoadText('225 lb', squat, 'kg')).toBe('250lb') // 247,5 → 250
+    expect(bumpLoadText('BW', squat, 'kg')).toBeNull()
   })
 })

@@ -15,6 +15,7 @@ import { pdfFileName } from '../pdf/pdfTokens'
 import { useIsMobile } from '../../hooks/useMediaQuery'
 import { useAvailableEquipment } from '../../hooks/useAvailableEquipment'
 import { missingEquipment, type EquipmentId } from '../../lib/equipment'
+import TooEasyPanel from '../workouts/TooEasyPanel'
 
 export default function WorkoutBuilderView() {
   const { t, i18n } = useTranslation(['workouts', 'common'])
@@ -33,6 +34,7 @@ export default function WorkoutBuilderView() {
     addExercise,
     removeExercise,
     updateExerciseConfig,
+    replaceExercise,
     saveWorkout,
     resetDraft,
     draftRestoredAt,
@@ -568,6 +570,7 @@ export default function WorkoutBuilderView() {
                   alert={muscleAlerts.find((a) => a.muscle === we.exercise.primary_muscle)}
                   onRemove={() => removeExercise(we.id)}
                   onUpdate={(config) => updateExerciseConfig(we.id, config)}
+                  onReplace={(exercise) => replaceExercise(we.id, exercise)}
                 />
               ))}
             </div>
@@ -1068,15 +1071,18 @@ function WorkoutExerciseSlot({
   workoutExercise: we,
   alert,
   onRemove,
-  onUpdate
+  onUpdate,
+  onReplace
 }: {
   workoutExercise: WorkoutExercise
   alert?: MuscleAlert
   onRemove: () => void
   onUpdate: (config: Partial<Pick<WorkoutExercise, 'sets' | 'reps' | 'weight' | 'rest_seconds' | 'notes'>>) => void
+  onReplace: (exercise: Exercise) => void
 }) {
   const { t } = useTranslation('workouts')
   const [expanded, setExpanded] = useState(false)
+  const [tooEasy, setTooEasy] = useState(false)
 
   const borderColor =
     alert?.level === 'danger'
@@ -1236,6 +1242,20 @@ function WorkoutExerciseSlot({
               min={0}
               style={miniInputStyle}
             />
+          </div>
+          <div style={{ gridColumn: '1 / -1' }}>
+            {tooEasy ? (
+              <TooEasyPanel
+                workoutExercise={we}
+                onLoad={(weight) => { onUpdate({ weight }); setTooEasy(false) }}
+                onReplace={(exercise) => { onReplace(exercise); setTooEasy(false) }}
+                onClose={() => setTooEasy(false)}
+              />
+            ) : (
+              <button type="button" className="wb-chip wb-tooeasy-btn" onClick={() => setTooEasy(true)}>
+                {t('progression.too_easy')}
+              </button>
+            )}
           </div>
           <div style={{ gridColumn: '1 / -1' }}>
             <label style={smallLabelStyle}>{t('fields.notes')}</label>

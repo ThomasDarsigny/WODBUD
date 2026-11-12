@@ -165,5 +165,13 @@
     "plan_tag": "Planned",
     "stat_sessions": "Sessions in total",
     "stat_minutes": "Active minutes"
+  },
+  "progression": {
+    "too_easy": "Too easy",
+    "load": "Load: {{from}} → {{to}}",
+    "harder": "Harder",
+    "replace": "Replace with {{name}}",
+    "no_load": "Enter a numeric load (e.g. 60kg) to get the next one.",
+    "no_variant": "No harder variation is linked to this exercise."
   }
 }

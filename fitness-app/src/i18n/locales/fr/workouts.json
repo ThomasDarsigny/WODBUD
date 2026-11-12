@@ -165,5 +165,13 @@
     "plan_tag": "Planifiée",
     "stat_sessions": "Séances au total",
     "stat_minutes": "Minutes actives"
+  },
+  "progression": {
+    "too_easy": "Trop facile",
+    "load": "Charge : {{from}} → {{to}}",
+    "harder": "Plus dur",
+    "replace": "Remplacer par {{name}}",
+    "no_load": "Indique une charge en chiffres (ex. 60kg) pour recevoir la suivante.",
+    "no_variant": "Aucune variante plus dure n’est reliée à cet exercice."
   }
 }

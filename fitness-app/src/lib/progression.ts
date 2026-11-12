@@ -63,3 +63,29 @@ export function nextLoad(currentKg: number, exercise: Load, unit: WeightUnit = '
   const kg = unit === 'kg' ? value : Math.round((value / LB) * 100) / 100
   return { value, kg, rate }
 }
+
+/**
+ * Lit une charge saisie à la main dans le créateur (« 60kg », « 135 lb »,
+ * « 62,5 »). Sans unité, on prend l'unité préférée. « BW », « 70%1RM »
+ * ou un texte libre ne donnent rien.
+ */
+export function parseLoad(text: string | undefined, fallback: WeightUnit): { value: number; unit: WeightUnit; explicit: boolean } | null {
+  const m = /^\s*(\d+(?:[.,]\d+)?)\s*(kg|kgs|lb|lbs)?\s*$/i.exec(text ?? '')
+  if (!m) return null
+  const value = Number(m[1].replace(',', '.'))
+  if (!(value > 0)) return null
+  const unit: WeightUnit = m[2] ? (m[2].toLowerCase().startsWith('kg') ? 'kg' : 'lb') : fallback
+  return { value, unit, explicit: Boolean(m[2]) }
+}
+
+/** « Trop facile » : la charge suivante, écrite comme la personne l'avait écrite. */
+export function bumpLoadText(text: string | undefined, exercise: Load, fallback: WeightUnit): string | null {
+  const load = parseLoad(text, fallback)
+  if (!load) return null
+  const kg = load.unit === 'kg' ? load.value : load.value / LB
+  const next = nextLoad(kg, exercise, load.unit)
+  if (!next) return null
+  const comma = (text ?? '').includes(',')
+  const num = String(next.value).replace('.', comma ? ',' : '.')
+  return load.explicit ? `${num}${load.unit}` : num
+}

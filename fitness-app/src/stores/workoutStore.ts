@@ -223,6 +223,8 @@ interface WorkoutBuilderState {
     id: string,
     config: Partial<Pick<WorkoutExercise, 'sets' | 'reps' | 'weight' | 'rest_seconds' | 'notes'>>
   ) => void
+  /** Remplace l'exercice d'une ligne (variante plus dure, adaptation) en gardant séries, reps, repos et notes. */
+  replaceExercise: (id: string, exercise: Exercise) => void
   resetDraft: () => void
   saveWorkout: () => Promise<void>
   fetchWorkouts: () => Promise<void>
@@ -435,6 +437,12 @@ export const useWorkoutStore = create<WorkoutBuilderState>((set, get) => ({
 
   updateExerciseConfig: (id, config) => {
     const exercises = get().exercises.map((e) => (e.id === id ? { ...e, ...config } : e))
+    set({ exercises, muscleAlerts: computeMuscleAlerts(exercises) })
+  },
+
+  replaceExercise: (id, exercise) => {
+    // La charge ne se transpose pas d'un exercice à l'autre : on la vide.
+    const exercises = get().exercises.map((e) => (e.id === id ? { ...e, exercise, weight: undefined } : e))
     set({ exercises, muscleAlerts: computeMuscleAlerts(exercises) })
   },
 
