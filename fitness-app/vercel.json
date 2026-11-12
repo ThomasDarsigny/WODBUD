@@ -4,7 +4,19 @@
   "outputDirectory": "dist",
   "rewrites": [
     {
-      "source": "/(login|signup|entraineur_dashboard|confidentialite|bienvenue|centres|membres|perso)",
+      "source": "/centres",
+      "destination": "/centres/index.html"
+    },
+    {
+      "source": "/membres",
+      "destination": "/membres/index.html"
+    },
+    {
+      "source": "/perso",
+      "destination": "/perso/index.html"
+    },
+    {
+      "source": "/(login|signup|entraineur_dashboard|confidentialite|bienvenue)",
       "destination": "/index.html"
     },
     {
@@ -28,6 +40,33 @@
         {
           "key": "Link",
           "value": "<https://wodbud.com/confidentialite>; rel=\"canonical\""
+        }
+      ]
+    },
+    {
+      "source": "/centres",
+      "headers": [
+        {
+          "key": "Link",
+          "value": "<https://wodbud.com/centres>; rel=\"canonical\""
+        }
+      ]
+    },
+    {
+      "source": "/membres",
+      "headers": [
+        {
+          "key": "Link",
+          "value": "<https://wodbud.com/membres>; rel=\"canonical\""
+        }
+      ]
+    },
+    {
+      "source": "/perso",
+      "headers": [
+        {
+          "key": "Link",
+          "value": "<https://wodbud.com/perso>; rel=\"canonical\""
         }
       ]
     },

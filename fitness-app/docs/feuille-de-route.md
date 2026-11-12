@@ -97,7 +97,7 @@ Fil conducteur : *WODBUD, c'est comme avoir un entraîneur chef* — pour le cen
 - [x] 7.3 Page `/centres` (la priorité du client) : haut de page dédié et section « Pour ton centre » (7 fonctions livrées).
 - [x] 7.4 Page `/membres` : haut de page dédié et section « Pour toi, membre » (lien d'invitation, WOD du jour, séance guidée, records, rangs, votes).
 - [x] 7.5 Page `/perso` : section « Pour toi » limitée à ce qu'un compte perso a vraiment (séance libre ou WOD prêt, minuteur, journal, records, rangs, communautés).
-- [ ] 7.6 Prérendu et référencement des trois pages.
+- [x] 7.6 Prérendu et référencement des trois pages (une page HTML par adresse avec titre, description, Open Graph et canonique ; sitemap).
 - [ ] 7.7 Section des avantages avec animations premium.
 
 ### 8. Travail d'équipe dans un centre
