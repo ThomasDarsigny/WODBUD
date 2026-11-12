@@ -16,6 +16,8 @@ interface Props {
   inWorkoutBuilder?: boolean
   /** Portée des liens modifiables : null = WODBUD, un id = ce centre ; absent = pas de modification. */
   linkScope?: string | null
+  /** Ouvre la fiche d'une variante liée. */
+  onOpenExercise?: (exercise: Exercise) => void
 }
 
 export default function ExerciseDetailModal({
@@ -25,7 +27,8 @@ export default function ExerciseDetailModal({
   onEdit,
   onDelete,
   inWorkoutBuilder = false,
-  linkScope
+  linkScope,
+  onOpenExercise
 }: Props) {
   useBackToClose(true, onClose)
   const { t } = useTranslation(['exercises', 'common'])
@@ -225,7 +228,7 @@ export default function ExerciseDetailModal({
             </div>
           )}
 
-          {linkScope !== undefined && !inWorkoutBuilder && <ExerciseLinksEditor exercise={exercise} scope={linkScope} />}
+          <ExerciseLinksEditor key={exercise.id} exercise={exercise} scope={inWorkoutBuilder ? undefined : linkScope} onOpen={onOpenExercise} />
 
           <div
             style={{

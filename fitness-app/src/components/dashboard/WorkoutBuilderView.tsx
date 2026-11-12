@@ -687,6 +687,7 @@ export default function WorkoutBuilderView() {
           exercise={pickerExercise}
           onClose={() => setPickerExercise(undefined)}
           onAddToWorkout={handleAddFromPicker}
+          onOpenExercise={setPickerExercise}
           inWorkoutBuilder
         />
       )}

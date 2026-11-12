@@ -293,6 +293,7 @@ export default function ExercisesView() {
           onEdit={canEdit(detailExercise) ? handleEdit : undefined}
           onDelete={canEdit(detailExercise) ? handleDelete : undefined}
           linkScope={linkScope(detailExercise)}
+          onOpenExercise={setDetailExercise}
         />
       )}
     </div>

@@ -1605,6 +1605,8 @@ button.wb-ex-card { display: flex; align-items: center; gap: 0.85rem; padding: 0
 .wb-links-kind--harder { background: rgba(255, 77, 0, 0.15); color: var(--orange); }
 .wb-links-kind--easier { background: rgba(80, 200, 140, 0.14); color: #6fd4a0; }
 .wb-links-kind--adaptation { background: rgba(120, 160, 255, 0.14); color: #9db7ff; }
+.wb-links-open { border: none; background: none; padding: 0; text-align: left; font: inherit; font-weight: 600; cursor: pointer; text-decoration: underline; text-decoration-color: var(--border); text-underline-offset: 3px; }
+.wb-links-open:hover { color: var(--orange); }
 .wb-links-remove { flex-shrink: 0; width: 44px; height: 44px; border: none; border-radius: var(--r-md); background: transparent; color: var(--muted); font-size: 1rem; cursor: pointer; }
 .wb-links-remove:hover { color: #ff8a8a; }
 .wb-links-form { display: grid; gap: 0.6rem; }

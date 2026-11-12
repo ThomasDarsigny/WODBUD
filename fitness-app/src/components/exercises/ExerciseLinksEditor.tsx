@@ -10,8 +10,14 @@ const KINDS: VariantKind[] = ['harder', 'easier', 'adaptation']
  * Liens d'un exercice (052) : WODBUD relie la base commune (scope null), un
  * proprio ou un chef relie pour son centre (scope = son centre). On ne retire
  * que les liens de sa propre portée ; ceux de WODBUD restent visibles.
+ * Sans portée (scope absent), la section se lit seulement — et disparaît
+ * s'il n'y a aucune variante. Un nom de variante ouvre sa fiche.
  */
-export default function ExerciseLinksEditor({ exercise, scope }: { exercise: Exercise; scope: string | null }) {
+export default function ExerciseLinksEditor({ exercise, scope, onOpen }: {
+  exercise: Exercise
+  scope?: string | null
+  onOpen?: (exercise: Exercise) => void
+}) {
   const { t } = useTranslation(['exercises', 'common'])
   const { exercises } = useExerciseStore()
   const [variants, setVariants] = useState<Variant[] | null>(null)
@@ -44,7 +50,7 @@ export default function ExerciseLinksEditor({ exercise, scope }: { exercise: Exe
     setBusy(true)
     setError(null)
     try {
-      await addLink({ exerciseId: exercise.id, otherId: other.id, kind, zone: kind === 'adaptation' ? zone : undefined, centerId: scope })
+      await addLink({ exerciseId: exercise.id, otherId: other.id, kind, zone: kind === 'adaptation' ? zone : undefined, centerId: scope ?? null })
       setVariants(await fetchVariants(exercise.id))
       setSearch('')
       setAdding(false)
@@ -69,13 +75,14 @@ export default function ExerciseLinksEditor({ exercise, scope }: { exercise: Exe
     }
   }
 
-  if (variants === null) return null
+  const canEdit = scope !== undefined
+  if (variants === null || (!canEdit && variants.length === 0)) return null
 
   return (
     <section className="wb-links" aria-label={t('links.title')}>
       <div className="wb-links-head">
         <p className="wb-links-title">{t('links.title')}</p>
-        {!adding && (
+        {canEdit && !adding && (
           <button type="button" className="wb-btn wb-btn--secondary wb-btn--sm" onClick={() => setAdding(true)}>
             {t('links.add')}
           </button>
@@ -86,20 +93,27 @@ export default function ExerciseLinksEditor({ exercise, scope }: { exercise: Exe
 
       {variants.length > 0 && (
         <ul className="wb-links-list">
-          {variants.map((v) => (
+          {variants.map((v) => {
+            const target = onOpen ? exercises.find((e) => e.id === v.exerciseId) : undefined
+            return (
             <li key={`${v.linkId}-${v.kind}`}>
               <span className={`wb-pill wb-links-kind wb-links-kind--${v.kind}`}>
                 {v.kind === 'adaptation' && v.zone ? t('links.adapt_zone', { zone: t(`links.zones.${v.zone}`) }) : t(`links.kinds.${v.kind}`)}
               </span>
-              <span className="wb-links-name">{v.name}</span>
-              {v.centerId === null && scope !== null && <span className="wb-pill">WODBUD</span>}
-              {v.centerId === scope && (
+              {target ? (
+                <button type="button" className="wb-links-name wb-links-open" onClick={() => onOpen?.(target)}>{v.name}</button>
+              ) : (
+                <span className="wb-links-name">{v.name}</span>
+              )}
+              {canEdit && v.centerId === null && scope !== null && <span className="wb-pill">WODBUD</span>}
+              {canEdit && v.centerId === scope && (
                 <button type="button" className="wb-links-remove" disabled={busy} onClick={() => { void remove(v) }} aria-label={t('links.remove', { name: v.name })}>
                   ✕
                 </button>
               )}
             </li>
-          ))}
+            )
+          })}
         </ul>
       )}
 
