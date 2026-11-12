@@ -45,7 +45,12 @@
     "recently": "récemment",
     "in_about_hours": "dans environ {{hours}}h",
     "draft_restored": "Brouillon repris ({{when}}) — gardé automatiquement sur cet appareil.",
-    "draft_discard": "Effacer"
+    "draft_discard": "Effacer",
+    "equipment_center_one": "Équipement de {{name}} : {{count}} élément",
+    "equipment_center_other": "Équipement de {{name}} : {{count}} éléments",
+    "equipment_home_one": "Ton équipement : {{count}} élément",
+    "equipment_home_other": "Ton équipement : {{count}} éléments",
+    "equipment_edit": "Modifier"
   },
   "reminders": {
     "theme_inactive": "Tu n'as pas fait de séance {{theme}} depuis {{days}} jours"

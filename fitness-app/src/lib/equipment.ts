@@ -37,3 +37,13 @@ export function cleanEquipment(list: readonly string[] | null | undefined): Equi
   const known = new Set<string>([...EQUIPMENT, BODYWEIGHT])
   return [...new Set((list ?? []).filter((e) => known.has(e)))] as EquipmentId[]
 }
+
+/**
+ * Ce qui manque pour faire un exercice. Rien ne manque pour un exercice au
+ * poids du corps, ni pour un exercice dont l'équipement n'est pas renseigné
+ * (on ne cache pas ce qu'on ne connaît pas).
+ */
+export function missingEquipment(required: readonly string[] | null | undefined, available: readonly string[]): EquipmentId[] {
+  const have = new Set(available)
+  return cleanEquipment(required).filter((e) => e !== BODYWEIGHT && !have.has(e))
+}

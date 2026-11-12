@@ -45,7 +45,12 @@
     "recently": "recently",
     "in_about_hours": "in about {{hours}}h",
     "draft_restored": "Draft restored ({{when}}) — saved automatically on this device.",
-    "draft_discard": "Discard"
+    "draft_discard": "Discard",
+    "equipment_center_one": "{{name}} equipment: {{count}} item",
+    "equipment_center_other": "{{name}} equipment: {{count}} items",
+    "equipment_home_one": "Your equipment: {{count}} item",
+    "equipment_home_other": "Your equipment: {{count}} items",
+    "equipment_edit": "Edit"
   },
   "reminders": {
     "theme_inactive": "You haven't done a {{theme}} session in {{days}} days"

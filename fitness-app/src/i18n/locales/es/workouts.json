@@ -45,7 +45,12 @@
     "recently": "hace poco",
     "in_about_hours": "en unas {{hours}}h",
     "draft_restored": "Borrador recuperado ({{when}}) — guardado automáticamente en este dispositivo.",
-    "draft_discard": "Borrar"
+    "draft_discard": "Borrar",
+    "equipment_center_one": "Equipamiento de {{name}}: {{count}} elemento",
+    "equipment_center_other": "Equipamiento de {{name}}: {{count}} elementos",
+    "equipment_home_one": "Tu equipamiento: {{count}} elemento",
+    "equipment_home_other": "Tu equipamiento: {{count}} elementos",
+    "equipment_edit": "Editar"
   },
   "reminders": {
     "theme_inactive": "No has hecho una sesión de {{theme}} desde hace {{days}} días"

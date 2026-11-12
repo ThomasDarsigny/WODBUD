@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router-dom'
 import NavIcon from '../navigation/NavIcon'
 import EmptyState from '../ui/EmptyState'
 import { useExerciseStore } from '../../stores/exerciseStore'
@@ -12,6 +13,7 @@ import { computeMuscleLoads } from '../../lib/muscleLoad'
 import { label as smallLabelStyle, fieldCompact as miniInputStyle, field as selectStyle, btnSmall as filterResetStyle, textarea as textareaStyle } from '../../styles/ui'
 import { pdfFileName } from '../pdf/pdfTokens'
 import { useIsMobile } from '../../hooks/useMediaQuery'
+import { useAvailableEquipment } from '../../hooks/useAvailableEquipment'
 
 export default function WorkoutBuilderView() {
   const { t, i18n } = useTranslation(['workouts', 'common'])
@@ -65,6 +67,10 @@ export default function WorkoutBuilderView() {
   useEffect(() => {
     if (exercises.length === 0) fetchExercises()
   }, [exercises.length, fetchExercises])
+
+  // Équipement sous la main (centre, sinon compte) : sert à proposer d'abord
+  // les exercices faisables.
+  const available = useAvailableEquipment()
 
   const normalizedSearch = search.trim().toLowerCase()
 
@@ -305,6 +311,16 @@ export default function WorkoutBuilderView() {
             placeholder={t('builder.search_placeholder', { ns: 'workouts' })}
             className="wb-input"
           />
+          {available && (
+            <p className="wb-builder-equip">
+              <span>
+                {available.source === 'center'
+                  ? t('builder.equipment_center', { ns: 'workouts', name: available.centerName, count: available.equipment.length })
+                  : t('builder.equipment_home', { ns: 'workouts', count: available.equipment.length })}
+              </span>
+              <Link to="/dashboard/settings">{t('builder.equipment_edit', { ns: 'workouts' })}</Link>
+            </p>
+          )}
           <div style={{ marginTop: '1rem', display: 'grid', gap: '0.8rem' }}>
             <div>
               <div className="wb-ex-fgroup"><span>{t('fields.filter_category', { ns: 'exercises' })}</span></div>
