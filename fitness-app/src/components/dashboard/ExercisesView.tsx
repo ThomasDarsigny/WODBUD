@@ -25,6 +25,8 @@ import { btnPrimary as emptyActionStyle } from '../../styles/ui'
 import { SkeletonCards } from '../ui/Skeleton'
 import { isCurrentUserAdmin } from '../../lib/access'
 import { fetchMyCenter, isLead, type MyCenter } from '../../lib/center'
+import { useAvailableEquipment } from '../../hooks/useAvailableEquipment'
+import { missingEquipment, type EquipmentId } from '../../lib/equipment'
 
 type FilterCategory = ExerciseCategory | 'all'
 
@@ -38,6 +40,9 @@ export default function ExercisesView() {
   const [movementFilter, setMovementFilter] = useState<MovementType | 'all'>('all')
   const [methodFilter, setMethodFilter] = useState<TrainingMethod | 'all'>('all')
   const [regionFilter, setRegionFilter] = useState<BodyRegion | 'all'>('all')
+  const [onlyDoable, setOnlyDoable] = useState(false)
+  // Équipement sous la main (centre, sinon compte) : pastille « manquant » et filtre.
+  const available = useAvailableEquipment()
   const [showForm, setShowForm] = useState(false)
   const [editingExercise, setEditingExercise] = useState<Exercise | undefined>()
   const [detailExercise, setDetailExercise] = useState<Exercise | undefined>()
@@ -75,9 +80,10 @@ export default function ExercisesView() {
         (e.secondary_movements ?? []).includes(movementFilter)
       const matchMethod = methodFilter === 'all' || (e.methods ?? []).includes(methodFilter)
       const matchRegion = regionFilter === 'all' || e.body_region === regionFilter
-      return matchSearch && matchCat && matchMove && matchMethod && matchRegion
+      const matchEquipment = !onlyDoable || !available || missingEquipment(e.equipment, available.equipment).length === 0
+      return matchSearch && matchCat && matchMove && matchMethod && matchRegion && matchEquipment
     })
-  }, [exercises, search, categoryFilter, movementFilter, methodFilter, regionFilter, t])
+  }, [exercises, search, categoryFilter, movementFilter, methodFilter, regionFilter, onlyDoable, available, t])
 
   // Un compteur plutôt qu'un booléen : le bouton doit dire combien de filtres
   // sont posés, sinon on ouvre le panneau juste pour vérifier.
@@ -85,7 +91,8 @@ export default function ExercisesView() {
     (categoryFilter !== 'all' ? 1 : 0) +
     (movementFilter !== 'all' ? 1 : 0) +
     (methodFilter !== 'all' ? 1 : 0) +
-    (regionFilter !== 'all' ? 1 : 0)
+    (regionFilter !== 'all' ? 1 : 0) +
+    (onlyDoable ? 1 : 0)
 
   const hasFilters = Boolean(search) || activeFilterCount > 0
 
@@ -95,6 +102,7 @@ export default function ExercisesView() {
     setMovementFilter('all')
     setMethodFilter('all')
     setRegionFilter('all')
+    setOnlyDoable(false)
   }
 
   function handleEdit(exercise: Exercise) {
@@ -209,6 +217,15 @@ export default function ExercisesView() {
             />
           ))}
         </FilterGroup>
+        {available && (
+          <FilterGroup label={t('fields.equipment', { ns: 'exercises' })}>
+            <FilterChip
+              active={onlyDoable}
+              onClick={() => setOnlyDoable((v) => !v)}
+              label={t('builder.only_doable', { ns: 'workouts' })}
+            />
+          </FilterGroup>
+        )}
       </FilterPanel>
 
       {loading ? (
@@ -240,6 +257,7 @@ export default function ExercisesView() {
             <ExerciseCard
               key={exercise.id}
               exercise={exercise}
+              missing={available ? missingEquipment(exercise.equipment, available.equipment) : []}
               onClick={() => setDetailExercise(exercise)}
             />
           ))}
@@ -279,8 +297,8 @@ export default function ExercisesView() {
  * vidéo complète vivent dans la fiche — sur téléphone, la liste doit se
  * parcourir d'un coup de pouce.
  */
-function ExerciseCard({ exercise, onClick }: { exercise: Exercise; onClick: () => void }) {
-  const { t } = useTranslation(['common', 'exercises'])
+function ExerciseCard({ exercise, onClick, missing }: { exercise: Exercise; onClick: () => void; missing: EquipmentId[] }) {
+  const { t } = useTranslation(['common', 'exercises', 'workouts'])
   return (
     <button type="button" className="wb-card wb-ex-card" onClick={onClick}>
       <span className="wb-ex-thumb">
@@ -310,6 +328,11 @@ function ExerciseCard({ exercise, onClick }: { exercise: Exercise; onClick: () =
           ))}
           {exercise.secondary_muscles.length > 1 && <span className="wb-ex-more">+{exercise.secondary_muscles.length - 1}</span>}
         </span>
+        {missing.length > 0 && (
+          <span className="wb-missing-equip">
+            {t('builder.missing_equipment', { ns: 'workouts', list: missing.map((m) => t(`equipment.items.${m}`)).join(', ') })}
+          </span>
+        )}
       </span>
     </button>
   )

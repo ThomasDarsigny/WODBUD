@@ -69,7 +69,7 @@ Fil conducteur : *WODBUD, c'est comme avoir un entraîneur chef* — pour le cen
 - [x] 4.2 Lire l'équipement disponible dans le créateur de WOD (celui du centre, sinon celui du compte).
 - [x] 4.3 Afficher d'abord les exercices faisables, avec une pastille « Équipement manquant » sur les autres.
 - [x] 4.4 Ajouter le filtre « Seulement ce que j'ai » dans le créateur.
-- [ ] 4.5 Ajouter le même filtre dans la bibliothèque d'exercices.
+- [x] 4.5 Ajouter le même filtre dans la bibliothèque d'exercices.
 - [ ] 4.6 Signaler à la relecture WODBUD les exercices importés sans équipement.
 
 ### 5. Progression / régression
