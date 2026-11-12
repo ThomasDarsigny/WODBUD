@@ -257,6 +257,7 @@
     "problem": {
       "tag": "Le problème",
       "title": "Fini le bricolage.",
+      "lead": "Moins d’heures à préparer, moins de maux de tête : tu coaches, WODBUD s’occupe du reste.",
       "pain_label": "Avant",
       "fix_label": "Avec WODBUD",
       "pairs": [

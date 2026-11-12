@@ -16,6 +16,7 @@ export default function ProblemPairs() {
     <section className={s.pairsSection} id="problem">
       <p className={s.sectionTag} data-reveal>{t('landing.problem.tag')}</p>
       <h2 className={s.sectionTitle} data-reveal>{t('landing.problem.title')}</h2>
+      <p className={s.sectionLead} data-reveal>{t('landing.problem.lead')}</p>
 
       <div className={s.pairsHead} aria-hidden="true">
         <span>{t('landing.problem.pain_label')}</span>

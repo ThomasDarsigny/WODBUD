@@ -92,7 +92,7 @@ Fil conducteur : *WODBUD, c'est comme avoir un entraîneur chef* — pour le cen
 - [ ] 6.9 Choix de l'avatar et du ton (motivant, calme, militaire, humoristique), appliqué à l'assistant.
 
 ### 7. Landing
-- [ ] 7.1 Ajouter la phrase après « Fini le bricolage. » (gain de temps, moins de maux de tête).
+- [x] 7.1 Ajouter la phrase après « Fini le bricolage. » (gain de temps, moins de maux de tête).
 - [ ] 7.2 Première page qui demande le profil.
 - [ ] 7.3 Page `/centres` (la priorité du client).
 - [ ] 7.4 Page `/membres`.
