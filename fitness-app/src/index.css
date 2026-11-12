@@ -1616,6 +1616,10 @@ button.wb-ex-card { display: flex; align-items: center; gap: 0.85rem; padding: 0
 .wb-cclasses li strong { font-family: var(--font-d); font-size: 0.875rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--white); }
 .wb-cclasses li span { font-size: 0.8125rem; color: var(--muted); }
 .wb-cclasses .wb-cclasses-next { font-size: 0.75rem; }
+.wb-cclasses-coach { display: grid; gap: 0.25rem; margin-top: 0.4rem; }
+.wb-cclasses-coach > span { font-size: 0.6875rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.wb-cclasses-coach select { min-height: 44px; font-size: 0.9rem; }
+.wb-cclasses .wb-review-ok, .wb-cclasses .wb-rec-error { margin: 0 0 0.6rem; }
 .wb-links { display: grid; gap: 0.6rem; padding-top: 1rem; border-top: 1px solid var(--border); }
 .wb-links-head { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; }
 .wb-links-title { margin: 0; font-family: var(--font-d); font-size: 0.6875rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }

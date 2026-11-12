@@ -61,3 +61,4 @@ enregistré en base, il faudrait d'abord le réparer.
 | `052_exercise_links.sql` | Liens entre exercices : `exercise_links` (`harder` — lu aussi à l'envers en « plus facile » — ou `adaptation` pour une zone : épaule, coude, poignet, cou, dos, hanche, genou, cheville) ; liens de WODBUD (base commune) ou d'un centre (ses exercices et la base commune), portée vérifiée par déclencheur ; `get_exercise_variants` avec les droits de la personne |
 | `053_center_classes.sql` | Le proprio et les chefs lisent tous les cours du centre (membres, programmation) ; `get_center_classes` pour la vue d'ensemble. |
 | `054_center_shared_wods.sql` | WODs partagés dans l'équipe d'un centre (proprio, chefs, entraîneurs) en lecture : `shares_center_staff` ; seul l'auteur modifie. Les membres ne voient rien de plus. |
+| `055_assign_class_coach.sql` | `assign_class_coach` : le proprio ou un chef confie un cours du centre à un entraîneur de l'équipe (les votes du cours suivent). |

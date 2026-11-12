@@ -592,12 +592,15 @@
     "plan_delete": "Retirer pour tout le cours",
     "tab_followup": "Suivi",
     "center_title": "Cours du centre · {{name}}",
-    "center_empty": "Aucun autre entraîneur n’a encore de cours.",
     "center_no_coach": "Sans entraîneur",
     "center_members_one": "{{count}} membre",
     "center_members_other": "{{count}} membres",
     "center_next": "Prochaine séance : {{date}}",
-    "center_nothing_planned": "Rien de programmé"
+    "center_nothing_planned": "Rien de programmé",
+    "coach": "Entraîneur",
+    "coach_me": "{{name}} (toi)",
+    "assigned": "« {{name}} » est maintenant confié à {{coach}}.",
+    "center_empty": "Le centre n’a encore aucun cours."
   },
   "athlete": {
     "role_label": "Athlète",

@@ -592,12 +592,15 @@
     "plan_delete": "Remove for the whole class",
     "tab_followup": "Follow-up",
     "center_title": "Center classes · {{name}}",
-    "center_empty": "No other coach has a class yet.",
     "center_no_coach": "No coach",
     "center_members_one": "{{count}} member",
     "center_members_other": "{{count}} members",
     "center_next": "Next session: {{date}}",
-    "center_nothing_planned": "Nothing planned"
+    "center_nothing_planned": "Nothing planned",
+    "coach": "Coach",
+    "coach_me": "{{name}} (you)",
+    "assigned": "“{{name}}” is now assigned to {{coach}}.",
+    "center_empty": "The center has no class yet."
   },
   "athlete": {
     "role_label": "Athlete",

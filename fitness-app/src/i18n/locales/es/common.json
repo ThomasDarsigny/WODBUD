@@ -595,12 +595,15 @@
     "plan_delete": "Quitar para toda la clase",
     "tab_followup": "Seguimiento",
     "center_title": "Clases del centro · {{name}}",
-    "center_empty": "Ningún otro entrenador tiene clases todavía.",
     "center_no_coach": "Sin entrenador",
     "center_members_one": "{{count}} miembro",
     "center_members_other": "{{count}} miembros",
     "center_next": "Próxima sesión: {{date}}",
-    "center_nothing_planned": "Nada programado"
+    "center_nothing_planned": "Nada programado",
+    "coach": "Entrenador",
+    "coach_me": "{{name}} (tú)",
+    "assigned": "«{{name}}» ahora está a cargo de {{coach}}.",
+    "center_empty": "El centro todavía no tiene clases."
   },
   "athlete": {
     "role_label": "Atleta",

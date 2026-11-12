@@ -2159,6 +2159,10 @@ export type Database = {
           role: string
         }[]
       }
+      assign_class_coach: {
+        Args: { p_class: string; p_coach: string }
+        Returns: undefined
+      }
       can_edit_exercise: { Args: { p_exercise: string }; Returns: boolean }
       can_edit_exercise_path: { Args: { p_name: string }; Returns: boolean }
       center_role: { Args: { p_center: string }; Returns: string }
