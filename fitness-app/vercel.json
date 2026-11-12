@@ -4,11 +4,11 @@
   "outputDirectory": "dist",
   "rewrites": [
     {
-      "source": "/(login|signup|entraineur_dashboard|confidentialite)",
+      "source": "/(login|signup|entraineur_dashboard|confidentialite|bienvenue|centres|membres|perso)",
       "destination": "/index.html"
     },
     {
-      "source": "/(dashboard|athlete|join|rang|rank)(/.*)?",
+      "source": "/(dashboard|athlete|join|rang|rank|rejoindre)(/.*)?",
       "destination": "/index.html"
     }
   ],

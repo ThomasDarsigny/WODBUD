@@ -6,6 +6,7 @@ import { usePageMeta } from '../hooks/usePageMeta'
 import { getLocalUser } from '../lib/currentUser'
 import { supabase } from '../lib/supabase'
 import { homeFor, inviteTokenFrom, rememberRole, saveMyRole, type OnboardingAnswers, type ProfileRole } from '../lib/profileRole'
+import { readProfileHint } from '../lib/landingProfile'
 import { acceptInvite, centerTokenFrom, createCenter, isStaff, previewInvite, readPendingInvite } from '../lib/center'
 import { BOX_PRESET, HOME_PRESET, type EquipmentId } from '../lib/equipment'
 import EquipmentPicker from '../components/center/EquipmentPicker'
@@ -41,6 +42,8 @@ export default function WelcomePage() {
   const [invitePreview, setInvitePreview] = useState<{ name: string; valid: boolean } | null>(null)
   const [equipment, setEquipment] = useState<EquipmentId[]>([])
   const [saving, setSaving] = useState(false)
+  const [hint] = useState(readProfileHint)
+  const roles = hint ? [...ROLES].sort((a, b) => Number(b.id === hint) - Number(a.id === hint)) : ROLES
   const [error, setError] = useState<string | null>(null)
 
   // Arrivé par un lien d'invitation avant d'avoir un compte : on y retourne,
@@ -153,8 +156,8 @@ export default function WelcomePage() {
               <p className="wb-welcome-sub">{t('welcome.sub_role')}</p>
 
               <div className="wb-welcome-roles">
-                {ROLES.map(({ id, art }) => (
-                  <button key={id} type="button" className="wb-role-card" onClick={() => choose(id)}>
+                {roles.map(({ id, art }) => (
+                  <button key={id} type="button" className={`wb-role-card${id === hint ? ' is-suggested' : ''}`} onClick={() => choose(id)}>
                     <img src={`/badges/${art}.svg`} alt="" width={72} height={72} />
                     <span>
                       <strong>{t(`welcome.role_${id}`)}</strong>

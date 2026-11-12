@@ -24,6 +24,7 @@ const AiCoachView = lazy(() => import('./components/dashboard/AiCoachView'))
 const SettingsView = lazy(() => import('./components/dashboard/SettingsView'))
 const CommunitiesView = lazy(() => import('./components/community/CommunitiesView'))
 const LandingPage = lazy(() => import('./pages/LandingPage'))
+const ProfileChooser = lazy(() => import('./components/landing/ProfileChooser'))
 const CommunityPage = lazy(() => import('./components/community/CommunityPage'))
 const CommunityInviteRedirect = lazy(() => import('./pages/CommunityInviteRedirect'))
 const SessionRunnerView = lazy(() => import('./components/session/SessionRunnerView'))
@@ -129,10 +130,13 @@ function ProtectedRoute({ children, adminOnly = false, requireRole = true }: { c
   return <>{children}</>
 }
 
-/** La landing est réservée au site web : l'app installée ouvre le compte. */
-function WebOnlyLanding() {
+/**
+ * La landing est réservée au site web : l'app installée ouvre le compte.
+ * `/` demande le profil (7.2) ; chaque profil a sa page.
+ */
+function WebOnlyLanding({ profile }: { profile?: 'center' | 'member' | 'perso' }) {
   if (isInstalledApp()) return <Navigate to="/entraineur_dashboard" replace />
-  return <LandingPage />
+  return profile ? <LandingPage profile={profile} /> : <ProfileChooser />
 }
 
 function DashboardHomeRedirect() {
@@ -239,6 +243,9 @@ function App() {
       <Suspense fallback={<RouteFallback />}>
       <Routes>
         <Route path="/" element={<WebOnlyLanding />} />
+        <Route path="/centres" element={<WebOnlyLanding profile="center" />} />
+        <Route path="/membres" element={<WebOnlyLanding profile="member" />} />
+        <Route path="/perso" element={<WebOnlyLanding profile="perso" />} />
         <Route path="/landing" element={<WebOnlyLanding />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />

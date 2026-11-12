@@ -1,11 +1,11 @@
 import { renderToString } from 'react-dom/server'
 import { StaticRouter } from 'react-router-dom'
 import i18n from './i18n'
-import LandingPage from './components/landing/LandingPage'
+import ProfileChooser from './components/landing/ProfileChooser'
 
 /**
  * Point d'entrée du prérendu (scripts/prerender.mjs), jamais chargé par le
- * navigateur. Rend la landing en HTML statique, en français : c'est la langue
+ * navigateur. Rend la première page (choix du profil, 7.2) en HTML statique, en français : c'est la langue
  * de repli de l'app et celle de la clientèle visée.
  *
  * Pas d'hydratation : main.tsx refait le rendu côté client par-dessus. Une
@@ -15,7 +15,7 @@ export async function render(): Promise<string> {
   await i18n.changeLanguage('fr')
   return renderToString(
     <StaticRouter location="/">
-      <LandingPage />
+      <ProfileChooser />
     </StaticRouter>
   )
 }

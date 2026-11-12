@@ -2247,3 +2247,33 @@
 .logoVT {
   view-transition-name: wodbud-logo;
 }
+
+/* ─── Choix du profil (7.2) ─────────────────────────────────────── */
+.chooser { min-height: 100vh; display: flex; flex-direction: column; }
+.chooserMain { flex: 1; width: 100%; max-width: 760px; margin: 0 auto; padding: calc(var(--nav-h, 72px) + 3rem) var(--gutter) 4rem; }
+.chooserTitle { font-family: var(--font-d); font-weight: 900; text-transform: uppercase; font-size: clamp(2.4rem, 8vw, 4.2rem); line-height: 0.95; letter-spacing: 0.01em; margin: 0 0 1rem; }
+.chooserSub { color: var(--muted); font-size: 1.05rem; line-height: 1.6; max-width: 48ch; margin: 0 0 2.5rem; }
+.chooserCards { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.85rem; }
+.chooserCard { display: flex; align-items: center; gap: 1rem; min-height: 96px; padding: 1rem 1.25rem; border-radius: 18px; border: 1px solid var(--border); background: var(--dark); color: var(--white); text-decoration: none; transition: border-color 0.2s, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s; }
+.chooserCard:hover, .chooserCard:focus-visible { border-color: var(--orange); transform: translateY(-2px); }
+.chooserCard:active { transform: scale(0.985); }
+.chooserCardMain { border-color: rgba(255, 90, 31, 0.5); background: linear-gradient(135deg, rgba(255, 90, 31, 0.12), var(--dark) 60%); }
+.chooserCard img { flex-shrink: 0; width: 56px; height: 56px; }
+.chooserCardText { flex: 1; min-width: 0; display: grid; gap: 0.25rem; }
+.chooserCardText strong { font-family: var(--font-d); font-size: 1.35rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.03em; }
+.chooserCardText small { color: var(--muted); font-size: 0.92rem; line-height: 1.45; }
+.chooser .footer { margin-top: auto; }
+@media (prefers-reduced-motion: reduce) { .chooserCard { transition: none; } .chooserCard:hover { transform: none; } }
+
+/* Liens vers les autres profils, dans le menu. */
+.navProfile .navLink { color: var(--orange); }
+
+/* ─── Page /centres (7.3) ───────────────────────────────────────── */
+.centerGrid { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; grid-template-columns: 1fr; }
+@media (min-width: 700px) { .centerGrid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1100px) { .centerGrid { grid-template-columns: repeat(3, 1fr); } }
+.centerCard { display: grid; gap: 0.6rem; align-content: start; padding: 1.4rem; border-radius: 18px; border: 1px solid var(--border); background: var(--dark); transition: border-color 0.25s; }
+.centerCard:hover { border-color: rgba(255, 90, 31, 0.5); }
+.centerCard strong { font-family: var(--font-d); font-size: 1.2rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.03em; }
+.centerCard p { margin: 0; color: var(--muted); line-height: 1.6; font-size: 0.95rem; }
+.centerIcon { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 12px; background: rgba(255, 90, 31, 0.12); color: var(--orange); }

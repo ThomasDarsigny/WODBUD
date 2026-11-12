@@ -6,14 +6,16 @@ import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react'
 import HeroMedia from './HeroMedia'
 import { Magnetic, WordReveal } from './fx'
 import { useAppEntry } from '../../lib/useAppEntry'
+import { rememberProfileHint, type LandingProfile } from '../../lib/landingProfile'
 import s from './landing.module.css'
 
 /**
  * Haut de page : titre géant révélé mot par mot, halo qui suit le pointeur
  * et un mot fantôme en contour qui glisse au défilement.
  */
-export default function HeroWow() {
+export default function HeroWow({ profile }: { profile: LandingProfile }) {
   const { t } = useTranslation('common')
+  const h = (k: string) => t(`landing.profiles.${profile}.hero.${k}`)
   const reduce = useReducedMotion()
   const ref = useRef<HTMLElement>(null)
   const appEntry = useAppEntry()
@@ -49,12 +51,12 @@ export default function HeroWow() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
           >
-            {t('landing.hero.tag')}
+            {h('tag')}
           </motion.p>
 
           <h1 className={s.heroTitle}>
-            <WordReveal text={t('landing.hero.title_line1')} delay={0.1} />
-            <WordReveal text={t('landing.hero.title_em')} delay={0.35} className={s.heroTitleEm} />
+            <WordReveal text={h('title_line1')} delay={0.1} />
+            <WordReveal text={h('title_em')} delay={0.35} className={s.heroTitleEm} />
           </h1>
 
           <motion.p
@@ -63,7 +65,7 @@ export default function HeroWow() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.75, ease: [0.16, 1, 0.3, 1] }}
           >
-            {t('landing.hero.subtitle')}
+            {h('subtitle')}
           </motion.p>
 
           <motion.div
@@ -73,8 +75,14 @@ export default function HeroWow() {
             transition={{ duration: 0.6, delay: 0.9, ease: [0.16, 1, 0.3, 1] }}
           >
             <Magnetic>
-              <Link to={appEntry} viewTransition className={s.btnPrimary}>
-                {t('landing.hero.open_dashboard')}
+              {/* Pas encore de compte : on s'inscrit, et Bienvenue propose ce profil en premier. */}
+              <Link
+                to={appEntry === '/login' ? '/signup' : appEntry}
+                viewTransition
+                className={s.btnPrimary}
+                onClick={() => rememberProfileHint(profile)}
+              >
+                {appEntry === '/login' ? h('cta') : t('landing.hero.open_dashboard')}
                 <span className={s.btnArrow} aria-hidden="true">→</span>
               </Link>
             </Magnetic>

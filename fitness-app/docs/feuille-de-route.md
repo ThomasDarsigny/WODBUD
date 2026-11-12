@@ -93,8 +93,8 @@ Fil conducteur : *WODBUD, c'est comme avoir un entraîneur chef* — pour le cen
 
 ### 7. Landing
 - [x] 7.1 Ajouter la phrase après « Fini le bricolage. » (gain de temps, moins de maux de tête).
-- [ ] 7.2 Première page qui demande le profil.
-- [ ] 7.3 Page `/centres` (la priorité du client).
+- [x] 7.2 Première page qui demande le profil (`/` : trois portes ; le profil choisi est proposé en premier dans Bienvenue).
+- [x] 7.3 Page `/centres` (la priorité du client) : haut de page dédié et section « Pour ton centre » (7 fonctions livrées).
 - [ ] 7.4 Page `/membres`.
 - [ ] 7.5 Page `/perso`.
 - [ ] 7.6 Prérendu et référencement des trois pages.

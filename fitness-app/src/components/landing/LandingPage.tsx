@@ -7,6 +7,9 @@ import { CountUp } from './fx'
 import ProblemPairs from './ProblemPairs'
 import FeatureBento from './FeatureBento'
 import FlowSteps from './FlowSteps'
+import CenterHighlights from './CenterHighlights'
+import { usePageMeta } from '../../hooks/usePageMeta'
+import { PROFILE_PATHS, LANDING_PROFILES, type LandingProfile } from '../../lib/landingProfile'
 import { useAppEntry } from '../../lib/useAppEntry'
 import { APP_STORE_URL, PLAY_STORE_URL, STORES_LIVE } from '../../lib/storeLinks'
 import s from './landing.module.css'
@@ -17,8 +20,10 @@ const MannequinDemo = lazy(() => import('./MannequinDemo'))
 
 const LANGS = ['fr', 'en', 'es'] as const
 
-export default function LandingPage() {
+/** Une page par profil (7.3–7.5) : /centres, /membres, /perso. */
+export default function LandingPage({ profile }: { profile: LandingProfile }) {
   const { t, i18n } = useTranslation('common')
+  usePageMeta(t(`landing.profiles.${profile}.meta_title`), t(`landing.profiles.${profile}.meta_description`))
   const [scrolled, setScrolled] = useState(false)
   const appEntry = useAppEntry()
   // Menu replié sur téléphone (☰) ; toujours déplié à partir de 960px.
@@ -66,6 +71,13 @@ export default function LandingPage() {
           WOD<span>BUD</span>
         </Link>
         <ul id="landing-menu" className={`${s.navLinks} ${menuOpen ? s.navLinksOpen : ''}`}>
+          {LANDING_PROFILES.filter((p) => p !== profile).map((p) => (
+            <li key={p} className={s.navProfile}>
+              <Link to={PROFILE_PATHS[p]} viewTransition className={s.navLink} onClick={closeMenu}>
+                {t(`landing.chooser.${p}_title`)}
+              </Link>
+            </li>
+          ))}
           <li>
             <a href="#features" className={s.navLink} onClick={closeMenu}>
               {t('landing.nav.features')}
@@ -121,7 +133,7 @@ export default function LandingPage() {
         </div>
       </nav>
 
-      <HeroWow />
+      <HeroWow profile={profile} />
 
       <div className={s.ticker} aria-hidden="true">
         <div className={s.tickerInner}>
@@ -144,6 +156,8 @@ export default function LandingPage() {
           </div>
         ))}
       </section>
+
+      {profile === 'center' && <CenterHighlights />}
 
       <ScrollStory />
 

@@ -451,6 +451,96 @@
           "desc": "Cronómetro, diario, rangos y clasificaciones: ves quién entrena, y cómo."
         }
       ]
+    },
+    "chooser": {
+      "meta_title": "WODBUD — Programación fitness para centros, miembros y entrenamiento personal",
+      "meta_description": "WODBUD ayuda a los centros de fitness a programar en equipo, a los miembros a seguir su centro y a cada uno a entrenar con el equipamiento que tiene.",
+      "tag": "Bienvenido a WODBUD",
+      "title": "¿Para quién es WODBUD?",
+      "subtitle": "Elige lo que te representa: te mostramos lo que WODBUD hace por ti.",
+      "center_title": "Mi centro",
+      "center_desc": "Un box, un gimnasio, un estudio: programad en equipo, gestionad clases y ejercicios.",
+      "member_title": "Soy miembro",
+      "member_desc": "Entreno en un centro y quiero seguir sus WODs.",
+      "perso_title": "Para mí",
+      "perso_desc": "Entreno solo, en casa o en el gimnasio."
+    },
+    "profiles": {
+      "center": {
+        "meta_title": "WODBUD para centros — programación, equipo y clases en un solo lugar",
+        "meta_description": "Entrenadores, base de ejercicios, importación de tu programación, clases y WODs compartidos: WODBUD reúne todo tu box en una sola app.",
+        "hero": {
+          "tag": "Para centros y boxes",
+          "title_line1": "Todo tu box",
+          "title_em": "en una sola app.",
+          "subtitle": "Tu equipo de entrenadores, tu base de ejercicios, tus clases y tus miembros: programad juntos, compartid vuestros WODs y seguid cada clase sin archivos dispersos.",
+          "cta": "Crear mi centro"
+        }
+      },
+      "member": {
+        "meta_title": "WODBUD para miembros — el WOD de tu centro en tu bolsillo",
+        "meta_description": "Únete a tu centro con su enlace, encuentra el WOD del día, lanza tu sesión y sigue tus récords con WODBUD.",
+        "hero": {
+          "tag": "Para miembros",
+          "title_line1": "Tu centro",
+          "title_em": "en tu bolsillo.",
+          "subtitle": "Únete a tu centro con su enlace, encuentra el WOD del día, lanza tu sesión con el cronómetro y sigue tus récords.",
+          "cta": "Unirme a mi centro"
+        }
+      },
+      "perso": {
+        "meta_title": "WODBUD personal — WODs adaptados a tu equipamiento",
+        "meta_description": "Dinos qué equipamiento tienes: WODBUD te propone ejercicios posibles, WODs estructurados y una IA para progresar.",
+        "hero": {
+          "tag": "Para entrenar solo",
+          "title_line1": "Tu entrenador,",
+          "title_em": "en casa o en el gimnasio.",
+          "subtitle": "Dinos qué equipamiento tienes: WODBUD te propone ejercicios posibles, WODs estructurados y una IA para ayudarte a progresar.",
+          "cta": "Empezar"
+        }
+      }
+    },
+    "centers": {
+      "tag": "Para tu centro",
+      "title": "Pensado para un equipo, no para un solo entrenador.",
+      "lead": "Todo lo necesario para programar entre varios, sin archivos dispersos.",
+      "items": [
+        {
+          "icon": "classes",
+          "title": "Equipo y roles",
+          "text": "Dueño, entrenadores jefe, entrenadores: invita a tu equipo por enlace, cada uno con sus permisos."
+        },
+        {
+          "icon": "exercises",
+          "title": "Tu base de ejercicios",
+          "text": "Crea tus ejercicios con foto o vídeo de referencia. WODBUD los revisa y puede publicarlos para todos."
+        },
+        {
+          "icon": "library",
+          "title": "Importa lo que tienes",
+          "text": "Tu programación actual en CSV, PDF o foto de una hoja: los ejercicios se reconocen."
+        },
+        {
+          "icon": "calendar",
+          "title": "Todas las clases de un vistazo",
+          "text": "Quién dirige qué, cuántos miembros, la próxima sesión; asigna una clase a un entrenador en un gesto."
+        },
+        {
+          "icon": "workout",
+          "title": "WODs compartidos",
+          "text": "Los WODs del equipo son visibles para todos los entrenadores: repítelos, prográmalos, inspírate."
+        },
+        {
+          "icon": "settings",
+          "title": "Según tu equipamiento",
+          "text": "El creador propone primero los ejercicios posibles con lo que tu box tiene de verdad."
+        },
+        {
+          "icon": "records",
+          "title": "Progresión y adaptación",
+          "text": "¿Demasiado fácil? Carga siguiente o variante más difícil. ¿Algo duele? La adaptación prevista para la zona."
+        }
+      ]
     }
   },
   "labels": {

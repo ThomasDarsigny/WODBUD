@@ -448,6 +448,96 @@
           "desc": "Timer, log, ranks and leaderboards: see who trains, and how."
         }
       ]
+    },
+    "chooser": {
+      "meta_title": "WODBUD — Fitness programming for gyms, members and solo training",
+      "meta_description": "WODBUD helps fitness centers program as a team, members follow their gym, and everyone train with the equipment they have.",
+      "tag": "Welcome to WODBUD",
+      "title": "Who is WODBUD for?",
+      "subtitle": "Pick what fits you: we’ll show you what WODBUD does for you.",
+      "center_title": "My gym",
+      "center_desc": "A box, a gym, a studio: program as a team, manage classes and exercises.",
+      "member_title": "I’m a member",
+      "member_desc": "I train at a gym and want to follow its WODs.",
+      "perso_title": "Just me",
+      "perso_desc": "I train on my own, at home or at the gym."
+    },
+    "profiles": {
+      "center": {
+        "meta_title": "WODBUD for gyms — programming, team and classes in one place",
+        "meta_description": "Coaches, exercise library, import your programming, classes and shared WODs: WODBUD brings your whole box into one app.",
+        "hero": {
+          "tag": "For gyms and boxes",
+          "title_line1": "Your whole box",
+          "title_em": "in one app.",
+          "subtitle": "Your coaching team, your exercise library, your classes and your members: program together, share your WODs and follow every class without scattered files.",
+          "cta": "Create my gym"
+        }
+      },
+      "member": {
+        "meta_title": "WODBUD for members — your gym’s WOD in your pocket",
+        "meta_description": "Join your gym with its link, find the WOD of the day, run your session and track your records with WODBUD.",
+        "hero": {
+          "tag": "For members",
+          "title_line1": "Your gym",
+          "title_em": "in your pocket.",
+          "subtitle": "Join your gym with its link, find the WOD of the day, run your session with the timer and track your records.",
+          "cta": "Join my gym"
+        }
+      },
+      "perso": {
+        "meta_title": "WODBUD solo — WODs that fit your equipment",
+        "meta_description": "Tell us what equipment you have: WODBUD suggests doable exercises, structured WODs and AI to help you progress.",
+        "hero": {
+          "tag": "For training on your own",
+          "title_line1": "Your coach,",
+          "title_em": "at home or at the gym.",
+          "subtitle": "Tell us what equipment you have: WODBUD suggests doable exercises, structured WODs and AI to help you progress.",
+          "cta": "Get started"
+        }
+      }
+    },
+    "centers": {
+      "tag": "For your gym",
+      "title": "Built for a team, not a single coach.",
+      "lead": "Everything you need to program together, without scattered files.",
+      "items": [
+        {
+          "icon": "classes",
+          "title": "Team and roles",
+          "text": "Owner, head coaches, coaches: invite your team by link, everyone gets the right access."
+        },
+        {
+          "icon": "exercises",
+          "title": "Your exercise library",
+          "text": "Create exercises with a reference photo or video. WODBUD reviews them and can publish them for everyone."
+        },
+        {
+          "icon": "library",
+          "title": "Import what you have",
+          "text": "Your existing programming as CSV, PDF or a photo of a sheet: exercises are recognized."
+        },
+        {
+          "icon": "calendar",
+          "title": "Every class at a glance",
+          "text": "Who coaches what, how many members, the next session; assign a class to a coach in one tap."
+        },
+        {
+          "icon": "workout",
+          "title": "Shared WODs",
+          "text": "Team WODs are visible to every coach: rerun them, schedule them, get inspired."
+        },
+        {
+          "icon": "settings",
+          "title": "Fits your equipment",
+          "text": "The builder suggests exercises you can actually do with what your box has first."
+        },
+        {
+          "icon": "records",
+          "title": "Progression and adaptation",
+          "text": "Too easy? Next load or a harder variation. Something hurts? The adaptation set for that area."
+        }
+      ]
     }
   },
   "labels": {
