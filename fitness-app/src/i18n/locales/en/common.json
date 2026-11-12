@@ -497,47 +497,86 @@
         }
       }
     },
-    "centers": {
-      "tag": "For your gym",
-      "title": "Built for a team, not a single coach.",
-      "lead": "Everything you need to program together, without scattered files.",
-      "items": [
-        {
-          "icon": "classes",
-          "title": "Team and roles",
-          "text": "Owner, head coaches, coaches: invite your team by link, everyone gets the right access."
-        },
-        {
-          "icon": "exercises",
-          "title": "Your exercise library",
-          "text": "Create exercises with a reference photo or video. WODBUD reviews them and can publish them for everyone."
-        },
-        {
-          "icon": "library",
-          "title": "Import what you have",
-          "text": "Your existing programming as CSV, PDF or a photo of a sheet: exercises are recognized."
-        },
-        {
-          "icon": "calendar",
-          "title": "Every class at a glance",
-          "text": "Who coaches what, how many members, the next session; assign a class to a coach in one tap."
-        },
-        {
-          "icon": "workout",
-          "title": "Shared WODs",
-          "text": "Team WODs are visible to every coach: rerun them, schedule them, get inspired."
-        },
-        {
-          "icon": "settings",
-          "title": "Fits your equipment",
-          "text": "The builder suggests exercises you can actually do with what your box has first."
-        },
-        {
-          "icon": "records",
-          "title": "Progression and adaptation",
-          "text": "Too easy? Next load or a harder variation. Something hurts? The adaptation set for that area."
-        }
-      ]
+    "highlights": {
+      "center": {
+        "tag": "For your gym",
+        "title": "Built for a team, not a single coach.",
+        "lead": "Everything you need to program together, without scattered files.",
+        "items": [
+          {
+            "icon": "classes",
+            "title": "Team and roles",
+            "text": "Owner, head coaches, coaches: invite your team by link, everyone gets the right access."
+          },
+          {
+            "icon": "exercises",
+            "title": "Your exercise library",
+            "text": "Create exercises with a reference photo or video. WODBUD reviews them and can publish them for everyone."
+          },
+          {
+            "icon": "library",
+            "title": "Import what you have",
+            "text": "Your existing programming as CSV, PDF or a photo of a sheet: exercises are recognized."
+          },
+          {
+            "icon": "calendar",
+            "title": "Every class at a glance",
+            "text": "Who coaches what, how many members, the next session; assign a class to a coach in one tap."
+          },
+          {
+            "icon": "workout",
+            "title": "Shared WODs",
+            "text": "Team WODs are visible to every coach: rerun them, schedule them, get inspired."
+          },
+          {
+            "icon": "settings",
+            "title": "Fits your equipment",
+            "text": "The builder suggests exercises you can actually do with what your box has first."
+          },
+          {
+            "icon": "records",
+            "title": "Progression and adaptation",
+            "text": "Too easy? Next load or a harder variation. Something hurts? The adaptation set for that area."
+          }
+        ]
+      },
+      "member": {
+        "tag": "For you, member",
+        "title": "Your gym stays with you, even between classes.",
+        "lead": "Everything your gym programs, in one place, on your phone.",
+        "items": [
+          {
+            "icon": "classes",
+            "title": "Join with one link",
+            "text": "Your coach sends you a link or a QR code: you’re in your class in seconds."
+          },
+          {
+            "icon": "calendar",
+            "title": "The WOD of the day",
+            "text": "Your class programming lands in your schedule: you know what to do before you even arrive."
+          },
+          {
+            "icon": "clock",
+            "title": "Guided session",
+            "text": "Timer, rest periods and sound cues: you focus on the effort."
+          },
+          {
+            "icon": "records",
+            "title": "Your records and log",
+            "text": "Every session is logged, your records are calculated automatically."
+          },
+          {
+            "icon": "rank",
+            "title": "Ranks and leaderboard",
+            "text": "Rank up with your training minutes and compare with your class, no pressure."
+          },
+          {
+            "icon": "vote",
+            "title": "Your opinion counts",
+            "text": "Your coach opens a vote: pick the exercises for the next session."
+          }
+        ]
+      }
     }
   },
   "labels": {

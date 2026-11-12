@@ -7,7 +7,7 @@ import { CountUp } from './fx'
 import ProblemPairs from './ProblemPairs'
 import FeatureBento from './FeatureBento'
 import FlowSteps from './FlowSteps'
-import CenterHighlights from './CenterHighlights'
+import ProfileHighlights from './ProfileHighlights'
 import { usePageMeta } from '../../hooks/usePageMeta'
 import { PROFILE_PATHS, LANDING_PROFILES, type LandingProfile } from '../../lib/landingProfile'
 import { useAppEntry } from '../../lib/useAppEntry'
@@ -157,7 +157,7 @@ export default function LandingPage({ profile }: { profile: LandingProfile }) {
         ))}
       </section>
 
-      {profile === 'center' && <CenterHighlights />}
+      {profile !== 'perso' && <ProfileHighlights profile={profile} />}
 
       <ScrollStory />
 

@@ -1,25 +1,27 @@
 import { useTranslation } from 'react-i18next'
 import { motion, useReducedMotion } from 'motion/react'
 import NavIcon, { type NavIconName } from '../navigation/NavIcon'
+import type { LandingProfile } from '../../lib/landingProfile'
 import s from './landing.module.css'
 
 type Item = { icon: NavIconName; title: string; text: string }
 
+const ANCHOR: Record<LandingProfile, string> = { center: 'centres', member: 'membres', perso: 'perso' }
+
 /**
- * Page /centres (7.3) : ce que WODBUD fait pour une box, une carte par
- * fonction réellement livrée (équipe, base d'exercices, import, cours,
- * WODs partagés, équipement, progression). Pas de promesse en l'air.
+ * Section « ce que WODBUD fait pour toi » de chaque page profil (7.3–7.5) :
+ * une carte par fonction réellement livrée. Pas de promesse en l'air.
  */
-export default function CenterHighlights() {
+export default function ProfileHighlights({ profile }: { profile: LandingProfile }) {
   const { t } = useTranslation('common')
   const reduce = useReducedMotion()
-  const items = t('landing.centers.items', { returnObjects: true }) as Item[]
+  const items = t(`landing.highlights.${profile}.items`, { returnObjects: true }) as Item[]
 
   return (
-    <section className={s.section} id="centres">
-      <p className={s.sectionTag} data-reveal>{t('landing.centers.tag')}</p>
-      <h2 className={s.sectionTitle} data-reveal>{t('landing.centers.title')}</h2>
-      <p className={s.sectionLead} data-reveal>{t('landing.centers.lead')}</p>
+    <section className={s.section} id={ANCHOR[profile]}>
+      <p className={s.sectionTag} data-reveal>{t(`landing.highlights.${profile}.tag`)}</p>
+      <h2 className={s.sectionTitle} data-reveal>{t(`landing.highlights.${profile}.title`)}</h2>
+      <p className={s.sectionLead} data-reveal>{t(`landing.highlights.${profile}.lead`)}</p>
       <ul className={s.centerGrid}>
         {items.map((it, i) => (
           <motion.li

@@ -500,47 +500,86 @@
         }
       }
     },
-    "centers": {
-      "tag": "Para tu centro",
-      "title": "Pensado para un equipo, no para un solo entrenador.",
-      "lead": "Todo lo necesario para programar entre varios, sin archivos dispersos.",
-      "items": [
-        {
-          "icon": "classes",
-          "title": "Equipo y roles",
-          "text": "Dueño, entrenadores jefe, entrenadores: invita a tu equipo por enlace, cada uno con sus permisos."
-        },
-        {
-          "icon": "exercises",
-          "title": "Tu base de ejercicios",
-          "text": "Crea tus ejercicios con foto o vídeo de referencia. WODBUD los revisa y puede publicarlos para todos."
-        },
-        {
-          "icon": "library",
-          "title": "Importa lo que tienes",
-          "text": "Tu programación actual en CSV, PDF o foto de una hoja: los ejercicios se reconocen."
-        },
-        {
-          "icon": "calendar",
-          "title": "Todas las clases de un vistazo",
-          "text": "Quién dirige qué, cuántos miembros, la próxima sesión; asigna una clase a un entrenador en un gesto."
-        },
-        {
-          "icon": "workout",
-          "title": "WODs compartidos",
-          "text": "Los WODs del equipo son visibles para todos los entrenadores: repítelos, prográmalos, inspírate."
-        },
-        {
-          "icon": "settings",
-          "title": "Según tu equipamiento",
-          "text": "El creador propone primero los ejercicios posibles con lo que tu box tiene de verdad."
-        },
-        {
-          "icon": "records",
-          "title": "Progresión y adaptación",
-          "text": "¿Demasiado fácil? Carga siguiente o variante más difícil. ¿Algo duele? La adaptación prevista para la zona."
-        }
-      ]
+    "highlights": {
+      "center": {
+        "tag": "Para tu centro",
+        "title": "Pensado para un equipo, no para un solo entrenador.",
+        "lead": "Todo lo necesario para programar entre varios, sin archivos dispersos.",
+        "items": [
+          {
+            "icon": "classes",
+            "title": "Equipo y roles",
+            "text": "Dueño, entrenadores jefe, entrenadores: invita a tu equipo por enlace, cada uno con sus permisos."
+          },
+          {
+            "icon": "exercises",
+            "title": "Tu base de ejercicios",
+            "text": "Crea tus ejercicios con foto o vídeo de referencia. WODBUD los revisa y puede publicarlos para todos."
+          },
+          {
+            "icon": "library",
+            "title": "Importa lo que tienes",
+            "text": "Tu programación actual en CSV, PDF o foto de una hoja: los ejercicios se reconocen."
+          },
+          {
+            "icon": "calendar",
+            "title": "Todas las clases de un vistazo",
+            "text": "Quién dirige qué, cuántos miembros, la próxima sesión; asigna una clase a un entrenador en un gesto."
+          },
+          {
+            "icon": "workout",
+            "title": "WODs compartidos",
+            "text": "Los WODs del equipo son visibles para todos los entrenadores: repítelos, prográmalos, inspírate."
+          },
+          {
+            "icon": "settings",
+            "title": "Según tu equipamiento",
+            "text": "El creador propone primero los ejercicios posibles con lo que tu box tiene de verdad."
+          },
+          {
+            "icon": "records",
+            "title": "Progresión y adaptación",
+            "text": "¿Demasiado fácil? Carga siguiente o variante más difícil. ¿Algo duele? La adaptación prevista para la zona."
+          }
+        ]
+      },
+      "member": {
+        "tag": "Para ti, miembro",
+        "title": "Tu centro te acompaña, incluso entre clases.",
+        "lead": "Todo lo que programa tu centro, en un solo lugar, en tu teléfono.",
+        "items": [
+          {
+            "icon": "classes",
+            "title": "Únete con un enlace",
+            "text": "Tu entrenador te envía un enlace o un código QR: estás en tu clase en segundos."
+          },
+          {
+            "icon": "calendar",
+            "title": "El WOD del día",
+            "text": "La programación de tu clase llega a tu agenda: sabes qué hacer antes de llegar."
+          },
+          {
+            "icon": "clock",
+            "title": "Sesión guiada",
+            "text": "Cronómetro, descansos y señales sonoras: te concentras en el esfuerzo."
+          },
+          {
+            "icon": "records",
+            "title": "Tus récords y tu diario",
+            "text": "Cada sesión queda registrada, tus récords se calculan solos."
+          },
+          {
+            "icon": "rank",
+            "title": "Rangos y clasificación",
+            "text": "Sube de rango con tus minutos de entrenamiento y compárate con tu clase, sin presión."
+          },
+          {
+            "icon": "vote",
+            "title": "Tu opinión cuenta",
+            "text": "Tu entrenador abre una votación: elige los ejercicios de la próxima sesión."
+          }
+        ]
+      }
     }
   },
   "labels": {
