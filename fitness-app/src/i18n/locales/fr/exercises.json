@@ -147,7 +147,12 @@
     "keep_private": "Laisser au centre",
     "publish": "Publier",
     "published": "« {{name}} » est publié dans la base commune.",
-    "kept": "« {{name}} » reste dans son centre."
+    "kept": "« {{name}} » reste dans son centre.",
+    "incomplete": "À compléter avant de publier : {{list}}",
+    "missing_equipment": "équipement",
+    "missing_level": "niveau",
+    "missing_technique": "consignes techniques",
+    "complete_first": "Corrige d’abord l’exercice : il manque des informations."
   },
   "import": {
     "tag": "Import",

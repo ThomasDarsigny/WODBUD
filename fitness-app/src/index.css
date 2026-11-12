@@ -1603,6 +1603,7 @@ button.wb-ex-card { display: flex; align-items: center; gap: 0.85rem; padding: 0
 .wb-review-item { display: grid; gap: 0.7rem; padding: 0.9rem; border-bottom: 1px solid var(--border); }
 .wb-review-item:last-child { border-bottom: none; }
 .wb-review-head { display: flex; align-items: center; gap: 0.75rem; }
+.wb-review-missing { margin: 0; padding: 0.45rem 0.7rem; border-radius: var(--r-md); background: rgba(255, 155, 143, 0.08); border: 1px solid rgba(255, 155, 143, 0.35); color: #ff9b8f; font-size: 0.8125rem; }
 .wb-review-actions { display: flex; flex-wrap: wrap; gap: 0.45rem; justify-content: flex-end; }
 .wb-review-media { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 0.5rem; }
 .wb-review-media video, .wb-review-media img { width: 100%; aspect-ratio: 9 / 16; object-fit: cover; border-radius: var(--r-md); background: var(--black); }

@@ -147,7 +147,12 @@
     "keep_private": "Dejar en el centro",
     "publish": "Publicar",
     "published": "«{{name}}» está publicado en la base común.",
-    "kept": "«{{name}}» se queda en su centro."
+    "kept": "«{{name}}» se queda en su centro.",
+    "incomplete": "Completar antes de publicar: {{list}}",
+    "missing_equipment": "equipamiento",
+    "missing_level": "nivel",
+    "missing_technique": "indicaciones técnicas",
+    "complete_first": "Corrige primero el ejercicio: falta información."
   },
   "import": {
     "tag": "Importar",

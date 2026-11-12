@@ -70,7 +70,7 @@ Fil conducteur : *WODBUD, c'est comme avoir un entraîneur chef* — pour le cen
 - [x] 4.3 Afficher d'abord les exercices faisables, avec une pastille « Équipement manquant » sur les autres.
 - [x] 4.4 Ajouter le filtre « Seulement ce que j'ai » dans le créateur.
 - [x] 4.5 Ajouter le même filtre dans la bibliothèque d'exercices.
-- [ ] 4.6 Signaler à la relecture WODBUD les exercices importés sans équipement.
+- [x] 4.6 Signaler à la relecture WODBUD les exercices importés sans équipement (et sans niveau ni consignes) ; publication bloquée tant que c'est incomplet.
 
 ### 5. Progression / régression
 - [ ] 5.1 Base de données : relier deux exercices (plus dur, plus facile, adaptation pour une zone du corps).

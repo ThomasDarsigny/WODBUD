@@ -147,7 +147,12 @@
     "keep_private": "Keep in gym",
     "publish": "Publish",
     "published": "“{{name}}” is published in the shared library.",
-    "kept": "“{{name}}” stays in its gym."
+    "kept": "“{{name}}” stays in its gym.",
+    "incomplete": "Complete before publishing: {{list}}",
+    "missing_equipment": "equipment",
+    "missing_level": "level",
+    "missing_technique": "technique cues",
+    "complete_first": "Edit the exercise first: some information is missing."
   },
   "import": {
     "tag": "Import",

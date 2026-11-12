@@ -4,6 +4,7 @@ import { supabase } from '../../lib/supabase'
 import { deleteReferences, listReferences, type ExerciseReference } from '../../lib/exerciseReferences'
 import { useExerciseStore } from '../../stores/exerciseStore'
 import type { Exercise } from '../../types'
+import { missingForPublish } from '../../lib/exerciseCompleteness'
 
 interface QueueItem {
   exercise_id: string
@@ -107,6 +108,7 @@ export default function ExerciseReviewQueue({ onEdit }: { onEdit: (exercise: Exe
           {items.map((item) => {
             const exercise = exercises.find((e) => e.id === item.exercise_id)
             const refs = media[item.exercise_id]
+            const missing = missingForPublish(exercise)
             return (
               <li key={item.exercise_id} className="wb-review-item">
                 <div className="wb-review-head">
@@ -120,6 +122,12 @@ export default function ExerciseReviewQueue({ onEdit }: { onEdit: (exercise: Exe
                     {t('review.media', { count: item.references_count })}
                   </button>
                 </div>
+
+                {missing.length > 0 && (
+                  <p className="wb-review-missing">
+                    {t('review.incomplete', { list: missing.map((m) => t(`review.missing_${m}`)).join(', ') })}
+                  </p>
+                )}
 
                 {open === item.exercise_id && (
                   <div className="wb-review-media">
@@ -145,7 +153,13 @@ export default function ExerciseReviewQueue({ onEdit }: { onEdit: (exercise: Exe
                   <button type="button" className="wb-btn wb-btn--ghost wb-btn--sm" disabled={busy !== null} onClick={() => { void decide(item, 'private') }}>
                     {t('review.keep_private')}
                   </button>
-                  <button type="button" className="wb-btn wb-btn--primary wb-btn--sm" disabled={busy !== null} onClick={() => { void decide(item, 'published') }}>
+                  <button
+                    type="button"
+                    className="wb-btn wb-btn--primary wb-btn--sm"
+                    disabled={busy !== null || !exercise || missing.length > 0}
+                    title={missing.length > 0 ? t('review.complete_first') : undefined}
+                    onClick={() => { void decide(item, 'published') }}
+                  >
                     {busy === item.exercise_id ? t('status.loading', { ns: 'common' }) : t('review.publish')}
                   </button>
                 </div>
