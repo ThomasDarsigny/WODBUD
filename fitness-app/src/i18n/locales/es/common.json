@@ -1444,5 +1444,16 @@
     "too_few_one": "{{count}} valoración: no basta",
     "too_few_other": "{{count}} valoraciones: no basta",
     "privacy": "La media se muestra a partir de 3 valoraciones. Nadie ve quién valoró qué."
+  },
+  "whiteboard": {
+    "tag": "Pizarra",
+    "title": "Pizarra",
+    "back": "Inicio",
+    "open": "Pizarra",
+    "empty": "Nadie ha registrado una marca todavía.",
+    "empty_hint": "Las marcas aparecen aquí en cuanto un miembro termina la sesión y registra la suya.",
+    "me": "tú",
+    "anonymous": "Miembro",
+    "react": "Animar"
   }
 }

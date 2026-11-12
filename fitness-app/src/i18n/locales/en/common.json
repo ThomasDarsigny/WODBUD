@@ -1441,5 +1441,16 @@
     "too_few_one": "{{count}} rating: not enough",
     "too_few_other": "{{count}} ratings: not enough",
     "privacy": "Average shown from 3 ratings. Nobody sees who rated what."
+  },
+  "whiteboard": {
+    "tag": "Whiteboard",
+    "title": "Whiteboard",
+    "back": "Home",
+    "open": "Whiteboard",
+    "empty": "No score logged yet.",
+    "empty_hint": "Scores show up here as soon as a member finishes the session and logs a score.",
+    "me": "you",
+    "anonymous": "Member",
+    "react": "Cheer"
   }
 }

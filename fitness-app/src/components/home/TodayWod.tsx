@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { supabase } from '../../lib/supabase'
 import { fetchUpcoming, localDate, type ScheduledEntry } from '../../lib/scheduledWorkouts'
@@ -103,6 +103,9 @@ export default function TodayWod() {
               </ol>
             )}
             {p.notes && <p className="wb-today-notes">{p.notes}</p>}
+            {p.class_plan_id && (
+              <Link to={`/athlete/whiteboard/${p.class_plan_id}`} className="wb-today-board">{t('whiteboard.open')} ›</Link>
+            )}
             {done ? (
               <p className="wb-today-done">
                 <span className="wb-pill wb-pill--green">✓ {t('journal.plan_done', { ns: 'workouts' })}</span>

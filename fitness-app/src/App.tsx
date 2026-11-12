@@ -25,6 +25,7 @@ const SettingsView = lazy(() => import('./components/dashboard/SettingsView'))
 const CommunitiesView = lazy(() => import('./components/community/CommunitiesView'))
 const LandingPage = lazy(() => import('./pages/LandingPage'))
 const ProfileChooser = lazy(() => import('./components/landing/ProfileChooser'))
+const WhiteboardView = lazy(() => import('./components/whiteboard/WhiteboardView'))
 const CommunityPage = lazy(() => import('./components/community/CommunityPage'))
 const CommunityInviteRedirect = lazy(() => import('./pages/CommunityInviteRedirect'))
 const SessionRunnerView = lazy(() => import('./components/session/SessionRunnerView'))
@@ -558,6 +559,26 @@ function App() {
               <AthleteDashboardLayout>
                 <RecordsView />
               </AthleteDashboardLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/athlete/whiteboard/:planId"
+          element={
+            <ProtectedRoute>
+              <AthleteDashboardLayout>
+                <WhiteboardView />
+              </AthleteDashboardLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard/whiteboard/:planId"
+          element={
+            <ProtectedRoute>
+              <DashboardLayout>
+                <WhiteboardView />
+              </DashboardLayout>
             </ProtectedRoute>
           }
         />

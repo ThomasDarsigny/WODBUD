@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { createClassPlan, deleteClassPlan, fetchClassPlans, type ClassPlan } from '../../lib/classPlans'
+import { Link } from 'react-router-dom'
 import { localDate } from '../../lib/scheduledWorkouts'
 import { useWorkoutStore } from '../../stores/workoutStore'
 import ConfirmButton from '../ui/ConfirmButton'
@@ -145,6 +146,9 @@ function PlanList({ heading, plans, planTitle, planDate, onDelete, muted }: {
               >
                 {t('classes.plan_progress', { done: p.done, total: p.total })}
               </span>
+              <Link to={`/dashboard/whiteboard/${p.id}`} style={{ ...ghostBtnStyle, fontSize: '0.75rem', flexShrink: 0, textDecoration: 'none' }}>
+                {t('whiteboard.open')}
+              </Link>
               <ConfirmButton
                 onConfirm={() => onDelete(p.id)}
                 title={t('classes.plan_delete')}

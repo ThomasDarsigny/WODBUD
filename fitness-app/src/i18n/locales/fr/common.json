@@ -1441,5 +1441,16 @@
     "too_few_one": "{{count}} note : pas assez",
     "too_few_other": "{{count}} notes : pas assez",
     "privacy": "Moyenne affichée à partir de 3 notes. Personne ne voit qui a noté quoi."
+  },
+  "whiteboard": {
+    "tag": "Tableau blanc",
+    "title": "Tableau blanc",
+    "back": "Accueil",
+    "open": "Tableau blanc",
+    "empty": "Personne n’a encore noté de score.",
+    "empty_hint": "Les scores apparaissent ici dès qu’un membre termine la séance et note son score.",
+    "me": "toi",
+    "anonymous": "Membre",
+    "react": "Encourager"
   }
 }

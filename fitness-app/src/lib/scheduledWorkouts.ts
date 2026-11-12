@@ -29,6 +29,8 @@ export interface ScheduledEntry {
   session_id: string | null
   /** Cours dont le coach a programmé cette séance, sinon null (plan perso). */
   class_name: string | null
+  /** Plan de cours d'origine (pour le tableau blanc), sinon null. */
+  class_plan_id: string | null
 }
 
 type Row = {
@@ -38,6 +40,7 @@ type Row = {
   notes: string | null
   workout_id: string | null
   session_id: string | null
+  class_plan_id: string | null
   workouts: { title: string } | { title: string }[] | null
   class_plans:
     | { classes: { name: string } | { name: string }[] | null }
@@ -71,7 +74,7 @@ export async function fetchUpcoming(limit = 50): Promise<ScheduledEntry[]> {
   // (pour le suivi, migration 037), elles n'ont rien à faire dans SON journal.
   const { data, error } = await supabase
     .from('scheduled_workouts')
-    .select('id, scheduled_date, title, notes, workout_id, session_id, workouts(title), class_plans(classes(name))')
+    .select('id, scheduled_date, title, notes, workout_id, session_id, class_plan_id, workouts(title), class_plans(classes(name))')
     .eq('user_id', auth.user.id)
     .gte('scheduled_date', localDate(from))
     .order('scheduled_date', { ascending: true })
@@ -88,7 +91,8 @@ export async function fetchUpcoming(limit = 50): Promise<ScheduledEntry[]> {
       workout_id: row.workout_id,
       workout_title: first(row.workouts)?.title ?? null,
       session_id: row.session_id,
-      class_name: first(first(row.class_plans)?.classes ?? null)?.name ?? null
+      class_name: first(first(row.class_plans)?.classes ?? null)?.name ?? null,
+      class_plan_id: row.class_plan_id
     }))
 }
 

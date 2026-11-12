@@ -1493,6 +1493,23 @@ button.wb-row:active, a.wb-row:active { background: var(--surface); }
 .wb-today-notes { margin: 0; color: var(--muted); line-height: 1.5; white-space: pre-wrap; }
 .wb-today-done { margin: 0; display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
 .wb-today-done strong { font-family: var(--font-d); font-size: 1.6rem; font-weight: 900; display: inline-flex; align-items: center; gap: 0.5rem; }
+.wb-today-board { justify-self: start; color: var(--orange); font-weight: 600; text-decoration: none; min-height: 44px; display: inline-flex; align-items: center; }
+.wb-board { list-style: none; margin: 0; padding: 0; }
+.wb-board-row { display: grid; grid-template-columns: 1.6rem 36px minmax(0, 1fr) auto; grid-template-areas: "rank avatar main score" "rank avatar react react"; align-items: center; column-gap: 0.7rem; row-gap: 0.35rem; padding: 0.7rem 0.9rem; border-bottom: 1px solid var(--border); }
+.wb-board-row:last-child { border-bottom: none; }
+.wb-board-row.is-me { background: rgba(255, 90, 31, 0.06); }
+.wb-board-rank { grid-area: rank; font-family: var(--font-d); font-weight: 900; font-size: 1.2rem; color: var(--orange); text-align: center; }
+.wb-board-avatar { grid-area: avatar; width: 36px; height: 36px; border-radius: 50%; object-fit: cover; }
+.wb-board-avatar--empty { display: inline-flex; align-items: center; justify-content: center; background: var(--surface); color: var(--muted); font-family: var(--font-d); font-weight: 900; }
+.wb-board-row .wb-row-main { grid-area: main; }
+.wb-board-score { grid-area: score; display: grid; justify-items: end; gap: 0.2rem; }
+.wb-board-score b { font-family: var(--font-d); font-size: 1.35rem; font-weight: 900; font-variant-numeric: tabular-nums; }
+.wb-board-react { grid-area: react; display: flex; align-items: center; gap: 0.25rem; }
+.wb-board-emoji { width: 40px; height: 40px; border-radius: 999px; border: 1px solid var(--border); background: var(--dark); font-size: 1.1rem; cursor: pointer; transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.15s; }
+.wb-board-emoji.is-on { border-color: var(--orange); background: rgba(255, 90, 31, 0.15); transform: scale(1.1); }
+.wb-board-emoji:disabled { opacity: 0.45; cursor: default; }
+.wb-board-react small { margin-left: 0.3rem; color: var(--muted); font-size: 0.8rem; }
+@media (min-width: 700px) { .wb-board-row { grid-template-columns: 1.6rem 36px minmax(0, 1fr) auto auto; grid-template-areas: "rank avatar main score react"; } }
 .wb-plan { display: flex; align-items: center; gap: 0.9rem; flex-wrap: wrap; }
 .wb-plan-main { flex: 1 1 180px; min-width: 0; display: grid; gap: 0.2rem; }
 .wb-plan-main strong { font-family: var(--font-d); font-size: 1.35rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.02em; line-height: 1.05; }

@@ -1510,6 +1510,42 @@ export type Database = {
           },
         ]
       }
+      score_reactions: {
+        Row: {
+          created_at: string
+          emoji: string
+          score_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          emoji: string
+          score_id: string
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          emoji?: string
+          score_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "score_reactions_score_id_fkey"
+            columns: ["score_id"]
+            isOneToOne: false
+            referencedRelation: "workout_scores"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "score_reactions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       session_exercises: {
         Row: {
           exercise_id: string
@@ -2072,6 +2108,7 @@ export type Database = {
       }
       can_edit_exercise: { Args: { p_exercise: string }; Returns: boolean }
       can_edit_exercise_path: { Args: { p_name: string }; Returns: boolean }
+      can_see_score: { Args: { p_score: string }; Returns: boolean }
       center_role: { Args: { p_center: string }; Returns: string }
       create_center: {
         Args: {
@@ -2336,6 +2373,26 @@ export type Database = {
           name: string
           sources: number
           total: number
+        }[]
+      }
+      get_whiteboard: {
+        Args: { p_plan: string }
+        Returns: {
+          athlete_id: string
+          avatar_url: string
+          capped: boolean
+          full_name: string
+          load_kg: number
+          my_reaction: string
+          note: string
+          performed_at: string
+          reactions: number
+          reps: number
+          rounds: number
+          rx: string
+          score_id: string
+          score_type: string
+          seconds: number
         }[]
       }
       is_admin: { Args: never; Returns: boolean }

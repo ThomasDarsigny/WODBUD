@@ -123,7 +123,7 @@ Rapport : audit produit publié le 12 novembre. Branche de travail : `sprint`. U
 - [x] 1.1 Modèle de score par méthode (temps avec cap, rounds + reps, charge, répétitions) et RX / adapté (migration 065, `lib/scores.ts` testé).
 - [x] 1.2 Saisie du score en fin de séance (écran de bilan ; champs selon la méthode du WOD ; RX ou adapté ; modifiable).
 - [x] 1.3 WOD du jour de ma classe en tête de l'accueil athlète (contenu du WOD, notes du coach, « Faire ce WOD » ; une fois fait : « Fait » et mon score).
-- [ ] 1.4 Tableau blanc par classe et par jour : scores, RX / scaled, réactions.
+- [x] 1.4 Tableau blanc par séance de cours : scores classés (RX d'abord), bravos 👏🔥💪 ; depuis la carte du jour (athlète) et la planification (coach) — migration 066.
 - [ ] 1.5 Benchmarks livrés par WODBUD et historique « la dernière fois ».
 
 ## À définir avec le client
