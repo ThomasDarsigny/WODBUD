@@ -1399,5 +1399,17 @@
     "anonymous_label": "Anonymous",
     "mark_done": "Handled",
     "reopen": "Reopen"
+  },
+  "favorites": {
+    "title": "Gym’s favorite WODs",
+    "empty": "No ratings yet. After a session, your members rate the WOD: favorites will show up here.",
+    "sessions_one": "{{count}} session",
+    "sessions_other": "{{count}} sessions",
+    "ratings_one": "{{count}} rating",
+    "ratings_other": "{{count}} ratings",
+    "score_label": "Average {{average}} out of 5, {{count}} ratings",
+    "too_few_one": "{{count}} rating: not enough",
+    "too_few_other": "{{count}} ratings: not enough",
+    "privacy": "Average shown from 3 ratings. Nobody sees who rated what."
   }
 }

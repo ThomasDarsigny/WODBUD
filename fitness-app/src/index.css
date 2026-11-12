@@ -1642,6 +1642,11 @@ button.wb-ex-card { display: flex; align-items: center; gap: 0.85rem; padding: 0
 .wb-rate-star.is-on[aria-pressed='true'] { transform: scale(1.12); }
 .wb-rate-hint { margin: 0; min-height: 1.3em; font-size: 0.875rem; color: var(--muted); }
 @media (prefers-reduced-motion: reduce) { .wb-rate-star { transition: none; } .wb-rate-star.is-on[aria-pressed='true'] { transform: none; } }
+.wb-fav li { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; }
+.wb-fav-rank { flex-shrink: 0; width: 28px; text-align: center; font-family: var(--font-d); font-weight: 900; font-size: 1.25rem; color: var(--orange); }
+.wb-fav-score { flex-shrink: 0; display: grid; justify-items: end; font-weight: 800; color: var(--orange); font-size: 1rem; }
+.wb-fav-score small { font-weight: 500; font-size: 0.75rem; color: var(--muted); }
+.wb-fav-few { flex-shrink: 0; font-size: 0.75rem; color: var(--muted); text-align: right; max-width: 9rem; }
 .wb-cclasses { padding: 1rem 1.25rem; border-top: 1px solid var(--border); }
 .wb-cclasses-title { margin: 0 0 0.6rem; font-family: var(--font-d); font-size: 0.6875rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--orange); }
 .wb-cclasses-empty { margin: 0; font-size: 0.8125rem; color: var(--muted); }

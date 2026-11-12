@@ -2345,6 +2345,18 @@ export type Database = {
           schedule: string
         }[]
       }
+      get_center_favorite_wods: {
+        Args: { p_center: string }
+        Returns: {
+          author_name: string
+          average: number
+          last_done: string
+          ratings: number
+          sessions: number
+          title: string
+          workout_id: string
+        }[]
+      }
       get_center_invite: {
         Args: { p_token: string }
         Returns: {

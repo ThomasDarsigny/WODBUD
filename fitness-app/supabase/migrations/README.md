@@ -66,3 +66,4 @@ enregistré en base, il faudrait d'abord le réparer.
 | `057_support_messages.sql` | Support WODBUD : `support_messages` (bogue, question, idée, autre ; contexte page/langue/plateforme ; 10 par jour et par personne) ; `get_support_inbox` réservé aux admins (nom et courriel pour répondre). |
 | `058_center_suggestions.sql` | Boîte à suggestions d'un centre : `center_suggestions` (en son nom ou anonyme ; 5 par jour) ; le membre relit les siennes ; l'équipe lit par `get_center_suggestions` (nom masqué si anonyme) et traite par `set_center_suggestion_status`. |
 | `059_session_rating.sql` | Note d'un entraînement (1 à 5) et sa date sur `workout_sessions`, sous les règles d'accès des séances. |
+| `060_center_favorite_wods.sql` | `get_center_favorite_wods` : WODs de l'équipe d'un centre classés selon les notes des gens du centre (moyenne à partir de 3 notes, jamais qui a noté quoi) ; réservé à l'équipe. |

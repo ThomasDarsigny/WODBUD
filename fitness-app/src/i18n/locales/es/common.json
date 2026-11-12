@@ -1402,5 +1402,17 @@
     "anonymous_label": "Anónimo",
     "mark_done": "Atendida",
     "reopen": "Reabrir"
+  },
+  "favorites": {
+    "title": "WODs favoritos del centro",
+    "empty": "Todavía no hay valoraciones. Tras una sesión, tus miembros valoran el WOD: los favoritos aparecerán aquí.",
+    "sessions_one": "{{count}} sesión",
+    "sessions_other": "{{count}} sesiones",
+    "ratings_one": "{{count}} valoración",
+    "ratings_other": "{{count}} valoraciones",
+    "score_label": "Media {{average}} sobre 5, {{count}} valoraciones",
+    "too_few_one": "{{count}} valoración: no basta",
+    "too_few_other": "{{count}} valoraciones: no basta",
+    "privacy": "La media se muestra a partir de 3 valoraciones. Nadie ve quién valoró qué."
   }
 }

@@ -1399,5 +1399,17 @@
     "anonymous_label": "Anonyme",
     "mark_done": "Traitée",
     "reopen": "Rouvrir"
+  },
+  "favorites": {
+    "title": "WODs préférés du centre",
+    "empty": "Pas encore de notes. Après une séance, tes membres notent le WOD : les préférés apparaîtront ici.",
+    "sessions_one": "{{count}} séance",
+    "sessions_other": "{{count}} séances",
+    "ratings_one": "{{count}} note",
+    "ratings_other": "{{count}} notes",
+    "score_label": "Moyenne {{average}} sur 5, {{count}} notes",
+    "too_few_one": "{{count}} note : pas assez",
+    "too_few_other": "{{count}} notes : pas assez",
+    "privacy": "Moyenne affichée à partir de 3 notes. Personne ne voit qui a noté quoi."
   }
 }

@@ -12,6 +12,7 @@ import Skeleton from '../ui/Skeleton'
 import TodayPlans from './TodayPlans'
 import { MyWeekStats, useMyWeek } from './MyWeek'
 import CenterSuggestionsInbox from '../center/CenterSuggestionsInbox'
+import CenterFavoriteWods from '../center/CenterFavoriteWods'
 
 interface ClassPulse {
   id: string
@@ -156,6 +157,8 @@ export default function CoachTodayView() {
           </ul>
         )}
       </section>
+
+      <CenterFavoriteWods />
 
       <CenterSuggestionsInbox />
     </div>
