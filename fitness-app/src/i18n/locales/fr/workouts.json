@@ -51,7 +51,8 @@
     "equipment_home_one": "Ton équipement : {{count}} élément",
     "equipment_home_other": "Ton équipement : {{count}} éléments",
     "equipment_edit": "Modifier",
-    "missing_equipment": "Équipement manquant : {{list}}"
+    "missing_equipment": "Équipement manquant : {{list}}",
+    "only_doable": "Seulement ce que j’ai"
   },
   "reminders": {
     "theme_inactive": "Tu n'as pas fait de séance {{theme}} depuis {{days}} jours"

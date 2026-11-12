@@ -51,7 +51,8 @@
     "equipment_home_one": "Tu equipamiento: {{count}} elemento",
     "equipment_home_other": "Tu equipamiento: {{count}} elementos",
     "equipment_edit": "Editar",
-    "missing_equipment": "Falta equipamiento: {{list}}"
+    "missing_equipment": "Falta equipamiento: {{list}}",
+    "only_doable": "Solo lo que tengo"
   },
   "reminders": {
     "theme_inactive": "No has hecho una sesión de {{theme}} desde hace {{days}} días"

@@ -51,7 +51,8 @@
     "equipment_home_one": "Your equipment: {{count}} item",
     "equipment_home_other": "Your equipment: {{count}} items",
     "equipment_edit": "Edit",
-    "missing_equipment": "Missing equipment: {{list}}"
+    "missing_equipment": "Missing equipment: {{list}}",
+    "only_doable": "Only what I have"
   },
   "reminders": {
     "theme_inactive": "You haven't done a {{theme}} session in {{days}} days"

@@ -72,6 +72,7 @@ export default function WorkoutBuilderView() {
   // Équipement sous la main (centre, sinon compte) : sert à proposer d'abord
   // les exercices faisables.
   const available = useAvailableEquipment()
+  const [onlyDoable, setOnlyDoable] = useState(false)
 
   const normalizedSearch = search.trim().toLowerCase()
 
@@ -106,12 +107,12 @@ export default function WorkoutBuilderView() {
     return map
   }, [exercises, available])
   const sortedExercises = available
-    ? [...filteredExercises].sort(
+    ? [...filteredExercises].filter((e) => !onlyDoable || (missingById.get(e.id)?.length ?? 0) === 0).sort(
         (a, b) => Number((missingById.get(a.id)?.length ?? 0) > 0) - Number((missingById.get(b.id)?.length ?? 0) > 0)
       )
     : filteredExercises
 
-  const hasActiveFilters = selectedCategories.length > 0 || selectedMuscles.length > 0
+  const hasActiveFilters = selectedCategories.length > 0 || selectedMuscles.length > 0 || onlyDoable
 
   function toggleCategory(category: ExerciseCategory) {
     setSelectedCategories((current) =>
@@ -336,6 +337,15 @@ export default function WorkoutBuilderView() {
               <Link to="/dashboard/settings">{t('builder.equipment_edit', { ns: 'workouts' })}</Link>
             </p>
           )}
+          {available && (
+            <div className="wb-chips" style={{ marginTop: '0.2rem' }}>
+              <FilterChip
+                active={onlyDoable}
+                onClick={() => setOnlyDoable((v) => !v)}
+                label={t('builder.only_doable', { ns: 'workouts' })}
+              />
+            </div>
+          )}
           <div style={{ marginTop: '1rem', display: 'grid', gap: '0.8rem' }}>
             <div>
               <div className="wb-ex-fgroup"><span>{t('fields.filter_category', { ns: 'exercises' })}</span></div>
@@ -370,6 +380,7 @@ export default function WorkoutBuilderView() {
                 onClick={() => {
                   setSelectedCategories([])
                   setSelectedMuscles([])
+                  setOnlyDoable(false)
                 }}
                 style={filterResetStyle}
               >
