@@ -2272,8 +2272,41 @@
 .centerGrid { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; grid-template-columns: 1fr; }
 @media (min-width: 700px) { .centerGrid { grid-template-columns: repeat(2, 1fr); } }
 @media (min-width: 1100px) { .centerGrid { grid-template-columns: repeat(3, 1fr); } }
-.centerCard { display: grid; gap: 0.6rem; align-content: start; padding: 1.4rem; border-radius: 18px; border: 1px solid var(--border); background: var(--dark); transition: border-color 0.25s; }
-.centerCard:hover { border-color: rgba(255, 90, 31, 0.5); }
+.centerItem { display: flex; }
+.centerCard {
+  position: relative; isolation: isolate; overflow: hidden; flex: 1;
+  display: grid; gap: 0.6rem; align-content: start; padding: 1.4rem;
+  border-radius: 18px; border: 1px solid var(--border); background: var(--dark);
+  transition: border-color 0.3s;
+  --mx: 50%; --my: 0%;
+}
+/* Halo qui suit la souris (TiltCard pose --mx / --my) ; un liseré orange
+   s'allume sous le pointeur. Invisible au toucher : la carte reste sobre. */
+.centerCard::before {
+  content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: radial-gradient(420px circle at var(--mx) var(--my), rgba(255, 90, 31, 0.16), transparent 45%);
+  opacity: 0; transition: opacity 0.35s;
+}
+.centerCard::after {
+  content: ''; position: absolute; inset: 0; border-radius: inherit; padding: 1px; pointer-events: none;
+  background: radial-gradient(260px circle at var(--mx) var(--my), rgba(255, 90, 31, 0.9), transparent 60%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+  opacity: 0; transition: opacity 0.35s;
+}
+@media (hover: hover) and (pointer: fine) {
+  .centerCard:hover::before, .centerCard:hover::after { opacity: 1; }
+  .centerCard:hover .centerNum { color: transparent; -webkit-text-stroke-color: rgba(255, 90, 31, 0.55); transform: translateY(-4px); }
+}
 .centerCard strong { font-family: var(--font-d); font-size: 1.2rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.03em; }
 .centerCard p { margin: 0; color: var(--muted); line-height: 1.6; font-size: 0.95rem; }
-.centerIcon { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 12px; background: rgba(255, 90, 31, 0.12); color: var(--orange); }
+.centerNum {
+  position: absolute; top: 0.6rem; right: 1rem; z-index: -1;
+  font-family: var(--font-d); font-weight: 900; font-size: 3.6rem; line-height: 1;
+  color: transparent; -webkit-text-stroke: 1px rgba(255, 255, 255, 0.09);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), -webkit-text-stroke-color 0.3s;
+}
+.centerIconWrap { position: relative; display: inline-flex; width: 44px; height: 44px; }
+.centerRing { position: absolute; inset: 0; border-radius: 12px; border: 1px solid var(--orange); opacity: 0; }
+.centerIcon { position: relative; display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 12px; background: rgba(255, 90, 31, 0.12); color: var(--orange); }
+@media (prefers-reduced-motion: reduce) { .centerNum, .centerCard::before, .centerCard::after { transition: none; } }
