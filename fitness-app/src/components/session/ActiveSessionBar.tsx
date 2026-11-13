@@ -29,22 +29,11 @@ export default function ActiveSessionBar({ basePath }: { basePath: string }) {
   if (!started || location.pathname === sessionPath) return null
 
   return (
-    <Link
-      to={sessionPath}
-      style={{
-        display: 'flex', alignItems: 'center', gap: '0.6rem', flexShrink: 0,
-        background: 'rgba(255,77,0,0.12)', borderBottom: '1px solid rgba(255,77,0,0.3)',
-        padding: '0.5rem 1.5rem', textDecoration: 'none',
-        fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.1em',
-        textTransform: 'uppercase', color: 'var(--orange)'
-      }}
-    >
-      <span>{running ? '●' : '❚❚'}</span>
-      <span style={{ fontVariantNumeric: 'tabular-nums' }}>{formatClock(activeMs(timer, now))}</span>
-      <span style={{ color: 'var(--muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-        {workoutName || t('session.in_progress')}
-      </span>
-      <span style={{ marginLeft: 'auto', flexShrink: 0 }}>
+    <Link to={sessionPath} className="wb-active-bar">
+      <span aria-hidden="true">{running ? '●' : '❚❚'}</span>
+      <span className="wb-active-bar-clock">{formatClock(activeMs(timer, now))}</span>
+      <span className="wb-active-bar-name">{workoutName || t('session.in_progress')}</span>
+      <span className="wb-active-bar-state">
         {running ? t('session.running') : t('session.paused')} ›
       </span>
     </Link>

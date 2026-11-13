@@ -2134,6 +2134,35 @@ button.wb-row:active, a.wb-row:active { background: var(--surface); }
 .wb-side-link.is-on { border-left-color: var(--orange); background: rgba(255, 77, 0, 0.08); color: var(--white); }
 .wb-side-label { font-family: var(--font-d); font-size: 0.9375rem; letter-spacing: 0.06em; text-transform: uppercase; }
 
+/* ── Séance et journal (4.2) ────────────────────────────────────── */
+/* Champ creusé dans une carte (fond plus sombre, bordure qui porte du sens) :
+   le motif était recopié par écran (.wb-join-card .wb-input, .wb-modal .wb-input…). */
+.wb-input--sunk { background: var(--black); border-color: var(--line-fn); }
+.wb-input--sunk:focus { border-color: var(--orange); }
+.wb-input--area { min-height: 96px; padding: 0.75rem 0.95rem; line-height: 1.55; resize: vertical; }
+.wb-form-error { margin: 0; color: var(--orange); font-size: 0.8125rem; }
+.wb-btn--quiet { border-color: var(--border); color: var(--muted); }
+.wb-run-stats { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.1rem; }
+.wb-run-done-actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.5rem; }
+.wb-rewards { margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid rgba(34, 197, 94, 0.25); }
+.wb-rewards-rank { display: flex; align-items: center; gap: 0.75rem; }
+.wb-rewards-rank.has-next { margin-bottom: 1.1rem; }
+.wb-rewards-kicker { display: block; margin: 0 0 0.75rem; color: var(--muted); font-family: var(--font-d); font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; }
+.wb-rewards-rank .wb-rewards-kicker { margin: 0; }
+.wb-rewards-rank-name { color: var(--rank); font-family: var(--font-d); font-size: 1.25rem; font-weight: 900; letter-spacing: 0.04em; text-transform: uppercase; }
+:root[data-theme='clair'] .wb-rewards-rank-name { color: color-mix(in srgb, var(--rank) 40%, var(--white)); }
+.wb-rewards-badges { display: flex; flex-wrap: wrap; gap: 1rem; }
+.wb-rewards-badge { display: flex; flex-direction: column; align-items: center; gap: 0.4rem; width: 96px; text-align: center; }
+.wb-rewards-badge-name { font-family: var(--font-d); font-size: 0.6875rem; font-weight: 800; letter-spacing: 0.04em; line-height: 1.2; text-transform: uppercase; }
+.wb-jsched { display: flex; flex-direction: column; gap: var(--s3); }
+.wb-jsched-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--s3); }
+.wb-jsched-actions { display: flex; flex-wrap: wrap; gap: var(--s2); }
+.wb-active-bar { display: flex; flex-shrink: 0; align-items: center; gap: 0.6rem; padding: 0.5rem 1.5rem; border-bottom: 1px solid rgba(255, 77, 0, 0.3); background: rgba(255, 77, 0, 0.12); color: var(--orange); font-family: var(--font-d); font-size: 0.6875rem; letter-spacing: 0.1em; text-decoration: none; text-transform: uppercase; }
+.wb-active-bar-clock { font-variant-numeric: tabular-nums; }
+.wb-active-bar-name { overflow: hidden; color: var(--muted); text-overflow: ellipsis; white-space: nowrap; }
+.wb-active-bar-state { flex-shrink: 0; margin-left: auto; }
+.wb-rest-spacer { height: 96px; }
+
 /* ── Créateur de WOD (4.2) ───────────────────────────────────────── */
 .wb-builder { display: grid; grid-template-columns: minmax(0, 1fr) 380px; height: calc(100vh - var(--section-tabs-h, 0px)); overflow: hidden; }
 .wb-builder.is-mobile { grid-template-columns: 1fr; grid-template-rows: auto minmax(0, 1fr); height: calc(100dvh - var(--mobile-top-h) - var(--tabbar-h) - var(--safe-bottom) - var(--section-tabs-h, 0px)); }

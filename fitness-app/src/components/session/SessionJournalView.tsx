@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import type { FormEvent } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { fetchJournal, groupByMonth, type JournalEntry } from '../../lib/journal'
@@ -9,7 +10,7 @@ import NavIcon, { type NavIconName } from '../navigation/NavIcon'
 import EmptyState from '../ui/EmptyState'
 import ConfirmButton from '../ui/ConfirmButton'
 import Skeleton from '../ui/Skeleton'
-import { label, text, field as inputStyle, textarea as textareaStyle, btnPrimary as actionBtnStyle, btnSecondary as ghostBtnStyle } from '../../styles/ui'
+import Field from '../ui/Field'
 import { AnimatedNumber } from '../ui/motion'
 import { formatMinutes } from '../../lib/ranks'
 
@@ -163,7 +164,8 @@ export default function SessionJournalView() {
                           <ConfirmButton
                             onConfirm={() => handleDeleteUpcoming(e.id)}
                             title={t('journal.delete_scheduled')}
-                            style={{ minHeight: 40, minWidth: 40, padding: '0 0.7rem', borderRadius: 10, border: '1px solid var(--border)', background: 'transparent', color: 'var(--muted)', cursor: 'pointer' }}
+                            ariaLabel={`${t('journal.delete_scheduled')} — ${e.title ?? e.workout_title ?? t('journal.free_session')}`}
+                            className="wb-btn wb-btn--ghost wb-btn--sm wb-btn--quiet"
                           >
                             ✕
                           </ConfirmButton>
@@ -230,7 +232,8 @@ function ScheduleForm({ savedWorkouts, onCancel, onSaved }: {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  async function handleSubmit() {
+  async function handleSubmit(event: FormEvent) {
+    event.preventDefault()
     if (!date) return
     setSaving(true)
     setError(null)
@@ -250,44 +253,40 @@ function ScheduleForm({ savedWorkouts, onCancel, onSaved }: {
   }
 
   return (
-    <div className="wb-card" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--s3)' }}>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 'var(--s3)' }}>
-        <label style={{ display: 'flex', flexDirection: 'column', gap: 'var(--s1)' }}>
-          <span style={label}>{t('journal.schedule_date')}</span>
-          <input type="date" value={date} onChange={(e) => setDate(e.target.value)} style={inputStyle} />
-        </label>
-        <label style={{ display: 'flex', flexDirection: 'column', gap: 'var(--s1)' }}>
-          <span style={label}>{t('journal.schedule_workout')}</span>
-          <select value={workoutId} onChange={(e) => setWorkoutId(e.target.value)} style={inputStyle}>
+    <form className="wb-card wb-jsched" onSubmit={(e) => { void handleSubmit(e) }}>
+      <div className="wb-jsched-grid">
+        <Field label={t('journal.schedule_date')} required>
+          <input type="date" required value={date} onChange={(e) => setDate(e.target.value)} className="wb-input wb-input--sunk" />
+        </Field>
+        <Field label={t('journal.schedule_workout')}>
+          <select value={workoutId} onChange={(e) => setWorkoutId(e.target.value)} className="wb-input wb-input--sunk">
             <option value="">{t('journal.schedule_workout_none')}</option>
             {savedWorkouts.map((w) => (
               <option key={w.id} value={w.id}>{w.name}</option>
             ))}
           </select>
-        </label>
+        </Field>
       </div>
-      <label style={{ display: 'flex', flexDirection: 'column', gap: 'var(--s1)' }}>
-        <span style={label}>{t('journal.schedule_title')}</span>
+      <Field label={t('journal.schedule_title')}>
         <input
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder={t('journal.schedule_title_placeholder')}
-          style={inputStyle}
+          className="wb-input wb-input--sunk"
         />
-      </label>
-      <label style={{ display: 'flex', flexDirection: 'column', gap: 'var(--s1)' }}>
-        <span style={label}>{t('journal.schedule_notes')}</span>
-        <textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={2} style={textareaStyle} />
-      </label>
+      </Field>
+      <Field label={t('journal.schedule_notes')}>
+        <textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={2} className="wb-input wb-input--sunk wb-input--area" />
+      </Field>
 
-      {error && <p style={{ color: 'var(--orange)', fontSize: text.sm, margin: 0 }}>{error}</p>}
+      {error && <p className="wb-form-error" role="alert">{error}</p>}
 
-      <div style={{ display: 'flex', gap: 'var(--s2)' }}>
-        <button onClick={() => { void handleSubmit() }} disabled={!date || saving} style={{ ...actionBtnStyle, opacity: !date || saving ? 0.6 : 1 }}>
+      <div className="wb-jsched-actions">
+        <button type="submit" disabled={!date || saving} className="wb-btn wb-btn--primary">
           {saving ? t('status.loading', { ns: 'common' }) : t('journal.schedule_save')}
         </button>
-        <button onClick={onCancel} style={ghostBtnStyle}>{t('actions.cancel', { ns: 'common' })}</button>
+        <button type="button" onClick={onCancel} className="wb-btn wb-btn--ghost">{t('actions.cancel', { ns: 'common' })}</button>
       </div>
-    </div>
+    </form>
   )
 }

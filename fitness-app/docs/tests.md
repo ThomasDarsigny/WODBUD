@@ -14,7 +14,7 @@ Les calculs sans réseau : scores, semaines et cycles, horaire, présences, menu
 npm run test:e2e
 ```
 
-Quatorze fichiers de parcours, chacun lancé sur ordinateur (1440 × 900) et sur téléphone (Pixel 7) :
+Quinze fichiers de parcours, chacun lancé sur ordinateur (1440 × 900) et sur téléphone (Pixel 7) :
 
 | Fichier | Parcours |
 |---|---|
@@ -32,6 +32,7 @@ Quatorze fichiers de parcours, chacun lancé sur ordinateur (1440 × 900) et sur
 | `e2e/public.e2e.ts` | Connexion refusée (message traduit), inscription (mots de passe différents, courriel de confirmation, renvoi limité), rang partagé |
 | `e2e/coach-votes.e2e.ts` | Fermer un vote, supprimer un vote (en deux temps) ; choisir une thématique ; l'admin en propose une au clavier |
 | `e2e/menus.e2e.ts` | Barre latérale (ordinateur) : replier et déplier, page courante annoncée, chez le coach et chez l'athlète |
+| `e2e/journal.e2e.ts` | Journal : programmer une séance au clavier, retirer une séance (en deux temps) |
 
 **Rien ne sort de la machine.** L'app est servie sur le port 5174 avec une fausse adresse Supabase (`http://supabase.test`). `e2e/supabase-mock.ts` intercepte chaque requête et répond comme PostgREST, à partir d'une petite base en mémoire. Il gère les filtres `eq`, `in`, `gte`…, le tri, les lignes uniques, les comptes, les écritures, les fonctions RPC et la connexion. Chaque test vérifie ensuite ce qui a été écrit (`db.writesTo('class_plans', 'POST')`). Côté authentification, `db.authCalls` garde chaque appel (connexion, inscription, renvoi) et `db.authErrors` fait répondre une erreur GoTrue à un chemin donné (`invalid_credentials`, `over_email_send_rate_limit`…). Le dépôt est public : aucun identifiant réel n'est utilisé.
 

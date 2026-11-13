@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import type { CSSProperties } from 'react'
 import type { ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
@@ -9,7 +10,6 @@ import { useWorkoutStore } from '../../stores/workoutStore'
 import { formatClock } from '../../lib/sessionTimer'
 import { unlockAudio } from '../../lib/gymCues'
 import { METHOD_I18N_KEYS } from '../../types'
-import { textarea as textareaStyle } from '../../styles/ui'
 import { badgeDisplay, fetchBadgesByKeys, type Badge } from '../../lib/badges'
 import { computeProgress, rankDisplay } from '../../lib/ranks'
 import { useRankStore } from '../../stores/rankStore'
@@ -326,7 +326,7 @@ function RunnerPanel() {
           onChange={(e) => setNotes(e.target.value)}
           placeholder={t('session.notes_placeholder')}
           rows={3}
-          style={textareaStyle}
+          className="wb-input wb-input--sunk wb-input--area"
         />
       </div>
 
@@ -373,7 +373,7 @@ function SummaryPanel({ basePath }: { basePath: string }) {
           // Totaux, rang et badges viennent du serveur : on ne les invente pas.
           <p className="wb-run-offline">{t('offline.done_hint', { ns: 'common' })}</p>
         ) : (
-          <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '1.1rem' }}>
+          <div className="wb-run-stats">
             <Stat label={t('session.done_total', { total: summary.totalMinutes })} />
             <Stat label={t('session.done_streak', { days: summary.currentStreak })} />
           </div>
@@ -402,7 +402,7 @@ function SummaryPanel({ basePath }: { basePath: string }) {
           previousMinutes={summary.previousMinutes}
           totalMinutes={summary.totalMinutes}
         />
-        <div style={{ display: 'flex', gap: '0.6rem', marginTop: '1.5rem', flexWrap: 'wrap' }}>
+        <div className="wb-run-done-actions">
           <ActionButton onClick={() => { clearSummary(); navigate(`${basePath}/rank`) }} variant="primary">
             {t('session.done_rank')}
           </ActionButton>
@@ -457,17 +457,13 @@ function SessionRewards({ badgeKeys, previousMinutes, totalMinutes, basePath }: 
   if (!rankedUp && badges.length === 0) return null
 
   return (
-    <div style={{ marginTop: '1.5rem', paddingTop: '1.25rem', borderTop: '1px solid rgba(34,197,94,0.25)' }}>
+    <div className="wb-rewards">
       {rankedUp && after && (
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: badges.length ? '1.1rem' : 0 }}>
+        <div className={`wb-rewards-rank${badges.length ? ' has-next' : ''}`} style={{ '--rank': after.color } as CSSProperties}>
           <RankEmblem rank={after} size={56} />
           <span>
-            <span style={{ display: 'block', fontFamily: 'var(--font-d)', fontSize: '0.6875rem', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--muted)' }}>
-              {t('session.new_rank')}
-            </span>
-            <span style={{ fontFamily: 'var(--font-d)', fontSize: '1.25rem', fontWeight: 900, letterSpacing: '0.04em', textTransform: 'uppercase', color: after.color }}>
-              {rankDisplay(after, i18n.language)}
-            </span>
+            <span className="wb-rewards-kicker">{t('session.new_rank')}</span>
+            <span className="wb-rewards-rank-name">{rankDisplay(after, i18n.language)}</span>
           </span>
         </div>
       )}
@@ -483,16 +479,12 @@ function SessionRewards({ badgeKeys, previousMinutes, totalMinutes, basePath }: 
 
       {badges.length > 0 && (
         <>
-          <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--muted)', margin: '0 0 0.75rem' }}>
-            {t('session.new_badges', { count: badges.length })}
-          </p>
-          <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+          <p className="wb-rewards-kicker">{t('session.new_badges', { count: badges.length })}</p>
+          <div className="wb-rewards-badges">
             {badges.map((b) => (
-              <div key={b.key} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.4rem', width: 96, textAlign: 'center' }}>
+              <div key={b.key} className="wb-rewards-badge">
                 <BadgeToken icon={b.icon} art={b.art} fresh state="unlocked" size={72} title={badgeDisplay(b, i18n.language)} />
-                <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', fontWeight: 800, letterSpacing: '0.04em', textTransform: 'uppercase', lineHeight: 1.2 }}>
-                  {badgeDisplay(b, i18n.language)}
-                </span>
+                <span className="wb-rewards-badge-name">{badgeDisplay(b, i18n.language)}</span>
               </div>
             ))}
           </div>

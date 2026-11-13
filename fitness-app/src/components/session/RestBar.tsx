@@ -48,7 +48,7 @@ export default function RestBar() {
   return (
     <>
     {/* Réserve la place de la barre : la fin de la page reste atteignable. */}
-    <div style={{ height: 96 }} aria-hidden="true" />
+    <div className="wb-rest-spacer" aria-hidden="true" />
     <div className="wb-rest wb-above-tabbar" role="timer" aria-live="off" aria-label={t('session.rest_label')}>
       <div className="wb-rest-bar" aria-hidden="true"><span style={{ transform: `scaleX(${Math.min(1, Math.max(0, progress))})` }} /></div>
       <div className="wb-rest-body">
