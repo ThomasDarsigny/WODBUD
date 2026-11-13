@@ -1563,6 +1563,13 @@ button.wb-row:active, a.wb-row:active { background: var(--surface); }
 .wb-week-picklist { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.25rem; max-height: 240px; overflow-y: auto; }
 .wb-week-picklist button { width: 100%; min-height: 44px; padding: 0 0.75rem; border: 1px solid var(--border); border-radius: 10px; background: var(--dark); color: var(--white); font: inherit; text-align: left; cursor: pointer; }
 .wb-week-picklist button.is-on { border-color: var(--orange); background: rgba(255, 90, 31, 0.12); }
+.wb-week-guard { display: grid; gap: 0.5rem; padding: 0.75rem 0.9rem; border-radius: var(--r-md); border: 1px solid rgba(245, 158, 11, 0.4); background: rgba(245, 158, 11, 0.07); }
+.wb-week-guard-title { margin: 0; font-weight: 700; color: #f5b041; }
+.wb-week-guard ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.35rem; }
+.wb-week-guard li { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; font-size: 0.9rem; }
+.wb-week-guard-pill { background: rgba(245, 158, 11, 0.15); color: #f5b041; }
+.wb-week-guard-pill--hot { background: rgba(239, 68, 68, 0.15); color: #ff7a6e; }
+.wb-week-conflicts { list-style: none; margin: 0; padding: 0.5rem 0.65rem; border-radius: 10px; background: rgba(239, 68, 68, 0.1); color: #ff9b8f; font-size: 0.85rem; display: grid; gap: 0.2rem; }
 .wb-week-foot { display: flex; justify-content: flex-end; }
 .wb-week-foot .is-armed { color: var(--black); background: #ef4444; border-color: #ef4444; }
 /* Sept colonnes seulement quand la place le permet (à côté de la liste des cours,

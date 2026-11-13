@@ -131,7 +131,7 @@ Rapport : audit produit publié le 12 novembre. Branche de travail : `sprint`. U
 - [x] 2.2 Calendrier par cours : semaine du lundi au dimanche, « + » sur un jour (recherche, benchmarks d'abord, note), tableau blanc et suppression par séance, « Dupliquer vers la semaine suivante » (sans doublons, sans notification) ; la liste reste disponible.
 - [ ] 2.3 Modèles et cycles (+5 % / +10 % par semaine).
 - [ ] 2.4 « Proposer un WOD » par l'IA dans le créateur (sortie structurée, exercices de la bibliothèque seulement).
-- [ ] 2.5 Garde-fou de volume hebdomadaire par muscle.
+- [x] 2.5 Garde-fou de volume hebdomadaire par muscle : dans le calendrier, muscle principal deux jours de suite ou 3 jours et plus dans la semaine ; avertissement (non bloquant) au moment de programmer un WOD ; cardio exclu ; règles testées.
 
 ## À définir avec le client
 - [ ] **Facturation** : qui paie et comment (par membre, par entraîneur, prix fixe).

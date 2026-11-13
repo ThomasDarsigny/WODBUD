@@ -791,7 +791,16 @@
     "week_duplicate": "Duplicar a la semana siguiente",
     "week_duplicated_one": "{{count}} sesión copiada a la semana siguiente.",
     "week_duplicated_other": "{{count}} sesiones copiadas a la semana siguiente.",
-    "week_duplicate_none": "La semana siguiente ya tiene todas estas sesiones."
+    "week_duplicate_none": "La semana siguiente ya tiene todas estas sesiones.",
+    "guard_title": "Control de carga semanal",
+    "guard_frequent": "Frecuente",
+    "guard_back_to_back": "Dos días seguidos",
+    "guard_days_one": "{{count}} día ({{days}})",
+    "guard_days_other": "{{count}} días ({{days}})",
+    "guard_pair_one": "{{days}}",
+    "guard_pair_other": "{{days}}",
+    "guard_hint": "Referencia: 48 h de recuperación entre dos sesiones del mismo músculo principal, y no más de 2 días por semana.",
+    "guard_conflict": "{{muscle}} ya trabajado el {{day}}"
   },
   "athlete": {
     "role_label": "Atleta",

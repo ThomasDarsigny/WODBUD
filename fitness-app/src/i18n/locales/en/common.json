@@ -788,7 +788,16 @@
     "week_duplicate": "Duplicate to next week",
     "week_duplicated_one": "{{count}} session copied to next week.",
     "week_duplicated_other": "{{count}} sessions copied to next week.",
-    "week_duplicate_none": "Next week already has all these sessions."
+    "week_duplicate_none": "Next week already has all these sessions.",
+    "guard_title": "Weekly load check",
+    "guard_frequent": "Frequent",
+    "guard_back_to_back": "Two days in a row",
+    "guard_days_one": "{{count}} day ({{days}})",
+    "guard_days_other": "{{count}} days ({{days}})",
+    "guard_pair_one": "{{days}}",
+    "guard_pair_other": "{{days}}",
+    "guard_hint": "Guideline: 48 h of recovery between two sessions on the same primary muscle, and no more than 2 days a week.",
+    "guard_conflict": "{{muscle}} already trained on {{day}}"
   },
   "athlete": {
     "role_label": "Athlete",

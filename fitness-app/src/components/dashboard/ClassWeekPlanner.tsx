@@ -5,6 +5,10 @@ import { createClassPlan, deleteClassPlan, fetchClassPlansBetween, type ClassPla
 import { localDate } from '../../lib/scheduledWorkouts'
 import { duplicationFor, shiftDate, weekDays, weekStart } from '../../lib/planWeek'
 import { useWorkoutStore } from '../../stores/workoutStore'
+import { useExerciseStore } from '../../stores/exerciseStore'
+import { supabase } from '../../lib/supabase'
+import { conflictsFor, primaryMuscles, weekWarnings, type DayLoad } from '../../lib/weekVolume'
+import { MUSCLE_GROUP_I18N_KEYS, type MuscleGroup } from '../../types'
 import ConfirmButton from '../ui/ConfirmButton'
 import Skeleton from '../ui/Skeleton'
 
@@ -16,6 +20,9 @@ import Skeleton from '../ui/Skeleton'
 export default function ClassWeekPlanner({ classId }: { classId: string }) {
   const { t, i18n } = useTranslation(['common', 'workouts'])
   const { savedWorkouts, fetchWorkouts } = useWorkoutStore()
+  const { exercises, fetchExercises } = useExerciseStore()
+  // Exercices de chaque WOD programmé, pour le garde-fou de volume (2.5).
+  const [wodExercises, setWodExercises] = useState<Record<string, string[]>>({})
   const today = localDate()
   const [start, setStart] = useState(() => weekStart(today))
   const [plans, setPlans] = useState<ClassPlan[] | null>(null)
@@ -32,6 +39,36 @@ export default function ClassWeekPlanner({ classId }: { classId: string }) {
   }, [classId, start, end])
 
   useEffect(() => { fetchWorkouts() }, [fetchWorkouts])
+  useEffect(() => { if (exercises.length === 0) void fetchExercises() }, [exercises.length, fetchExercises])
+
+  async function exercisesOf(ids: string[]): Promise<Record<string, string[]>> {
+    const missing = ids.filter((id) => !(id in wodExercises))
+    if (missing.length === 0) return wodExercises
+    const { data } = await supabase.from('workout_exercises').select('workout_id, exercise_id').in('workout_id', missing)
+    const next: Record<string, string[]> = { ...wodExercises }
+    for (const id of missing) next[id] = []
+    for (const row of data ?? []) next[row.workout_id].push(row.exercise_id)
+    setWodExercises(next)
+    return next
+  }
+
+  // Charge les exercices des WODs de la semaine dès que les séances sont là.
+  const weekWodIds = (plans ?? []).map((p) => p.workout_id).filter((id): id is string => Boolean(id)).sort().join(',')
+  useEffect(() => {
+    if (!weekWodIds) return
+    let alive = true
+    const ids = weekWodIds.split(',')
+    supabase.from('workout_exercises').select('workout_id, exercise_id').in('workout_id', ids).then(({ data }) => {
+      if (!alive) return
+      setWodExercises((prev) => {
+        const next: Record<string, string[]> = { ...prev }
+        for (const id of ids) next[id] = []
+        for (const row of data ?? []) next[row.workout_id].push(row.exercise_id)
+        return next
+      })
+    })
+    return () => { alive = false }
+  }, [weekWodIds])
   useEffect(() => {
     let alive = true
     load().then((rows) => { if (alive) setPlans(rows) }).catch(() => { if (alive) setPlans([]) })
@@ -39,6 +76,15 @@ export default function ClassWeekPlanner({ classId }: { classId: string }) {
   }, [load])
 
   const weekPlans = (plans ?? []).filter((p) => p.scheduled_date >= start && p.scheduled_date <= end)
+  const exerciseById = useMemo(() => new Map(exercises.map((e) => [e.id, e])), [exercises])
+  const musclesOfWod = (id: string | null, cache: Record<string, string[]> = wodExercises): MuscleGroup[] =>
+    id ? primaryMuscles((cache[id] ?? []).map((x) => exerciseById.get(x)).filter((e): e is NonNullable<typeof e> => Boolean(e))) : []
+  const dayLoads: DayLoad[] = days.map((d) => ({
+    date: d,
+    primary: [...new Set(weekPlans.filter((p) => p.scheduled_date === d).flatMap((p) => musclesOfWod(p.workout_id)))]
+  }))
+  const warnings = weekWarnings(dayLoads)
+  const muscleName = (m: MuscleGroup) => t(MUSCLE_GROUP_I18N_KEYS[m])
   const nextPlans = (plans ?? []).filter((p) => p.scheduled_date > end)
 
   const title = (p: ClassPlan) => p.title ?? p.workout_title ?? t('journal.free_session', { ns: 'workouts' })
@@ -104,6 +150,21 @@ export default function ClassWeekPlanner({ classId }: { classId: string }) {
 
       {message && <p className={message.kind === 'ok' ? 'wb-review-ok' : 'wb-rec-error'} role="status">{message.text}</p>}
 
+      {warnings.length > 0 && (
+        <section className="wb-week-guard" aria-label={t('classes.guard_title')}>
+          <p className="wb-week-guard-title">{t('classes.guard_title')}</p>
+          <ul>
+            {warnings.map((w) => (
+              <li key={`${w.muscle}-${w.kind}`}>
+                <span className={`wb-pill ${w.kind === 'back_to_back' ? 'wb-week-guard-pill--hot' : 'wb-week-guard-pill'}`}>{t(`classes.guard_${w.kind}`)}</span>
+                <span><b>{muscleName(w.muscle)}</b> · {t(w.kind === 'frequent' ? 'classes.guard_days' : 'classes.guard_pair', { count: w.dates.length, days: w.dates.map((d) => fmt(d, { weekday: 'short' })).join(', ') })}</span>
+              </li>
+            ))}
+          </ul>
+          <p className="wb-set-hint" style={{ margin: 0 }}>{t('classes.guard_hint')}</p>
+        </section>
+      )}
+
       {plans === null ? (
         <Skeleton height={56} lines={4} />
       ) : (
@@ -138,6 +199,11 @@ export default function ClassWeekPlanner({ classId }: { classId: string }) {
                     <WodPicker
                       workouts={savedWorkouts}
                       busy={busy}
+                      checkConflicts={async (id) => {
+                        const cache = await exercisesOf([id])
+                        return conflictsFor(day, musclesOfWod(id, cache), dayLoads)
+                          .map((c) => t('classes.guard_conflict', { muscle: muscleName(c.muscle), day: fmt(c.date, { weekday: 'long' }) }))
+                      }}
                       onCancel={() => setPicking(null)}
                       onPick={(id, notes) => { void add(day, id, notes) }}
                     />
@@ -158,9 +224,11 @@ export default function ClassWeekPlanner({ classId }: { classId: string }) {
   )
 }
 
-function WodPicker({ workouts, busy, onPick, onCancel }: {
+function WodPicker({ workouts, busy, onPick, onCancel, checkConflicts }: {
   workouts: Array<{ id: string; name: string; is_benchmark?: boolean }>
   busy: boolean
+  /** Muscles déjà travaillés la veille ou le lendemain (phrases prêtes à afficher). */
+  checkConflicts: (workoutId: string) => Promise<string[]>
   onPick: (workoutId: string, notes: string) => void
   onCancel: () => void
 }) {
@@ -168,6 +236,12 @@ function WodPicker({ workouts, busy, onPick, onCancel }: {
   const [q, setQ] = useState('')
   const [chosen, setChosen] = useState<string | null>(null)
   const [notes, setNotes] = useState('')
+  const [conflicts, setConflicts] = useState<string[]>([])
+  function choose(id: string) {
+    setChosen(id)
+    setConflicts([])
+    checkConflicts(id).then(setConflicts).catch(() => setConflicts([]))
+  }
   const list = workouts
     .filter((w) => w.name.toLowerCase().includes(q.trim().toLowerCase()))
     .sort((a, b) => Number(Boolean(b.is_benchmark)) - Number(Boolean(a.is_benchmark)) || a.name.localeCompare(b.name))
@@ -181,13 +255,18 @@ function WodPicker({ workouts, busy, onPick, onCancel }: {
       <ul className="wb-week-picklist" role="listbox" aria-label={t('classes.plan_workout')}>
         {list.map((w) => (
           <li key={w.id}>
-            <button type="button" role="option" aria-selected={chosen === w.id} className={chosen === w.id ? 'is-on' : undefined} onClick={() => setChosen(w.id)}>
+            <button type="button" role="option" aria-selected={chosen === w.id} className={chosen === w.id ? 'is-on' : undefined} onClick={() => choose(w.id)}>
               {w.is_benchmark ? '★ ' : ''}{w.name}
             </button>
           </li>
         ))}
         {list.length === 0 && <li className="wb-set-hint">{t('classes.week_no_match')}</li>}
       </ul>
+      {chosen && conflicts.length > 0 && (
+        <ul className="wb-week-conflicts" role="status">
+          {conflicts.map((c) => <li key={c}>⚠ {c}</li>)}
+        </ul>
+      )}
       {chosen && (
         <textarea id="week-picker-notes" className="wb-input wb-support-text" rows={2} value={notes} onChange={(e) => setNotes(e.target.value)} placeholder={t('classes.plan_notes_placeholder')} aria-label={t('classes.plan_notes')} />
       )}
