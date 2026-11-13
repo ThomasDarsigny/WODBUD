@@ -545,9 +545,9 @@ function CreateVoteModal({ classId, exercises, onClose, onCreate }: {
           </Field>
         </div>
 
-        <fieldset className="wb-pick">
+        <fieldset className="wb-vpick">
           <legend className="wb-field-label">
-            {t('classes.pick_exercises')} {selected.size > 0 && <span className="wb-pick-count">({selected.size})</span>}
+            {t('classes.pick_exercises')} {selected.size > 0 && <span className="wb-vpick-count">({selected.size})</span>}
           </legend>
           <input
             className="wb-input"
@@ -557,14 +557,14 @@ function CreateVoteModal({ classId, exercises, onClose, onCreate }: {
             placeholder={t('search', { ns: 'exercises' })}
             aria-label={t('search', { ns: 'exercises' })}
           />
-          <div className="wb-pick-list">
+          <div className="wb-vpick-list">
             {filtered.map((ex) => {
               const isSelected = selected.has(ex.id)
               return (
-                <button key={ex.id} type="button" onClick={() => toggleExercise(ex.id)} className={`wb-pick-item${isSelected ? ' is-on' : ''}`} aria-pressed={isSelected}>
-                  <span className="wb-pick-check" aria-hidden="true">{isSelected && '✓'}</span>
-                  <span className="wb-pick-name">{ex.name}</span>
-                  <span className="wb-pick-cat">{t(CATEGORY_I18N_KEYS[ex.category], { ns: 'common' })}</span>
+                <button key={ex.id} type="button" onClick={() => toggleExercise(ex.id)} className={`wb-vpick-item${isSelected ? ' is-on' : ''}`} aria-pressed={isSelected}>
+                  <span className="wb-vpick-check" aria-hidden="true">{isSelected && '✓'}</span>
+                  <span className="wb-vpick-name">{ex.name}</span>
+                  <span className="wb-vpick-cat">{t(CATEGORY_I18N_KEYS[ex.category], { ns: 'common' })}</span>
                 </button>
               )
             })}

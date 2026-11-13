@@ -1781,18 +1781,18 @@ button.wb-row:active, a.wb-row:active { background: var(--surface); }
 .wb-vote-session-actions { display: flex; align-items: center; gap: 0.5rem; }
 .wb-vote-form-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0.75rem; align-items: end; }
 @media (max-width: 520px) { .wb-vote-form-row { grid-template-columns: 1fr; } }
-.wb-pick { display: grid; gap: 0.5rem; margin: 0; padding: 0; border: none; min-width: 0; }
-.wb-pick-count { color: var(--orange); }
-.wb-pick-list { max-height: 300px; overflow-y: auto; border-radius: var(--r-md); border: 1px solid var(--border); background: var(--black); }
-.wb-pick-item { display: flex; align-items: center; gap: 0.75rem; width: 100%; min-height: 44px; padding: 0.6rem 0.9rem; text-align: left; background: transparent; border: none; border-bottom: 1px solid var(--border); cursor: pointer; transition: background-color 0.1s ease; }
-.wb-pick-item:last-child { border-bottom: none; }
-.wb-pick-item.is-on { background: rgba(255, 77, 0, 0.08); }
-.wb-pick-item:focus-visible { outline: 2px solid var(--orange); outline-offset: -2px; }
-.wb-pick-check { display: inline-grid; place-items: center; width: 18px; height: 18px; flex-shrink: 0; border-radius: 50%; border: 2px solid var(--border); color: var(--black); font-size: 0.7rem; font-weight: 900; }
-.wb-pick-item.is-on .wb-pick-check { border-color: var(--orange); background: var(--orange); }
-.wb-pick-name { font-family: var(--font-d); font-size: 0.8125rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); }
-.wb-pick-item.is-on .wb-pick-name { color: var(--white); }
-.wb-pick-cat { margin-left: auto; font-family: var(--font-d); font-size: 0.6875rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--orange); opacity: 0.7; }
+.wb-vpick { display: grid; gap: 0.5rem; margin: 0; padding: 0; border: none; min-width: 0; }
+.wb-vpick-count { color: var(--orange); }
+.wb-vpick-list { max-height: 300px; overflow-y: auto; border-radius: var(--r-md); border: 1px solid var(--border); background: var(--black); }
+.wb-vpick-item { display: flex; align-items: center; gap: 0.75rem; width: 100%; min-height: 44px; padding: 0.6rem 0.9rem; text-align: left; background: transparent; border: none; border-bottom: 1px solid var(--border); cursor: pointer; transition: background-color 0.1s ease; }
+.wb-vpick-item:last-child { border-bottom: none; }
+.wb-vpick-item.is-on { background: rgba(255, 77, 0, 0.08); }
+.wb-vpick-item:focus-visible { outline: 2px solid var(--orange); outline-offset: -2px; }
+.wb-vpick-check { display: inline-grid; place-items: center; width: 18px; height: 18px; flex-shrink: 0; border-radius: 50%; border: 2px solid var(--border); color: var(--black); font-size: 0.7rem; font-weight: 900; }
+.wb-vpick-item.is-on .wb-vpick-check { border-color: var(--orange); background: var(--orange); }
+.wb-vpick-name { font-family: var(--font-d); font-size: 0.8125rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); }
+.wb-vpick-item.is-on .wb-vpick-name { color: var(--white); }
+.wb-vpick-cat { margin-left: auto; font-family: var(--font-d); font-size: 0.6875rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--orange); opacity: 0.7; }
 
 .wb-cycle { display: grid; gap: 0.75rem; padding: 0.9rem; border-radius: var(--r-md); border: 1px solid rgba(255, 90, 31, 0.35); background: var(--dark); }
 .wb-cycle-head { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; }
