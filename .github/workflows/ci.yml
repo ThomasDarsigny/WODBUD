@@ -34,8 +34,13 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      # Les tests n'appellent jamais le réseau, mais lib/supabase.ts exige ces
+      # variables au chargement : de fausses valeurs suffisent.
       - name: Tests unitaires
         run: npm test
+        env:
+          VITE_SUPABASE_URL: http://supabase.test
+          VITE_SUPABASE_ANON_KEY: test
 
       - name: Build
         run: npm run build
