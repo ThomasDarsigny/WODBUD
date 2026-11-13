@@ -1424,6 +1424,8 @@ button.wb-row:active, a.wb-row:active { background: var(--surface); }
 .wb-btn--secondary { background: var(--surface); color: var(--white); border-color: var(--border); }
 .wb-btn--ghost { background: transparent; color: var(--white); border-color: var(--line-fn); }
 .wb-btn--danger { background: transparent; color: #ff9b8f; border-color: #6b2422; }
+/* Thème clair : le rose pâle tombait sous le contraste AA sur fond blanc ; rouge foncé à ~6,5:1. */
+:root[data-theme='clair'] .wb-btn--danger { color: #b42318; border-color: #f0b4ae; }
 .wb-btn--block { width: 100%; }
 .wb-btn--lg { min-height: 56px; font-size: 1.1rem; border-radius: var(--r-lg); }
 .wb-btn--sm { min-height: 40px; padding: 0 0.85rem; font-size: 0.8rem; }
@@ -1836,6 +1838,68 @@ button.wb-row:active, a.wb-row:active { background: var(--surface); }
 .wb-join-switch { margin: 1.25rem 0 0; text-align: center; color: var(--muted); font-size: 0.8125rem; }
 .wb-join-switch button { display: inline-flex; align-items: center; min-height: 40px; padding: 0; border: none; background: none; color: var(--orange); font: inherit; cursor: pointer; }
 .wb-join-switch button:hover, .wb-join-switch button:focus-visible { text-decoration: underline; }
+
+/* ── Fiche d'exercice (4.2) ──────────────────────────────────────── */
+.wb-exd-overlay { background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(4px); padding: 0; }
+.wb-exd { width: 100%; max-width: 620px; max-height: 90vh; overflow: auto; border-radius: var(--r-md); border: 1px solid var(--border); background: var(--dark); }
+.wb-exd:focus { outline: none; }
+.wb-exd-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; padding: 1.5rem 2rem; border-bottom: 1px solid var(--border); }
+.wb-exd-cat { margin: 0 0 0.35rem; font-family: var(--font-d); font-size: 0.6875rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--orange); }
+.wb-exd-title { margin: 0; font-family: var(--font-d); font-size: 1.75rem; font-weight: 900; letter-spacing: 0.04em; line-height: 1; text-transform: uppercase; }
+.wb-exd-close { display: inline-grid; place-items: center; flex-shrink: 0; width: 40px; height: 40px; margin: -0.4rem -0.6rem 0 0; border: none; border-radius: 50%; background: none; color: var(--muted); font-size: 1.25rem; line-height: 1; cursor: pointer; }
+.wb-exd-close:hover, .wb-exd-close:focus-visible { background: var(--surface); color: var(--white); }
+.wb-exd-video { display: block; width: 100%; max-height: 320px; background: #000; }
+.wb-exd-novideo { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.5rem; width: 100%; height: 180px; background: var(--black); }
+.wb-exd-novideo > span { display: flex; opacity: 0.25; }
+.wb-exd-novideo p { margin: 0; font-family: var(--font-d); font-size: 0.6875rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
+.wb-exd-body { display: flex; flex-direction: column; gap: 1.25rem; padding: 1.5rem 2rem; }
+.wb-exd-label { display: block; margin: 0; font-family: var(--font-d); font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+.wb-exd-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.4rem; }
+.wb-exd-tag { display: inline-block; padding: 0.2rem 0.6rem; border-radius: var(--r-md); border: 1px solid var(--border); color: var(--muted); font-family: var(--font-d); font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; white-space: nowrap; }
+.wb-exd-tag--primary { color: var(--orange); border-color: rgba(255, 77, 0, 0.35); background: rgba(255, 77, 0, 0.15); }
+.wb-exd-desc { margin: 0.4rem 0 0; color: var(--muted); font-size: 0.9375rem; line-height: 1.75; white-space: pre-line; }
+.wb-exd-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; padding-top: 0.5rem; border-top: 1px solid var(--border); }
+.wb-exd-add { flex: 1; }
+.wb-btn--danger.is-on { background: rgba(255, 60, 60, 0.14); }
+.wb-exd-confirm { display: grid; gap: 0.75rem; margin-top: 0.4rem; padding: 0.9rem; border-radius: var(--r-md); border: 1px solid rgba(255, 60, 60, 0.35); background: rgba(255, 60, 60, 0.08); }
+.wb-exd-confirm-title { margin: 0; font-family: var(--font-d); font-size: 0.6875rem; letter-spacing: 0.08em; text-transform: uppercase; color: #ff8a8a; }
+.wb-exd-confirm-text { margin: 0; font-size: 0.9375rem; line-height: 1.6; }
+.wb-exd-confirm-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.6rem; }
+@media (max-width: 520px) { .wb-exd-head, .wb-exd-body { padding-left: 1.25rem; padding-right: 1.25rem; } }
+
+/* ── Formulaire d'exercice (4.2), dans la même boîte que la fiche ─ */
+.wb-fieldset { margin: 0; padding: 0; border: none; min-width: 0; }
+.wb-fieldset > .wb-field-label { margin-bottom: 0.35rem; }
+.wb-exd--form { max-width: 680px; position: relative; }
+.wb-exd-head--center { align-items: center; }
+.wb-exf-title { letter-spacing: 0.08em; }
+.wb-exd .wb-input { background: var(--black); border-color: var(--line-fn); }
+.wb-exd .wb-input:focus { border-color: var(--orange); }
+.wb-exf-form { display: flex; flex-direction: column; gap: 1.25rem; padding: 1.5rem 2rem; }
+@media (max-width: 520px) { .wb-exf-form { padding-left: 1.25rem; padding-right: 1.25rem; } }
+.wb-exf-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.wb-exf-chips--tight { gap: 0.35rem; }
+.wb-exf-secondary { margin-top: 0.6rem; }
+.wb-exf-secondary .wb-exf-hint { margin: 0 0 0.35rem; }
+.wb-exf-mv { min-height: 40px; padding: 0.35rem 0.8rem; border-radius: var(--r-md); border: 1px solid var(--border); background: transparent; color: var(--muted); font-family: var(--font-d); font-size: 0.6875rem; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease; }
+.wb-exf-mv.is-on { border-color: var(--mv); background: color-mix(in srgb, var(--mv) 13%, transparent); color: var(--mv); }
+.wb-exf-mv2 { min-height: 36px; padding: 0.2rem 0.55rem; border: 1px dashed var(--border); background: transparent; color: var(--muted); font-family: var(--font-d); font-size: 0.6875rem; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; opacity: 0.6; }
+.wb-exf-mv2.is-on { border-color: var(--mv); color: var(--mv); opacity: 1; }
+.wb-exf-pick { min-height: 36px; padding: 0.3rem 0.7rem; border-radius: var(--r-md); border: 1px solid var(--border); background: transparent; color: var(--muted); font-family: var(--font-d); font-size: 0.6875rem; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease; }
+.wb-exf-pick.is-on { border-color: var(--orange); background: rgba(255, 77, 0, 0.12); color: var(--orange); }
+.wb-exf-pick--method { min-height: 40px; font-size: 0.8125rem; letter-spacing: 0.08em; text-transform: none; }
+.wb-exf-pick--tertiary { border-style: dashed; border-radius: 0; padding: 0.25rem 0.6rem; }
+.wb-exf-pick--tertiary.is-on { border-color: #a78bfa; background: rgba(167, 139, 250, 0.12); color: #a78bfa; }
+.wb-exf-mv:focus-visible, .wb-exf-mv2:focus-visible, .wb-exf-pick:focus-visible, .wb-exf-drop:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
+.wb-exf-start { align-self: flex-start; }
+.wb-exf-drop { padding: 1.5rem; border: 1px dashed var(--border); text-align: center; cursor: pointer; transition: border-color 0.2s ease; }
+.wb-exf-drop:hover { border-color: var(--orange); }
+.wb-exf-drop .wb-exf-hint { margin: 0.4rem 0 0; }
+.wb-exf-drop-icon { display: flex; justify-content: center; margin-bottom: 0.6rem; color: var(--muted); }
+.wb-exf-drop-title { margin: 0; font-family: var(--font-d); font-size: 0.8125rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.wb-exf-preview { max-width: 100%; max-height: 200px; margin-bottom: 0.75rem; }
+.wb-exf-error { padding: 0.75rem 1rem; border-radius: var(--r-md); border: 1px solid rgba(255, 77, 0, 0.3); background: rgba(255, 77, 0, 0.1); color: var(--orange); font-size: 0.8125rem; }
+.wb-exf-submit:disabled { opacity: 1; background: var(--border); cursor: wait; }
 
 /* ── Créateur de WOD (4.2) ───────────────────────────────────────── */
 .wb-builder { display: grid; grid-template-columns: minmax(0, 1fr) 380px; height: calc(100vh - var(--section-tabs-h, 0px)); overflow: hidden; }

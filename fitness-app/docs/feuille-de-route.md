@@ -151,7 +151,9 @@ Rapport : audit produit publié le 12 novembre. Branche de travail : `sprint`. U
   - [x] Paramètres : 42 → 0 style en ligne ; étiquettes reliées aux champs (nom, courriel, mot de passe), groupes de puces annoncés, ✕ des liens sociaux étiqueté, bordures de champs contrastées ; fenêtre de suppression du compte sur `Modal` (teinte danger, Échap, impossible à fermer pendant la suppression) ; bouton désactivé enfin visible comme tel ; parcours e2e.
   - [x] Vote de l'athlète : 33 → 1 (la couleur de l'option, passée en variable CSS) ; options en groupe annoncé, confirmation en zone vivante, états vides sur EmptyState ; parcours e2e.
   - [x] Page d'invitation : 32 → 0 ; même gabarit que la page de présence, étiquettes reliées aux champs (elles ne l'étaient pas), autocomplete (nom, courriel, nouveau / mot de passe actuel), erreurs annoncées ; parcours e2e (connexion puis cours rejoint, lien invalide).
-  - [ ] Fiche et formulaire d'exercice (25 + 31), planning (26), puis le reste.
+  - [x] Fiche d'exercice : 25 → 0 ; vraie fenêtre (rôle dialog relié au titre, Échap — elle ne se fermait pas au clavier —, focus rendu à la ligne), ✕ étiqueté, confirmation de suppression traduite (faute « irreversible » corrigée) ; bouton « danger » lisible en thème clair (#b42318, ~6,5:1).
+  - [x] Formulaire d'exercice : 31 → 2 (couleurs des types de mouvement en variable CSS) ; `FieldGroup` partagé (fieldset / legend) pour les groupes de puces au lieu d'une étiquette autour de boutons, puces en aria-pressed, zone de dépôt vidéo utilisable au clavier, champs étiquetés ; parcours e2e (formulaire, confirmation de suppression).
+  - [ ] Planning (26), puis le reste.
 - [ ] 4.3 Jetons sémantiques (couleurs, espacements) et plancher typographique.
 - [ ] 4.4 Thème clair.
 - [ ] 4.5 Suivi des erreurs.

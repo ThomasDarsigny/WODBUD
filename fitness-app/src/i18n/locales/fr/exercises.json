@@ -107,7 +107,9 @@
     "add_to_workout": "Ajouter à l'entraînement",
     "delete_confirm": "Supprimer \"{{name}}\" ? Cette action est irréversible.",
     "delete_confirm_action": "Supprimer définitivement",
-    "deleting": "Suppression…"
+    "deleting": "Suppression…",
+    "delete_confirm_title": "Confirmation requise",
+    "delete_confirm_text": "Supprimer {{name}} ? Cette action est irréversible et retirera aussi ses liens musculaires."
   },
   "errors": {
     "auth_session_missing_exercise": "Session manquante : reconnecte-toi pour créer ou modifier un exercice.",

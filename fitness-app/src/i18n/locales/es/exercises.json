@@ -107,7 +107,9 @@
     "add_to_workout": "Agregar al entrenamiento",
     "delete_confirm": "¿Eliminar \"{{name}}\"? Esta acción no se puede deshacer.",
     "delete_confirm_action": "Eliminar definitivamente",
-    "deleting": "Eliminando…"
+    "deleting": "Eliminando…",
+    "delete_confirm_title": "Confirmación necesaria",
+    "delete_confirm_text": "¿Eliminar {{name}}? Esta acción es irreversible y también quitará sus vínculos musculares."
   },
   "errors": {
     "auth_session_missing_exercise": "Sesión faltante: vuelve a iniciar sesión para crear o editar un ejercicio.",

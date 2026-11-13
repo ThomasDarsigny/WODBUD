@@ -23,3 +23,20 @@ export default function Field({ label, required, hint, children }: {
     </label>
   )
 }
+
+/**
+ * Groupe de choix (puces, cases) : un fieldset dont la légende nomme le
+ * groupe. Une étiquette <label> autour de plusieurs boutons n'est pas
+ * valide ; ceci l'est, et les lecteurs d'écran annoncent le groupe.
+ */
+export function FieldGroup({ label, required, children }: { label: string; required?: boolean; children: ReactNode }) {
+  return (
+    <fieldset className="wb-field wb-fieldset">
+      <legend className="wb-field-label">
+        {label}
+        {required && <span className="wb-field-req" aria-hidden="true"> *</span>}
+      </legend>
+      {children}
+    </fieldset>
+  )
+}

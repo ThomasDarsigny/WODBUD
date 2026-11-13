@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect, useMemo } from 'react'
-import type { FormEvent, ReactNode } from 'react'
+import { useState, useRef, useEffect, useMemo, useId } from 'react'
+import type { CSSProperties, FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import NavIcon from '../navigation/NavIcon'
 import type {
@@ -29,8 +29,8 @@ import {
   UPPER_MUSCLES
 } from '../../types'
 import { useExerciseStore } from '../../stores/exerciseStore'
-import { field as inputStyle, btnBase as btnStyle, textarea as textareaStyle } from '../../styles/ui'
-import { useBackToClose } from '../../hooks/useBackToClose'
+import { useDialog } from '../../hooks/useDialog'
+import Field, { FieldGroup } from '../ui/Field'
 import EquipmentPicker from '../center/EquipmentPicker'
 import { cleanEquipment, type EquipmentId } from '../../lib/equipment'
 import { matchAgainstExisting, normalizeExerciseName } from '../../lib/textSimilarity'
@@ -74,7 +74,10 @@ function extractErrorMessage(err: unknown, fallbackMessage: string): string {
 }
 
 export default function ExerciseFormModal({ exercise, onClose, isAdmin = false, centerId, onUseExisting }: Props) {
-  useBackToClose(true, onClose)
+  // Fenêtre partagée (4.2) : Échap, retour Android, focus rendu à la fermeture.
+  const titleId = useId()
+  const boxRef = useRef<HTMLDivElement>(null)
+  useDialog(boxRef, onClose)
   const { t } = useTranslation(['exercises', 'common'])
   const { createExercise, updateExercise, exercises } = useExerciseStore()
   const isEdit = !!exercise
@@ -285,115 +288,52 @@ export default function ExerciseFormModal({ exercise, onClose, isAdmin = false, 
     }
   }
 
+  const pickClass = (on: boolean, extra = '') => `wb-exf-pick${extra}${on ? ' is-on' : ''}`
+
   return (
-    <div
-      style={{
-        position: 'fixed',
-        inset: 0,
-        zIndex: 200,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        background: 'rgba(0,0,0,0.8)',
-        backdropFilter: 'blur(4px)'
-      }}
-      onClick={(e) => {
-        if (e.target === e.currentTarget) onClose()
-      }}
-    >
-      <div
-        style={{
-          background: 'var(--dark)',
-          border: '1px solid var(--border)', borderRadius: 12,
-          width: '100%',
-          maxWidth: 680,
-          maxHeight: '90vh',
-          overflow: 'auto',
-          position: 'relative'
-        }}
-      >
-        <div
-          style={{
-            padding: '1.5rem 2rem',
-            borderBottom: '1px solid var(--border)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between'
-          }}
-        >
-          <h2
-            style={{
-              fontFamily: 'var(--font-d)',
-              fontSize: '1.75rem',
-              fontWeight: 900,
-              textTransform: 'uppercase',
-              letterSpacing: '0.08em'
-            }}
-          >
+    <div className="wb-modal-overlay wb-exd-overlay" onClick={(e) => { if (e.target === e.currentTarget) onClose() }}>
+      <div ref={boxRef} className="wb-exd wb-exd--form" role="dialog" aria-modal="true" aria-labelledby={titleId} tabIndex={-1}>
+        <div className="wb-exd-head wb-exd-head--center">
+          <h2 id={titleId} className="wb-exd-title wb-exf-title">
             {isEdit ? t('form.edit_title', { ns: 'exercises' }) : t('form.create_title', { ns: 'exercises' })}
           </h2>
-          <button
-            onClick={onClose}
-            style={{
-              background: 'none',
-              border: 'none',
-              color: 'var(--muted)',
-              cursor: 'pointer',
-              fontSize: '1.25rem',
-              lineHeight: 1
-            }}
-          >
-            ✕
-          </button>
+          <button type="button" onClick={onClose} className="wb-exd-close" aria-label={t('actions.close', { ns: 'common' })}>✕</button>
         </div>
 
-        <form
-          onSubmit={handleSubmit}
-          style={{
-            padding: '1.5rem 2rem',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '1.25rem'
-          }}
-        >
-          <Field label={`${t('fields.name', { ns: 'exercises' })} *`}>
+        <form onSubmit={handleSubmit} className="wb-exf-form">
+          <Field label={t('fields.name', { ns: 'exercises' })} required>
             <input
+              className="wb-input"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder={t('form.name_placeholder', { ns: 'exercises' })}
               required
-              style={inputStyle}
             />
-            {duplicates.length > 0 && (
-              <div className="wb-exf-dupes" role="status">
-                <p>{t('form.duplicates', { ns: 'exercises' })}</p>
-                {duplicates.map((d) => (
-                  <button
-                    key={d.id}
-                    type="button"
-                    className="wb-chip"
-                    onClick={() => (onUseExisting ? onUseExisting(d) : onClose())}
-                  >
-                    {t('form.use_existing', { ns: 'exercises', name: d.name })}
-                  </button>
-                ))}
-              </div>
-            )}
           </Field>
+          {duplicates.length > 0 && (
+            <div className="wb-exf-dupes" role="status">
+              <p>{t('form.duplicates', { ns: 'exercises' })}</p>
+              {duplicates.map((d) => (
+                <button key={d.id} type="button" className="wb-chip" onClick={() => (onUseExisting ? onUseExisting(d) : onClose())}>
+                  {t('form.use_existing', { ns: 'exercises', name: d.name })}
+                </button>
+              ))}
+            </div>
+          )}
 
           {asCenter && !isEdit && <p className="wb-exf-note">{t('form.center_note', { ns: 'exercises' })}</p>}
 
-          <Field label={`${t('detail.tech_instructions', { ns: 'exercises' })}${asCenter ? ' *' : ''}`}>
+          <Field label={t('detail.tech_instructions', { ns: 'exercises' })} required={asCenter}>
             <textarea
+              className="wb-input wb-support-text"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder={t('form.description_placeholder', { ns: 'exercises' })}
               rows={3}
-              style={textareaStyle}
             />
           </Field>
 
-          <Field label={`${t('fields.level', { ns: 'exercises' })}${asCenter ? ' *' : ''}`}>
+          <FieldGroup label={t('fields.level', { ns: 'exercises' })} required={asCenter}>
             <div className="wb-welcome-chips">
               {EXERCISE_LEVELS.map((lv) => (
                 <button key={lv} type="button" className="wb-chip" aria-pressed={level === lv} onClick={() => setLevel(level === lv ? null : lv)}>
@@ -401,51 +341,36 @@ export default function ExerciseFormModal({ exercise, onClose, isAdmin = false, 
                 </button>
               ))}
             </div>
-          </Field>
+          </FieldGroup>
 
-          <Field label={`${t('fields.equipment', { ns: 'exercises' })}${asCenter ? ' *' : ''}`}>
+          <FieldGroup label={t('fields.equipment', { ns: 'exercises' })} required={asCenter}>
             <EquipmentPicker value={equipment} onChange={setEquipment} forExercise />
-          </Field>
+          </FieldGroup>
 
           <Field label={t('fields.category', { ns: 'exercises' })}>
-            <select
-              value={category}
-              onChange={(e) => setCategory(e.target.value as ExerciseCategory)}
-              style={inputStyle}
-            >
+            <select className="wb-input" value={category} onChange={(e) => setCategory(e.target.value as ExerciseCategory)}>
               {CATEGORY_OPTIONS.map(([val, key]) => (
-                <option key={val} value={val}>
-                  {t(key, { ns: 'common' })}
-                </option>
+                <option key={val} value={val}>{t(key, { ns: 'common' })}</option>
               ))}
             </select>
           </Field>
 
-          <Field label={t('fields.movement_type', { ns: 'exercises' })}>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
+          <FieldGroup label={t('fields.movement_type', { ns: 'exercises' })}>
+            <div className="wb-exf-chips">
               {MOVEMENT_TYPES.map((mv) => {
                 const selected = movementType === mv
                 return (
                   <button
                     key={mv}
-                    type='button'
+                    type="button"
                     title={t(MOVEMENT_TYPE_DESC_I18N_KEYS[mv], { ns: 'common' })}
+                    aria-pressed={selected}
                     onClick={() => {
                       setMovementType(selected ? null : mv)
                       setSecondaryMovements((prev) => prev.filter((m) => m !== mv))
                     }}
-                    style={{
-                      fontFamily: 'var(--font-d)',
-                      fontSize: '0.6875rem',
-                      letterSpacing: '0.1em',
-                      textTransform: 'uppercase',
-                      padding: '0.35rem 0.8rem',
-                      border: `1px solid ${selected ? MOVEMENT_TYPE_COLORS[mv] : 'var(--border)'}`, borderRadius: 12,
-                      background: selected ? MOVEMENT_TYPE_COLORS[mv] + '22' : 'transparent',
-                      color: selected ? MOVEMENT_TYPE_COLORS[mv] : 'var(--muted)',
-                      cursor: 'pointer',
-                      transition: 'all 0.15s'
-                    }}
+                    className={`wb-exf-mv${selected ? ' is-on' : ''}`}
+                    style={{ '--mv': MOVEMENT_TYPE_COLORS[mv] } as CSSProperties}
                   >
                     {t(MOVEMENT_TYPE_I18N_KEYS[mv], { ns: 'common' })}
                   </button>
@@ -453,30 +378,19 @@ export default function ExerciseFormModal({ exercise, onClose, isAdmin = false, 
               })}
             </div>
             {movementType && (
-              <div style={{ marginTop: '0.6rem' }}>
-                <p style={{ fontSize: '0.8125rem', color: 'var(--muted)', margin: '0 0 0.35rem' }}>
-                  {t(MOVEMENT_TYPE_DESC_I18N_KEYS[movementType], { ns: 'common' })}
-                </p>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem' }}>
+              <div className="wb-exf-secondary">
+                <p className="wb-exf-hint">{t(MOVEMENT_TYPE_DESC_I18N_KEYS[movementType], { ns: 'common' })}</p>
+                <div className="wb-exf-chips wb-exf-chips--tight">
                   {MOVEMENT_TYPES.filter((mv) => mv !== movementType).map((mv) => {
                     const selected = secondaryMovements.includes(mv)
                     return (
                       <button
                         key={mv}
-                        type='button'
+                        type="button"
+                        aria-pressed={selected}
                         onClick={() => toggleSecondaryMovement(mv)}
-                        style={{
-                          fontFamily: 'var(--font-d)',
-                          fontSize: '0.6875rem',
-                          letterSpacing: '0.08em',
-                          textTransform: 'uppercase',
-                          padding: '0.2rem 0.55rem',
-                          border: `1px dashed ${selected ? MOVEMENT_TYPE_COLORS[mv] : 'var(--border)'}`,
-                          background: 'transparent',
-                          color: selected ? MOVEMENT_TYPE_COLORS[mv] : 'var(--muted)',
-                          cursor: 'pointer',
-                          opacity: selected ? 1 : 0.6
-                        }}
+                        className={`wb-exf-mv2${selected ? ' is-on' : ''}`}
+                        style={{ '--mv': MOVEMENT_TYPE_COLORS[mv] } as CSSProperties}
                       >
                         + {t(MOVEMENT_TYPE_I18N_KEYS[mv], { ns: 'common' })}
                       </button>
@@ -485,55 +399,39 @@ export default function ExerciseFormModal({ exercise, onClose, isAdmin = false, 
                 </div>
               </div>
             )}
-          </Field>
+          </FieldGroup>
 
-          <Field label={t('fields.methods', { ns: 'exercises' })}>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
+          <FieldGroup label={t('fields.methods', { ns: 'exercises' })}>
+            <div className="wb-exf-chips">
               {TRAINING_METHODS.map((mk) => {
                 const selected = methods.includes(mk)
                 return (
-                  <button
-                    key={mk}
-                    type='button'
-                    onClick={() => toggleMethod(mk)}
-                    style={{
-                      fontFamily: 'var(--font-d)',
-                      fontSize: '0.8125rem',
-                      letterSpacing: '0.08em',
-                      padding: '0.3rem 0.7rem',
-                      border: `1px solid ${selected ? 'var(--orange)' : 'var(--border)'}`, borderRadius: 12,
-                      background: selected ? 'rgba(255,77,0,0.12)' : 'transparent',
-                      color: selected ? 'var(--orange)' : 'var(--muted)',
-                      cursor: 'pointer',
-                      transition: 'all 0.15s'
-                    }}
-                  >
+                  <button key={mk} type="button" aria-pressed={selected} onClick={() => toggleMethod(mk)} className={pickClass(selected, ' wb-exf-pick--method')}>
                     {t(TRAINING_METHOD_I18N_KEYS[mk], { ns: 'common' })}
                   </button>
                 )
               })}
             </div>
-          </Field>
+          </FieldGroup>
 
           <Field label={t('fields.body_region', { ns: 'exercises' })}>
             <select
+              className="wb-input"
               value={bodyRegion}
               onChange={(e) => {
                 setRegionTouched(true)
                 setBodyRegion(e.target.value as BodyRegion)
               }}
-              style={inputStyle}
             >
               {BODY_REGIONS.map((r) => (
-                <option key={r} value={r}>
-                  {t(BODY_REGION_I18N_KEYS[r], { ns: 'common' })}
-                </option>
+                <option key={r} value={r}>{t(BODY_REGION_I18N_KEYS[r], { ns: 'common' })}</option>
               ))}
             </select>
           </Field>
 
-          <Field label={`${t('fields.primary_muscle', { ns: 'exercises' })} *`}>
+          <Field label={t('fields.primary_muscle', { ns: 'exercises' })} required>
             <select
+              className="wb-input"
               value={primaryMuscle}
               onChange={(e) => {
                 const value = e.target.value as MuscleGroup
@@ -542,78 +440,41 @@ export default function ExerciseFormModal({ exercise, onClose, isAdmin = false, 
                 setTertiaryMuscles((s) => s.filter((m) => m !== value))
                 if (!regionTouched) setBodyRegion(regionFromMuscle(value))
               }}
-              style={inputStyle}
             >
               {MUSCLE_OPTIONS.map(([val, key]) => (
-                <option key={val} value={val}>
-                  {t(key, { ns: 'common' })}
-                </option>
+                <option key={val} value={val}>{t(key, { ns: 'common' })}</option>
               ))}
             </select>
           </Field>
 
-          <Field label={t('fields.secondary_muscles', { ns: 'exercises' })}>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
+          <FieldGroup label={t('fields.secondary_muscles', { ns: 'exercises' })}>
+            <div className="wb-exf-chips">
               {MUSCLE_OPTIONS.filter(([val]) => val !== primaryMuscle).map(([val, key]) => {
                 const selected = secondaryMuscles.includes(val)
                 return (
-                  <button
-                    key={val}
-                    type='button'
-                    onClick={() => toggleSecondary(val)}
-                    style={{
-                      fontFamily: 'var(--font-d)',
-                      fontSize: '0.6875rem',
-                      letterSpacing: '0.1em',
-                      textTransform: 'uppercase',
-                      padding: '0.3rem 0.7rem',
-                      border: `1px solid ${selected ? 'var(--orange)' : 'var(--border)'}`, borderRadius: 12,
-                      background: selected ? 'rgba(255,77,0,0.12)' : 'transparent',
-                      color: selected ? 'var(--orange)' : 'var(--muted)',
-                      cursor: 'pointer',
-                      transition: 'all 0.15s'
-                    }}
-                  >
+                  <button key={val} type="button" aria-pressed={selected} onClick={() => toggleSecondary(val)} className={pickClass(selected)}>
                     {t(key, { ns: 'common' })}
                   </button>
                 )
               })}
             </div>
-          </Field>
+          </FieldGroup>
 
-          <Field label={t('fields.tertiary_muscles', { ns: 'exercises' })}>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
-              {MUSCLE_OPTIONS.filter(
-                ([val]) => val !== primaryMuscle && !secondaryMuscles.includes(val)
-              ).map(([val, key]) => {
+          <FieldGroup label={t('fields.tertiary_muscles', { ns: 'exercises' })}>
+            <div className="wb-exf-chips">
+              {MUSCLE_OPTIONS.filter(([val]) => val !== primaryMuscle && !secondaryMuscles.includes(val)).map(([val, key]) => {
                 const selected = tertiaryMuscles.includes(val)
                 return (
-                  <button
-                    key={val}
-                    type='button'
-                    onClick={() => toggleTertiary(val)}
-                    style={{
-                      fontFamily: 'var(--font-d)',
-                      fontSize: '0.6875rem',
-                      letterSpacing: '0.1em',
-                      textTransform: 'uppercase',
-                      padding: '0.25rem 0.6rem',
-                      border: `1px dashed ${selected ? '#a78bfa' : 'var(--border)'}`,
-                      background: selected ? 'rgba(167,139,250,0.12)' : 'transparent',
-                      color: selected ? '#a78bfa' : 'var(--muted)',
-                      cursor: 'pointer',
-                      transition: 'all 0.15s'
-                    }}
-                  >
+                  <button key={val} type="button" aria-pressed={selected} onClick={() => toggleTertiary(val)} className={pickClass(selected, ' wb-exf-pick--tertiary')}>
                     {t(key, { ns: 'common' })}
                   </button>
                 )
               })}
             </div>
-          </Field>
+          </FieldGroup>
 
           {canAttach && (
-            <Field label={t('form.ref_title', { ns: 'exercises' })}>
+            <FieldGroup label={t('form.ref_title', { ns: 'exercises' })}>
               <p className="wb-exf-hint">{t('form.ref_hint', { ns: 'exercises' })}</p>
               {refFiles.length > 0 && (
                 <ul className="wb-exf-refs">
@@ -622,13 +483,13 @@ export default function ExerciseFormModal({ exercise, onClose, isAdmin = false, 
                       <NavIcon name={referenceKind(f) === 'video' ? 'video' : 'exercises'} size={18} />
                       <span>{f.name}</span>
                       <small>{(f.size / 1024 / 1024).toFixed(1)} Mo</small>
-                      <button type="button" aria-label={t('actions.delete', { ns: 'common' })} onClick={() => setRefFiles((l) => l.filter((_, j) => j !== i))}>✕</button>
+                      <button type="button" aria-label={`${t('actions.delete', { ns: 'common' })} — ${f.name}`} onClick={() => setRefFiles((l) => l.filter((_, j) => j !== i))}>✕</button>
                     </li>
                   ))}
                 </ul>
               )}
               {refFiles.length < MAX_REFERENCES && !createdId && (
-                <button type="button" className="wb-btn wb-btn--secondary" onClick={() => refInput.current?.click()}>
+                <button type="button" className="wb-btn wb-btn--secondary wb-exf-start" onClick={() => refInput.current?.click()}>
                   + {t('form.ref_add', { ns: 'exercises' })}
                 </button>
               )}
@@ -640,131 +501,71 @@ export default function ExerciseFormModal({ exercise, onClose, isAdmin = false, 
                 hidden
                 onChange={(e) => { void addReferences(e.target.files); e.target.value = '' }}
               />
-            </Field>
+            </FieldGroup>
           )}
 
           {isAdmin && (
-          <Field label={t('fields.video', { ns: 'exercises' })}>
-            <div
-              onDragOver={(e) => {
-                e.preventDefault()
-                dragRef.current = true
-              }}
-              onDragLeave={() => {
-                dragRef.current = false
-              }}
-              onDrop={(e) => {
-                e.preventDefault()
-                const f = e.dataTransfer.files[0]
-                if (f) handleVideoSelect(f)
-              }}
-              onClick={() => videoRef.current?.click()}
-              style={{
-                border: '1px dashed var(--border)',
-                padding: '1.5rem',
-                textAlign: 'center',
-                cursor: 'pointer',
-                transition: 'border-color 0.2s'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = 'var(--orange)'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = 'var(--border)'
-              }}
-            >
-              {videoPreview ? (
-                <div>
-                  <video
-                    src={videoPreview}
-                    controls
-                    style={{ maxWidth: '100%', maxHeight: 200, marginBottom: '0.75rem' }}
-                  />
-                  <p style={{ color: 'var(--muted)', fontSize: '0.8125rem' }}>
-                    {t('form.video_replace', { ns: 'exercises' })}
-                  </p>
-                </div>
-              ) : (
-                <div>
-                  <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '0.6rem', color: 'var(--muted)' }}>
-                    <NavIcon name="video" size={30} />
-                  </div>
-                  <p
-                    style={{
-                      fontFamily: 'var(--font-d)',
-                      fontSize: '0.8125rem',
-                      letterSpacing: '0.1em',
-                      textTransform: 'uppercase',
-                      color: 'var(--muted)'
-                    }}
-                  >
-                    {t('form.video_dropzone', { ns: 'exercises' })}
-                  </p>
-                  <p style={{ fontSize: '0.8125rem', color: 'var(--muted)', marginTop: '0.4rem' }}>
-                    {t('form.video_requirements', { ns: 'exercises' })}
-                  </p>
-                </div>
-              )}
-              <input
-                ref={videoRef}
-                type='file'
-                accept='video/*'
-                style={{ display: 'none' }}
-                onChange={(e) => {
-                  const f = e.target.files?.[0]
+            <FieldGroup label={t('fields.video', { ns: 'exercises' })}>
+              <div
+                role="button"
+                tabIndex={0}
+                className="wb-exf-drop"
+                aria-label={videoPreview ? t('form.video_replace', { ns: 'exercises' }) : t('form.video_dropzone', { ns: 'exercises' })}
+                onDragOver={(e) => {
+                  e.preventDefault()
+                  dragRef.current = true
+                }}
+                onDragLeave={() => {
+                  dragRef.current = false
+                }}
+                onDrop={(e) => {
+                  e.preventDefault()
+                  const f = e.dataTransfer.files[0]
                   if (f) handleVideoSelect(f)
                 }}
-              />
-            </div>
-          </Field>
+                onClick={() => videoRef.current?.click()}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault()
+                    videoRef.current?.click()
+                  }
+                }}
+              >
+                {videoPreview ? (
+                  <div>
+                    <video src={videoPreview} controls className="wb-exf-preview" />
+                    <p className="wb-exf-hint">{t('form.video_replace', { ns: 'exercises' })}</p>
+                  </div>
+                ) : (
+                  <div>
+                    <div className="wb-exf-drop-icon"><NavIcon name="video" size={30} /></div>
+                    <p className="wb-exf-drop-title">{t('form.video_dropzone', { ns: 'exercises' })}</p>
+                    <p className="wb-exf-hint">{t('form.video_requirements', { ns: 'exercises' })}</p>
+                  </div>
+                )}
+                <input
+                  ref={videoRef}
+                  type="file"
+                  accept="video/*"
+                  hidden
+                  onChange={(e) => {
+                    const f = e.target.files?.[0]
+                    if (f) handleVideoSelect(f)
+                  }}
+                />
+              </div>
+            </FieldGroup>
           )}
 
           {progress && <p className="wb-exf-progress" role="status">{progress}</p>}
 
-          {error && (
-            <div
-              style={{
-                background: 'rgba(255,77,0,0.1)',
-                border: '1px solid rgba(255,77,0,0.3)', borderRadius: 12,
-                padding: '0.75rem 1rem',
-                color: 'var(--orange)',
-                fontSize: '0.8125rem'
-              }}
-            >
-              {error}
-            </div>
-          )}
+          {error && <div className="wb-exf-error" role="alert">{error}</div>}
 
-          <div
-            style={{
-              display: 'flex',
-              gap: '0.75rem',
-              justifyContent: 'flex-end',
-              paddingTop: '0.5rem'
-            }}
-          >
-            <button
-              type='button'
-              onClick={onClose}
-              style={{
-                ...btnStyle,
-                background: 'transparent',
-                border: '1px solid var(--border)', borderRadius: 12,
-                color: 'var(--muted)'
-              }}
-            >
+          <div className="wb-form-actions">
+            <button type="button" onClick={onClose} className="wb-btn wb-btn--ghost">
               {t('actions.cancel', { ns: 'common' })}
             </button>
-            <button
-              type='submit'
-              disabled={uploading}
-              style={{
-                ...btnStyle,
-                background: uploading ? 'var(--border)' : 'var(--orange)',
-                color: 'var(--black)',
-                cursor: uploading ? 'wait' : 'pointer'
-              }}
-            >
+            <button type="submit" disabled={uploading} className="wb-btn wb-btn--primary wb-exf-submit">
               {uploading
                 ? t('form.saving', { ns: 'exercises' })
                 : createdId
@@ -779,23 +580,3 @@ export default function ExerciseFormModal({ exercise, onClose, isAdmin = false, 
     </div>
   )
 }
-
-function Field({ label, children }: { label: string; children: ReactNode }) {
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-      <label
-        style={{
-          fontFamily: 'var(--font-d)',
-          fontSize: '0.6875rem',
-          letterSpacing: '0.2em',
-          textTransform: 'uppercase',
-          color: 'var(--muted)'
-        }}
-      >
-        {label}
-      </label>
-      {children}
-    </div>
-  )
-}
-

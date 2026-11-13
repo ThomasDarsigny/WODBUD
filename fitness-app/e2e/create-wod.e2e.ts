@@ -61,3 +61,20 @@ test('l’alerte 48 h demande une décision, au clavier comme à la souris', asy
   await expect(alert).toHaveCount(0)
   await expect(page.getByRole('status').filter({ hasText: 'Back squat ajouté' })).toBeVisible()
 })
+
+/** La fiche d'exercice (4.2) : une vraie fenêtre, qui se ferme avec Échap et rend le focus à la ligne. */
+test('la fiche d’un exercice se ferme avec Échap', async ({ page }) => {
+  const db = coachDb()
+  await db.install(page)
+  await page.goto('/dashboard/workout')
+  await page.getByRole('searchbox').first().fill('squat')
+  const open = page.locator('.wb-pick').filter({ hasText: 'Back squat' }).locator('.wb-pick-open')
+  await open.click()
+
+  const dialog = page.getByRole('dialog', { name: 'Back squat' })
+  await expect(dialog).toBeVisible()
+  await expect(dialog).toContainText('Quadriceps')
+  await page.keyboard.press('Escape')
+  await expect(dialog).toHaveCount(0)
+  await expect(open).toBeFocused()
+})

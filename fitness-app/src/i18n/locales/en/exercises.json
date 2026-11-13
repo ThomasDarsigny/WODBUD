@@ -107,7 +107,9 @@
     "add_to_workout": "Add to workout",
     "delete_confirm": "Delete \"{{name}}\"? This action cannot be undone.",
     "delete_confirm_action": "Delete permanently",
-    "deleting": "Deleting…"
+    "deleting": "Deleting…",
+    "delete_confirm_title": "Confirmation required",
+    "delete_confirm_text": "Delete {{name}}? This can’t be undone and also removes its muscle links."
   },
   "errors": {
     "auth_session_missing_exercise": "Missing session: sign in again to create or edit an exercise.",
