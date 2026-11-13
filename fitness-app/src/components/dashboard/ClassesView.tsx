@@ -22,6 +22,7 @@ import CenterClassesList from '../center/CenterClassesList'
 import { shareLink } from '../../lib/shareLink'
 import InviteByEmail from '../invite/InviteByEmail'
 import ClassScheduleEditor from './ClassScheduleEditor'
+import ClassAttendance from './ClassAttendance'
 import { useClassSlotStore } from '../../stores/classSlotStore'
 import { summarizeSlots } from '../../lib/classSlots'
 
@@ -258,7 +259,10 @@ export default function ClassesView() {
             </div>
 
             {activeTab === 'followup' && (
-              <ClassFollowup classId={selectedClass.id} />
+              <>
+                <ClassAttendance key={`att-${selectedClass.id}`} classId={selectedClass.id} />
+                <ClassFollowup classId={selectedClass.id} />
+              </>
             )}
 
             {/* Members tab */}

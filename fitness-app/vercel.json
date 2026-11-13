@@ -20,7 +20,7 @@
       "destination": "/index.html"
     },
     {
-      "source": "/(dashboard|athlete|join|rang|rank|rejoindre)(/.*)?",
+      "source": "/(dashboard|athlete|join|rang|rank|rejoindre|presence)(/.*)?",
       "destination": "/index.html"
     }
   ],
@@ -80,7 +80,7 @@
       ]
     },
     {
-      "source": "/(dashboard|athlete|join|rang|rank)(/.*)?",
+      "source": "/(dashboard|athlete|join|rang|rank|rejoindre|presence)(/.*)?",
       "headers": [
         {
           "key": "X-Robots-Tag",

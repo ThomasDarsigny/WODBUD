@@ -135,7 +135,7 @@ Rapport : audit produit publié le 12 novembre. Branche de travail : `sprint`. U
 
 ### Phase 3 · Faire tourner la salle
 - [x] 3.1 Horaire récurrent : créneaux par cours (jour, heure, durée ; au plus 28) réglés par le coach ou les responsables du centre (migration 068) ; heures affichées dans le calendrier de la semaine, jours de cours sans WOD signalés, cycles qui commencent au prochain jour de cours ; « Prochain cours » sur l'accueil athlète. Le texte libre reste affiché tant qu'aucun créneau n'existe.
-- [ ] 3.2 Présences par QR.
+- [x] 3.2 Présences : QR de la séance affiché par le coach (code valable 3 h, illisible hors des fonctions), « Je suis là » sur la carte du cours de 30 min avant à 30 min après, cases à cocher pour le coach ; une présence par membre, cours et jour ; assiduité sur 30 jours rapportée aux jours d'horaire ; QR scanné sans être connecté : retour à la page après la connexion (migration 069).
 - [ ] 3.3 Mode TV.
 - [ ] 3.4 Menu coach ramené à cinq entrées.
 - [ ] 3.5 Accueil coach réorganisé.

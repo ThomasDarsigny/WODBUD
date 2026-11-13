@@ -1588,6 +1588,42 @@ button.wb-row:active, a.wb-row:active { background: var(--surface); }
 .wb-class-next { margin: 0; font-size: 0.875rem; font-weight: 600; color: var(--white); }
 .wb-class-next::first-letter { text-transform: uppercase; }
 .wb-class-next.is-live { color: var(--orange); }
+.wb-att { display: grid; gap: 0.75rem; padding: 0.9rem 1rem; margin-bottom: 1.25rem; border-radius: var(--r-md); border: 1px solid var(--border); background: var(--dark); }
+.wb-att-head { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; flex-wrap: wrap; }
+.wb-att-day { display: flex; align-items: center; gap: 0.5rem; }
+.wb-att-day strong { min-width: 7rem; text-align: center; font-size: 0.9375rem; }
+.wb-att-day strong::first-letter { text-transform: uppercase; }
+.wb-att-day .wb-week-arrow:disabled { opacity: 0.35; cursor: default; }
+.wb-att-summary { margin: 0; color: var(--muted); font-size: 0.9375rem; font-variant-numeric: tabular-nums; }
+.wb-att-qr-open { justify-self: start; }
+.wb-att-qr { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; padding: 0.9rem; border-radius: var(--r-md); border: 1px solid rgba(255, 90, 31, 0.35); background: var(--surface); }
+.wb-att-qr-code { flex: none; padding: 0.6rem; border-radius: 12px; background: #fff; line-height: 0; }
+.wb-att-qr-text { display: grid; gap: 0.5rem; flex: 1 1 14rem; justify-items: start; }
+.wb-att-qr-text p { margin: 0; }
+.wb-att-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.35rem; }
+.wb-att-row { display: flex; align-items: center; gap: 0.65rem; min-height: 52px; padding: 0.4rem 0.6rem; border-radius: 12px; border: 1px solid var(--border); background: var(--surface); }
+.wb-att-row.is-present { border-color: rgba(255, 90, 31, 0.45); }
+.wb-att-who { display: grid; flex: 1; min-width: 0; }
+.wb-att-who strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 0.9375rem; }
+.wb-att-who small { color: var(--muted); font-size: 0.8125rem; font-variant-numeric: tabular-nums; }
+.wb-att-method { flex: none; font-size: 0.75rem; }
+.wb-att-toggle { flex: none; display: inline-grid; place-items: center; width: 44px; height: 44px; border-radius: 12px; border: 2px solid var(--border); background: transparent; color: var(--black); font-size: 1.2rem; font-weight: 900; cursor: pointer; }
+.wb-att-toggle[aria-pressed='true'] { background: var(--orange); border-color: var(--orange); }
+.wb-att-toggle:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
+.wb-att-toggle:disabled { opacity: 0.5; }
+.wb-class-here { justify-self: start; }
+.wb-class-present { margin: 0; font-size: 0.875rem; font-weight: 600; color: var(--orange); }
+.wb-checkin-page { min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2rem; padding: var(--page-pad); background: var(--black); color: var(--white); font-family: var(--font-b); }
+.wb-checkin-logo { font-family: var(--font-d); font-weight: 900; font-size: 1.75rem; letter-spacing: 0.15em; color: var(--white); text-decoration: none; }
+.wb-checkin-logo span { color: var(--orange); }
+.wb-checkin-card { width: 100%; max-width: 420px; display: grid; justify-items: center; gap: 0.75rem; text-align: center; padding: 1.75rem var(--page-pad); border-radius: var(--r-md); border: 1px solid var(--border); background: var(--dark); }
+.wb-checkin-card .wb-btn { width: 100%; margin-top: 0.5rem; }
+.wb-checkin-title { margin: 0; font-family: var(--font-d); font-size: 1.75rem; font-weight: 900; text-transform: uppercase; line-height: 1.1; }
+.wb-checkin-text { margin: 0; color: var(--muted); font-size: 0.9375rem; }
+.wb-checkin-text::first-letter { text-transform: uppercase; }
+.wb-checkin-status { margin: 0; color: var(--muted); font-family: var(--font-d); font-size: 0.875rem; letter-spacing: 0.12em; text-transform: uppercase; }
+.wb-checkin-mark { display: inline-grid; place-items: center; width: 64px; height: 64px; border-radius: 50%; background: var(--orange); color: var(--black); font-size: 2rem; font-weight: 900; }
+.wb-checkin-link { color: var(--muted); font-size: 0.875rem; }
 .wb-cycle { display: grid; gap: 0.75rem; padding: 0.9rem; border-radius: var(--r-md); border: 1px solid rgba(255, 90, 31, 0.35); background: var(--dark); }
 .wb-cycle-head { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; }
 .wb-cycle-title { margin: 0; font-family: var(--font-d); font-size: 1.2rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.03em; }

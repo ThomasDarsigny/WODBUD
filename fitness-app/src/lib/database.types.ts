@@ -306,6 +306,74 @@ export type Database = {
           },
         ]
       }
+      class_attendance: {
+        Row: {
+          checked_in_at: string
+          class_id: string
+          id: string
+          method: string
+          session_date: string
+          user_id: string
+        }
+        Insert: {
+          checked_in_at?: string
+          class_id: string
+          id?: string
+          method: string
+          session_date: string
+          user_id: string
+        }
+        Update: {
+          checked_in_at?: string
+          class_id?: string
+          id?: string
+          method?: string
+          session_date?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "class_attendance_class_id_fkey"
+            columns: ["class_id"]
+            isOneToOne: false
+            referencedRelation: "classes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "class_attendance_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      class_checkin_codes: {
+        Row: {
+          class_id: string
+          code: string
+          expires_at: string
+        }
+        Insert: {
+          class_id: string
+          code: string
+          expires_at: string
+        }
+        Update: {
+          class_id?: string
+          code?: string
+          expires_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "class_checkin_codes_class_id_fkey"
+            columns: ["class_id"]
+            isOneToOne: true
+            referencedRelation: "classes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       class_members: {
         Row: {
           athlete_id: string
@@ -2148,6 +2216,10 @@ export type Database = {
       can_edit_exercise_path: { Args: { p_name: string }; Returns: boolean }
       can_see_score: { Args: { p_score: string }; Returns: boolean }
       center_role: { Args: { p_center: string }; Returns: string }
+      check_in: {
+        Args: { p_class: string; p_code?: string; p_date: string }
+        Returns: string
+      }
       create_center: {
         Args: {
           p_equipment?: string[]
@@ -2443,6 +2515,13 @@ export type Database = {
       is_community_admin: { Args: { p_community: string }; Returns: boolean }
       is_community_member: { Args: { p_community: string }; Returns: boolean }
       is_community_owner: { Args: { p_community: string }; Returns: boolean }
+      open_checkin: {
+        Args: { p_class: string }
+        Returns: {
+          code: string
+          expires_at: string
+        }[]
+      }
       review_center_exercise: {
         Args: { p_decision: string; p_exercise: string }
         Returns: undefined
