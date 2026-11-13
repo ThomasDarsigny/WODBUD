@@ -25,7 +25,7 @@ export const useClassSlotStore = create<ClassSlotState>((set) => ({
       .in('class_id', ids)
     if (error) return
     const next: Record<string, ClassSlot[]> = Object.fromEntries(ids.map((id) => [id, []]))
-    for (const row of data ?? []) next[row.class_id].push(row)
+    for (const row of data ?? []) next[row.class_id]?.push(row)
     for (const id of ids) next[id] = sortSlots(next[id])
     set((s) => ({ byClass: { ...s.byClass, ...next } }))
   },

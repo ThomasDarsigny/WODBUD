@@ -13,6 +13,7 @@ import TodayPlans from './TodayPlans'
 import { MyWeekStats, useMyWeek } from './MyWeek'
 import CenterSuggestionsInbox from '../center/CenterSuggestionsInbox'
 import CenterFavoriteWods from '../center/CenterFavoriteWods'
+import CoachGymToday from './CoachGymToday'
 
 interface ClassPulse {
   id: string
@@ -25,8 +26,8 @@ interface ClassPulse {
 const DAY = 864e5
 
 /**
- * Accueil du coach : ce qu'il y a à faire aujourd'hui, en un coup d'œil.
- * Démarrer une séance, le WOD prévu, les athlètes à relancer, ses records.
+ * Accueil du coach (3.5) : la salle d'abord — les cours du jour, leur WOD,
+ * les présents, ce qu'il reste à faire —, puis son propre entraînement.
  */
 export default function CoachTodayView() {
   const { t, i18n } = useTranslation(['common', 'workouts'])
@@ -78,21 +79,11 @@ export default function CoachTodayView() {
           <p className="wb-ph-tag">{today}</p>
           <h1>{me?.firstName ? t('home.hello', { name: me.firstName }) : t('home.title')}</h1>
         </div>
+        <Link to="/dashboard/workout" className="wb-btn wb-btn--secondary">+ {t('home.new_wod')}</Link>
       </header>
 
-      {/* Les deux gestes du jour, à portée du pouce. */}
-      <div className="wb-home-actions">
-        <Link to="/dashboard/session" className="wb-btn wb-btn--primary wb-btn--lg" onClick={unlockAudio}>
-          ▶ {sessionRunning ? t('home.resume_session') : t('home.start_session')}
-        </Link>
-        <Link to="/dashboard/workout" className="wb-btn wb-btn--secondary wb-btn--lg">
-          + {t('home.new_wod')}
-        </Link>
-      </div>
-
-      <MyWeekStats me={me} />
-
-      <TodayPlans basePath="/dashboard" />
+      {/* La salle aujourd'hui, puis ce qu'il reste à faire (3.5). */}
+      <CoachGymToday classes={classes} />
 
       <OnboardingCard area="coach" />
 
@@ -119,7 +110,6 @@ export default function CoachTodayView() {
                     <strong>{c.name}</strong>
                     <span>{t('home.class_line', { count: c.members, active: c.active })}</span>
                   </span>
-                  {c.idle > 0 && <span className="wb-pill wb-pill--orange">{t('home.to_check', { count: c.idle })}</span>}
                   <span className="wb-row-chev" aria-hidden="true">›</span>
                 </Link>
               </li>
@@ -127,6 +117,26 @@ export default function CoachTodayView() {
           </ul>
         )}
       </section>
+
+      <CenterFavoriteWods />
+
+      <CenterSuggestionsInbox />
+
+      {/* Mon entraînement : la séance, la semaine, les records du coach. */}
+      <section className="wb-home-sec" aria-labelledby="my-training">
+        <div className="wb-sec">
+          <h2 id="my-training">{t('home.my_training')}</h2>
+        </div>
+        <div className="wb-home-actions">
+          <Link to="/dashboard/session" className="wb-btn wb-btn--primary wb-btn--lg" onClick={unlockAudio}>
+            ▶ {sessionRunning ? t('home.resume_session') : t('home.start_session')}
+          </Link>
+        </div>
+      </section>
+
+      <MyWeekStats me={me} />
+
+      <TodayPlans basePath="/dashboard" />
 
       <section className="wb-home-sec">
         <div className="wb-sec">
@@ -157,10 +167,6 @@ export default function CoachTodayView() {
           </ul>
         )}
       </section>
-
-      <CenterFavoriteWods />
-
-      <CenterSuggestionsInbox />
     </div>
   )
 }

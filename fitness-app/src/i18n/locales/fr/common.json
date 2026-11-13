@@ -841,7 +841,8 @@
     "sched_limit": "{{max}} créneaux au maximum par cours.",
     "sched_next": "Prochain cours : {{when}}",
     "sched_ongoing": "En cours · depuis {{time}}",
-    "week_unplanned": "Jours de cours sans WOD cette semaine : {{days}}"
+    "week_unplanned": "Jours de cours sans WOD cette semaine : {{days}}",
+    "center_schedule": "Horaire"
   },
   "athlete": {
     "role_label": "Athlète",
@@ -1261,7 +1262,27 @@
     "to_check_other": "{{count}} à relancer",
     "today_wod": "WOD du jour",
     "today_do": "Faire ce WOD",
-    "today_sets": "séries"
+    "today_sets": "séries",
+    "gym_title": "Aujourd’hui à la salle",
+    "gym_none_title": "Pas de cours aujourd’hui",
+    "gym_next": "Prochain cours : {{when}} — {{name}}",
+    "gym_no_schedule": "Règle l’horaire de tes cours dans leur fiche : ils apparaîtront ici chaque jour.",
+    "gym_nothing_planned": "Rien de programmé",
+    "gym_present_one": "{{count}} présent",
+    "gym_present_other": "{{count}} présents",
+    "gym_program": "Programmer",
+    "gym_attendance": "Présences",
+    "gym_board": "Tableau blanc",
+    "todo_title": "À faire",
+    "todo_unplanned_one": "{{count}} jour sans WOD",
+    "todo_unplanned_other": "{{count}} jours sans WOD",
+    "todo_idle_one": "{{count}} membre à relancer",
+    "todo_idle_other": "{{count}} membres à relancer",
+    "todo_votes_one": "{{count}} vote en cours",
+    "todo_votes_other": "{{count}} votes en cours",
+    "todo_none": "Rien à faire pour l’instant",
+    "todo_none_hint": "Les jours de cours sans WOD, les membres à relancer et les votes en cours apparaîtront ici.",
+    "my_training": "Mon entraînement"
   },
   "welcome": {
     "hello": "Salut {{name}} !",

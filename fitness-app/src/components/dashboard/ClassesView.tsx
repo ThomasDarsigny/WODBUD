@@ -58,11 +58,14 @@ export default function ClassesView() {
   // nettoyée ensuite, pour que « retour » ne rouvre pas le même cours.
   const [params, setParams] = useSearchParams()
   const wanted = params.get('c')
+  const wantedTab = params.get('tab')
   const [linkHandled, setLinkHandled] = useState<string | null>(null)
   if (wanted && wanted !== linkHandled && classes.length > 0) {
     setLinkHandled(wanted)
     const found = classes.find((c) => c.id === wanted)
-    if (found) { setSelectedClass(found); setActiveTab('followup') }
+    const tabs = ['followup', 'members', 'planning', 'votes', 'leaderboard'] as const
+    const tab = tabs.find((x) => x === wantedTab) ?? 'followup'
+    if (found) { setSelectedClass(found); setActiveTab(tab) }
   }
   useEffect(() => {
     if (wanted && wanted === linkHandled) setParams({}, { replace: true })

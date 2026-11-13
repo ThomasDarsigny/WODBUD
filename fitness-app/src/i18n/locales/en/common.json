@@ -841,7 +841,8 @@
     "sched_limit": "{{max}} slots at most per class.",
     "sched_next": "Next class: {{when}}",
     "sched_ongoing": "In progress · since {{time}}",
-    "week_unplanned": "Class days without a WOD this week: {{days}}"
+    "week_unplanned": "Class days without a WOD this week: {{days}}",
+    "center_schedule": "Schedule"
   },
   "athlete": {
     "role_label": "Athlete",
@@ -1261,7 +1262,27 @@
     "to_check_other": "{{count}} to check in",
     "today_wod": "WOD of the day",
     "today_do": "Do this WOD",
-    "today_sets": "sets"
+    "today_sets": "sets",
+    "gym_title": "Today at the gym",
+    "gym_none_title": "No class today",
+    "gym_next": "Next class: {{when}} — {{name}}",
+    "gym_no_schedule": "Set your classes’ schedule in their page: they will show here every day.",
+    "gym_nothing_planned": "Nothing scheduled",
+    "gym_present_one": "{{count}} present",
+    "gym_present_other": "{{count}} present",
+    "gym_program": "Program",
+    "gym_attendance": "Attendance",
+    "gym_board": "Whiteboard",
+    "todo_title": "To do",
+    "todo_unplanned_one": "{{count}} class day without a WOD",
+    "todo_unplanned_other": "{{count}} class days without a WOD",
+    "todo_idle_one": "{{count}} member to follow up",
+    "todo_idle_other": "{{count}} members to follow up",
+    "todo_votes_one": "{{count}} vote in progress",
+    "todo_votes_other": "{{count}} votes in progress",
+    "todo_none": "Nothing to do for now",
+    "todo_none_hint": "Class days without a WOD, members to follow up and open votes will show here.",
+    "my_training": "My training"
   },
   "welcome": {
     "hello": "Hi {{name}}!",

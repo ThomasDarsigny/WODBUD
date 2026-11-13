@@ -844,7 +844,8 @@
     "sched_limit": "{{max}} franjas como máximo por clase.",
     "sched_next": "Próxima clase: {{when}}",
     "sched_ongoing": "En curso · desde {{time}}",
-    "week_unplanned": "Días de clase sin WOD esta semana: {{days}}"
+    "week_unplanned": "Días de clase sin WOD esta semana: {{days}}",
+    "center_schedule": "Horario"
   },
   "athlete": {
     "role_label": "Atleta",
@@ -1264,7 +1265,27 @@
     "to_check_other": "{{count}} por contactar",
     "today_wod": "WOD del día",
     "today_do": "Hacer este WOD",
-    "today_sets": "series"
+    "today_sets": "series",
+    "gym_title": "Hoy en el gimnasio",
+    "gym_none_title": "Hoy no hay clase",
+    "gym_next": "Próxima clase: {{when}} — {{name}}",
+    "gym_no_schedule": "Define el horario de tus clases en su ficha: aparecerán aquí cada día.",
+    "gym_nothing_planned": "Nada programado",
+    "gym_present_one": "{{count}} presente",
+    "gym_present_other": "{{count}} presentes",
+    "gym_program": "Programar",
+    "gym_attendance": "Asistencia",
+    "gym_board": "Pizarra",
+    "todo_title": "Pendiente",
+    "todo_unplanned_one": "{{count}} día sin WOD",
+    "todo_unplanned_other": "{{count}} días sin WOD",
+    "todo_idle_one": "{{count}} miembro a contactar",
+    "todo_idle_other": "{{count}} miembros a contactar",
+    "todo_votes_one": "{{count}} votación en curso",
+    "todo_votes_other": "{{count}} votaciones en curso",
+    "todo_none": "Nada pendiente por ahora",
+    "todo_none_hint": "Los días de clase sin WOD, los miembros a contactar y las votaciones aparecerán aquí.",
+    "my_training": "Mi entrenamiento"
   },
   "welcome": {
     "hello": "¡Hola {{name}}!",

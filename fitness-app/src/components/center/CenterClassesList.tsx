@@ -4,6 +4,9 @@ import { supabase } from '../../lib/supabase'
 import { getLocalUser } from '../../lib/currentUser'
 import { fetchMyCenter, fetchTeam, isLead, isStaff, type TeamMember } from '../../lib/center'
 import { useClassStore } from '../../stores/classStore'
+import { useClassSlotStore } from '../../stores/classSlotStore'
+import { summarizeSlots } from '../../lib/classSlots'
+import ClassScheduleEditor from '../dashboard/ClassScheduleEditor'
 
 interface CenterClass {
   class_id: string
@@ -34,6 +37,12 @@ export default function CenterClassesList() {
   const [data, setData] = useState<Loaded | null>(null)
   const [busy, setBusy] = useState<string | null>(null)
   const [message, setMessage] = useState<{ kind: 'ok' | 'err'; text: string } | null>(null)
+  // Horaire (3.1, 3.5) : les responsables du centre font l'horaire de la salle.
+  const slotsByClass = useClassSlotStore((s) => s.byClass)
+  const fetchSlots = useClassSlotStore((s) => s.fetchSlots)
+  const [scheduleOpen, setScheduleOpen] = useState<string | null>(null)
+  const centerIds = (data?.list ?? []).map((c) => c.class_id).join(',')
+  useEffect(() => { if (centerIds) void fetchSlots(centerIds.split(',')) }, [centerIds, fetchSlots])
 
   const load = useCallback(async (): Promise<Loaded | null> => {
     const mine = await fetchMyCenter().catch(() => null)
@@ -92,6 +101,7 @@ export default function CenterClassesList() {
             <li key={c.class_id}>
               <strong>{c.name}</strong>
               <span>{t('classes.center_members', { count: c.members_count })}</span>
+              {(slotsByClass[c.class_id] ?? []).length > 0 && <span className="wb-cclasses-sched">{summarizeSlots(slotsByClass[c.class_id] ?? [], i18n.language)}</span>}
               <span className="wb-cclasses-next">
                 {c.next_plan_date
                   ? t('classes.center_next', { date: new Date(`${c.next_plan_date}T12:00:00`).toLocaleDateString(i18n.language, { weekday: 'short', day: 'numeric', month: 'short' }) })
@@ -115,6 +125,15 @@ export default function CenterClassesList() {
                   ))}
                 </select>
               </label>
+              <button
+                type="button"
+                className="wb-cclasses-schedbtn"
+                aria-expanded={scheduleOpen === c.class_id}
+                onClick={() => setScheduleOpen((cur) => (cur === c.class_id ? null : c.class_id))}
+              >
+                {scheduleOpen === c.class_id ? t('classes.sched_done') : t('classes.center_schedule')}
+              </button>
+              {scheduleOpen === c.class_id && <ClassScheduleEditor classId={c.class_id} legacyText={c.schedule} />}
             </li>
           ))}
         </ul>

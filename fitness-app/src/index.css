@@ -1696,6 +1696,23 @@ button.wb-row:active, a.wb-row:active { background: var(--surface); }
 .wb-section-tab.is-on { color: var(--white); border-color: var(--orange); background: rgba(255, 90, 31, 0.12); }
 .wb-section-tab:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
 .wb-section-dot { position: absolute; top: 6px; right: 6px; width: 7px; height: 7px; border-radius: 50%; background: var(--orange); }
+.wb-floor-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.6rem; }
+.wb-floor-card { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 0.4rem 1rem; align-items: center; padding: 0.9rem 1rem; border-radius: var(--r-md); border: 1px solid var(--border); background: var(--dark); }
+.wb-floor-time { grid-row: span 2; align-self: start; min-width: 4.2rem; font-family: var(--font-d); font-size: 1.6rem; font-weight: 900; line-height: 1; color: var(--orange); font-variant-numeric: tabular-nums; }
+.wb-floor-main { display: grid; gap: 0.15rem; min-width: 0; }
+.wb-floor-main strong { font-family: var(--font-d); font-size: 1.15rem; text-transform: uppercase; letter-spacing: 0.03em; }
+.wb-floor-wod { font-weight: 600; color: var(--white); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.wb-floor-wod.is-empty { color: var(--orange); }
+.wb-floor-present { font-size: 0.875rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.wb-floor-actions { grid-column: 2; display: flex; flex-wrap: wrap; gap: 0.4rem; }
+@media (min-width: 900px) {
+  .wb-floor-card { grid-template-columns: auto minmax(0, 1fr) auto; }
+  .wb-floor-time { grid-row: auto; align-self: center; }
+  .wb-floor-actions { grid-column: auto; justify-content: flex-end; }
+}
+.wb-cclasses-sched { font-size: 0.8125rem; color: var(--muted); }
+.wb-cclasses-schedbtn { justify-self: start; min-height: 36px; padding: 0 0.8rem; border-radius: 999px; border: 1px solid var(--border); background: transparent; color: var(--white); font: inherit; font-size: 0.8125rem; font-weight: 600; cursor: pointer; }
+.wb-cclasses-schedbtn[aria-expanded='true'] { border-color: var(--orange); color: var(--orange); }
 .wb-cycle { display: grid; gap: 0.75rem; padding: 0.9rem; border-radius: var(--r-md); border: 1px solid rgba(255, 90, 31, 0.35); background: var(--dark); }
 .wb-cycle-head { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; }
 .wb-cycle-title { margin: 0; font-family: var(--font-d); font-size: 1.2rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.03em; }
