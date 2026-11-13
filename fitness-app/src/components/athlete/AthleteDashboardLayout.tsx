@@ -80,56 +80,50 @@ export default function AthleteDashboardLayout({ children }: Props) {
   const moreItems = navItems.filter((i) => !tabIds.includes(i.id)).map(toMobile)
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--black)', color: 'var(--white)', fontFamily: 'var(--font-b)' }}>
+    <div className="wb-shell">
       {/* Même logique que le tableau de bord coach : sur téléphone, barre
           d'onglets en bas à la place de la barre latérale. */}
       {!isMobile && (
-      <aside style={{
-        width: rail ? '64px' : '220px',
-        flexShrink: 0, background: 'var(--dark)', borderRight: '1px solid var(--border)',
-        display: 'flex', flexDirection: 'column',
-        transition: 'width 0.25s ease', overflow: 'hidden'
-      }}>
-        <div style={{ padding: rail ? '1.25rem 0' : '1.25rem 1.5rem', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: rail ? 'center' : 'space-between', gap: '0.5rem' }}>
+      <aside className={`wb-side wb-side--athlete${rail ? ' is-rail' : ''}`}>
+        <div className="wb-side-head">
           {!rail && (
-            <Link to="/" style={{ fontFamily: 'var(--font-d)', fontWeight: 900, fontSize: '1.25rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--white)', textDecoration: 'none' }}>
-              WOD<span style={{ color: 'var(--orange)' }}>BUD</span>
+            <Link to="/" className="wb-brand">
+              WOD<span>BUD</span>
             </Link>
           )}
           <button
+            type="button"
             onClick={() => setCollapsed(!collapsed)}
-            style={{ background: 'none', border: 'none', color: 'var(--muted)', cursor: 'pointer', fontSize: isMobile ? '1.4rem' : '1rem', padding: '0.25rem 0.5rem', lineHeight: 1 }}
-            aria-label="Toggle sidebar"
+            className="wb-side-toggle"
+            aria-label={rail ? t('nav.expand_menu') : t('nav.collapse_menu')}
+            aria-expanded={!rail}
           >
             {rail ? '›' : '‹'}
           </button>
         </div>
 
         {!rail && (
-          <div style={{ padding: '0.6rem 1.5rem 0.4rem', borderBottom: '1px solid var(--border)' }}>
-            <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--orange)', border: '1px solid rgba(255,77,0,0.3)', borderRadius: 12, padding: '0.1rem 0.4rem' }}>
-              {t('athlete.role_label')}
-            </span>
+          <div className="wb-side-role">
+            <span>{t('athlete.role_label')}</span>
           </div>
         )}
 
-        <nav style={{ flex: 1, padding: '1rem 0' }}>
+        <nav className="wb-side-nav" aria-label={t('nav.main')}>
           {navItems.map((item) => {
             const active = location.pathname === item.path || (item.id === 'groups' && location.pathname.startsWith('/athlete/communities'))
             return (
-              <div key={item.id} style={{ position: 'relative' }}>
-              <Link
-                to={item.path}
-                style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: rail ? '0.75rem 0' : '0.75rem 1.5rem', justifyContent: rail ? 'center' : 'flex-start', textDecoration: 'none', color: active ? 'var(--white)' : 'var(--muted)', background: active ? 'rgba(255,77,0,0.08)' : 'transparent', borderLeft: active ? '2px solid var(--orange)' : '2px solid transparent', transition: 'all 0.15s' }}
-              >
-                <NavIcon name={item.icon} />
-                {!rail && (
-                  <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.9375rem', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
-                    {t(item.labelKey)}
-                  </span>
-                )}
-              </Link>
-              <NavDot count={dotFor(item.id)} compact={rail} />
+              <div key={item.id} className="wb-side-item">
+                <Link
+                  to={item.path}
+                  aria-current={active ? 'page' : undefined}
+                  title={rail ? t(item.labelKey) : undefined}
+                  aria-label={rail ? t(item.labelKey) : undefined}
+                  className={`wb-side-link${active ? ' is-on' : ''}`}
+                >
+                  <NavIcon name={item.icon} />
+                  {!rail && <span className="wb-side-label">{t(item.labelKey)}</span>}
+                </Link>
+                <NavDot count={dotFor(item.id)} compact={rail} />
               </div>
             )
           })}
@@ -138,15 +132,15 @@ export default function AthleteDashboardLayout({ children }: Props) {
       </aside>
       )}
 
-      <main style={{ flex: 1, overflow: 'auto', minWidth: 0, display: 'flex', flexDirection: 'column' }}>
+      <main className="wb-main">
         {/* Barre du haut en verre : le contenu défile dessous (même conteneur de
             défilement) et s'estompe contre elle une fois qu'on a défilé. */}
         <div className={isMobile ? 'wb-scroller wb-has-tabbar' : 'wb-scroller'} onScroll={markScrolled}>
           <div className="wb-topgroup">
             {isMobile && (
               <div className="wb-mobile-top">
-                <Link to="/" style={{ fontFamily: 'var(--font-d)', fontWeight: 900, fontSize: '1.25rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--white)', textDecoration: 'none' }}>
-                  WOD<span style={{ color: 'var(--orange)' }}>BUD</span>
+                <Link to="/" className="wb-brand">
+                  WOD<span>BUD</span>
                 </Link>
               </div>
             )}

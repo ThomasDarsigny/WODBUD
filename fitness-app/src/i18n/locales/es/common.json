@@ -35,7 +35,9 @@
     "groups": "Grupos",
     "group_groups": "Grupos",
     "tab_groups": "Grupos",
-    "tab_groups_all": "Resumen"
+    "tab_groups_all": "Resumen",
+    "collapse_menu": "Contraer el menú",
+    "expand_menu": "Expandir el menú"
   },
   "library": {
     "title": "Biblioteca de workouts",

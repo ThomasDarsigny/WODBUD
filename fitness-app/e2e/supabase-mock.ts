@@ -125,10 +125,13 @@ export class MockSupabase {
       } catch { /* stockage indisponible */ }
     }, [STORAGE_KEY, stored, signedIn] as const)
 
-    await page.route('**/*', async (route) => {
+    // Les modules servis par Vite (localhost, des centaines en dev) ne passent pas par
+    // l'interception : la faire transiter par Playwright ralentissait la suite en parallèle
+    // jusqu'à faire expirer des chargements. Seul ce qui sortirait de la machine est routé.
+    const local = (url: URL) => url.hostname === 'localhost' || url.hostname === '127.0.0.1'
+    await page.route((url) => !local(url), async (route) => {
       const url = new URL(route.request().url())
       if (url.origin === SUPABASE_URL) return this.handle(route, url)
-      if (url.hostname === 'localhost' || url.hostname === '127.0.0.1') return route.continue()
       // Rien ne sort : polices, analytics, etc.
       return route.abort()
     })

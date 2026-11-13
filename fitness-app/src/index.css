@@ -2110,6 +2110,30 @@ button.wb-row:active, a.wb-row:active { background: var(--surface); }
 /* Texte à la couleur d'une option de vote, thème clair : même mélange que pour les rangs. */
 :root[data-theme='clair'] :is(.wb-vres-row.is-leading .wb-vres-label, .wb-vres-row.is-leading .wb-vres-count, .wb-vote-opt-muscle) { color: color-mix(in srgb, var(--opt) 40%, var(--white)); }
 
+/* ── Menus : coquille, barre latérale, logo (4.2) ─────────────────── */
+.wb-shell { display: flex; min-height: 100vh; background: var(--black); color: var(--white); font-family: var(--font-b); }
+.wb-main { display: flex; flex: 1; flex-direction: column; min-width: 0; overflow: auto; }
+.wb-side { display: flex; flex-direction: column; flex-shrink: 0; width: 240px; overflow: hidden; border-right: 1px solid var(--border); background: var(--dark); transition: width 0.25s ease; }
+.wb-side--athlete { width: 220px; }
+.wb-side.is-rail { width: 64px; }
+.wb-side-head { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); }
+.wb-side.is-rail .wb-side-head { justify-content: center; padding: 1.25rem 0; }
+.wb-brand { color: var(--white); font-family: var(--font-d); font-size: 1.25rem; font-weight: 900; letter-spacing: 0.15em; text-decoration: none; text-transform: uppercase; }
+.wb-brand span { color: var(--orange); }
+.wb-mobile-top .wb-brand { letter-spacing: 0.14em; }
+.wb-side-toggle { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; padding: 0 0.5rem; border: none; border-radius: var(--r-md); background: none; color: var(--muted); font-size: 1rem; line-height: 1; cursor: pointer; }
+.wb-side-toggle:hover, .wb-side-toggle:focus-visible { color: var(--white); }
+.wb-side-role { padding: 0.6rem 1.5rem 0.4rem; border-bottom: 1px solid var(--border); }
+.wb-side-role span { padding: 0.1rem 0.4rem; border-radius: 12px; border: 1px solid rgba(255, 77, 0, 0.3); color: var(--orange); font-family: var(--font-d); font-size: 0.6875rem; letter-spacing: 0.2em; text-transform: uppercase; }
+.wb-side-nav { flex: 1; padding: 1rem 0; }
+.wb-side-item { position: relative; }
+.wb-side-link { display: flex; align-items: center; gap: 0.75rem; padding: 0.85rem 1.5rem; border-left: 2px solid transparent; color: var(--muted); text-decoration: none; transition: color 0.15s, background-color 0.15s, border-color 0.15s; }
+.wb-side--athlete .wb-side-link { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+.wb-side.is-rail .wb-side-link { justify-content: center; padding-left: 0; padding-right: 0; }
+.wb-side-link:hover { color: var(--white); }
+.wb-side-link.is-on { border-left-color: var(--orange); background: rgba(255, 77, 0, 0.08); color: var(--white); }
+.wb-side-label { font-family: var(--font-d); font-size: 0.9375rem; letter-spacing: 0.06em; text-transform: uppercase; }
+
 /* ── Créateur de WOD (4.2) ───────────────────────────────────────── */
 .wb-builder { display: grid; grid-template-columns: minmax(0, 1fr) 380px; height: calc(100vh - var(--section-tabs-h, 0px)); overflow: hidden; }
 .wb-builder.is-mobile { grid-template-columns: 1fr; grid-template-rows: auto minmax(0, 1fr); height: calc(100dvh - var(--mobile-top-h) - var(--tabbar-h) - var(--safe-bottom) - var(--section-tabs-h, 0px)); }
