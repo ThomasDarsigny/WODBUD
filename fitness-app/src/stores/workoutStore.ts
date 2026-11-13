@@ -26,6 +26,7 @@ type WorkoutRow = {
   notes?: string
   created_at: string
   created_by?: string | null
+  is_benchmark?: boolean
 }
 
 type RecentWorkoutRow = {
@@ -525,7 +526,8 @@ export const useWorkoutStore = create<WorkoutBuilderState>((set, get) => ({
         notes: w.notes,
         exercises: [],
         created_at: w.created_at,
-        created_by: w.created_by ?? null
+        created_by: w.created_by ?? null,
+        is_benchmark: w.is_benchmark ?? false
       }))
 
       saveToCache('workouts', lightweight)

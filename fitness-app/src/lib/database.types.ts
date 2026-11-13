@@ -2017,6 +2017,7 @@ export type Database = {
           created_by: string
           duration_minutes: number | null
           id: string
+          is_benchmark: boolean
           method: string
           notes: string | null
           theme_id: string | null
@@ -2028,6 +2029,7 @@ export type Database = {
           created_by: string
           duration_minutes?: number | null
           id?: string
+          is_benchmark?: boolean
           method?: string
           notes?: string | null
           theme_id?: string | null
@@ -2039,6 +2041,7 @@ export type Database = {
           created_by?: string
           duration_minutes?: number | null
           id?: string
+          is_benchmark?: boolean
           method?: string
           notes?: string | null
           theme_id?: string | null

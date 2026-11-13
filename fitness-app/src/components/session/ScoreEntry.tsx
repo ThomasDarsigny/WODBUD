@@ -2,7 +2,7 @@ import { useEffect, useState, type FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { supabase } from '../../lib/supabase'
 import { readUnit } from '../../lib/records'
-import { formatScore, loadToKg, parseTime, saveScore, scoreTypeFor, SCORE_TYPES, type Rx, type Score, type ScoreType } from '../../lib/scores'
+import { fetchMyScores, formatScore, history, loadToKg, parseTime, saveScore, scoreTypeFor, SCORE_TYPES, type Rx, type Score, type ScoreType } from '../../lib/scores'
 import type { WorkoutMethod } from '../../types'
 
 /**
@@ -24,6 +24,13 @@ export default function ScoreEntry({ sessionId, workoutId }: { sessionId: string
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState<Score | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [past, setPast] = useState<ReturnType<typeof history> | null>(null)
+
+  useEffect(() => {
+    let alive = true
+    fetchMyScores(workoutId).then((list) => { if (alive) setPast(history(list, sessionId)) }).catch(() => {})
+    return () => { alive = false }
+  }, [workoutId, sessionId])
 
   useEffect(() => {
     let alive = true
@@ -94,6 +101,7 @@ export default function ScoreEntry({ sessionId, workoutId }: { sessionId: string
   return (
     <form className="wb-score" onSubmit={(e) => { void submit(e) }}>
       <p className="wb-score-title">{t('score.title')}</p>
+      {past && past.last && <PastScores past={past} />}
 
       {scoreTypeFor(method) === null && (
         <div className="wb-links-chips" role="group" aria-label={t('score.type')}>
@@ -147,5 +155,28 @@ export default function ScoreEntry({ sessionId, workoutId }: { sessionId: string
       {error && <p className="wb-rec-error" role="alert">{error}</p>}
       <button type="submit" className="wb-btn wb-btn--primary" disabled={saving}>{saving ? t('status.loading', { ns: 'common' }) : t('score.save')}</button>
     </form>
+  )
+}
+
+/** « La dernière fois » et « Ton meilleur », pour viser mieux (1.5). */
+export function PastScores({ past }: { past: ReturnType<typeof history> }) {
+  const { t, i18n } = useTranslation('workouts')
+  const unit = readUnit()
+  if (!past.last) return null
+  const date = (s: Score) => (s.createdAt ? new Date(s.createdAt).toLocaleDateString(i18n.language, { day: 'numeric', month: 'short', year: 'numeric' }) : '')
+  const same = past.best && past.best.sessionId === past.last.sessionId
+  return (
+    <dl className="wb-past">
+      <div>
+        <dt>{t('score.last_time')}</dt>
+        <dd><b>{formatScore(past.last, unit)}</b> <span>{[t(`score.rx_${past.last.rx}`), date(past.last)].filter(Boolean).join(' · ')}</span></dd>
+      </div>
+      {past.best && !same && (
+        <div>
+          <dt>{t('score.best')}</dt>
+          <dd><b>{formatScore(past.best, unit)}</b> <span>{[t(`score.rx_${past.best.rx}`), date(past.best)].filter(Boolean).join(' · ')}</span></dd>
+        </div>
+      )}
+    </dl>
   )
 }

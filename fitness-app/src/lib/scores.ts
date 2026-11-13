@@ -22,6 +22,8 @@ export interface Score {
   capped?: boolean
   rx: Rx
   note?: string
+  /** Date d'enregistrement (lecture seulement). */
+  createdAt?: string
 }
 
 const LB = 2.20462
@@ -113,13 +115,14 @@ export function loadToKg(value: number, unit: WeightUnit): number {
 type Row = {
   id: string; session_id: string; workout_id: string; score_type: string
   seconds: number | null; rounds: number | null; reps: number | null; load_kg: number | null
-  capped: boolean; rx: string; note: string | null
+  capped: boolean; rx: string; note: string | null; created_at?: string
 }
 
 const fromRow = (r: Row): Score => ({
   id: r.id, sessionId: r.session_id, workoutId: r.workout_id, scoreType: r.score_type as ScoreType,
   seconds: r.seconds ?? undefined, rounds: r.rounds ?? undefined, reps: r.reps ?? undefined,
-  loadKg: r.load_kg === null ? undefined : Number(r.load_kg), capped: r.capped, rx: r.rx as Rx, note: r.note ?? undefined
+  loadKg: r.load_kg === null ? undefined : Number(r.load_kg), capped: r.capped, rx: r.rx as Rx, note: r.note ?? undefined,
+  createdAt: r.created_at
 })
 
 /** Enregistre ou remplace le score d'une séance (une séance = un score). */
@@ -138,6 +141,21 @@ export async function saveScore(score: Score): Promise<Score> {
   }, { onConflict: 'session_id' }).select().single()
   if (error) throw error
   return fromRow(data as Row)
+}
+
+/**
+ * Ma dernière fois et mon meilleur score sur un WOD, hors la séance en cours.
+ * Le meilleur ne compare que des scores du même type, RX d'abord.
+ */
+export function history(scores: Score[], excludeSessionId?: string): { last: Score | null; best: Score | null; count: number } {
+  const list = scores.filter((s) => s.sessionId !== excludeSessionId)
+  if (list.length === 0) return { last: null, best: null, count: 0 }
+  const last = list[0]
+  const sameType = list.filter((s) => s.scoreType === last.scoreType)
+  const rx = sameType.filter((s) => s.rx === 'rx')
+  const pool = rx.length ? rx : sameType
+  const best = [...pool].sort(compareScores)[0] ?? null
+  return { last, best, count: list.length }
 }
 
 /** Mes scores sur un WOD, du plus récent au plus ancien. */

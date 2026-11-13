@@ -217,6 +217,8 @@
     "bad_time": "Escribe un tiempo como 12:34.",
     "bad_rounds": "Escribe el número de rondas.",
     "bad_reps": "Escribe el número de repeticiones.",
-    "bad_load": "Escribe una carga."
+    "bad_load": "Escribe una carga.",
+    "last_time": "La última vez",
+    "best": "Tu mejor marca"
   }
 }

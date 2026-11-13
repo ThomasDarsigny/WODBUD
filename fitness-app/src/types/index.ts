@@ -195,6 +195,8 @@ export interface Workout {
   exercises: WorkoutExercise[]
   created_at: string
   created_by?: string | null
+  /** WOD de référence livré par WODBUD (067). */
+  is_benchmark?: boolean
 }
 
 export type WorkoutInsert = Omit<Workout, 'id' | 'created_at'>

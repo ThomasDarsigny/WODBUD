@@ -1670,6 +1670,12 @@ button.wb-ex-card { display: flex; align-items: center; gap: 0.85rem; padding: 0
 .wb-score-big { margin: 0; font-family: var(--font-d); font-size: 2.2rem; font-weight: 900; line-height: 1.1; display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
 .wb-score--done { justify-items: start; }
 .wb-score .wb-rec-error { margin: 0; }
+.wb-past { margin: 0; display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; padding: 0.6rem 0.8rem; border-radius: var(--r-md); background: var(--surface); }
+.wb-past > div { display: grid; gap: 0.1rem; }
+.wb-past dt { font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.wb-past dd { margin: 0; display: flex; align-items: baseline; gap: 0.5rem; flex-wrap: wrap; }
+.wb-past b { font-family: var(--font-d); font-size: 1.3rem; font-weight: 900; font-variant-numeric: tabular-nums; }
+.wb-past span { font-size: 0.8125rem; color: var(--muted); }
 .wb-rate { display: grid; justify-items: center; gap: 0.35rem; margin-top: 1.4rem; padding-top: 1.1rem; border-top: 1px solid var(--border); text-align: center; }
 .wb-rate-title { margin: 0; font-weight: 700; }
 .wb-rate-stars { display: flex; gap: 0.15rem; }

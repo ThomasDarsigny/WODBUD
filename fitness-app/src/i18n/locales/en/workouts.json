@@ -217,6 +217,8 @@
     "bad_time": "Enter a time like 12:34.",
     "bad_rounds": "Enter the number of rounds.",
     "bad_reps": "Enter the number of reps.",
-    "bad_load": "Enter a load."
+    "bad_load": "Enter a load.",
+    "last_time": "Last time",
+    "best": "Your best"
   }
 }

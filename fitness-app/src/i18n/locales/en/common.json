@@ -45,7 +45,9 @@
     "source_mine": "Mine",
     "source_team": "Team",
     "source_wodbud": "WODBUD",
-    "badge_team": "Team · {{name}}"
+    "badge_team": "Team · {{name}}",
+    "benchmarks": "Benchmarks",
+    "badge_benchmark": "Benchmark"
   },
   "vote_view": {
     "title": "All votes",

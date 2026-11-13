@@ -24,6 +24,7 @@ export default function WorkoutsLibraryView() {
   const [currentUserId, setCurrentUserId] = useState<string | null>(null)
   const [search, setSearch] = useState('')
   const [methodFilter, setMethodFilter] = useState<WorkoutMethod | 'all'>('all')
+  const [benchOnly, setBenchOnly] = useState(false)
   const [musclesOpenId, setMusclesOpenId] = useState<string | null>(null)
   const [source, setSource] = useState<Source>('all')
   // Équipe du centre (054) : ses WODs sont visibles ; on affiche le nom de l'auteur.
@@ -61,12 +62,13 @@ export default function WorkoutsLibraryView() {
         methodLabel.includes(q) ||
         w.method.toLowerCase().includes(q)
       const matchesMethod = methodFilter === 'all' || w.method === methodFilter
+      if (benchOnly && !w.is_benchmark) return false
       const matchesSource = source === 'all' || sourceOf(w.created_by) === source
       return matchesSearch && matchesMethod && matchesSource
     })
     // sourceOf dépend de team et currentUserId, listés ici.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [savedWorkouts, search, methodFilter, source, team, currentUserId, t])
+  }, [savedWorkouts, search, methodFilter, benchOnly, source, team, currentUserId, t])
 
   return (
     <div className="wb-page wb-page--wide">
@@ -90,6 +92,9 @@ export default function WorkoutsLibraryView() {
         />
       </div>
       <div className="wb-chips" role="group" aria-label={t('library.all_types')}>
+        <button type="button" className="wb-chip" aria-pressed={benchOnly} onClick={() => setBenchOnly((v) => !v)}>
+          ★ {t('library.benchmarks')}
+        </button>
         <button type="button" className="wb-chip" aria-pressed={methodFilter === 'all'} onClick={() => setMethodFilter('all')}>
           {t('library.all_types')}
         </button>
@@ -129,9 +134,11 @@ export default function WorkoutsLibraryView() {
                 <div className="wb-wod-head">
                   <h2>{w.name}</h2>
                   <span className={`wb-pill${from === 'wodbud' ? ' wb-pill--orange' : ''}${from === 'team' ? ' wb-pill--team' : ''}`}>
-                    {from === 'team'
-                      ? t('library.badge_team', { name: team?.get(w.created_by ?? '') })
-                      : isTemplate ? t('library.badge_template') : t('library.badge_mine')}
+                    {w.is_benchmark
+                      ? `★ ${t('library.badge_benchmark')}`
+                      : from === 'team'
+                        ? t('library.badge_team', { name: team?.get(w.created_by ?? '') })
+                        : isTemplate ? t('library.badge_template') : t('library.badge_mine')}
                   </span>
                 </div>
                 <div className="wb-wod-tags">

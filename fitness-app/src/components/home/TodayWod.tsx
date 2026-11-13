@@ -3,7 +3,8 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { supabase } from '../../lib/supabase'
 import { fetchUpcoming, localDate, type ScheduledEntry } from '../../lib/scheduledWorkouts'
-import { formatScore, type Score, type ScoreType, type Rx } from '../../lib/scores'
+import { fetchMyScores, formatScore, history, type Score, type ScoreType, type Rx } from '../../lib/scores'
+import { PastScores } from '../session/ScoreEntry'
 import { readUnit } from '../../lib/records'
 import { useSessionStore } from '../../stores/sessionStore'
 import { unlockAudio } from '../../lib/gymCues'
@@ -26,6 +27,7 @@ export default function TodayWod() {
   const [plans, setPlans] = useState<ScheduledEntry[] | null>(null)
   const [details, setDetails] = useState<Record<string, Detail>>({})
   const [scores, setScores] = useState<Record<string, Score>>({})
+  const [pasts, setPasts] = useState<Record<string, ReturnType<typeof history>>>({})
 
   useEffect(() => {
     let alive = true
@@ -36,6 +38,10 @@ export default function TodayWod() {
         if (!alive) return
         setPlans(todays)
         const ids = [...new Set(todays.map((p) => p.workout_id).filter((id): id is string => Boolean(id)))]
+        const pendingIds = [...new Set(todays.filter((p) => p.session_id === null).map((p) => p.workout_id).filter((id): id is string => Boolean(id)))]
+        Promise.all(pendingIds.map(async (id) => [id, history(await fetchMyScores(id))] as const))
+          .then((pairs) => { if (alive) setPasts(Object.fromEntries(pairs)) })
+          .catch(() => {})
         if (ids.length) {
           const { data } = await supabase
             .from('workouts')
@@ -103,6 +109,7 @@ export default function TodayWod() {
               </ol>
             )}
             {p.notes && <p className="wb-today-notes">{p.notes}</p>}
+            {!done && p.workout_id && pasts[p.workout_id]?.last && <PastScores past={pasts[p.workout_id]} />}
             {p.class_plan_id && (
               <Link to={`/athlete/whiteboard/${p.class_plan_id}`} className="wb-today-board">{t('whiteboard.open')} ›</Link>
             )}

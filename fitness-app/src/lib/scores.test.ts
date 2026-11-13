@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { compareScores, formatScore, formatTime, loadToKg, parseTime, scoreTypeFor, type Score } from './scores'
+import { compareScores, formatScore, formatTime, history, loadToKg, parseTime, scoreTypeFor, type Score } from './scores'
 
 const s = (p: Partial<Score> & Pick<Score, 'scoreType'>): Score => ({ sessionId: 's', workoutId: 'w', rx: 'rx', ...p })
 
@@ -47,5 +47,19 @@ describe('scores', () => {
   it('convertit la charge saisie en kg', () => {
     expect(loadToKg(100, 'kg')).toBe(100)
     expect(loadToKg(225, 'lb')).toBe(102.06)
+  })
+
+  it('retrouve la dernière fois et le meilleur score, RX d’abord, hors séance en cours', () => {
+    const list = [
+      s({ sessionId: 'now', scoreType: 'time', seconds: 300 }),
+      s({ sessionId: 'b', scoreType: 'time', seconds: 400, rx: 'scaled' }),
+      s({ sessionId: 'c', scoreType: 'time', seconds: 420 }),
+      s({ sessionId: 'd', scoreType: 'time', seconds: 380 })
+    ]
+    const h = history(list, 'now')
+    expect(h.last?.sessionId).toBe('b')
+    expect(h.best?.sessionId).toBe('d')
+    expect(h.count).toBe(3)
+    expect(history([], 'x')).toEqual({ last: null, best: null, count: 0 })
   })
 })

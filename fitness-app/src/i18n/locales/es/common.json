@@ -45,7 +45,9 @@
     "source_mine": "Los míos",
     "source_team": "Equipo",
     "source_wodbud": "WODBUD",
-    "badge_team": "Equipo · {{name}}"
+    "badge_team": "Equipo · {{name}}",
+    "benchmarks": "Benchmarks",
+    "badge_benchmark": "Benchmark"
   },
   "vote_view": {
     "title": "Todos los votos",

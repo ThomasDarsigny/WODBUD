@@ -73,3 +73,4 @@ enregistré en base, il faudrait d'abord le réparer.
 | `064_drop_legacy_app_tables.sql` | Suppression des dix tables `app_*` d'une version précédente (nutrition, poids, journaux), sans code ni règle d'accès ; export JSON conservé hors dépôt avant application. |
 | `065_workout_scores.sql` | Score d'un WOD par séance : temps (avec cap), rounds + reps, reps ou charge, RX ou adapté ; chacun gère les siens (le tableau blanc lira par fonction dédiée). |
 | `066_whiteboard.sql` | Tableau blanc : `get_whiteboard(plan)` rend les scores rattachés à une séance de cours (membres et coach du cours seulement, RX puis meilleur score) ; `score_reactions` (un emoji par personne et par score). |
+| `067_benchmarks.sql` | `workouts.is_benchmark` (réservé à WODBUD par déclencheur) et 13 benchmarks livrés par le compte admin : Fran, Cindy, Helen, Isabel, Karen, Annie, Murph, Diane, Elizabeth, Jackie, Chelsea, Angie, Kelly. |
