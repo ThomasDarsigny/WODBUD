@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import type { CSSProperties } from 'react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRankStore } from '../../stores/rankStore'
@@ -60,12 +61,16 @@ export default function RankView() {
       </header>
 
       {/* Insigne + progression */}
-      <section className="wb-card wb-card--accent wb-rank-hero">
+      <section
+        className="wb-card wb-card--accent wb-rank-hero"
+        // Couleurs du rang actuel et du suivant : données, passées en variables CSS.
+        style={{ '--rank': progress.current?.color ?? 'var(--orange)', '--rank-next': progress.next?.color ?? 'var(--orange)' } as CSSProperties}
+      >
         <div className="wb-rank-top">
           {/* L'insigne seul : le nom est déjà écrit en grand juste à côté. */}
           {progress.current && <RankEmblem rank={progress.current} lang={lang} size={120} />}
           <div className="wb-rank-id">
-            {progress.current && <strong style={{ color: progress.current.color }}>{rankDisplay(progress.current, lang)}</strong>}
+            {progress.current && <strong className="wb-rank-ink">{rankDisplay(progress.current, lang)}</strong>}
             {progress.current && rankMotto(progress.current, lang) && <span>« {rankMotto(progress.current, lang)} »</span>}
           </div>
         </div>
@@ -73,11 +78,11 @@ export default function RankView() {
         {progress.next ? (
           <div className="wb-rank-next">
             <div className="wb-rank-next-row">
-              <span>{t('rank.next')} — <b style={{ color: progress.next.color }}>{rankDisplay(progress.next, lang)}</b></span>
+              <span>{t('rank.next')} — <b className="wb-rank-ink wb-rank-ink--next">{rankDisplay(progress.next, lang)}</b></span>
               <span className="wb-rank-left">{t('rank.remaining', { amount: formatMinutes(progress.remaining) })}</span>
             </div>
             <div className="wb-rank-bar" aria-hidden="true">
-              <span style={{ width: `${Math.round(progress.ratio * 100)}%`, background: progress.next.color }} />
+              <span style={{ width: `${Math.round(progress.ratio * 100)}%` }} />
             </div>
           </div>
         ) : (
@@ -101,9 +106,9 @@ export default function RankView() {
             const reached = minutes >= r.min_minutes
             const isCurrent = progress.current?.key === r.key
             return (
-              <li key={r.key} className={`wb-ladder${reached ? ' is-reached' : ''}${isCurrent ? ' is-current' : ''}`} style={isCurrent ? { background: `${r.color}14` } : undefined}>
+              <li key={r.key} className={`wb-ladder${reached ? ' is-reached' : ''}${isCurrent ? ' is-current' : ''}`} style={{ '--rank': r.color } as CSSProperties}>
                 <RankEmblem rank={r} size={34} dimmed={!reached} />
-                <span className="wb-ladder-name" style={{ color: reached ? r.color : undefined }}>{rankDisplay(r, lang)}</span>
+                <span className="wb-ladder-name">{rankDisplay(r, lang)}</span>
                 <span className="wb-ladder-side">{reached ? t('rank.reached') : t('rank.from', { amount: formatMinutes(r.min_minutes) })}</span>
               </li>
             )

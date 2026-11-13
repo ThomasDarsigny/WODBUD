@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react'
 import { rankDisplay, type Rank } from '../../lib/ranks'
 
 /**
@@ -28,17 +29,13 @@ export function RankEmblem({ rank, size = 40, dimmed = false, lang }: {
     return (
       <span
         {...a11y}
-        style={{
-          width: size, height: size, flexShrink: 0, display: 'inline-block',
-          border: `2px solid ${dimmed ? 'var(--border)' : rank.color}`,
-          background: dimmed ? 'transparent' : `${rank.color}33`,
-          clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)'
-        }}
+        className={`wb-rank-hexa${dimmed ? ' is-dimmed' : ''}`}
+        style={{ '--size': `${size}px`, '--rank': rank.color } as CSSProperties}
       />
     )
   }
   return (
-    <span {...a11y} className={`wb-rank-emblem${dimmed ? ' is-dimmed' : ''}`} style={{ width: size, height: size }}>
+    <span {...a11y} className={`wb-rank-emblem${dimmed ? ' is-dimmed' : ''}`} style={{ '--size': `${size}px` } as CSSProperties}>
       <img src={src} alt="" width={size} height={size} decoding="async" draggable={false} />
     </span>
   )
@@ -53,15 +50,9 @@ export default function RankBadge({ rank, lang, size = 132, dimmed = false }: {
 }) {
   const label = rankDisplay(rank, lang)
   return (
-    <div style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
+    <div className="wb-rank-badge" style={{ '--rank': rank.color } as CSSProperties}>
       <RankEmblem rank={rank} size={size} dimmed={dimmed} lang={lang} />
-      <span style={{
-        fontFamily: 'var(--font-d)', fontWeight: 900, letterSpacing: '0.1em',
-        textTransform: 'uppercase', fontSize: size > 100 ? '1.35rem' : '0.8rem',
-        color: dimmed ? 'var(--muted)' : rank.color, textAlign: 'center'
-      }}>
-        {label}
-      </span>
+      <span className={`wb-rank-badge-name${size > 100 ? '' : ' is-small'}${dimmed ? ' is-dimmed' : ''}`}>{label}</span>
     </div>
   )
 }

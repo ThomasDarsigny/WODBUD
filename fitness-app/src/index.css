@@ -2163,6 +2163,35 @@ button.wb-row:active, a.wb-row:active { background: var(--surface); }
 .wb-active-bar-state { flex-shrink: 0; margin-left: auto; }
 .wb-rest-spacer { height: 96px; }
 
+/* ── Rang et classement (4.2) ───────────────────────────────────── */
+.wb-lb-periods { display: flex; flex-wrap: wrap; gap: var(--s2); margin-bottom: var(--s3); }
+.wb-lb-period { display: inline-block; padding: 0.45rem 0.7rem; border-radius: 12px; border: 1px solid var(--border); background: transparent; color: var(--muted); font-family: var(--font-d); font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; white-space: nowrap; cursor: pointer; }
+.wb-lb-period.is-on { border-color: var(--orange); color: var(--orange); }
+.wb-lb { display: flex; flex-direction: column; gap: 1px; margin: 0; padding: 0; list-style: none; overflow: hidden; border-radius: 12px; border: 1px solid var(--border); background: var(--border); }
+.wb-lb-row { display: flex; align-items: center; gap: var(--s4); padding: var(--s3) var(--s4); border-left: 2px solid transparent; background: var(--dark); }
+.wb-lb-row.is-me { border-left-color: var(--orange); background: color-mix(in srgb, var(--orange) 8%, var(--dark)); }
+.wb-lb-pos { flex-shrink: 0; min-width: 1.8rem; color: var(--muted); font-family: var(--font-d); font-size: 1.25rem; font-weight: 900; font-variant-numeric: tabular-nums; text-align: right; }
+.wb-lb-pos.is-first { color: var(--orange); }
+.wb-lb-main { flex: 1; min-width: 0; }
+.wb-lb-name { display: block; overflow: hidden; font-family: var(--font-d); font-size: 1rem; font-weight: 800; letter-spacing: 0.02em; line-height: 1.15; text-overflow: ellipsis; text-transform: uppercase; white-space: nowrap; }
+.wb-lb-row.is-me .wb-lb-name { color: var(--orange); }
+.wb-lb-streak { display: block; margin-top: 2px; color: var(--muted); font-family: var(--font-d); font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; }
+.wb-lb-min { flex-shrink: 0; font-family: var(--font-d); font-size: 1rem; font-weight: 900; font-variant-numeric: tabular-nums; }
+.wb-rank-hexa { display: inline-block; flex-shrink: 0; width: var(--size); height: var(--size); border: 2px solid var(--rank); background: color-mix(in srgb, var(--rank) 20%, transparent); clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); }
+.wb-rank-hexa.is-dimmed { border-color: var(--border); background: transparent; }
+.wb-rank-badge { display: inline-flex; flex-direction: column; align-items: center; gap: 0.5rem; }
+.wb-rank-badge-name { color: var(--rank); font-family: var(--font-d); font-size: 1.35rem; font-weight: 900; letter-spacing: 0.1em; text-align: center; text-transform: uppercase; }
+.wb-rank-badge-name.is-small { font-size: 0.8rem; }
+.wb-rank-badge-name.is-dimmed { color: var(--muted); }
+.wb-rank-ink { color: var(--rank); }
+.wb-rank-ink--next { color: var(--rank-next); }
+.wb-rank-bar span { background: var(--rank-next); }
+.wb-ladder.is-current { background: color-mix(in srgb, var(--rank) 8%, transparent); }
+.wb-ladder.is-reached .wb-ladder-name { color: var(--rank); }
+/* Thème clair : les couleurs des rangs tombaient à 1,4–3,2:1 en texte ; même mélange que partout. */
+:root[data-theme='clair'] :is(.wb-rank-badge-name:not(.is-dimmed), .wb-rank-ink, .wb-ladder.is-reached .wb-ladder-name) { color: color-mix(in srgb, var(--rank) 40%, var(--white)); }
+:root[data-theme='clair'] .wb-rank-ink--next { color: color-mix(in srgb, var(--rank-next) 40%, var(--white)); }
+
 /* ── Créateur de WOD (4.2) ───────────────────────────────────────── */
 .wb-builder { display: grid; grid-template-columns: minmax(0, 1fr) 380px; height: calc(100vh - var(--section-tabs-h, 0px)); overflow: hidden; }
 .wb-builder.is-mobile { grid-template-columns: 1fr; grid-template-rows: auto minmax(0, 1fr); height: calc(100dvh - var(--mobile-top-h) - var(--tabbar-h) - var(--safe-bottom) - var(--section-tabs-h, 0px)); }
@@ -2772,7 +2801,7 @@ em[data-rarity='legendaire'] { color: #f4c652; } em[data-rarity='mythique'] { co
 @media (prefers-reduced-motion: reduce) { .wb-badge-art.is-fresh, .wb-badge-art.is-fresh::after { animation: none; } }
 
 /* ─── Insignes de rang « Forge » ───────────────────────────────── */
-.wb-rank-emblem { display: inline-block; flex-shrink: 0; }
+.wb-rank-emblem { display: inline-block; flex-shrink: 0; width: var(--size, 40px); height: var(--size, 40px); }
 .wb-rank-emblem img { display: block; width: 100%; height: 100%; user-select: none; -webkit-user-drag: none; filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.5)); }
 .wb-rank-emblem.is-dimmed img { filter: grayscale(1) brightness(0.45) contrast(1.1); opacity: 0.75; }
 
