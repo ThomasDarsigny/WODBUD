@@ -26,7 +26,12 @@
     "communities": "Communities",
     "records": "Records",
     "today": "Today",
-    "tab_today": "Home"
+    "tab_today": "Home",
+    "group_classes": "Classes",
+    "group_program": "Program",
+    "group_training": "My training",
+    "tab_program": "Program",
+    "tab_training": "Training"
   },
   "library": {
     "title": "Workout library",

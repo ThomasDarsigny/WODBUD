@@ -1686,6 +1686,16 @@ button.wb-row:active, a.wb-row:active { background: var(--surface); }
 @media (max-width: 520px) {
   .wb-tv-side { grid-template-columns: 1fr; }
 }
+/* Onglets de section (3.4) : les pages d'une entrée du menu. Hauteur fixe,
+   que les pages à hauteur d'écran (créateur) retranchent via --section-tabs-h. */
+:root { --section-tabs-size: 56px; }
+.wb-section-tabs { display: flex; align-items: center; gap: 0.4rem; height: var(--section-tabs-size); padding: 0 var(--page-pad); overflow-x: auto; scrollbar-width: none; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+.wb-section-tabs::-webkit-scrollbar { display: none; }
+.wb-section-tab { position: relative; display: inline-flex; align-items: center; min-height: 40px; padding: 0 0.95rem; border-radius: 999px; border: 1px solid var(--border); color: var(--muted); font-size: 0.9375rem; font-weight: 600; text-decoration: none; white-space: nowrap; transition: color 0.15s, border-color 0.15s, background 0.15s; }
+.wb-section-tab:hover { color: var(--white); }
+.wb-section-tab.is-on { color: var(--white); border-color: var(--orange); background: rgba(255, 90, 31, 0.12); }
+.wb-section-tab:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
+.wb-section-dot { position: absolute; top: 6px; right: 6px; width: 7px; height: 7px; border-radius: 50%; background: var(--orange); }
 .wb-cycle { display: grid; gap: 0.75rem; padding: 0.9rem; border-radius: var(--r-md); border: 1px solid rgba(255, 90, 31, 0.35); background: var(--dark); }
 .wb-cycle-head { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; }
 .wb-cycle-title { margin: 0; font-family: var(--font-d); font-size: 1.2rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.03em; }

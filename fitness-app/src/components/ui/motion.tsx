@@ -25,7 +25,7 @@ export function PageTransition({ children }: { children: ReactNode }) {
       initial={reduce ? false : { opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.32, ease: EASE }}
-      style={{ minHeight: '100%' }}
+      style={{ minHeight: 'calc(100% - var(--section-tabs-h, 0px) - var(--page-top-h, 0px))' }}
     >
       {children}
     </motion.div>

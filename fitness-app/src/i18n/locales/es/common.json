@@ -26,7 +26,12 @@
     "communities": "Comunidades",
     "records": "Récords",
     "today": "Hoy",
-    "tab_today": "Inicio"
+    "tab_today": "Inicio",
+    "group_classes": "Clases",
+    "group_program": "Programar",
+    "group_training": "Mi entrenamiento",
+    "tab_program": "Programar",
+    "tab_training": "Entreno"
   },
   "library": {
     "title": "Biblioteca de workouts",

@@ -12,6 +12,8 @@ export interface MobileNavItem {
   path: string
   /** Pastille de notification (0 = rien). */
   dot?: number
+  /** Adresses qui allument aussi cet onglet (les pages d'un groupe). */
+  match?: string[]
 }
 
 /** Petit retour tactile là où le navigateur le permet (Android) ; iOS l'ignore. */
@@ -37,7 +39,8 @@ export default function MobileTabBar({ primary, more }: { primary: MobileNavItem
   useBackToClose(sheetOpen, () => setSheetPath(null))
 
   const isActive = (path: string) => pathname === path || (path !== '/athlete' && pathname.startsWith(`${path}/`))
-  const moreActive = more.some((i) => isActive(i.path))
+  const itemActive = (item: MobileNavItem) => (item.match ?? [item.path]).some(isActive)
+  const moreActive = more.some(itemActive)
   const moreDots = more.reduce((n, i) => n + (i.dot ?? 0), 0)
   // La poignée se tire vers le bas pour fermer, comme une feuille iOS. Le
   // glisser part de la poignée et de l'en-tête seulement : la liste défile.
@@ -62,7 +65,7 @@ export default function MobileTabBar({ primary, more }: { primary: MobileNavItem
     <>
       <nav className="wb-tabbar" aria-label={t('nav.main')}>
         {primary.map((item) => {
-          const active = isActive(item.path)
+          const active = itemActive(item)
           return (
             <Link
               key={item.id}
@@ -126,7 +129,7 @@ export default function MobileTabBar({ primary, more }: { primary: MobileNavItem
             </div>
             <ul className="wb-sheet-list">
               {more.map((item) => {
-                const active = isActive(item.path)
+                const active = itemActive(item)
                 return (
                   <li key={item.id}>
                     <Link to={item.path} replace onClick={() => { tap(); setSheetPath(null) }} className={`wb-sheet-row${active ? ' is-active' : ''}`} aria-current={active ? 'page' : undefined}>

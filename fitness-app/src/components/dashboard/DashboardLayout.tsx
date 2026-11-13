@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import type { ReactNode } from 'react'
+import type { CSSProperties, ReactNode } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { supabase } from '../../lib/supabase'
@@ -9,38 +9,12 @@ import ActiveSessionBar from '../session/ActiveSessionBar'
 import { markScrolled } from '../../lib/scrollEdge'
 import { useIsMobile } from '../../hooks/useMediaQuery'
 import NavIcon from '../navigation/NavIcon'
-import type { NavIconName } from '../navigation/NavIcon'
 import NavDot from '../navigation/NavDot'
 import MobileTabBar, { type MobileNavItem } from '../navigation/MobileTabBar'
 import { useNotificationStore } from '../../stores/notificationStore'
 import { PageTransition } from '../ui/motion'
+import { activeGroup, activeLeaf, buildNav, groupPaths, LEAVES, type NavGroup, type NavLeaf } from '../../lib/coachNav'
 
-type NavItem = {
-  id: string
-  labelKey: string
-  ns?: 'common' | 'workouts'
-  icon: NavIconName
-  path: string
-  disabled?: boolean
-  soon?: boolean
-}
-
-const NAV_ITEMS: NavItem[] = [
-  { id: 'admin', labelKey: 'nav.admin', icon: 'admin', path: '/dashboard/admin' },
-  { id: 'today', labelKey: 'nav.today', icon: 'home', path: '/dashboard/today' },
-  { id: 'exercises', labelKey: 'nav.exercises', icon: 'exercises', path: '/dashboard/exercises' },
-  { id: 'workout', labelKey: 'new', ns: 'workouts', icon: 'workout', path: '/dashboard/workout' },
-  { id: 'library', labelKey: 'nav.library', icon: 'library', path: '/dashboard/workouts' },
-  { id: 'session', labelKey: 'nav.session', icon: 'session', path: '/dashboard/session' },
-  { id: 'journal', labelKey: 'nav.journal', icon: 'calendar', path: '/dashboard/journal' },
-  { id: 'rank', labelKey: 'nav.rank', icon: 'rank', path: '/dashboard/rank' },
-  { id: 'records', labelKey: 'nav.records', icon: 'records', path: '/dashboard/records' },
-  { id: 'classes', labelKey: 'nav.classes', icon: 'classes', path: '/dashboard/classes' },
-  { id: 'ai', labelKey: 'nav.ai', icon: 'ai', path: '/dashboard/ai' },
-  { id: 'vote', labelKey: 'nav.vote', icon: 'vote', path: '/dashboard/vote' },
-  { id: 'communities', labelKey: 'nav.communities', icon: 'community', path: '/dashboard/communities' },
-  { id: 'settings', labelKey: 'nav.settings', icon: 'settings', path: '/dashboard/settings' }
-]
 
 interface Props {
   children: ReactNode
@@ -85,13 +59,18 @@ export default function DashboardLayout({ children }: Props) {
     }
   }, [])
 
-  const navItems = useMemo(() => {
-    return NAV_ITEMS.filter((item) => {
-      if (item.id === 'admin') return isAdmin
-      if (item.id === 'ai' || item.id === 'classes' || item.id === 'today') return !isAdmin
+  // Cinq entrées (3.4) : les pages sont regroupées, les adresses ne changent pas.
+  const groups = useMemo(() => {
+    const visible = new Set(LEAVES.map((l) => l.id).filter((id) => {
+      if (id === 'admin') return isAdmin
+      if (id === 'ai' || id === 'classes' || id === 'today') return !isAdmin
       return true
-    })
+    }))
+    return buildNav(visible)
   }, [isAdmin])
+  const current = activeGroup(groups, location.pathname)
+  const currentLeaf = activeLeaf(current, location.pathname)
+  const showTabs = Boolean(current && current.leaves.length > 1)
 
   // Une seule lecture au montage : les pastilles n'ont pas besoin d'être
   // temps réel, elles se rafraîchissent au changement d'écran.
@@ -105,22 +84,19 @@ export default function DashboardLayout({ children }: Props) {
     return 0
   }
 
-  // Téléphone : 4 onglets à portée du pouce, le reste dans « Plus ».
-  const label = (item: NavItem) => (item.ns === 'workouts' ? t(item.labelKey, { ns: 'workouts' }) : t(item.labelKey))
-  const TAB_LABELS: Record<string, string> = { today: 'nav.tab_today', workout: 'nav.tab_new', admin: 'nav.tab_admin', classes: 'nav.tab_classes', rank: 'nav.tab_rank' }
-  const tabIds = isAdmin ? ['admin', 'workout', 'session', 'rank'] : ['today', 'workout', 'session', 'classes']
-  const toMobile = (item: NavItem, short: boolean): MobileNavItem => ({
-    id: item.id,
-    label: short && TAB_LABELS[item.id] ? t(TAB_LABELS[item.id]) : label(item),
-    icon: item.icon,
-    path: item.path,
-    dot: dotFor(item.id)
-  })
-  const tabItems = tabIds
-    .map((id) => navItems.find((i) => i.id === id))
-    .filter((i): i is NavItem => Boolean(i))
-    .map((i) => toMobile(i, true))
-  const moreItems = navItems.filter((i) => !tabIds.includes(i.id)).map((i) => toMobile(i, false))
+  const groupDot = (g: NavGroup) => g.leaves.reduce((n, l) => n + dotFor(l.id), 0)
+  const leafLabel = (leaf: NavLeaf, short = false) => {
+    if (short && leaf.tabKey) return t(leaf.tabKey)
+    return leaf.ns === 'workouts' ? t(leaf.labelKey, { ns: 'workouts' }) : t(leaf.labelKey)
+  }
+
+  // Téléphone : les quatre premiers groupes en onglets, « Plus » ouvre le reste.
+  const tabItems: MobileNavItem[] = groups
+    .filter((g) => g.id !== 'more')
+    .slice(0, 4)
+    .map((g) => ({ id: g.id, label: t(g.tabKey), icon: g.icon, path: g.path, match: groupPaths(g), dot: groupDot(g) }))
+  const moreItems: MobileNavItem[] = (groups.find((g) => g.id === 'more')?.leaves ?? [])
+    .map((l) => ({ id: l.id, label: leafLabel(l), icon: l.icon, path: l.path, dot: dotFor(l.id) }))
 
   return (
     <div
@@ -190,89 +166,36 @@ export default function DashboardLayout({ children }: Props) {
           </button>
         </div>
 
-        <nav style={{ flex: 1, padding: '1rem 0' }}>
-          {navItems.map((item) => {
-            const active = location.pathname === item.path
+        <nav style={{ flex: 1, padding: '1rem 0' }} aria-label={t('nav.main')}>
+          {groups.map((g) => {
+            const active = current?.id === g.id
             return (
-              <div key={item.id} style={{ position: 'relative' }}>
-                {item.disabled ? (
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '0.75rem',
-                      padding: rail ? '0.75rem 0' : '0.75rem 1.5rem',
-                      justifyContent: rail ? 'center' : 'flex-start',
-                      opacity: 0.4,
-                      cursor: 'not-allowed'
-                    }}
-                  >
-                    <NavIcon name={item.icon} />
-                    {!rail && (
-                      <>
-                        <span
-                          style={{
-                            fontFamily: 'var(--font-d)',
-                            fontSize: '0.9375rem',
-                            letterSpacing: '0.06em',
-                            textTransform: 'uppercase'
-                          }}
-                        >
-                          {item.ns === 'workouts' ? t(item.labelKey, { ns: 'workouts' }) : t(item.labelKey)}
-                        </span>
-                        {item.soon && (
-                          <span
-                            style={{
-                              marginLeft: 'auto',
-                              fontFamily: 'var(--font-d)',
-                              fontSize: '0.6875rem',
-                              letterSpacing: '0.15em',
-                              textTransform: 'uppercase',
-                              color: 'var(--orange)',
-                              border: '1px solid rgba(255,77,0,0.3)', borderRadius: 12,
-                              padding: '0.1rem 0.35rem'
-                            }}
-                          >
-                            {t('status.soon')}
-                          </span>
-                        )}
-                      </>
-                    )}
-                  </div>
-                ) : (
-                  <Link
-                    to={item.path}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '0.75rem',
-                      padding: rail ? '0.75rem 0' : '0.75rem 1.5rem',
-                      justifyContent: rail ? 'center' : 'flex-start',
-                      textDecoration: 'none',
-                      color: active ? 'var(--white)' : 'var(--muted)',
-                      background: active ? 'rgba(255,77,0,0.08)' : 'transparent',
-                      borderLeft: active
-                        ? '2px solid var(--orange)'
-                        : '2px solid transparent',
-                      transition: 'all 0.15s'
-                    }}
-                  >
-                    <NavIcon name={item.icon} />
-                    {!rail && (
-                      <span
-                        style={{
-                          fontFamily: 'var(--font-d)',
-                          fontSize: '0.9375rem',
-                          letterSpacing: '0.06em',
-                          textTransform: 'uppercase'
-                        }}
-                      >
-                        {item.ns === 'workouts' ? t(item.labelKey, { ns: 'workouts' }) : t(item.labelKey)}
-                      </span>
-                    )}
-                  </Link>
-                )}
-                <NavDot count={dotFor(item.id)} compact={rail} />
+              <div key={g.id} style={{ position: 'relative' }}>
+                <Link
+                  to={g.path}
+                  aria-current={active ? 'page' : undefined}
+                  title={rail ? t(g.labelKey) : undefined}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.75rem',
+                    padding: rail ? '0.85rem 0' : '0.85rem 1.5rem',
+                    justifyContent: rail ? 'center' : 'flex-start',
+                    textDecoration: 'none',
+                    color: active ? 'var(--white)' : 'var(--muted)',
+                    background: active ? 'rgba(255,77,0,0.08)' : 'transparent',
+                    borderLeft: active ? '2px solid var(--orange)' : '2px solid transparent',
+                    transition: 'all 0.15s'
+                  }}
+                >
+                  <NavIcon name={g.icon} />
+                  {!rail && (
+                    <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.9375rem', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+                      {t(g.labelKey)}
+                    </span>
+                  )}
+                </Link>
+                <NavDot count={groupDot(g)} compact={rail} />
               </div>
             )
           })}
@@ -284,7 +207,11 @@ export default function DashboardLayout({ children }: Props) {
       <main style={{ flex: 1, overflow: 'auto', minWidth: 0, display: 'flex', flexDirection: 'column' }}>
         {/* Barre du haut en verre : le contenu défile dessous (même conteneur de
             défilement) et s'estompe contre elle une fois qu'on a défilé. */}
-        <div className={isMobile ? 'wb-scroller wb-has-tabbar' : 'wb-scroller'} onScroll={markScrolled}>
+        <div
+          className={isMobile ? 'wb-scroller wb-has-tabbar' : 'wb-scroller'}
+          onScroll={markScrolled}
+          style={{ '--section-tabs-h': showTabs ? 'var(--section-tabs-size)' : '0px', '--page-top-h': isMobile ? 'var(--mobile-top-h)' : '0px' } as CSSProperties}
+        >
           <div className="wb-topgroup">
             {isMobile && (
               <div className="wb-mobile-top">
@@ -307,6 +234,19 @@ export default function DashboardLayout({ children }: Props) {
             <OfflineBanner />
             <ActiveSessionBar basePath="/dashboard" />
           </div>
+          {showTabs && current && (
+            <nav className="wb-section-tabs" aria-label={t(current.labelKey)}>
+              {current.leaves.map((l) => {
+                const on = currentLeaf?.id === l.id
+                return (
+                  <Link key={l.id} to={l.path} className={`wb-section-tab${on ? ' is-on' : ''}`} aria-current={on ? 'page' : undefined}>
+                    {leafLabel(l, true)}
+                    {dotFor(l.id) > 0 && <span className="wb-section-dot" aria-hidden="true" />}
+                  </Link>
+                )
+              })}
+            </nav>
+          )}
           <PageTransition>{children}</PageTransition>
         </div>
       </main>

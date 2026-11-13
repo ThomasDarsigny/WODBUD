@@ -294,7 +294,7 @@ export default function WorkoutBuilderView() {
         display: 'grid',
         gridTemplateColumns: isMobile ? '1fr' : '1fr 380px',
         gridTemplateRows: isMobile ? 'auto minmax(0, 1fr)' : undefined,
-        height: isMobile ? 'calc(100dvh - var(--mobile-top-h) - var(--tabbar-h) - var(--safe-bottom))' : '100vh',
+        height: isMobile ? 'calc(100dvh - var(--mobile-top-h) - var(--tabbar-h) - var(--safe-bottom) - var(--section-tabs-h, 0px))' : 'calc(100vh - var(--section-tabs-h, 0px))',
         overflow: 'hidden'
       }}
     >
