@@ -387,6 +387,41 @@ export type Database = {
           },
         ]
       }
+      class_slots: {
+        Row: {
+          class_id: string
+          created_at: string
+          duration_minutes: number
+          id: string
+          start_time: string
+          weekday: number
+        }
+        Insert: {
+          class_id: string
+          created_at?: string
+          duration_minutes?: number
+          id?: string
+          start_time: string
+          weekday: number
+        }
+        Update: {
+          class_id?: string
+          created_at?: string
+          duration_minutes?: number
+          id?: string
+          start_time?: string
+          weekday?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "class_slots_class_id_fkey"
+            columns: ["class_id"]
+            isOneToOne: false
+            referencedRelation: "classes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       classes: {
         Row: {
           center_id: string | null

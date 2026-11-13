@@ -4,6 +4,8 @@ import { useWorkoutStore } from '../../stores/workoutStore'
 import { useExerciseStore } from '../../stores/exerciseStore'
 import { readUnit } from '../../lib/records'
 import { localDate } from '../../lib/scheduledWorkouts'
+import { useClassSlotStore } from '../../stores/classSlotStore'
+import { nextSlotDate } from '../../lib/classSlots'
 import { createCycle, fetchCycleBase, hasProgression, MAX_WEEKS, MIN_WEEKS, planCycle, type CycleBase } from '../../lib/cycles'
 
 /**
@@ -19,7 +21,9 @@ export default function CycleSheet({ classId, onClose, onCreated }: { classId: s
   const [q, setQ] = useState('')
   const [workoutId, setWorkoutId] = useState<string | null>(null)
   const [base, setBase] = useState<CycleBase | null>(null)
-  const [firstDate, setFirstDate] = useState(localDate())
+  // Premier jour d'horaire du cours (3.1), sinon aujourd'hui.
+  const classSlots = useClassSlotStore((s) => s.byClass[classId])
+  const [firstDate, setFirstDate] = useState(() => nextSlotDate(classSlots ?? [], localDate()) ?? localDate())
   const [weeks, setWeeks] = useState(6)
   const [progress, setProgress] = useState(true)
   const [busy, setBusy] = useState<number | null>(null)

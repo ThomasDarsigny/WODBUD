@@ -74,3 +74,4 @@ enregistré en base, il faudrait d'abord le réparer.
 | `065_workout_scores.sql` | Score d'un WOD par séance : temps (avec cap), rounds + reps, reps ou charge, RX ou adapté ; chacun gère les siens (le tableau blanc lira par fonction dédiée). |
 | `066_whiteboard.sql` | Tableau blanc : `get_whiteboard(plan)` rend les scores rattachés à une séance de cours (membres et coach du cours seulement, RX puis meilleur score) ; `score_reactions` (un emoji par personne et par score). |
 | `067_benchmarks.sql` | `workouts.is_benchmark` (réservé à WODBUD par déclencheur) et 13 benchmarks livrés par le compte admin : Fran, Cindy, Helen, Isabel, Karen, Annie, Murph, Diane, Elizabeth, Jackie, Chelsea, Angie, Kelly. |
+| `068_class_slots.sql` | Horaire récurrent : `class_slots` (jour 1–7, heure locale, durée 15–240 min ; au plus 28 par cours). Lecture : coach, membres, responsables du centre ; écriture : coach et responsables du centre. |

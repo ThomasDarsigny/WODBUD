@@ -1570,6 +1570,24 @@ button.wb-row:active, a.wb-row:active { background: var(--surface); }
 .wb-week-guard-pill { background: rgba(245, 158, 11, 0.15); color: #f5b041; }
 .wb-week-guard-pill--hot { background: rgba(239, 68, 68, 0.15); color: #ff7a6e; }
 .wb-week-conflicts { list-style: none; margin: 0; padding: 0.5rem 0.65rem; border-radius: 10px; background: rgba(239, 68, 68, 0.1); color: #ff9b8f; font-size: 0.85rem; display: grid; gap: 0.2rem; }
+.wb-sched { display: grid; gap: 0.6rem; padding: 0.9rem 1rem; margin-bottom: 1.25rem; border-radius: var(--r-md); border: 1px solid var(--border); background: var(--dark); }
+.wb-sched-head { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; }
+.wb-sched-title { margin: 0; font-family: var(--font-d); font-size: 0.8125rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--orange); }
+.wb-sched-list { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.wb-sched-slot { display: inline-flex; align-items: center; gap: 0.4rem; min-height: 40px; padding: 0.3rem 0.75rem; border-radius: 999px; background: var(--surface); border: 1px solid var(--border); font-variant-numeric: tabular-nums; }
+.wb-sched-slot strong { font-size: 0.9375rem; }
+.wb-sched-slot small { font-size: 0.75rem; color: var(--muted); }
+.wb-sched-dow { font-size: 0.8125rem; color: var(--muted); text-transform: capitalize; }
+.wb-sched-del { align-self: center; display: inline-grid; place-items: center; width: 28px; height: 28px; margin-right: -0.35rem; border: none; border-radius: 50%; background: transparent; color: var(--muted); cursor: pointer; }
+.wb-sched-del:hover, .wb-sched-del:focus-visible { background: rgba(255, 90, 31, 0.15); color: var(--white); }
+.wb-sched-add { display: grid; gap: 0.6rem; padding-top: 0.6rem; border-top: 1px solid var(--border); }
+.wb-sched-days { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+.wb-sched-days .wb-chip { min-width: 3.2rem; justify-content: center; text-transform: capitalize; }
+.wb-week-slot { font-size: 0.75rem; font-weight: 600; color: var(--orange); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.wb-week-unplanned { margin: 0; padding: 0.55rem 0.75rem; border-radius: 10px; border: 1px dashed rgba(255, 90, 31, 0.45); color: var(--muted); font-size: 0.875rem; }
+.wb-class-next { margin: 0; font-size: 0.875rem; font-weight: 600; color: var(--white); }
+.wb-class-next::first-letter { text-transform: uppercase; }
+.wb-class-next.is-live { color: var(--orange); }
 .wb-cycle { display: grid; gap: 0.75rem; padding: 0.9rem; border-radius: var(--r-md); border: 1px solid rgba(255, 90, 31, 0.35); background: var(--dark); }
 .wb-cycle-head { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; }
 .wb-cycle-title { margin: 0; font-family: var(--font-d); font-size: 1.2rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.03em; }

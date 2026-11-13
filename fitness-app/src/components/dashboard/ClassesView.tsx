@@ -21,11 +21,15 @@ import { useBackToClose } from '../../hooks/useBackToClose'
 import CenterClassesList from '../center/CenterClassesList'
 import { shareLink } from '../../lib/shareLink'
 import InviteByEmail from '../invite/InviteByEmail'
+import ClassScheduleEditor from './ClassScheduleEditor'
+import { useClassSlotStore } from '../../stores/classSlotStore'
+import { summarizeSlots } from '../../lib/classSlots'
 
 const BASE_URL = window.location.origin
 
 export default function ClassesView() {
-  const { t } = useTranslation(['common', 'exercises'])
+  const { t, i18n } = useTranslation(['common', 'exercises'])
+  const { byClass: slotsByClass, fetchSlots } = useClassSlotStore()
   const { classes, members, voteSessions, voteResults, loading, fetchClasses, createClass, deleteClass, fetchMembers, removeMember, fetchVoteSessions, createVoteSession, closeVoteSession, deleteVoteSession, fetchVoteResults } = useClassStore()
   const { exercises, fetchExercises } = useExerciseStore()
 
@@ -41,6 +45,12 @@ export default function ClassesView() {
   const showDetail = !isMobile || Boolean(selectedClass)
 
   useEffect(() => { fetchClasses() }, [fetchClasses])
+  const classIds = classes.map((c) => c.id).join(',')
+  useEffect(() => { if (classIds) void fetchSlots(classIds.split(',')) }, [classIds, fetchSlots])
+  const scheduleOf = (cls: Class) => {
+    const slots = slotsByClass[cls.id] ?? []
+    return slots.length ? summarizeSlots(slots, i18n.language) : cls.schedule
+  }
 
   // Lien direct depuis l'accueil : /dashboard/classes?c=<id>.
   // La sélection se fait au rendu (pas d'effet en cascade) ; l'URL est
@@ -127,7 +137,8 @@ export default function ClassesView() {
                     padding: '0.85rem 1.25rem',
                     background: active ? 'rgba(255,77,0,0.08)' : 'transparent',
                     borderLeft: `2px solid ${active ? 'var(--orange)' : 'transparent'}`,
-                    border: 'none',
+                    borderTop: 'none',
+                    borderRight: 'none',
                     borderBottom: '1px solid var(--border)',
                     cursor: 'pointer',
                     transition: 'all 0.15s'
@@ -136,9 +147,9 @@ export default function ClassesView() {
                   <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.9375rem', fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', color: active ? 'var(--white)' : 'var(--muted)', margin: 0 }}>
                     {cls.name}
                   </p>
-                  {cls.schedule && (
+                  {scheduleOf(cls) && (
                     <p style={{ fontFamily: 'var(--font-b)', fontSize: '0.8125rem', color: 'var(--muted)', margin: '0.2rem 0 0', opacity: 0.7 }}>
-                      {cls.schedule}
+                      {scheduleOf(cls)}
                     </p>
                   )}
                 </button>
@@ -180,9 +191,6 @@ export default function ClassesView() {
                 <h1 style={{ fontFamily: 'var(--font-d)', fontSize: '1.75rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.03em', margin: 0 }}>
                   {selectedClass.name}
                 </h1>
-                {selectedClass.schedule && (
-                  <p style={{ color: 'var(--muted)', marginTop: '0.25rem', fontSize: '0.9375rem' }}>{selectedClass.schedule}</p>
-                )}
                 {selectedClass.description && (
                   <p style={{ color: 'var(--muted)', marginTop: '0.25rem', fontSize: '0.9375rem' }}>{selectedClass.description}</p>
                 )}
@@ -191,6 +199,8 @@ export default function ClassesView() {
                 {t('actions.delete')}
               </ConfirmButton>
             </div>
+
+            <ClassScheduleEditor key={`sched-${selectedClass.id}`} classId={selectedClass.id} legacyText={selectedClass.schedule} />
 
             {/* Invite section */}
             <div style={{ background: 'var(--dark)', border: '1px solid var(--border)', borderRadius: 12, padding: '1.25rem', marginBottom: '1.5rem' }}>

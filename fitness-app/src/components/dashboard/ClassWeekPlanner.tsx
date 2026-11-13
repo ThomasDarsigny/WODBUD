@@ -11,6 +11,8 @@ import { conflictsFor, primaryMuscles, weekWarnings, type DayLoad } from '../../
 import { MUSCLE_GROUP_I18N_KEYS, type MuscleGroup } from '../../types'
 import ConfirmButton from '../ui/ConfirmButton'
 import CycleSheet from './CycleSheet'
+import { useClassSlotStore } from '../../stores/classSlotStore'
+import { formatSlotTime, slotsOn, type ClassSlot } from '../../lib/classSlots'
 import Skeleton from '../ui/Skeleton'
 
 /**
@@ -18,6 +20,8 @@ import Skeleton from '../ui/Skeleton'
  * dimanche. Un « + » sur un jour programme un WOD (recherche, benchmarks
  * compris) ; « Dupliquer vers la semaine suivante » recopie la semaine.
  */
+const NO_SLOTS: ClassSlot[] = []
+
 export default function ClassWeekPlanner({ classId }: { classId: string }) {
   const { t, i18n } = useTranslation(['common', 'workouts'])
   const { savedWorkouts, fetchWorkouts } = useWorkoutStore()
@@ -31,6 +35,10 @@ export default function ClassWeekPlanner({ classId }: { classId: string }) {
   const [message, setMessage] = useState<{ kind: 'ok' | 'err'; text: string } | null>(null)
   const [busy, setBusy] = useState(false)
   const [cycleOpen, setCycleOpen] = useState(false)
+  // Horaire du cours (3.1) : les heures de chaque jour, et les jours encore vides.
+  const slots = useClassSlotStore((s) => s.byClass[classId] ?? NO_SLOTS)
+  const fetchSlots = useClassSlotStore((s) => s.fetchSlots)
+  useEffect(() => { void fetchSlots([classId]) }, [classId, fetchSlots])
 
   const days = useMemo(() => weekDays(start), [start])
   const end = days[6]
@@ -91,6 +99,8 @@ export default function ClassWeekPlanner({ classId }: { classId: string }) {
 
   const title = (p: ClassPlan) => p.title ?? p.workout_title ?? t('journal.free_session', { ns: 'workouts' })
   const fmt = (iso: string, o: Intl.DateTimeFormatOptions) => new Date(`${iso}T12:00:00`).toLocaleDateString(i18n.language, o)
+  // Jours d'horaire à venir sans WOD programmé.
+  const unplanned = days.filter((d) => d >= today && slotsOn(slots, d).length > 0 && !weekPlans.some((p) => p.scheduled_date === d))
 
   async function refresh() { setPlans(await load()) }
 
@@ -152,6 +162,10 @@ export default function ClassWeekPlanner({ classId }: { classId: string }) {
 
       {message && <p className={message.kind === 'ok' ? 'wb-review-ok' : 'wb-rec-error'} role="status">{message.text}</p>}
 
+      {plans !== null && unplanned.length > 0 && (
+        <p className="wb-week-unplanned">{t('classes.week_unplanned', { days: unplanned.map((d) => fmt(d, { weekday: 'short', day: 'numeric' })).join(', ') })}</p>
+      )}
+
       {warnings.length > 0 && (
         <section className="wb-week-guard" aria-label={t('classes.guard_title')}>
           <p className="wb-week-guard-title">{t('classes.guard_title')}</p>
@@ -179,6 +193,9 @@ export default function ClassWeekPlanner({ classId }: { classId: string }) {
                 <div className="wb-week-dayhead">
                   <span className="wb-week-dow">{fmt(day, { weekday: 'short' })}</span>
                   <span className="wb-week-date">{fmt(day, { day: 'numeric' })}</span>
+                  {slotsOn(slots, day).map((s) => (
+                    <span key={s.id} className="wb-week-slot">{formatSlotTime(s.start_time, i18n.language)}</span>
+                  ))}
                   {day === today && <span className="wb-pill wb-pill--orange">{t('classes.week_today')}</span>}
                 </div>
                 <div className="wb-week-plans">

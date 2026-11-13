@@ -16,6 +16,8 @@ import { useSessionStore } from '../../stores/sessionStore'
 import { unlockAudio } from '../../lib/gymCues'
 import TodayWod from '../home/TodayWod'
 import { MyWeekStats, useMyWeek } from '../home/MyWeek'
+import { useClassSlotStore } from '../../stores/classSlotStore'
+import { formatSlotTime, nextOccurrence, summarizeSlots, type ClassSlot } from '../../lib/classSlots'
 
 export default function AthleteHomeView() {
   const { t, i18n } = useTranslation(['common', 'exercises'])
@@ -44,6 +46,11 @@ export default function AthleteHomeView() {
     fetchMyClasses()
     fetchExercises()
   }, [fetchMyClasses, fetchExercises])
+
+  // Horaire de mes cours (3.1).
+  const fetchSlots = useClassSlotStore((s) => s.fetchSlots)
+  const myClassIds = classes.map((c) => c.id).join(',')
+  useEffect(() => { if (myClassIds) void fetchSlots(myClassIds.split(',')) }, [myClassIds, fetchSlots])
 
   useEffect(() => {
     let mounted = true
@@ -154,8 +161,18 @@ function VoteSessionCard({ session, exerciseMap, hasVoted, onVote }: {
   )
 }
 
+const NO_SLOTS: ClassSlot[] = []
+
 function ClassCard({ cls, currentUserId }: { cls: Class; currentUserId: string | null }) {
-  const { t } = useTranslation('common')
+  const { t, i18n } = useTranslation('common')
+  const slots = useClassSlotStore((s) => s.byClass[cls.id] ?? NO_SLOTS)
+  const next = nextOccurrence(slots)
+  const lang = i18n.language
+  const when = next
+    ? next.ongoing
+      ? t('classes.sched_ongoing', { time: formatSlotTime(next.slot.start_time, lang) })
+      : t('classes.sched_next', { when: `${new Date(`${next.date}T12:00:00`).toLocaleDateString(lang, { weekday: 'long', day: 'numeric', month: 'long' })} · ${formatSlotTime(next.slot.start_time, lang)}` })
+    : null
   // Replié par défaut : le classement se charge seulement si on le demande,
   // ce qui évite autant de requêtes que de cours à l'ouverture de l'écran.
   const [showBoard, setShowBoard] = useState(false)
@@ -166,9 +183,10 @@ function ClassCard({ cls, currentUserId }: { cls: Class; currentUserId: string |
         <span className="wb-row-icon"><NavIcon name="classes" size={20} /></span>
         <div>
           <strong>{cls.name}</strong>
-          {cls.schedule && <span>{cls.schedule}</span>}
+          {slots.length ? <span>{summarizeSlots(slots, lang)}</span> : cls.schedule && <span>{cls.schedule}</span>}
         </div>
       </div>
+      {when && <p className={`wb-class-next${next?.ongoing ? ' is-live' : ''}`}>{when}</p>}
       {cls.description && <p className="wb-cardio-hint">{cls.description}</p>}
       <button type="button" className="wb-wod-toggle" onClick={() => setShowBoard((v) => !v)} aria-expanded={showBoard}>
         <span aria-hidden="true">{showBoard ? '▾' : '▸'}</span> {showBoard ? t('leaderboard.hide') : t('leaderboard.title')}

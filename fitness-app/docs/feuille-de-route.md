@@ -130,8 +130,16 @@ Rapport : audit produit publié le 12 novembre. Branche de travail : `sprint`. U
 - [x] 2.1 Créateur en un écran : liste d'exercices d'abord, filtres repliés, « + » direct sur chaque ligne, tiroir « N exercices dans le WOD » sur téléphone, `h1` et champs étiquetés ; ligne et filtres extraits en composants.
 - [x] 2.2 Calendrier par cours : semaine du lundi au dimanche, « + » sur un jour (recherche, benchmarks d'abord, note), tableau blanc et suppression par séance, « Dupliquer vers la semaine suivante » (sans doublons, sans notification) ; la liste reste disponible.
 - [x] 2.3 Cycles : un WOD de base répété N semaines (2 à 12) le même jour, charge +5 % haut / +10 % bas par semaine (arrondi aux disques) ou identique, aperçu semaine par semaine avant de créer ; copies du WOD et séances de cours créées, une seule notification. Modèles réutilisables : la bibliothèque et les benchmarks en tiennent lieu pour l'instant.
-- [ ] 2.4 « Proposer un WOD » par l'IA dans le créateur (sortie structurée, exercices de la bibliothèque seulement).
+- [ ] 2.4 « Proposer un WOD » par l'IA dans le créateur (sortie structurée, exercices de la bibliothèque seulement). Reportée : attend la clé `ANTHROPIC_API_KEY` (voir « Toujours en suspens »).
 - [x] 2.5 Garde-fou de volume hebdomadaire par muscle : dans le calendrier, muscle principal deux jours de suite ou 3 jours et plus dans la semaine ; avertissement (non bloquant) au moment de programmer un WOD ; cardio exclu ; règles testées.
+
+### Phase 3 · Faire tourner la salle
+- [x] 3.1 Horaire récurrent : créneaux par cours (jour, heure, durée ; au plus 28) réglés par le coach ou les responsables du centre (migration 068) ; heures affichées dans le calendrier de la semaine, jours de cours sans WOD signalés, cycles qui commencent au prochain jour de cours ; « Prochain cours » sur l'accueil athlète. Le texte libre reste affiché tant qu'aucun créneau n'existe.
+- [ ] 3.2 Présences par QR.
+- [ ] 3.3 Mode TV.
+- [ ] 3.4 Menu coach ramené à cinq entrées.
+- [ ] 3.5 Accueil coach réorganisé.
+- [ ] 3.6 Fusion cours / communautés en un seul concept de groupe.
 
 ## À définir avec le client
 - [ ] **Facturation** : qui paie et comment (par membre, par entraîneur, prix fixe).
@@ -149,5 +157,6 @@ Rapport : audit produit publié le 12 novembre. Branche de travail : `sprint`. U
 - [ ] Suivi des erreurs et statistiques d'usage.
 - [ ] Essai d'une invitation avec deux vrais comptes (membre et entraîneur).
 - [ ] Essai de la lecture de feuilles réelles avec Claude, une fois la clé ajoutée.
+- [ ] Unité 2.4 « Proposer un WOD » par l'IA dans le créateur, une fois la clé `ANTHROPIC_API_KEY` posée : sortie structurée, exercices de la bibliothèque seulement, garde-fou de volume appliqué.
 - [ ] Retirer les données de test en production (centre « Box Test WODBUD », ses exercices et mentions).
 - [ ] Retirer les exercices parasites de la base commune (`test`, `test 1`, `test 2` ×2, `simple test`, `avant-bras`, `biceps`, `epaules`).
