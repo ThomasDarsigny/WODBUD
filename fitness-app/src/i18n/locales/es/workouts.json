@@ -61,7 +61,10 @@
     "name_label": "Nombre de la sesión",
     "notes_label": "Notas para el grupo",
     "pdf_export": "Exportar PDF",
-    "pdf_loading": "PDF…"
+    "pdf_loading": "PDF…",
+    "slot_details": "Detalles de {{name}}",
+    "slot_hide": "Ocultar detalles de {{name}}",
+    "slot_remove": "Quitar {{name}} del WOD"
   },
   "reminders": {
     "theme_inactive": "No has hecho una sesión de {{theme}} desde hace {{days}} días"

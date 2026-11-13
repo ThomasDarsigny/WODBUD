@@ -43,8 +43,10 @@ export default function PickerExerciseRow({ exercise, count, missing, onOpen, on
       <button
         type="button"
         className="wb-pick-add"
-        onClick={onAdd}
-        disabled={adding}
+        // aria-disabled plutôt que disabled : un bouton désactivé perd le focus,
+        // et le clavier perdrait sa place dans la liste (l'ajout ignore un 2e clic).
+        onClick={() => { if (!adding) onAdd() }}
+        aria-disabled={adding || undefined}
         aria-label={t('builder.add_named', { name: exercise.name })}
       >
         +

@@ -8,7 +8,8 @@ import { METHOD_I18N_KEYS, MUSCLE_GROUP_I18N_KEYS, CATEGORY_LABELS, MUSCLE_GROUP
 import ExerciseDetailModal from '../exercises/ExerciseDetailModal'
 import Mannequin2D from '../mannequin/Mannequin2D'
 import { computeMuscleLoads } from '../../lib/muscleLoad'
-import { label as smallLabelStyle, fieldCompact as miniInputStyle, field as selectStyle, textarea as textareaStyle } from '../../styles/ui'
+import Field from '../ui/Field'
+import AlertDialog from '../ui/AlertDialog'
 import { pdfFileName } from '../pdf/pdfTokens'
 import { useIsMobile } from '../../hooks/useMediaQuery'
 import { useAvailableEquipment } from '../../hooks/useAvailableEquipment'
@@ -277,8 +278,6 @@ export default function WorkoutBuilderView() {
           : 'modere'
       : null
 
-  const riskColor = riskLevel === 'eleve' ? '#ef4444' : riskLevel === 'moyen' ? '#f59e0b' : '#eab308'
-
   const riskText =
     riskLevel === 'eleve'
       ? t('alerts.risk_high', { ns: 'workouts' })
@@ -289,15 +288,7 @@ export default function WorkoutBuilderView() {
           : ''
 
   return (
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: isMobile ? '1fr' : '1fr 380px',
-        gridTemplateRows: isMobile ? 'auto minmax(0, 1fr)' : undefined,
-        height: isMobile ? 'calc(100dvh - var(--mobile-top-h) - var(--tabbar-h) - var(--safe-bottom) - var(--section-tabs-h, 0px))' : 'calc(100vh - var(--section-tabs-h, 0px))',
-        overflow: 'hidden'
-      }}
-    >
+    <div className={`wb-builder${isMobile ? ' is-mobile' : ''}`}>
       {isMobile && (
         <div className="wb-segmented" role="tablist" aria-label={t('builder.panes_label', { ns: 'workouts' })}>
           <button type="button" role="tab" aria-selected={pane === 'library'} className={pane === 'library' ? 'is-on' : undefined} onClick={() => setPane('library')}>
@@ -309,22 +300,11 @@ export default function WorkoutBuilderView() {
           </button>
         </div>
       )}
-      <div
-        style={{
-          borderRight: isMobile ? 'none' : '1px solid var(--border)',
-          display: isMobile && pane !== 'library' ? 'none' : 'flex',
-          flexDirection: 'column',
-          overflow: isMobile ? 'auto' : 'hidden'
-        }}
-      >
-        <div
-          style={{
-            padding: isMobile ? '1rem var(--page-pad)' : '1.75rem 2rem',
-            borderBottom: '1px solid var(--border)',
-            flexShrink: 0
-          }}
-        >
-          <p className="wb-ph-tag" style={{ marginBottom: '0.35rem' }}>{t('builder.library', { ns: 'workouts' })}</p>
+
+      {/* Bibliothèque */}
+      <div className={`wb-builder-lib${isMobile && pane !== 'library' ? ' is-hidden' : ''}`}>
+        <div className="wb-builder-lib-head">
+          <p className="wb-ph-tag">{t('builder.library', { ns: 'workouts' })}</p>
           <h1 className="wb-builder-title">{t('builder.choose_exercise', { ns: 'workouts' })}</h1>
           <div className="wb-search">
             <input
@@ -352,21 +332,9 @@ export default function WorkoutBuilderView() {
           />
         </div>
 
-        <div style={{ flex: isMobile ? 'none' : 1, overflowY: isMobile ? 'visible' : 'auto', padding: '0.75rem' }}>
+        <div className="wb-builder-lib-list">
           {filteredExercises.length === 0 ? (
-            <div
-              style={{
-                textAlign: 'center',
-                padding: '3rem',
-                color: 'var(--muted)',
-                fontFamily: 'var(--font-d)',
-                letterSpacing: '0.1em',
-                textTransform: 'uppercase',
-                fontSize: '0.8125rem'
-              }}
-            >
-              {t('empty', { ns: 'workouts' })}
-            </div>
+            <p className="wb-builder-empty">{t('empty', { ns: 'workouts' })}</p>
           ) : (
             <div className="wb-pick-list">
               {sortedExercises.map((exercise) => (
@@ -392,141 +360,61 @@ export default function WorkoutBuilderView() {
         <p className="wb-builder-toast" role="status" aria-live="polite">{toast}</p>
       </div>
 
-      {/* Une seule zone qui défile : avec le mannequin et les alertes, une
-          liste en flex: 1 dans une colonne de 100vh tombait à zéro hauteur. */}
-      <div
-        style={{
-          display: isMobile && pane !== 'workout' ? 'none' : 'flex',
-          flexDirection: 'column',
-          overflowY: 'auto',
-          overflowX: 'hidden',
-          background: 'var(--dark)'
-        }}
-      >
-        <div
-          style={{
-            padding: '1.75rem 1.5rem',
-            borderBottom: '1px solid var(--border)',
-            flexShrink: 0
-          }}
-        >
-          <p
-            style={{
-              fontFamily: 'var(--font-d)',
-              fontSize: '0.6875rem',
-              letterSpacing: '0.28em',
-              textTransform: 'uppercase',
-              color: 'var(--orange)',
-              marginBottom: '0.35rem'
-            }}
-          >
-            {t('builder.workout_section', { ns: 'workouts' })}
-          </p>
+      {/* Le WOD. Une seule zone qui défile : avec le mannequin et les alertes,
+          une liste en flex: 1 dans une colonne de 100vh tombait à zéro hauteur. */}
+      <div className={`wb-builder-wod${isMobile && pane !== 'workout' ? ' is-hidden' : ''}`}>
+        <div className="wb-builder-wod-head">
+          <p className="wb-builder-eyebrow">{t('builder.workout_section', { ns: 'workouts' })}</p>
           <input
             ref={nameRef}
             id="builder-name"
+            className={`wb-builder-name${missing && !name.trim() ? ' is-missing' : ''}`}
             aria-label={t('builder.name_label', { ns: 'workouts' })}
             value={name}
             onChange={(e) => { setName(e.target.value); setMissing(null) }}
             placeholder={t('builder.name_placeholder', { ns: 'workouts' })}
             aria-invalid={missing !== null && !name.trim()}
-            style={{
-              width: '100%',
-              background: 'transparent',
-              border: 'none',
-              borderBottom: `1px solid ${missing && !name.trim() ? 'var(--orange)' : 'var(--border)'}`,
-              color: 'var(--white)',
-              padding: '0.3rem 0',
-              fontFamily: 'var(--font-d)',
-              fontSize: '1.75rem',
-              fontWeight: 900,
-              textTransform: 'uppercase',
-              letterSpacing: '0.04em',
-              outline: 'none',
-              marginBottom: 0
-            }}
           />
-
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
-            <div>
-              <label htmlFor="builder-method" style={smallLabelStyle}>{t('fields.method', { ns: 'workouts' })}</label>
-              <select
-                id="builder-method"
-                value={method}
-                onChange={(e) => setMethod(e.target.value as WorkoutMethod)}
-                style={selectStyle}
-              >
+          <div className="wb-builder-meta">
+            <Field label={t('fields.method', { ns: 'workouts' })}>
+              <select id="builder-method" className="wb-input" value={method} onChange={(e) => setMethod(e.target.value as WorkoutMethod)}>
                 {Object.entries(METHOD_I18N_KEYS).map(([val, key]) => (
-                  <option key={val} value={val}>
-                    {t(key, { ns: 'common' })}
-                  </option>
+                  <option key={val} value={val}>{t(key, { ns: 'common' })}</option>
                 ))}
               </select>
-            </div>
-            <div>
-              <label htmlFor="builder-duration" style={smallLabelStyle}>{t('fields.duration', { ns: 'workouts' })} ({t('fields.duration_unit_min', { ns: 'workouts' })})</label>
+            </Field>
+            <Field label={`${t('fields.duration', { ns: 'workouts' })} (${t('fields.duration_unit_min', { ns: 'workouts' })})`}>
               <input
                 id="builder-duration"
-                type='number'
+                className="wb-input"
+                type="number"
                 value={durationMinutes ?? ''}
-                onChange={(e) =>
-                  setDuration(e.target.value ? Number.parseInt(e.target.value, 10) : undefined)
-                }
-                placeholder='20'
+                onChange={(e) => setDuration(e.target.value ? Number.parseInt(e.target.value, 10) : undefined)}
+                placeholder="20"
                 min={1}
-                style={{ ...selectStyle, fontFamily: 'var(--font-b)' }}
               />
-            </div>
+            </Field>
           </div>
-
         </div>
 
-        <div
-          style={{
-            padding: '1rem 1.5rem',
-            borderBottom: '1px solid var(--border)',
-            flexShrink: 0
-          }}
-        >
-          <p
-            style={{
-              fontFamily: 'var(--font-d)',
-              fontSize: '0.6875rem',
-              letterSpacing: '0.14em',
-              textTransform: 'uppercase',
-              color: 'var(--muted)',
-              margin: '0 0 0.6rem'
-            }}
-          >
-            {t('mannequin.title', { ns: 'common' })}
-          </p>
+        <section className="wb-builder-sec" aria-labelledby="builder-zones">
+          <p id="builder-zones" className="wb-builder-sec-title">{t('mannequin.title', { ns: 'common' })}</p>
           {workoutExercises.length === 0 ? (
-            <p style={{ fontSize: '0.8125rem', color: 'var(--muted)', margin: 0 }}>
-              {t('mannequin.no_data', { ns: 'common' })}
-            </p>
+            <p className="wb-builder-hint">{t('mannequin.no_data', { ns: 'common' })}</p>
           ) : (
             <Mannequin2D loads={muscleLoads} height={300} bothViews />
           )}
-        </div>
+        </section>
 
         {muscleAlerts.length > 0 && (
-          <div
-            style={{
-              padding: '0.75rem 1.5rem',
-              borderBottom: '1px solid var(--border)',
-              flexShrink: 0,
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '0.4rem'
-            }}
-          >
+          <div className="wb-builder-alerts">
             {muscleAlerts.map((alert) => (
               <MuscleAlertBadge key={alert.muscle} alert={alert} />
             ))}
           </div>
         )}
 
-        <div style={{ flexShrink: 0, padding: '0.75rem 1rem' }}>
+        <div className="wb-builder-exercises">
           {workoutExercises.length === 0 ? (
             <EmptyState
               compact
@@ -535,7 +423,7 @@ export default function WorkoutBuilderView() {
               hint={t('empty_hint', { ns: 'workouts' })}
             />
           ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+            <div className="wb-builder-slots">
               {workoutExercises.map((we) => (
                 <WorkoutExerciseSlot
                   key={we.id}
@@ -550,113 +438,56 @@ export default function WorkoutBuilderView() {
           )}
         </div>
 
-        <div style={{ padding: '0.75rem 1rem', borderTop: '1px solid var(--border)', flexShrink: 0 }}>
+        <div className="wb-builder-notes">
           <textarea
             id="builder-notes"
+            className="wb-input wb-builder-notes-input"
             aria-label={t('builder.notes_label', { ns: 'workouts' })}
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             placeholder={t('builder.notes_placeholder', { ns: 'workouts' })}
             rows={2}
-            style={{ ...textareaStyle, minHeight: 72, resize: 'none' }}
           />
         </div>
 
-        <div style={{ flexShrink: 0, marginTop: 'auto', position: 'sticky', bottom: 0, background: 'var(--dark)', zIndex: 1 }}>
-        {((missing && (workoutExercises.length === 0 || !name.trim())) || error) && (
-          <div
-            role='alert'
-            style={{
-              padding: '0.5rem 1rem',
-              background: 'rgba(255,77,0,0.1)',
-              borderTop: '1px solid rgba(255,77,0,0.2)',
-              color: 'var(--orange)',
-              fontSize: '0.8125rem',
-              fontFamily: 'var(--font-b)'
-            }}
-          >
-            {missing && (workoutExercises.length === 0 || !name.trim()) ? missing : error}
-          </div>
-        )}
-        {draftRestoredAt && (
-          <div className="wb-draft" role="status">
-            <span aria-hidden="true">↺</span>
-            <span>{t('builder.draft_restored', { ns: 'workouts', when: new Date(draftRestoredAt).toLocaleString(i18n.language, { weekday: 'short', hour: '2-digit', minute: '2-digit' }) })}</span>
-            <button type="button" onClick={resetDraft}>{t('builder.draft_discard', { ns: 'workouts' })}</button>
-          </div>
-        )}
-        <div
-          style={{
-            padding: '0.75rem 1rem',
-            borderTop: '1px solid var(--border)',
-            display: 'flex',
-            gap: '0.5rem'
-          }}
-        >
-          <button
-            onClick={resetDraft}
-            style={{
-              fontFamily: 'var(--font-d)',
-              fontWeight: 700,
-              fontSize: '0.8125rem',
-              letterSpacing: '0.1em',
-              textTransform: 'uppercase',
-              padding: '0.6rem 1rem',
-              background: 'transparent',
-              border: '1px solid var(--border)', borderRadius: 12,
-              color: 'var(--muted)',
-              cursor: 'pointer'
-            }}
-          >
-            {t('builder.reset', { ns: 'workouts' })}
-          </button>
-          <button
-            onClick={handleExportPdf}
-            disabled={loadingPdf || workoutExercises.length === 0 || !name.trim()}
-            style={{
-              fontFamily: 'var(--font-d)',
-              fontWeight: 700,
-              fontSize: '0.8rem',
-              letterSpacing: '0.1em',
-              textTransform: 'uppercase',
-              padding: '0.6rem 1rem',
-              background: 'transparent',
-              border: '1px solid var(--border)', borderRadius: 12,
-              color: loadingPdf || workoutExercises.length === 0 || !name.trim() ? 'var(--muted)' : 'var(--orange)',
-              cursor: loadingPdf ? 'wait' : 'pointer'
-            }}
-          >
-            {loadingPdf ? t('builder.pdf_loading', { ns: 'workouts' }) : t('builder.pdf_export', { ns: 'workouts' })}
-          </button>
-          <button
-            onClick={handleSave}
-            disabled={loadingSave}
-            style={{
-              flex: 1,
-              fontFamily: 'var(--font-d)',
-              fontWeight: 700,
-              fontSize: '0.9375rem',
-              letterSpacing: '0.1em',
-              textTransform: 'uppercase',
-              padding: '0.65rem 1rem',
-              background: savedSuccess
-                ? '#22c55e'
+        <div className="wb-builder-foot">
+          {((missing && (workoutExercises.length === 0 || !name.trim())) || error) && (
+            <div role="alert" className="wb-builder-error">
+              {missing && (workoutExercises.length === 0 || !name.trim()) ? missing : error}
+            </div>
+          )}
+          {draftRestoredAt && (
+            <div className="wb-draft" role="status">
+              <span aria-hidden="true">↺</span>
+              <span>{t('builder.draft_restored', { ns: 'workouts', when: new Date(draftRestoredAt).toLocaleString(i18n.language, { weekday: 'short', hour: '2-digit', minute: '2-digit' }) })}</span>
+              <button type="button" onClick={resetDraft}>{t('builder.draft_discard', { ns: 'workouts' })}</button>
+            </div>
+          )}
+          <div className="wb-builder-actions">
+            <button type="button" onClick={resetDraft} className="wb-btn wb-btn--ghost wb-btn--sm wb-builder-reset">
+              {t('builder.reset', { ns: 'workouts' })}
+            </button>
+            <button
+              type="button"
+              onClick={handleExportPdf}
+              disabled={loadingPdf || workoutExercises.length === 0 || !name.trim()}
+              className="wb-btn wb-btn--ghost wb-btn--sm wb-builder-pdf"
+            >
+              {loadingPdf ? t('builder.pdf_loading', { ns: 'workouts' }) : t('builder.pdf_export', { ns: 'workouts' })}
+            </button>
+            <button
+              type="button"
+              onClick={handleSave}
+              disabled={loadingSave}
+              className={`wb-btn wb-btn--primary wb-builder-save${savedSuccess ? ' is-saved' : ''}`}
+            >
+              {savedSuccess
+                ? t('builder.saved', { ns: 'workouts' })
                 : loadingSave
-                  ? 'var(--border)'
-                  : 'var(--orange)',
-              color: 'var(--black)',
-              border: 'none',
-              cursor: loadingSave ? 'wait' : 'pointer',
-              transition: 'background 0.2s'
-            }}
-          >
-            {savedSuccess
-              ? t('builder.saved', { ns: 'workouts' })
-              : loadingSave
-                ? t('builder.saving', { ns: 'workouts' })
-                : t('builder.save', { ns: 'workouts' })}
-          </button>
-        </div>
+                  ? t('builder.saving', { ns: 'workouts' })
+                  : t('builder.save', { ns: 'workouts' })}
+            </button>
+          </div>
         </div>
       </div>
 
@@ -671,264 +502,43 @@ export default function WorkoutBuilderView() {
       )}
 
       {cardioOverridePrompt && (
-        <div
-          style={{
-            position: 'fixed',
-            inset: 0,
-            zIndex: 255,
-            background: 'rgba(0,0,0,0.82)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '1rem'
-          }}
-          onClick={(e) => {
-            if (e.target === e.currentTarget) setCardioOverridePrompt(null)
-          }}
-        >
-          <div
-            style={{
-              width: '100%',
-              maxWidth: 560,
-              background: 'var(--dark)',
-              border: '1px solid rgba(255,77,0,0.45)', borderRadius: 12,
-              boxShadow: '0 18px 60px rgba(0,0,0,0.5)'
-            }}
-          >
-            <div
-              style={{
-                padding: '1rem 1.25rem',
-                borderBottom: '1px solid rgba(255,77,0,0.35)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between'
-              }}
-            >
-              <p
-                style={{
-                  fontFamily: 'var(--font-d)',
-                  fontSize: '0.6875rem',
-                  letterSpacing: '0.14em',
-                  textTransform: 'uppercase',
-                  color: 'var(--orange)',
-                  fontWeight: 800
-                }}
-              >
-                {t('alerts.cardio_title', { ns: 'workouts' })}
-              </p>
-              <button
-                onClick={() => setCardioOverridePrompt(null)}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  color: 'var(--muted)',
-                  cursor: 'pointer',
-                  fontSize: '1rem'
-                }}
-              >
-                ✕
-              </button>
-            </div>
-
-            <div style={{ padding: '1rem 1.25rem 1.1rem' }}>
-              <p
-                style={{
-                  color: 'var(--muted)',
-                  lineHeight: 1.6,
-                  fontFamily: 'var(--font-b)',
-                  fontSize: '0.9375rem'
-                }}
-              >
-                {cardioOverridePrompt.message}
-              </p>
-            </div>
-
-            <div
-              style={{
-                padding: '0.9rem 1.25rem 1.1rem',
-                borderTop: '1px solid var(--border)',
-                display: 'flex',
-                gap: '0.6rem',
-                justifyContent: 'flex-end'
-              }}
-            >
-              <button
-                onClick={() => setCardioOverridePrompt(null)}
-                style={{
-                  fontFamily: 'var(--font-d)',
-                  fontWeight: 700,
-                  fontSize: '0.6875rem',
-                  letterSpacing: '0.1em',
-                  textTransform: 'uppercase',
-                  padding: '0.55rem 0.9rem',
-                  background: 'transparent',
-                  border: '1px solid var(--border)', borderRadius: 12,
-                  color: 'var(--muted)',
-                  cursor: 'pointer'
-                }}
-              >
+        <AlertDialog
+          title={t('alerts.cardio_title', { ns: 'workouts' })}
+          onClose={() => setCardioOverridePrompt(null)}
+          actions={(
+            <>
+              <button type="button" autoFocus onClick={() => setCardioOverridePrompt(null)} className="wb-btn wb-btn--ghost wb-btn--sm">
                 {t('builder.override_cancel', { ns: 'workouts' })}
               </button>
-              <button
-                onClick={confirmCardioOverrideAdd}
-                style={{
-                  fontFamily: 'var(--font-d)',
-                  fontWeight: 800,
-                  fontSize: '0.6875rem',
-                  letterSpacing: '0.1em',
-                  textTransform: 'uppercase',
-                  padding: '0.55rem 0.9rem',
-                  background: 'var(--orange)',
-                  border: '1px solid rgba(255,77,0,0.45)', borderRadius: 12,
-                  color: 'var(--black)',
-                  cursor: 'pointer'
-                }}
-              >
+              <button type="button" onClick={confirmCardioOverrideAdd} className="wb-btn wb-btn--primary wb-btn--sm">
                 {t('builder.override_confirm', { ns: 'workouts' })}
               </button>
-            </div>
-          </div>
-        </div>
+            </>
+          )}
+        >
+          <p>{cardioOverridePrompt.message}</p>
+        </AlertDialog>
       )}
 
       {restOverridePrompt && (
-        <div
-          style={{
-            position: 'fixed',
-            inset: 0,
-            zIndex: 250,
-            background: 'rgba(0,0,0,0.82)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '1rem'
-          }}
-          onClick={(e) => {
-            if (e.target === e.currentTarget) setRestOverridePrompt(null)
-          }}
-        >
-          <div
-            style={{
-              width: '100%',
-              maxWidth: 560,
-              background: 'var(--dark)',
-              border: '1px solid rgba(245,158,11,0.45)', borderRadius: 12,
-              boxShadow: '0 18px 60px rgba(0,0,0,0.5)'
-            }}
-          >
-            <div
-              style={{
-                padding: '1rem 1.25rem',
-                borderBottom: '1px solid rgba(245,158,11,0.35)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between'
-              }}
-            >
-              <p
-                style={{
-                  fontFamily: 'var(--font-d)',
-                  fontSize: '0.6875rem',
-                  letterSpacing: '0.14em',
-                  textTransform: 'uppercase',
-                  color: '#f59e0b',
-                  fontWeight: 800
-                }}
-              >
-                {t('alerts.rest48_title', { ns: 'workouts' })}
-              </p>
-              <button
-                onClick={() => setRestOverridePrompt(null)}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  color: 'var(--muted)',
-                  cursor: 'pointer',
-                  fontSize: '1rem'
-                }}
-              >
-                ✕
-              </button>
-            </div>
-
-            <div style={{ padding: '1rem 1.25rem 1.1rem' }}>
-              <p
-                style={{
-                  color: 'var(--muted)',
-                  lineHeight: 1.6,
-                  fontFamily: 'var(--font-b)',
-                  fontSize: '0.9375rem'
-                }}
-              >
-                {restOverridePrompt.message}
-              </p>
-
-              {riskLevel && (
-                <div
-                  style={{
-                    marginTop: '0.85rem',
-                    padding: '0.55rem 0.7rem',
-                    border: `1px solid ${riskColor}55`, borderRadius: 12,
-                    background: `${riskColor}22`,
-                    color: riskColor,
-                    fontFamily: 'var(--font-d)',
-                    fontSize: '0.6875rem',
-                    fontWeight: 800,
-                    letterSpacing: '0.1em',
-                    textTransform: 'uppercase'
-                  }}
-                >
-                  {riskText}
-                </div>
-              )}
-            </div>
-
-            <div
-              style={{
-                padding: '0.9rem 1.25rem 1.1rem',
-                borderTop: '1px solid var(--border)',
-                display: 'flex',
-                gap: '0.6rem',
-                justifyContent: 'flex-end'
-              }}
-            >
-              <button
-                onClick={() => setRestOverridePrompt(null)}
-                style={{
-                  fontFamily: 'var(--font-d)',
-                  fontWeight: 700,
-                  fontSize: '0.6875rem',
-                  letterSpacing: '0.1em',
-                  textTransform: 'uppercase',
-                  padding: '0.55rem 0.9rem',
-                  background: 'transparent',
-                  border: '1px solid var(--border)', borderRadius: 12,
-                  color: 'var(--muted)',
-                  cursor: 'pointer'
-                }}
-              >
+        <AlertDialog
+          title={t('alerts.rest48_title', { ns: 'workouts' })}
+          tone="amber"
+          onClose={() => setRestOverridePrompt(null)}
+          actions={(
+            <>
+              <button type="button" autoFocus onClick={() => setRestOverridePrompt(null)} className="wb-btn wb-btn--ghost wb-btn--sm">
                 {t('builder.override_cancel', { ns: 'workouts' })}
               </button>
-              <button
-                onClick={confirmOverrideAdd}
-                style={{
-                  fontFamily: 'var(--font-d)',
-                  fontWeight: 800,
-                  fontSize: '0.6875rem',
-                  letterSpacing: '0.1em',
-                  textTransform: 'uppercase',
-                  padding: '0.55rem 0.9rem',
-                  background: '#f59e0b',
-                  border: '1px solid rgba(245,158,11,0.45)', borderRadius: 12,
-                  color: 'var(--black)',
-                  cursor: 'pointer'
-                }}
-              >
+              <button type="button" onClick={confirmOverrideAdd} className="wb-btn wb-btn--sm wb-btn--amber">
                 {t('builder.override_confirm', { ns: 'workouts' })}
               </button>
-            </div>
-          </div>
-        </div>
+            </>
+          )}
+        >
+          <p>{restOverridePrompt.message}</p>
+          {riskLevel && <p className={`wb-alert-risk wb-alert-risk--${riskLevel}`}>{riskText}</p>}
+        </AlertDialog>
       )}
     </div>
   )
@@ -951,166 +561,73 @@ function WorkoutExerciseSlot({
   const [expanded, setExpanded] = useState(false)
   const [panel, setPanel] = useState<'easy' | 'adapt' | null>(null)
 
-  const borderColor =
-    alert?.level === 'danger'
-      ? '#ff4444'
-      : alert?.level === 'warning'
-        ? '#f59e0b'
-        : 'var(--border)'
+  const tone = alert?.level === 'danger' ? ' is-danger' : alert?.level === 'warning' ? ' is-warning' : ''
 
   return (
-    <div style={{ background: 'var(--black)', border: `1px solid ${borderColor}`, borderRadius: 12, transition: 'border-color 0.2s' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.6rem 0.75rem' }}>
-        <span
-          style={{
-            fontFamily: 'var(--font-d)',
-            fontSize: '0.9375rem',
-            fontWeight: 700,
-            color: 'var(--orange)',
-            minWidth: '1.5rem',
-            textAlign: 'center'
-          }}
-        >
-          {we.position}
-        </span>
+    <div className={`wb-slot${tone}`}>
+      <div className="wb-slot-row">
+        <span className="wb-slot-pos">{we.position}</span>
 
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <p
-            style={{
-              fontFamily: 'var(--font-d)',
-              fontSize: '0.9375rem',
-              fontWeight: 700,
-              textTransform: 'uppercase',
-              letterSpacing: '0.04em',
-              color: 'var(--white)',
-              whiteSpace: 'nowrap',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis'
-            }}
-          >
-            {we.exercise.name}
-          </p>
-          <p
-            style={{
-              fontFamily: 'var(--font-d)',
-              fontSize: '0.6875rem',
-              letterSpacing: '0.1em',
-              textTransform: 'uppercase',
-              color: alert ? (alert.level === 'danger' ? '#ff4444' : '#f59e0b') : 'var(--muted)'
-            }}
-          >
+        <div className="wb-slot-main">
+          <p className="wb-slot-name">{we.exercise.name}</p>
+          <p className="wb-slot-sub">
             {t(MUSCLE_GROUP_I18N_KEYS[we.exercise.primary_muscle], { ns: 'common' })}
-            {alert &&
-              ` · ${alert.level === 'danger' ? t('alerts.risk_high') : t('alerts.risk_medium')}`}
+            {alert && ` · ${alert.level === 'danger' ? t('alerts.risk_high') : t('alerts.risk_medium')}`}
           </p>
         </div>
 
         <input
-          type='text'
+          type="text"
+          className="wb-slot-num wb-slot-num--reps"
           value={we.reps ?? ''}
           onChange={(e) => {
             const parsed = Number.parseInt(e.target.value, 10)
             onUpdate({ reps: Number.isNaN(parsed) ? undefined : parsed })
           }}
           placeholder={t('fields.reps')}
-          style={{
-            width: 52,
-            background: 'var(--surface)',
-            border: '1px solid var(--border)', borderRadius: 12,
-            color: 'var(--white)',
-            padding: '0.25rem 0.4rem',
-            fontFamily: 'var(--font-b)',
-            fontSize: '0.8125rem',
-            textAlign: 'center',
-            outline: 'none'
-          }}
+          aria-label={`${t('fields.reps')} — ${we.exercise.name}`}
         />
-
-        <span style={{ color: 'var(--muted)', fontSize: '0.8125rem' }}>×</span>
-
+        <span className="wb-slot-x" aria-hidden="true">×</span>
         <input
-          type='number'
+          type="number"
+          className="wb-slot-num"
           value={we.sets ?? ''}
-          onChange={(e) =>
-            onUpdate({ sets: Number.parseInt(e.target.value, 10) || undefined })
-          }
+          onChange={(e) => onUpdate({ sets: Number.parseInt(e.target.value, 10) || undefined })}
           placeholder={t('fields.sets')}
+          aria-label={`${t('fields.sets')} — ${we.exercise.name}`}
           min={1}
-          style={{
-            width: 44,
-            background: 'var(--surface)',
-            border: '1px solid var(--border)', borderRadius: 12,
-            color: 'var(--white)',
-            padding: '0.25rem 0.4rem',
-            fontFamily: 'var(--font-b)',
-            fontSize: '0.8125rem',
-            textAlign: 'center',
-            outline: 'none'
-          }}
         />
 
         <button
+          type="button"
+          className="wb-slot-icon"
           onClick={() => setExpanded(!expanded)}
-          style={{
-            background: 'none',
-            border: 'none',
-            color: 'var(--muted)',
-            cursor: 'pointer',
-            fontSize: '0.8125rem',
-            padding: '0.2rem 0.4rem'
-          }}
+          aria-expanded={expanded}
+          aria-label={t(expanded ? 'builder.slot_hide' : 'builder.slot_details', { name: we.exercise.name })}
         >
           {expanded ? '▲' : '▼'}
         </button>
-        <button
-          onClick={onRemove}
-          style={{
-            background: 'none',
-            border: 'none',
-            color: 'var(--muted)',
-            cursor: 'pointer',
-            fontSize: '0.8125rem',
-            padding: '0.2rem 0.4rem'
-          }}
-        >
+        <button type="button" className="wb-slot-icon" onClick={onRemove} aria-label={t('builder.slot_remove', { name: we.exercise.name })}>
           ✕
         </button>
       </div>
 
       {expanded && (
-        <div
-          style={{
-            padding: '0.5rem 0.75rem 0.75rem',
-            borderTop: '1px solid var(--border)',
-            display: 'grid',
-            gridTemplateColumns: '1fr',
-            gap: '0.5rem'
-          }}
-        >
-          <div>
-            <label style={smallLabelStyle}>{t('fields.weight_intensity')}</label>
+        <div className="wb-slot-details">
+          <Field label={t('fields.weight_intensity')}>
+            <input type="text" className="wb-input wb-input--compact" value={we.weight ?? ''} onChange={(e) => onUpdate({ weight: e.target.value })} placeholder="60kg / BW / 70%1RM" />
+          </Field>
+          <Field label={`${t('fields.rest')} (s)`}>
             <input
-              type='text'
-              value={we.weight ?? ''}
-              onChange={(e) => onUpdate({ weight: e.target.value })}
-              placeholder='60kg / BW / 70%1RM'
-              style={miniInputStyle}
-            />
-          </div>
-          <div>
-            <label style={smallLabelStyle}>{t('fields.rest')} (s)</label>
-            <input
-              type='number'
+              type="number"
+              className="wb-input wb-input--compact"
               value={we.rest_seconds ?? ''}
-              onChange={(e) =>
-                onUpdate({ rest_seconds: Number.parseInt(e.target.value, 10) || undefined })
-              }
-              placeholder='60'
+              onChange={(e) => onUpdate({ rest_seconds: Number.parseInt(e.target.value, 10) || undefined })}
+              placeholder="60"
               min={0}
-              style={miniInputStyle}
             />
-          </div>
-          <div style={{ gridColumn: '1 / -1' }}>
+          </Field>
+          <div>
             {panel === 'easy' ? (
               <TooEasyPanel
                 workoutExercise={we}
@@ -1135,16 +652,9 @@ function WorkoutExerciseSlot({
               </div>
             )}
           </div>
-          <div style={{ gridColumn: '1 / -1' }}>
-            <label style={smallLabelStyle}>{t('fields.notes')}</label>
-            <input
-              type='text'
-              value={we.notes ?? ''}
-              onChange={(e) => onUpdate({ notes: e.target.value })}
-              placeholder={t('fields.instructions')}
-              style={miniInputStyle}
-            />
-          </div>
+          <Field label={t('fields.notes')}>
+            <input type="text" className="wb-input wb-input--compact" value={we.notes ?? ''} onChange={(e) => onUpdate({ notes: e.target.value })} placeholder={t('fields.instructions')} />
+          </Field>
         </div>
       )}
     </div>
@@ -1155,36 +665,12 @@ function MuscleAlertBadge({ alert }: { alert: MuscleAlert }) {
   const { t } = useTranslation('workouts')
   const isDanger = alert.level === 'danger'
   return (
-    <div
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: '0.5rem',
-        padding: '0.35rem 0.75rem',
-        background: isDanger ? 'rgba(255,68,68,0.1)' : 'rgba(245,158,11,0.1)',
-        border: `1px solid ${isDanger ? 'rgba(255,68,68,0.3)' : 'rgba(245,158,11,0.3)'}`, borderRadius: 12,
-        fontSize: '0.8125rem'
-      }}
-    >
-      <span style={{ color: isDanger ? '#ff4444' : '#f59e0b' }}>{isDanger ? 'HIGH' : 'MED'}</span>
-      <span
-        style={{
-          fontFamily: 'var(--font-d)',
-          fontSize: '0.6875rem',
-          letterSpacing: '0.1em',
-          textTransform: 'uppercase',
-          color: isDanger ? '#ff4444' : '#f59e0b',
-          fontWeight: 700
-        }}
-      >
-        {t(MUSCLE_GROUP_I18N_KEYS[alert.muscle], { ns: 'common' })}
-      </span>
-      <span style={{ color: 'var(--muted)', fontFamily: 'var(--font-b)' }}>
-        {isDanger
-          ? t('alerts.primary_repeated', { count: alert.count })
-          : t('alerts.secondary_repeated', { count: alert.count })}
+    <div className={`wb-muscle-alert${isDanger ? ' is-danger' : ''}`}>
+      <span className="wb-muscle-alert-level">{isDanger ? 'HIGH' : 'MED'}</span>
+      <span className="wb-muscle-alert-name">{t(MUSCLE_GROUP_I18N_KEYS[alert.muscle], { ns: 'common' })}</span>
+      <span className="wb-muscle-alert-text">
+        {isDanger ? t('alerts.primary_repeated', { count: alert.count }) : t('alerts.secondary_repeated', { count: alert.count })}
       </span>
     </div>
   )
 }
-

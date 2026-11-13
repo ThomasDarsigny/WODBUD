@@ -1,4 +1,4 @@
-import { test, expect, coachDb, EXERCISES } from './fixtures'
+import { test, expect, coachDb, EXERCISES, NOW } from './fixtures'
 
 /** Parcours 2 : créer un WOD dans le créateur en un écran (2.1) et l'enregistrer. */
 test('le coach crée un WOD et l’enregistre', async ({ page, isMobile }) => {
@@ -31,4 +31,33 @@ test('le coach crée un WOD et l’enregistre', async ({ page, isMobile }) => {
   const lines = db.writesTo('workout_exercises', 'POST')
   expect(lines.map((l) => l.exercise_id)).toEqual([EXERCISES[0].id, EXERCISES[3].id])
   expect(lines.every((l) => l.workout_id === workout.id)).toBe(true)
+})
+
+/** L'alerte de récupération 48 h (AlertDialog partagé, 4.2) : annuler au clavier, puis ajouter quand même. */
+test('l’alerte 48 h demande une décision, au clavier comme à la souris', async ({ page }) => {
+  const db = coachDb({ tables: {
+    muscle_groups: [{ id: 'mg-quads', name_key: 'quads' }],
+    exercise_muscles: [{ exercise_id: EXERCISES[0].id, muscle_group_id: 'mg-quads', role: 'primary' }]
+  } })
+  // Un WOD d'hier soir travaillait déjà les quadriceps.
+  db.table('workouts').push({ id: 'w-hier', title: 'Jambes', method: 'strength', duration_minutes: 40, notes: null, created_by: 'x', is_benchmark: false, created_at: new Date(NOW.getTime() - 10 * 3600e3).toISOString() })
+  db.table('workout_exercises').push({ workout_id: 'w-hier', exercise_id: EXERCISES[0].id, position: 1 })
+  await db.install(page)
+  await page.goto('/dashboard/workout')
+
+  await page.getByRole('searchbox').first().fill('squat')
+  const add = page.getByRole('button', { name: 'Ajouter Back squat au WOD' })
+  await add.click()
+  const alert = page.getByRole('alertdialog', { name: /Alerte récupération 48h/i })
+  await expect(alert).toContainText('Quadriceps')
+  await expect(alert.getByRole('button', { name: 'Annuler' })).toBeFocused()
+
+  await page.keyboard.press('Escape')
+  await expect(alert).toHaveCount(0)
+  await expect(add).toBeFocused()
+
+  await add.click()
+  await alert.getByRole('button', { name: 'Ajouter quand même' }).click()
+  await expect(alert).toHaveCount(0)
+  await expect(page.getByRole('status').filter({ hasText: 'Back squat ajouté' })).toBeVisible()
 })

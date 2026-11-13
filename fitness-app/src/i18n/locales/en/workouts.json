@@ -61,7 +61,10 @@
     "name_label": "Session name",
     "notes_label": "Notes for the group",
     "pdf_export": "Export PDF",
-    "pdf_loading": "PDF…"
+    "pdf_loading": "PDF…",
+    "slot_details": "Details for {{name}}",
+    "slot_hide": "Hide details for {{name}}",
+    "slot_remove": "Remove {{name}} from the WOD"
   },
   "reminders": {
     "theme_inactive": "You haven't done a {{theme}} session in {{days}} days"

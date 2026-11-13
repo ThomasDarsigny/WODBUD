@@ -1,5 +1,5 @@
-import { useEffect, useId, useRef, type ReactNode } from 'react'
-import { useBackToClose } from '../../hooks/useBackToClose'
+import { useId, useRef, type ReactNode } from 'react'
+import { useDialog } from '../../hooks/useDialog'
 
 /**
  * Fenêtre modale partagée (phase 4, 4.2). Fond assombri et boîte centrée ;
@@ -16,24 +16,7 @@ export default function Modal({ title, onClose, wide = false, children }: {
 }) {
   const titleId = useId()
   const boxRef = useRef<HTMLDivElement>(null)
-  const closeRef = useRef(onClose)
-  useEffect(() => { closeRef.current = onClose })
-  useBackToClose(true, onClose)
-
-  useEffect(() => {
-    const opener = document.activeElement instanceof HTMLElement ? document.activeElement : null
-    if (!boxRef.current?.contains(document.activeElement)) boxRef.current?.focus()
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key !== 'Escape') return
-      e.stopPropagation()
-      closeRef.current()
-    }
-    document.addEventListener('keydown', onKey)
-    return () => {
-      document.removeEventListener('keydown', onKey)
-      opener?.focus()
-    }
-  }, [])
+  useDialog(boxRef, onClose)
 
   return (
     <div className="wb-modal-overlay" onClick={(e) => { if (e.target === e.currentTarget) onClose() }}>

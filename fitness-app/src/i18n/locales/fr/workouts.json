@@ -61,7 +61,10 @@
     "name_label": "Nom de la séance",
     "notes_label": "Notes pour le groupe",
     "pdf_export": "Exporter PDF",
-    "pdf_loading": "PDF…"
+    "pdf_loading": "PDF…",
+    "slot_details": "Détails de {{name}}",
+    "slot_hide": "Masquer les détails de {{name}}",
+    "slot_remove": "Retirer {{name}} du WOD"
   },
   "reminders": {
     "theme_inactive": "Tu n'as pas fait de séance {{theme}} depuis {{days}} jours"

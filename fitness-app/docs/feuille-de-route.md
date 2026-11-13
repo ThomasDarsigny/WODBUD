@@ -147,7 +147,8 @@ Rapport : audit produit publié le 12 novembre. Branche de travail : `sprint`. U
 - [ ] 4.2 Composants partagés à la place des styles en ligne (691 au départ), page par page, rendu comparé avant / après et parcours Playwright à chaque étape :
   - [x] Composants `Modal` (rôle dialog relié au titre, Échap, retour Android, focus rendu au déclencheur) et `Field` (étiquette reliée au champ) ; classes `wb-*` pour boutons et champs.
   - [x] ClassesView : 71 → 0 style en ligne ; fenêtres « Créer un cours » et « Créer un vote » accessibles au clavier ; chaînes en dur traduites ; parcours e2e de création d'un cours.
-  - [ ] Créateur de WOD (65), Paramètres (42), votes athlète (33), page d'invitation (32), fiche et formulaire d'exercice (25 + 31), planning (26), puis le reste.
+  - [x] Créateur de WOD : 65 → 0 style en ligne ; alertes « repos 48 h » et « cardio » sur un `AlertDialog` partagé (rôle alertdialog, focus sur Annuler, Échap, focus rendu au « + ») ; « + » en aria-disabled pendant l'ajout pour ne plus perdre le focus ; lignes d'exercice étiquetées (répétitions, séries, détails, retirer) ; parcours e2e de l'alerte 48 h. Correctif : collision de classes .wb-pick* introduite à l'étape précédente (lignes de la bibliothèque) et vérification de mise en page ajoutée au parcours « créer un WOD ».
+  - [ ] Paramètres (42), votes athlète (33), page d'invitation (32), fiche et formulaire d'exercice (25 + 31), planning (26), puis le reste.
 - [ ] 4.3 Jetons sémantiques (couleurs, espacements) et plancher typographique.
 - [ ] 4.4 Thème clair.
 - [ ] 4.5 Suivi des erreurs.
