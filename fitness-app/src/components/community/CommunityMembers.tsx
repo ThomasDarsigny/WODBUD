@@ -1,11 +1,11 @@
 import { useState } from 'react'
+import type { CSSProperties } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { CommunityMember } from '../../lib/communityMembers'
 import { removeMember, setMemberRole } from '../../lib/communitySocial'
 import { rankDisplay } from '../../lib/ranks'
 import { useRankStore } from '../../stores/rankStore'
 import ConfirmButton from '../ui/ConfirmButton'
-import { btnDanger, btnSmall } from '../../styles/ui'
 import { Avatar, Notice } from './communityUi'
 import { RankEmblem } from '../rank/RankBadge'
 
@@ -51,31 +51,32 @@ export default function CommunityMembers({ communityId, members, isMember, isOwn
           const canModerate = isAdmin && !m.is_me && !m.is_owner
           return (
             <li key={m.user_id} className='wb-member-row'>
-              <button onClick={() => onOpenMember(m.user_id)} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flex: '1 1 200px', minWidth: 0, background: 'none', border: 'none', padding: 0, cursor: 'pointer', color: 'var(--white)', textAlign: 'left' }}>
+              <button type='button' onClick={() => onOpenMember(m.user_id)} className='wb-commu-member-btn'>
                 <Avatar name={m.display_name} url={m.avatar_url} />
-                <span style={{ minWidth: 0 }}>
-                  <span className='wb-board-name' style={{ display: 'block' }}>
+                <span className='wb-commu-min'>
+                  <span className='wb-board-name wb-commu-block'>
                     {m.display_name}
-                    {m.is_me && <span style={{ color: 'var(--orange)', fontSize: '0.6875rem', marginLeft: '0.4rem' }}>{t('community.you')}</span>}
+                    {m.is_me && <span className='wb-you'>{t('community.you')}</span>}
                   </span>
-                  <span style={{ display: 'block', fontSize: '0.75rem', color: 'var(--muted)' }}>
+                  <span className='wb-commu-meta wb-commu-block'>
                     {m.is_owner ? t('community.role_owner') : m.role === 'admin' ? t('community.role_admin') : t('community.role_member')}
                     {isMember && !m.share_rank && ` · ${t('community.rank_private')}`}
                   </span>
                 </span>
               </button>
               {rank && (
-                <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: rank.color, border: `1px solid ${rank.color}`, borderRadius: 999, padding: '0.1rem 0.5rem 0.1rem 0.2rem', display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}>
+                <span className="wb-rank-pill" style={{ '--rank': rank.color } as CSSProperties}>
                   <RankEmblem rank={rank} size={18} />{rankDisplay(rank, i18n.language)}
                 </span>
               )}
               {canModerate && (
-                <span style={{ display: 'flex', gap: '0.35rem' }}>
+                <span className='wb-commu-mod'>
                   {isOwner && (
                     <button
+                      type='button'
                       onClick={() => { void run(m.user_id, () => setMemberRole(communityId, m.user_id, m.role === 'admin' ? 'member' : 'admin')) }}
                       disabled={busy === m.user_id}
-                      style={btnSmall}
+                      className='wb-btn wb-btn--ghost wb-btn--sm'
                     >
                       {m.role === 'admin' ? t('community.demote') : t('community.promote')}
                     </button>
@@ -83,7 +84,8 @@ export default function CommunityMembers({ communityId, members, isMember, isOwn
                   <ConfirmButton
                     onConfirm={() => run(m.user_id, () => removeMember(communityId, m.user_id))}
                     confirmLabel={t('actions.confirm')}
-                    style={{ ...btnDanger, minHeight: 36, fontSize: '0.6875rem', padding: '0 0.6rem' }}
+                    ariaLabel={`${t('community.remove')} — ${m.display_name}`}
+                    className='wb-btn wb-btn--danger wb-btn--sm'
                   >
                     {t('community.remove')}
                   </ConfirmButton>

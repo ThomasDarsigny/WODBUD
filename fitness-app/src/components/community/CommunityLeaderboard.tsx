@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import type { CSSProperties } from 'react'
 import { useTranslation } from 'react-i18next'
 import { fetchCommunityLeaderboard, type CommunityLeaderRow, type CommunityPeriod } from '../../lib/communitySocial'
 import type { CommunityMember } from '../../lib/communityMembers'
@@ -47,10 +48,11 @@ export default function CommunityLeaderboard({ communityId, members, onOpenMembe
 
   return (
     <div>
-      <div role='tablist' className='wb-segmented' style={{ margin: '0 0 1rem' }}>
+      <div role='tablist' className='wb-segmented wb-commu-periods'>
         {(['week', 'month', 'all'] as Period[]).map((p) => (
           <button
             key={p}
+            type='button'
             role='tab'
             aria-selected={period === p}
             onClick={() => setPeriod(p)}
@@ -77,6 +79,7 @@ export default function CommunityLeaderboard({ communityId, members, onOpenMembe
             return (
               <li key={row.user_id}>
                 <button
+                  type='button'
                   onClick={() => onOpenMember(row.user_id)}
                   className={`wb-row wb-board-row${row.is_me ? ' is-me' : ''}`}
                 >
@@ -86,14 +89,14 @@ export default function CommunityLeaderboard({ communityId, members, onOpenMembe
                   <Avatar name={row.display_name} url={row.avatar_url} />
                   <span className='wb-board-name'>
                     {row.display_name}
-                    {row.is_me && <span style={{ color: 'var(--orange)', fontSize: '0.6875rem', marginLeft: '0.4rem' }}>{t('community.you')}</span>}
+                    {row.is_me && <span className='wb-you'>{t('community.you')}</span>}
                   </span>
                   {rank && (
-                    <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: rank.color, border: `1px solid ${rank.color}`, borderRadius: 999, padding: '0.1rem 0.5rem 0.1rem 0.2rem', display: 'inline-flex', alignItems: 'center', gap: '0.3rem', flexShrink: 0 }}>
+                    <span className='wb-rank-pill' style={{ '--rank': rank.color } as CSSProperties}>
                       <RankEmblem rank={rank} size={18} />{rankDisplay(rank, i18n.language)}
                     </span>
                   )}
-                  <span className='wb-board-min' style={{ color: i === 0 ? 'var(--orange)' : undefined }}>
+                  <span className={`wb-board-min${i === 0 ? ' is-first' : ''}`}>
                     {t('community.stat_minutes', { count: row.minutes })}
                   </span>
                 </button>

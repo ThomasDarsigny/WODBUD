@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import type { CSSProperties } from 'react'
 import { useTranslation } from 'react-i18next'
 import { fetchMemberProfile, type MemberProfile } from '../../lib/communitySocial'
 import { badgeDisplay, fetchBadgesByKeys, type Badge } from '../../lib/badges'
@@ -7,7 +8,7 @@ import { useRankStore } from '../../stores/rankStore'
 import BadgeToken from '../badges/BadgeToken'
 import Skeleton from '../ui/Skeleton'
 import { Avatar, Notice, SectionLabel } from './communityUi'
-import { useBackToClose } from '../../hooks/useBackToClose'
+import { useDialog } from '../../hooks/useDialog'
 
 /** Profil d'un membre, vu depuis une communauté : rang et badges s'il les partage. */
 export default function MemberProfileModal({ communityId, userId, onClose }: {
@@ -15,8 +16,10 @@ export default function MemberProfileModal({ communityId, userId, onClose }: {
   userId: string
   onClose: () => void
 }) {
-  useBackToClose(true, onClose)
   const { t, i18n } = useTranslation('common')
+  // Fenêtre partagée (4.2) : Échap, retour Android, focus rendu à la fermeture.
+  const boxRef = useRef<HTMLDivElement>(null)
+  useDialog(boxRef, onClose)
   const { ranks, fetchAll } = useRankStore()
   const [profile, setProfile] = useState<MemberProfile | null | undefined>(undefined)
   const [badges, setBadges] = useState<Badge[]>([])
@@ -39,12 +42,6 @@ export default function MemberProfileModal({ communityId, userId, onClose }: {
     return () => { mounted = false }
   }, [communityId, userId, t])
 
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [onClose])
-
   const rank = profile?.rank_key ? ranks.find((r) => r.key === profile.rank_key) : undefined
   const progress = profile?.visible && ranks.length ? computeProgress(ranks, profile.total_minutes ?? 0) : null
   // Ordre de déblocage, le plus récent d'abord.
@@ -53,12 +50,10 @@ export default function MemberProfileModal({ communityId, userId, onClose }: {
     .filter((b): b is Badge => !!b)
 
   return (
-    <div role='dialog' aria-modal='true' aria-label={profile?.display_name ?? ''} onClick={onClose}
-      style={{ position: 'fixed', inset: 0, zIndex: 300, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(4px)', padding: '1rem' }}>
-      <div onClick={(e) => e.stopPropagation()}
-        style={{ background: 'var(--black)', border: '1px solid var(--border)', borderRadius: 12, maxWidth: 520, width: '100%', maxHeight: '90vh', overflowY: 'auto', padding: '1.5rem' }}>
-        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <button onClick={onClose} aria-label={t('actions.close')} style={{ background: 'none', border: 'none', color: 'var(--muted)', fontSize: '1.25rem', cursor: 'pointer', lineHeight: 1 }}>✕</button>
+    <div className='wb-modal-overlay wb-profile-overlay' onClick={(e) => { if (e.target === e.currentTarget) onClose() }}>
+      <div ref={boxRef} className='wb-profile' role='dialog' aria-modal='true' aria-label={profile?.display_name ?? t('status.loading')} tabIndex={-1}>
+        <div className='wb-profile-close-row'>
+          <button type='button' onClick={onClose} aria-label={t('actions.close')} className='wb-alert-close'>✕</button>
         </div>
 
         {error && <Notice tone='error'>{error}</Notice>}
@@ -67,16 +62,12 @@ export default function MemberProfileModal({ communityId, userId, onClose }: {
 
         {profile && (
           <>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.25rem' }}>
+            <div className='wb-profile-head'>
               <Avatar name={profile.display_name} url={profile.avatar_url} size={64} />
-              <div style={{ minWidth: 0 }}>
-                <h2 style={{ fontFamily: 'var(--font-d)', fontSize: '1.5rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.03em', margin: 0, overflowWrap: 'anywhere' }}>
-                  {profile.display_name}
-                </h2>
+              <div className='wb-commu-min'>
+                <h2 className='wb-profile-name'>{profile.display_name}</h2>
                 {(profile.is_owner || profile.role === 'admin') && (
-                  <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--orange)' }}>
-                    {profile.is_owner ? t('community.role_owner') : t('community.role_admin')}
-                  </span>
+                  <span className='wb-profile-role'>{profile.is_owner ? t('community.role_owner') : t('community.role_admin')}</span>
                 )}
               </div>
             </div>
@@ -86,15 +77,15 @@ export default function MemberProfileModal({ communityId, userId, onClose }: {
             ) : (
               <>
                 {rank && (
-                  <div style={{ border: `1px solid ${rank.color}`, borderRadius: 12, background: `${rank.color}14`, padding: '0.9rem 1rem', marginBottom: '1rem' }}>
-                    <p style={{ margin: 0, fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'var(--muted)' }}>{t('community.profile_rank')}</p>
-                    <p style={{ margin: '0.15rem 0 0', fontFamily: 'var(--font-d)', fontSize: '1.5rem', fontWeight: 900, textTransform: 'uppercase', color: rank.color }}>{rankDisplay(rank, i18n.language)}</p>
+                  <div className='wb-profile-rank' style={{ '--rank': rank.color } as CSSProperties}>
+                    <p className='wb-profile-rank-label'>{t('community.profile_rank')}</p>
+                    <p className='wb-profile-rank-name'>{rankDisplay(rank, i18n.language)}</p>
                     {progress?.next && (
                       <>
-                        <div style={{ height: 6, background: 'var(--black)', border: '1px solid var(--border)', borderRadius: 12, margin: '0.6rem 0 0.3rem', overflow: 'hidden' }}>
-                          <div style={{ height: '100%', width: `${Math.round(progress.ratio * 100)}%`, background: rank.color }} />
+                        <div className='wb-progress wb-progress--thin' role='progressbar' aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(progress.ratio * 100)} aria-label={t('community.profile_rank')}>
+                          <div className='wb-progress-fill wb-progress-fill--rank' style={{ width: `${Math.round(progress.ratio * 100)}%` }} />
                         </div>
-                        <p style={{ margin: 0, fontSize: '0.75rem', color: 'var(--muted)' }}>
+                        <p className='wb-commu-meta'>
                           {t('community.profile_next', { count: progress.remaining, rank: rankDisplay(progress.next, i18n.language) })}
                         </p>
                       </>
@@ -102,7 +93,7 @@ export default function MemberProfileModal({ communityId, userId, onClose }: {
                   </div>
                 )}
 
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.5rem', marginBottom: '1.25rem' }}>
+                <div className='wb-profile-stats'>
                   <Stat value={profile.total_minutes ?? 0} label={t('community.profile_minutes')} />
                   <Stat value={profile.current_streak ?? 0} label={t('community.profile_streak')} />
                   <Stat value={profile.longest_streak ?? 0} label={t('community.profile_best_streak')} />
@@ -112,22 +103,20 @@ export default function MemberProfileModal({ communityId, userId, onClose }: {
                 {ordered.length === 0 ? (
                   <Notice>{t('community.profile_no_badges')}</Notice>
                 ) : (
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(84px, 1fr))', gap: '0.9rem', marginBottom: '1rem' }}>
+                  <div className='wb-profile-badges'>
                     {ordered.map((b) => (
-                      <div key={b.key} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.35rem', textAlign: 'center' }}>
+                      <div key={b.key} className='wb-profile-badge'>
                         <BadgeToken icon={b.icon} art={b.art} state='unlocked' size={56} title={badgeDisplay(b, i18n.language)} />
-                        <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.03em', lineHeight: 1.2 }}>
-                          {badgeDisplay(b, i18n.language)}
-                        </span>
+                        <span className='wb-profile-badge-name'>{badgeDisplay(b, i18n.language)}</span>
                       </div>
                     ))}
                   </div>
                 )}
 
                 {profile.social_links.length > 0 && (
-                  <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                  <div className='wb-profile-links'>
                     {profile.social_links.map((l) => (
-                      <a key={l.url} href={l.url} target='_blank' rel='noopener noreferrer nofollow' style={{ color: 'var(--orange)', fontSize: '0.8125rem' }}>
+                      <a key={l.url} href={l.url} target='_blank' rel='noopener noreferrer nofollow' className='wb-profile-link'>
                         {l.platform}
                       </a>
                     ))}
@@ -144,9 +133,9 @@ export default function MemberProfileModal({ communityId, userId, onClose }: {
 
 function Stat({ value, label }: { value: number; label: string }) {
   return (
-    <div style={{ border: '1px solid var(--border)', borderRadius: 12, background: 'var(--dark)', padding: '0.6rem', textAlign: 'center' }}>
-      <p style={{ margin: 0, fontFamily: 'var(--font-d)', fontSize: '1.375rem', fontWeight: 900, fontVariantNumeric: 'tabular-nums' }}>{value}</p>
-      <p style={{ margin: '0.1rem 0 0', fontSize: '0.6875rem', color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{label}</p>
+    <div className='wb-profile-stat'>
+      <p className='wb-profile-stat-value'>{value}</p>
+      <p className='wb-profile-stat-label'>{label}</p>
     </div>
   )
 }

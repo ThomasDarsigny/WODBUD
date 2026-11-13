@@ -1925,6 +1925,91 @@ button.wb-row:active, a.wb-row:active { background: var(--surface); }
 .wb-plist-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem; }
 .wb-plist-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 
+/* ── Communautés (4.2) ───────────────────────────────────────────── */
+.wb-contents { display: contents; }
+.wb-avatar { width: var(--av, 36px); height: var(--av, 36px); flex-shrink: 0; border-radius: 50%; border: 1px solid var(--border); object-fit: cover; }
+.wb-avatar--empty { display: inline-flex; align-items: center; justify-content: center; background: var(--surface); color: var(--muted); font-family: var(--font-d); font-weight: 700; font-size: calc(var(--av, 36px) * 0.42); }
+.wb-commu-label { margin: 0 0 0.6rem; font-size: 0.95rem; font-weight: 700; }
+.wb-commu-notice { margin: 0 0 1rem; color: var(--muted); font-size: 0.875rem; line-height: 1.5; }
+.wb-commu-notice.is-error { color: var(--orange); }
+.wb-commu-page { min-height: 100%; padding: var(--page-pad); }
+.wb-commu-head { margin-bottom: 1.5rem; }
+.wb-commu-error { margin-bottom: 1rem; }
+.wb-commu-search { max-width: 420px; margin-bottom: 1rem; }
+.wb-commu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 0.75rem; }
+.wb-commu-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 0.5rem; }
+.wb-commu-card-name { margin: 0; font-family: var(--font-d); font-size: 1.35rem; font-weight: 900; letter-spacing: 0.01em; line-height: 1.05; text-transform: uppercase; }
+.wb-commu-card-desc { margin: 0; color: var(--muted); font-size: 0.8125rem; line-height: 1.5; }
+.wb-commu-card-foot { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; margin-top: auto; padding-top: 0.4rem; }
+.wb-commu-card-count { display: flex; align-items: center; gap: 0.4rem; color: var(--muted); font-size: 0.8125rem; }
+.wb-commu-detail { max-width: 820px; }
+.wb-commu-back { margin-bottom: -0.5rem; }
+.wb-commu-box { padding: 1rem; border-radius: var(--r-lg); border: 1px solid var(--border); background: var(--dark); }
+.wb-commu-box--accent, .wb-commu-box.is-active { border-color: rgba(255, 77, 0, 0.35); }
+.wb-commu-box.is-reached { border-color: rgba(34, 197, 94, 0.45); }
+.wb-commu-wod { margin-bottom: 1.25rem; }
+.wb-commu-form { display: grid; gap: 0.6rem; margin-bottom: 1.25rem; }
+.wb-commu-form .wb-input { background: var(--black); border-color: var(--line-fn); }
+.wb-commu-form .wb-input:focus { border-color: var(--orange); }
+.wb-commu-form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.5rem; }
+.wb-commu-field { display: grid; gap: 0.25rem; color: var(--muted); font-size: 0.75rem; }
+.wb-commu-start { justify-self: start; }
+.wb-commu-stack { display: flex; flex-direction: column; gap: 0.6rem; }
+.wb-commu-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 0.75rem; }
+.wb-commu-min { min-width: 0; }
+.wb-commu-block { display: block; }
+.wb-commu-challenge { margin: 0; font-family: var(--font-d); font-size: 1rem; font-weight: 800; letter-spacing: 0.03em; text-transform: uppercase; }
+.wb-commu-meta { margin: 0.2rem 0 0; color: var(--muted); font-size: 0.75rem; }
+.wb-commu-wod > .wb-commu-meta:first-child { margin-top: 0; }
+.wb-commu-nums { margin-top: 0; font-variant-numeric: tabular-nums; }
+.wb-commu-gap { margin-top: 0.5rem; }
+.wb-commu-small { margin: 0; color: var(--muted); font-size: 0.8125rem; }
+.wb-commu-title { margin: 0.2rem 0 0; font-family: var(--font-d); font-size: 1.375rem; font-weight: 900; letter-spacing: 0.03em; text-transform: uppercase; }
+.wb-commu-text { margin: 0.4rem 0 0; color: var(--muted); font-size: 0.875rem; line-height: 1.5; }
+.wb-commu-wod-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.9rem; }
+.wb-commu-doneby { margin-top: 1.1rem; }
+.wb-commu-people { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.35rem; }
+.wb-commu-person { display: flex; align-items: center; gap: 0.6rem; }
+.wb-commu-person-name { flex: 1; font-size: 0.875rem; }
+.wb-progress { height: 8px; margin: 0.7rem 0 0.35rem; overflow: hidden; border-radius: var(--r-md); border: 1px solid var(--border); background: var(--black); }
+.wb-progress--thin { height: 6px; margin: 0.6rem 0 0.3rem; }
+.wb-progress-fill { height: 100%; background: var(--orange); transition: width 0.4s ease; }
+.wb-progress-fill.is-done { background: #22c55e; }
+.wb-progress-fill--rank { background: var(--rank); }
+.wb-rank-pill { display: inline-flex; align-items: center; gap: 0.3rem; flex-shrink: 0; padding: 0.1rem 0.5rem 0.1rem 0.2rem; border-radius: 999px; border: 1px solid var(--rank); color: var(--rank); font-family: var(--font-d); font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
+.wb-you { margin-left: 0.4rem; color: var(--orange); font-size: 0.6875rem; }
+.wb-commu-member-btn { display: flex; flex: 1 1 200px; align-items: center; gap: 0.75rem; min-width: 0; padding: 0; border: none; background: none; color: var(--white); text-align: left; font: inherit; cursor: pointer; }
+.wb-commu-mod { display: flex; gap: 0.35rem; }
+.wb-commu-periods { margin: 0 0 1rem; }
+.wb-board-min.is-first { color: var(--orange); }
+.wb-feed-avatar-btn { padding: 0; border: none; background: none; cursor: pointer; border-radius: 50%; }
+.wb-feed-main { flex: 1; min-width: 0; }
+.wb-feed-text { margin: 0; font-size: 0.95rem; line-height: 1.45; }
+.wb-feed-name { padding: 0; border: none; background: none; color: var(--white); font: inherit; font-weight: 700; cursor: pointer; }
+.wb-feed-name:hover, .wb-feed-name:focus-visible { text-decoration: underline; }
+.wb-feed-desc { color: var(--muted); }
+.wb-feed-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem; margin-top: 0.45rem; }
+.wb-feed-time { margin-right: 0.35rem; color: var(--muted); font-size: 0.75rem; }
+.wb-profile-overlay { z-index: 300; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(4px); }
+.wb-profile { width: 100%; max-width: 520px; max-height: 90vh; overflow-y: auto; padding: 1.5rem; border-radius: var(--r-md); border: 1px solid var(--border); background: var(--black); }
+.wb-profile:focus { outline: none; }
+.wb-profile-close-row { display: flex; justify-content: flex-end; margin: -0.5rem -0.5rem 0 0; }
+.wb-profile-head { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.25rem; }
+.wb-profile-name { margin: 0; overflow-wrap: anywhere; font-family: var(--font-d); font-size: 1.5rem; font-weight: 900; letter-spacing: 0.03em; text-transform: uppercase; }
+.wb-profile-role { color: var(--orange); font-family: var(--font-d); font-size: 0.6875rem; letter-spacing: 0.14em; text-transform: uppercase; }
+.wb-profile-rank { margin-bottom: 1rem; padding: 0.9rem 1rem; border-radius: var(--r-md); border: 1px solid var(--rank); background: color-mix(in srgb, var(--rank) 8%, transparent); }
+.wb-profile-rank-label { margin: 0; color: var(--muted); font-family: var(--font-d); font-size: 0.6875rem; letter-spacing: 0.16em; text-transform: uppercase; }
+.wb-profile-rank-name { margin: 0.15rem 0 0; color: var(--rank); font-family: var(--font-d); font-size: 1.5rem; font-weight: 900; text-transform: uppercase; }
+.wb-profile-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; margin-bottom: 1.25rem; }
+.wb-profile-stat { padding: 0.6rem; border-radius: var(--r-md); border: 1px solid var(--border); background: var(--dark); text-align: center; }
+.wb-profile-stat-value { margin: 0; font-family: var(--font-d); font-size: 1.375rem; font-weight: 900; font-variant-numeric: tabular-nums; }
+.wb-profile-stat-label { margin: 0.1rem 0 0; color: var(--muted); font-size: 0.6875rem; letter-spacing: 0.08em; text-transform: uppercase; }
+.wb-profile-badges { display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: 0.9rem; margin-bottom: 1rem; }
+.wb-profile-badge { display: flex; flex-direction: column; align-items: center; gap: 0.35rem; text-align: center; }
+.wb-profile-badge-name { font-family: var(--font-d); font-size: 0.6875rem; font-weight: 800; letter-spacing: 0.03em; line-height: 1.2; text-transform: uppercase; }
+.wb-profile-links { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.wb-profile-link { color: var(--orange); font-size: 0.8125rem; }
+
 /* ── Créateur de WOD (4.2) ───────────────────────────────────────── */
 .wb-builder { display: grid; grid-template-columns: minmax(0, 1fr) 380px; height: calc(100vh - var(--section-tabs-h, 0px)); overflow: hidden; }
 .wb-builder.is-mobile { grid-template-columns: 1fr; grid-template-rows: auto minmax(0, 1fr); height: calc(100dvh - var(--mobile-top-h) - var(--tabbar-h) - var(--safe-bottom) - var(--section-tabs-h, 0px)); }
@@ -2014,18 +2099,18 @@ button.wb-row:active, a.wb-row:active { background: var(--surface); }
 .wb-classes-desc { margin: 0.25rem 0 0; color: var(--muted); font-size: 0.9375rem; }
 .wb-classes-head-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
 @media (max-width: 768px) { .wb-classes-list { width: 100%; border-right: none; } }
-.wb-invite { margin-bottom: 1.5rem; padding: 1.25rem; border-radius: var(--r-md); border: 1px solid var(--border); background: var(--dark); }
-.wb-invite-label { margin: 0 0 0.75rem; font-family: var(--font-d); font-size: 0.6875rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--orange); }
-.wb-invite-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; }
-.wb-invite-url { flex: 1; min-width: 0; padding: 0.5rem 0.75rem; border-radius: var(--r-md); border: 1px solid var(--border); background: var(--black); color: var(--muted); font-family: monospace; font-size: 0.8125rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.wb-invite-qr { display: inline-block; padding: 0.75rem; background: #fff; line-height: 0; }
-.wb-members { list-style: none; margin: 0; padding: 0; border-radius: var(--r-md); border: 1px solid var(--border); background: var(--dark); }
-.wb-member-row { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); }
-.wb-member-row:last-child { border-bottom: none; }
-.wb-member-avatar { display: inline-grid; place-items: center; width: 30px; height: 30px; flex-shrink: 0; border-radius: 50%; background: var(--border); color: var(--muted); font-family: var(--font-d); font-size: 0.8125rem; }
-.wb-member-main { display: grid; flex: 1; min-width: 0; }
-.wb-member-main strong { font-family: var(--font-d); font-size: 0.8125rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.wb-member-main span { color: var(--muted); font-size: 0.8125rem; }
+.wb-cinvite { margin-bottom: 1.5rem; padding: 1.25rem; border-radius: var(--r-md); border: 1px solid var(--border); background: var(--dark); }
+.wb-cinvite-label { margin: 0 0 0.75rem; font-family: var(--font-d); font-size: 0.6875rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--orange); }
+.wb-cinvite-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; }
+.wb-cinvite-url { flex: 1; min-width: 0; padding: 0.5rem 0.75rem; border-radius: var(--r-md); border: 1px solid var(--border); background: var(--black); color: var(--muted); font-family: monospace; font-size: 0.8125rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.wb-cinvite-qr { display: inline-block; padding: 0.75rem; background: #fff; line-height: 0; }
+.wb-cmembers { list-style: none; margin: 0; padding: 0; border-radius: var(--r-md); border: 1px solid var(--border); background: var(--dark); }
+.wb-cmember-row { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); }
+.wb-cmember-row:last-child { border-bottom: none; }
+.wb-cmember-avatar { display: inline-grid; place-items: center; width: 30px; height: 30px; flex-shrink: 0; border-radius: 50%; background: var(--border); color: var(--muted); font-family: var(--font-d); font-size: 0.8125rem; }
+.wb-cmember-main { display: grid; flex: 1; min-width: 0; }
+.wb-cmember-main strong { font-family: var(--font-d); font-size: 0.8125rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.wb-cmember-main span { color: var(--muted); font-size: 0.8125rem; }
 .wb-votes-toolbar { display: flex; justify-content: flex-end; margin-bottom: 1rem; }
 .wb-vote-session { margin-bottom: 0.75rem; padding: 1rem; border-radius: var(--r-md); border: 1px solid var(--border); background: var(--dark); }
 .wb-vote-session-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 0.75rem; }

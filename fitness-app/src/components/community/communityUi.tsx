@@ -1,22 +1,20 @@
-import type { ReactNode } from 'react'
+import type { CSSProperties, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 
 /** Petits éléments partagés par les écrans de communauté. */
 
 export function SectionLabel({ children }: { children: ReactNode }) {
   return (
-    <p style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--white)', margin: '0 0 0.6rem' }}>
-      {children}
-    </p>
+    <p className="wb-commu-label">{children}</p>
   )
 }
 
 export function Avatar({ name, url, size = 36 }: { name: string; url: string | null; size?: number }) {
-  if (url) {
-    return <img src={url} alt='' style={{ width: size, height: size, borderRadius: '50%', objectFit: 'cover', border: '1px solid var(--border)', flexShrink: 0 }} />
-  }
+  // La taille vient de l'appel : une seule variable CSS.
+  const sized = { '--av': `${size}px` } as CSSProperties
+  if (url) return <img src={url} alt='' className='wb-avatar' style={sized} />
   return (
-    <span aria-hidden='true' style={{ width: size, height: size, borderRadius: '50%', border: '1px solid var(--border)', background: 'var(--surface)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-d)', fontWeight: 700, fontSize: size * 0.42, color: 'var(--muted)', flexShrink: 0 }}>
+    <span aria-hidden='true' className='wb-avatar wb-avatar--empty' style={sized}>
       {name.charAt(0).toUpperCase()}
     </span>
   )
@@ -24,7 +22,7 @@ export function Avatar({ name, url, size = 36 }: { name: string; url: string | n
 
 export function Notice({ children, tone = 'muted' }: { children: ReactNode; tone?: 'muted' | 'error' }) {
   return (
-    <p role={tone === 'error' ? 'alert' : undefined} style={{ color: tone === 'error' ? 'var(--orange)' : 'var(--muted)', fontSize: '0.875rem', lineHeight: 1.5, margin: '0 0 1rem' }}>
+    <p role={tone === 'error' ? 'alert' : undefined} className={`wb-commu-notice${tone === 'error' ? ' is-error' : ''}`}>
       {children}
     </p>
   )
@@ -44,4 +42,3 @@ export function useTimeAgo() {
   }
 }
 
-export const cardBox = { border: '1px solid var(--border)', background: 'var(--dark)', padding: '1rem', borderRadius: 16 } as const

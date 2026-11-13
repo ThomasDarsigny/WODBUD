@@ -110,3 +110,40 @@ export const test = base.extend<{ pageErrors: string[] }>({
   }, { auto: true }]
 })
 export { expect }
+
+export const COMMUNITY_ID = 'c0aa0000-0000-4000-8000-000000000001'
+
+/** Une communauté dont le coach est propriétaire : membres, fil, défis, classement, WOD épinglé. */
+export function communityDb(): MockSupabase {
+  const db = coachDb()
+  const people = [{ id: COACH.id, name: COACH.fullName }, ...ATHLETES.map((a) => ({ id: a.id, name: a.name }))]
+  db.tables.communities = [
+    { id: COMMUNITY_ID, name: 'Club des 6 h', description: 'Ceux qui s’entraînent avant le lever du soleil.', created_by: COACH.id, created_at: '2026-10-01T00:00:00Z', community_members: [{ count: people.length }] },
+    { id: 'c0aa0000-0000-4000-8000-000000000002', name: 'Coureurs du dimanche', description: null, created_by: 'x', created_at: '2026-09-01T00:00:00Z', community_members: [{ count: 12 }] }
+  ]
+  db.tables.community_members = people.map((p) => ({ community_id: COMMUNITY_ID, user_id: p.id }))
+  db.tables.community_challenges = [{ id: 'ch1', community_id: COMMUNITY_ID }, { id: 'ch2', community_id: COMMUNITY_ID }]
+  // Deux rangs : bronze dès 120 min, argent à 600 (sa couleur passe par --rank).
+  const rank = (position: number, key: string, fr: string, min: number, color: string) => ({ position, key, display_fr: fr, display_en: fr, display_es: fr, min_minutes: min, color, motto_fr: null, motto_en: null, motto_es: null })
+  db.tables.ranks = [rank(1, 'bronze', 'Bronze', 120, '#cd7f32'), rank(2, 'argent', 'Argent', 600, '#c0c0c0')]
+  db.rpc.get_community_members = () => people.map((p, i) => ({
+    user_id: p.id, display_name: p.name, avatar_url: null, joined_at: `2026-10-0${i + 1}T00:00:00Z`, is_me: p.id === COACH.id,
+    share_rank: i !== 3, rank_key: i === 3 ? null : 'bronze', total_minutes: i === 3 ? null : 300 - i * 40, current_streak: i === 3 ? null : 3 - (i % 3), badges: i === 3 ? null : 2,
+    role: p.id === COACH.id ? 'admin' : 'member', is_owner: p.id === COACH.id
+  }))
+  db.rpc.get_community_challenges = () => [
+    { id: 'ch1', title: '1 000 minutes en novembre', target_minutes: 1000, starts_on: '2026-11-01', ends_on: '2026-11-30', progress_minutes: 640, contributors: 4 },
+    { id: 'ch2', title: 'Sprint d’octobre', target_minutes: 500, starts_on: '2026-10-01', ends_on: '2026-10-31', progress_minutes: 520, contributors: 3 }
+  ]
+  db.rpc.get_community_leaderboard_since = () => people.slice(0, 3).map((p, i) => ({ user_id: p.id, display_name: p.name, avatar_url: null, minutes: 180 - i * 45, is_me: p.id === COACH.id }))
+  db.rpc.get_community_wod = () => [{ id: 'cw1', workout_id: FRAN_ID, title: 'Fran', note: 'Le benchmark du mois : notez vos temps.', pinned_at: '2026-11-10T00:00:00Z', done_by: [{ user_id: ATHLETES[1].id, display_name: 'Alex Tremblay', avatar_url: null, minutes: 6 }], i_did: false }]
+  db.rpc.get_community_feed = () => [
+    { event_key: 'session:1', kind: 'session', at: new Date(NOW.getTime() - 2 * 3600e3).toISOString(), user_id: ATHLETES[1].id, display_name: 'Alex Tremblay', avatar_url: null, is_me: false, title: 'Fran', minutes: 12, badge_key: null, rank_key: null, fire: 2, muscle: 0, clap: 1, my_reactions: ['fire'] },
+    { event_key: 'rank:1', kind: 'rank', at: new Date(NOW.getTime() - 26 * 3600e3).toISOString(), user_id: ATHLETES[0].id, display_name: ATHLETE.fullName, avatar_url: null, is_me: false, title: null, minutes: null, badge_key: null, rank_key: 'bronze', fire: 0, muscle: 3, clap: 0, my_reactions: [] }
+  ]
+  db.rpc.get_community_member_profile = (args) => {
+    const p = people.find((x) => x.id === args.p_user) ?? people[1]
+    return [{ user_id: p.id, display_name: p.name, avatar_url: null, role: p.id === COACH.id ? 'admin' : 'member', is_owner: p.id === COACH.id, visible: true, rank_key: 'bronze', total_minutes: 260, current_streak: 2, longest_streak: 9, social_links: [{ platform: 'instagram', url: 'https://instagram.com/alex.test' }], badges: [{ key: 'first_session', unlocked_at: '2026-10-02T00:00:00Z' }] }]
+  }
+  return db
+}

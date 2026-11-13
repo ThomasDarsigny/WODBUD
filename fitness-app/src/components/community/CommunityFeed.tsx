@@ -79,24 +79,25 @@ export default function CommunityFeed({ communityId, onOpenMember }: {
       <ul className='wb-list wb-stagger'>
         {events.map((ev) => (
           <li key={ev.event_key} className='wb-feed-item'>
-            <button onClick={() => onOpenMember(ev.user_id)} aria-label={ev.display_name} style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}>
+            <button type='button' onClick={() => onOpenMember(ev.user_id)} aria-label={ev.display_name} className='wb-feed-avatar-btn'>
               <Avatar name={ev.display_name} url={ev.avatar_url} size={40} />
             </button>
-            <div style={{ minWidth: 0, flex: 1 }}>
-              <p style={{ margin: 0, fontSize: '0.95rem', lineHeight: 1.45 }}>
-                <button onClick={() => onOpenMember(ev.user_id)} style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', color: 'var(--white)', fontWeight: 700, font: 'inherit' }}>
+            <div className='wb-feed-main'>
+              <p className='wb-feed-text'>
+                <button type='button' onClick={() => onOpenMember(ev.user_id)} className='wb-feed-name'>
                   {ev.display_name}
                 </button>{' '}
-                <span style={{ color: 'var(--muted)' }}>{describe(ev)}</span>
+                <span className='wb-feed-desc'>{describe(ev)}</span>
               </p>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', marginTop: '0.45rem', flexWrap: 'wrap' }}>
-                <span style={{ fontSize: '0.75rem', color: 'var(--muted)', marginRight: '0.35rem' }}>{timeAgo(ev.at)}</span>
+              <div className='wb-feed-meta'>
+                <span className='wb-feed-time'>{timeAgo(ev.at)}</span>
                 {REACTIONS.map(({ key, glyph }) => {
                   const mine = ev.my_reactions.includes(key)
                   const count = ev[key]
                   return (
                     <button
                       key={key}
+                      type='button'
                       onClick={() => { void react(ev, key) }}
                       aria-pressed={mine}
                       aria-label={t(`community.react_${key}`)}

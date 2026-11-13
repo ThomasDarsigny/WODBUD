@@ -10,7 +10,6 @@ import { inviteLink } from '../../lib/communitySocial'
 import { getLocalUser } from '../../lib/currentUser'
 import EmptyState from '../ui/EmptyState'
 import Skeleton from '../ui/Skeleton'
-import { btnPrimary } from '../../styles/ui'
 import CommunityFeed from './CommunityFeed'
 import CommunityChallenges from './CommunityChallenges'
 import CommunityLeaderboard from './CommunityLeaderboard'
@@ -62,10 +61,10 @@ export default function CommunityPage() {
   }, [id, community?.is_member, t])
 
   if (!community) {
-    if (!loaded) return <div style={{ padding: 'var(--page-pad)' }}><Skeleton height={120} lines={3} /></div>
+    if (!loaded) return <div className="wb-commu-page"><Skeleton height={120} lines={3} /></div>
     return (
-      <div style={{ padding: 'var(--page-pad)' }}>
-        <EmptyState icon='community' title={t('community.not_found')} action={<Link to={`${basePath}/communities`} style={btnPrimary}>{t('community.back')}</Link>} />
+      <div className="wb-commu-page">
+        <EmptyState icon='community' title={t('community.not_found')} action={<Link to={`${basePath}/communities`} className="wb-btn wb-btn--primary">{t('community.back')}</Link>} />
       </div>
     )
   }
@@ -113,8 +112,8 @@ export default function CommunityPage() {
   }
 
   return (
-    <div className="wb-page" style={{ maxWidth: 820 }}>
-      <Link to={`${basePath}/communities`} className="wb-rec-back" style={{ marginBottom: '-0.5rem' }}>
+    <div className="wb-page wb-commu-detail">
+      <Link to={`${basePath}/communities`} className="wb-rec-back wb-commu-back">
         ‹ {t('community.back')}
       </Link>
 

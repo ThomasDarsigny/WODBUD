@@ -180,10 +180,10 @@ export default function ClassesView() {
             <ClassScheduleEditor key={`sched-${selectedClass.id}`} classId={selectedClass.id} legacyText={selectedClass.schedule} />
 
             {/* Invitation */}
-            <section className="wb-invite" aria-labelledby="class-invite-label">
-              <p id="class-invite-label" className="wb-invite-label">{t('classes.invite_label')}</p>
-              <div className="wb-invite-row">
-                <code className="wb-invite-url">{inviteUrl}</code>
+            <section className="wb-cinvite" aria-labelledby="class-invite-label">
+              <p id="class-invite-label" className="wb-cinvite-label">{t('classes.invite_label')}</p>
+              <div className="wb-cinvite-row">
+                <code className="wb-cinvite-url">{inviteUrl}</code>
                 <button
                   type="button"
                   className="wb-btn wb-btn--primary wb-btn--sm"
@@ -206,7 +206,7 @@ export default function ClassesView() {
                 </button>
               </div>
               {showQR && (
-                <div className="wb-invite-qr">
+                <div className="wb-cinvite-qr">
                   <QRCodeSVG value={inviteUrl} size={160} />
                 </div>
               )}
@@ -322,11 +322,11 @@ function MembersTab({ classId, members, onRemove }: {
   }
 
   return (
-    <ul className="wb-members">
+    <ul className="wb-cmembers">
       {members.map((m) => (
-        <li key={m.athlete_id} className="wb-member-row">
-          <span className="wb-member-avatar" aria-hidden="true">{(m.profile?.full_name?.[0] ?? '?').toUpperCase()}</span>
-          <span className="wb-member-main">
+        <li key={m.athlete_id} className="wb-cmember-row">
+          <span className="wb-cmember-avatar" aria-hidden="true">{(m.profile?.full_name?.[0] ?? '?').toUpperCase()}</span>
+          <span className="wb-cmember-main">
             <strong>{m.profile?.full_name ?? t('classes.unknown_athlete')}</strong>
             <span>{new Date(m.joined_at).toLocaleDateString()}</span>
           </span>

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
-import type { FormEvent, ReactNode } from 'react'
+import type { FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { getLocalUser } from '../../lib/currentUser'
 import { useCommunityStore } from '../../stores/communityStore'
@@ -9,8 +9,8 @@ import ConfirmButton from '../ui/ConfirmButton'
 import EmptyState from '../ui/EmptyState'
 import Skeleton from '../ui/Skeleton'
 import NavIcon from '../navigation/NavIcon'
-import { btnPrimary as actionBtnStyle, btnSecondary as ghostBtnStyle, field as inputStyle, textarea as textareaStyle } from '../../styles/ui'
-import { useBackToClose } from '../../hooks/useBackToClose'
+import Modal from '../ui/Modal'
+import Field from '../ui/Field'
 
 /**
  * Communautés — ouvertes à la création pour tout compte (voir la migration
@@ -64,36 +64,28 @@ export default function CommunitiesView() {
   }
 
   return (
-    <div style={{ padding: 'var(--page-pad)', minHeight: '100%' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '1rem', flexWrap: 'wrap', marginBottom: '1.5rem' }}>
+    <div className="wb-commu-page">
+      <header className="wb-ph wb-commu-head">
         <div>
-          <p className="wb-ph-tag">
-            {t('community.tag')}
-          </p>
-          <h1 className="wb-ph-h1">
-            {t('community.title')}
-          </h1>
-          <p style={{ color: 'var(--muted)', marginTop: '0.45rem' }}>{t('community.subtitle')}</p>
+          <p className="wb-ph-tag">{t('community.tag')}</p>
+          <h1 className="wb-ph-h1">{t('community.title')}</h1>
+          <p className="wb-ph-sub">{t('community.subtitle')}</p>
         </div>
-        <button onClick={() => setShowCreate(true)} style={actionBtnStyle}>
+        <button type="button" onClick={() => setShowCreate(true)} className="wb-btn wb-btn--primary">
           {t('community.create')}
         </button>
-      </div>
+      </header>
 
-      {error && (
-        <div className="wb-rec-error" role="alert" style={{ marginBottom: '1rem' }}>
-          {error}
-        </div>
-      )}
+      {error && <div className="wb-rec-error wb-commu-error" role="alert">{error}</div>}
 
       {communities.length > 0 && (
         <input
-          type='search'
+          type="search"
+          className="wb-input wb-commu-search"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder={t('community.search_placeholder')}
           aria-label={t('community.search_placeholder')}
-          style={{ ...inputStyle, marginBottom: '1rem', maxWidth: 420 }}
         />
       )}
 
@@ -104,57 +96,51 @@ export default function CommunitiesView() {
           icon="community"
           title={t('community.empty')}
           hint={t('community.empty_hint')}
-          action={<button onClick={() => setShowCreate(true)} style={actionBtnStyle}>{t('community.create')}</button>}
+          action={<button type="button" onClick={() => setShowCreate(true)} className="wb-btn wb-btn--primary">{t('community.create')}</button>}
         />
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '0.75rem' }}>
-          {visible.length === 0 && (
-            <p style={{ color: 'var(--muted)', fontSize: '0.875rem', margin: 0 }}>{t('community.search_empty')}</p>
-          )}
+        <div className="wb-commu-grid">
+          {visible.length === 0 && <p className="wb-commu-small">{t('community.search_empty')}</p>}
           {visible.map((c) => (
             <div
               key={c.id}
-              role='button'
+              role="button"
               tabIndex={0}
               aria-label={c.name}
               onClick={() => open(c.id)}
               onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(c.id) } }}
               className="wb-card wb-commu-card"
             >
-              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '0.5rem' }}>
-                <p style={{ fontFamily: 'var(--font-d)', fontSize: '1.35rem', fontWeight: 900, letterSpacing: '0.01em', textTransform: 'uppercase', lineHeight: 1.05, margin: 0 }}>
-                  {c.name}
-                </p>
+              <div className="wb-commu-card-top">
+                <p className="wb-commu-card-name">{c.name}</p>
                 {c.created_by === userId && (
-                  <span onClick={(e) => e.stopPropagation()} style={{ display: 'contents' }}>
-                  <ConfirmButton
-                    onConfirm={() => deleteCommunity(c.id)}
-                    title={t('community.delete')}
-                    style={{ ...ghostBtnStyle, fontSize: '0.6875rem', padding: '0.25rem 0.5rem', color: 'rgba(255,77,0,0.8)', borderColor: 'rgba(255,77,0,0.35)', flexShrink: 0 }}
-                  >
-                    ✕
-                  </ConfirmButton>
+                  <span onClick={(e) => e.stopPropagation()} className="wb-contents">
+                    <ConfirmButton
+                      onConfirm={() => deleteCommunity(c.id)}
+                      title={t('community.delete')}
+                      ariaLabel={`${t('community.delete')} — ${c.name}`}
+                      className="wb-btn wb-btn--danger wb-btn--sm"
+                    >
+                      ✕
+                    </ConfirmButton>
                   </span>
                 )}
               </div>
 
-              {c.description && (
-                <p style={{ color: 'var(--muted)', fontSize: '0.8125rem', lineHeight: 1.5, margin: 0 }}>{c.description}</p>
-              )}
+              {c.description && <p className="wb-commu-card-desc">{c.description}</p>}
 
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem', marginTop: 'auto', paddingTop: '0.4rem' }}>
-                <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'var(--muted)', fontSize: '0.8125rem' }}>
+              <div className="wb-commu-card-foot">
+                <span className="wb-commu-card-count">
                   <NavIcon name="community" size={16} />
                   {t('community.member_count', { count: c.member_count ?? 0 })}
                 </span>
                 <button
+                  type="button"
                   onClick={(e) => { e.stopPropagation(); void handleToggleMembership(c) }}
                   disabled={busyId === c.id}
-                  style={c.is_member
-                    ? { ...ghostBtnStyle, fontSize: '0.75rem', opacity: busyId === c.id ? 0.6 : 1 }
-                    : { ...actionBtnStyle, fontSize: '0.75rem', padding: '0.45rem 0.9rem', opacity: busyId === c.id ? 0.6 : 1 }}
+                  className={`wb-btn wb-btn--sm ${c.is_member ? 'wb-btn--ghost' : 'wb-btn--primary'}`}
                 >
-                  {busyId === c.id ? '...' : c.is_member ? t('community.leave') : t('community.join')}
+                  {busyId === c.id ? '…' : c.is_member ? t('community.leave') : t('community.join')}
                 </button>
               </div>
             </div>
@@ -180,7 +166,6 @@ function CreateCommunityModal({ onClose, onCreate }: {
   onClose: () => void
   onCreate: (data: { name: string; description: string | null }) => Promise<void>
 }) {
-  useBackToClose(true, onClose)
   const { t } = useTranslation('common')
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
@@ -201,46 +186,22 @@ function CreateCommunityModal({ onClose, onCreate }: {
   }
 
   return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      style={{ position: 'fixed', inset: 0, zIndex: 200, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(4px)', padding: '1rem' }}
-      onClick={onClose}
-    >
-      <div
-        onClick={(e) => e.stopPropagation()}
-        style={{ background: 'var(--dark)', border: '1px solid var(--border)', borderRadius: 20, maxWidth: 420, width: '100%', padding: '1.5rem' }}
-      >
-        <h2 style={{ fontFamily: 'var(--font-d)', fontSize: '1.375rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.04em', margin: '0 0 1.25rem' }}>
-          {t('community.create')}
-        </h2>
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          <Field label={t('community.field_name')} required>
-            <input value={name} onChange={(e) => setName(e.target.value)} autoFocus style={inputStyle} />
-          </Field>
-          <Field label={t('community.field_description')}>
-            <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={3} style={textareaStyle} />
-          </Field>
-          {error && <p style={{ color: 'var(--orange)', fontSize: '0.8125rem', margin: 0 }}>{error}</p>}
-          <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-end', marginTop: '0.5rem' }}>
-            <button type="button" onClick={onClose} style={ghostBtnStyle}>{t('actions.cancel')}</button>
-            <button type="submit" disabled={!name.trim() || loading} style={{ ...actionBtnStyle, opacity: !name.trim() || loading ? 0.6 : 1 }}>
-              {loading ? '...' : t('actions.save')}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  )
-}
-
-function Field({ label, required, children }: { label: string; required?: boolean; children: ReactNode }) {
-  return (
-    <label style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
-      <span style={{ fontSize: '0.8125rem', fontWeight: 600 }}>
-        {label}{required && ' *'}
-      </span>
-      {children}
-    </label>
+    <Modal title={t('community.create')} onClose={onClose}>
+      <form onSubmit={handleSubmit} className="wb-form">
+        <Field label={t('community.field_name')} required>
+          <input className="wb-input" value={name} onChange={(e) => setName(e.target.value)} autoFocus required />
+        </Field>
+        <Field label={t('community.field_description')}>
+          <textarea className="wb-input wb-support-text" value={description} onChange={(e) => setDescription(e.target.value)} rows={3} />
+        </Field>
+        {error && <p className="wb-rec-error" role="alert">{error}</p>}
+        <div className="wb-form-actions">
+          <button type="button" onClick={onClose} className="wb-btn wb-btn--ghost">{t('actions.cancel')}</button>
+          <button type="submit" disabled={!name.trim() || loading} className="wb-btn wb-btn--primary">
+            {loading ? '…' : t('actions.save')}
+          </button>
+        </div>
+      </form>
+    </Modal>
   )
 }

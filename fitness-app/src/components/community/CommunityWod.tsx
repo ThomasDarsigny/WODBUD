@@ -7,8 +7,7 @@ import { useWorkoutStore } from '../../stores/workoutStore'
 import { useSessionStore } from '../../stores/sessionStore'
 import ConfirmButton from '../ui/ConfirmButton'
 import Skeleton from '../ui/Skeleton'
-import { btnDanger, btnPrimary, field } from '../../styles/ui'
-import { Avatar, cardBox, Notice, SectionLabel, useTimeAgo } from './communityUi'
+import { Avatar, Notice, SectionLabel, useTimeAgo } from './communityUi'
 
 /** Le WOD épinglé par un admin : les membres le lancent en un clic. */
 export default function CommunityWod({ communityId, isAdmin, basePath }: {
@@ -82,55 +81,55 @@ export default function CommunityWod({ communityId, isAdmin, basePath }: {
       ) : wod === null ? (
         <Notice>{isAdmin ? t('community.wod_empty_admin') : t('community.wod_empty')}</Notice>
       ) : (
-        <div style={{ ...cardBox, borderColor: 'rgba(255,77,0,0.35)', marginBottom: '1.25rem' }}>
-          <p style={{ margin: 0, fontSize: '0.75rem', color: 'var(--muted)' }}>{t('community.wod_pinned', { when: timeAgo(wod.pinned_at) })}</p>
-          <p style={{ margin: '0.2rem 0 0', fontFamily: 'var(--font-d)', fontSize: '1.375rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.03em' }}>{wod.title}</p>
-          {wod.note && <p style={{ margin: '0.4rem 0 0', color: 'var(--muted)', fontSize: '0.875rem', lineHeight: 1.5 }}>{wod.note}</p>}
-          <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '0.9rem' }}>
-            <button onClick={launch} disabled={sessionRunning} style={{ ...btnPrimary, opacity: sessionRunning ? 0.55 : 1 }}>
+        <div className="wb-commu-box wb-commu-box--accent wb-commu-wod">
+          <p className="wb-commu-meta">{t('community.wod_pinned', { when: timeAgo(wod.pinned_at) })}</p>
+          <p className="wb-commu-title">{wod.title}</p>
+          {wod.note && <p className="wb-commu-text">{wod.note}</p>}
+          <div className="wb-commu-wod-actions">
+            <button type="button" onClick={launch} disabled={sessionRunning} className="wb-btn wb-btn--primary">
               ▶ {wod.i_did ? t('community.wod_redo') : t('community.wod_start')}
             </button>
             {isAdmin && (
-              <ConfirmButton onConfirm={async () => { await unpinCommunityWod(wod.id); await reload() }} confirmLabel={t('actions.confirm')} style={{ ...btnDanger }}>
+              <ConfirmButton onConfirm={async () => { await unpinCommunityWod(wod.id); await reload() }} confirmLabel={t('actions.confirm')} className="wb-btn wb-btn--danger">
                 {t('community.wod_unpin')}
               </ConfirmButton>
             )}
           </div>
-          {sessionRunning && <p style={{ margin: '0.5rem 0 0', fontSize: '0.75rem', color: 'var(--muted)' }}>{t('community.wod_session_running')}</p>}
+          {sessionRunning && <p className="wb-commu-meta wb-commu-gap">{t('community.wod_session_running')}</p>}
 
-          <div style={{ marginTop: '1.1rem' }}>
+          <div className="wb-commu-doneby">
             <SectionLabel>{t('community.wod_done_by', { count: wod.done_by.length })}</SectionLabel>
             {wod.done_by.length === 0 ? (
-              <p style={{ margin: 0, fontSize: '0.8125rem', color: 'var(--muted)' }}>{t('community.wod_nobody')}</p>
+              <p className="wb-commu-small">{t('community.wod_nobody')}</p>
             ) : (
-              <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
+              <ul className="wb-commu-people">
                 {wod.done_by.map((d) => (
-                  <li key={d.user_id} style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                  <li key={d.user_id} className="wb-commu-person">
                     <Avatar name={d.display_name} url={d.avatar_url} size={28} />
-                    <span style={{ flex: 1, fontSize: '0.875rem' }}>{d.display_name}</span>
-                    <span style={{ fontSize: '0.8125rem', color: 'var(--muted)' }}>{t('community.stat_minutes', { count: d.minutes })}</span>
+                    <span className="wb-commu-person-name">{d.display_name}</span>
+                    <span className="wb-commu-small">{t('community.stat_minutes', { count: d.minutes })}</span>
                   </li>
                 ))}
               </ul>
             )}
-            <p style={{ margin: '0.5rem 0 0', fontSize: '0.75rem', color: 'var(--muted)' }}>{t('community.wod_privacy')}</p>
+            <p className="wb-commu-meta wb-commu-gap">{t('community.wod_privacy')}</p>
           </div>
         </div>
       )}
 
       {isAdmin && (
-        <div style={{ ...cardBox, display: 'grid', gap: '0.6rem' }}>
+        <div className="wb-commu-box wb-commu-form">
           <SectionLabel>{wod ? t('community.wod_replace') : t('community.wod_pin')}</SectionLabel>
           {mine.length === 0 ? (
-            <p style={{ margin: 0, fontSize: '0.8125rem', color: 'var(--muted)' }}>{t('community.wod_no_workouts')}</p>
+            <p className="wb-commu-small">{t('community.wod_no_workouts')}</p>
           ) : (
             <>
-              <select value={workoutId} onChange={(e) => setWorkoutId(e.target.value)} style={field}>
+              <select className="wb-input" value={workoutId} onChange={(e) => setWorkoutId(e.target.value)} aria-label={t('community.wod_choose')}>
                 <option value=''>{t('community.wod_choose')}</option>
                 {mine.map((w) => <option key={w.id} value={w.id}>{w.name}</option>)}
               </select>
-              <input value={note} onChange={(e) => setNote(e.target.value)} maxLength={300} placeholder={t('community.wod_note_placeholder')} style={field} />
-              <button onClick={() => { void pin() }} disabled={!chosen || saving} style={{ ...btnPrimary, justifySelf: 'start', opacity: !chosen || saving ? 0.55 : 1 }}>
+              <input className="wb-input" value={note} onChange={(e) => setNote(e.target.value)} maxLength={300} placeholder={t('community.wod_note_placeholder')} aria-label={t('community.wod_note_placeholder')} />
+              <button type="button" onClick={() => { void pin() }} disabled={!chosen || saving} className="wb-btn wb-btn--primary wb-commu-start">
                 📌 {t('community.wod_pin_action')}
               </button>
             </>
