@@ -57,7 +57,7 @@ describe('charge saisie', () => {
     expect(bumpLoadText('100kg', squat, 'kg')).toBe('110kg')
     expect(bumpLoadText('60', press, 'kg')).toBe('62.5')
     expect(bumpLoadText('57,5kg', press, 'kg')).toBe('60kg')
-    expect(bumpLoadText('225 lb', squat, 'kg')).toBe('250lb') // 247,5 → 250
+    expect(bumpLoadText('225 lb', squat, 'kg')).toBe('250 lb') // 247,5 → 250, espace gardée
     expect(bumpLoadText('BW', squat, 'kg')).toBeNull()
   })
 })

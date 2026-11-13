@@ -10,6 +10,7 @@ import { supabase } from '../../lib/supabase'
 import { conflictsFor, primaryMuscles, weekWarnings, type DayLoad } from '../../lib/weekVolume'
 import { MUSCLE_GROUP_I18N_KEYS, type MuscleGroup } from '../../types'
 import ConfirmButton from '../ui/ConfirmButton'
+import CycleSheet from './CycleSheet'
 import Skeleton from '../ui/Skeleton'
 
 /**
@@ -29,6 +30,7 @@ export default function ClassWeekPlanner({ classId }: { classId: string }) {
   const [picking, setPicking] = useState<string | null>(null)
   const [message, setMessage] = useState<{ kind: 'ok' | 'err'; text: string } | null>(null)
   const [busy, setBusy] = useState(false)
+  const [cycleOpen, setCycleOpen] = useState(false)
 
   const days = useMemo(() => weekDays(start), [start])
   const end = days[6]
@@ -215,7 +217,23 @@ export default function ClassWeekPlanner({ classId }: { classId: string }) {
         </ol>
       )}
 
+      {cycleOpen && (
+        <CycleSheet
+          classId={classId}
+          onClose={() => setCycleOpen(false)}
+          onCreated={(n) => {
+            setCycleOpen(false)
+            void fetchWorkouts()
+            void refresh()
+            setMessage({ kind: 'ok', text: t('classes.cycle_created', { count: n }) })
+          }}
+        />
+      )}
+
       <div className="wb-week-foot">
+        {!cycleOpen && (
+          <button type="button" className="wb-btn wb-btn--secondary wb-btn--sm" onClick={() => setCycleOpen(true)}>{t('classes.cycle_open')}</button>
+        )}
         <ConfirmButton onConfirm={duplicate} disabled={busy || weekPlans.length === 0} className="wb-btn wb-btn--secondary wb-btn--sm">
           {t('classes.week_duplicate')}
         </ConfirmButton>

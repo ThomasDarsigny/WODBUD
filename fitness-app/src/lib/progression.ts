@@ -78,8 +78,19 @@ export function parseLoad(text: string | undefined, fallback: WeightUnit): { val
   return { value, unit, explicit: Boolean(m[2]) }
 }
 
-/** « Trop facile » : la charge suivante, écrite comme la personne l'avait écrite. */
+/**
+ * « Trop facile » : la charge suivante, écrite comme la personne l'avait écrite.
+ * « 102 kg / 70 kg » (RX hommes / femmes) fait monter les deux charges.
+ */
 export function bumpLoadText(text: string | undefined, exercise: Load, fallback: WeightUnit): string | null {
+  if (text && text.includes('/')) {
+    const parts = text.split(/\s*\/\s*/).map((part) => bumpOne(part, exercise, fallback))
+    return parts.every((part): part is string => part !== null) ? parts.join(' / ') : null
+  }
+  return bumpOne(text, exercise, fallback)
+}
+
+function bumpOne(text: string | undefined, exercise: Load, fallback: WeightUnit): string | null {
   const load = parseLoad(text, fallback)
   if (!load) return null
   const kg = load.unit === 'kg' ? load.value : load.value / LB
@@ -87,5 +98,6 @@ export function bumpLoadText(text: string | undefined, exercise: Load, fallback:
   if (!next) return null
   const comma = (text ?? '').includes(',')
   const num = String(next.value).replace('.', comma ? ',' : '.')
-  return load.explicit ? `${num}${load.unit}` : num
+  const gap = /\d\s+(kg|lb)/i.test(text ?? '') ? ' ' : ''
+  return load.explicit ? `${num}${gap}${load.unit}` : num
 }

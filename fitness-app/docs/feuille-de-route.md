@@ -129,7 +129,7 @@ Rapport : audit produit publié le 12 novembre. Branche de travail : `sprint`. U
 ### Phase 2 · Programmer comme un entraîneur chef
 - [x] 2.1 Créateur en un écran : liste d'exercices d'abord, filtres repliés, « + » direct sur chaque ligne, tiroir « N exercices dans le WOD » sur téléphone, `h1` et champs étiquetés ; ligne et filtres extraits en composants.
 - [x] 2.2 Calendrier par cours : semaine du lundi au dimanche, « + » sur un jour (recherche, benchmarks d'abord, note), tableau blanc et suppression par séance, « Dupliquer vers la semaine suivante » (sans doublons, sans notification) ; la liste reste disponible.
-- [ ] 2.3 Modèles et cycles (+5 % / +10 % par semaine).
+- [x] 2.3 Cycles : un WOD de base répété N semaines (2 à 12) le même jour, charge +5 % haut / +10 % bas par semaine (arrondi aux disques) ou identique, aperçu semaine par semaine avant de créer ; copies du WOD et séances de cours créées, une seule notification. Modèles réutilisables : la bibliothèque et les benchmarks en tiennent lieu pour l'instant.
 - [ ] 2.4 « Proposer un WOD » par l'IA dans le créateur (sortie structurée, exercices de la bibliothèque seulement).
 - [x] 2.5 Garde-fou de volume hebdomadaire par muscle : dans le calendrier, muscle principal deux jours de suite ou 3 jours et plus dans la semaine ; avertissement (non bloquant) au moment de programmer un WOD ; cardio exclu ; règles testées.
 
