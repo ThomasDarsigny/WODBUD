@@ -1823,6 +1823,20 @@ button.wb-row:active, a.wb-row:active { background: var(--surface); }
 .wb-vote-opt-name { font-family: var(--font-d); font-size: 0.9375rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
 .wb-vote-opt-muscle { align-self: flex-start; padding: 0.14rem 0.45rem; border-radius: var(--r-md); border: 1px solid color-mix(in srgb, var(--opt) 35%, transparent); color: var(--opt); font-family: var(--font-d); font-size: 0.6875rem; letter-spacing: 0.1em; text-transform: uppercase; }
 
+/* ── Page d'invitation (4.2), sur la base de la page de présence ── */
+.wb-join-card { width: 100%; max-width: 420px; padding: 1.75rem var(--page-pad); border-radius: var(--r-md); border: 1px solid var(--border); background: var(--dark); }
+.wb-join-card .wb-input { background: var(--black); border-color: var(--line-fn); }
+.wb-join-card .wb-input:focus { border-color: var(--orange); }
+.wb-join-head { margin-bottom: 1.75rem; text-align: center; }
+.wb-join-sub { margin: 0.5rem 0 0; color: var(--muted); font-size: 0.8125rem; }
+.wb-join-done { display: flex; flex-direction: column; align-items: center; gap: 1rem; text-align: center; }
+.wb-join-emoji { font-size: 3rem; line-height: 1; }
+.wb-join-error { margin: 0; color: var(--orange); font-size: 0.8125rem; }
+.wb-join-done .wb-join-error { font-family: var(--font-d); font-size: 0.9375rem; letter-spacing: 0.1em; text-transform: uppercase; }
+.wb-join-switch { margin: 1.25rem 0 0; text-align: center; color: var(--muted); font-size: 0.8125rem; }
+.wb-join-switch button { display: inline-flex; align-items: center; min-height: 40px; padding: 0; border: none; background: none; color: var(--orange); font: inherit; cursor: pointer; }
+.wb-join-switch button:hover, .wb-join-switch button:focus-visible { text-decoration: underline; }
+
 /* ── Créateur de WOD (4.2) ───────────────────────────────────────── */
 .wb-builder { display: grid; grid-template-columns: minmax(0, 1fr) 380px; height: calc(100vh - var(--section-tabs-h, 0px)); overflow: hidden; }
 .wb-builder.is-mobile { grid-template-columns: 1fr; grid-template-rows: auto minmax(0, 1fr); height: calc(100dvh - var(--mobile-top-h) - var(--tabbar-h) - var(--safe-bottom) - var(--section-tabs-h, 0px)); }

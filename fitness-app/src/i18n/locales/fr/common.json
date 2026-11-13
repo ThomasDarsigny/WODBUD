@@ -884,7 +884,8 @@
     "create_account": "Créer un compte",
     "create_subtitle": "Crée ton compte pour rejoindre le cours.",
     "field_name": "Prénom et nom",
-    "submit_signup": "Créer mon compte"
+    "submit_signup": "Créer mon compte",
+    "password_placeholder": "6 caractères min."
   },
   "vote": {
     "tag": "Sélection du coach",

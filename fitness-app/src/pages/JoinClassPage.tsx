@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { supabase } from '../lib/supabase'
 import { useClassStore } from '../stores/classStore'
 import type { Class } from '../types'
-import { btnPrimary as btnStyle, field } from '../styles/ui'
+import Field from '../components/ui/Field'
 
 type Step = 'loading' | 'signup' | 'login' | 'joining' | 'done' | 'error'
 
@@ -109,135 +109,87 @@ export default function JoinClassPage() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--black)', color: 'var(--white)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 'var(--page-pad)', fontFamily: 'var(--font-b)' }}>
-      <Link to="/" style={{ fontFamily: 'var(--font-d)', fontWeight: 900, fontSize: '1.75rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--white)', textDecoration: 'none', marginBottom: '2.5rem' }}>
-        WOD<span style={{ color: 'var(--orange)' }}>BUD</span>
-      </Link>
+    <main className="wb-checkin-page">
+      <Link to="/" className="wb-checkin-logo">WOD<span>BUD</span></Link>
 
-      <div style={{ width: '100%', maxWidth: 420, border: '1px solid var(--border)', background: 'var(--dark)', padding: 'var(--page-pad)' }}>
-        {step === 'loading' && (
-          <p style={{ textAlign: 'center', color: 'var(--muted)', fontFamily: 'var(--font-d)', fontSize: '0.8125rem', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
-            {t('status.loading')}
-          </p>
-        )}
+      <section className="wb-join-card" aria-live="polite">
+        {step === 'loading' && <p className="wb-checkin-status">{t('status.loading')}</p>}
 
-        {step === 'joining' && (
-          <p style={{ textAlign: 'center', color: 'var(--muted)', fontFamily: 'var(--font-d)', fontSize: '0.8125rem', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
-            {t('join.joining')}
-          </p>
-        )}
+        {step === 'joining' && <p className="wb-checkin-status">{t('join.joining')}</p>}
 
         {step === 'done' && (
-          <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
-            <span style={{ fontSize: '3rem' }}>🎉</span>
-            <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'var(--orange)' }}>
-              {t('join.success_label')}
-            </p>
-            <h2 style={{ fontFamily: 'var(--font-d)', fontSize: '1.75rem', fontWeight: 900, textTransform: 'uppercase', margin: 0 }}>
-              {classInfo?.name ?? t('join.success_title')}
-            </h2>
-            <p style={{ color: 'var(--muted)', fontSize: '0.9375rem', marginTop: '0.25rem' }}>
-              {t('join.success_subtitle')}
-            </p>
-            <button onClick={() => navigate('/athlete')} style={btnStyle}>
+          <div className="wb-join-done">
+            <span className="wb-join-emoji" aria-hidden="true">🎉</span>
+            <p className="wb-ph-tag">{t('join.success_label')}</p>
+            <h1 className="wb-checkin-title">{classInfo?.name ?? t('join.success_title')}</h1>
+            <p className="wb-checkin-text">{t('join.success_subtitle')}</p>
+            <button type="button" onClick={() => navigate('/athlete')} className="wb-btn wb-btn--primary">
               {t('join.go_dashboard')}
             </button>
           </div>
         )}
 
         {step === 'error' && (
-          <div style={{ textAlign: 'center' }}>
-            <p style={{ color: 'var(--orange)', fontFamily: 'var(--font-d)', fontSize: '0.9375rem', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '1rem' }}>
-              {errorMsg}
-            </p>
-            <Link to="/login" style={{ color: 'var(--muted)', fontSize: '0.8125rem' }}>{t('auth.login')}</Link>
+          <div className="wb-join-done">
+            <p className="wb-join-error" role="alert">{errorMsg}</p>
+            <Link to="/login" className="wb-checkin-link">{t('auth.login')}</Link>
           </div>
         )}
 
         {step === 'signup' && (
           <>
-            <div style={{ marginBottom: '1.75rem', textAlign: 'center' }}>
-              <p className="wb-ph-tag">
-                {t('join.invited_tag')}
-              </p>
-              <h2 style={{ fontFamily: 'var(--font-d)', fontSize: '1.75rem', fontWeight: 900, textTransform: 'uppercase', margin: 0 }}>
-                {t('join.create_account')}
-              </h2>
-              <p style={{ color: 'var(--muted)', fontSize: '0.8125rem', marginTop: '0.5rem' }}>
-                {t('join.create_subtitle')}
-              </p>
+            <div className="wb-join-head">
+              <p className="wb-ph-tag">{t('join.invited_tag')}</p>
+              <h1 className="wb-checkin-title">{t('join.create_account')}</h1>
+              <p className="wb-join-sub">{t('join.create_subtitle')}</p>
             </div>
-            <form onSubmit={handleSignup} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              <InputField label={t('join.field_name')} value={fullName} onChange={setFullName} placeholder="Jean Tremblay" required />
-              <InputField label={t('auth.email')} value={email} onChange={setEmail} type="email" placeholder="jean@exemple.com" required />
-              <InputField label={t('auth.password')} value={password} onChange={setPassword} type="password" placeholder="6 caractères min." required />
-              {formError && <p style={{ color: 'var(--orange)', fontSize: '0.8125rem', margin: 0 }}>{formError}</p>}
-              <button type="submit" disabled={formLoading} style={{ ...btnStyle, marginTop: '0.5rem', opacity: formLoading ? 0.7 : 1 }}>
-                {formLoading ? '...' : t('join.submit_signup')}
+            <form onSubmit={handleSignup} className="wb-form">
+              <Field label={t('join.field_name')} required>
+                <input className="wb-input" value={fullName} onChange={(e) => setFullName(e.target.value)} placeholder="Jean Tremblay" autoComplete="name" required />
+              </Field>
+              <Field label={t('auth.email')} required>
+                <input className="wb-input" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="jean@exemple.com" autoComplete="email" required />
+              </Field>
+              <Field label={t('auth.password')} required>
+                <input className="wb-input" type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder={t('join.password_placeholder')} autoComplete="new-password" minLength={6} required />
+              </Field>
+              {formError && <p className="wb-join-error" role="alert">{formError}</p>}
+              <button type="submit" disabled={formLoading} className="wb-btn wb-btn--primary wb-btn--block">
+                {formLoading ? '…' : t('join.submit_signup')}
               </button>
             </form>
-            <p style={{ textAlign: 'center', marginTop: '1.25rem', fontSize: '0.8125rem', color: 'var(--muted)' }}>
+            <p className="wb-join-switch">
               {t('auth.have_account')}{' '}
-              <button onClick={() => { setStep('login'); setFormError('') }} style={{ background: 'none', border: 'none', color: 'var(--orange)', cursor: 'pointer', fontSize: '0.8125rem', fontFamily: 'var(--font-b)', padding: 0 }}>
-                {t('auth.login')}
-              </button>
+              <button type="button" onClick={() => { setStep('login'); setFormError('') }}>{t('auth.login')}</button>
             </p>
           </>
         )}
 
         {step === 'login' && (
           <>
-            <div style={{ marginBottom: '1.75rem', textAlign: 'center' }}>
-              <p className="wb-ph-tag">
-                {t('join.invited_tag')}
-              </p>
-              <h2 style={{ fontFamily: 'var(--font-d)', fontSize: '1.75rem', fontWeight: 900, textTransform: 'uppercase', margin: 0 }}>
-                {t('auth.login')}
-              </h2>
+            <div className="wb-join-head">
+              <p className="wb-ph-tag">{t('join.invited_tag')}</p>
+              <h1 className="wb-checkin-title">{t('auth.login')}</h1>
             </div>
-            <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              <InputField label={t('auth.email')} value={email} onChange={setEmail} type="email" placeholder="jean@exemple.com" required />
-              <InputField label={t('auth.password')} value={password} onChange={setPassword} type="password" placeholder="" required />
-              {formError && <p style={{ color: 'var(--orange)', fontSize: '0.8125rem', margin: 0 }}>{formError}</p>}
-              <button type="submit" disabled={formLoading} style={{ ...btnStyle, marginTop: '0.5rem', opacity: formLoading ? 0.7 : 1 }}>
-                {formLoading ? '...' : t('auth_ui.login_submit')}
+            <form onSubmit={handleLogin} className="wb-form">
+              <Field label={t('auth.email')} required>
+                <input className="wb-input" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="jean@exemple.com" autoComplete="email" required />
+              </Field>
+              <Field label={t('auth.password')} required>
+                <input className="wb-input" type="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="current-password" required />
+              </Field>
+              {formError && <p className="wb-join-error" role="alert">{formError}</p>}
+              <button type="submit" disabled={formLoading} className="wb-btn wb-btn--primary wb-btn--block">
+                {formLoading ? '…' : t('auth_ui.login_submit')}
               </button>
             </form>
-            <p style={{ textAlign: 'center', marginTop: '1.25rem', fontSize: '0.8125rem', color: 'var(--muted)' }}>
+            <p className="wb-join-switch">
               {t('auth.no_account')}{' '}
-              <button onClick={() => { setStep('signup'); setFormError('') }} style={{ background: 'none', border: 'none', color: 'var(--orange)', cursor: 'pointer', fontSize: '0.8125rem', fontFamily: 'var(--font-b)', padding: 0 }}>
-                {t('join.submit_signup')}
-              </button>
+              <button type="button" onClick={() => { setStep('signup'); setFormError('') }}>{t('join.submit_signup')}</button>
             </p>
           </>
         )}
-      </div>
-    </div>
+      </section>
+    </main>
   )
 }
-
-function InputField({ label, value, onChange, type = 'text', placeholder, required }: {
-  label: string
-  value: string
-  onChange: (v: string) => void
-  type?: string
-  placeholder?: string
-  required?: boolean
-}) {
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
-      <label style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--muted)' }}>
-        {label}{required && <span style={{ color: 'var(--orange)' }}> *</span>}
-      </label>
-      <input
-        type={type}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder={placeholder}
-        required={required}
-        style={field}
-      />
-    </div>
-  )
-}
-

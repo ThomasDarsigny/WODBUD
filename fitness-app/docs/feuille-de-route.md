@@ -149,7 +149,9 @@ Rapport : audit produit publié le 12 novembre. Branche de travail : `sprint`. U
   - [x] ClassesView : 71 → 0 style en ligne ; fenêtres « Créer un cours » et « Créer un vote » accessibles au clavier ; chaînes en dur traduites ; parcours e2e de création d'un cours.
   - [x] Créateur de WOD : 65 → 0 style en ligne ; alertes « repos 48 h » et « cardio » sur un `AlertDialog` partagé (rôle alertdialog, focus sur Annuler, Échap, focus rendu au « + ») ; « + » en aria-disabled pendant l'ajout pour ne plus perdre le focus ; lignes d'exercice étiquetées (répétitions, séries, détails, retirer) ; parcours e2e de l'alerte 48 h. Correctif : collision de classes .wb-pick* introduite à l'étape précédente (lignes de la bibliothèque) et vérification de mise en page ajoutée au parcours « créer un WOD ».
   - [x] Paramètres : 42 → 0 style en ligne ; étiquettes reliées aux champs (nom, courriel, mot de passe), groupes de puces annoncés, ✕ des liens sociaux étiqueté, bordures de champs contrastées ; fenêtre de suppression du compte sur `Modal` (teinte danger, Échap, impossible à fermer pendant la suppression) ; bouton désactivé enfin visible comme tel ; parcours e2e.
-  - [ ] Votes athlète (33), page d'invitation (32), fiche et formulaire d'exercice (25 + 31), planning (26), puis le reste.
+  - [x] Vote de l'athlète : 33 → 1 (la couleur de l'option, passée en variable CSS) ; options en groupe annoncé, confirmation en zone vivante, états vides sur EmptyState ; parcours e2e.
+  - [x] Page d'invitation : 32 → 0 ; même gabarit que la page de présence, étiquettes reliées aux champs (elles ne l'étaient pas), autocomplete (nom, courriel, nouveau / mot de passe actuel), erreurs annoncées ; parcours e2e (connexion puis cours rejoint, lien invalide).
+  - [ ] Fiche et formulaire d'exercice (25 + 31), planning (26), puis le reste.
 - [ ] 4.3 Jetons sémantiques (couleurs, espacements) et plancher typographique.
 - [ ] 4.4 Thème clair.
 - [ ] 4.5 Suivi des erreurs.

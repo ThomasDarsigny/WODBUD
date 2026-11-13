@@ -884,7 +884,8 @@
     "create_account": "Create an account",
     "create_subtitle": "Create your account to join the class.",
     "field_name": "Full name",
-    "submit_signup": "Create my account"
+    "submit_signup": "Create my account",
+    "password_placeholder": "6 characters min."
   },
   "vote": {
     "tag": "Coach selection",

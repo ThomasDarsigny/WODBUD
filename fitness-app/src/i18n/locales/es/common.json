@@ -887,7 +887,8 @@
     "create_account": "Crear una cuenta",
     "create_subtitle": "Crea tu cuenta para unirte a la clase.",
     "field_name": "Nombre completo",
-    "submit_signup": "Crear mi cuenta"
+    "submit_signup": "Crear mi cuenta",
+    "password_placeholder": "6 caracteres mín."
   },
   "vote": {
     "tag": "Selección del coach",
