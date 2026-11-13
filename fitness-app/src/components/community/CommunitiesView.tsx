@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import type { FormEvent, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { getLocalUser } from '../../lib/currentUser'
@@ -23,6 +23,17 @@ export default function CommunitiesView() {
   const { communities, loading, error, fetchCommunities, createCommunity, deleteCommunity, joinCommunity, leaveCommunity } = useCommunityStore()
   const [userId, setUserId] = useState<string | null>(null)
   const [showCreate, setShowCreate] = useState(false)
+  // « + Nouvelle communauté » depuis Groupes : ?new=1 ouvre la création.
+  const [params, setParams] = useSearchParams()
+  const wantNew = params.get('new') === '1'
+  const [newHandled, setNewHandled] = useState(false)
+  if (wantNew && !newHandled) {
+    setNewHandled(true)
+    setShowCreate(true)
+  }
+  useEffect(() => {
+    if (wantNew && newHandled) setParams({}, { replace: true })
+  }, [wantNew, newHandled, setParams])
   const [busyId, setBusyId] = useState<string | null>(null)
   const [search, setSearch] = useState('')
   const navigate = useNavigate()

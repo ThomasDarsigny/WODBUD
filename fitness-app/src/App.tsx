@@ -23,6 +23,7 @@ const ClassesView = lazy(() => import('./components/dashboard/ClassesView'))
 const AiCoachView = lazy(() => import('./components/dashboard/AiCoachView'))
 const SettingsView = lazy(() => import('./components/dashboard/SettingsView'))
 const CommunitiesView = lazy(() => import('./components/community/CommunitiesView'))
+const GroupsView = lazy(() => import('./components/groups/GroupsView'))
 const LandingPage = lazy(() => import('./pages/LandingPage'))
 const ProfileChooser = lazy(() => import('./components/landing/ProfileChooser'))
 const WhiteboardView = lazy(() => import('./components/whiteboard/WhiteboardView'))
@@ -382,6 +383,16 @@ function App() {
           }
         />
         <Route
+          path="/dashboard/groups"
+          element={
+            <ProtectedRoute>
+              <DashboardLayout>
+                <GroupsView />
+              </DashboardLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/dashboard/communities/:id"
           element={
             <ProtectedRoute>
@@ -535,6 +546,16 @@ function App() {
             <ProtectedRoute>
               <AthleteDashboardLayout>
                 <CommunitiesView />
+              </AthleteDashboardLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/athlete/groups"
+          element={
+            <ProtectedRoute>
+              <AthleteDashboardLayout>
+                <GroupsView />
               </AthleteDashboardLayout>
             </ProtectedRoute>
           }

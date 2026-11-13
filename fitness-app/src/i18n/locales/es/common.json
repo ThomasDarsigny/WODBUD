@@ -31,7 +31,11 @@
     "group_program": "Programar",
     "group_training": "Mi entrenamiento",
     "tab_program": "Programar",
-    "tab_training": "Entreno"
+    "tab_training": "Entreno",
+    "groups": "Grupos",
+    "group_groups": "Grupos",
+    "tab_groups": "Grupos",
+    "tab_groups_all": "Resumen"
   },
   "library": {
     "title": "Biblioteca de workouts",
@@ -1618,5 +1622,24 @@
     "rotate": "Alternar",
     "next_plan": "Sesión siguiente",
     "fullscreen": "Pantalla completa"
+  },
+  "groups": {
+    "tag": "Grupos",
+    "title": "Mis grupos",
+    "subtitle_coach": "Tus clases y tus comunidades, en un solo lugar.",
+    "subtitle_athlete": "Tus clases y tus comunidades, en un solo lugar.",
+    "new_class": "Nueva clase",
+    "new_community": "Nueva comunidad",
+    "kind_class": "Clases",
+    "kind_community": "Comunidades",
+    "discover": "Descubrir comunidades",
+    "no_class_coach": "Aún no hay clases",
+    "no_class_coach_hint": "Crea tu primera clase: horario, planificación, asistencia y pizarra vendrán después.",
+    "no_class_athlete": "No estás en ninguna clase",
+    "no_class_athlete_hint": "Pide el enlace de invitación a tu coach: tu clase aparecerá aquí.",
+    "no_schedule": "Horario por definir",
+    "no_community": "Ninguna comunidad",
+    "no_community_hint": "Retos, clasificaciones y WODs compartidos con otros atletas.",
+    "you_created": "creada por ti"
   }
 }

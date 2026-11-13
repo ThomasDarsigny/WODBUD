@@ -1,7 +1,7 @@
 import type { NavIconName } from '../components/navigation/NavIcon'
 
 /**
- * Menu du coach (phase 3, 3.4) : cinq entrées au lieu de treize. Chaque
+ * Menu du coach (phase 3, 3.4 ; « Groupes » en 3.6) : cinq entrées. Chaque
  * entrée regroupe des pages ; la page ouverte montre des onglets vers les
  * autres pages de son groupe. Les adresses ne changent pas.
  */
@@ -33,7 +33,8 @@ export interface NavGroup {
 export const LEAVES: NavLeaf[] = [
   { id: 'admin', labelKey: 'nav.admin', icon: 'admin', path: '/dashboard/admin' },
   { id: 'today', labelKey: 'nav.today', icon: 'home', path: '/dashboard/today' },
-  { id: 'classes', labelKey: 'nav.classes', icon: 'classes', path: '/dashboard/classes' },
+  { id: 'groups', labelKey: 'nav.groups', tabKey: 'nav.tab_groups_all', icon: 'classes', path: '/dashboard/groups' },
+  { id: 'classes', labelKey: 'nav.classes', tabKey: 'nav.tab_classes', icon: 'classes', path: '/dashboard/classes' },
   { id: 'vote', labelKey: 'nav.vote', icon: 'vote', path: '/dashboard/vote' },
   { id: 'workout', labelKey: 'new', tabKey: 'nav.tab_new', ns: 'workouts', icon: 'workout', path: '/dashboard/workout' },
   { id: 'library', labelKey: 'nav.library', icon: 'library', path: '/dashboard/workouts' },
@@ -50,10 +51,10 @@ export const LEAVES: NavLeaf[] = [
 const GROUPS: Array<Omit<NavGroup, 'leaves' | 'path' | 'extra'> & { leafIds: string[]; extra?: string[] }> = [
   { id: 'admin', labelKey: 'nav.admin', tabKey: 'nav.tab_admin', icon: 'admin', leafIds: ['admin'] },
   { id: 'today', labelKey: 'nav.today', tabKey: 'nav.tab_today', icon: 'home', leafIds: ['today'] },
-  { id: 'classes', labelKey: 'nav.group_classes', tabKey: 'nav.tab_classes', icon: 'classes', leafIds: ['classes', 'vote'], extra: ['/dashboard/whiteboard'] },
+  { id: 'classes', labelKey: 'nav.group_groups', tabKey: 'nav.tab_groups', icon: 'classes', leafIds: ['groups', 'classes', 'communities', 'vote'], extra: ['/dashboard/whiteboard'] },
   { id: 'program', labelKey: 'nav.group_program', tabKey: 'nav.tab_program', icon: 'workout', leafIds: ['workout', 'library', 'exercises'] },
   { id: 'training', labelKey: 'nav.group_training', tabKey: 'nav.tab_training', icon: 'session', leafIds: ['session', 'journal', 'records', 'rank'] },
-  { id: 'more', labelKey: 'nav.more', tabKey: 'nav.more', icon: 'grid', leafIds: ['communities', 'ai', 'settings'] }
+  { id: 'more', labelKey: 'nav.more', tabKey: 'nav.more', icon: 'grid', leafIds: ['ai', 'settings'] }
 ]
 
 /**

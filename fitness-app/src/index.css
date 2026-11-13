@@ -1713,6 +1713,10 @@ button.wb-row:active, a.wb-row:active { background: var(--surface); }
 .wb-cclasses-sched { font-size: 0.8125rem; color: var(--muted); }
 .wb-cclasses-schedbtn { justify-self: start; min-height: 36px; padding: 0 0.8rem; border-radius: 999px; border: 1px solid var(--border); background: transparent; color: var(--white); font: inherit; font-size: 0.8125rem; font-weight: 600; cursor: pointer; }
 .wb-cclasses-schedbtn[aria-expanded='true'] { border-color: var(--orange); color: var(--orange); }
+.wb-groups-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.wb-groups-kind { display: inline-flex; align-items: center; padding: 0.15rem 0.6rem; border-radius: 999px; background: rgba(255, 90, 31, 0.14); color: var(--orange); font-size: 0.9em; }
+.wb-groups-kind.is-community { background: rgba(14, 165, 233, 0.14); color: #38bdf8; }
+.wb-groups-cards { display: grid; gap: 0.75rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); }
 .wb-cycle { display: grid; gap: 0.75rem; padding: 0.9rem; border-radius: var(--r-md); border: 1px solid rgba(255, 90, 31, 0.35); background: var(--dark); }
 .wb-cycle-head { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; }
 .wb-cycle-title { margin: 0; font-family: var(--font-d); font-size: 1.2rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.03em; }

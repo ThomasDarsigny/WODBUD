@@ -31,7 +31,11 @@
     "group_program": "Program",
     "group_training": "My training",
     "tab_program": "Program",
-    "tab_training": "Training"
+    "tab_training": "Training",
+    "groups": "Groups",
+    "group_groups": "Groups",
+    "tab_groups": "Groups",
+    "tab_groups_all": "Overview"
   },
   "library": {
     "title": "Workout library",
@@ -1615,5 +1619,24 @@
     "rotate": "Rotate",
     "next_plan": "Next session",
     "fullscreen": "Full screen"
+  },
+  "groups": {
+    "tag": "Groups",
+    "title": "My groups",
+    "subtitle_coach": "Your classes and communities, in one place.",
+    "subtitle_athlete": "Your classes and communities, in one place.",
+    "new_class": "New class",
+    "new_community": "New community",
+    "kind_class": "Classes",
+    "kind_community": "Communities",
+    "discover": "Discover communities",
+    "no_class_coach": "No class yet",
+    "no_class_coach_hint": "Create your first class: schedule, planning, attendance and whiteboard will follow.",
+    "no_class_athlete": "You’re not in any class",
+    "no_class_athlete_hint": "Ask your coach for the invite link: your class will show here.",
+    "no_schedule": "Schedule to set",
+    "no_community": "No community joined",
+    "no_community_hint": "Challenges, leaderboards and WODs shared with other athletes.",
+    "you_created": "created by you"
   }
 }

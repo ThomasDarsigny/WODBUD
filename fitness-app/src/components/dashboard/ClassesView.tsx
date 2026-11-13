@@ -70,6 +70,16 @@ export default function ClassesView() {
   useEffect(() => {
     if (wanted && wanted === linkHandled) setParams({}, { replace: true })
   }, [wanted, linkHandled, setParams])
+  // « + Nouveau cours » depuis Groupes : /dashboard/classes?new=1 ouvre la création.
+  const wantNew = params.get('new') === '1'
+  const [newHandled, setNewHandled] = useState(false)
+  if (wantNew && !newHandled) {
+    setNewHandled(true)
+    setShowCreateClass(true)
+  }
+  useEffect(() => {
+    if (wantNew && newHandled) setParams({}, { replace: true })
+  }, [wantNew, newHandled, setParams])
   useEffect(() => { fetchExercises() }, [fetchExercises])
 
   useEffect(() => {

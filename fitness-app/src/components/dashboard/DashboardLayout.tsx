@@ -63,7 +63,7 @@ export default function DashboardLayout({ children }: Props) {
   const groups = useMemo(() => {
     const visible = new Set(LEAVES.map((l) => l.id).filter((id) => {
       if (id === 'admin') return isAdmin
-      if (id === 'ai' || id === 'classes' || id === 'today') return !isAdmin
+      if (id === 'ai' || id === 'classes' || id === 'today' || id === 'groups') return !isAdmin
       return true
     }))
     return buildNav(visible)

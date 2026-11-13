@@ -48,7 +48,7 @@ export default function AthleteDashboardLayout({ children }: Props) {
     { id: 'journal', labelKey: 'nav.journal', icon: 'calendar', path: '/athlete/journal' },
     { id: 'rank', labelKey: 'nav.rank', icon: 'rank', path: '/athlete/rank' },
     { id: 'records', labelKey: 'nav.records', icon: 'records', path: '/athlete/records' },
-    { id: 'communities', labelKey: 'nav.communities', icon: 'community', path: '/athlete/communities' },
+    { id: 'groups', labelKey: 'nav.groups', icon: 'community', path: '/athlete/groups' },
     { id: 'settings', labelKey: 'nav.settings', icon: 'settings', path: '/athlete/settings' },
   ]
 
@@ -72,6 +72,8 @@ export default function AthleteDashboardLayout({ children }: Props) {
     label: item.id === 'rank' ? t('nav.tab_rank') : t(item.labelKey),
     icon: item.icon,
     path: item.path,
+    // « Groupes » s'allume aussi sur les pages des communautés.
+    match: item.id === 'groups' ? ['/athlete/groups', '/athlete/communities'] : undefined,
     dot: dotFor(item.id)
   })
   const tabItems = navItems.filter((i) => tabIds.includes(i.id)).map(toMobile)
@@ -113,7 +115,7 @@ export default function AthleteDashboardLayout({ children }: Props) {
 
         <nav style={{ flex: 1, padding: '1rem 0' }}>
           {navItems.map((item) => {
-            const active = location.pathname === item.path
+            const active = location.pathname === item.path || (item.id === 'groups' && location.pathname.startsWith('/athlete/communities'))
             return (
               <div key={item.id} style={{ position: 'relative' }}>
               <Link
