@@ -14,7 +14,10 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: Boolean(process.env.CI),
   retries: process.env.CI ? 1 : 0,
-  workers: process.env.CI ? 2 : undefined,
+  // En local, 6 navigateurs : à 10 (la moitié des cœurs, le défaut), Vite et Chrome
+  // saturaient la machine — des chargements n'aboutissaient pas (échecs au hasard
+  // vers 50 s) et la suite était plus lente (1 min 30 contre 55 s).
+  workers: process.env.CI ? 2 : 6,
   reporter: process.env.CI ? [['list'], ['html', { open: 'never' }]] : 'list',
   timeout: 45_000,
   expect: { timeout: 10_000 },
