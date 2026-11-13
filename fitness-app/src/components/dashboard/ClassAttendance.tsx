@@ -111,7 +111,10 @@ export default function ClassAttendance({ classId }: { classId: string }) {
             <div className="wb-att-qr-text">
               <p>{t('attendance.qr_hint', { time: until })}</p>
               <p className="wb-set-hint" style={{ margin: 0 }}>{t('attendance.qr_live')}</p>
-              <button type="button" className="wb-btn wb-btn--ghost wb-btn--sm" onClick={() => setQr(null)}>{t('attendance.qr_hide')}</button>
+              <div className="wb-review-actions" style={{ justifyContent: 'flex-start' }}>
+                <a href={`/tv/${classId}`} target="_blank" rel="noopener" className="wb-btn wb-btn--secondary wb-btn--sm">{t('tv.open')}</a>
+                <button type="button" className="wb-btn wb-btn--ghost wb-btn--sm" onClick={() => setQr(null)}>{t('attendance.qr_hide')}</button>
+              </div>
             </div>
           </div>
         ) : (

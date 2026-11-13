@@ -196,9 +196,14 @@ export default function ClassesView() {
                   <p style={{ color: 'var(--muted)', marginTop: '0.25rem', fontSize: '0.9375rem' }}>{selectedClass.description}</p>
                 )}
               </div>
-              <ConfirmButton onConfirm={() => handleDeleteClass(selectedClass)} style={ghostBtnStyle}>
-                {t('actions.delete')}
-              </ConfirmButton>
+              <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                <a href={`/tv/${selectedClass.id}`} target="_blank" rel="noopener" className="wb-btn wb-btn--secondary wb-btn--sm" title={t('tv.open_hint')}>
+                  {t('tv.open')}
+                </a>
+                <ConfirmButton onConfirm={() => handleDeleteClass(selectedClass)} style={ghostBtnStyle}>
+                  {t('actions.delete')}
+                </ConfirmButton>
+              </div>
             </div>
 
             <ClassScheduleEditor key={`sched-${selectedClass.id}`} classId={selectedClass.id} legacyText={selectedClass.schedule} />

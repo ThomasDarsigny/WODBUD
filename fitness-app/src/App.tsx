@@ -40,6 +40,7 @@ const AthleteHomeView = lazy(() => import('./components/athlete/AthleteHomeView'
 const AthleteVoteView = lazy(() => import('./components/athlete/AthleteVoteView'))
 const JoinClassPage = lazy(() => import('./pages/JoinClassPage'))
 const CheckInPage = lazy(() => import('./pages/CheckInPage'))
+const TvModeView = lazy(() => import('./pages/TvModeView'))
 const CenterJoinPage = lazy(() => import('./pages/CenterJoinPage'))
 import { useSessionStore } from './stores/sessionStore'
 import { isInstalledApp } from './lib/platform'
@@ -451,6 +452,7 @@ function App() {
 
         <Route path="/join/:token" element={<JoinClassPage />} />
         <Route path="/presence/:classId" element={<CheckInPage />} />
+        <Route path="/tv/:classId" element={<ProtectedRoute><TvModeView /></ProtectedRoute>} />
         <Route path="/rejoindre/:token" element={<CenterJoinPage />} />
         <Route path="/rang/:token" element={<SharedRankPage />} />
         <Route path="/rank/:token" element={<SharedRankPage />} />

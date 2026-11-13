@@ -1562,5 +1562,32 @@
     "no_class_day": "pas de cours à l’horaire ce jour-là",
     "self_cta": "Je suis là",
     "self_done": "Présent au cours de {{time}}"
+  },
+  "tv": {
+    "open": "Mode TV",
+    "open_hint": "Ouvre l’écran de la salle dans un nouvel onglet",
+    "wod": "WOD",
+    "wod_of_day": "WOD du jour",
+    "board": "Tableau blanc",
+    "not_found": "Cours introuvable ou réservé au coach.",
+    "exit": "Quitter",
+    "ongoing": "cours en cours depuis {{time}}",
+    "next_today": "cours à {{time}}",
+    "no_wod": "Pas de WOD programmé aujourd’hui",
+    "no_wod_hint": "Programme-le dans Cours › Planning : il s’affichera ici tout seul.",
+    "minutes_one": "{{count}} min",
+    "minutes_other": "{{count}} min",
+    "board_empty": "Pas encore de score",
+    "board_empty_hint": "Les scores apparaissent ici dès qu’ils sont saisis.",
+    "scan": "Scanne pour être compté présent",
+    "present_one": "{{count}} présent",
+    "present_other": "{{count}} présents",
+    "more": "et {{count}} autres",
+    "controls": "Commandes de l’écran",
+    "show_wod": "WOD",
+    "show_board": "Tableau blanc",
+    "rotate": "Alterner",
+    "next_plan": "Séance suivante",
+    "fullscreen": "Plein écran"
   }
 }

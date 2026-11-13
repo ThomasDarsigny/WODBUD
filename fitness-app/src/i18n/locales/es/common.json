@@ -1565,5 +1565,32 @@
     "no_class_day": "sin clase en el horario ese día",
     "self_cta": "Estoy aquí",
     "self_done": "Presente en la clase de las {{time}}"
+  },
+  "tv": {
+    "open": "Modo TV",
+    "open_hint": "Abre la pantalla del gimnasio en una pestaña nueva",
+    "wod": "WOD",
+    "wod_of_day": "WOD del día",
+    "board": "Pizarra",
+    "not_found": "Clase no encontrada o solo para el coach.",
+    "exit": "Salir",
+    "ongoing": "clase en curso desde las {{time}}",
+    "next_today": "clase a las {{time}}",
+    "no_wod": "Hoy no hay WOD programado",
+    "no_wod_hint": "Prográmalo en Clases › Planificación: aparecerá aquí solo.",
+    "minutes_one": "{{count}} min",
+    "minutes_other": "{{count}} min",
+    "board_empty": "Aún no hay resultados",
+    "board_empty_hint": "Los resultados aparecen aquí en cuanto se registran.",
+    "scan": "Escanea para registrar tu asistencia",
+    "present_one": "{{count}} presente",
+    "present_other": "{{count}} presentes",
+    "more": "y {{count}} más",
+    "controls": "Controles de la pantalla",
+    "show_wod": "WOD",
+    "show_board": "Pizarra",
+    "rotate": "Alternar",
+    "next_plan": "Sesión siguiente",
+    "fullscreen": "Pantalla completa"
   }
 }

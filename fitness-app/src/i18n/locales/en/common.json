@@ -1562,5 +1562,32 @@
     "no_class_day": "no scheduled class that day",
     "self_cta": "I’m here",
     "self_done": "Present at the {{time}} class"
+  },
+  "tv": {
+    "open": "TV mode",
+    "open_hint": "Opens the gym screen in a new tab",
+    "wod": "WOD",
+    "wod_of_day": "WOD of the day",
+    "board": "Whiteboard",
+    "not_found": "Class not found or coach only.",
+    "exit": "Exit",
+    "ongoing": "class in progress since {{time}}",
+    "next_today": "class at {{time}}",
+    "no_wod": "No WOD scheduled today",
+    "no_wod_hint": "Schedule it in Classes › Planning: it will show here on its own.",
+    "minutes_one": "{{count}} min",
+    "minutes_other": "{{count}} min",
+    "board_empty": "No score yet",
+    "board_empty_hint": "Scores show here as soon as they are entered.",
+    "scan": "Scan to be marked present",
+    "present_one": "{{count}} present",
+    "present_other": "{{count}} present",
+    "more": "and {{count}} more",
+    "controls": "Screen controls",
+    "show_wod": "WOD",
+    "show_board": "Whiteboard",
+    "rotate": "Rotate",
+    "next_plan": "Next session",
+    "fullscreen": "Full screen"
   }
 }
