@@ -56,6 +56,8 @@
   --orange: #ff5a1f;
   --orange-dim: #c43f10;
   --white: #f2ede6;
+  /* Vert « ouvert / réussi » en texte (4.3 avant l'heure) : #22c55e passe à 2,3:1 sur fond clair. */
+  --ok: #22c55e;
   /* 4,14:1 avant, 6,21:1 maintenant sur une carte. Le minimum AA est 4,5. */
   --muted: #9d958a;
 
@@ -170,6 +172,7 @@ option {
   --orange: #c23c00;
   --orange-dim: #8f2c00;
   --white: #17150f;
+  --ok: #15803d;
   --muted: #5f5a53;
   --line-fn: #9a9287;
 }
@@ -2065,6 +2068,48 @@ button.wb-row:active, a.wb-row:active { background: var(--surface); }
    sur fond clair (turquoise, jaune). Mêlées à 60 % de la couleur du texte : ≥ 5,5:1 pour les dix rangs. */
 :root[data-theme='clair'] :is(.wb-share-link, .wb-rank-pill, .wb-profile-rank-name) { color: color-mix(in srgb, var(--rank) 40%, var(--white)); }
 
+/* ── Votes du coach et thématiques (4.2) ─────────────────────────── */
+.wb-screen { min-height: 100%; padding: var(--page-pad); }
+.wb-screen-head { margin-bottom: 1.5rem; }
+.wb-vres { display: flex; flex-direction: column; gap: 0.55rem; }
+.wb-vres-empty { margin: 0; color: var(--muted); font-family: var(--font-d); font-size: 0.6875rem; letter-spacing: 0.1em; text-transform: uppercase; }
+.wb-vres-head { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; margin-bottom: 0.22rem; }
+.wb-vres-label { min-width: 0; overflow: hidden; color: var(--muted); font-family: var(--font-d); font-size: 0.6875rem; letter-spacing: 0.06em; text-overflow: ellipsis; text-transform: uppercase; white-space: nowrap; }
+.wb-vres-count { flex-shrink: 0; color: var(--muted); font-family: var(--font-d); font-size: 0.8125rem; letter-spacing: 0.08em; white-space: nowrap; }
+.wb-vres-row.is-leading :is(.wb-vres-label, .wb-vres-count) { color: var(--opt); font-weight: 700; }
+.wb-vres-track { height: 6px; overflow: hidden; border-radius: var(--r-md); border: 1px solid var(--border); background: var(--black); }
+.wb-vres-fill { width: var(--pct); height: 100%; background: var(--opt); opacity: 0.6; transition: width 0.4s ease; }
+.wb-vres-row.is-leading .wb-vres-fill { opacity: 1; }
+.wb-topics { margin-bottom: 1.5rem; padding: 1.25rem; border-radius: var(--r-lg); border: 1px solid var(--border); background: var(--dark); }
+.wb-topics-title { margin: 0; font-family: var(--font-d); font-size: 1.25rem; font-weight: 900; letter-spacing: 0.03em; text-transform: uppercase; }
+.wb-topics-sub { margin: 0.35rem 0 1.1rem; color: var(--muted); font-size: 0.8125rem; line-height: 1.5; }
+.wb-topics-form { display: grid; gap: 0.5rem; margin-bottom: 1.25rem; }
+.wb-topics-form .wb-input { background: var(--black); border-color: var(--line-fn); }
+.wb-topics-form .wb-input:focus { border-color: var(--orange); }
+.wb-topics-text { min-height: auto; padding: 0.7rem 0.95rem; resize: vertical; line-height: 1.45; }
+.wb-topics-add { justify-self: start; }
+.wb-topics-error { margin: 0 0 0.9rem; color: var(--orange); font-size: 0.8125rem; }
+.wb-topics-note { margin: 0; color: var(--muted); font-size: 0.8125rem; }
+.wb-topics-list { display: flex; flex-direction: column; gap: 0.6rem; }
+.wb-topic { padding: 0.8rem 0.9rem; border-radius: var(--r-md); border: 1px solid var(--border); background: var(--black); }
+.wb-topic.is-done { border-color: #22c55e; }
+.wb-topic.is-mine { border-color: var(--orange); background: rgba(255, 77, 0, 0.06); }
+.wb-topic-head { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 0.75rem; }
+.wb-topic-main { flex: 1 1 160px; min-width: 0; }
+.wb-topic-title { margin: 0; font-family: var(--font-d); font-size: 0.9375rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; }
+.wb-topic-status { margin-left: 0.5rem; color: var(--muted); font-size: 0.6875rem; letter-spacing: 0.12em; }
+.wb-topic-status.is-done { color: var(--ok); }
+.wb-topic-desc { margin: 0.25rem 0 0; color: var(--muted); font-size: 0.8125rem; line-height: 1.45; }
+.wb-topic-pick.is-mine { color: var(--orange); border-color: var(--orange); }
+.wb-topic-admin { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.wb-topic-bar { display: flex; align-items: center; gap: 0.6rem; margin-top: 0.6rem; }
+.wb-topic-track { flex: 1; height: 6px; overflow: hidden; border-radius: var(--r-md); border: 1px solid var(--border); background: var(--dark); }
+.wb-topic-fill { width: var(--pct); height: 100%; background: var(--muted); transition: width 0.4s ease; }
+.wb-topic.is-mine .wb-topic-fill { background: var(--orange); }
+.wb-topic-count { color: var(--muted); font-family: var(--font-d); font-size: 0.75rem; letter-spacing: 0.08em; white-space: nowrap; font-variant-numeric: tabular-nums; }
+/* Texte à la couleur d'une option de vote, thème clair : même mélange que pour les rangs. */
+:root[data-theme='clair'] :is(.wb-vres-row.is-leading .wb-vres-label, .wb-vres-row.is-leading .wb-vres-count, .wb-vote-opt-muscle) { color: color-mix(in srgb, var(--opt) 40%, var(--white)); }
+
 /* ── Créateur de WOD (4.2) ───────────────────────────────────────── */
 .wb-builder { display: grid; grid-template-columns: minmax(0, 1fr) 380px; height: calc(100vh - var(--section-tabs-h, 0px)); overflow: hidden; }
 .wb-builder.is-mobile { grid-template-columns: 1fr; grid-template-rows: auto minmax(0, 1fr); height: calc(100dvh - var(--mobile-top-h) - var(--tabbar-h) - var(--safe-bottom) - var(--section-tabs-h, 0px)); }
@@ -2172,9 +2217,10 @@ button.wb-row:active, a.wb-row:active { background: var(--surface); }
 .wb-vote-session-title { display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
 .wb-vote-session-title strong { font-family: var(--font-d); font-size: 0.9375rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
 .wb-vote-status { padding: 0.1rem 0.45rem; border-radius: 999px; border: 1px solid var(--border); color: var(--muted); font-family: var(--font-d); font-size: 0.6875rem; letter-spacing: 0.15em; text-transform: uppercase; }
-.wb-vote-status.is-open { color: #22c55e; border-color: rgba(34, 197, 94, 0.35); background: rgba(34, 197, 94, 0.08); }
+.wb-vote-status.is-open { color: var(--ok); border-color: rgba(34, 197, 94, 0.35); background: rgba(34, 197, 94, 0.08); }
 .wb-vote-total { color: var(--muted); font-family: var(--font-d); font-size: 0.6875rem; letter-spacing: 0.12em; text-transform: uppercase; }
-.wb-vote-session-deadline { margin: 0.2rem 0 0; color: var(--muted); font-size: 0.8125rem; }
+.wb-vote-session-meta { display: flex; flex-wrap: wrap; gap: 0.25rem 0.75rem; margin: 0.2rem 0 0; color: var(--muted); font-size: 0.8125rem; }
+.wb-vote-session-course { color: var(--orange); font-family: var(--font-d); font-size: 0.6875rem; letter-spacing: 0.1em; text-transform: uppercase; align-self: center; }
 .wb-vote-session-actions { display: flex; align-items: center; gap: 0.5rem; }
 .wb-vote-form-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0.75rem; align-items: end; }
 @media (max-width: 520px) { .wb-vote-form-row { grid-template-columns: 1fr; } }

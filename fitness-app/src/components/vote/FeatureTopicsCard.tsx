@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
+import type { CSSProperties, FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   clearTopicVote,
@@ -11,7 +12,6 @@ import {
   type FeatureTopicStatus
 } from '../../lib/featureTopics'
 import ConfirmButton from '../ui/ConfirmButton'
-import { btnDanger, btnPrimary, btnSmall, card, field, textarea } from '../../styles/ui'
 
 /**
  * Carte « Quelles thématiques ajouter à WODBUD ? ».
@@ -62,7 +62,8 @@ export default function FeatureTopicsCard({ admin = false }: { admin?: boolean }
     }
   }
 
-  async function submit() {
+  async function submit(e: FormEvent) {
+    e.preventDefault()
     if (!title.trim()) return
     await run('create', () => createFeatureTopic(title, description))
     setTitle('')
@@ -78,14 +79,10 @@ export default function FeatureTopicsCard({ admin = false }: { admin?: boolean }
   const mine = visible.find((topic) => topic.is_mine)
 
   return (
-    <section style={{ ...card, padding: '1.25rem', marginBottom: '1.5rem' }}>
-      <p className="wb-ph-tag">
-        {t('feature_topics.tag')}
-      </p>
-      <h2 style={{ fontFamily: 'var(--font-d)', fontSize: '1.25rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.03em', margin: 0 }}>
-        {t('feature_topics.title')}
-      </h2>
-      <p style={{ color: 'var(--muted)', fontSize: '0.8125rem', margin: '0.35rem 0 1.1rem', lineHeight: 1.5 }}>
+    <section className="wb-topics" aria-labelledby="topics-title">
+      <p className="wb-ph-tag">{t('feature_topics.tag')}</p>
+      <h2 id="topics-title" className="wb-topics-title">{t('feature_topics.title')}</h2>
+      <p className="wb-topics-sub">
         {admin
           ? t('feature_topics.admin_subtitle', { count: total })
           : mine
@@ -94,45 +91,38 @@ export default function FeatureTopicsCard({ admin = false }: { admin?: boolean }
       </p>
 
       {admin && (
-        <div style={{ display: 'grid', gap: '0.5rem', marginBottom: '1.25rem' }}>
+        <form className="wb-topics-form" onSubmit={(e) => { void submit(e) }}>
           <input
+            className="wb-input"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            onKeyDown={(e) => { if (e.key === 'Enter') void submit() }}
             maxLength={120}
             placeholder={t('feature_topics.title_placeholder')}
-            style={field}
+            aria-label={t('feature_topics.title_placeholder')}
           />
           <textarea
+            className="wb-input wb-topics-text"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             maxLength={500}
             rows={2}
             placeholder={t('feature_topics.description_placeholder')}
-            style={{ ...textarea, resize: 'vertical' }}
+            aria-label={t('feature_topics.description_placeholder')}
           />
-          <button
-            onClick={() => { void submit() }}
-            disabled={!title.trim() || busy === 'create'}
-            style={{ ...btnPrimary, justifySelf: 'start', opacity: !title.trim() ? 0.55 : 1 }}
-          >
+          <button type="submit" disabled={!title.trim() || busy === 'create'} className="wb-btn wb-btn--primary wb-topics-add">
             + {t('feature_topics.add')}
           </button>
-        </div>
+        </form>
       )}
 
-      {error && (
-        <p role='alert' style={{ color: 'var(--orange)', fontSize: '0.8125rem', margin: '0 0 0.9rem' }}>{error}</p>
-      )}
+      {error && <p role="alert" className="wb-topics-error">{error}</p>}
 
       {topics === null ? (
-        <p style={{ color: 'var(--muted)', fontSize: '0.8125rem', margin: 0 }}>…</p>
+        <p className="wb-topics-note" role="status">…</p>
       ) : visible.length === 0 ? (
-        <p style={{ color: 'var(--muted)', fontSize: '0.8125rem', margin: 0 }}>
-          {admin ? t('feature_topics.empty_admin') : t('feature_topics.empty')}
-        </p>
+        <p className="wb-topics-note">{admin ? t('feature_topics.empty_admin') : t('feature_topics.empty')}</p>
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+        <div className="wb-topics-list">
           {visible.map((topic) => (
             <TopicRow
               key={topic.id}
@@ -163,51 +153,52 @@ function TopicRow({ topic, total, admin, busy, onVote, onStatus, onDelete }: {
   const { t } = useTranslation('common')
   const pct = total > 0 ? Math.round((topic.votes / total) * 100) : 0
   const open = topic.status === 'open'
-  const accent = topic.is_mine ? 'var(--orange)' : topic.status === 'done' ? '#22c55e' : 'var(--border)'
+  const state = topic.is_mine ? ' is-mine' : topic.status === 'done' ? ' is-done' : ''
 
   return (
-    <div style={{ border: `1px solid ${accent}`, borderRadius: 12, background: topic.is_mine ? 'rgba(255,77,0,0.06)' : 'var(--black)', padding: '0.8rem 0.9rem' }}>
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '0.75rem', flexWrap: 'wrap' }}>
-        <div style={{ minWidth: 0, flex: '1 1 200px' }}>
-          <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.9375rem', fontWeight: 800, letterSpacing: '0.04em', textTransform: 'uppercase', margin: 0 }}>
+    <div className={`wb-topic${state}`} style={{ '--pct': `${pct}%` } as CSSProperties}>
+      <div className="wb-topic-head">
+        <div className="wb-topic-main">
+          <p className="wb-topic-title">
             {topic.title}
             {topic.status !== 'open' && (
-              <span style={{ marginLeft: '0.5rem', fontSize: '0.6875rem', letterSpacing: '0.12em', color: topic.status === 'done' ? '#22c55e' : 'var(--muted)' }}>
+              <span className={`wb-topic-status${topic.status === 'done' ? ' is-done' : ''}`}>
                 {topic.status === 'done' ? `✓ ${t('feature_topics.status_done')}` : t('feature_topics.status_closed')}
               </span>
             )}
           </p>
-          {topic.description && (
-            <p style={{ color: 'var(--muted)', fontSize: '0.8125rem', margin: '0.25rem 0 0', lineHeight: 1.45 }}>{topic.description}</p>
-          )}
+          {topic.description && <p className="wb-topic-desc">{topic.description}</p>}
         </div>
 
         {!admin && open && (
           <button
+            type="button"
             onClick={onVote}
             disabled={busy}
             aria-pressed={topic.is_mine}
-            style={topic.is_mine ? { ...btnSmall, color: 'var(--orange)', borderColor: 'var(--orange)' } : btnSmall}
+            aria-label={`${t('feature_topics.choose')} — ${topic.title}`}
+            className={`wb-btn wb-btn--ghost wb-btn--sm wb-topic-pick${topic.is_mine ? ' is-mine' : ''}`}
           >
             {topic.is_mine ? `✓ ${t('feature_topics.chosen')}` : t('feature_topics.choose')}
           </button>
         )}
 
         {admin && (
-          <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
+          <div className="wb-topic-admin">
             {topic.status !== 'open' && (
-              <button onClick={() => onStatus('open')} disabled={busy} style={btnSmall}>{t('feature_topics.reopen')}</button>
+              <button type="button" onClick={() => onStatus('open')} disabled={busy} className="wb-btn wb-btn--ghost wb-btn--sm">{t('feature_topics.reopen')}</button>
             )}
             {open && (
-              <button onClick={() => onStatus('closed')} disabled={busy} style={btnSmall}>{t('feature_topics.close')}</button>
+              <button type="button" onClick={() => onStatus('closed')} disabled={busy} className="wb-btn wb-btn--ghost wb-btn--sm">{t('feature_topics.close')}</button>
             )}
             {topic.status !== 'done' && (
-              <button onClick={() => onStatus('done')} disabled={busy} style={btnSmall}>✓ {t('feature_topics.mark_done')}</button>
+              <button type="button" onClick={() => onStatus('done')} disabled={busy} className="wb-btn wb-btn--ghost wb-btn--sm">✓ {t('feature_topics.mark_done')}</button>
             )}
             <ConfirmButton
               onConfirm={onDelete}
               confirmLabel={t('feature_topics.delete_confirm')}
-              style={{ ...btnDanger, minHeight: 36, fontSize: '0.6875rem', padding: '0 0.75rem' }}
+              ariaLabel={`${t('feature_topics.delete')} — ${topic.title}`}
+              className="wb-btn wb-btn--danger wb-btn--sm"
             >
               {t('feature_topics.delete')}
             </ConfirmButton>
@@ -215,13 +206,11 @@ function TopicRow({ topic, total, admin, busy, onVote, onStatus, onDelete }: {
         )}
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginTop: '0.6rem' }}>
-        <div style={{ flex: 1, height: 6, background: 'var(--dark)', border: '1px solid var(--border)', borderRadius: 12, overflow: 'hidden' }}>
-          <div style={{ height: '100%', width: `${pct}%`, background: topic.is_mine ? 'var(--orange)' : 'var(--muted)', transition: 'width 0.4s ease' }} />
+      <div className="wb-topic-bar">
+        <div className="wb-topic-track" aria-hidden="true">
+          <div className="wb-topic-fill" />
         </div>
-        <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.75rem', letterSpacing: '0.08em', color: 'var(--muted)', whiteSpace: 'nowrap', fontVariantNumeric: 'tabular-nums' }}>
-          {pct}% · {t('feature_topics.votes', { count: topic.votes })}
-        </span>
+        <span className="wb-topic-count">{pct}% · {t('feature_topics.votes', { count: topic.votes })}</span>
       </div>
     </div>
   )

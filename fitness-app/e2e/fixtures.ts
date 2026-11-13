@@ -149,3 +149,25 @@ export function communityDb(): MockSupabase {
   }
   return db
 }
+
+/** Thématiques proposées à tous : une choisie par le compte courant, une ajoutée. */
+export const FEATURE_TOPICS = [
+  { id: 't1', title: 'Suivi du sommeil', description: 'Noter ses heures de sommeil à côté des séances.', status: 'open', created_at: '2026-10-01T00:00:00Z', votes: 3, is_mine: true },
+  { id: 't2', title: 'Minuterie EMOM', description: null, status: 'open', created_at: '2026-10-02T00:00:00Z', votes: 1, is_mine: false },
+  { id: 't3', title: 'Mode hors ligne', description: null, status: 'done', created_at: '2026-09-01T00:00:00Z', votes: 4, is_mine: false }
+]
+
+/** Votes du coach : un vote ouvert avec résultats, un vote fermé sans vote ; les thématiques. */
+export function voteDb(): MockSupabase {
+  const db = coachDb()
+  db.tables.vote_sessions = [
+    { id: 'vs-open', class_id: CLASS_ID, coach_id: COACH.id, title: 'Mouvement de vendredi', status: 'open', deadline: '2026-11-20T23:00:00Z', exercise_options: [], created_at: '2026-11-17T00:00:00Z' },
+    { id: 'vs-closed', class_id: CLASS_ID, coach_id: COACH.id, title: 'Finisher de lundi', status: 'closed', deadline: null, exercise_options: [], created_at: '2026-11-10T00:00:00Z' }
+  ]
+  db.tables.vote_results = [
+    { vote_session_id: 'vs-open', vote_option_id: 'o1', position: 1, label: 'Back squat', color: '#34d399', exercise_id: EXERCISES[0].id, votes: 3, percentage: '60.0', is_leading: true },
+    { vote_session_id: 'vs-open', vote_option_id: 'o2', position: 2, label: 'Thruster', color: '#38bdf8', exercise_id: EXERCISES[1].id, votes: 2, percentage: '40.0', is_leading: false }
+  ]
+  db.rpc.get_feature_topics = () => FEATURE_TOPICS.map((t) => ({ ...t }))
+  return db
+}

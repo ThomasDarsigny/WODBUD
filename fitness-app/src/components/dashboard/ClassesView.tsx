@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useClassStore } from '../../stores/classStore'
 import { useExerciseStore } from '../../stores/exerciseStore'
 import type { Class, VoteSession } from '../../types'
-import VoteResultsBars from '../vote/VoteResultsBars'
+import VoteSessionCard from '../vote/VoteSessionCard'
 import ConfirmButton from '../ui/ConfirmButton'
 import EmptyState from '../ui/EmptyState'
 import NavIcon from '../navigation/NavIcon'
@@ -12,7 +12,6 @@ import { CATEGORY_I18N_KEYS } from '../../types'
 import Skeleton from '../ui/Skeleton'
 import ClassLeaderboard from '../rank/ClassLeaderboard'
 import ClassPlanningTab from './ClassPlanningTab'
-import { isVoteSessionOpen, voteSessionKind } from '../../lib/voteSessions'
 import ClassFollowup from './ClassFollowup'
 import { useIsMobile } from '../../hooks/useMediaQuery'
 import { useSearchParams } from 'react-router-dom'
@@ -379,48 +378,16 @@ function VotesTab({ sessions, voteResults, onCreateVote, onCloseSession, onDelet
         <EmptyState compact icon="vote" title={t('classes.no_votes')} hint={t('classes.no_votes_hint')} />
       ) : (
         <>
-          {visibleSessions.map((session) => {
-            const results = voteResults[session.id] ?? []
-            const totalVotes = results.reduce((sum, r) => sum + r.votes, 0)
-            const open = isVoteSessionOpen(session)
-            const kind = voteSessionKind(session)
-
-            return (
-              <article key={session.id} className="wb-vote-session">
-                <div className="wb-vote-session-head">
-                  <div>
-                    <div className="wb-vote-session-title">
-                      <strong>{session.title}</strong>
-                      <span className={`wb-vote-status${open ? ' is-open' : ''}`}>
-                        {kind === 'open' ? t('classes.vote_open') : kind === 'expired' ? t('classes.vote_expired') : t('classes.vote_closed')}
-                      </span>
-                      {totalVotes > 0 && <span className="wb-vote-total">{totalVotes} {t('classes.votes_total')}</span>}
-                    </div>
-                    {session.deadline && (
-                      <p className="wb-vote-session-deadline">
-                        {t('classes.deadline')}: {new Date(session.deadline).toLocaleDateString()}
-                      </p>
-                    )}
-                  </div>
-                  <div className="wb-vote-session-actions">
-                    <button type="button" onClick={() => onFetchResults(session.id)} title={t('classes.vote_refresh')} aria-label={t('classes.vote_refresh')} className="wb-btn wb-btn--ghost wb-btn--sm">
-                      ↻
-                    </button>
-                    {open && (
-                      <button type="button" onClick={() => onCloseSession(session.id)} title={t('classes.vote_close_hint')} className="wb-btn wb-btn--ghost wb-btn--sm">
-                        {t('classes.close_vote')}
-                      </button>
-                    )}
-                    <ConfirmButton onConfirm={() => handleDelete(session)} title={t('classes.delete_vote')} className="wb-btn wb-btn--danger wb-btn--sm">
-                      ✕
-                    </ConfirmButton>
-                  </div>
-                </div>
-
-                <VoteResultsBars results={results} emptyLabel={t('classes.no_votes_yet')} />
-              </article>
-            )
-          })}
+          {visibleSessions.map((session) => (
+            <VoteSessionCard
+              key={session.id}
+              session={session}
+              results={voteResults[session.id] ?? []}
+              onRefresh={() => onFetchResults(session.id)}
+              onClose={() => onCloseSession(session.id)}
+              onDelete={() => handleDelete(session)}
+            />
+          ))}
 
           {!showAll && hiddenCount > 0 && (
             <button type="button" onClick={() => setShowAll(true)} className="wb-btn wb-btn--ghost wb-btn--block">

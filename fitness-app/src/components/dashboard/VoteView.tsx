@@ -3,12 +3,10 @@ import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useClassStore } from '../../stores/classStore'
 import type { VoteSession } from '../../types'
-import VoteResultsBars from '../vote/VoteResultsBars'
+import VoteSessionCard from '../vote/VoteSessionCard'
 import FeatureTopicsCard from '../vote/FeatureTopicsCard'
-import ConfirmButton from '../ui/ConfirmButton'
 import EmptyState from '../ui/EmptyState'
-import { btnPrimary as actionBtnStyle, btnSecondary as ghostBtnStyle } from '../../styles/ui'
-import { isVoteSessionOpen, voteSessionKind } from '../../lib/voteSessions'
+import { isVoteSessionOpen } from '../../lib/voteSessions'
 
 type SessionWithClass = VoteSession & { className: string }
 
@@ -71,18 +69,14 @@ export default function VoteView() {
   const openCount = allSessions.filter(isVoteSessionOpen).length
 
   return (
-    <div style={{ padding: 'var(--page-pad)', minHeight: '100%' }}>
-      <div style={{ marginBottom: '1.5rem' }}>
-        <p className="wb-ph-tag">
-          {t('nav.vote')}
-        </p>
-        <h1 className="wb-ph-h1">
-          {t('vote_view.title')}
-        </h1>
-        <p style={{ color: 'var(--muted)', marginTop: '0.45rem' }}>
-          {t('vote_view.subtitle', { open: openCount, total: allSessions.length })}
-        </p>
-      </div>
+    <div className="wb-screen">
+      <header className="wb-ph wb-screen-head">
+        <div>
+          <p className="wb-ph-tag">{t('nav.vote')}</p>
+          <h1 className="wb-ph-h1">{t('vote_view.title')}</h1>
+          <p className="wb-ph-sub">{t('vote_view.subtitle', { open: openCount, total: allSessions.length })}</p>
+        </div>
+      </header>
 
       <FeatureTopicsCard />
 
@@ -92,77 +86,26 @@ export default function VoteView() {
           title={t('vote_view.empty')}
           hint={t('vote_view.empty_hint')}
           action={
-            <button onClick={() => navigate('/dashboard/classes')} style={actionBtnStyle}>
+            <button type="button" onClick={() => navigate('/dashboard/classes')} className="wb-btn wb-btn--primary">
               {t('vote_view.go_to_classes')}
             </button>
           }
         />
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-          {allSessions.map((session) => {
-            const results = voteResults[session.id] ?? []
-            const totalVotes = results.reduce((sum, r) => sum + r.votes, 0)
-
-            return (
-              <div key={session.id} style={{ border: '1px solid var(--border)', borderRadius: 12, background: 'var(--dark)', padding: '1rem' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem', gap: '0.5rem', flexWrap: 'wrap' }}>
-                  <div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
-                      <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.9375rem', fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--white)', margin: 0 }}>
-                        {session.title}
-                      </p>
-                      <span style={{
-                        fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.15em', textTransform: 'uppercase',
-                        color: isVoteSessionOpen(session) ? '#22c55e' : 'var(--muted)',
-                        border: `1px solid ${isVoteSessionOpen(session) ? 'rgba(34,197,94,0.35)' : 'var(--border)'}`, borderRadius: 12,
-                        background: isVoteSessionOpen(session) ? 'rgba(34,197,94,0.08)' : 'transparent',
-                        padding: '0.1rem 0.4rem'
-                      }}>
-                        {voteSessionKind(session) === 'open' ? t('classes.vote_open')
-                          : voteSessionKind(session) === 'expired' ? t('classes.vote_expired')
-                          : t('classes.vote_closed')}
-                      </span>
-                      {totalVotes > 0 && (
-                        <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--muted)', padding: '0.1rem 0.4rem' }}>
-                          {totalVotes} {t('classes.votes_total')}
-                        </span>
-                      )}
-                    </div>
-                    <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', marginTop: '0.2rem' }}>
-                      {session.className && (
-                        <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--orange)' }}>
-                          {session.className}
-                        </span>
-                      )}
-                      {session.deadline && (
-                        <span style={{ color: 'var(--muted)', fontSize: '0.8125rem' }}>
-                          {t('classes.deadline')}: {new Date(session.deadline).toLocaleDateString()}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                  <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                    <button onClick={() => fetchVoteResults(session.id)} title={t('vote_view.refresh')} style={{ ...ghostBtnStyle, fontSize: '0.6875rem', padding: '0.35rem 0.65rem' }}>
-                      ↻
-                    </button>
-                    {isVoteSessionOpen(session) && (
-                      <button onClick={() => closeVoteSession(session.id)} style={{ ...ghostBtnStyle, fontSize: '0.6875rem' }}>
-                        {t('classes.close_vote')}
-                      </button>
-                    )}
-                    <ConfirmButton onConfirm={() => handleDelete(session)} title={t('classes.delete_vote')} style={{ ...ghostBtnStyle, fontSize: '0.6875rem', color: 'rgba(255,77,0,0.8)', borderColor: 'rgba(255,77,0,0.35)' }}>
-                      ✕
-                    </ConfirmButton>
-                  </div>
-                </div>
-
-                <VoteResultsBars results={results} emptyLabel={t('classes.no_votes_yet')} />
-              </div>
-            )
-          })}
+        <div>
+          {allSessions.map((session) => (
+            <VoteSessionCard
+              key={session.id}
+              session={session}
+              results={voteResults[session.id] ?? []}
+              courseName={session.className}
+              onRefresh={() => fetchVoteResults(session.id)}
+              onClose={() => closeVoteSession(session.id)}
+              onDelete={() => handleDelete(session)}
+            />
+          ))}
         </div>
       )}
     </div>
   )
 }
-
