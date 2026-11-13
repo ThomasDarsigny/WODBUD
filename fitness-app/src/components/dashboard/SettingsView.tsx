@@ -13,13 +13,12 @@ import type { ThemePref, SocialLink, SocialPlatform } from '../../types'
 import { uploadAvatar } from '../../lib/avatar'
 import { previewAccountDeletion, confirmAccountDeletion, type DeletionImpact } from '../../lib/accountDeletion'
 import { clearAuthSessionCookies } from '../../lib/authSessionCookies'
-import { field as inputStyle, btnAccent as buttonStyle } from '../../styles/ui'
+import Modal from '../ui/Modal'
 import { clearWorkoutDraft } from '../../stores/workoutStore'
 import { clearRoleCache } from '../../lib/profileRole'
 import CenterSettings from '../center/CenterSettings'
 import SupportForm from '../support/SupportForm'
 import CenterSuggestionForm from '../center/CenterSuggestionForm'
-import { useBackToClose } from '../../hooks/useBackToClose'
 
 const LANGS: Array<{ code: string; key: string }> = [
   { code: 'fr', key: 'language.fr' },
@@ -237,7 +236,7 @@ export default function SettingsView() {
   }
 
   return (
-    <div className="wb-page" style={{ maxWidth: 720 }}>
+    <div className="wb-page wb-settings">
       <header className="wb-ph">
         <div>
           <p className="wb-ph-tag">{t('nav.settings')}</p>
@@ -247,23 +246,14 @@ export default function SettingsView() {
       </header>
 
       {notice && (
-        <div
-          role='status'
-          style={{
-            border: `1px solid ${notice.kind === 'ok' ? '#4ade80' : '#ef4444'}`,
-            color: notice.kind === 'ok' ? '#4ade80' : '#ef4444',
-            padding: '0.6rem 0.8rem',
-            fontSize: '0.875rem',
-            borderRadius: 12
-          }}
-        >
+        <div role="status" className={`wb-set-notice ${notice.kind === 'ok' ? 'is-ok' : 'is-err'}`}>
           {notice.text}
         </div>
       )}
 
       <Section title={t('settings.appearance')}>
         <Row label={t('settings.theme')} hint={t('settings.theme_hint')}>
-          <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
+          <div className="wb-set-chips" role="group" aria-label={t('settings.theme')}>
             {THEMES.map((opt) => (
               <Chip key={opt.value} active={theme === opt.value} onClick={() => pickTheme(opt.value)} label={t(opt.key)} />
             ))}
@@ -271,7 +261,7 @@ export default function SettingsView() {
         </Row>
 
         <Row label={t('language.label')} hint={t('settings.language_hint')}>
-          <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
+          <div className="wb-set-chips" role="group" aria-label={t('language.label')}>
             {LANGS.map((l) => (
               <Chip
                 key={l.code}
@@ -284,7 +274,7 @@ export default function SettingsView() {
         </Row>
 
         <Row label={t('settings.mannequin')} hint={t('settings.mannequin_hint')}>
-          <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
+          <div className="wb-set-chips" role="group" aria-label={t('settings.mannequin')}>
             {(['male', 'female'] as MannequinBody[]).map((b) => (
               <Chip
                 key={b}
@@ -303,51 +293,45 @@ export default function SettingsView() {
 
       <Section title={t('settings.account')}>
         <Row label={t('settings.avatar')} hint={t('settings.avatar_hint')}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <div className="wb-set-inline">
             {avatarUrl ? (
-              <img
-                src={avatarUrl}
-                alt=''
-                style={{ width: 64, height: 64, borderRadius: '50%', objectFit: 'cover', border: '1px solid var(--border)' }}
-              />
+              <img src={avatarUrl} alt="" className="wb-set-avatar" />
             ) : (
-              <div
-                aria-hidden='true'
-                style={{ width: 64, height: 64, borderRadius: '50%', border: '1px solid var(--border)', background: 'var(--surface)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--muted)', fontFamily: 'var(--font-d)', fontSize: '1.5rem' }}
-              >
+              <div aria-hidden="true" className="wb-set-avatar wb-set-avatar--empty">
                 {(savedName || currentEmail || '?').charAt(0).toUpperCase()}
               </div>
             )}
             <input
               ref={avatarInputRef}
-              type='file'
-              accept='image/jpeg,image/png,image/webp'
-              style={{ display: 'none' }}
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              hidden
               onChange={(e) => { void handleAvatarChange(e) }}
             />
-            <button type='button' onClick={() => avatarInputRef.current?.click()} disabled={busy === 'avatar'} style={buttonStyle}>
+            <button type="button" onClick={() => avatarInputRef.current?.click()} disabled={busy === 'avatar'} className="wb-btn wb-btn--accent">
               {busy === 'avatar' ? t('settings.saving') : avatarUrl ? t('settings.avatar_change') : t('settings.avatar_add')}
             </button>
           </div>
         </Row>
 
-        <Row label={t('settings.display_name')} hint={t('settings.display_name_hint')}>
-          <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+        <Row label={t('settings.display_name')} hint={t('settings.display_name_hint')} forId="set-name">
+          <div className="wb-set-inline">
             <input
-              type='text'
+              id="set-name"
+              className="wb-input wb-set-grow"
+              type="text"
               value={fullName}
               maxLength={60}
               onChange={(e) => setFullName(e.target.value)}
               onKeyDown={(e) => { if (e.key === 'Enter') void submitName() }}
               placeholder={t('settings.display_name_placeholder')}
-              autoComplete='name'
-              style={inputStyle}
+              autoComplete="name"
             />
             <button
-              type='button'
+              type="button"
               onClick={() => { void submitName() }}
               disabled={busy === 'name' || !fullName.trim() || fullName.trim() === savedName}
-              style={buttonStyle}
+              className="wb-btn wb-btn--accent"
             >
               {busy === 'name' ? t('settings.saving') : t('settings.save_name')}
             </button>
@@ -355,43 +339,46 @@ export default function SettingsView() {
         </Row>
 
         <Row label={t('settings.current_email')}>
-          <p style={{ margin: 0, fontSize: '0.9375rem' }}>{currentEmail || '—'}</p>
+          <p className="wb-set-value">{currentEmail || '—'}</p>
         </Row>
 
-        <Row label={t('settings.new_email')}>
-          <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+        <Row label={t('settings.new_email')} forId="set-new-email">
+          <div className="wb-set-inline">
             <input
-              type='email'
+              id="set-new-email"
+              className="wb-input wb-set-grow"
+              type="email"
               value={newEmail}
               onChange={(e) => setNewEmail(e.target.value)}
               placeholder={currentEmail}
-              autoComplete='email'
-              style={inputStyle}
+              autoComplete="email"
             />
-            <button type='button' onClick={submitEmail} disabled={busy === 'email'} style={buttonStyle}>
+            <button type="button" onClick={submitEmail} disabled={busy === 'email'} className="wb-btn wb-btn--accent">
               {busy === 'email' ? t('settings.saving') : t('settings.change_email')}
             </button>
           </div>
         </Row>
 
-        <Row label={t('settings.new_password')}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+        <Row label={t('settings.new_password')} forId="set-new-password">
+          <div className="wb-set-stack">
             <input
-              type='password'
+              id="set-new-password"
+              className="wb-input"
+              type="password"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
-              autoComplete='new-password'
-              style={inputStyle}
+              autoComplete="new-password"
             />
             <input
-              type='password'
+              className="wb-input"
+              type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder={t('settings.confirm_password')}
-              autoComplete='new-password'
-              style={inputStyle}
+              aria-label={t('settings.confirm_password')}
+              autoComplete="new-password"
             />
-            <button type='button' onClick={submitPassword} disabled={busy === 'password'} style={{ ...buttonStyle, alignSelf: 'flex-start' }}>
+            <button type="button" onClick={submitPassword} disabled={busy === 'password'} className="wb-btn wb-btn--accent">
               {busy === 'password' ? t('settings.saving') : t('settings.change_password')}
             </button>
           </div>
@@ -401,63 +388,73 @@ export default function SettingsView() {
       <Section title={t('settings.notifications')}>
         <Row label={t('settings.push')} hint={t('settings.push_hint')}>
           {pushState === null ? (
-            <p style={{ margin: 0, color: 'var(--muted)' }}>…</p>
+            <p className="wb-set-muted">…</p>
           ) : pushState === 'on' ? (
-            <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', alignItems: 'center' }}>
-              <span style={{ color: '#22c55e', fontSize: '0.9375rem', marginRight: '0.25rem' }}>✓ {t('settings.push_on')}</span>
-              <button type='button' disabled={busy === 'push'} style={buttonStyle}
+            <div className="wb-set-inline">
+              <span className="wb-set-ok">✓ {t('settings.push_on')}</span>
+              <button type="button" disabled={busy === 'push'} className="wb-btn wb-btn--accent"
                 onClick={() => { void runPush(sendTestPush, t('settings.push_test_sent')) }}>
                 {t('settings.push_test')}
               </button>
-              <button type='button' disabled={busy === 'push'} style={buttonStyle}
+              <button type="button" disabled={busy === 'push'} className="wb-btn wb-btn--accent"
                 onClick={() => { void runPush(disablePush) }}>
                 {t('settings.push_disable')}
               </button>
             </div>
           ) : pushState === 'off' ? (
-            <button type='button' disabled={busy === 'push'} style={buttonStyle}
+            <button type="button" disabled={busy === 'push'} className="wb-btn wb-btn--accent wb-set-start"
               onClick={() => { void runPush(enablePush, t('settings.push_enabled')) }}>
               {busy === 'push' ? t('settings.saving') : t('settings.push_enable')}
             </button>
           ) : (
-            <p style={{ margin: 0, color: 'var(--muted)', fontSize: '0.875rem', lineHeight: 1.5 }}>
-              {t(`settings.push_${pushState.replace('-', '_')}`)}
-            </p>
+            <p className="wb-set-muted">{t(`settings.push_${pushState.replace('-', '_')}`)}</p>
           )}
         </Row>
       </Section>
 
       <Section title={t('community.social_links')}>
         <Row label={t('community.social_links')} hint={t('community.social_links_hint')}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-            {socialLinks.map((link, i) => (
-              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--orange)', border: '1px solid var(--border)', borderRadius: 12, padding: '0.2rem 0.5rem', flexShrink: 0 }}>
-                  {t(`community.social_platform_${link.platform}`)}
-                </span>
-                <a href={link.url} target='_blank' rel='noreferrer' style={{ color: 'var(--muted)', fontSize: '0.8125rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1 }}>
-                  {link.url}
-                </a>
-                <button type='button' onClick={() => { void removeSocialLink(i) }} style={{ background: 'none', border: 'none', color: 'var(--muted)', cursor: 'pointer', fontSize: '0.875rem', flexShrink: 0 }} title={t('community.social_remove')}>
-                  ✕
-                </button>
-              </div>
-            ))}
+          <div className="wb-set-stack">
+            {socialLinks.length > 0 && (
+              <ul className="wb-social-list">
+                {socialLinks.map((link, i) => (
+                  <li key={i} className="wb-social-row">
+                    <span className="wb-social-platform">{t(`community.social_platform_${link.platform}`)}</span>
+                    <a href={link.url} target="_blank" rel="noreferrer" className="wb-social-url">{link.url}</a>
+                    <button
+                      type="button"
+                      onClick={() => { void removeSocialLink(i) }}
+                      className="wb-social-remove"
+                      aria-label={`${t('community.social_remove')} — ${t(`community.social_platform_${link.platform}`)}`}
+                      title={t('community.social_remove')}
+                    >
+                      ✕
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
 
-            <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: socialLinks.length > 0 ? '0.4rem' : 0 }}>
-              <select value={newPlatform} onChange={(e) => setNewPlatform(e.target.value as SocialPlatform)} style={inputStyle}>
-                <option value='instagram'>{t('community.social_platform_instagram')}</option>
-                <option value='facebook'>{t('community.social_platform_facebook')}</option>
-                <option value='x'>{t('community.social_platform_x')}</option>
-                <option value='autre'>{t('community.social_platform_autre')}</option>
+            <div className="wb-set-inline">
+              <select
+                className="wb-input wb-set-select"
+                value={newPlatform}
+                onChange={(e) => setNewPlatform(e.target.value as SocialPlatform)}
+                aria-label={t('settings.social_platform_label')}
+              >
+                <option value="instagram">{t('community.social_platform_instagram')}</option>
+                <option value="facebook">{t('community.social_platform_facebook')}</option>
+                <option value="x">{t('community.social_platform_x')}</option>
+                <option value="autre">{t('community.social_platform_autre')}</option>
               </select>
               <input
+                className="wb-input wb-set-grow"
                 value={newUrl}
                 onChange={(e) => setNewUrl(e.target.value)}
                 placeholder={t('community.social_url_placeholder')}
-                style={{ ...inputStyle, flex: 1, minWidth: 180 }}
+                aria-label={t('settings.social_url_label')}
               />
-              <button type='button' onClick={() => { void addSocialLink() }} disabled={!newUrl.trim()} style={{ ...buttonStyle, opacity: !newUrl.trim() ? 0.6 : 1 }}>
+              <button type="button" onClick={() => { void addSocialLink() }} disabled={!newUrl.trim()} className="wb-btn wb-btn--accent">
                 {t('community.social_add')}
               </button>
             </div>
@@ -466,19 +463,14 @@ export default function SettingsView() {
       </Section>
 
       <Section title={t('settings.privacy')}>
-        <Link to='/confidentialite' className="wb-auth-link" style={{ fontSize: '0.8125rem' }}>
+        <Link to="/confidentialite" className="wb-auth-link wb-set-small">
           {t('settings.privacy_link')}
         </Link>
       </Section>
 
       <Section title={t('settings.session')}>
         <Row label={currentEmail} hint={t('settings.logout_hint')}>
-          <button
-            type='button'
-            onClick={() => { void logout() }}
-            disabled={busy === 'logout'}
-            style={{ ...buttonStyle, alignSelf: 'flex-start' }}
-          >
+          <button type="button" onClick={() => { void logout() }} disabled={busy === 'logout'} className="wb-btn wb-btn--accent wb-set-start">
             {t('actions.logout')}
           </button>
         </Row>
@@ -492,11 +484,7 @@ export default function SettingsView() {
 
       <Section title={t('settings.danger_zone')}>
         <Row label={t('settings.delete_account')} hint={t('settings.delete_account_hint')}>
-          <button
-            type='button'
-            onClick={() => setDeleteModalOpen(true)}
-            style={{ ...buttonStyle, background: 'transparent', color: '#ef4444', border: '1px solid rgba(239,68,68,0.4)', borderRadius: 12, alignSelf: 'flex-start' }}
-          >
+          <button type="button" onClick={() => setDeleteModalOpen(true)} className="wb-btn wb-btn--danger wb-set-start">
             {t('settings.delete_account')}
           </button>
         </Row>
@@ -516,10 +504,11 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
   )
 }
 
-function Row({ label, hint, children }: { label: string; hint?: string; children: ReactNode }) {
+/** Une ligne de réglage ; `forId` relie l'étiquette au champ qu'elle décrit. */
+function Row({ label, hint, forId, children }: { label: string; hint?: string; forId?: string; children: ReactNode }) {
   return (
     <div className="wb-set-row">
-      <span className="wb-set-label">{label}</span>
+      {forId ? <label className="wb-set-label" htmlFor={forId}>{label}</label> : <span className="wb-set-label">{label}</span>}
       {children}
       {hint && <span className="wb-set-hint">{hint}</span>}
     </div>
@@ -544,7 +533,6 @@ function Chip({ label, active, onClick }: { label: string; active: boolean; onCl
  * action qu'aucun « annuler » ne peut défaire.
  */
 function DeleteAccountModal({ onClose }: { onClose: () => void }) {
-  useBackToClose(true, onClose)
   const { t } = useTranslation('common')
   const navigate = useNavigate()
   const [impact, setImpact] = useState<DeletionImpact | null>(null)
@@ -583,22 +571,14 @@ function DeleteAccountModal({ onClose }: { onClose: () => void }) {
   const hasThirdPartyImpact = (impact?.athletesAffected ?? 0) > 0 || (impact?.communityMembersAffected ?? 0) > 0
 
   return (
-    <div
-      role='dialog'
-      aria-modal='true'
-      style={{ position: 'fixed', inset: 0, zIndex: 200, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(4px)', padding: '1rem' }}
-    >
-      <div style={{ background: 'var(--black)', border: '1px solid rgba(239,68,68,0.4)', borderRadius: 12, maxWidth: 480, width: '100%', padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-        <h2 style={{ fontFamily: 'var(--font-d)', fontSize: '1.0625rem', letterSpacing: '0.04em', textTransform: 'uppercase', color: '#ef4444', margin: 0 }}>
-          {t('settings.delete_account')}
-        </h2>
-
+    <Modal title={t('settings.delete_account')} onClose={() => { if (!deleting) onClose() }} tone="danger">
+      <div className="wb-delete">
         {loadingImpact ? (
-          <p style={{ color: 'var(--muted)', fontSize: '0.875rem', margin: 0 }}>{t('status.loading')}</p>
+          <p className="wb-set-muted">{t('status.loading')}</p>
         ) : impact ? (
           <>
-            <p style={{ fontSize: '0.875rem', margin: 0 }}>{t('settings.delete_warning')}</p>
-            <ul style={{ margin: 0, paddingLeft: '1.1rem', fontSize: '0.8125rem', color: 'var(--muted)', display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+            <p className="wb-delete-warning">{t('settings.delete_warning')}</p>
+            <ul className="wb-delete-impact">
               {impact.workoutsCreated > 0 && <li>{t('settings.delete_impact_workouts', { count: impact.workoutsCreated })}</li>}
               {impact.sessionsLogged > 0 && <li>{t('settings.delete_impact_sessions', { count: impact.sessionsLogged })}</li>}
               {impact.classesOwned > 0 && <li>{t('settings.delete_impact_classes', { count: impact.classesOwned })}</li>}
@@ -608,42 +588,35 @@ function DeleteAccountModal({ onClose }: { onClose: () => void }) {
             </ul>
 
             {hasThirdPartyImpact && (
-              <div style={{ border: '1px solid rgba(239,68,68,0.4)', borderRadius: 12, background: 'rgba(239,68,68,0.08)', padding: '0.75rem', fontSize: '0.8125rem', color: '#ef4444', display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
+              <div className="wb-delete-others">
                 {impact.athletesAffected > 0 && <span>{t('settings.delete_impact_athletes', { count: impact.athletesAffected })}</span>}
                 {impact.communityMembersAffected > 0 && <span>{t('settings.delete_impact_community_members', { count: impact.communityMembersAffected })}</span>}
               </div>
             )}
 
-            <label style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
-              <span style={{ fontSize: '0.8125rem' }}>{t('settings.delete_confirm_label', { word: confirmWord })}</span>
-              <input
-                value={confirmText}
-                onChange={(e) => setConfirmText(e.target.value)}
-                autoComplete='off'
-                style={inputStyle}
-              />
+            <label className="wb-delete-confirm">
+              <span>{t('settings.delete_confirm_label', { word: confirmWord })}</span>
+              <input className="wb-input" value={confirmText} onChange={(e) => setConfirmText(e.target.value)} autoComplete="off" />
             </label>
           </>
         ) : null}
 
-        {error && (
-          <p role='alert' style={{ color: '#ef4444', fontSize: '0.8125rem', margin: 0 }}>{error}</p>
-        )}
+        {error && <p role="alert" className="wb-delete-error">{error}</p>}
 
-        <div style={{ display: 'flex', gap: '0.6rem', justifyContent: 'flex-end' }}>
-          <button type='button' onClick={onClose} disabled={deleting} style={{ ...buttonStyle, background: 'transparent', color: 'var(--muted)', border: '1px solid var(--border)', borderRadius: 12 }}>
+        <div className="wb-form-actions">
+          <button type="button" onClick={onClose} disabled={deleting} className="wb-btn wb-btn--ghost">
             {t('actions.cancel')}
           </button>
           <button
-            type='button'
+            type="button"
             onClick={() => { void handleDelete() }}
             disabled={deleting || loadingImpact || !impact || confirmText.trim() !== confirmWord}
-            style={{ ...buttonStyle, background: '#ef4444', color: 'var(--black)', opacity: (deleting || loadingImpact || !impact || confirmText.trim() !== confirmWord) ? 0.5 : 1 }}
+            className="wb-btn wb-btn--destructive"
           >
             {deleting ? t('settings.saving') : t('settings.delete_account_confirm_button')}
           </button>
         </div>
       </div>
-    </div>
+    </Modal>
   )
 }

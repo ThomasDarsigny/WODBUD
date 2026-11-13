@@ -1753,6 +1753,43 @@ button.wb-row:active, a.wb-row:active { background: var(--surface); }
 .wb-btn--amber { background: #f59e0b; color: var(--black); }
 .wb-input--compact { min-height: 36px; padding: 0 0.5rem; font-size: 0.8125rem; }
 
+.wb-btn--accent { background: transparent; color: var(--orange); border-color: var(--orange); }
+.wb-btn--destructive { background: #ef4444; border-color: #ef4444; color: var(--black); }
+.wb-modal--danger { border-color: rgba(239, 68, 68, 0.4); background: var(--black); }
+.wb-modal--danger .wb-modal-title { margin-bottom: 1rem; font-size: 1.0625rem; color: #ef4444; }
+
+/* ── Paramètres (4.2) ─────────────────────────────────────────────── */
+.wb-settings { max-width: 720px; }
+.wb-set-card .wb-input { background: var(--black); border-color: var(--line-fn); }
+.wb-set-card .wb-input:focus { border-color: var(--orange); }
+.wb-set-notice { padding: 0.6rem 0.8rem; border-radius: var(--r-md); border: 1px solid; font-size: 0.875rem; }
+.wb-set-notice.is-ok { color: #4ade80; border-color: #4ade80; }
+.wb-set-notice.is-err { color: #ef4444; border-color: #ef4444; }
+.wb-set-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.wb-set-inline { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+.wb-set-stack { display: flex; flex-direction: column; gap: 0.5rem; }
+.wb-set-stack > .wb-btn, .wb-set-start { align-self: flex-start; }
+.wb-set-grow { flex: 1; min-width: 180px; width: auto; }
+.wb-set-select { width: auto; }
+.wb-set-avatar { width: 64px; height: 64px; flex-shrink: 0; border-radius: 50%; border: 1px solid var(--border); object-fit: cover; }
+.wb-set-avatar--empty { display: flex; align-items: center; justify-content: center; background: var(--surface); color: var(--muted); font-family: var(--font-d); font-size: 1.5rem; }
+.wb-set-value { margin: 0; font-size: 0.9375rem; }
+.wb-set-muted { margin: 0; color: var(--muted); font-size: 0.875rem; line-height: 1.5; }
+.wb-set-ok { margin-right: 0.25rem; color: #22c55e; font-size: 0.9375rem; }
+.wb-set-small { font-size: 0.8125rem; }
+.wb-social-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.5rem; }
+.wb-social-row { display: flex; align-items: center; gap: 0.5rem; min-width: 0; }
+.wb-social-platform { flex-shrink: 0; padding: 0.2rem 0.5rem; border-radius: var(--r-md); border: 1px solid var(--border); color: var(--orange); font-family: var(--font-d); font-size: 0.6875rem; letter-spacing: 0.1em; text-transform: uppercase; }
+.wb-social-url { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--muted); font-size: 0.8125rem; }
+.wb-social-remove { display: inline-grid; place-items: center; flex-shrink: 0; width: 40px; height: 40px; border: none; border-radius: 50%; background: none; color: var(--muted); font-size: 0.875rem; cursor: pointer; }
+.wb-social-remove:hover, .wb-social-remove:focus-visible { background: var(--surface); color: var(--white); }
+.wb-delete { display: flex; flex-direction: column; gap: 1rem; }
+.wb-delete-warning { margin: 0; font-size: 0.875rem; }
+.wb-delete-impact { margin: 0; padding-left: 1.1rem; display: flex; flex-direction: column; gap: 0.25rem; color: var(--muted); font-size: 0.8125rem; }
+.wb-delete-others { display: flex; flex-direction: column; gap: 0.35rem; padding: 0.75rem; border-radius: var(--r-md); border: 1px solid rgba(239, 68, 68, 0.4); background: rgba(239, 68, 68, 0.08); color: #ef4444; font-size: 0.8125rem; }
+.wb-delete-confirm { display: flex; flex-direction: column; gap: 0.35rem; font-size: 0.8125rem; }
+.wb-delete-error { margin: 0; color: #ef4444; font-size: 0.8125rem; }
+
 /* ── Créateur de WOD (4.2) ───────────────────────────────────────── */
 .wb-builder { display: grid; grid-template-columns: minmax(0, 1fr) 380px; height: calc(100vh - var(--section-tabs-h, 0px)); overflow: hidden; }
 .wb-builder.is-mobile { grid-template-columns: 1fr; grid-template-rows: auto minmax(0, 1fr); height: calc(100dvh - var(--mobile-top-h) - var(--tabbar-h) - var(--safe-bottom) - var(--section-tabs-h, 0px)); }

@@ -1002,7 +1002,9 @@
     "delete_impact_athletes_other": "{{count}} atletas serán retirados de tus clases y perderán sus votos ahí.",
     "delete_confirm_word": "ELIMINAR",
     "delete_confirm_label": "Escribe {{word}} para confirmar",
-    "delete_account_confirm_button": "Eliminar definitivamente"
+    "delete_account_confirm_button": "Eliminar definitivamente",
+    "social_platform_label": "Red",
+    "social_url_label": "Dirección del enlace"
   },
   "rank": {
     "tag": "Progresión",
