@@ -154,7 +154,7 @@ export default function Mannequin2D({ loads, height = 340, bothViews = false, on
               style={{
                 flex: 1,
                 fontFamily: 'var(--font-d)',
-                fontSize: '0.6875rem',
+                fontSize: 'var(--t-label)',
                 fontWeight: 700,
                 letterSpacing: '0.12em',
                 textTransform: 'uppercase',
@@ -180,7 +180,7 @@ export default function Mannequin2D({ loads, height = 340, bothViews = false, on
               <span
                 style={{
                   fontFamily: 'var(--font-d)',
-                  fontSize: '0.6875rem',
+                  fontSize: 'var(--t-label)',
                   letterSpacing: '0.14em',
                   textTransform: 'uppercase',
                   color: 'var(--muted, #9d958a)'
