@@ -1487,7 +1487,7 @@
     "removed": "Retiré du centre."
   },
   "invite": {
-    "has_app": "Elle a déjà WODBUD ? Envoie-lui une notification",
+    "has_app": "Déjà sur WODBUD ? Envoie une notification",
     "email_label": "Courriel de son compte WODBUD",
     "email_placeholder": "prenom@exemple.com",
     "send": "Envoyer",
