@@ -846,7 +846,13 @@
     "sched_next": "Prochain cours : {{when}}",
     "sched_ongoing": "En cours · depuis {{time}}",
     "week_unplanned": "Jours de cours sans WOD cette semaine : {{days}}",
-    "center_schedule": "Horaire"
+    "center_schedule": "Horaire",
+    "vote_refresh": "Rafraîchir les résultats",
+    "vote_close_hint": "Clôturer ce vote : les athlètes ne pourront plus voter",
+    "votes_more_one": "Voir {{count}} vote de plus",
+    "votes_more_other": "Voir {{count}} votes de plus",
+    "votes_less": "Réduire",
+    "field_schedule_hint": "Facultatif : les jours et heures se règlent ensuite dans l’horaire du cours."
   },
   "athlete": {
     "role_label": "Athlète",

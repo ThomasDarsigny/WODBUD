@@ -849,7 +849,13 @@
     "sched_next": "Próxima clase: {{when}}",
     "sched_ongoing": "En curso · desde {{time}}",
     "week_unplanned": "Días de clase sin WOD esta semana: {{days}}",
-    "center_schedule": "Horario"
+    "center_schedule": "Horario",
+    "vote_refresh": "Actualizar resultados",
+    "vote_close_hint": "Cerrar esta votación: los atletas ya no podrán votar",
+    "votes_more_one": "Ver {{count}} votación más",
+    "votes_more_other": "Ver {{count}} votaciones más",
+    "votes_less": "Reducir",
+    "field_schedule_hint": "Opcional: los días y horas se definen después en el horario de la clase."
   },
   "athlete": {
     "role_label": "Atleta",

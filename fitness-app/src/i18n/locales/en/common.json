@@ -846,7 +846,13 @@
     "sched_next": "Next class: {{when}}",
     "sched_ongoing": "In progress · since {{time}}",
     "week_unplanned": "Class days without a WOD this week: {{days}}",
-    "center_schedule": "Schedule"
+    "center_schedule": "Schedule",
+    "vote_refresh": "Refresh results",
+    "vote_close_hint": "Close this vote: athletes won’t be able to vote anymore",
+    "votes_more_one": "Show {{count}} more vote",
+    "votes_more_other": "Show {{count}} more votes",
+    "votes_less": "Show less",
+    "field_schedule_hint": "Optional: days and times are set afterwards in the class schedule."
   },
   "athlete": {
     "role_label": "Athlete",

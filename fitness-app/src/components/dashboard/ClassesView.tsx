@@ -8,8 +8,7 @@ import VoteResultsBars from '../vote/VoteResultsBars'
 import ConfirmButton from '../ui/ConfirmButton'
 import EmptyState from '../ui/EmptyState'
 import NavIcon from '../navigation/NavIcon'
-import { CATEGORY_I18N_KEYS, MUSCLE_GROUP_I18N_KEYS } from '../../types'
-import { btnPrimary as actionBtnStyle, btnSecondary as ghostBtnStyle, field as inputStyle, textarea as textareaStyle } from '../../styles/ui'
+import { CATEGORY_I18N_KEYS } from '../../types'
 import Skeleton from '../ui/Skeleton'
 import ClassLeaderboard from '../rank/ClassLeaderboard'
 import ClassPlanningTab from './ClassPlanningTab'
@@ -17,7 +16,8 @@ import { isVoteSessionOpen, voteSessionKind } from '../../lib/voteSessions'
 import ClassFollowup from './ClassFollowup'
 import { useIsMobile } from '../../hooks/useMediaQuery'
 import { useSearchParams } from 'react-router-dom'
-import { useBackToClose } from '../../hooks/useBackToClose'
+import Modal from '../ui/Modal'
+import Field from '../ui/Field'
 import CenterClassesList from '../center/CenterClassesList'
 import { shareLink } from '../../lib/shareLink'
 import InviteByEmail from '../invite/InviteByEmail'
@@ -103,39 +103,21 @@ export default function ClassesView() {
   }
 
   return (
-    <div style={{ display: 'flex', height: '100%', minHeight: 0 }}>
-      {/* Left panel — class list */}
+    <div className="wb-classes">
+      {/* Liste des cours */}
       {showList && (
-      <div style={{
-        width: isMobile ? '100%' : 280,
-        flexShrink: 0,
-        borderRight: '1px solid var(--border)',
-        display: 'flex',
-        flexDirection: 'column',
-        background: 'var(--dark)'
-      }}>
-        <div style={{ padding: '1.5rem 1.25rem 1rem', borderBottom: '1px solid var(--border)' }}>
-          <p className="wb-ph-tag">
-            {t('classes.tag')}
-          </p>
-          <h2 style={{ fontFamily: 'var(--font-d)', fontSize: '1.75rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.03em', margin: 0 }}>
-            {t('classes.title')}
-          </h2>
+      <div className="wb-classes-list">
+        <div className="wb-classes-list-head">
+          <p className="wb-ph-tag">{t('classes.tag')}</p>
+          <h2 className="wb-classes-list-title">{t('classes.title')}</h2>
         </div>
 
-        <div style={{ flex: 1, overflowY: 'auto' }}>
+        <div className="wb-classes-scroll">
           {loading && classes.length === 0 ? (
-            <div style={{ padding: 'var(--s4) var(--s5)' }}>
-              <Skeleton height={44} lines={4} />
-            </div>
+            <div className="wb-classes-pad"><Skeleton height={44} lines={4} /></div>
           ) : classes.length === 0 ? (
-            <div style={{ padding: '1rem' }}>
-              <EmptyState
-                compact
-                icon="classes"
-                title={t('classes.empty')}
-                hint={t('classes.empty_hint')}
-              />
+            <div className="wb-classes-pad">
+              <EmptyState compact icon="classes" title={t('classes.empty')} hint={t('classes.empty_hint')} />
             </div>
           ) : (
             classes.map((cls) => {
@@ -143,29 +125,13 @@ export default function ClassesView() {
               return (
                 <button
                   key={cls.id}
+                  type="button"
                   onClick={() => handleSelectClass(cls)}
-                  style={{
-                    display: 'block',
-                    width: '100%',
-                    textAlign: 'left',
-                    padding: '0.85rem 1.25rem',
-                    background: active ? 'rgba(255,77,0,0.08)' : 'transparent',
-                    borderLeft: `2px solid ${active ? 'var(--orange)' : 'transparent'}`,
-                    borderTop: 'none',
-                    borderRight: 'none',
-                    borderBottom: '1px solid var(--border)',
-                    cursor: 'pointer',
-                    transition: 'all 0.15s'
-                  }}
+                  className={`wb-classes-item${active ? ' is-active' : ''}`}
+                  aria-current={active ? 'true' : undefined}
                 >
-                  <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.9375rem', fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', color: active ? 'var(--white)' : 'var(--muted)', margin: 0 }}>
-                    {cls.name}
-                  </p>
-                  {scheduleOf(cls) && (
-                    <p style={{ fontFamily: 'var(--font-b)', fontSize: '0.8125rem', color: 'var(--muted)', margin: '0.2rem 0 0', opacity: 0.7 }}>
-                      {scheduleOf(cls)}
-                    </p>
-                  )}
+                  <span className="wb-classes-item-name">{cls.name}</span>
+                  {scheduleOf(cls) && <span className="wb-classes-item-sub">{scheduleOf(cls)}</span>}
                 </button>
               )
             })
@@ -173,47 +139,39 @@ export default function ClassesView() {
           <CenterClassesList />
         </div>
 
-        <div style={{ padding: '1rem 1.25rem', borderTop: '1px solid var(--border)' }}>
-          <button
-            onClick={() => setShowCreateClass(true)}
-            style={{ width: '100%', fontFamily: 'var(--font-d)', fontSize: '0.6875rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--black)', background: 'var(--orange)', border: 'none', padding: '0.65rem', minHeight: 48, borderRadius: 12, cursor: 'pointer' }}
-          >
+        <div className="wb-classes-foot">
+          <button type="button" onClick={() => setShowCreateClass(true)} className="wb-btn wb-btn--primary wb-btn--block">
             + {t('classes.create')}
           </button>
         </div>
       </div>
       )}
 
-      {/* Right panel — class detail */}
+      {/* Fiche du cours */}
       {showDetail && (
-      <div style={{ flex: 1, minWidth: 0, overflow: 'auto', padding: 'var(--page-pad)' }}>
+      <div className="wb-classes-detail">
         {isMobile && selectedClass && (
-          <button type="button" className="wb-auth-link" onClick={() => setSelectedClass(null)} style={{ background: 'none', border: 'none', padding: 0, fontWeight: 600, cursor: 'pointer', marginBottom: '0.25rem' }}>
+          <button type="button" className="wb-auth-link wb-classes-back" onClick={() => setSelectedClass(null)}>
             ‹ {t('classes.title')}
           </button>
         )}
         {!selectedClass ? (
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'var(--muted)', gap: '1rem' }}>
-            <span style={{ opacity: 0.3, display: 'flex' }}><NavIcon name="classes" size={46} /></span>
-            <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.9375rem', letterSpacing: '0.12em', textTransform: 'uppercase' }}>{t('classes.select_prompt')}</p>
+          <div className="wb-classes-placeholder">
+            <span className="wb-classes-placeholder-icon"><NavIcon name="classes" size={46} /></span>
+            <p>{t('classes.select_prompt')}</p>
           </div>
         ) : (
           <>
-            {/* Header */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
+            <div className="wb-classes-head">
               <div>
-                <h1 style={{ fontFamily: 'var(--font-d)', fontSize: '1.75rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.03em', margin: 0 }}>
-                  {selectedClass.name}
-                </h1>
-                {selectedClass.description && (
-                  <p style={{ color: 'var(--muted)', marginTop: '0.25rem', fontSize: '0.9375rem' }}>{selectedClass.description}</p>
-                )}
+                <h1 className="wb-classes-title">{selectedClass.name}</h1>
+                {selectedClass.description && <p className="wb-classes-desc">{selectedClass.description}</p>}
               </div>
-              <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+              <div className="wb-classes-head-actions">
                 <a href={`/tv/${selectedClass.id}`} target="_blank" rel="noopener" className="wb-btn wb-btn--secondary wb-btn--sm" title={t('tv.open_hint')}>
                   {t('tv.open')}
                 </a>
-                <ConfirmButton onConfirm={() => handleDeleteClass(selectedClass)} style={ghostBtnStyle}>
+                <ConfirmButton onConfirm={() => handleDeleteClass(selectedClass)} className="wb-btn wb-btn--ghost wb-btn--sm">
                   {t('actions.delete')}
                 </ConfirmButton>
               </div>
@@ -221,44 +179,39 @@ export default function ClassesView() {
 
             <ClassScheduleEditor key={`sched-${selectedClass.id}`} classId={selectedClass.id} legacyText={selectedClass.schedule} />
 
-            {/* Invite section */}
-            <div style={{ background: 'var(--dark)', border: '1px solid var(--border)', borderRadius: 12, padding: '1.25rem', marginBottom: '1.5rem' }}>
-              <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--orange)', marginBottom: '0.75rem' }}>
-                {t('classes.invite_label')}
-              </p>
-              <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', alignItems: 'center', marginBottom: '0.75rem' }}>
-                <code style={{ flex: 1, minWidth: 0, background: 'var(--black)', border: '1px solid var(--border)', borderRadius: 12, padding: '0.5rem 0.75rem', fontSize: '0.8125rem', color: 'var(--muted)', fontFamily: 'monospace', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                  {inviteUrl}
-                </code>
+            {/* Invitation */}
+            <section className="wb-invite" aria-labelledby="class-invite-label">
+              <p id="class-invite-label" className="wb-invite-label">{t('classes.invite_label')}</p>
+              <div className="wb-invite-row">
+                <code className="wb-invite-url">{inviteUrl}</code>
                 <button
                   type="button"
+                  className="wb-btn wb-btn--primary wb-btn--sm"
                   onClick={async () => {
                     const outcome = await shareLink({ title: selectedClass.name, text: t('classes.invite_text', { name: selectedClass.name }), url: inviteUrl })
                     if (outcome === 'copied') { setCopied(true); setTimeout(() => setCopied(false), 2500) }
                   }}
-                  style={actionBtnStyle}
                 >
                   {copied ? `✓ ${t('community.invite_copied')}` : t('classes.invite')}
                 </button>
                 <button
                   type="button"
+                  className="wb-btn wb-btn--ghost wb-btn--sm"
                   onClick={() => { void navigator.clipboard.writeText(inviteUrl).then(() => { setCopied(true); setTimeout(() => setCopied(false), 2500) }).catch(() => {}) }}
-                  style={ghostBtnStyle}
                 >
                   {t('classes.copy_link')}
                 </button>
-                <button onClick={() => setShowQR(!showQR)} style={ghostBtnStyle}>
+                <button type="button" className="wb-btn wb-btn--ghost wb-btn--sm" aria-expanded={showQR} onClick={() => setShowQR(!showQR)}>
                   {showQR ? t('classes.hide_qr') : t('classes.show_qr')}
                 </button>
               </div>
               {showQR && (
-                <div style={{ display: 'inline-block', background: '#fff', padding: '0.75rem' }}>
+                <div className="wb-invite-qr">
                   <QRCodeSVG value={inviteUrl} size={160} />
                 </div>
               )}
               <InviteByEmail key={selectedClass.id} kind="class" targetId={selectedClass.id} />
-            </div>
-
+            </section>
             {/* Tabs */}
             {/* Cinq onglets en puces : elles défilent sur téléphone plutôt que de déborder. */}
             <div className="wb-chips wb-class-tabs" role="tablist" aria-label={t('classes.title')}>
@@ -369,28 +322,20 @@ function MembersTab({ classId, members, onRemove }: {
   }
 
   return (
-    <div style={{ border: '1px solid var(--border)', borderRadius: 12, background: 'var(--dark)' }}>
+    <ul className="wb-members">
       {members.map((m) => (
-        <div key={m.athlete_id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.75rem 1rem', borderBottom: '1px solid var(--border)' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-            <div style={{ width: 30, height: 30, borderRadius: '50%', background: 'var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-d)', fontSize: '0.8125rem', color: 'var(--muted)' }}>
-              {(m.profile?.full_name?.[0] ?? '?').toUpperCase()}
-            </div>
-            <div>
-              <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.8125rem', letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--white)', margin: 0 }}>
-                {m.profile?.full_name ?? t('classes.unknown_athlete')}
-              </p>
-              <p style={{ color: 'var(--muted)', fontSize: '0.8125rem', margin: 0 }}>
-                {new Date(m.joined_at).toLocaleDateString()}
-              </p>
-            </div>
-          </div>
-          <button onClick={() => onRemove(m.athlete_id)} style={{ ...ghostBtnStyle, fontSize: '0.6875rem' }}>
+        <li key={m.athlete_id} className="wb-member-row">
+          <span className="wb-member-avatar" aria-hidden="true">{(m.profile?.full_name?.[0] ?? '?').toUpperCase()}</span>
+          <span className="wb-member-main">
+            <strong>{m.profile?.full_name ?? t('classes.unknown_athlete')}</strong>
+            <span>{new Date(m.joined_at).toLocaleDateString()}</span>
+          </span>
+          <button type="button" onClick={() => onRemove(m.athlete_id)} className="wb-btn wb-btn--ghost wb-btn--sm">
             {t('actions.delete')}
           </button>
-        </div>
+        </li>
       ))}
-    </div>
+    </ul>
   )
 }
 
@@ -424,104 +369,67 @@ function VotesTab({ sessions, voteResults, onCreateVote, onCloseSession, onDelet
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
-        <button onClick={onCreateVote} style={actionBtnStyle} title={t('classes.create_vote')}>
+      <div className="wb-votes-toolbar">
+        <button type="button" onClick={onCreateVote} className="wb-btn wb-btn--primary wb-btn--sm">
           + {t('classes.create_vote')}
         </button>
       </div>
 
       {sessions.length === 0 ? (
-        <EmptyState
-          compact
-          icon="vote"
-          title={t('classes.no_votes')}
-          hint={t('classes.no_votes_hint')}
-        />
+        <EmptyState compact icon="vote" title={t('classes.no_votes')} hint={t('classes.no_votes_hint')} />
       ) : (
         <>
           {visibleSessions.map((session) => {
             const results = voteResults[session.id] ?? []
             const totalVotes = results.reduce((sum, r) => sum + r.votes, 0)
+            const open = isVoteSessionOpen(session)
+            const kind = voteSessionKind(session)
 
             return (
-              <div key={session.id} style={{ border: '1px solid var(--border)', borderRadius: 12, background: 'var(--dark)', padding: '1rem', marginBottom: '0.75rem' }}>
-                {/* Header */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem' }}>
+              <article key={session.id} className="wb-vote-session">
+                <div className="wb-vote-session-head">
                   <div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                      <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.9375rem', fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--white)', margin: 0 }}>
-                        {session.title}
-                      </p>
-                      <span style={{
-                        fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.15em', textTransform: 'uppercase',
-                        color: isVoteSessionOpen(session) ? '#22c55e' : 'var(--muted)',
-                        border: `1px solid ${isVoteSessionOpen(session) ? 'rgba(34,197,94,0.35)' : 'var(--border)'}`, borderRadius: 12,
-                        background: isVoteSessionOpen(session) ? 'rgba(34,197,94,0.08)' : 'transparent',
-                        padding: '0.1rem 0.4rem'
-                      }}>
-                        {voteSessionKind(session) === 'open' ? t('classes.vote_open')
-                          : voteSessionKind(session) === 'expired' ? t('classes.vote_expired')
-                          : t('classes.vote_closed')}
+                    <div className="wb-vote-session-title">
+                      <strong>{session.title}</strong>
+                      <span className={`wb-vote-status${open ? ' is-open' : ''}`}>
+                        {kind === 'open' ? t('classes.vote_open') : kind === 'expired' ? t('classes.vote_expired') : t('classes.vote_closed')}
                       </span>
-                      {totalVotes > 0 && (
-                        <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--muted)', padding: '0.1rem 0.4rem' }}>
-                          {totalVotes} {t('classes.votes_total')}
-                        </span>
-                      )}
+                      {totalVotes > 0 && <span className="wb-vote-total">{totalVotes} {t('classes.votes_total')}</span>}
                     </div>
                     {session.deadline && (
-                      <p style={{ color: 'var(--muted)', fontSize: '0.8125rem', margin: '0.2rem 0 0' }}>
+                      <p className="wb-vote-session-deadline">
                         {t('classes.deadline')}: {new Date(session.deadline).toLocaleDateString()}
                       </p>
                     )}
                   </div>
-                  <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                    <button
-                      onClick={() => onFetchResults(session.id)}
-                      title="Rafraîchir les résultats"
-                      style={{ ...ghostBtnStyle, fontSize: '0.6875rem', padding: '0.35rem 0.65rem' }}
-                    >
+                  <div className="wb-vote-session-actions">
+                    <button type="button" onClick={() => onFetchResults(session.id)} title={t('classes.vote_refresh')} aria-label={t('classes.vote_refresh')} className="wb-btn wb-btn--ghost wb-btn--sm">
                       ↻
                     </button>
-                    {isVoteSessionOpen(session) && (
-                      <button
-                        onClick={() => onCloseSession(session.id)}
-                        title="Clôturer ce vote — les athlètes ne pourront plus voter"
-                        style={{ ...ghostBtnStyle, fontSize: '0.6875rem' }}
-                      >
+                    {open && (
+                      <button type="button" onClick={() => onCloseSession(session.id)} title={t('classes.vote_close_hint')} className="wb-btn wb-btn--ghost wb-btn--sm">
                         {t('classes.close_vote')}
                       </button>
                     )}
-                    <ConfirmButton
-                      onConfirm={() => handleDelete(session)}
-                      title={t('classes.delete_vote')}
-                      style={{ ...ghostBtnStyle, fontSize: '0.6875rem', color: 'rgba(255,77,0,0.8)', borderColor: 'rgba(255,77,0,0.35)' }}
-                    >
+                    <ConfirmButton onConfirm={() => handleDelete(session)} title={t('classes.delete_vote')} className="wb-btn wb-btn--danger wb-btn--sm">
                       ✕
                     </ConfirmButton>
                   </div>
                 </div>
 
-                {/* Results bars */}
                 <VoteResultsBars results={results} emptyLabel={t('classes.no_votes_yet')} />
-              </div>
+              </article>
             )
           })}
 
           {!showAll && hiddenCount > 0 && (
-            <button
-              onClick={() => setShowAll(true)}
-              style={{ ...ghostBtnStyle, width: '100%', justifyContent: 'center', display: 'flex', marginTop: '0.25rem' }}
-            >
-              ↓ Voir {hiddenCount} vote{hiddenCount > 1 ? 's' : ''} de plus
+            <button type="button" onClick={() => setShowAll(true)} className="wb-btn wb-btn--ghost wb-btn--block">
+              ↓ {t('classes.votes_more', { count: hiddenCount })}
             </button>
           )}
           {showAll && sessions.length > VOTES_VISIBLE_DEFAULT && (
-            <button
-              onClick={() => setShowAll(false)}
-              style={{ ...ghostBtnStyle, width: '100%', justifyContent: 'center', display: 'flex', marginTop: '0.25rem' }}
-            >
-              ↑ Réduire
+            <button type="button" onClick={() => setShowAll(false)} className="wb-btn wb-btn--ghost wb-btn--block">
+              ↑ {t('classes.votes_less')}
             </button>
           )}
         </>
@@ -555,29 +463,26 @@ function CreateClassModal({ onClose, onCreate }: {
   }
 
   return (
-    <ModalOverlay onClose={onClose}>
-      <h2 style={{ fontFamily: 'var(--font-d)', fontSize: '1.75rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.04em', margin: '0 0 1.5rem' }}>
-        {t('classes.create')}
-      </h2>
-      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+    <Modal title={t('classes.create')} onClose={onClose}>
+      <form onSubmit={handleSubmit} className="wb-form">
         <Field label={t('classes.field_name')} required>
-          <input value={name} onChange={(e) => setName(e.target.value)} autoFocus style={inputStyle} />
+          <input className="wb-input" value={name} onChange={(e) => setName(e.target.value)} autoFocus required />
         </Field>
-        <Field label={t('classes.field_schedule')}>
-          <input value={schedule} onChange={(e) => setSchedule(e.target.value)} placeholder={t('classes.schedule_placeholder')} style={inputStyle} />
+        <Field label={t('classes.field_schedule')} hint={t('classes.field_schedule_hint')}>
+          <input className="wb-input" value={schedule} onChange={(e) => setSchedule(e.target.value)} placeholder={t('classes.schedule_placeholder')} />
         </Field>
         <Field label={t('classes.field_description')}>
-          <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={2} style={textareaStyle} />
+          <textarea className="wb-input wb-support-text" value={description} onChange={(e) => setDescription(e.target.value)} rows={2} />
         </Field>
-        {error && <p style={{ color: 'var(--orange)', fontSize: '0.8125rem', margin: 0 }}>{error}</p>}
-        <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-end', marginTop: '0.5rem' }}>
-          <button type="button" onClick={onClose} style={ghostBtnStyle}>{t('actions.cancel')}</button>
-          <button type="submit" disabled={!name.trim() || loading} style={{ ...actionBtnStyle, opacity: !name.trim() || loading ? 0.6 : 1 }}>
-            {loading ? '...' : t('actions.save')}
+        {error && <p className="wb-rec-error" role="alert">{error}</p>}
+        <div className="wb-form-actions">
+          <button type="button" onClick={onClose} className="wb-btn wb-btn--ghost">{t('actions.cancel')}</button>
+          <button type="submit" disabled={!name.trim() || loading} className="wb-btn wb-btn--primary">
+            {loading ? '…' : t('actions.save')}
           </button>
         </div>
       </form>
-    </ModalOverlay>
+    </Modal>
   )
 }
 
@@ -629,105 +534,51 @@ function CreateVoteModal({ classId, exercises, onClose, onCreate }: {
   }
 
   return (
-    <ModalOverlay onClose={onClose} wide>
-      <h2 style={{ fontFamily: 'var(--font-d)', fontSize: '1.75rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.04em', margin: '0 0 1.25rem' }}>
-        {t('classes.create_vote')}
-      </h2>
-      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: '0.75rem', alignItems: 'end' }}>
+    <Modal title={t('classes.create_vote')} onClose={onClose} wide>
+      <form onSubmit={handleSubmit} className="wb-form">
+        <div className="wb-vote-form-row">
           <Field label={t('classes.vote_title')} required>
-            <input value={title} onChange={(e) => setTitle(e.target.value)} autoFocus style={inputStyle} />
+            <input className="wb-input" value={title} onChange={(e) => setTitle(e.target.value)} autoFocus required />
           </Field>
           <Field label={t('classes.vote_deadline')}>
-            <input type="date" value={deadline} onChange={(e) => setDeadline(e.target.value)} style={inputStyle} />
+            <input className="wb-input" type="date" value={deadline} onChange={(e) => setDeadline(e.target.value)} />
           </Field>
         </div>
 
-        <div>
-          <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '0.5rem' }}>
-            {t('classes.pick_exercises')} {selected.size > 0 && <span style={{ color: 'var(--orange)' }}>({selected.size})</span>}
-          </p>
+        <fieldset className="wb-pick">
+          <legend className="wb-field-label">
+            {t('classes.pick_exercises')} {selected.size > 0 && <span className="wb-pick-count">({selected.size})</span>}
+          </legend>
           <input
+            className="wb-input"
+            type="search"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder={t('search', { ns: 'exercises' })}
-            style={{ ...inputStyle, marginBottom: '0.5rem' }}
+            aria-label={t('search', { ns: 'exercises' })}
           />
-          <div style={{ maxHeight: 300, overflowY: 'auto', border: '1px solid var(--border)', borderRadius: 12, background: 'var(--black)' }}>
+          <div className="wb-pick-list">
             {filtered.map((ex) => {
               const isSelected = selected.has(ex.id)
               return (
-                <button
-                  key={ex.id}
-                  type="button"
-                  onClick={() => toggleExercise(ex.id)}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.75rem',
-                    width: '100%',
-                    textAlign: 'left',
-                    padding: '0.6rem 0.9rem',
-                    borderBottom: '1px solid var(--border)',
-                    background: isSelected ? 'rgba(255,77,0,0.08)' : 'transparent',
-                    border: 'none',
-                    cursor: 'pointer',
-                    transition: 'background 0.1s'
-                  }}
-                >
-                  <span style={{ width: 18, height: 18, borderRadius: '50%', border: `2px solid ${isSelected ? 'var(--orange)' : 'var(--border)'}`, background: isSelected ? 'var(--orange)' : 'transparent', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.6875rem', color: 'var(--black)' }}>
-                    {isSelected && 'OK'}
-                  </span>
-                  <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.8125rem', letterSpacing: '0.05em', textTransform: 'uppercase', color: isSelected ? 'var(--white)' : 'var(--muted)' }}>
-                    {ex.name}
-                  </span>
-                  <span style={{ marginLeft: 'auto', fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--orange)', opacity: 0.7 }}>
-                    {t(CATEGORY_I18N_KEYS[ex.category], { ns: 'common' })}
-                  </span>
+                <button key={ex.id} type="button" onClick={() => toggleExercise(ex.id)} className={`wb-pick-item${isSelected ? ' is-on' : ''}`} aria-pressed={isSelected}>
+                  <span className="wb-pick-check" aria-hidden="true">{isSelected && '✓'}</span>
+                  <span className="wb-pick-name">{ex.name}</span>
+                  <span className="wb-pick-cat">{t(CATEGORY_I18N_KEYS[ex.category], { ns: 'common' })}</span>
                 </button>
               )
             })}
           </div>
-        </div>
+        </fieldset>
 
-        {error && <p style={{ color: 'var(--orange)', fontSize: '0.8125rem', margin: 0 }}>{error}</p>}
-        <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-end' }}>
-          <button type="button" onClick={onClose} style={ghostBtnStyle}>{t('actions.cancel')}</button>
-          <button type="submit" disabled={!title.trim() || selected.size === 0 || loading} style={{ ...actionBtnStyle, opacity: !title.trim() || selected.size === 0 || loading ? 0.6 : 1 }}>
-            {loading ? '...' : t('classes.launch_vote')}
+        {error && <p className="wb-rec-error" role="alert">{error}</p>}
+        <div className="wb-form-actions">
+          <button type="button" onClick={onClose} className="wb-btn wb-btn--ghost">{t('actions.cancel')}</button>
+          <button type="submit" disabled={!title.trim() || selected.size === 0 || loading} className="wb-btn wb-btn--primary">
+            {loading ? '…' : t('classes.launch_vote')}
           </button>
         </div>
       </form>
-    </ModalOverlay>
+    </Modal>
   )
 }
-
-function ModalOverlay({ children, onClose, wide = false }: { children: React.ReactNode; onClose: () => void; wide?: boolean }) {
-  useBackToClose(true, onClose)
-  return (
-    <div
-      onClick={(e) => { if (e.target === e.currentTarget) onClose() }}
-      style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 200, padding: '1rem' }}
-    >
-      <div style={{ background: 'var(--dark)', border: '1px solid var(--border)', borderRadius: 12, padding: 'var(--page-pad)', width: '100%', maxWidth: wide ? 640 : 460, maxHeight: '90vh', overflowY: 'auto' }}>
-        {children}
-      </div>
-    </div>
-  )
-}
-
-function Field({ label, children, required }: { label: string; children: React.ReactNode; required?: boolean }) {
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
-      <label style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--muted)' }}>
-        {label}{required && <span style={{ color: 'var(--orange)' }}> *</span>}
-      </label>
-      {children}
-    </div>
-  )
-}
-
-// ─── Shared styles ────────────────────────────────────────────────────────────
-
-// Imported for MUSCLE_GROUP_I18N_KEYS usage in CreateVoteModal
-void MUSCLE_GROUP_I18N_KEYS

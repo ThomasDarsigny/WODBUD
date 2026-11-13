@@ -144,7 +144,10 @@ Rapport : audit produit publié le 12 novembre. Branche de travail : `sprint`. U
 
 ### Phase 4 · Qualité et système
 - [x] 4.1 Tests de bout en bout Playwright : cinq parcours (connexion et accueil coach, créer un WOD, programmer une semaine et un cycle, présences, mode TV et tableau blanc), sur ordinateur et sur téléphone ; Supabase entièrement simulé (aucun secret, heure figée) ; job CI à chaque push, avec les tests unitaires désormais lancés aussi en CI et une vérification des types qui vérifie vraiment (`tsc -b`). Mode d'emploi : docs/tests.md.
-- [ ] 4.2 Composants partagés à la place des styles en ligne.
+- [ ] 4.2 Composants partagés à la place des styles en ligne (691 au départ), page par page, rendu comparé avant / après et parcours Playwright à chaque étape :
+  - [x] Composants `Modal` (rôle dialog relié au titre, Échap, retour Android, focus rendu au déclencheur) et `Field` (étiquette reliée au champ) ; classes `wb-*` pour boutons et champs.
+  - [x] ClassesView : 71 → 0 style en ligne ; fenêtres « Créer un cours » et « Créer un vote » accessibles au clavier ; chaînes en dur traduites ; parcours e2e de création d'un cours.
+  - [ ] Créateur de WOD (65), Paramètres (42), votes athlète (33), page d'invitation (32), fiche et formulaire d'exercice (25 + 31), planning (26), puis le reste.
 - [ ] 4.3 Jetons sémantiques (couleurs, espacements) et plancher typographique.
 - [ ] 4.4 Thème clair.
 - [ ] 4.5 Suivi des erreurs.
