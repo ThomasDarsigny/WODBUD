@@ -153,7 +153,8 @@ Rapport : audit produit publié le 12 novembre. Branche de travail : `sprint`. U
   - [x] Page d'invitation : 32 → 0 ; même gabarit que la page de présence, étiquettes reliées aux champs (elles ne l'étaient pas), autocomplete (nom, courriel, nouveau / mot de passe actuel), erreurs annoncées ; parcours e2e (connexion puis cours rejoint, lien invalide).
   - [x] Fiche d'exercice : 25 → 0 ; vraie fenêtre (rôle dialog relié au titre, Échap — elle ne se fermait pas au clavier —, focus rendu à la ligne), ✕ étiqueté, confirmation de suppression traduite (faute « irreversible » corrigée) ; bouton « danger » lisible en thème clair (#b42318, ~6,5:1).
   - [x] Formulaire d'exercice : 31 → 2 (couleurs des types de mouvement en variable CSS) ; `FieldGroup` partagé (fieldset / legend) pour les groupes de puces au lieu d'une étiquette autour de boutons, puces en aria-pressed, zone de dépôt vidéo utilisable au clavier, champs étiquetés ; parcours e2e (formulaire, confirmation de suppression).
-  - [ ] Planning (26), puis le reste.
+  - [x] Planning, vue liste : 26 → 0 ; formulaire sur `Field` ; `ConfirmButton` reçoit un nom accessible (`ariaLabel`) : ses ✕ s'annoncent « Retirer pour tout le cours — Fran » au lieu de « ✕ » (liste et calendrier) ; parcours e2e.
+  - [ ] Reste (≈ 390, dont une part légitime : valeurs calculées comme les couleurs du mannequin ou les hauteurs de squelette), par lots : communautés (≈ 107), pages publiques — inscription, connexion, confidentialité, rang partagé (≈ 61), votes côté coach et thématiques (≈ 46), menus (≈ 29), séance et journal (≈ 24), rang (≈ 20).
 - [ ] 4.3 Jetons sémantiques (couleurs, espacements) et plancher typographique.
 - [ ] 4.4 Thème clair.
 - [ ] 4.5 Suivi des erreurs.

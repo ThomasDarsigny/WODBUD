@@ -8,7 +8,7 @@ import { useWorkoutStore } from '../../stores/workoutStore'
 import ConfirmButton from '../ui/ConfirmButton'
 import EmptyState from '../ui/EmptyState'
 import Skeleton from '../ui/Skeleton'
-import { label, text, field as inputStyle, textarea as textareaStyle, btnPrimary as actionBtnStyle, btnSecondary as ghostBtnStyle } from '../../styles/ui'
+import Field from '../ui/Field'
 
 /**
  * Planning d'un cours : le coach programme une séance pour tous les
@@ -20,7 +20,7 @@ export default function ClassPlanningTab({ classId }: { classId: string }) {
   const [view, setView] = useState<'week' | 'list'>('week')
   return (
     <div>
-      <div className="wb-links-chips" role="group" aria-label={t('classes.plan_view')} style={{ marginBottom: 'var(--s3)' }}>
+      <div className="wb-links-chips wb-plist-views" role="group" aria-label={t('classes.plan_view')}>
         <button type="button" className="wb-chip" aria-pressed={view === 'week'} onClick={() => setView('week')}>{t('classes.plan_view_week')}</button>
         <button type="button" className="wb-chip" aria-pressed={view === 'list'} onClick={() => setView('list')}>{t('classes.plan_view_list')}</button>
       </div>
@@ -84,9 +84,9 @@ function ClassPlanList({ classId }: { classId: string }) {
 
   return (
     <div>
-      <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 'var(--s3)', marginBottom: 'var(--s3)', flexWrap: 'wrap' }}>
-        <p style={{ color: 'var(--muted)', fontSize: text.sm, margin: 0 }}>{t('classes.plan_intro')}</p>
-        <button onClick={() => setShowForm((v) => !v)} style={{ ...ghostBtnStyle, fontSize: '0.75rem' }}>
+      <div className="wb-plist-top">
+        <p className="wb-plist-intro">{t('classes.plan_intro')}</p>
+        <button type="button" onClick={() => setShowForm((v) => !v)} aria-expanded={showForm} className="wb-btn wb-btn--ghost wb-btn--sm">
           {showForm ? t('actions.cancel') : t('classes.plan_add')}
         </button>
       </div>
@@ -100,7 +100,7 @@ function ClassPlanList({ classId }: { classId: string }) {
         />
       )}
 
-      {error && <p style={{ color: 'var(--orange)', fontSize: text.sm, margin: '0 0 var(--s3)' }}>{error}</p>}
+      {error && <p className="wb-plist-error" role="alert">{error}</p>}
 
       {!ready ? (
         <Skeleton height={56} lines={2} />
@@ -141,34 +141,29 @@ function PlanList({ heading, plans, planTitle, planDate, onDelete, muted }: {
   if (plans.length === 0) return null
 
   return (
-    <section style={{ marginBottom: 'var(--s5)' }}>
-      <h3 style={{ ...label, color: 'var(--white)', margin: '0 0 var(--s2)' }}>{heading}</h3>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 1, background: 'var(--border)', border: '1px solid var(--border)', borderRadius: 12 }}>
+    <section className={`wb-plist${muted ? ' is-past' : ''}`}>
+      <h3 className="wb-plist-heading">{heading}</h3>
+      <div className="wb-plist-rows">
         {plans.map((p) => {
           const allDone = p.total > 0 && p.done === p.total
           return (
-            <article key={p.id} style={{ background: 'var(--dark)', padding: 'var(--s4)', display: 'flex', gap: 'var(--s4)', alignItems: 'center', flexWrap: 'wrap', opacity: muted ? 0.8 : 1 }}>
-              <div style={{ flex: '1 1 200px', minWidth: 0 }}>
-                <p style={{ fontFamily: 'var(--font-d)', fontSize: text.lg, fontWeight: 800, letterSpacing: '0.02em', textTransform: 'uppercase', lineHeight: 1.15, margin: 0 }}>
-                  {planTitle(p)}
-                </p>
-                <p style={{ ...label, marginTop: 'var(--s1)' }}>{planDate(p)}</p>
-                {p.notes && (
-                  <p style={{ fontSize: text.sm, color: 'var(--muted)', lineHeight: 1.5, margin: 'var(--s2) 0 0' }}>{p.notes}</p>
-                )}
+            <article key={p.id} className="wb-plist-row">
+              <div className="wb-plist-main">
+                <p className="wb-plist-title">{planTitle(p)}</p>
+                <p className="wb-plist-date">{planDate(p)}</p>
+                {p.notes && <p className="wb-plist-notes">{p.notes}</p>}
               </div>
-              <span
-                style={{ ...label, display: 'inline', fontVariantNumeric: 'tabular-nums', color: allDone ? '#22c55e' : 'var(--white)', border: `1px solid ${allDone ? 'rgba(34,197,94,0.35)' : 'var(--border)'}`, borderRadius: 12, padding: '0.35rem 0.6rem', flexShrink: 0 }}
-              >
+              <span className={`wb-plist-progress${allDone ? ' is-done' : ''}`}>
                 {t('classes.plan_progress', { done: p.done, total: p.total })}
               </span>
-              <Link to={`/dashboard/whiteboard/${p.id}`} style={{ ...ghostBtnStyle, fontSize: '0.75rem', flexShrink: 0, textDecoration: 'none' }}>
+              <Link to={`/dashboard/whiteboard/${p.id}`} className="wb-btn wb-btn--ghost wb-btn--sm">
                 {t('whiteboard.open')}
               </Link>
               <ConfirmButton
                 onConfirm={() => onDelete(p.id)}
                 title={t('classes.plan_delete')}
-                style={{ ...ghostBtnStyle, fontSize: '0.75rem', flexShrink: 0, color: 'rgba(255,77,0,0.8)', borderColor: 'rgba(255,77,0,0.35)' }}
+                ariaLabel={`${t('classes.plan_delete')} — ${planTitle(p)}`}
+                className="wb-btn wb-btn--danger wb-btn--sm"
               >
                 ✕
               </ConfirmButton>
@@ -219,39 +214,35 @@ function PlanForm({ classId, savedWorkouts, onCancel, onSaved }: {
   }
 
   return (
-    <div style={{ border: '1px solid var(--border)', borderRadius: 12, background: 'var(--dark)', padding: 'var(--s4)', marginBottom: 'var(--s4)', display: 'flex', flexDirection: 'column', gap: 'var(--s3)' }}>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 'var(--s3)' }}>
-        <label style={{ display: 'flex', flexDirection: 'column', gap: 'var(--s1)' }}>
-          <span style={label}>{t('journal.schedule_date', { ns: 'workouts' })}</span>
-          <input type="date" value={date} min={localDate()} onChange={(e) => setDate(e.target.value)} style={inputStyle} />
-        </label>
-        <label style={{ display: 'flex', flexDirection: 'column', gap: 'var(--s1)' }}>
-          <span style={label}>{t('classes.plan_workout')}</span>
-          <select value={workoutId} onChange={(e) => setWorkoutId(e.target.value)} style={inputStyle}>
+    <div className="wb-plist-form">
+      <div className="wb-plist-grid">
+        <Field label={t('journal.schedule_date', { ns: 'workouts' })}>
+          <input className="wb-input" type="date" value={date} min={localDate()} onChange={(e) => setDate(e.target.value)} />
+        </Field>
+        <Field label={t('classes.plan_workout')}>
+          <select className="wb-input" value={workoutId} onChange={(e) => setWorkoutId(e.target.value)}>
             <option value="">{t('journal.schedule_workout_none', { ns: 'workouts' })}</option>
             {savedWorkouts.map((w) => (
               <option key={w.id} value={w.id}>{w.name}</option>
             ))}
           </select>
-        </label>
+        </Field>
       </div>
-      <label style={{ display: 'flex', flexDirection: 'column', gap: 'var(--s1)' }}>
-        <span style={label}>{t('journal.schedule_title', { ns: 'workouts' })}</span>
-        <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder={t('classes.plan_title_placeholder')} style={inputStyle} />
-      </label>
-      <label style={{ display: 'flex', flexDirection: 'column', gap: 'var(--s1)' }}>
-        <span style={label}>{t('classes.plan_notes')}</span>
-        <textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={2} placeholder={t('classes.plan_notes_placeholder')} style={textareaStyle} />
-      </label>
+      <Field label={t('journal.schedule_title', { ns: 'workouts' })}>
+        <input className="wb-input" value={title} onChange={(e) => setTitle(e.target.value)} placeholder={t('classes.plan_title_placeholder')} />
+      </Field>
+      <Field label={t('classes.plan_notes')}>
+        <textarea className="wb-input wb-support-text" value={notes} onChange={(e) => setNotes(e.target.value)} rows={2} placeholder={t('classes.plan_notes_placeholder')} />
+      </Field>
 
-      {!valid && date && <p style={{ color: 'var(--muted)', fontSize: text.sm, margin: 0 }}>{t('classes.plan_need_content')}</p>}
-      {error && <p style={{ color: 'var(--orange)', fontSize: text.sm, margin: 0 }}>{error}</p>}
+      {!valid && date && <p className="wb-plist-hint">{t('classes.plan_need_content')}</p>}
+      {error && <p className="wb-plist-error" role="alert">{error}</p>}
 
-      <div style={{ display: 'flex', gap: 'var(--s2)' }}>
-        <button onClick={() => { void handleSubmit() }} disabled={!valid || saving} style={{ ...actionBtnStyle, opacity: !valid || saving ? 0.6 : 1 }}>
+      <div className="wb-plist-actions">
+        <button type="button" onClick={() => { void handleSubmit() }} disabled={!valid || saving} className="wb-btn wb-btn--primary">
           {saving ? t('status.loading') : t('classes.plan_save')}
         </button>
-        <button onClick={onCancel} style={ghostBtnStyle}>{t('actions.cancel')}</button>
+        <button type="button" onClick={onCancel} className="wb-btn wb-btn--ghost">{t('actions.cancel')}</button>
       </div>
     </div>
   )

@@ -206,7 +206,7 @@ export default function ClassWeekPlanner({ classId }: { classId: string }) {
                         <span>{t('classes.plan_progress', { done: p.done, total: p.total })}</span>
                       </span>
                       <Link to={`/dashboard/whiteboard/${p.id}`} className="wb-week-board">{t('whiteboard.open')}</Link>
-                      <ConfirmButton onConfirm={() => remove(p.id)} title={t('classes.plan_delete')} className="wb-week-del">✕</ConfirmButton>
+                      <ConfirmButton onConfirm={() => remove(p.id)} title={t('classes.plan_delete')} ariaLabel={`${t('classes.plan_delete')} — ${title(p)}`} className="wb-week-del">✕</ConfirmButton>
                     </div>
                   ))}
                   {!past && picking !== day && (

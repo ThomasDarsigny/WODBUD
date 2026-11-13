@@ -33,3 +33,18 @@ test('le coach programme vendredi, puis un cycle de deux semaines', async ({ pag
   const plans = db.writesTo('class_plans', 'POST').slice(1)
   expect(plans.map((p) => [p.scheduled_date, p.workout_id])).toEqual([[TODAY, FRAN_ID], [day(7), copy.id]])
 })
+
+/** Vue liste du planning (4.2) : le ✕ dit ce qu'il retire, arme puis confirme. */
+test('le coach retire une séance depuis la liste, en deux temps', async ({ page }) => {
+  const db = coachDb()
+  db.table('class_plans').push({ id: 'p-ven', class_id: CLASS_ID, coach_id: 'x', scheduled_date: day(2), title: 'Force du vendredi', notes: null, workout_id: null, workouts: null, scheduled_workouts: [] })
+  await db.install(page)
+  await page.goto(`/dashboard/classes?c=${CLASS_ID}&tab=planning`)
+  await page.getByRole('button', { name: 'Liste' }).click()
+
+  const remove = page.getByRole('button', { name: 'Retirer pour tout le cours — Force du vendredi' })
+  await remove.click()
+  await page.getByRole('button', { name: 'Confirmer' }).click()
+  await expect(page.getByText('Force du vendredi')).toHaveCount(0)
+  expect(db.writesTo('class_plans', 'DELETE').map((p) => p.id)).toEqual(['p-ven'])
+})

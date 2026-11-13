@@ -1901,6 +1901,30 @@ button.wb-row:active, a.wb-row:active { background: var(--surface); }
 .wb-exf-error { padding: 0.75rem 1rem; border-radius: var(--r-md); border: 1px solid rgba(255, 77, 0, 0.3); background: rgba(255, 77, 0, 0.1); color: var(--orange); font-size: 0.8125rem; }
 .wb-exf-submit:disabled { opacity: 1; background: var(--border); cursor: wait; }
 
+/* ── Planning d'un cours, vue liste (4.2) ─────────────────────────── */
+.wb-plist-views { margin-bottom: 0.75rem; }
+.wb-plist-top { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.75rem; margin-bottom: 0.75rem; }
+.wb-plist-intro { margin: 0; color: var(--muted); font-size: 0.8125rem; }
+.wb-plist-error { margin: 0 0 0.75rem; color: var(--orange); font-size: 0.8125rem; }
+.wb-plist-form .wb-plist-error { margin: 0; }
+.wb-plist-hint { margin: 0; color: var(--muted); font-size: 0.8125rem; }
+.wb-plist { margin-bottom: 1.5rem; }
+.wb-plist-heading { margin: 0 0 0.5rem; font-family: var(--font-d); font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; }
+.wb-plist-rows { display: flex; flex-direction: column; gap: 1px; overflow: hidden; border-radius: var(--r-md); border: 1px solid var(--border); background: var(--border); }
+.wb-plist-row { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; padding: 1rem; background: var(--dark); }
+.wb-plist.is-past .wb-plist-row { opacity: 0.8; }
+.wb-plist-main { flex: 1 1 200px; min-width: 0; }
+.wb-plist-title { margin: 0; font-family: var(--font-d); font-size: 1rem; font-weight: 800; letter-spacing: 0.02em; line-height: 1.15; text-transform: uppercase; }
+.wb-plist-date { margin: 0.25rem 0 0; font-family: var(--font-d); font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+.wb-plist-notes { margin: 0.5rem 0 0; color: var(--muted); font-size: 0.8125rem; line-height: 1.5; }
+.wb-plist-progress { flex-shrink: 0; padding: 0.35rem 0.6rem; border-radius: var(--r-md); border: 1px solid var(--border); font-family: var(--font-d); font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; font-variant-numeric: tabular-nums; }
+.wb-plist-progress.is-done { color: #22c55e; border-color: rgba(34, 197, 94, 0.35); }
+.wb-plist-form { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1rem; padding: 1rem; border-radius: var(--r-md); border: 1px solid var(--border); background: var(--dark); }
+.wb-plist-form .wb-input { background: var(--black); border-color: var(--line-fn); }
+.wb-plist-form .wb-input:focus { border-color: var(--orange); }
+.wb-plist-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem; }
+.wb-plist-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+
 /* ── Créateur de WOD (4.2) ───────────────────────────────────────── */
 .wb-builder { display: grid; grid-template-columns: minmax(0, 1fr) 380px; height: calc(100vh - var(--section-tabs-h, 0px)); overflow: hidden; }
 .wb-builder.is-mobile { grid-template-columns: 1fr; grid-template-rows: auto minmax(0, 1fr); height: calc(100dvh - var(--mobile-top-h) - var(--tabbar-h) - var(--safe-bottom) - var(--section-tabs-h, 0px)); }
