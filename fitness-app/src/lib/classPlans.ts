@@ -44,13 +44,18 @@ function first<T>(value: T | T[] | null): T | null {
 export async function fetchClassPlans(classId: string): Promise<ClassPlan[]> {
   const from = new Date()
   from.setDate(from.getDate() - PAST_DAYS_SHOWN)
+  return fetchClassPlansBetween(classId, localDate(from), null)
+}
 
-  const { data, error } = await supabase
+/** Plans d'un cours entre deux dates incluses (`to` null : sans borne). */
+export async function fetchClassPlansBetween(classId: string, from: string, to: string | null): Promise<ClassPlan[]> {
+  let query = supabase
     .from('class_plans')
     .select('id, scheduled_date, title, notes, workout_id, workouts(title), scheduled_workouts(session_id)')
     .eq('class_id', classId)
-    .gte('scheduled_date', localDate(from))
-    .order('scheduled_date', { ascending: true })
+    .gte('scheduled_date', from)
+  if (to) query = query.lte('scheduled_date', to)
+  const { data, error } = await query.order('scheduled_date', { ascending: true })
   if (error) throw error
 
   return ((data ?? []) as unknown as Row[]).map((row) => {
@@ -74,7 +79,7 @@ export async function createClassPlan(input: {
   workoutId: string | null
   title: string | null
   notes: string | null
-}): Promise<void> {
+}, options: { notify?: boolean } = {}): Promise<void> {
   const { data } = await getLocalUser()
   if (!data.user) throw new Error('Non authentifié')
 
@@ -91,7 +96,7 @@ export async function createClassPlan(input: {
     .select('id')
     .single()
   if (error) throw error
-  notifyClass(input.classId, 'plan', row.id)
+  if (options.notify !== false) notifyClass(input.classId, 'plan', row.id)
 }
 
 export async function deleteClassPlan(id: string): Promise<void> {

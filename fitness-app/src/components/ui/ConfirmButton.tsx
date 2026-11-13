@@ -11,13 +11,15 @@ import { useTranslation } from 'react-i18next'
  * l'armement retombe tout seul au bout de quelques secondes — donc un clic
  * distrait ne détruit rien.
  */
-export default function ConfirmButton({ children, confirmLabel, onConfirm, style, title, resetMs = 4000 }: {
+export default function ConfirmButton({ children, confirmLabel, onConfirm, style, title, className, disabled, resetMs = 4000 }: {
   children: ReactNode
   /** Texte affiché une fois le bouton armé. Par défaut « Confirmer ». */
   confirmLabel?: string
   onConfirm: () => void | Promise<void>
   style?: CSSProperties
   title?: string
+  className?: string
+  disabled?: boolean
   resetMs?: number
 }) {
   const { t } = useTranslation('common')
@@ -41,6 +43,9 @@ export default function ConfirmButton({ children, confirmLabel, onConfirm, style
 
   return (
     <button
+      type="button"
+      className={className ? `${className}${armed ? ' is-armed' : ''}` : undefined}
+      disabled={disabled}
       onClick={handleClick}
       title={armed ? undefined : title}
       style={{

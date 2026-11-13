@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { createClassPlan, deleteClassPlan, fetchClassPlans, type ClassPlan } from '../../lib/classPlans'
 import { Link } from 'react-router-dom'
+import ClassWeekPlanner from './ClassWeekPlanner'
 import { localDate } from '../../lib/scheduledWorkouts'
 import { useWorkoutStore } from '../../stores/workoutStore'
 import ConfirmButton from '../ui/ConfirmButton'
@@ -14,6 +15,21 @@ import { label, text, field as inputStyle, textarea as textareaStyle, btnPrimary
  * athlètes, puis voit combien l'ont faite.
  */
 export default function ClassPlanningTab({ classId }: { classId: string }) {
+  const { t } = useTranslation('common')
+  // Semaine par défaut (2.2) ; la liste reste pour l'historique et le suivi.
+  const [view, setView] = useState<'week' | 'list'>('week')
+  return (
+    <div>
+      <div className="wb-links-chips" role="group" aria-label={t('classes.plan_view')} style={{ marginBottom: 'var(--s3)' }}>
+        <button type="button" className="wb-chip" aria-pressed={view === 'week'} onClick={() => setView('week')}>{t('classes.plan_view_week')}</button>
+        <button type="button" className="wb-chip" aria-pressed={view === 'list'} onClick={() => setView('list')}>{t('classes.plan_view_list')}</button>
+      </div>
+      {view === 'week' ? <ClassWeekPlanner key={classId} classId={classId} /> : <ClassPlanList classId={classId} />}
+    </div>
+  )
+}
+
+function ClassPlanList({ classId }: { classId: string }) {
   const { t, i18n } = useTranslation(['common', 'workouts'])
   const { savedWorkouts, fetchWorkouts } = useWorkoutStore()
   // Clé par cours : changer de cours ne doit pas afficher l'ancien planning.
