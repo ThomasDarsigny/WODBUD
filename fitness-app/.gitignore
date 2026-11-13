@@ -36,3 +36,8 @@ dist-ssr
 
 # Fichiers sortis du dépôt en attendant une suppression manuelle
 _to_delete/
+
+# Tests de bout en bout (Playwright)
+/playwright-report/
+/test-results/
+/blob-report/

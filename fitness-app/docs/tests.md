@@ -1,0 +1,33 @@
+# Tests
+
+## Unitaires (Vitest)
+
+```bash
+npm test
+```
+
+Les calculs sans réseau : scores, semaines et cycles, horaire, présences, menu, accueil coach… Fichiers `src/**/*.test.ts`.
+
+## De bout en bout (Playwright)
+
+```bash
+npm run test:e2e
+```
+
+Cinq parcours, chacun sur ordinateur (1440 × 900) et sur téléphone (Pixel 7) :
+
+| Fichier | Parcours |
+|---|---|
+| `e2e/coach-home.e2e.ts` | Connexion, puis l'accueil coach : la salle du jour, « À faire », le menu à cinq entrées |
+| `e2e/create-wod.e2e.ts` | Créer un WOD dans le créateur et l'enregistrer |
+| `e2e/planning.e2e.ts` | Programmer un jour de la semaine d'un cours, puis un cycle de deux semaines |
+| `e2e/attendance.e2e.ts` | Présences : scan du QR, QR expiré, « Je suis là », scan sans être connecté puis connexion |
+| `e2e/tv-whiteboard.e2e.ts` | Mode TV (WOD, QR, arrivées, tableau blanc) et réaction sur le tableau blanc |
+
+**Rien ne sort de la machine.** L'app est servie sur le port 5174 avec une fausse adresse Supabase (`http://supabase.test`). `e2e/supabase-mock.ts` intercepte chaque requête et répond comme PostgREST, à partir d'une petite base en mémoire. Il gère les filtres `eq`, `in`, `gte`…, le tri, les lignes uniques, les comptes, les écritures, les fonctions RPC et la connexion. Chaque test vérifie ensuite ce qui a été écrit (`db.writesTo('class_plans', 'POST')`). Le dépôt est public : aucun identifiant réel n'est utilisé.
+
+**Heure figée.** Les tests se déroulent le mercredi 18 novembre 2026 à 5 h 45, un quart d'heure avant le cours de 6 h. Les données (`e2e/fixtures.ts`) sont fictives : un coach, le cours « CrossFit 6h » (lundi, mercredi et vendredi à 6 h), trois athlètes, et Fran au programme du jour.
+
+**Navigateur.** Les tests utilisent Chrome tel qu'il est installé sur la machine (`channel: 'chrome'`), donc aucun navigateur à télécharger. Sur GitHub, le job « Parcours de bout en bout » du workflow CI les lance à chaque push sur `main` ou `dev`. En cas d'échec, le rapport (captures et traces) est joint au run.
+
+**Ajouter un parcours.** Partir de `coachDb()` ou `athleteDb()`, compléter les tables au besoin, appeler `await db.install(page)` avant la première navigation, puis vérifier l'écran et `db.writes` / `db.calls`. Toute erreur JavaScript dans la page fait échouer le test.

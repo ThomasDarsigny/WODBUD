@@ -142,6 +142,14 @@ Rapport : audit produit publié le 12 novembre. Branche de travail : `sprint`. U
 - [x] 3.6 Groupes (option A, présentation seulement) : une entrée « Groupes » remplace « Cours » chez le coach (onglets Aperçu, Cours, Communautés, Votes) et « Communautés » chez l'athlète ; la page « Mes groupes » montre les cours (fiche pour le coach ; carte horaire, présence et classement pour l'athlète) et les communautés rejointes, avec « Nouveau cours » / « Nouvelle communauté » (`?new=1`) et « Découvrir des communautés ». Les tables restent séparées en base.
 - [ ] 3.6 B Fusion en base (les communautés deviennent des cours sans coach ni horaire ; migration des membres, défis et WODs partagés ; invitations revues) : plus tard, si l'usage le confirme.
 
+### Phase 4 · Qualité et système
+- [x] 4.1 Tests de bout en bout Playwright : cinq parcours (connexion et accueil coach, créer un WOD, programmer une semaine et un cycle, présences, mode TV et tableau blanc), sur ordinateur et sur téléphone ; Supabase entièrement simulé (aucun secret, heure figée) ; job CI à chaque push, avec les tests unitaires désormais lancés aussi en CI et une vérification des types qui vérifie vraiment (`tsc -b`). Mode d'emploi : docs/tests.md.
+- [ ] 4.2 Composants partagés à la place des styles en ligne.
+- [ ] 4.3 Jetons sémantiques (couleurs, espacements) et plancher typographique.
+- [ ] 4.4 Thème clair.
+- [ ] 4.5 Suivi des erreurs.
+- [ ] 4.6 Environnement de préproduction (branche Supabase ou projet séparé).
+
 ## À définir avec le client
 - [ ] **Facturation** : qui paie et comment (par membre, par entraîneur, prix fixe).
 - [ ] **Forfaits d'abonnement** (« balancer les bundles ») : ce qui est inclus dans chaque palier.
