@@ -13,6 +13,7 @@ import NavDot from '../navigation/NavDot'
 import MobileTabBar, { type MobileNavItem } from '../navigation/MobileTabBar'
 import { useNotificationStore } from '../../stores/notificationStore'
 import { PageTransition } from '../ui/motion'
+import ErrorBoundary from '../ui/ErrorBoundary'
 import { activeGroup, activeLeaf, buildNav, groupPaths, LEAVES, type NavGroup, type NavLeaf } from '../../lib/coachNav'
 
 
@@ -177,7 +178,7 @@ export default function DashboardLayout({ children }: Props) {
               })}
             </nav>
           )}
-          <PageTransition>{children}</PageTransition>
+          <PageTransition><ErrorBoundary key={location.pathname}>{children}</ErrorBoundary></PageTransition>
         </div>
       </main>
 

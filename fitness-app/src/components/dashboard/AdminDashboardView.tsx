@@ -9,6 +9,7 @@ import ExerciseImport from '../exercises/ExerciseImport'
 import ExerciseReviewQueue from './ExerciseReviewQueue'
 import VideoPriorities from './VideoPriorities'
 import SupportInbox from '../support/SupportInbox'
+import ClientErrors from './ClientErrors'
 import FeatureTopicsCard from '../vote/FeatureTopicsCard'
 import Skeleton from '../ui/Skeleton'
 
@@ -90,6 +91,8 @@ export default function AdminDashboardView() {
       </div>
 
       <SupportInbox />
+
+      <ClientErrors />
 
       <ExerciseReviewQueue onEdit={openEdit} />
 

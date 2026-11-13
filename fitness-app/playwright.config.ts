@@ -40,7 +40,9 @@ export default defineConfig({
     timeout: 120_000,
     env: {
       VITE_SUPABASE_URL: 'http://supabase.test',
-      VITE_SUPABASE_ANON_KEY: 'e2e-anon-key'
+      VITE_SUPABASE_ANON_KEY: 'e2e-anon-key',
+      // Le suivi des erreurs (4.5) est actif, pour que les parcours puissent le vérifier.
+      VITE_ERROR_REPORTING: 'on'
     }
   }
 })

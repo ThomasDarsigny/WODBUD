@@ -2263,6 +2263,19 @@ button.wb-row:active, a.wb-row:active { background: var(--surface); }
 .wb-badge-plate.is-soon { background: var(--line-fn); }
 .wb-badge-plate.is-soon .wb-badge-plate-face { color: var(--muted); }
 
+/* ── Suivi des erreurs (4.5) ────────────────────────────────────── */
+.wb-crash { display: grid; justify-items: start; gap: 0.75rem; max-width: 520px; margin: var(--page-pad); padding: 1.5rem; border-radius: var(--r-lg); border: 1px solid color-mix(in srgb, var(--danger) 40%, transparent); background: var(--dark); }
+.wb-crash.is-full { margin: 15vh auto 0; }
+.wb-crash-title { margin: 0; font-family: var(--font-d); font-size: 1.5rem; font-weight: 900; text-transform: uppercase; }
+.wb-crash-body { margin: 0; color: var(--muted); line-height: 1.5; }
+.wb-crash-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.wb-cerr { display: grid; gap: 0.3rem; padding: 0.75rem 1rem; }
+.wb-cerr-head { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+.wb-cerr-count { font-weight: 700; }
+.wb-cerr-when { margin-left: auto; color: var(--muted); font-size: 0.8125rem; }
+.wb-cerr-msg { margin: 0; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.8125rem; overflow-wrap: anywhere; }
+.wb-cerr-meta { margin: 0; color: var(--muted); font-size: var(--t-label); }
+
 /* ── Créateur de WOD (4.2) ───────────────────────────────────────── */
 .wb-builder { display: grid; grid-template-columns: minmax(0, 1fr) 380px; height: calc(100vh - var(--section-tabs-h, 0px)); overflow: hidden; }
 .wb-builder.is-mobile { grid-template-columns: 1fr; grid-template-rows: auto minmax(0, 1fr); height: calc(100dvh - var(--mobile-top-h) - var(--tabbar-h) - var(--safe-bottom) - var(--section-tabs-h, 0px)); }

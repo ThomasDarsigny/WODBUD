@@ -1659,5 +1659,22 @@
     "no_community": "Aucune communauté rejointe",
     "no_community_hint": "Défis, classements et WODs partagés avec d’autres athlètes.",
     "you_created": "créée par toi"
+  },
+  "crash": {
+    "title": "Cet écran a planté.",
+    "body": "L’erreur nous a été signalée. Recharge la page ; si ça recommence, reviens à l’accueil.",
+    "reload": "Recharger",
+    "home": "Retour à l’accueil"
+  },
+  "client_errors": {
+    "title": "Erreurs des utilisateurs",
+    "hint": "Les 90 derniers jours, regroupées par message. Pages sans paramètres, jetons masqués.",
+    "empty": "Aucune erreur signalée.",
+    "count_one": "{{count}} fois",
+    "count_other": "{{count}} fois",
+    "versions": "version",
+    "kind_error": "Erreur",
+    "kind_unhandledrejection": "Promesse rejetée",
+    "kind_render": "Écran planté"
   }
 }

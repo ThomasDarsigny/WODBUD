@@ -6,9 +6,12 @@ import App from './App'
 import './index.css'
 import { initTheme, readStoredTheme } from './lib/theme'
 import { markPlatform } from './lib/platform'
+import { initErrorReporting } from './lib/errorReporting'
+import ErrorBoundary from './components/ui/ErrorBoundary'
 
 initTheme(readStoredTheme())
 markPlatform()
+initErrorReporting()
 
 if (import.meta.env.PROD) {
   const updateSW = registerSW({
@@ -29,6 +32,8 @@ if (import.meta.env.PROD) {
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <App />
+    <ErrorBoundary full>
+      <App />
+    </ErrorBoundary>
   </React.StrictMode>
 )

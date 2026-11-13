@@ -12,6 +12,7 @@ import NavDot from '../navigation/NavDot'
 import MobileTabBar from '../navigation/MobileTabBar'
 import { useNotificationStore } from '../../stores/notificationStore'
 import { PageTransition } from '../ui/motion'
+import ErrorBoundary from '../ui/ErrorBoundary'
 import { fetchMyRole } from '../../lib/profileRole'
 
 interface Props {
@@ -147,7 +148,7 @@ export default function AthleteDashboardLayout({ children }: Props) {
             <OfflineBanner />
             <ActiveSessionBar basePath="/athlete" />
           </div>
-          <PageTransition>{children}</PageTransition>
+          <PageTransition><ErrorBoundary key={location.pathname}>{children}</ErrorBoundary></PageTransition>
         </div>
       </main>
 

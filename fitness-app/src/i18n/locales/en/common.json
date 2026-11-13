@@ -1659,5 +1659,22 @@
     "no_community": "No community joined",
     "no_community_hint": "Challenges, leaderboards and WODs shared with other athletes.",
     "you_created": "created by you"
+  },
+  "crash": {
+    "title": "This screen crashed.",
+    "body": "The error has been reported to us. Reload the page; if it happens again, go back home.",
+    "reload": "Reload",
+    "home": "Back to home"
+  },
+  "client_errors": {
+    "title": "User errors",
+    "hint": "The last 90 days, grouped by message. Pages without parameters, tokens masked.",
+    "empty": "No errors reported.",
+    "count_one": "{{count}} time",
+    "count_other": "{{count}} times",
+    "versions": "version",
+    "kind_error": "Error",
+    "kind_unhandledrejection": "Rejected promise",
+    "kind_render": "Screen crashed"
   }
 }

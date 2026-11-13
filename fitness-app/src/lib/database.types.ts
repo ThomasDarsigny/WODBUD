@@ -538,6 +538,42 @@ export type Database = {
           },
         ]
       }
+      client_errors: {
+        Row: {
+          app_version: string | null
+          created_at: string
+          id: number
+          kind: string
+          message: string
+          path: string | null
+          stack: string | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          app_version?: string | null
+          created_at?: string
+          id?: never
+          kind: string
+          message: string
+          path?: string | null
+          stack?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          app_version?: string | null
+          created_at?: string
+          id?: never
+          kind?: string
+          message?: string
+          path?: string | null
+          stack?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       communities: {
         Row: {
           created_at: string
@@ -2515,6 +2551,17 @@ export type Database = {
       is_community_admin: { Args: { p_community: string }; Returns: boolean }
       is_community_member: { Args: { p_community: string }; Returns: boolean }
       is_community_owner: { Args: { p_community: string }; Returns: boolean }
+      log_client_error: {
+        Args: {
+          p_app_version?: string
+          p_kind: string
+          p_message: string
+          p_path?: string
+          p_stack?: string
+          p_user_agent?: string
+        }
+        Returns: undefined
+      }
       open_checkin: {
         Args: { p_class: string }
         Returns: {

@@ -14,7 +14,7 @@ Les calculs sans réseau : scores, semaines et cycles, horaire, présences, menu
 npm run test:e2e
 ```
 
-Dix-sept fichiers de parcours, chacun lancé sur ordinateur (1440 × 900) et sur téléphone (Pixel 7) :
+Dix-huit fichiers de parcours, chacun lancé sur ordinateur (1440 × 900) et sur téléphone (Pixel 7) :
 
 | Fichier | Parcours |
 |---|---|
@@ -35,8 +35,9 @@ Dix-sept fichiers de parcours, chacun lancé sur ordinateur (1440 × 900) et sur
 | `e2e/journal.e2e.ts` | Journal : programmer une séance au clavier, retirer une séance (en deux temps) |
 | `e2e/rank.e2e.ts` | Rang lisible en thème clair ; classement d'un cours (liste ordonnée, changer de période) |
 | `e2e/contrast.e2e.ts` | Garde-fou de contraste : chaque texte de 20 écrans, en thème clair et sombre, atteint 4,5:1 (3:1 en grand) ; aide `e2e/contrast.ts` |
+| `e2e/errors.e2e.ts` | Suivi des erreurs : signalement unique et page masquée, écran qui plante (menu toujours utilisable), section d'administration |
 
-**Rien ne sort de la machine.** L'app est servie sur le port 5174 avec une fausse adresse Supabase (`http://supabase.test`). `e2e/supabase-mock.ts` intercepte chaque requête et répond comme PostgREST, à partir d'une petite base en mémoire. Il gère les filtres `eq`, `in`, `gte`…, le tri, les lignes uniques, les comptes, les écritures, les fonctions RPC et la connexion. Chaque test vérifie ensuite ce qui a été écrit (`db.writesTo('class_plans', 'POST')`). Côté authentification, `db.authCalls` garde chaque appel (connexion, inscription, renvoi) et `db.authErrors` fait répondre une erreur GoTrue à un chemin donné (`invalid_credentials`, `over_email_send_rate_limit`…). Le dépôt est public : aucun identifiant réel n'est utilisé.
+**Rien ne sort de la machine.** L'app est servie sur le port 5174 avec une fausse adresse Supabase (`http://supabase.test`) et le suivi des erreurs actif (`VITE_ERROR_REPORTING=on`), pour que les parcours puissent le vérifier. `e2e/supabase-mock.ts` intercepte chaque requête et répond comme PostgREST, à partir d'une petite base en mémoire. Il gère les filtres `eq`, `in`, `gte`…, le tri, les lignes uniques, les comptes, les écritures, les fonctions RPC et la connexion. Chaque test vérifie ensuite ce qui a été écrit (`db.writesTo('class_plans', 'POST')`). Côté authentification, `db.authCalls` garde chaque appel (connexion, inscription, renvoi) et `db.authErrors` fait répondre une erreur GoTrue à un chemin donné (`invalid_credentials`, `over_email_send_rate_limit`…). Le dépôt est public : aucun identifiant réel n'est utilisé.
 
 **Heure figée.** Les tests se déroulent le mercredi 18 novembre 2026 à 5 h 45, un quart d'heure avant le cours de 6 h. Les données (`e2e/fixtures.ts`) sont fictives : un coach, le cours « CrossFit 6h » (lundi, mercredi et vendredi à 6 h), trois athlètes, et Fran au programme du jour.
 

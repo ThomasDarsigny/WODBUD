@@ -1662,5 +1662,22 @@
     "no_community": "Ninguna comunidad",
     "no_community_hint": "Retos, clasificaciones y WODs compartidos con otros atletas.",
     "you_created": "creada por ti"
+  },
+  "crash": {
+    "title": "Esta pantalla falló.",
+    "body": "El error nos fue notificado. Recarga la página; si vuelve a pasar, regresa al inicio.",
+    "reload": "Recargar",
+    "home": "Volver al inicio"
+  },
+  "client_errors": {
+    "title": "Errores de los usuarios",
+    "hint": "Los últimos 90 días, agrupados por mensaje. Páginas sin parámetros, tokens ocultos.",
+    "empty": "Ningún error reportado.",
+    "count_one": "{{count}} vez",
+    "count_other": "{{count}} veces",
+    "versions": "versión",
+    "kind_error": "Error",
+    "kind_unhandledrejection": "Promesa rechazada",
+    "kind_render": "Pantalla caída"
   }
 }
