@@ -235,6 +235,16 @@
     "continue_apple": "Continuer avec Apple",
     "apple_redirect": "Redirection vers Apple..."
   },
+  "auth_errors": {
+    "invalid_credentials": "Courriel ou mot de passe incorrect.",
+    "email_not_confirmed": "Confirme d’abord ton adresse : le lien est dans le courriel reçu à l’inscription.",
+    "user_exists": "Un compte existe déjà avec ce courriel. Connecte-toi plutôt.",
+    "weak_password": "Mot de passe trop faible : au moins 6 caractères, difficiles à deviner.",
+    "pwned_password": "Ce mot de passe figure dans une fuite de données connue. Choisis-en un autre.",
+    "rate_limit": "Trop de tentatives. Réessaie dans quelques minutes.",
+    "email_invalid": "Cette adresse courriel n’est pas valide.",
+    "signup_disabled": "Les inscriptions sont fermées pour le moment."
+  },
   "landing": {
     "nav": {
       "features": "Fonctionnalités",

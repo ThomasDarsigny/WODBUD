@@ -235,6 +235,16 @@
     "continue_apple": "Continuar con Apple",
     "apple_redirect": "Redirigiendo a Apple..."
   },
+  "auth_errors": {
+    "invalid_credentials": "Correo o contraseña incorrectos.",
+    "email_not_confirmed": "Confirma primero tu dirección: el enlace está en el correo que recibiste al registrarte.",
+    "user_exists": "Ya existe una cuenta con este correo. Inicia sesión.",
+    "weak_password": "Contraseña demasiado débil: al menos 6 caracteres, difíciles de adivinar.",
+    "pwned_password": "Esta contraseña aparece en una filtración de datos conocida. Elige otra.",
+    "rate_limit": "Demasiados intentos. Vuelve a intentarlo en unos minutos.",
+    "email_invalid": "Esta dirección de correo no es válida.",
+    "signup_disabled": "Los registros están cerrados por ahora."
+  },
   "landing": {
     "nav": {
       "features": "Funciones",

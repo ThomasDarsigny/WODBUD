@@ -709,6 +709,11 @@ label {
 
 .wb-auth-card {
   position: relative;
+  width: 100%;
+  max-width: 560px;
+  padding: var(--page-pad);
+  border: 1px solid var(--border);
+  background: var(--dark);
   box-shadow: 0 40px 80px -40px rgba(0, 0, 0, 0.8);
 }
 
@@ -729,6 +734,7 @@ label {
   text-transform: uppercase;
   letter-spacing: 0.02em;
   line-height: 1;
+  margin: 0 0 0.75rem;
 }
 
 @keyframes wb-auth-in {
@@ -2010,6 +2016,55 @@ button.wb-row:active, a.wb-row:active { background: var(--surface); }
 .wb-profile-links { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 .wb-profile-link { color: var(--orange); font-size: 0.8125rem; }
 
+/* ── Pages publiques (4.2) : connexion, inscription, confidentialité, rang partagé ── */
+.wb-auth-page { min-height: 100vh; display: grid; place-items: center; padding: var(--page-pad); background: var(--black); color: var(--white); }
+.wb-auth-sub { margin: 0 0 1em; color: var(--muted); }
+.wb-auth-note { margin: 0; color: var(--muted); font-size: 0.875rem; }
+.wb-check-mail .wb-auth-title, .wb-check-mail .wb-auth-sub { margin: 0; }
+.wb-check-mail .wb-auth-sub { line-height: 1.55; }
+.wb-auth-error { margin: 1rem 0; }
+.wb-auth-form { margin-top: 1rem; }
+.wb-auth-card .wb-input { background: var(--black); border-color: var(--line-fn); }
+.wb-auth-card .wb-input:focus, .wb-auth-card .wb-input[aria-invalid='true'] { border-color: var(--orange); }
+.wb-auth-alt { display: grid; gap: 0.9rem; margin-top: 1rem; }
+.wb-auth-rule { height: 1px; background: var(--border); }
+.wb-auth-links { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1.25rem; }
+.wb-oauth-slot { min-height: 48px; }
+.wb-oauth-list { display: grid; gap: 0.6rem; }
+.wb-legal { min-height: 100vh; padding: 3rem 1.5rem; background: var(--black); color: var(--white); }
+.wb-legal-inner { max-width: 760px; margin: 0 auto; }
+.wb-legal-back { display: inline-flex; align-items: center; min-height: 44px; color: var(--muted); font-family: var(--font-d); font-size: 0.6875rem; letter-spacing: 0.14em; text-decoration: none; text-transform: uppercase; }
+.wb-legal-back:hover, .wb-legal-back:focus-visible { color: var(--white); }
+.wb-legal-h1 { margin: 0.5rem 0 0.4rem; font-family: var(--font-d); font-size: 1.75rem; letter-spacing: 0.04em; text-transform: uppercase; }
+.wb-legal-meta { margin: 0 0 2rem; color: var(--muted); font-size: 0.8125rem; }
+.wb-legal-section { margin-bottom: 2rem; }
+.wb-legal-h2 { margin: 0 0 0.7rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--border); font-family: var(--font-d); font-size: 1rem; letter-spacing: 0.06em; text-transform: uppercase; }
+.wb-legal-p { margin: 0 0 0.9rem; font-size: 0.9375rem; line-height: 1.7; }
+.wb-legal-list { display: flex; flex-direction: column; gap: 0.35rem; margin: 0 0 0.9rem; padding-left: 1.1rem; }
+.wb-legal-list li { font-size: 0.9375rem; line-height: 1.65; }
+.wb-legal-mark { padding: 0 0.25rem; background: rgba(255, 77, 0, 0.18); color: var(--orange); font-weight: 600; }
+.wb-legal-foot { padding-top: 1rem; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.8125rem; line-height: 1.6; }
+.wb-share-page { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: var(--page-pad); background: var(--black); color: var(--white); font-family: var(--font-b); }
+.wb-share-logo { display: inline-flex; align-items: center; min-height: 44px; margin-bottom: 2rem; color: var(--white); font-family: var(--font-d); font-size: 1.25rem; font-weight: 900; letter-spacing: 0.15em; text-decoration: none; text-transform: uppercase; }
+.wb-share-logo span { color: var(--orange); }
+.wb-share-loading { color: var(--muted); font-family: var(--font-d); font-size: 0.8125rem; letter-spacing: 0.12em; text-transform: uppercase; }
+.wb-share-missing { color: var(--muted); font-size: 0.9375rem; text-align: center; }
+.wb-share-card { width: 100%; max-width: 420px; padding: 2.5rem 2rem; border: 1px solid var(--rank); background: color-mix(in srgb, var(--rank) 6%, transparent); text-align: center; }
+.wb-share-tag { margin: 0 0 1.25rem; color: var(--muted); font-family: var(--font-d); font-size: 0.6875rem; letter-spacing: 0.28em; text-transform: uppercase; }
+.wb-share-avatar { display: block; width: 72px; height: 72px; margin: 0 auto 1rem; border-radius: 50%; border: 1px solid var(--rank); object-fit: cover; }
+.wb-share-name { margin: 0 0 1.5rem; overflow-wrap: anywhere; font-family: var(--font-d); font-size: 1.25rem; font-weight: 900; letter-spacing: 0.06em; text-transform: uppercase; }
+.wb-share-motto { margin: 1rem 0 0; color: var(--muted); font-size: 0.9375rem; font-style: italic; }
+.wb-share-stats { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem; margin-top: 1.75rem; }
+.wb-share-stat { min-width: 100px; padding: 0.55rem 0.9rem; border: 1px solid var(--border); }
+.wb-share-stat-value { font-family: var(--font-d); font-size: 1.25rem; font-weight: 900; line-height: 1.1; }
+.wb-share-stat-label { margin-top: 0.15rem; color: var(--muted); font-family: var(--font-d); font-size: 0.6875rem; letter-spacing: 0.14em; text-transform: uppercase; }
+.wb-share-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem; margin-top: 1.25rem; }
+.wb-share-link { display: inline-flex; align-items: center; min-height: 44px; padding: 0 0.9rem; border: 1px solid color-mix(in srgb, var(--rank) 35%, transparent); color: var(--rank); font-family: var(--font-d); font-size: 0.75rem; letter-spacing: 0.1em; text-decoration: none; text-transform: uppercase; }
+.wb-share-cta { margin-top: 2rem; }
+/* Texte à la couleur du rang, thème clair : seules, les couleurs des rangs tombent à 1,4–3,2:1
+   sur fond clair (turquoise, jaune). Mêlées à 60 % de la couleur du texte : ≥ 5,5:1 pour les dix rangs. */
+:root[data-theme='clair'] :is(.wb-share-link, .wb-rank-pill, .wb-profile-rank-name) { color: color-mix(in srgb, var(--rank) 40%, var(--white)); }
+
 /* ── Créateur de WOD (4.2) ───────────────────────────────────────── */
 .wb-builder { display: grid; grid-template-columns: minmax(0, 1fr) 380px; height: calc(100vh - var(--section-tabs-h, 0px)); overflow: hidden; }
 .wb-builder.is-mobile { grid-template-columns: 1fr; grid-template-rows: auto minmax(0, 1fr); height: calc(100dvh - var(--mobile-top-h) - var(--tabbar-h) - var(--safe-bottom) - var(--section-tabs-h, 0px)); }
@@ -2713,7 +2768,7 @@ em[data-rarity='legendaire'] { color: #f4c652; } em[data-rarity='mythique'] { co
 .wb-team-role { width: auto; min-width: 0; max-width: 11rem; padding-right: 2rem; }
 .wb-team-badge { pointer-events: none; flex-shrink: 0; }
 
-.wb-check-mail { display: grid; gap: 0.9rem; justify-items: start; border-radius: var(--r-xl, 20px); }
+.wb-check-mail { display: grid; gap: 0.9rem; justify-items: start; max-width: 520px; border-radius: var(--r-xl, 20px); }
 .wb-check-mail-icon { width: 56px; height: 56px; border-radius: 16px; display: inline-flex; align-items: center; justify-content: center; font-size: 1.6rem; background: rgba(255, 90, 31, 0.14); color: var(--orange); }
 
 /* ─── Transparence réduite, contraste accru ──────────────────────

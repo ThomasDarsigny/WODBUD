@@ -235,6 +235,16 @@
     "continue_apple": "Continue with Apple",
     "apple_redirect": "Redirecting to Apple..."
   },
+  "auth_errors": {
+    "invalid_credentials": "Incorrect email or password.",
+    "email_not_confirmed": "Confirm your address first: the link is in the email you received when signing up.",
+    "user_exists": "An account already exists with this email. Log in instead.",
+    "weak_password": "Password too weak: at least 6 characters, hard to guess.",
+    "pwned_password": "This password appears in a known data breach. Choose another one.",
+    "rate_limit": "Too many attempts. Try again in a few minutes.",
+    "email_invalid": "This email address isn’t valid.",
+    "signup_disabled": "Sign-ups are closed for now."
+  },
   "landing": {
     "nav": {
       "features": "Features",

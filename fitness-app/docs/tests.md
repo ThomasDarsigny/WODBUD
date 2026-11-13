@@ -14,7 +14,7 @@ Les calculs sans réseau : scores, semaines et cycles, horaire, présences, menu
 npm run test:e2e
 ```
 
-Onze fichiers de parcours, chacun lancé sur ordinateur (1440 × 900) et sur téléphone (Pixel 7) :
+Douze fichiers de parcours, chacun lancé sur ordinateur (1440 × 900) et sur téléphone (Pixel 7) :
 
 | Fichier | Parcours |
 |---|---|
@@ -29,8 +29,9 @@ Onze fichiers de parcours, chacun lancé sur ordinateur (1440 × 900) et sur té
 | `e2e/join.e2e.ts` | Lien d'invitation : connexion puis cours rejoint ; lien invalide |
 | `e2e/exercises.e2e.ts` | Formulaire d'exercice (champs étiquetés, Échap) ; confirmation avant de supprimer |
 | `e2e/communities.e2e.ts` | Créer une communauté ; défi (progression annoncée, suppression) ; profil d'un membre (rang, Échap) |
+| `e2e/public.e2e.ts` | Connexion refusée (message traduit), inscription (mots de passe différents, courriel de confirmation, renvoi limité), rang partagé |
 
-**Rien ne sort de la machine.** L'app est servie sur le port 5174 avec une fausse adresse Supabase (`http://supabase.test`). `e2e/supabase-mock.ts` intercepte chaque requête et répond comme PostgREST, à partir d'une petite base en mémoire. Il gère les filtres `eq`, `in`, `gte`…, le tri, les lignes uniques, les comptes, les écritures, les fonctions RPC et la connexion. Chaque test vérifie ensuite ce qui a été écrit (`db.writesTo('class_plans', 'POST')`). Le dépôt est public : aucun identifiant réel n'est utilisé.
+**Rien ne sort de la machine.** L'app est servie sur le port 5174 avec une fausse adresse Supabase (`http://supabase.test`). `e2e/supabase-mock.ts` intercepte chaque requête et répond comme PostgREST, à partir d'une petite base en mémoire. Il gère les filtres `eq`, `in`, `gte`…, le tri, les lignes uniques, les comptes, les écritures, les fonctions RPC et la connexion. Chaque test vérifie ensuite ce qui a été écrit (`db.writesTo('class_plans', 'POST')`). Côté authentification, `db.authCalls` garde chaque appel (connexion, inscription, renvoi) et `db.authErrors` fait répondre une erreur GoTrue à un chemin donné (`invalid_credentials`, `over_email_send_rate_limit`…). Le dépôt est public : aucun identifiant réel n'est utilisé.
 
 **Heure figée.** Les tests se déroulent le mercredi 18 novembre 2026 à 5 h 45, un quart d'heure avant le cours de 6 h. Les données (`e2e/fixtures.ts`) sont fictives : un coach, le cours « CrossFit 6h » (lundi, mercredi et vendredi à 6 h), trois athlètes, et Fran au programme du jour.
 

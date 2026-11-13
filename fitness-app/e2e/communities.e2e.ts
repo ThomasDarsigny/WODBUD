@@ -1,5 +1,10 @@
 import { test, expect, communityDb, COMMUNITY_ID, COACH } from './fixtures'
 
+// Thème clair (celui des tests) : le bord garde la couleur du rang, le texte la mêle
+// à 60 % de la couleur du texte pour rester lisible (bronze 40 % + #17150f 60 %).
+const BRONZE = 'rgb(205, 127, 50)'
+const BRONZE_INK = 'color(srgb 0.375686 0.248627 0.113725)'
+
 /** Communautés (4.2) : création dans la fenêtre partagée (Échap, focus rendu). */
 test('le coach crée une communauté depuis la fenêtre partagée', async ({ page }) => {
   const db = communityDb()
@@ -41,12 +46,15 @@ test('profil d’un membre : rang coloré, progression, fermeture au clavier', a
   await db.install(page)
   await page.goto(`/dashboard/communities/${COMMUNITY_ID}`)
   await page.getByRole('tab', { name: 'Membres' }).click()
-  await expect(page.locator('.wb-rank-pill').first()).toHaveCSS('color', 'rgb(205, 127, 50)')
+  const pill = page.locator('.wb-rank-pill').first()
+  await expect(pill).toHaveCSS('border-color', BRONZE)
+  await expect(pill).toHaveCSS('color', BRONZE_INK)
 
   const alex = page.getByRole('button', { name: /^Alex Tremblay/ })
   await alex.click()
   const dialog = page.getByRole('dialog', { name: 'Alex Tremblay' })
-  await expect(dialog.getByText('Bronze')).toHaveCSS('color', 'rgb(205, 127, 50)')
+  await expect(dialog.locator('.wb-profile-rank')).toHaveCSS('border-color', BRONZE)
+  await expect(dialog.getByText('Bronze')).toHaveCSS('color', BRONZE_INK)
   // 260 min entre bronze (120) et argent (600) : 29 %.
   await expect(dialog.getByRole('progressbar')).toHaveAttribute('aria-valuenow', '29')
   await page.keyboard.press('Escape')

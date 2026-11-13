@@ -161,17 +161,15 @@ SECTIONS.push(
 function renderChunk(chunk: string | string[], i: number) {
   if (Array.isArray(chunk)) {
     return (
-      <ul key={i} style={{ margin: '0 0 0.9rem', paddingLeft: '1.1rem', display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
+      <ul key={i} className="wb-legal-list">
         {chunk.map((li, j) => (
-          <li key={j} style={{ fontSize: '0.9375rem', lineHeight: 1.65 }}>
-            {highlight(li)}
-          </li>
+          <li key={j}>{highlight(li)}</li>
         ))}
       </ul>
     )
   }
   return (
-    <p key={i} style={{ margin: '0 0 0.9rem', fontSize: '0.9375rem', lineHeight: 1.7 }}>
+    <p key={i} className="wb-legal-p">
       {highlight(chunk)}
     </p>
   )
@@ -182,10 +180,7 @@ function highlight(text: string) {
   const parts = text.split(/(\[À COMPLÉTER[^\]]*\])/g)
   return parts.map((part, i) =>
     part.startsWith('[À COMPLÉTER') ? (
-      <mark
-        key={i}
-        style={{ background: 'rgba(255,77,0,0.18)', color: 'var(--orange)', padding: '0 0.25rem', fontWeight: 600 }}
-      >
+      <mark key={i} className="wb-legal-mark">
         {part}
       </mark>
     ) : (
@@ -197,57 +192,25 @@ function highlight(text: string) {
 export default function PrivacyPolicyPage() {
   usePageMeta('Politique de confidentialité | WODBUD')
   return (
-    <main style={{ minHeight: '100vh', background: 'var(--black)', color: 'var(--white)', padding: '3rem 1.5rem' }}>
-      <div style={{ maxWidth: 760, margin: '0 auto' }}>
-        <Link
-          to='/'
-          style={{
-            fontFamily: 'var(--font-d)',
-            fontSize: '0.6875rem',
-            letterSpacing: '0.14em',
-            textTransform: 'uppercase',
-            color: 'var(--muted)',
-            textDecoration: 'none'
-          }}
-        >
+    <main className="wb-legal">
+      <div className="wb-legal-inner">
+        <Link to='/' className="wb-legal-back">
           &larr; WODBUD
         </Link>
 
-        <h1
-          style={{
-            fontFamily: 'var(--font-d)',
-            fontSize: '1.75rem',
-            letterSpacing: '0.04em',
-            textTransform: 'uppercase',
-            margin: '1.25rem 0 0.4rem'
-          }}
-        >
-          Politique de confidentialité
-        </h1>
-        <p style={{ color: 'var(--muted)', fontSize: '0.8125rem', margin: '0 0 2rem' }}>
+        <h1 className="wb-legal-h1">Politique de confidentialité</h1>
+        <p className="wb-legal-meta">
           Dernière mise à jour : {DERNIERE_MAJ} · Loi 25 (Québec) et LPRPDE (Canada)
         </p>
 
         {SECTIONS.map((section) => (
-          <section key={section.t} style={{ marginBottom: '2rem' }}>
-            <h2
-              style={{
-                fontFamily: 'var(--font-d)',
-                fontSize: '1rem',
-                letterSpacing: '0.06em',
-                textTransform: 'uppercase',
-                margin: '0 0 0.7rem',
-                paddingBottom: '0.4rem',
-                borderBottom: '1px solid var(--border)'
-              }}
-            >
-              {section.t}
-            </h2>
+          <section key={section.t} className="wb-legal-section">
+            <h2 className="wb-legal-h2">{section.t}</h2>
             {section.p.map(renderChunk)}
           </section>
         ))}
 
-        <p style={{ color: 'var(--muted)', fontSize: '0.8125rem', lineHeight: 1.6, borderTop: '1px solid var(--border)', paddingTop: '1rem' }}>
+        <p className="wb-legal-foot">
           Ce document a été rédigé à partir des obligations de la Loi 25 et de la LPRPDE et des données
           réellement collectées par WODBUD. Il ne constitue pas un avis juridique. Faites-le relire par un
           conseiller juridique avant la mise en ligne, et remplissez les blocs surlignés.

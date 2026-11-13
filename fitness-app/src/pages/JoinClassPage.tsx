@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { supabase } from '../lib/supabase'
+import { authErrorMessage } from '../lib/authErrors'
 import { useClassStore } from '../stores/classStore'
 import type { Class } from '../types'
 import Field from '../components/ui/Field'
@@ -86,7 +87,7 @@ export default function JoinClassPage() {
       setClassInfo(cls)
       setStep('done')
     } catch (err) {
-      setFormError(err instanceof Error ? err.message : t('errors.generic'))
+      setFormError(authErrorMessage(err, t))
       setFormLoading(false)
     }
   }
@@ -103,7 +104,7 @@ export default function JoinClassPage() {
       setClassInfo(cls)
       setStep('done')
     } catch (err) {
-      setFormError(err instanceof Error ? err.message : t('errors.generic'))
+      setFormError(authErrorMessage(err, t))
       setFormLoading(false)
     }
   }

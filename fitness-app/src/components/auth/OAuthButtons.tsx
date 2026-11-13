@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { supabase } from '../../lib/supabase'
 import { fetchAuthProviders, type AuthProviders } from '../../lib/authProviders'
+import { authErrorMessage } from '../../lib/authErrors'
 
 type Provider = 'apple' | 'google'
 
@@ -34,17 +35,17 @@ export default function OAuthButtons({ disabled, onError }: { disabled?: boolean
     // remet l'état à zéro que si quelque chose a échoué.
     if (error) {
       setPending(null)
-      onError(error.message)
+      onError(authErrorMessage(error, t))
     }
   }
 
   // Réserve la place de Google pendant la lecture, pour éviter un saut.
-  if (!providers) return <div style={{ minHeight: 48 }} aria-hidden="true" />
+  if (!providers) return <div className="wb-oauth-slot" aria-hidden="true" />
 
   const busy = disabled || pending !== null
 
   return (
-    <div style={{ display: 'grid', gap: '0.6rem' }}>
+    <div className="wb-oauth-list">
       {providers.apple && (
         <button type="button" onClick={() => { void signIn('apple') }} disabled={busy} className="wb-oauth wb-oauth-apple">
           <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">

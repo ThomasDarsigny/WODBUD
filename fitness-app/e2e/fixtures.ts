@@ -111,6 +111,10 @@ export const test = base.extend<{ pageErrors: string[] }>({
 })
 export { expect }
 
+/** Deux rangs : bronze dès 120 min, argent à 600 (leur couleur passe par --rank). */
+const rank = (position: number, key: string, fr: string, min: number, color: string, motto: string | null = null) => ({ position, key, display_fr: fr, display_en: fr, display_es: fr, min_minutes: min, color, motto_fr: motto, motto_en: motto, motto_es: motto })
+export const RANKS = [rank(1, 'bronze', 'Bronze', 120, '#cd7f32', 'Chaque séance compte.'), rank(2, 'argent', 'Argent', 600, '#c0c0c0')]
+
 export const COMMUNITY_ID = 'c0aa0000-0000-4000-8000-000000000001'
 
 /** Une communauté dont le coach est propriétaire : membres, fil, défis, classement, WOD épinglé. */
@@ -123,9 +127,7 @@ export function communityDb(): MockSupabase {
   ]
   db.tables.community_members = people.map((p) => ({ community_id: COMMUNITY_ID, user_id: p.id }))
   db.tables.community_challenges = [{ id: 'ch1', community_id: COMMUNITY_ID }, { id: 'ch2', community_id: COMMUNITY_ID }]
-  // Deux rangs : bronze dès 120 min, argent à 600 (sa couleur passe par --rank).
-  const rank = (position: number, key: string, fr: string, min: number, color: string) => ({ position, key, display_fr: fr, display_en: fr, display_es: fr, min_minutes: min, color, motto_fr: null, motto_en: null, motto_es: null })
-  db.tables.ranks = [rank(1, 'bronze', 'Bronze', 120, '#cd7f32'), rank(2, 'argent', 'Argent', 600, '#c0c0c0')]
+  db.tables.ranks = RANKS.map((r) => ({ ...r }))
   db.rpc.get_community_members = () => people.map((p, i) => ({
     user_id: p.id, display_name: p.name, avatar_url: null, joined_at: `2026-10-0${i + 1}T00:00:00Z`, is_me: p.id === COACH.id,
     share_rank: i !== 3, rank_key: i === 3 ? null : 'bronze', total_minutes: i === 3 ? null : 300 - i * 40, current_streak: i === 3 ? null : 3 - (i % 3), badges: i === 3 ? null : 2,

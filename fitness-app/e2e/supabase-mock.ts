@@ -91,6 +91,10 @@ export class MockSupabase {
   rpc: Record<string, RpcHandler> = {}
   writes: Write[] = []
   calls: RpcCall[] = []
+  /** Appels à l'authentification (connexion, inscription, renvoi du courriel), avec leur corps. */
+  authCalls: { path: string; body: Row }[] = []
+  /** Erreur à renvoyer pour un chemin d'authentification, comme GoTrue (ex. invalid_credentials). */
+  authErrors: Record<string, { status: number; code: string; message: string }> = {}
   signedIn: boolean
   readonly user: MockUser
   private seq = 0
@@ -160,6 +164,10 @@ export class MockSupabase {
 
   private auth(route: Route, url: URL) {
     const path = url.pathname
+    const req = route.request()
+    if (req.method() !== 'GET') this.authCalls.push({ path, body: (req.postDataJSON() ?? {}) as Row })
+    const fail = this.authErrors[path]
+    if (fail) return this.reply(route, fail.status, { code: fail.status, error_code: fail.code, msg: fail.message })
     if (path === '/auth/v1/token') {
       this.signedIn = true
       return this.reply(route, 200, session(this.user))
