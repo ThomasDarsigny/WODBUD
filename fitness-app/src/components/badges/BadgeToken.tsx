@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react'
 import NavIcon, { type NavIconName } from '../navigation/NavIcon'
 
 /**
@@ -13,9 +14,6 @@ import NavIcon, { type NavIconName } from '../navigation/NavIcon'
  */
 
 export type BadgeState = 'unlocked' | 'locked' | 'soon'
-
-const CLIP =
-  'polygon(0 0, calc(100% - 22%) 0, 100% 22%, 100% 100%, 22% 100%, 0 calc(100% - 22%))'
 
 interface Props {
   icon: string
@@ -57,7 +55,6 @@ function toIconName(icon: string): NavIconName {
 
 export default function BadgeToken({ icon, state, size = 72, title, art, fresh = false }: Props) {
   const unlocked = state === 'unlocked'
-  const soon = state === 'soon'
 
   // Visuel « Forge » : verrouillé, il passe en gris sombre avec un cadenas —
   // la silhouette reste lisible, c'est elle qui donne envie de le débloquer.
@@ -68,7 +65,7 @@ export default function BadgeToken({ icon, state, size = 72, title, art, fresh =
         aria-label={title}
         title={title}
         className={`wb-badge-art is-${state}${fresh ? ' is-fresh' : ''}`}
-        style={{ width: size, height: size, ['--art' as string]: `url(/badges/${art}.svg)` }}
+        style={{ '--size': `${size}px`, '--art': `url(/badges/${art}.svg)` } as CSSProperties}
       >
         <img src={`/badges/${art}.svg`} alt="" width={size} height={size} loading="lazy" decoding="async" draggable={false} />
         {!unlocked && (
@@ -80,37 +77,16 @@ export default function BadgeToken({ icon, state, size = 72, title, art, fresh =
     )
   }
 
-  const edge = unlocked ? 'var(--orange)' : soon ? 'var(--line-fn)' : 'var(--border)'
-  const fill = unlocked ? 'rgba(255, 90, 31, 0.1)' : 'var(--dark)'
-  const ink = unlocked ? 'var(--orange)' : soon ? 'var(--muted)' : 'var(--line-fn)'
-
+  // Couleurs par état : en CSS (.wb-badge-plate.is-unlocked / is-soon / is-locked).
   return (
     <div
       role="img"
       aria-label={title}
       title={title}
-      style={{
-        width: size,
-        height: size,
-        position: 'relative',
-        flexShrink: 0,
-        clipPath: CLIP,
-        background: edge,
-        // Un badge verrouillé ne doit pas attirer l'œil autant qu'un obtenu.
-        opacity: unlocked ? 1 : 0.85
-      }}
+      className={`wb-badge-plate is-${state}`}
+      style={{ '--size': `${size}px` } as CSSProperties}
     >
-      <div
-        style={{
-          position: 'absolute',
-          inset: 2,
-          clipPath: CLIP,
-          background: fill,
-          display: 'grid',
-          placeItems: 'center',
-          color: ink
-        }}
-      >
+      <div className="wb-badge-plate-face">
         <NavIcon name={toIconName(icon)} size={Math.round(size * 0.36)} strokeWidth={1.7} />
       </div>
     </div>

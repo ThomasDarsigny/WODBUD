@@ -177,7 +177,7 @@ export default function ClassWeekPlanner({ classId }: { classId: string }) {
               </li>
             ))}
           </ul>
-          <p className="wb-set-hint" style={{ margin: 0 }}>{t('classes.guard_hint')}</p>
+          <p className="wb-set-hint is-flush">{t('classes.guard_hint')}</p>
         </section>
       )}
 

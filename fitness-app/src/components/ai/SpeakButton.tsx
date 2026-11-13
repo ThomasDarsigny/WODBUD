@@ -41,22 +41,11 @@ export default function SpeakButton({ text }: { text: string }) {
 
   return (
     <button
+      type="button"
       onClick={toggle}
       aria-label={speaking ? t('ai.stop') : t('ai.speak')}
       title={speaking ? t('ai.stop') : t('ai.speak')}
-      style={{
-        background: 'transparent',
-        border: `1px solid ${speaking ? 'var(--orange)' : 'var(--border)'}`, borderRadius: 12,
-        color: speaking ? 'var(--orange)' : 'var(--muted)',
-        cursor: 'pointer',
-        fontFamily: 'var(--font-d)',
-        fontSize: '0.6875rem',
-        letterSpacing: '0.14em',
-        textTransform: 'uppercase',
-        padding: '0.18rem 0.5rem',
-        marginLeft: 'auto',
-        flexShrink: 0
-      }}
+      className={`wb-speak${speaking ? ' is-on' : ''}`}
     >
       {speaking ? `■ ${t('ai.stop')}` : `▶ ${t('ai.speak')}`}
     </button>

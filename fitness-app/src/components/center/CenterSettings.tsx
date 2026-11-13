@@ -141,8 +141,8 @@ export default function CenterSettings({ onNotice }: { onNotice: Notice }) {
       <Section title={t('center.my_center')}>
         <Row label={t('center.name')} hint={t(`center.role_${role}`)}>
           {lead ? (
-            <div style={{ display: 'flex', gap: '0.5rem' }}>
-              <input className="wb-input" value={name} maxLength={80} onChange={(e) => setName(e.target.value)} style={{ flex: 1, minWidth: 0 }} />
+            <div className="wb-inline-field">
+              <input className="wb-input wb-grow" value={name} maxLength={80} onChange={(e) => setName(e.target.value)} aria-label={t('center.name')} />
               <button
                 type="button"
                 className="wb-btn wb-btn--secondary"

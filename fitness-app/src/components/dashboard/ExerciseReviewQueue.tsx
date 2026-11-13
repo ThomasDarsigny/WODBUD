@@ -97,7 +97,7 @@ export default function ExerciseReviewQueue({ onEdit }: { onEdit: (exercise: Exe
           {t('review.announce')}
         </button>
       </div>
-      <p className="wb-set-hint" style={{ margin: '0 0 0.75rem' }}>{t('review.hint')}</p>
+      <p className="wb-set-hint is-lead">{t('review.hint')}</p>
 
       {message && <p className={message.kind === 'ok' ? 'wb-review-ok' : 'wb-rec-error'} role="status">{message.text}</p>}
 

@@ -63,7 +63,7 @@ export default function ClassFollowup({ classId }: { classId: string }) {
     .sort((a, b) => filter === 'idle' ? (b.days ?? 1e9) - (a.days ?? 1e9) : 0)
 
   if (rows === null) {
-    return <div style={{ display: 'grid', gap: '0.6rem' }}><Skeleton height={76} /><Skeleton height={64} /><Skeleton height={64} /></div>
+    return <div className="wb-skel-stack wb-skel-stack--tight"><Skeleton height={76} /><Skeleton height={64} /><Skeleton height={64} /></div>
   }
   if (error) return <p className="wb-rec-error" role="alert">{error}</p>
   if (rows.length === 0) {

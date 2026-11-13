@@ -76,7 +76,7 @@ export default function AiCoachView() {
     <div className="wb-ai">
       <header className="wb-ai-head">
         <img className="wb-ai-avatar wb-ai-avatar--img" src={avatarUrl(persona.avatar)} alt="" width={44} height={44} />
-        <div style={{ flex: 1, minWidth: 0 }}>
+        <div className="wb-grow">
           <h1>{t('ai.name')}</h1>
           <p>{t('ai.subtitle')} · {t(`ai.tones.${persona.tone}`)}</p>
         </div>

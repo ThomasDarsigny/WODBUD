@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import type { CSSProperties, ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 
 /**
@@ -11,12 +11,11 @@ import { useTranslation } from 'react-i18next'
  * l'armement retombe tout seul au bout de quelques secondes — donc un clic
  * distrait ne détruit rien.
  */
-export default function ConfirmButton({ children, confirmLabel, onConfirm, style, title, ariaLabel, className, disabled, resetMs = 4000 }: {
+export default function ConfirmButton({ children, confirmLabel, onConfirm, title, ariaLabel, className, disabled, resetMs = 4000 }: {
   children: ReactNode
   /** Texte affiché une fois le bouton armé. Par défaut « Confirmer ». */
   confirmLabel?: string
   onConfirm: () => void | Promise<void>
-  style?: CSSProperties
   title?: string
   /** Nom lu par les lecteurs d'écran quand le bouton n'affiche qu'un symbole (✕). */
   ariaLabel?: string
@@ -46,17 +45,11 @@ export default function ConfirmButton({ children, confirmLabel, onConfirm, style
   return (
     <button
       type="button"
-      className={className ? `${className}${armed ? ' is-armed' : ''}` : undefined}
+      className={`wb-confirm${className ? ` ${className}` : ''}${armed ? ' is-armed' : ''}`}
       disabled={disabled}
       onClick={handleClick}
       title={armed ? undefined : title}
       aria-label={armed ? undefined : ariaLabel}
-      style={{
-        ...style,
-        ...(armed
-          ? { color: 'var(--black)', background: '#ef4444', borderColor: '#ef4444' }
-          : null)
-      }}
     >
       {armed ? (confirmLabel ?? t('actions.confirm')) : children}
     </button>

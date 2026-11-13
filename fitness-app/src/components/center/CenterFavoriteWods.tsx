@@ -66,7 +66,7 @@ export default function CenterFavoriteWods() {
           ))}
         </ul>
       )}
-      <p className="wb-set-hint" style={{ margin: '0.5rem 0 0' }}>{t('favorites.privacy')}</p>
+      <p className="wb-set-hint is-after">{t('favorites.privacy')}</p>
     </section>
   )
 }

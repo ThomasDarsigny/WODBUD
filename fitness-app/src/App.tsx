@@ -106,15 +106,7 @@ function ProtectedRoute({ children, adminOnly = false, requireRole = true }: { c
 
   if (loading) {
     return (
-      <div
-        style={{
-          minHeight: '100vh',
-          display: 'grid',
-          placeItems: 'center',
-          background: 'var(--black)',
-          color: 'var(--muted)'
-        }}
-      >
+      <div className="wb-boot">
         {t('status.session_check')}
       </div>
     )
@@ -179,15 +171,7 @@ function DashboardHomeRedirect() {
 
   if (!target) {
     return (
-      <div
-        style={{
-          minHeight: '100vh',
-          display: 'grid',
-          placeItems: 'center',
-          background: 'var(--black)',
-          color: 'var(--muted)'
-        }}
-      >
+      <div className="wb-boot">
         {t('status.redirect')}
       </div>
     )
@@ -198,7 +182,7 @@ function DashboardHomeRedirect() {
 
 function RouteFallback() {
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--black)', color: 'var(--muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-d)', fontSize: '0.8125rem', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
+    <div className="wb-boot wb-boot--brand">
       WODBUD
     </div>
   )

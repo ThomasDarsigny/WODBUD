@@ -44,7 +44,10 @@ test('le coach retire une séance depuis la liste, en deux temps', async ({ page
 
   const remove = page.getByRole('button', { name: 'Retirer pour tout le cours — Force du vendredi' })
   await remove.click()
-  await page.getByRole('button', { name: 'Confirmer' }).click()
+  // Armé : le bouton passe au rouge (classe is-armed, plus de style en ligne).
+  const confirm = page.getByRole('button', { name: 'Confirmer' })
+  await expect(confirm).toHaveCSS('background-color', 'rgb(239, 68, 68)')
+  await confirm.click()
   await expect(page.getByText('Force du vendredi')).toHaveCount(0)
   expect(db.writesTo('class_plans', 'DELETE').map((p) => p.id)).toEqual(['p-ven'])
 })

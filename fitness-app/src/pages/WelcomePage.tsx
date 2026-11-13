@@ -134,7 +134,7 @@ export default function WelcomePage() {
     : { initial: { opacity: 0, x: 40 }, animate: { opacity: 1, x: 0 }, exit: { opacity: 0, x: -40 }, transition: { duration: 0.32, ease: [0.16, 1, 0.3, 1] as const } }
 
   const back = (
-    <button type="button" className="wb-rec-back" onClick={() => setStep(step === 'equipment' ? 'details' : 'role')} style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}>
+    <button type="button" className="wb-rec-back wb-unbutton" onClick={() => setStep(step === 'equipment' ? 'details' : 'role')}>
       ‹ {t('actions.back')}
     </button>
   )

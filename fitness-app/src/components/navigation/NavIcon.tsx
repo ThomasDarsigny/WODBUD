@@ -109,7 +109,7 @@ export default function NavIcon({ name, size = 22, strokeWidth = 1.7 }: Props) {
       // L'icône double le libellé : elle n'apporte rien à un lecteur d'écran.
       aria-hidden='true'
       focusable='false'
-      style={{ flexShrink: 0, display: 'block' }}
+      className='wb-icon'
     >
       {PATHS[name].map((d, i) => (
         <path key={i} d={d} />

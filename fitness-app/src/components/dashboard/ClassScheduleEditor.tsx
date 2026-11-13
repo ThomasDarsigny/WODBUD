@@ -58,7 +58,7 @@ export default function ClassScheduleEditor({ classId, legacyText }: { classId: 
       </div>
 
       {slots.length === 0 ? (
-        <p className="wb-set-hint" style={{ margin: 0 }}>
+        <p className="wb-set-hint is-flush">
           {legacyText ? t('classes.sched_text_fallback', { text: legacyText }) : t('classes.sched_empty')}
         </p>
       ) : (
@@ -109,7 +109,7 @@ export default function ClassScheduleEditor({ classId, legacyText }: { classId: 
               {days.length > 1 ? t('classes.sched_add_n', { count: days.length }) : t('classes.sched_add')}
             </button>
           </div>
-          {days.length === 0 && <p className="wb-set-hint" style={{ margin: 0 }}>{t('classes.sched_pick_day')}</p>}
+          {days.length === 0 && <p className="wb-set-hint is-flush">{t('classes.sched_pick_day')}</p>}
         </div>
       )}
       {error && <p className="wb-rec-error" role="alert">{error}</p>}

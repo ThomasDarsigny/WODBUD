@@ -31,7 +31,7 @@ export default function CommunityInviteRedirect() {
 
   if (!area) {
     return (
-      <div style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', background: 'var(--black)', color: 'var(--muted)' }}>
+      <div className="wb-boot">
         {t('status.redirect')}
       </div>
     )

@@ -16,28 +16,7 @@ export default function NavDot({ count, compact = false }: {
   if (count <= 0) return null
 
   return (
-    <span
-      aria-hidden="true"
-      style={{
-        position: 'absolute',
-        top: compact ? 8 : '50%',
-        right: compact ? 'calc(50% - 16px)' : '1.25rem',
-        transform: compact ? 'none' : 'translateY(-50%)',
-        minWidth: 18,
-        height: 18,
-        padding: '0 5px',
-        display: 'inline-flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        background: 'var(--orange)',
-        color: 'var(--black)',
-        fontFamily: 'var(--font-d)',
-        fontSize: '0.6875rem',
-        fontWeight: 900,
-        letterSpacing: '0.02em',
-        fontVariantNumeric: 'tabular-nums',
-        pointerEvents: 'none'
-      }}
+    <span aria-hidden="true" className={`wb-navdot${compact ? ' is-compact' : ''}`}
     >
       {count > 9 ? '9+' : count}
     </span>

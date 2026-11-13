@@ -80,7 +80,7 @@ export default function BadgeGrid() {
 
   if (loading) {
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--s4)' }}>
+      <div className="wb-stack">
         <Skeleton height={18} width="40%" />
         <Skeleton height={92} lines={3} />
       </div>

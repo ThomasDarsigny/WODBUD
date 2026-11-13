@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
-import { field } from '../../styles/ui'
 import { localDate } from '../../lib/scheduledWorkouts'
 import {
   fetchExerciseOptions, parseDuration, readUnit, toKg, writeUnit,
@@ -116,7 +115,7 @@ export default function ResultSheet({ exercise, withDate = false, onSubmit, onCl
               onChange={(e) => setQuery(e.target.value)}
               placeholder={t('records.search')}
               aria-label={t('records.search')}
-              style={field}
+              className="wb-input wb-input--sunk"
             />
             <ul className="wb-rec-pick">
               {matches.map((o) => (
@@ -148,7 +147,7 @@ export default function ResultSheet({ exercise, withDate = false, onSubmit, onCl
                 <label>
                   <span>{t('records.weight')}</span>
                   <span className="wb-rec-unit">
-                    <input ref={firstRef} inputMode="decimal" value={weight} onChange={(e) => setWeight(e.target.value)} placeholder="0" style={field} />
+                    <input ref={firstRef} inputMode="decimal" value={weight} onChange={(e) => setWeight(e.target.value)} placeholder="0" className="wb-input wb-input--sunk" />
                     <span role="group" aria-label={t('records.unit')}>
                       {(['kg', 'lb'] as WeightUnit[]).map((u) => (
                         <button key={u} type="button" aria-pressed={unit === u} className={unit === u ? 'is-on' : undefined} onClick={() => changeUnit(u)}>{u}</button>
@@ -158,20 +157,20 @@ export default function ResultSheet({ exercise, withDate = false, onSubmit, onCl
                 </label>
                 <label>
                   <span>{t('records.reps_optional')}</span>
-                  <input inputMode="numeric" value={reps} onChange={(e) => setReps(e.target.value)} placeholder="1" style={field} />
+                  <input inputMode="numeric" value={reps} onChange={(e) => setReps(e.target.value)} placeholder="1" className="wb-input wb-input--sunk" />
                 </label>
               </div>
             )}
             {kind === 'reps' && (
               <label className="wb-rec-field">
                 <span>{t('records.reps')}</span>
-                <input ref={firstRef} inputMode="numeric" value={reps} onChange={(e) => setReps(e.target.value)} placeholder="0" style={field} />
+                <input ref={firstRef} inputMode="numeric" value={reps} onChange={(e) => setReps(e.target.value)} placeholder="0" className="wb-input wb-input--sunk" />
               </label>
             )}
             {kind === 'time' && (
               <label className="wb-rec-field">
                 <span>{t('records.time')}</span>
-                <input ref={firstRef} inputMode="numeric" value={time} onChange={(e) => setTime(e.target.value)} placeholder="3:20" style={field} />
+                <input ref={firstRef} inputMode="numeric" value={time} onChange={(e) => setTime(e.target.value)} placeholder="3:20" className="wb-input wb-input--sunk" />
                 <small>{t('records.time_hint')}</small>
               </label>
             )}
@@ -179,13 +178,13 @@ export default function ResultSheet({ exercise, withDate = false, onSubmit, onCl
             {withDate && (
               <label className="wb-rec-field">
                 <span>{t('records.date')}</span>
-                <input type="date" value={date} max={localDate(new Date())} onChange={(e) => setDate(e.target.value)} style={field} />
+                <input type="date" value={date} max={localDate(new Date())} onChange={(e) => setDate(e.target.value)} className="wb-input wb-input--sunk" />
               </label>
             )}
 
             <label className="wb-rec-field">
               <span>{t('records.notes')}</span>
-              <input value={notes} maxLength={280} onChange={(e) => setNotes(e.target.value)} placeholder={t('records.notes_placeholder')} style={field} />
+              <input value={notes} maxLength={280} onChange={(e) => setNotes(e.target.value)} placeholder={t('records.notes_placeholder')} className="wb-input wb-input--sunk" />
             </label>
 
             {error && <p className="wb-rec-error" role="alert">{error}</p>}

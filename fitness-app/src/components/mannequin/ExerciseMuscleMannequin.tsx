@@ -62,12 +62,12 @@ export default function ExerciseMuscleMannequin({
   }
 
   return (
-    <div style={{ display: 'flex', gap: '0.4rem', justifyContent: 'center' }} aria-hidden="true">
+    <div className="wb-mannequin-pair" aria-hidden="true">
       {(['front', 'back'] as MannequinView[]).map((view) => {
         const viewBox = VIEW_BOXES[body][view]
         const [, , vw, vh] = viewBox.split(' ').map(Number)
         return (
-          <svg key={view} viewBox={viewBox} height={height} width={(height * vw) / vh} style={{ display: 'block' }}>
+          <svg key={view} viewBox={viewBox} height={height} width={(height * vw) / vh} className="wb-block">
             {BODY_SHAPES[body][view].map((shape, i) => {
               if (shape.muscle === null) {
                 return <path key={i} d={shape.d} fill="var(--mannequin-body, #2b2724)" />

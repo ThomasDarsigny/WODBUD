@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from 'react'
+import type { CSSProperties } from 'react'
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import EmptyState from '../ui/EmptyState'
@@ -21,7 +22,6 @@ import ExerciseFormModal from '../exercises/ExerciseFormModal'
 import ExerciseDetailModal from '../exercises/ExerciseDetailModal'
 import ExerciseImport from '../exercises/ExerciseImport'
 import { useIsMobile } from '../../hooks/useMediaQuery'
-import { btnPrimary as emptyActionStyle } from '../../styles/ui'
 import { SkeletonCards } from '../ui/Skeleton'
 import { isCurrentUserAdmin } from '../../lib/access'
 import { fetchMyCenter, isLead, type MyCenter } from '../../lib/center'
@@ -251,7 +251,7 @@ export default function ExercisesView() {
           }
           action={
             hasFilters ? (
-              <button onClick={resetFilters} style={emptyActionStyle}>
+              <button type="button" onClick={resetFilters} className="wb-btn wb-btn--primary">
                 {t('actions.reset', { ns: 'common' })}
               </button>
             ) : undefined
@@ -435,10 +435,15 @@ function FilterChip({
   accent?: string
   onClick: () => void
 }) {
-  // Un type de mouvement garde sa couleur une fois choisi.
-  const style = active && accent ? { background: accent, borderColor: accent } : undefined
+  // Un type de mouvement garde sa couleur une fois choisi (donnée : variable CSS).
   return (
-    <button type="button" className="wb-chip" aria-pressed={active} onClick={onClick} style={style}>
+    <button
+      type="button"
+      className={`wb-chip${accent ? ' wb-chip--accent' : ''}`}
+      aria-pressed={active}
+      onClick={onClick}
+      style={accent ? ({ '--chip': accent } as CSSProperties) : undefined}
+    >
       {label}
     </button>
   )

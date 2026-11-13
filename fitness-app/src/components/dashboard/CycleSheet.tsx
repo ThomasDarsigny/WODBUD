@@ -69,7 +69,7 @@ export default function CycleSheet({ classId, onClose, onCreated }: { classId: s
         <p className="wb-cycle-title">{t('classes.cycle_title')}</p>
         <button type="button" className="wb-tooeasy-close" onClick={onClose} aria-label={t('actions.close')}>✕</button>
       </div>
-      <p className="wb-set-hint" style={{ margin: 0 }}>{t('classes.cycle_hint')}</p>
+      <p className="wb-set-hint is-flush">{t('classes.cycle_hint')}</p>
 
       <div className="wb-cycle-step">
         <p className="wb-bfilters-label">{t('classes.cycle_base')}</p>

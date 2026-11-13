@@ -22,61 +22,33 @@ interface Props {
   style?: CSSProperties
 }
 
-const bar: CSSProperties = {
-  background:
-    'linear-gradient(90deg, var(--dark) 0%, var(--surface) 50%, var(--dark) 100%)',
-  backgroundSize: '200% 100%',
-  animation: 'wodbud-skeleton 1.4s ease-in-out infinite'
-}
+/** Hauteur et largeur : des valeurs de l'appelant, passées en variables CSS. */
+const dims = (height: number | string, width: number | string): CSSProperties => ({
+  '--h': typeof height === 'number' ? `${height}px` : height,
+  '--w': typeof width === 'number' ? `${width}px` : width
+} as CSSProperties)
 
 export default function Skeleton({ height = 16, width = '100%', lines = 1, style }: Props) {
   if (lines > 1) {
     return (
-      <div
-        aria-hidden="true"
-        style={{ display: 'flex', flexDirection: 'column', gap: 'var(--s3)', ...style }}
-      >
+      <div aria-hidden="true" className="wb-skel-stack" style={style}>
         {Array.from({ length: lines }, (_, i) => (
-          <div
-            key={i}
-            style={{
-              ...bar,
-              height,
-              // La dernière barre est plus courte : une liste de texte ne
-              // finit jamais pile en bout de ligne.
-              width: i === lines - 1 ? '62%' : width
-            }}
-          />
+          // La dernière barre est plus courte : une liste de texte ne
+          // finit jamais pile en bout de ligne.
+          <div key={i} className="wb-skel" style={dims(height, i === lines - 1 ? '62%' : width)} />
         ))}
       </div>
     )
   }
-  return <div aria-hidden="true" style={{ ...bar, height, width, ...style }} />
+  return <div aria-hidden="true" className="wb-skel" style={{ ...dims(height, width), ...style }} />
 }
 
 /** Esquisse d'une liste de cartes, aux dimensions réelles de la grille. */
 export function SkeletonCards({ count = 6 }: { count?: number }) {
   return (
-    <div
-      aria-hidden="true"
-      style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-        gap: 'var(--s4)'
-      }}
-    >
+    <div aria-hidden="true" className="wb-skel-cards">
       {Array.from({ length: count }, (_, i) => (
-        <div
-          key={i}
-          style={{
-            border: '1px solid var(--border)', borderRadius: 12,
-            background: 'var(--dark)',
-            padding: 'var(--s4)',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 'var(--s3)'
-          }}
-        >
+        <div key={i} className="wb-skel-card">
           <Skeleton height={12} width="35%" />
           <Skeleton height={20} width="70%" />
           <Skeleton height={12} lines={2} />

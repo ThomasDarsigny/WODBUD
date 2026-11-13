@@ -67,7 +67,7 @@ export default function CenterSuggestionForm() {
     <section className="wb-home-sec">
       <div className="wb-sec"><h2>{t('suggestions.title', { name: center.center.name })}</h2></div>
       <form className="wb-card wb-set-card wb-support" onSubmit={(e) => { void submit(e) }}>
-        <p className="wb-set-hint" style={{ margin: 0 }}>{t('suggestions.hint')}</p>
+        <p className="wb-set-hint is-flush">{t('suggestions.hint')}</p>
         <label className="wb-sr-only" htmlFor="suggestion-message">{t('suggestions.message')}</label>
         <textarea
           id="suggestion-message"

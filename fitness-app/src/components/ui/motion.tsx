@@ -25,7 +25,7 @@ export function PageTransition({ children }: { children: ReactNode }) {
       initial={reduce ? false : { opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.32, ease: EASE }}
-      style={{ minHeight: 'calc(100% - var(--section-tabs-h, 0px) - var(--page-top-h, 0px))' }}
+      className="wb-page-fill"
     >
       {children}
     </motion.div>
@@ -58,7 +58,7 @@ export function AnimatedNumber({ value, format = ROUND, duration = 1.1 }: {
   }, [value, format, duration, reduce])
 
   // Le texte final est là dès le rendu : lecteurs d'écran et captures le voient.
-  return <span ref={ref} style={{ fontVariantNumeric: 'tabular-nums' }}>{format(value)}</span>
+  return <span ref={ref} className="wb-nums">{format(value)}</span>
 }
 
 const COLORS = ['#ff5a1f', '#ffb38f', '#4ade80', '#38bdf8', '#facc15', '#f5f5f4']

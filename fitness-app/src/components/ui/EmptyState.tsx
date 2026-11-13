@@ -25,62 +25,13 @@ interface Props {
 
 export default function EmptyState({ icon, title, hint, action, compact = false }: Props) {
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        textAlign: 'center',
-        gap: '0.8rem',
-        padding: compact ? '1.9rem 1.2rem' : '3.2rem 1.5rem',
-        border: '1px dashed var(--border)',
-        borderRadius: 16,
-        background: 'var(--dark)'
-      }}
-    >
-      <span
-        style={{
-          display: 'grid',
-          placeItems: 'center',
-          width: compact ? 42 : 54,
-          height: compact ? 42 : 54,
-          borderRadius: 14,
-          background: 'rgba(255, 77, 0, 0.12)',
-          color: 'var(--orange)',
-          flexShrink: 0
-        }}
-      >
+    <div className={`wb-estate${compact ? ' is-compact' : ''}`}>
+      <span className="wb-estate-icon">
         <NavIcon name={icon} size={compact ? 20 : 26} strokeWidth={1.6} />
       </span>
-
-      <p
-        style={{
-          margin: 0,
-          fontFamily: 'var(--font-b)',
-          fontSize: compact ? '0.98rem' : '1.08rem',
-          fontWeight: 700,
-          color: 'var(--white)'
-        }}
-      >
-        {title}
-      </p>
-
-      {hint && (
-        <p
-          style={{
-            margin: 0,
-            color: 'var(--muted)',
-            fontSize: '0.875rem',
-            lineHeight: 1.55,
-            maxWidth: '40ch'
-          }}
-        >
-          {hint}
-        </p>
-      )}
-
-      {action && <div style={{ marginTop: '0.3rem' }}>{action}</div>}
+      <p className="wb-estate-title">{title}</p>
+      {hint && <p className="wb-estate-hint">{hint}</p>}
+      {action && <div className="wb-estate-action">{action}</div>}
     </div>
   )
 }

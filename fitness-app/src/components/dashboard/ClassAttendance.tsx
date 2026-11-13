@@ -110,8 +110,8 @@ export default function ClassAttendance({ classId }: { classId: string }) {
             <div className="wb-att-qr-code"><QRCodeSVG value={url} size={220} marginSize={2} title={t('attendance.qr_title')} /></div>
             <div className="wb-att-qr-text">
               <p>{t('attendance.qr_hint', { time: until })}</p>
-              <p className="wb-set-hint" style={{ margin: 0 }}>{t('attendance.qr_live')}</p>
-              <div className="wb-review-actions" style={{ justifyContent: 'flex-start' }}>
+              <p className="wb-set-hint is-flush">{t('attendance.qr_live')}</p>
+              <div className="wb-review-actions is-start">
                 <a href={`/tv/${classId}`} target="_blank" rel="noopener" className="wb-btn wb-btn--secondary wb-btn--sm">{t('tv.open')}</a>
                 <button type="button" className="wb-btn wb-btn--ghost wb-btn--sm" onClick={() => setQr(null)}>{t('attendance.qr_hide')}</button>
               </div>
@@ -125,7 +125,7 @@ export default function ClassAttendance({ classId }: { classId: string }) {
       {error && <p className="wb-rec-error" role="alert">{error}</p>}
 
       {members.length === 0 ? (
-        <p className="wb-set-hint" style={{ margin: 0 }}>{t('attendance.no_members')}</p>
+        <p className="wb-set-hint is-flush">{t('attendance.no_members')}</p>
       ) : (
         <ul className="wb-att-list">
           {sorted.map((m) => {

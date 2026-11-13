@@ -150,7 +150,7 @@ export default function ScoreEntry({ sessionId, workoutId }: { sessionId: string
           <button key={v} type="button" className="wb-chip" aria-pressed={rx === v} onClick={() => setRx(v)}>{t(`score.rx_${v}`)}</button>
         ))}
       </div>
-      <p className="wb-set-hint" style={{ margin: 0 }}>{t(`score.rx_hint_${rx}`)}</p>
+      <p className="wb-set-hint is-flush">{t(`score.rx_hint_${rx}`)}</p>
 
       {error && <p className="wb-rec-error" role="alert">{error}</p>}
       <button type="submit" className="wb-btn wb-btn--primary" disabled={saving}>{saving ? t('status.loading', { ns: 'common' }) : t('score.save')}</button>

@@ -112,7 +112,7 @@ export default function AdminDashboardView() {
           />
         </div>
 
-        <div className="wb-segmented" role="tablist" aria-label={t('admin.to_complete', { ns: 'exercises' })} style={{ margin: 0 }}>
+        <div className="wb-segmented wb-segmented--flush" role="tablist" aria-label={t('admin.to_complete', { ns: 'exercises' })}>
           {(['all', 'todo', 'done'] as const).map((k) => (
             <button key={k} type="button" role="tab" aria-selected={completion === k} className={completion === k ? 'is-on' : undefined} onClick={() => setCompletion(k)}>
               {t(`admin.filter_${k}`, { ns: 'exercises' })}

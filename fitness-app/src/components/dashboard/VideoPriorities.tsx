@@ -48,7 +48,7 @@ export default function VideoPriorities({ onEdit }: { onEdit: (exercise: Exercis
           </button>
         )}
       </div>
-      <p className="wb-set-hint" style={{ margin: '0 0 0.75rem' }}>{t('priorities.hint')}</p>
+      <p className="wb-set-hint is-lead">{t('priorities.hint')}</p>
 
       {shown.length === 0 ? (
         <div className="wb-card wb-review-empty">{items.length ? t('priorities.all_done') : t('priorities.empty')}</div>

@@ -266,7 +266,8 @@ function RecordDetail({ record, results, unit, fmtDate, onDelete }: {
               onConfirm={() => onDelete(r.id)}
               confirmLabel={t('actions.confirm')}
               title={t('actions.delete')}
-              style={{ minHeight: 36, padding: '0 0.7rem', fontSize: '0.75rem' }}
+              ariaLabel={`${t('actions.delete')} — ${fmtDate(r.performedAt)}`}
+              className="wb-btn wb-btn--ghost wb-btn--sm wb-btn--quiet"
             >
               ✕
             </ConfirmButton>

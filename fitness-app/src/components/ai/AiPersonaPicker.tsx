@@ -58,7 +58,7 @@ export default function AiPersonaPicker({ value, onSaved, onClose }: {
           </button>
         ))}
       </div>
-      <p className="wb-set-hint" style={{ margin: 0 }}>{t(`ai.tone_hint.${draft.tone}`)}</p>
+      <p className="wb-set-hint is-flush">{t(`ai.tone_hint.${draft.tone}`)}</p>
 
       {error && <p className="wb-rec-error" role="alert">{t('errors.generic')}</p>}
       <div className="wb-review-actions">
