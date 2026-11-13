@@ -1,16 +1,14 @@
 import { useState, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router-dom'
-import NavIcon from '../navigation/NavIcon'
 import EmptyState from '../ui/EmptyState'
 import { useExerciseStore } from '../../stores/exerciseStore'
 import { useWorkoutStore } from '../../stores/workoutStore'
 import type { Exercise, WorkoutExercise, MuscleAlert, WorkoutMethod, ExerciseCategory, MuscleGroup } from '../../types'
-import { METHOD_I18N_KEYS, MUSCLE_GROUP_I18N_KEYS, CATEGORY_I18N_KEYS, CATEGORY_LABELS, MUSCLE_GROUP_LABELS } from '../../types'
+import { METHOD_I18N_KEYS, MUSCLE_GROUP_I18N_KEYS, CATEGORY_LABELS, MUSCLE_GROUP_LABELS } from '../../types'
 import ExerciseDetailModal from '../exercises/ExerciseDetailModal'
 import Mannequin2D from '../mannequin/Mannequin2D'
 import { computeMuscleLoads } from '../../lib/muscleLoad'
-import { label as smallLabelStyle, fieldCompact as miniInputStyle, field as selectStyle, btnSmall as filterResetStyle, textarea as textareaStyle } from '../../styles/ui'
+import { label as smallLabelStyle, fieldCompact as miniInputStyle, field as selectStyle, textarea as textareaStyle } from '../../styles/ui'
 import { pdfFileName } from '../pdf/pdfTokens'
 import { useIsMobile } from '../../hooks/useMediaQuery'
 import { useAvailableEquipment } from '../../hooks/useAvailableEquipment'
@@ -18,6 +16,8 @@ import { missingEquipment, type EquipmentId } from '../../lib/equipment'
 import TooEasyPanel from '../workouts/TooEasyPanel'
 import { useSpaceBase } from '../../hooks/useSpaceBase'
 import AdaptPanel from '../workouts/AdaptPanel'
+import PickerExerciseRow from '../workouts/PickerExerciseRow'
+import BuilderFilters from '../workouts/BuilderFilters'
 
 export default function WorkoutBuilderView() {
   const { t, i18n } = useTranslation(['workouts', 'common'])
@@ -78,6 +78,12 @@ export default function WorkoutBuilderView() {
   const available = useAvailableEquipment()
   const base = useSpaceBase()
   const [onlyDoable, setOnlyDoable] = useState(false)
+  // Filtres repliés sur téléphone (ils prenaient le premier écran), ouverts sur grand écran.
+  const [filtersOpen, setFiltersOpen] = useState(() => !isMobile)
+  // Ajout direct par « + » : un exercice à la fois, et un retour bref.
+  const [addingId, setAddingId] = useState<string | null>(null)
+  const [toast, setToast] = useState<string | null>(null)
+  const toastTimer = useRef<number | undefined>(undefined)
 
   const normalizedSearch = search.trim().toLowerCase()
 
@@ -116,8 +122,6 @@ export default function WorkoutBuilderView() {
         (a, b) => Number((missingById.get(a.id)?.length ?? 0) > 0) - Number((missingById.get(b.id)?.length ?? 0) > 0)
       )
     : filteredExercises
-
-  const hasActiveFilters = selectedCategories.length > 0 || selectedMuscles.length > 0 || onlyDoable
 
   function toggleCategory(category: ExerciseCategory) {
     setSelectedCategories((current) =>
@@ -212,6 +216,22 @@ export default function WorkoutBuilderView() {
     return false
   }
 
+  function showAdded(exerciseName: string) {
+    setToast(t('builder.added_toast', { name: exerciseName }))
+    window.clearTimeout(toastTimer.current)
+    toastTimer.current = window.setTimeout(() => setToast(null), 1800)
+  }
+
+  async function quickAdd(ex: Exercise) {
+    if (addingId) return
+    setAddingId(ex.id)
+    try {
+      if (await handleAddFromPicker(ex)) showAdded(ex.name)
+    } finally {
+      setAddingId(null)
+    }
+  }
+
   async function confirmOverrideAdd() {
     if (!restOverridePrompt) return
     const forcedTry = await addExercise(restOverridePrompt.exercise, {
@@ -219,7 +239,7 @@ export default function WorkoutBuilderView() {
       forceCardioSequence: restOverridePrompt.forceCardioSequence
     })
     setRestOverridePrompt(null)
-    if (forcedTry.added) setPickerExercise(undefined)
+    if (forcedTry.added) { setPickerExercise(undefined); showAdded(restOverridePrompt.exercise.name) }
   }
 
   async function confirmCardioOverrideAdd() {
@@ -232,6 +252,7 @@ export default function WorkoutBuilderView() {
     if (forcedTry.added) {
       setCardioOverridePrompt(null)
       setPickerExercise(undefined)
+      showAdded(cardioOverridePrompt.exercise.name)
       return
     }
 
@@ -303,96 +324,32 @@ export default function WorkoutBuilderView() {
             flexShrink: 0
           }}
         >
-          <p
-            style={{
-              fontFamily: 'var(--font-d)',
-              fontSize: '0.6875rem',
-              letterSpacing: '0.28em',
-              textTransform: 'uppercase',
-              color: 'var(--orange)',
-              marginBottom: '0.35rem'
-            }}
-          >
-            {t('builder.library', { ns: 'workouts' })}
-          </p>
-          <h2
-            style={{
-              fontFamily: 'var(--font-d)',
-              fontSize: '1.75rem',
-              fontWeight: 900,
-              textTransform: 'uppercase',
-              marginBottom: '1rem'
-            }}
-          >
-            {t('builder.choose_exercise', { ns: 'workouts' })}
-          </h2>
-          <input
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder={t('builder.search_placeholder', { ns: 'workouts' })}
-            className="wb-input"
-          />
-          {available && (
-            <p className="wb-builder-equip">
-              <span>
-                {available.source === 'center'
-                  ? t('builder.equipment_center', { ns: 'workouts', name: available.centerName, count: available.equipment.length })
-                  : t('builder.equipment_home', { ns: 'workouts', count: available.equipment.length })}
-              </span>
-              <Link to={`${base}/settings`}>{t('builder.equipment_edit', { ns: 'workouts' })}</Link>
-            </p>
-          )}
-          {available && (
-            <div className="wb-chips" style={{ marginTop: '0.2rem' }}>
-              <FilterChip
-                active={onlyDoable}
-                onClick={() => setOnlyDoable((v) => !v)}
-                label={t('builder.only_doable', { ns: 'workouts' })}
-              />
-            </div>
-          )}
-          <div style={{ marginTop: '1rem', display: 'grid', gap: '0.8rem' }}>
-            <div>
-              <div className="wb-ex-fgroup"><span>{t('fields.filter_category', { ns: 'exercises' })}</span></div>
-              <div className="wb-chips" style={{ marginTop: '0.45rem' }}>
-                {(Object.keys(CATEGORY_LABELS) as ExerciseCategory[]).map((category) => (
-                  <FilterChip
-                    key={category}
-                    active={selectedCategories.includes(category)}
-                    onClick={() => toggleCategory(category)}
-                    label={t(CATEGORY_I18N_KEYS[category], { ns: 'common' })}
-                  />
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <div className="wb-ex-fgroup"><span>{t('fields.primary_muscle', { ns: 'exercises' })}</span></div>
-              <div className="wb-chips" style={{ marginTop: '0.45rem' }}>
-                {(Object.keys(MUSCLE_GROUP_LABELS) as MuscleGroup[]).map((muscle) => (
-                  <FilterChip
-                    key={muscle}
-                    active={selectedMuscles.includes(muscle)}
-                    onClick={() => toggleMuscle(muscle)}
-                    label={t(MUSCLE_GROUP_I18N_KEYS[muscle], { ns: 'common' })}
-                  />
-                ))}
-              </div>
-            </div>
-
-            {hasActiveFilters && (
-              <button
-                onClick={() => {
-                  setSelectedCategories([])
-                  setSelectedMuscles([])
-                  setOnlyDoable(false)
-                }}
-                style={filterResetStyle}
-              >
-                Effacer les filtres
-              </button>
-            )}
+          <p className="wb-ph-tag" style={{ marginBottom: '0.35rem' }}>{t('builder.library', { ns: 'workouts' })}</p>
+          <h1 className="wb-builder-title">{t('builder.choose_exercise', { ns: 'workouts' })}</h1>
+          <div className="wb-search">
+            <input
+              id="builder-search"
+              type="search"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder={t('builder.search_placeholder', { ns: 'workouts' })}
+              aria-label={t('builder.search_label', { ns: 'workouts' })}
+              className="wb-input"
+            />
           </div>
+          <BuilderFilters
+            open={filtersOpen}
+            onToggle={() => setFiltersOpen((v) => !v)}
+            available={available}
+            editEquipmentTo={`${base}/settings`}
+            onlyDoable={onlyDoable}
+            onOnlyDoable={() => setOnlyDoable((v) => !v)}
+            categories={selectedCategories}
+            onCategory={toggleCategory}
+            muscles={selectedMuscles}
+            onMuscle={toggleMuscle}
+            onClear={() => { setSelectedCategories([]); setSelectedMuscles([]); setOnlyDoable(false) }}
+          />
         </div>
 
         <div style={{ flex: isMobile ? 'none' : 1, overflowY: isMobile ? 'visible' : 'auto', padding: '0.75rem' }}>
@@ -411,19 +368,28 @@ export default function WorkoutBuilderView() {
               {t('empty', { ns: 'workouts' })}
             </div>
           ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+            <div className="wb-pick-list">
               {sortedExercises.map((exercise) => (
                 <PickerExerciseRow
                   key={exercise.id}
                   exercise={exercise}
                   missing={missingById.get(exercise.id) ?? []}
-                  onClick={() => setPickerExercise(exercise)}
-                  alreadyAdded={workoutExercises.some((we) => we.exercise.id === exercise.id)}
+                  count={workoutExercises.filter((we) => we.exercise.id === exercise.id).length}
+                  onOpen={() => setPickerExercise(exercise)}
+                  onAdd={() => { void quickAdd(exercise) }}
+                  adding={addingId === exercise.id}
                 />
               ))}
             </div>
           )}
         </div>
+        {isMobile && workoutExercises.length > 0 && (
+          <button type="button" className="wb-builder-tray" onClick={() => setPane('workout')}>
+            <span>{t('builder.tray', { ns: 'workouts', count: workoutExercises.length })}</span>
+            <span aria-hidden="true">›</span>
+          </button>
+        )}
+        <p className="wb-builder-toast" role="status" aria-live="polite">{toast}</p>
       </div>
 
       {/* Une seule zone qui défile : avec le mannequin et les alertes, une
@@ -458,6 +424,8 @@ export default function WorkoutBuilderView() {
           </p>
           <input
             ref={nameRef}
+            id="builder-name"
+            aria-label={t('builder.name_label', { ns: 'workouts' })}
             value={name}
             onChange={(e) => { setName(e.target.value); setMissing(null) }}
             placeholder={t('builder.name_placeholder', { ns: 'workouts' })}
@@ -481,8 +449,9 @@ export default function WorkoutBuilderView() {
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
             <div>
-              <label style={smallLabelStyle}>{t('fields.method', { ns: 'workouts' })}</label>
+              <label htmlFor="builder-method" style={smallLabelStyle}>{t('fields.method', { ns: 'workouts' })}</label>
               <select
+                id="builder-method"
                 value={method}
                 onChange={(e) => setMethod(e.target.value as WorkoutMethod)}
                 style={selectStyle}
@@ -495,8 +464,9 @@ export default function WorkoutBuilderView() {
               </select>
             </div>
             <div>
-              <label style={smallLabelStyle}>{t('fields.duration', { ns: 'workouts' })} ({t('fields.duration_unit_min', { ns: 'workouts' })})</label>
+              <label htmlFor="builder-duration" style={smallLabelStyle}>{t('fields.duration', { ns: 'workouts' })} ({t('fields.duration_unit_min', { ns: 'workouts' })})</label>
               <input
+                id="builder-duration"
                 type='number'
                 value={durationMinutes ?? ''}
                 onChange={(e) =>
@@ -582,6 +552,8 @@ export default function WorkoutBuilderView() {
 
         <div style={{ padding: '0.75rem 1rem', borderTop: '1px solid var(--border)', flexShrink: 0 }}>
           <textarea
+            id="builder-notes"
+            aria-label={t('builder.notes_label', { ns: 'workouts' })}
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             placeholder={t('builder.notes_placeholder', { ns: 'workouts' })}
@@ -654,7 +626,7 @@ export default function WorkoutBuilderView() {
               cursor: loadingPdf ? 'wait' : 'pointer'
             }}
           >
-            {loadingPdf ? 'PDF...' : 'Exporter PDF'}
+            {loadingPdf ? t('builder.pdf_loading', { ns: 'workouts' }) : t('builder.pdf_export', { ns: 'workouts' })}
           </button>
           <button
             onClick={handleSave}
@@ -962,114 +934,6 @@ export default function WorkoutBuilderView() {
   )
 }
 
-function PickerExerciseRow({
-  exercise,
-  onClick,
-  alreadyAdded,
-  missing
-}: {
-  exercise: Exercise
-  onClick: () => void
-  alreadyAdded: boolean
-  /** Équipement requis absent du centre (ou de la maison). */
-  missing: EquipmentId[]
-}) {
-  const { t } = useTranslation('workouts')
-  const [hovered, setHovered] = useState(false)
-  return (
-    <button
-      onClick={onClick}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: '0.75rem',
-        padding: '0.75rem 1rem',
-        background: hovered ? 'var(--surface)' : 'transparent',
-        border: 'none',
-        borderBottom: '1px solid var(--border)',
-        cursor: 'pointer',
-        textAlign: 'left',
-        transition: 'background 0.12s',
-        opacity: alreadyAdded ? 0.45 : 1
-      }}
-    >
-      <div
-        style={{
-          width: 48,
-          height: 36,
-          background: 'var(--black)',
-          flexShrink: 0,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          overflow: 'hidden'
-        }}
-      >
-        {exercise.video_url ? (
-          <video
-            src={exercise.video_url}
-            muted
-            preload='metadata'
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-          />
-        ) : (
-          <span style={{ opacity: 0.25, display: 'flex' }}><NavIcon name="video" size={16} /></span>
-        )}
-      </div>
-
-      <div style={{ flex: 1, minWidth: 0 }}>
-        <p
-          style={{
-            fontFamily: 'var(--font-d)',
-            fontSize: '0.9375rem',
-            fontWeight: 700,
-            textTransform: 'uppercase',
-            letterSpacing: '0.04em',
-            color: 'var(--white)',
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis'
-          }}
-        >
-          {exercise.name}
-        </p>
-        <p
-          style={{
-            fontFamily: 'var(--font-d)',
-            fontSize: '0.6875rem',
-            letterSpacing: '0.1em',
-            textTransform: 'uppercase',
-            color: 'var(--orange)',
-            marginTop: '0.1rem'
-          }}
-        >
-          {t(MUSCLE_GROUP_I18N_KEYS[exercise.primary_muscle], { ns: 'common' })}
-        </p>
-        {missing.length > 0 && (
-          <span className="wb-missing-equip">
-            {t('builder.missing_equipment', { list: missing.map((m) => t(`equipment.items.${m}`, { ns: 'common' })).join(', ') })}
-          </span>
-        )}
-      </div>
-
-      <span
-        style={{
-          fontFamily: 'var(--font-d)',
-          fontSize: '0.6875rem',
-          letterSpacing: '0.08em',
-          textTransform: 'uppercase',
-          color: alreadyAdded ? 'var(--muted)' : 'var(--orange)',
-          flexShrink: 0
-        }}
-      >
-        {alreadyAdded ? t('builder.already_added') : t('builder.view')}
-      </span>
-    </button>
-  )
-}
-
 function WorkoutExerciseSlot({
   workoutExercise: we,
   alert,
@@ -1324,18 +1188,3 @@ function MuscleAlertBadge({ alert }: { alert: MuscleAlert }) {
   )
 }
 
-function FilterChip({
-  active,
-  onClick,
-  label
-}: {
-  active: boolean
-  onClick: () => void
-  label: string
-}) {
-  return (
-    <button type="button" className="wb-chip" aria-pressed={active} onClick={onClick}>
-      {label}
-    </button>
-  )
-}

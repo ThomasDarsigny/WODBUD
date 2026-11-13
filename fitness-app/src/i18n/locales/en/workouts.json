@@ -28,7 +28,7 @@
     "clear_filters": "Clear filters",
     "workout_section": "Workout",
     "name_placeholder": "Session name...",
-    "empty_state": "Click an exercise to add it",
+    "empty_state": "Tap + on an exercise to add it",
     "notes_placeholder": "Notes, instructions for the group...",
     "reset": "Reset",
     "save": "Save session",
@@ -52,7 +52,16 @@
     "equipment_home_other": "Your equipment: {{count}} items",
     "equipment_edit": "Edit",
     "missing_equipment": "Missing equipment: {{list}}",
-    "only_doable": "Only what I have"
+    "only_doable": "Only what I have",
+    "search_label": "Search an exercise",
+    "add_named": "Add {{name}} to the WOD",
+    "added_toast": "{{name}} added",
+    "tray_one": "{{count}} exercise in the WOD · View",
+    "tray_other": "{{count}} exercises in the WOD · View",
+    "name_label": "Session name",
+    "notes_label": "Notes for the group",
+    "pdf_export": "Export PDF",
+    "pdf_loading": "PDF…"
   },
   "reminders": {
     "theme_inactive": "You haven't done a {{theme}} session in {{days}} days"
