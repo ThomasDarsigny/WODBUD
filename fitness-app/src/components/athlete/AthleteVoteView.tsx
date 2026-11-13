@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import type { ReactNode } from 'react'
+import type { CSSProperties } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import NavIcon from '../navigation/NavIcon'
@@ -10,7 +10,7 @@ import { useExerciseStore } from '../../stores/exerciseStore'
 import type { Exercise, VoteOption, VoteSession } from '../../types'
 import { CATEGORY_I18N_KEYS, MUSCLE_GROUP_I18N_KEYS } from '../../types'
 import VoteResultsBars from '../vote/VoteResultsBars'
-import { btnPrimary as actionBtnStyle } from '../../styles/ui'
+import EmptyState from '../ui/EmptyState'
 import { isVoteSessionOpen, voteSessionKind } from '../../lib/voteSessions'
 
 /**
@@ -112,59 +112,49 @@ export default function AthleteVoteView() {
     }
   }
 
-  if (loadingSession) return <CenteredMessage message={t('status.loading')} />
-  if (!session) return <CenteredMessage message={t('athlete.vote_not_found')} />
+  if (loadingSession) return <div className="wb-vote-page"><EmptyState icon="vote" title={t('status.loading')} /></div>
+  if (!session) return <div className="wb-vote-page"><EmptyState icon="vote" title={t('athlete.vote_not_found')} /></div>
   if (!isVoteSessionOpen(session)) {
     // Fermé par le coach ou expiré tout seul : même écran, message différent
     // — un athlète qui voit « fermé » alors que la date limite est juste
     // passée cherche un coach qui n'a rien fait.
     const closedMessage = voteSessionKind(session) === 'expired' ? t('athlete.vote_expired') : t('athlete.vote_closed')
     return (
-      <div style={{ padding: 'var(--page-pad)', maxWidth: 720 }}>
-        <BackButton onClick={() => navigate('/athlete')} label={t('actions.back')} />
-        <h1 style={{ fontFamily: 'var(--font-d)', fontSize: '1.75rem', fontWeight: 900, textTransform: 'uppercase', margin: '0 0 0.5rem' }}>
-          {session.title}
-        </h1>
-        <p style={{ color: 'var(--muted)', marginBottom: '1.5rem' }}>{closedMessage}</p>
-        <SectionTitle>{t('vote.results_title')}</SectionTitle>
+      <div className="wb-vote-page wb-vote-page--closed">
+        <button type="button" className="wb-vote-back" onClick={() => navigate('/athlete')}>← {t('actions.back')}</button>
+        <h1 className="wb-vote-h1">{session.title}</h1>
+        <p className="wb-vote-sub">{closedMessage}</p>
+        <h2 className="wb-vote-sec-title">{t('vote.results_title')}</h2>
         <VoteResultsBars results={results} emptyLabel={t('vote.no_options')} />
       </div>
     )
   }
 
+  const blocked = !selectedOptionId || submitting || !changed
+
   return (
-    <div style={{ padding: 'var(--page-pad)', paddingBottom: '7rem' }}>
-      <div style={{ marginBottom: '2rem' }}>
-        <BackButton onClick={() => navigate('/athlete')} label={t('actions.back')} />
-        <p className="wb-ph-tag">
-          {t('vote.tag')}
-        </p>
-        <h1 style={{ fontFamily: 'var(--font-d)', fontSize: '1.75rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.02em', margin: 0 }}>
-          {session.title}
-        </h1>
-        <p style={{ color: 'var(--muted)', marginTop: '0.5rem', fontSize: '0.9375rem' }}>
-          {t('vote.subtitle')}
-        </p>
+    <div className="wb-vote-page">
+      <div className="wb-vote-head">
+        <button type="button" className="wb-vote-back" onClick={() => navigate('/athlete')}>← {t('actions.back')}</button>
+        <p className="wb-ph-tag">{t('vote.tag')}</p>
+        <h1 className="wb-vote-h1">{session.title}</h1>
+        <p className="wb-vote-sub">{t('vote.subtitle')}</p>
         {session.deadline && (
-          <p style={{ color: 'var(--muted)', fontSize: '0.8125rem', marginTop: '0.25rem' }}>
-            {t('classes.deadline')}: {new Date(session.deadline).toLocaleDateString()}
-          </p>
+          <p className="wb-vote-when">{t('classes.deadline')}: {new Date(session.deadline).toLocaleDateString()}</p>
         )}
       </div>
 
       {confirmedOptionId && (
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap', background: 'rgba(34,197,94,0.07)', border: '1px solid rgba(34,197,94,0.3)', borderRadius: 12, padding: '0.75rem 1rem', marginBottom: '1.25rem' }}>
-          <span style={{ color: '#22c55e', fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
-            ✓ {t('vote.already_voted')}
-          </span>
-          <span style={{ color: 'var(--muted)', fontSize: '0.8125rem' }}>— {t('vote.can_modify')}</span>
+        <div className="wb-vote-confirmed" role="status">
+          <span className="wb-vote-confirmed-tag">✓ {t('vote.already_voted')}</span>
+          <span className="wb-vote-confirmed-text">— {t('vote.can_modify')}</span>
         </div>
       )}
 
       {options.length === 0 ? (
-        <CenteredMessage message={t('vote.no_options')} />
+        <EmptyState icon="vote" title={t('vote.no_options')} />
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '0.75rem' }}>
+        <div className="wb-vote-grid" role="group" aria-label={session.title}>
           {options.map((option) => (
             <VoteCard
               key={option.id}
@@ -179,31 +169,17 @@ export default function AthleteVoteView() {
       )}
 
       {showResults && (
-        <div style={{ marginTop: '2rem', border: '1px solid var(--border)', borderRadius: 12, background: 'var(--dark)', padding: '1.25rem' }}>
-          <SectionTitle>{t('vote.results_title')}</SectionTitle>
+        <section className="wb-vote-results" aria-labelledby="vote-results-title">
+          <h2 id="vote-results-title" className="wb-vote-sec-title">{t('vote.results_title')}</h2>
           <VoteResultsBars results={results} emptyLabel={t('vote.no_options')} />
-        </div>
+        </section>
       )}
 
-      {error && (
-        <div style={{ marginTop: '1rem', padding: '0.65rem 0.9rem', background: 'rgba(255,77,0,0.1)', border: '1px solid rgba(255,77,0,0.3)', borderRadius: 12, color: 'var(--orange)', fontSize: '0.8125rem' }}>
-          {error}
-        </div>
-      )}
+      {error && <div className="wb-vote-error" role="alert">{error}</div>}
 
-      <div className="wb-above-tabbar" style={{ position: 'fixed', bottom: 0, left: 0, right: 0, background: 'var(--dark)', borderTop: '1px solid var(--border)', padding: '1rem var(--page-pad)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', zIndex: 100, flexWrap: 'wrap' }}>
-        <div style={{ color: 'var(--muted)', fontFamily: 'var(--font-d)', fontSize: '0.8125rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-          {selectedOptionId ? t('vote.single_hint') : t('vote.none_selected')}
-        </div>
-        <button
-          onClick={handleSubmit}
-          disabled={!selectedOptionId || submitting || !changed}
-          style={{
-            ...actionBtnStyle,
-            opacity: (!selectedOptionId || submitting || !changed) ? 0.5 : 1,
-            cursor: (!selectedOptionId || !changed) ? 'not-allowed' : 'pointer'
-          }}
-        >
+      <div className="wb-above-tabbar wb-vote-bar">
+        <p className="wb-vote-bar-hint" aria-live="polite">{selectedOptionId ? t('vote.single_hint') : t('vote.none_selected')}</p>
+        <button type="button" onClick={handleSubmit} disabled={blocked} className="wb-btn wb-btn--primary">
           {submitting ? t('vote.submitting') : confirmedOptionId ? t('vote.update') : t('vote.submit')}
         </button>
       </div>
@@ -222,80 +198,34 @@ function VoteCard({ option, exercise, selected, confirmed, onSelect }: {
   const name = exercise?.name ?? option.label ?? `Option ${option.position}`
 
   return (
+    // La couleur de l'option vient des données : une seule variable CSS.
     <button
+      type="button"
       onClick={onSelect}
       aria-pressed={selected}
-      style={{
-        background: selected ? `${option.color}14` : 'var(--dark)',
-        border: `1px solid ${selected ? option.color : 'var(--border)'}`, borderRadius: 12,
-        outline: selected ? `1px solid ${option.color}` : 'none',
-        outlineOffset: '-2px',
-        padding: '1rem 1.15rem', textAlign: 'left', cursor: 'pointer',
-        display: 'flex', flexDirection: 'column', gap: '0.5rem', position: 'relative',
-        color: 'var(--white)', transition: 'all 0.15s'
-      }}
+      className={`wb-vote-opt${selected ? ' is-selected' : ''}`}
+      style={{ '--opt': option.color } as CSSProperties}
     >
       {/* La pastille de couleur est l'identité de l'option : c'est elle qu'on
           retrouve dans les barres de résultats. */}
-      <span style={{ display: 'flex', alignItems: 'center', gap: '0.55rem' }}>
-        <span style={{ width: 14, height: 14, background: option.color, flexShrink: 0, borderRadius: '50%' }} />
-        <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--muted)' }}>
-          {exercise ? t(CATEGORY_I18N_KEYS[exercise.category]) : `#${option.position}`}
-        </span>
-        {confirmed && (
-          <span style={{ marginLeft: 'auto', fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#22c55e', border: '1px solid rgba(34,197,94,0.35)', borderRadius: 12, padding: '0.08rem 0.35rem' }}>
-            ✓ {t('vote.your_choice')}
-          </span>
-        )}
+      <span className="wb-vote-opt-top">
+        <span className="wb-vote-opt-dot" aria-hidden="true" />
+        <span className="wb-vote-opt-cat">{exercise ? t(CATEGORY_I18N_KEYS[exercise.category]) : `#${option.position}`}</span>
+        {confirmed && <span className="wb-vote-opt-mine">✓ {t('vote.your_choice')}</span>}
       </span>
 
-      <div style={{ width: '100%', height: 92, background: 'var(--black)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', position: 'relative' }}>
+      <span className="wb-vote-opt-media">
         {exercise?.video_url ? (
-          <video src={exercise.video_url} style={{ width: '100%', height: '100%', objectFit: 'cover' }} muted preload="metadata" />
+          <video src={exercise.video_url} muted preload="metadata" />
         ) : (
-          <span style={{ opacity: 0.2, display: 'flex' }}><NavIcon name="video" size={26} /></span>
+          <span className="wb-vote-opt-novideo" aria-hidden="true"><NavIcon name="video" size={26} /></span>
         )}
-        {selected && <div style={{ position: 'absolute', inset: 0, background: `${option.color}2e`, pointerEvents: 'none' }} />}
-      </div>
+        {selected && <span className="wb-vote-opt-tint" aria-hidden="true" />}
+      </span>
 
-      <h3 style={{ fontFamily: 'var(--font-d)', fontSize: '0.9375rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', margin: 0 }}>
-        {name}
-      </h3>
+      <span className="wb-vote-opt-name">{name}</span>
 
-      {exercise && (
-        <span style={{ fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: option.color, border: `1px solid ${option.color}59`, borderRadius: 12, padding: '0.14rem 0.45rem', alignSelf: 'flex-start' }}>
-          {t(MUSCLE_GROUP_I18N_KEYS[exercise.primary_muscle])}
-        </span>
-      )}
+      {exercise && <span className="wb-vote-opt-muscle">{t(MUSCLE_GROUP_I18N_KEYS[exercise.primary_muscle])}</span>}
     </button>
   )
 }
-
-function SectionTitle({ children }: { children: ReactNode }) {
-  return (
-    <h2 style={{ fontFamily: 'var(--font-d)', fontSize: '0.8125rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', margin: '0 0 0.9rem' }}>
-      {children}
-    </h2>
-  )
-}
-
-function BackButton({ onClick, label }: { onClick: () => void; label: string }) {
-  return (
-    <button
-      onClick={onClick}
-      style={{ background: 'none', border: 'none', color: 'var(--muted)', cursor: 'pointer', fontFamily: 'var(--font-d)', fontSize: '0.6875rem', letterSpacing: '0.15em', textTransform: 'uppercase', padding: 0, marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}
-    >
-      ← {label}
-    </button>
-  )
-}
-
-function CenteredMessage({ message, icon = 'INFO' }: { message: string; icon?: string }) {
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', minHeight: 300, gap: '1rem', color: 'var(--muted)' }}>
-      <span style={{ fontSize: '2.5rem', opacity: 0.4 }}>{icon}</span>
-      <p style={{ fontFamily: 'var(--font-d)', fontSize: '0.9375rem', letterSpacing: '0.12em', textTransform: 'uppercase' }}>{message}</p>
-    </div>
-  )
-}
-
