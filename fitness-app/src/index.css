@@ -71,6 +71,8 @@
   --info-ink: #38bdf8;
   --adapt: #78a0ff;
   --adapt-ink: #9db7ff;
+  /* Orange en texte sur une teinte orangée (pastilles, surlignage). */
+  --orange-ink: #ff5a1f;
   /* 4,14:1 avant, 6,21:1 maintenant sur une carte. Le minimum AA est 4,5. */
   --muted: #9d958a;
 
@@ -195,6 +197,7 @@ option {
   --warn-ink: #b45309;
   --info-ink: #0369a1;
   --adapt-ink: #3b5bdb;
+  --orange-ink: #a83400;
   --muted: #5f5a53;
   --line-fn: #9a9287;
 }
@@ -1491,7 +1494,7 @@ button.wb-row:active, a.wb-row:active { background: var(--surface); }
 
 /* ── Pastilles d'état ─────────────────────────────────────────────── */
 .wb-pill { display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; white-space: nowrap; background: var(--surface); color: var(--muted); }
-.wb-pill--orange { background: color-mix(in srgb, var(--orange) 14%, transparent); color: var(--orange); }
+.wb-pill--orange { background: color-mix(in srgb, var(--orange) 14%, transparent); color: var(--orange-ink); }
 .wb-pill--green { background: color-mix(in srgb, var(--ok) 12%, transparent); color: var(--ok-ink); }
 .wb-pill--blue { background: color-mix(in srgb, var(--info) 12%, transparent); color: var(--info-ink); }
 
@@ -1577,7 +1580,8 @@ button.wb-row:active, a.wb-row:active { background: var(--surface); }
 .wb-week-days { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.5rem; }
 .wb-week-day { display: grid; grid-template-columns: 4.6rem minmax(0, 1fr); gap: 0.6rem; padding: 0.6rem 0.7rem; border: 1px solid var(--border); border-radius: var(--r-md); background: var(--dark); }
 .wb-week-day.is-today { border-color: var(--orange); }
-.wb-week-day.is-past { opacity: 0.7; }
+/* Jour passé : bordure pointillée plutôt qu'un fondu (à 70 %, le texte tombait à 3,2:1). */
+.wb-week-day.is-past { border-style: dashed; background: transparent; }
 .wb-week-dayhead { display: grid; justify-items: center; align-content: start; gap: 0.1rem; }
 .wb-week-dow { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
 .wb-week-date { font-family: var(--font-d); font-size: 1.5rem; font-weight: 900; line-height: 1; }
@@ -2065,7 +2069,7 @@ button.wb-row:active, a.wb-row:active { background: var(--surface); }
 .wb-legal-p { margin: 0 0 0.9rem; font-size: 0.9375rem; line-height: 1.7; }
 .wb-legal-list { display: flex; flex-direction: column; gap: 0.35rem; margin: 0 0 0.9rem; padding-left: 1.1rem; }
 .wb-legal-list li { font-size: 0.9375rem; line-height: 1.65; }
-.wb-legal-mark { padding: 0 0.25rem; background: color-mix(in srgb, var(--orange) 18%, transparent); color: var(--orange); font-weight: 600; }
+.wb-legal-mark { padding: 0 0.25rem; background: color-mix(in srgb, var(--orange) 18%, transparent); color: var(--orange-ink); font-weight: 600; }
 .wb-legal-foot { padding-top: 1rem; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.8125rem; line-height: 1.6; }
 .wb-share-page { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: var(--page-pad); background: var(--black); color: var(--white); font-family: var(--font-b); }
 .wb-share-logo { display: inline-flex; align-items: center; min-height: 44px; margin-bottom: 2rem; color: var(--white); font-family: var(--font-d); font-size: 1.25rem; font-weight: 900; letter-spacing: 0.15em; text-decoration: none; text-transform: uppercase; }
@@ -2336,7 +2340,7 @@ button.wb-row:active, a.wb-row:active { background: var(--surface); }
 .wb-classes-item:focus-visible { outline: 2px solid var(--orange); outline-offset: -2px; }
 .wb-classes-item-name { font-family: var(--font-d); font-size: 0.9375rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
 .wb-classes-item.is-active .wb-classes-item-name { color: var(--white); }
-.wb-classes-item-sub { font-size: 0.8125rem; color: var(--muted); opacity: 0.75; }
+.wb-classes-item-sub { font-size: 0.8125rem; color: var(--muted); }
 .wb-classes-foot { padding: 1rem 1.25rem; border-top: 1px solid var(--border); }
 .wb-classes-detail { flex: 1; min-width: 0; overflow: auto; padding: var(--page-pad); }
 .wb-classes-back { background: none; border: none; padding: 0; margin-bottom: 0.25rem; font-weight: 600; cursor: pointer; }
