@@ -17,6 +17,14 @@ relit pas depuis git.
   de création de profil sur `auth.users` et le bucket `avatars`.
 
 À régénérer après une série de migrations, pour qu'il reste la référence.
+Depuis le 2026-11-13, `schema_auth_storage.sql` contient aussi le déclencheur de
+base `ensure_rls` (RLS activée automatiquement sur toute nouvelle table).
+
+**Préproduction** (`docs/preproduction.md`) : une nouvelle migration passe
+d'abord par `npm run staging -- migrate`, puis par la production ;
+`npm run staging -- diff` vérifie ensuite que les deux structures sont
+identiques. La préproduction est reconstruite à partir de ces deux fichiers et
+des migrations 039 et suivantes.
 `db pull` n'est pas utilisé : les noms de fichiers ici (`024_…`) ne suivent
 pas le format horodaté de la CLI et ne correspondent pas à l'historique
 enregistré en base, il faudrait d'abord le réparer.

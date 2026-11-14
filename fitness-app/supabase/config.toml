@@ -386,6 +386,15 @@ deno_version = 2
 # [edge_runtime.secrets]
 # secret_key = "env(SECRET_VALUE)"
 
+# Fonctions qui vérifient elles-mêmes l'appelant (voir l'en-tête de chacune) :
+# sans ces lignes, un `supabase functions deploy` réactiverait la vérification
+# du jeton, et la tâche du matin (en-tête x-cron-secret, sans jeton) serait refusée.
+[functions.push]
+verify_jwt = false
+
+[functions.ai-coach]
+verify_jwt = false
+
 [analytics]
 enabled = true
 port = 54327

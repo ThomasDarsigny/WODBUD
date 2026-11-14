@@ -1,0 +1,15 @@
+# Préproduction (4.6) : réglages de connexion du projet « wodbud-staging ».
+# Appliqués par `npm run staging -- auth` (supabase config push --remote=<préproduction>).
+# Seules les propriétés écrites ici sont envoyées ; les autres gardent les valeurs du projet.
+project_id = "wodbud-staging"
+
+[auth]
+# Les courriels (confirmation, mot de passe oublié) ramènent ici par défaut.
+site_url = "http://localhost:5173"
+# L'app demande un retour vers `${window.location.origin}/entraineur_dashboard` :
+# le serveur local (`npm run dev:staging`) et les aperçus Vercel du projet.
+additional_redirect_urls = [
+  "http://localhost:5173/**",
+  "http://127.0.0.1:5173/**",
+  "https://fitness-*-thomasdarsignys-projects.vercel.app/**",
+]

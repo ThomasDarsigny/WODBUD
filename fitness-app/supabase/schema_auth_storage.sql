@@ -6,6 +6,13 @@
 -- schema.sql + ce fichier = la structure complète de WODBUD.
 -- ═══════════════════════════════════════════════════════════════════
 
+-- Active la RLS sur toute nouvelle table de `public`, filet si une migration l'oublie
+-- (public.rls_auto_enable est dans schema.sql). Déclencheur de base (event trigger),
+-- absent du dump lui aussi. Relevé sur la production le 2026-11-13.
+create event trigger ensure_rls on ddl_command_end
+  when tag in ('CREATE TABLE', 'CREATE TABLE AS', 'SELECT INTO')
+  execute function public.rls_auto_enable();
+
 -- Crée le profil à l'inscription (public.handle_new_user est dans schema.sql).
 create trigger on_auth_user_created
   after insert on auth.users

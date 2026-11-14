@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:staging": "vite --mode staging",
+    "staging": "node scripts/staging.mjs",
     "build": "vite build && node scripts/prerender.mjs",
     "type-check": "tsc -b",
     "test": "vitest run",
