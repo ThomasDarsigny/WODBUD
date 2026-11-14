@@ -183,9 +183,10 @@ Rapport : audit produit publié le 12 novembre. Branche de travail : `sprint`. U
 - [ ] Clés : `ANTHROPIC_API_KEY` (assistant IA et lecture des feuilles — Gemini n'est plus utilisé), clés R2 (vidéos).
 - [ ] Emballage App Store / Play Store avec Capacitor, et notifications natives (Apple, Firebase).
 - [ ] Logo officiel d'Apple sur le bouton « Continuer avec Apple ».
-- [ ] Suivi des erreurs et statistiques d'usage.
+- [x] Suivi des erreurs : fait en 4.5 (sans service tiers).
+- [ ] Statistiques d'usage.
 - [ ] Essai d'une invitation avec deux vrais comptes (membre et entraîneur).
 - [ ] Essai de la lecture de feuilles réelles avec Claude, une fois la clé ajoutée.
 - [ ] Unité 2.4 « Proposer un WOD » par l'IA dans le créateur, une fois la clé `ANTHROPIC_API_KEY` posée : sortie structurée, exercices de la bibliothèque seulement, garde-fou de volume appliqué.
-- [ ] Retirer les données de test en production (centre « Box Test WODBUD », ses exercices et mentions).
-- [ ] Retirer les exercices parasites de la base commune (`test`, `test 1`, `test 2` ×2, `simple test`, `avant-bras`, `biceps`, `epaules`).
+- [x] Retirer les données de test en production (centre « Box Test WODBUD », ses exercices et mentions) : migration 071, répétée d'abord en préproduction. Reste le fichier photo de l'exercice de test dans Storage (`exercise-references`, dossier `e6479c3e…`), que la base refuse de supprimer : à retirer depuis le tableau de bord.
+- [x] Retirer les exercices parasites de la base commune (`test`, `test 1`, `test 2` ×2, `simple test`, `avant-bras`, `biceps`, `epaules`) : migration 071, avec les 2 votes de test du cours « test classe » qui ne contenaient qu'eux (le cours reste). Aucun WOD, séance ni résultat ne les utilisait.
