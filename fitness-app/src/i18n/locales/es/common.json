@@ -260,12 +260,7 @@
       "menu_close": "Cerrar el menú"
     },
     "hero": {
-      "tag": "Plataforma CrossFit Pro",
-      "title_line1": "Entrena a tus atletas",
-      "title_em": "Sin Límites",
-      "subtitle": "La plataforma todo en uno para entrenadores de CrossFit. Crea tus WODs, sigue el progreso de tus atletas y gestiona tu box en unos clics.",
       "open_dashboard": "Abrir panel",
-      "watch_demo": "Ver demo",
       "see_app": "Ver la app"
     },
     "hero_stats": {
@@ -359,22 +354,6 @@
       "soon": "Pronto",
       "meanwhile": "Mientras tanto, WODBUD ya se instala desde tu navegador, en el móvil o en el ordenador.",
       "meanwhile_link": "Crear una cuenta"
-    },
-    "demo": {
-      "tag": "Acceso anticipado",
-      "title_line1": "Únete a los entrenadores",
-      "title_line2": "que entrenan mejor",
-      "subtitle": "WODBUD está en acceso anticipado. Reserva una demo gratuita de 30 minutos y descubre cómo transformar la gestión de tu box.",
-      "book": "Reservar una demo",
-      "view_features": "Ver funciones",
-      "perks_label": "Ventajas incluidas",
-      "perks": [
-        "Demo personalizada 1 a 1",
-        "Configuración asistida",
-        "3 meses gratis al inicio",
-        "Soporte prioritario",
-        "Acceso a nuevas funciones"
-      ]
     },
     "footer": {
       "copy": "© 2026 WODBUD. Todos los derechos reservados.",
@@ -1756,5 +1735,42 @@
     "kind_error": "Error",
     "kind_unhandledrejection": "Promesa rechazada",
     "kind_render": "Pantalla caída"
+  },
+  "contact": {
+    "meta_title": "Contacto | WODBUD",
+    "meta_description": "Una pregunta sobre WODBUD, un centro interesado, un problema: escribe al equipo de WODBUD y te respondemos por correo.",
+    "tag": "Contacto",
+    "title": "Hablemos de tu box.",
+    "lead": "Un centro interesado, una pregunta, un error: escríbenos. Una persona del equipo te responde por correo.",
+    "point_center": "Centros: cuéntanos de tu box, tus clases y tu forma de programar.",
+    "point_member": "Miembros: para unirte a tu centro, pídele su enlace de invitación.",
+    "point_reply": "¿Tienes cuenta? El formulario de soporte de los ajustes también funciona.",
+    "form_title": "Escríbenos",
+    "name": "Tu nombre",
+    "email": "Tu correo",
+    "topic": "Se trata de…",
+    "topics": {
+      "center": "Mi centro está interesado",
+      "member": "Soy miembro de un centro",
+      "question": "Una pregunta",
+      "press": "Prensa o colaboración",
+      "other": "Otra cosa"
+    },
+    "organization": "Nombre del centro (opcional)",
+    "organization_placeholder": "CrossFit Madrid",
+    "message": "Tu mensaje",
+    "message_hint": "Al menos unas palabras. Para un error: la página y lo que estabas haciendo.",
+    "send": "Enviar",
+    "sending": "Enviando…",
+    "privacy_note": "Tu nombre y tu correo solo sirven para responderte y se borran a los 12 meses.",
+    "privacy_link": "Privacidad",
+    "success_title": "Mensaje enviado",
+    "success_body": "Gracias. Te respondemos a {{email}}.",
+    "back_home": "Volver al inicio",
+    "err_invalid": "Revisa tu correo y escribe al menos unas palabras, luego vuelve a enviar.",
+    "err_rate": "Enviaste varios mensajes en poco tiempo. Vuelve a intentarlo en una hora.",
+    "err_network": "El mensaje no se envió: revisa tu conexión y vuelve a intentarlo.",
+    "inbox_title": "Mensajes del sitio",
+    "inbox_empty": "Ningún mensaje."
   }
 }

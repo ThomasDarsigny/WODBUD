@@ -784,6 +784,51 @@ export type Database = {
           },
         ]
       }
+      contact_messages: {
+        Row: {
+          created_at: string
+          email: string
+          handled_at: string | null
+          handled_by: string | null
+          id: number
+          locale: string | null
+          message: string
+          name: string
+          organization: string | null
+          status: string
+          topic: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          handled_at?: string | null
+          handled_by?: string | null
+          id?: never
+          locale?: string | null
+          message: string
+          name: string
+          organization?: string | null
+          status?: string
+          topic: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          handled_at?: string | null
+          handled_by?: string | null
+          id?: never
+          locale?: string | null
+          message?: string
+          name?: string
+          organization?: string | null
+          status?: string
+          topic?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       exercise_links: {
         Row: {
           center_id: string | null
@@ -2572,6 +2617,17 @@ export type Database = {
       review_center_exercise: {
         Args: { p_decision: string; p_exercise: string }
         Returns: undefined
+      }
+      send_contact_message: {
+        Args: {
+          p_email: string
+          p_locale?: string
+          p_message: string
+          p_name: string
+          p_organization?: string
+          p_topic: string
+        }
+        Returns: string
       }
       set_center_suggestion_status: {
         Args: { p_id: string; p_status: string }

@@ -2372,6 +2372,46 @@
   .scScan, .scPlayPulse::after { display: none; animation: none; }
 }
 
+/* ─── Contact (/contact) ─────────────────────────────────────────── */
+.contactMain { flex: 1; width: 100%; max-width: 1120px; margin: 0 auto; padding: calc(var(--nav-h, 72px) + 2.5rem) var(--gutter) 4rem; display: grid; gap: 2rem; align-items: start; }
+.contactIntro { display: grid; gap: 0.25rem; }
+.contactIntro .chooserSub { margin: 0; }
+.contactPoints { list-style: none; margin: 1.25rem 0 0; padding: 0; display: grid; gap: 0.75rem; }
+.contactPoints li { position: relative; padding-left: 1.4rem; color: var(--muted); line-height: 1.5; }
+.contactPoints li::before { content: ''; position: absolute; left: 0; top: 0.6em; width: 0.6rem; height: 2px; background: var(--orange); }
+.contactCard { border-radius: 20px; border: 1px solid var(--border); background: var(--dark); padding: 1.5rem; }
+.contactForm { display: grid; gap: 1.1rem; }
+.contactFormTitle { margin: 0; font-family: var(--font-d); font-size: 1.6rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.02em; }
+.contactRow { display: grid; gap: 1.1rem; }
+.contactField { display: grid; gap: 0.4rem; min-width: 0; }
+.contactField label, .contactTopics legend { font-size: 0.9rem; font-weight: 600; color: var(--white); }
+.contactField input, .contactField textarea { width: 100%; min-height: 48px; padding: 0.7rem 0.9rem; border-radius: 12px; border: 1px solid var(--line-fn); background: var(--black); color: var(--white); font: inherit; font-size: 1rem; transition: border-color 0.15s; }
+.contactField textarea { resize: vertical; min-height: 140px; line-height: 1.5; }
+.contactField input::placeholder { color: var(--muted); opacity: 0.8; }
+.contactField input:focus-visible, .contactField textarea:focus-visible { outline: 2px solid var(--orange); outline-offset: 1px; border-color: var(--orange); }
+.contactField small { color: var(--muted); font-size: 0.85rem; line-height: 1.4; }
+.contactTopics { margin: 0; padding: 0; border: 0; display: grid; gap: 0.5rem; min-width: 0; }
+.contactTopics legend { padding: 0; margin-bottom: 0.5rem; }
+.contactTopics > div { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.contactTopics label { display: inline-flex; align-items: center; min-height: 44px; padding: 0 1rem; border-radius: 999px; border: 1px solid var(--line-fn); background: var(--black); color: var(--white); font-size: 0.92rem; font-weight: 600; cursor: pointer; transition: border-color 0.15s, background 0.15s; }
+.contactTopics label:hover { border-color: var(--white); }
+.contactTopics label.contactTopicOn { border-color: var(--orange); background: rgba(255, 90, 31, 0.14); }
+.contactTopics input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.contactTopics label:has(input:focus-visible) { outline: 2px solid var(--orange); outline-offset: 2px; }
+.contactTrap { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+.contactError { margin: 0; padding: 0.7rem 0.9rem; border-radius: 12px; border: 1px solid rgba(255, 138, 128, 0.45); background: rgba(239, 68, 68, 0.12); color: #ff9b8f; font-size: 0.92rem; }
+.contactForm .btnPrimary { justify-self: start; border: 0; cursor: pointer; }
+.contactForm .btnPrimary:disabled { opacity: 0.6; cursor: progress; }
+.contactNote { margin: 0; color: var(--muted); font-size: 0.85rem; line-height: 1.5; }
+.contactNote a { color: var(--white); }
+.contactDone { display: grid; justify-items: start; gap: 0.75rem; padding: 0.5rem 0; }
+.contactDone h2 { margin: 0; font-family: var(--font-d); font-size: 1.8rem; font-weight: 900; text-transform: uppercase; }
+.contactDone p { margin: 0; color: var(--muted); }
+.contactDoneMark { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 50%; background: var(--orange); color: var(--black); font-size: 1.4rem; font-weight: 900; }
+@media (min-width: 640px) { .contactRow { grid-template-columns: 1fr 1fr; } .contactCard { padding: 2rem; } }
+@media (min-width: 960px) { .contactMain { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 3.5rem; } .contactIntro { position: sticky; top: calc(var(--nav-h, 72px) + 2rem); } }
+@media (prefers-reduced-motion: reduce) { .contactField input, .contactField textarea, .contactTopics label { transition: none; } }
+
 /* Liens vers les autres profils, dans le menu. */
 .navProfile .navLink { color: var(--orange); }
 

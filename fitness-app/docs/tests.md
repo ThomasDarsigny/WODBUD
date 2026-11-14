@@ -14,7 +14,7 @@ Les calculs sans réseau : scores, semaines et cycles, horaire, présences, menu
 npm run test:e2e
 ```
 
-Vingt fichiers de parcours, chacun lancé sur ordinateur (1440 × 900) et sur téléphone (Pixel 7) :
+Vingt et un fichiers de parcours, chacun lancé sur ordinateur (1440 × 900) et sur téléphone (Pixel 7) :
 
 | Fichier | Parcours |
 |---|---|
@@ -36,6 +36,7 @@ Vingt fichiers de parcours, chacun lancé sur ordinateur (1440 × 900) et sur t�
 | `e2e/rank.e2e.ts` | Rang lisible en thème clair ; classement d'un cours (liste ordonnée, changer de période) |
 | `e2e/contrast.e2e.ts` | Garde-fou de contraste : chaque texte de 20 écrans, en thème clair et sombre, atteint 4,5:1 (3:1 en grand) ; aide `e2e/contrast.ts` |
 | `e2e/landing.e2e.ts` | Accueil : « C'est pour qui ? » (trois colonnes, leurs fonctionnalités, profil retenu ; immobile en animation réduite) ; chaque page de profil n'a que ses sections et son menu |
+| `e2e/contact.e2e.ts` | Page Contact : le lien du pied de page l'ouvre, envoi, refus trop fréquent annoncé (formulaire gardé), champ piège sans envoi ; l'administration lit et traite les messages |
 | `e2e/admin.e2e.ts` | L'administration se déconnecte depuis son en-tête |
 | `e2e/errors.e2e.ts` | Suivi des erreurs : signalement unique et page masquée, écran qui plante (menu toujours utilisable), section d'administration |
 

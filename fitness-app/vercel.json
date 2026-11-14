@@ -16,11 +16,11 @@
       "destination": "/perso/index.html"
     },
     {
-      "source": "/(login|signup|entraineur_dashboard|confidentialite|bienvenue)",
+      "source": "/(login|signup|entraineur_dashboard|confidentialite|bienvenue|contact)",
       "destination": "/index.html"
     },
     {
-      "source": "/(dashboard|athlete|join|rang|rank|rejoindre|presence|tv)(/.*)?",
+      "source": "/(dashboard|athlete|join|rang|rank|rejoindre|presence|tv|communities)(/.*)?",
       "destination": "/index.html"
     }
   ],
@@ -80,7 +80,7 @@
       ]
     },
     {
-      "source": "/(dashboard|athlete|join|rang|rank|rejoindre|presence|tv)(/.*)?",
+      "source": "/(dashboard|athlete|join|rang|rank|rejoindre|presence|tv|communities)(/.*)?",
       "headers": [
         {
           "key": "X-Robots-Tag",

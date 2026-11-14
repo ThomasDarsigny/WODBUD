@@ -36,6 +36,7 @@ const RecordsView = lazy(() => import('./components/records/RecordsView'))
 const CoachTodayView = lazy(() => import('./components/home/CoachTodayView'))
 const WelcomePage = lazy(() => import('./pages/WelcomePage'))
 const PrivacyPolicyPage = lazy(() => import('./pages/PrivacyPolicyPage'))
+const ContactPage = lazy(() => import('./pages/ContactPage'))
 const SharedRankPage = lazy(() => import('./pages/SharedRankPage'))
 const AthleteHomeView = lazy(() => import('./components/athlete/AthleteHomeView'))
 const AthleteVoteView = lazy(() => import('./components/athlete/AthleteVoteView'))
@@ -444,6 +445,7 @@ function App() {
 
         <Route path="/confidentialite" element={<PrivacyPolicyPage />} />
         <Route path="/privacy" element={<PrivacyPolicyPage />} />
+        <Route path="/contact" element={<ContactPage />} />
 
         <Route path="/join/:token" element={<JoinClassPage />} />
         <Route path="/presence/:classId" element={<CheckInPage />} />

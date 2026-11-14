@@ -260,12 +260,7 @@
       "menu_close": "Fermer le menu"
     },
     "hero": {
-      "tag": "Pour entraîneurs fitness",
-      "title_line1": "Lance ta programmation",
-      "title_em": "gratuitement pendant 30 jours.",
-      "subtitle": "Construis tes entraînements de groupe en quelques minutes. Base d'exercices complète, méthodes de programmation, vidéos et suggestions IA - tout au même endroit.",
       "open_dashboard": "Ouvrir le dashboard coach",
-      "watch_demo": "Voir une démo",
       "see_app": "Voir l'app"
     },
     "ticker": [
@@ -356,22 +351,6 @@
       "soon": "Bientôt",
       "meanwhile": "En attendant, WODBUD s'installe déjà depuis ton navigateur, sur téléphone comme sur ordi.",
       "meanwhile_link": "Créer un compte"
-    },
-    "demo": {
-      "tag": "Démo WODBUD",
-      "title_line1": "Réserve une démo",
-      "title_line2": "de la plateforme",
-      "subtitle": "Découvre comment WODBUD accélère la création de WODs, structure tes cycles et facilite le partage avec tes athlètes. On te montre des cas concrets adaptés à ton contexte.",
-      "book": "Réserver une démo",
-      "view_features": "Voir les fonctionnalités",
-      "perks_label": "Avantages démo",
-      "perks": [
-        "Session personnalisée pour ta box",
-        "Questions répondues en direct",
-        "Cas concrets de programmation",
-        "Plan de démarrage rapide",
-        "Aperçu de la roadmap produit"
-      ]
     },
     "footer": {
       "copy": "© 2026 WODBUD - Plateforme en développement actif",
@@ -1753,5 +1732,42 @@
     "kind_error": "Erreur",
     "kind_unhandledrejection": "Promesse rejetée",
     "kind_render": "Écran planté"
+  },
+  "contact": {
+    "meta_title": "Contact | WODBUD",
+    "meta_description": "Une question sur WODBUD, un centre intéressé, un problème : écris à l’équipe WODBUD, on te répond par courriel.",
+    "tag": "Nous joindre",
+    "title": "Parlons de ta box.",
+    "lead": "Un centre intéressé, une question, un bogue : écris-nous. Une personne de l’équipe te répond par courriel.",
+    "point_center": "Centres : présente ta box, tes cours et ta façon de programmer.",
+    "point_member": "Membres : pour rejoindre ton centre, demande-lui son lien d’invitation.",
+    "point_reply": "Tu as un compte ? Le formulaire de support des réglages fonctionne aussi.",
+    "form_title": "Écris-nous",
+    "name": "Ton nom",
+    "email": "Ton courriel",
+    "topic": "C’est à propos de…",
+    "topics": {
+      "center": "Mon centre est intéressé",
+      "member": "Je suis membre d’un centre",
+      "question": "Une question",
+      "press": "Presse ou partenariat",
+      "other": "Autre chose"
+    },
+    "organization": "Nom du centre (facultatif)",
+    "organization_placeholder": "CrossFit Québec",
+    "message": "Ton message",
+    "message_hint": "Au moins quelques mots. Pour un bogue : la page et ce que tu faisais.",
+    "send": "Envoyer",
+    "sending": "Envoi…",
+    "privacy_note": "Ton nom et ton courriel servent seulement à te répondre, puis sont effacés après 12 mois.",
+    "privacy_link": "Confidentialité",
+    "success_title": "Message envoyé",
+    "success_body": "Merci. On te répond à {{email}}.",
+    "back_home": "Retour à l’accueil",
+    "err_invalid": "Vérifie ton courriel et écris au moins quelques mots, puis renvoie.",
+    "err_rate": "Tu as envoyé plusieurs messages en peu de temps. Réessaie dans une heure.",
+    "err_network": "Le message n’est pas parti : vérifie ta connexion, puis réessaie.",
+    "inbox_title": "Messages du site",
+    "inbox_empty": "Aucun message."
   }
 }

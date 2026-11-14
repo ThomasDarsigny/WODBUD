@@ -60,8 +60,8 @@ export default function ProfileChooser() {
       <footer className={s.footer}>
         <p className={s.footerCopy}>{t('landing.footer.copy')}</p>
         <nav className={s.footerLinks} aria-label={t('landing.footer.links_label')}>
-          <a href="/confidentialite">{t('landing.footer.privacy')}</a>
-          <a href="/contact">{t('landing.footer.contact')}</a>
+          <Link to="/confidentialite">{t('landing.footer.privacy')}</Link>
+          <Link to="/contact">{t('landing.footer.contact')}</Link>
         </nav>
       </footer>
     </div>

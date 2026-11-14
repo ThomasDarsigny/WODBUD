@@ -12,6 +12,7 @@ import ExerciseReviewQueue from './ExerciseReviewQueue'
 import VideoPriorities from './VideoPriorities'
 import SupportInbox from '../support/SupportInbox'
 import ClientErrors from './ClientErrors'
+import ContactInbox from './ContactInbox'
 import FeatureTopicsCard from '../vote/FeatureTopicsCard'
 import Skeleton from '../ui/Skeleton'
 
@@ -107,6 +108,8 @@ export default function AdminDashboardView() {
       </div>
 
       <SupportInbox />
+
+      <ContactInbox />
 
       <ClientErrors />
 

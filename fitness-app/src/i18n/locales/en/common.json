@@ -260,12 +260,7 @@
       "menu_close": "Close menu"
     },
     "hero": {
-      "tag": "For fitness coaches",
-      "title_line1": "Launch your programming",
-      "title_em": "free for 30 days.",
-      "subtitle": "Build your group workouts in minutes. Exercise library, programming methods, videos, and AI suggestions - all in one place, no credit card required.",
       "open_dashboard": "Open coach dashboard",
-      "watch_demo": "Watch a demo",
       "see_app": "See the app"
     },
     "ticker": [
@@ -356,22 +351,6 @@
       "soon": "Soon",
       "meanwhile": "In the meantime, WODBUD already installs from your browser, on phone or computer.",
       "meanwhile_link": "Create an account"
-    },
-    "demo": {
-      "tag": "WODBUD demo",
-      "title_line1": "Book a demo",
-      "title_line2": "of the platform",
-      "subtitle": "Discover how WODBUD speeds up WOD creation, structures your cycles, and simplifies sharing with your athletes. We show practical use cases adapted to your context.",
-      "book": "Book a demo",
-      "view_features": "See features",
-      "perks_label": "Demo perks",
-      "perks": [
-        "Personalized session for your box",
-        "Live Q&A",
-        "Real programming use cases",
-        "Quick-start plan",
-        "Product roadmap preview"
-      ]
     },
     "footer": {
       "copy": "© 2026 WODBUD - Platform in active development",
@@ -1753,5 +1732,42 @@
     "kind_error": "Error",
     "kind_unhandledrejection": "Rejected promise",
     "kind_render": "Screen crashed"
+  },
+  "contact": {
+    "meta_title": "Contact | WODBUD",
+    "meta_description": "A question about WODBUD, a gym that’s interested, a problem: write to the WODBUD team and we’ll reply by email.",
+    "tag": "Get in touch",
+    "title": "Let’s talk about your gym.",
+    "lead": "An interested gym, a question, a bug: write to us. Someone from the team will reply by email.",
+    "point_center": "Gyms: tell us about your box, your classes and how you program.",
+    "point_member": "Members: to join your gym, ask it for its invite link.",
+    "point_reply": "Have an account? The support form in settings works too.",
+    "form_title": "Write to us",
+    "name": "Your name",
+    "email": "Your email",
+    "topic": "This is about…",
+    "topics": {
+      "center": "My gym is interested",
+      "member": "I’m a gym member",
+      "question": "A question",
+      "press": "Press or partnership",
+      "other": "Something else"
+    },
+    "organization": "Gym name (optional)",
+    "organization_placeholder": "CrossFit Montréal",
+    "message": "Your message",
+    "message_hint": "At least a few words. For a bug: the page and what you were doing.",
+    "send": "Send",
+    "sending": "Sending…",
+    "privacy_note": "Your name and email are used only to reply to you, then deleted after 12 months.",
+    "privacy_link": "Privacy",
+    "success_title": "Message sent",
+    "success_body": "Thanks. We’ll reply to {{email}}.",
+    "back_home": "Back to home",
+    "err_invalid": "Check your email and write at least a few words, then send again.",
+    "err_rate": "You sent several messages in a short time. Try again in an hour.",
+    "err_network": "The message didn’t go through: check your connection, then try again.",
+    "inbox_title": "Website messages",
+    "inbox_empty": "No messages."
   }
 }
