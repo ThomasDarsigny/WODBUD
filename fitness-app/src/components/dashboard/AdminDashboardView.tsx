@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { signOut } from '../../lib/signOut'
 import { useExerciseStore } from '../../stores/exerciseStore'
 import type { Exercise } from '../../types'
 import { CATEGORY_I18N_KEYS, MUSCLE_GROUP_I18N_KEYS } from '../../types'
@@ -16,6 +18,15 @@ import Skeleton from '../ui/Skeleton'
 export default function AdminDashboardView() {
   const { t } = useTranslation(['exercises', 'common'])
   const { exercises, loading, error, fetchExercises, deleteExercise } = useExerciseStore()
+  const navigate = useNavigate()
+  const [leaving, setLeaving] = useState(false)
+
+  // L'admin arrive ici, pas dans les réglages : la déconnexion doit être à portée de main.
+  async function logout() {
+    setLeaving(true)
+    await signOut()
+    navigate('/login')
+  }
 
   const [search, setSearch] = useState('')
   const [completion, setCompletion] = useState<'all' | 'todo' | 'done'>('all')
@@ -74,9 +85,14 @@ export default function AdminDashboardView() {
           <h1>{t('admin.title', { ns: 'exercises' })}</h1>
           <p className="wb-ph-sub">{t('admin.subtitle', { ns: 'exercises' })}</p>
         </div>
-        <button type="button" className="wb-btn wb-btn--primary" onClick={() => { setEditingExercise(undefined); setShowForm(true) }}>
-          + {t('add', { ns: 'exercises' })}
-        </button>
+        <div className="wb-admin-head-actions">
+          <button type="button" className="wb-btn wb-btn--primary" onClick={() => { setEditingExercise(undefined); setShowForm(true) }}>
+            + {t('add', { ns: 'exercises' })}
+          </button>
+          <button type="button" className="wb-btn wb-btn--ghost" onClick={() => { void logout() }} disabled={leaving}>
+            {t('actions.logout', { ns: 'common' })}
+          </button>
+        </div>
       </header>
 
       <div className="wb-admin-stats">

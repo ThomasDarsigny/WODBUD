@@ -1,22 +1,20 @@
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { motion, useReducedMotion } from 'motion/react'
 import { useAppEntry } from '../../lib/useAppEntry'
 import { usePageMeta } from '../../hooks/usePageMeta'
-import { LANDING_PROFILES, PROFILE_PATHS, rememberProfileHint } from '../../lib/landingProfile'
+import { LANDING_PROFILES } from '../../lib/landingProfile'
+import ChooserPanel from './ChooserPanel'
 import s from './landing.module.css'
 
 const LANGS = ['fr', 'en', 'es'] as const
-// Mêmes illustrations que l'écran Bienvenue, pour qu'on s'y retrouve après l'inscription.
-const ART = { center: 'sifflet', member: 'membre', perso: 'premiere-serie' } as const
 
 /**
- * Première page (7.2) : « WODBUD, c'est pour qui ? ». Trois portes vers
- * /centres, /membres et /perso, chacune avec son message.
+ * Première page (7.2) : « WODBUD, c'est pour qui ? ». Trois colonnes, une par
+ * profil, chacune avec une animation de ses fonctionnalités clés et la porte
+ * vers sa page (/centres, /membres, /perso).
  */
 export default function ProfileChooser() {
   const { t, i18n } = useTranslation('common')
-  const reduce = useReducedMotion()
   const appEntry = useAppEntry()
   const currentLang = (i18n.resolvedLanguage ?? i18n.language ?? 'fr').slice(0, 2)
   usePageMeta(t('landing.chooser.meta_title'), t('landing.chooser.meta_description'))
@@ -48,34 +46,15 @@ export default function ProfileChooser() {
       </nav>
 
       <main className={s.chooserMain}>
-        <p className={s.sectionTag}>{t('landing.chooser.tag')}</p>
-        <h1 className={s.chooserTitle}>{t('landing.chooser.title')}</h1>
-        <p className={s.chooserSub}>{t('landing.chooser.subtitle')}</p>
+        <header className={s.chooserHead}>
+          <p className={s.sectionTag}>{t('landing.chooser.tag')}</p>
+          <h1 className={s.chooserTitle}>{t('landing.chooser.title')}</h1>
+          <p className={s.chooserSub}>{t('landing.chooser.subtitle')}</p>
+        </header>
 
-        <ul className={s.chooserCards}>
-          {LANDING_PROFILES.map((p, i) => (
-            <motion.li
-              key={p}
-              initial={reduce ? false : { opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 + i * 0.1, ease: [0.16, 1, 0.3, 1] }}
-            >
-              <Link
-                to={PROFILE_PATHS[p]}
-                viewTransition
-                className={`${s.chooserCard} ${p === 'center' ? s.chooserCardMain : ''}`}
-                onClick={() => rememberProfileHint(p)}
-              >
-                <img src={`/badges/${ART[p]}.svg`} alt="" width={64} height={64} />
-                <span className={s.chooserCardText}>
-                  <strong>{t(`landing.chooser.${p}_title`)}</strong>
-                  <small>{t(`landing.chooser.${p}_desc`)}</small>
-                </span>
-                <span className={s.btnArrow} aria-hidden="true">→</span>
-              </Link>
-            </motion.li>
-          ))}
-        </ul>
+        <div className={s.chooserPanels}>
+          {LANDING_PROFILES.map((p, i) => <ChooserPanel key={p} profile={p} index={i} />)}
+        </div>
       </main>
 
       <footer className={s.footer}>

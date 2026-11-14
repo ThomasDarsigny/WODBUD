@@ -392,7 +392,7 @@
         "label": "Groupes musculaires"
       },
       {
-        "value": 32,
+        "value": 41,
         "suffix": "",
         "label": "Badges à débloquer"
       },
@@ -477,14 +477,28 @@
       "meta_title": "WODBUD — Programmation fitness pour centres, membres et entraînement perso",
       "meta_description": "WODBUD aide les centres de fitness à programmer en équipe, les membres à suivre leur centre et chacun à s’entraîner avec l’équipement qu’il a.",
       "tag": "Bienvenue sur WODBUD",
-      "title": "WODBUD, c’est pour qui ?",
+      "title": "WODBUD, c’est pour qui ?",
       "subtitle": "Choisis ce qui te ressemble : on te montre ce que WODBUD fait pour toi.",
       "center_title": "Mon centre",
       "center_desc": "Une box, un gym, un studio : programmez en équipe, gérez cours et exercices.",
       "member_title": "Je suis membre",
       "member_desc": "Je m’entraîne dans un centre et je veux suivre ses WODs.",
       "perso_title": "Pour moi",
-      "perso_desc": "Je m’entraîne seul, à la maison ou au gym."
+      "perso_desc": "Je m’entraîne seul, à la maison ou au gym.",
+      "center_cta": "Découvrir pour les centres",
+      "member_cta": "Découvrir pour les membres",
+      "perso_cta": "Découvrir pour moi",
+      "scene": {
+        "invited": "Invités par lien, chacun avec ses droits",
+        "shared": "Partagé avec l’équipe",
+        "joined": "Tu es dans ton cours",
+        "wod_today": "WOD du jour",
+        "round": "Tour {{n}} sur {{total}}",
+        "free": "Séance libre",
+        "record": "Record",
+        "rank_up": "Nouveau rang !",
+        "minutes": "+{{n}} min d’entraînement"
+      }
     },
     "profiles": {
       "center": {
@@ -496,7 +510,29 @@
           "title_em": "dans une seule app.",
           "subtitle": "Ton équipe d’entraîneurs, ta base d’exercices, tes cours et tes membres : programmez ensemble, partagez vos WODs et suivez chaque cours sans fichiers éparpillés.",
           "cta": "Créer mon centre"
-        }
+        },
+        "stats": [
+          {
+            "value": 60,
+            "suffix": "+",
+            "label": "Exercices"
+          },
+          {
+            "value": 18,
+            "suffix": "",
+            "label": "Groupes musculaires"
+          },
+          {
+            "value": 6,
+            "suffix": "",
+            "label": "Méthodes de programmation"
+          },
+          {
+            "value": 4,
+            "suffix": "",
+            "label": "Rôles d’équipe"
+          }
+        ]
       },
       "member": {
         "meta_title": "WODBUD pour les membres — le WOD de ton centre dans ta poche",
@@ -507,7 +543,17 @@
           "title_em": "dans ta poche.",
           "subtitle": "Rejoins ton centre avec son lien, retrouve le WOD du jour, lance ta séance avec le minuteur et suis tes records.",
           "cta": "Rejoindre mon centre"
-        }
+        },
+        "ticker": [
+          "WOD du jour",
+          "Séance guidée",
+          "Minuteur et repos",
+          "Records",
+          "Rangs et badges",
+          "Classement du cours",
+          "Votes du cours",
+          "Présence par code QR"
+        ]
       },
       "perso": {
         "meta_title": "WODBUD perso — tes séances, tes records, ta progression",
@@ -518,7 +564,38 @@
           "title_em": "à la maison comme au gym.",
           "subtitle": "Lance une séance libre ou un WOD prêt, laisse le minuteur te guider, et regarde tes records et ton rang grimper, seul ou avec une communauté.",
           "cta": "Commencer"
-        }
+        },
+        "ticker": [
+          "Séance libre",
+          "WODs prêts",
+          "Minuteur et repos",
+          "Créateur de WOD",
+          "Records",
+          "Rangs et badges",
+          "Communautés",
+          "Selon ton équipement"
+        ],
+        "showcase_title": "Pensée pour tes séances, où que tu sois",
+        "features_title_line1": "Tout ton entraînement.",
+        "features_title_line2": "Une seule app.",
+        "ai_chat": [
+          {
+            "from": "me",
+            "text": "Une variante plus légère pour les épaules ?"
+          },
+          {
+            "from": "ai",
+            "text": "Remplace le développé militaire par des pompes inclinées, 3 × 12."
+          },
+          {
+            "from": "me",
+            "text": "Et si je n’ai qu’une paire d’haltères ?"
+          },
+          {
+            "from": "ai",
+            "text": "Passe en EMOM 12 min : 10 thrusters aux haltères, 8 rowings, 30 s de corde."
+          }
+        ]
       }
     },
     "highlights": {

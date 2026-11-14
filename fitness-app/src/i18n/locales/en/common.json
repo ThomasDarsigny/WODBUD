@@ -392,7 +392,7 @@
         "label": "Muscle groups"
       },
       {
-        "value": 32,
+        "value": 41,
         "suffix": "",
         "label": "Badges to unlock"
       },
@@ -484,7 +484,21 @@
       "member_title": "I’m a member",
       "member_desc": "I train at a gym and want to follow its WODs.",
       "perso_title": "Just me",
-      "perso_desc": "I train on my own, at home or at the gym."
+      "perso_desc": "I train on my own, at home or at the gym.",
+      "center_cta": "See it for gyms",
+      "member_cta": "See it for members",
+      "perso_cta": "See it for me",
+      "scene": {
+        "invited": "Invited by link, each with their own rights",
+        "shared": "Shared with the team",
+        "joined": "You’re in your class",
+        "wod_today": "Today’s WOD",
+        "round": "Round {{n}} of {{total}}",
+        "free": "Free session",
+        "record": "PR",
+        "rank_up": "New rank!",
+        "minutes": "+{{n}} training minutes"
+      }
     },
     "profiles": {
       "center": {
@@ -496,7 +510,29 @@
           "title_em": "in one app.",
           "subtitle": "Your coaching team, your exercise library, your classes and your members: program together, share your WODs and follow every class without scattered files.",
           "cta": "Create my gym"
-        }
+        },
+        "stats": [
+          {
+            "value": 60,
+            "suffix": "+",
+            "label": "Exercises"
+          },
+          {
+            "value": 18,
+            "suffix": "",
+            "label": "Muscle groups"
+          },
+          {
+            "value": 6,
+            "suffix": "",
+            "label": "Programming methods"
+          },
+          {
+            "value": 4,
+            "suffix": "",
+            "label": "Team roles"
+          }
+        ]
       },
       "member": {
         "meta_title": "WODBUD for members — your gym’s WOD in your pocket",
@@ -507,7 +543,17 @@
           "title_em": "in your pocket.",
           "subtitle": "Join your gym with its link, find the WOD of the day, run your session with the timer and track your records.",
           "cta": "Join my gym"
-        }
+        },
+        "ticker": [
+          "Today’s WOD",
+          "Guided session",
+          "Timer and rest",
+          "PRs",
+          "Ranks and badges",
+          "Class leaderboard",
+          "Class votes",
+          "QR check-in"
+        ]
       },
       "perso": {
         "meta_title": "WODBUD solo — your sessions, your records, your progress",
@@ -518,7 +564,38 @@
           "title_em": "at home or at the gym.",
           "subtitle": "Start a free session or a ready-made WOD, let the timer guide you, and watch your records and rank climb, on your own or with a community.",
           "cta": "Get started"
-        }
+        },
+        "ticker": [
+          "Free session",
+          "Ready-made WODs",
+          "Timer and rest",
+          "WOD builder",
+          "PRs",
+          "Ranks and badges",
+          "Communities",
+          "Fits your equipment"
+        ],
+        "showcase_title": "Built for your sessions, wherever you train",
+        "features_title_line1": "All your training.",
+        "features_title_line2": "One app.",
+        "ai_chat": [
+          {
+            "from": "me",
+            "text": "A lighter variation for the shoulders?"
+          },
+          {
+            "from": "ai",
+            "text": "Swap the strict press for incline push-ups, 3 × 12."
+          },
+          {
+            "from": "me",
+            "text": "What if I only have a pair of dumbbells?"
+          },
+          {
+            "from": "ai",
+            "text": "Go EMOM 12 min: 10 dumbbell thrusters, 8 rows, 30 s of rope."
+          }
+        ]
       }
     },
     "highlights": {

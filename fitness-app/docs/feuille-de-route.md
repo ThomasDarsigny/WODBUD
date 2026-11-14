@@ -99,6 +99,8 @@ Fil conducteur : *WODBUD, c'est comme avoir un entraîneur chef* — pour le cen
 - [x] 7.5 Page `/perso` : section « Pour toi » limitée à ce qu'un compte perso a vraiment (séance libre ou WOD prêt, minuteur, journal, records, rangs, communautés).
 - [x] 7.6 Prérendu et référencement des trois pages (une page HTML par adresse avec titre, description, Open Graph et canonique ; sitemap).
 - [x] 7.7 Section des avantages avec animations premium (entrée en cascade avec flou, icône à ressort et onde, halo et liseré qui suivent la souris, inclinaison ; sobre au toucher et si l'appareil demande moins d'animations).
+- [x] 7.8 « C'est pour qui ? » en trois colonnes (empilées sur téléphone) : chacune montre en petite animation trois fonctionnalités clés de son profil (centre : équipe et rôles, cours de la semaine, WODs partagés ; membre : lien ou QR, WOD du jour, séance guidée ; perso : séance libre ou WOD prêt, records, rangs), qui défilent tant que la colonne est à l'écran ; toute la colonne mène à la page du profil ; immobile si l'appareil demande moins d'animations.
+- [x] 7.9 Chaque page de profil ne montre que ses fonctionnalités : `/centres` sans le chrono ni les rangs des membres ; `/membres` sans les outils du coach (créateur, assistant IA, votes à lancer, « Fini le bricolage », les 4 étapes) ; `/perso` sans ce qui suppose une équipe. Bandeau, chiffres et menu suivent la page ; nombre de badges corrigé (41, et non 32).
 
 ### 8. Travail d'équipe dans un centre
 - [x] 8.1 Le proprio et les chefs voient tous les cours du centre (entraîneur, membres, prochaine séance ; lecture seulement — migration 053).

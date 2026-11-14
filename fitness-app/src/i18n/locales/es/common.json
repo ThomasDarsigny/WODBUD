@@ -395,7 +395,7 @@
         "label": "Grupos musculares"
       },
       {
-        "value": 32,
+        "value": 41,
         "suffix": "",
         "label": "Insignias por desbloquear"
       },
@@ -487,7 +487,21 @@
       "member_title": "Soy miembro",
       "member_desc": "Entreno en un centro y quiero seguir sus WODs.",
       "perso_title": "Para mí",
-      "perso_desc": "Entreno solo, en casa o en el gimnasio."
+      "perso_desc": "Entreno solo, en casa o en el gimnasio.",
+      "center_cta": "Ver para centros",
+      "member_cta": "Ver para miembros",
+      "perso_cta": "Ver para mí",
+      "scene": {
+        "invited": "Invitados por enlace, cada uno con sus permisos",
+        "shared": "Compartido con el equipo",
+        "joined": "Ya estás en tu clase",
+        "wod_today": "WOD del día",
+        "round": "Ronda {{n}} de {{total}}",
+        "free": "Sesión libre",
+        "record": "Récord",
+        "rank_up": "¡Nuevo rango!",
+        "minutes": "+{{n}} min de entrenamiento"
+      }
     },
     "profiles": {
       "center": {
@@ -499,7 +513,29 @@
           "title_em": "en una sola app.",
           "subtitle": "Tu equipo de entrenadores, tu base de ejercicios, tus clases y tus miembros: programad juntos, compartid vuestros WODs y seguid cada clase sin archivos dispersos.",
           "cta": "Crear mi centro"
-        }
+        },
+        "stats": [
+          {
+            "value": 60,
+            "suffix": "+",
+            "label": "Ejercicios"
+          },
+          {
+            "value": 18,
+            "suffix": "",
+            "label": "Grupos musculares"
+          },
+          {
+            "value": 6,
+            "suffix": "",
+            "label": "Métodos de programación"
+          },
+          {
+            "value": 4,
+            "suffix": "",
+            "label": "Roles de equipo"
+          }
+        ]
       },
       "member": {
         "meta_title": "WODBUD para miembros — el WOD de tu centro en tu bolsillo",
@@ -510,7 +546,17 @@
           "title_em": "en tu bolsillo.",
           "subtitle": "Únete a tu centro con su enlace, encuentra el WOD del día, lanza tu sesión con el cronómetro y sigue tus récords.",
           "cta": "Unirme a mi centro"
-        }
+        },
+        "ticker": [
+          "WOD del día",
+          "Sesión guiada",
+          "Temporizador y descanso",
+          "Récords",
+          "Rangos e insignias",
+          "Clasificación de la clase",
+          "Votos de la clase",
+          "Asistencia con código QR"
+        ]
       },
       "perso": {
         "meta_title": "WODBUD personal — tus sesiones, tus récords, tu progreso",
@@ -521,7 +567,38 @@
           "title_em": "en casa o en el gimnasio.",
           "subtitle": "Lanza una sesión libre o un WOD listo, deja que el cronómetro te guíe y mira cómo suben tus récords y tu rango, solo o con una comunidad.",
           "cta": "Empezar"
-        }
+        },
+        "ticker": [
+          "Sesión libre",
+          "WODs listos",
+          "Temporizador y descanso",
+          "Creador de WOD",
+          "Récords",
+          "Rangos e insignias",
+          "Comunidades",
+          "Según tu equipamiento"
+        ],
+        "showcase_title": "Pensada para tus sesiones, estés donde estés",
+        "features_title_line1": "Todo tu entrenamiento.",
+        "features_title_line2": "Una sola app.",
+        "ai_chat": [
+          {
+            "from": "me",
+            "text": "¿Una variante más ligera para los hombros?"
+          },
+          {
+            "from": "ai",
+            "text": "Cambia el press militar por flexiones inclinadas, 3 × 12."
+          },
+          {
+            "from": "me",
+            "text": "¿Y si solo tengo un par de mancuernas?"
+          },
+          {
+            "from": "ai",
+            "text": "Pasa a EMOM 12 min: 10 thrusters con mancuernas, 8 remos, 30 s de comba."
+          }
+        ]
       }
     },
     "highlights": {

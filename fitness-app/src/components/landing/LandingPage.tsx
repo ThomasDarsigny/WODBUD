@@ -5,7 +5,7 @@ import HeroWow from './HeroWow'
 import ScrollStory from './ScrollStory'
 import { CountUp } from './fx'
 import ProblemPairs from './ProblemPairs'
-import FeatureBento from './FeatureBento'
+import FeatureBento, { type BentoTile } from './FeatureBento'
 import FlowSteps from './FlowSteps'
 import ProfileHighlights from './ProfileHighlights'
 import { usePageMeta } from '../../hooks/usePageMeta'
@@ -20,6 +20,31 @@ const MannequinDemo = lazy(() => import('./MannequinDemo'))
 
 const LANGS = ['fr', 'en', 'es'] as const
 
+type Section = 'story' | 'problems' | 'features' | 'try' | 'flow'
+
+/**
+ * Ce que montre chaque page : seulement les fonctionnalités de son profil.
+ * Un centre ne voit ni le chrono ni les rangs des membres ; un membre ne voit
+ * pas les outils du coach (créateur, assistant IA, votes à lancer) ; un perso
+ * voit ses outils à lui, sans ceux d'une équipe. Le mannequin (« Essaie-le »)
+ * est partout : coach et perso bâtissent leurs WODs, le membre le voit pendant
+ * sa séance.
+ */
+const PAGE: Record<LandingProfile, { sections: Section[]; story: number[]; tiles: BentoTile[] }> = {
+  center: { sections: ['problems', 'features', 'try', 'flow'], story: [], tiles: ['mann', 'lib', 'meth', 'vote', 'ai'] },
+  member: { sections: ['story', 'try'], story: [1, 2], tiles: [] },
+  perso: { sections: ['story', 'features', 'try'], story: [0, 1, 2], tiles: ['mann', 'lib', 'meth', 'ai'] }
+}
+
+/** Entrées du menu, dans l'ordre de la page ; seules celles des sections présentes s'affichent. */
+const NAV: Array<{ href: string; label: string; section?: Section }> = [
+  { href: '#app', label: 'landing.nav.demo', section: 'story' },
+  { href: '#features', label: 'landing.nav.features', section: 'features' },
+  { href: '#how', label: 'landing.nav.how', section: 'flow' },
+  { href: '#try', label: 'landing.nav.try', section: 'try' },
+  { href: '#download', label: 'landing.nav.download' }
+]
+
 /** Une page par profil (7.3–7.5) : /centres, /membres, /perso. */
 export default function LandingPage({ profile }: { profile: LandingProfile }) {
   const { t, i18n } = useTranslation('common')
@@ -30,8 +55,13 @@ export default function LandingPage({ profile }: { profile: LandingProfile }) {
   const [menuOpen, setMenuOpen] = useState(false)
   const closeMenu = () => setMenuOpen(false)
 
-  const tickerBase = t('landing.ticker', { returnObjects: true }) as string[]
-  const stats = t('landing.stats', { returnObjects: true }) as Array<{ value: number; suffix: string; label: string }>
+  const page = PAGE[profile]
+  const show = (section: Section) => page.sections.includes(section)
+  // Bandeau et chiffres propres au profil quand la page en a (sinon ceux de la landing).
+  const own = (key: string) => (i18n.exists(`landing.profiles.${profile}.${key}`) ? `landing.profiles.${profile}.${key}` : `landing.${key}`)
+  const tickerBase = t(own('ticker'), { returnObjects: true }) as string[]
+  const stats = t(own('stats'), { returnObjects: true }) as Array<{ value: number; suffix: string; label: string }>
+  const storyTitle = i18n.exists(`landing.profiles.${profile}.showcase_title`) ? t(`landing.profiles.${profile}.showcase_title`) : t('landing.showcase.title')
   const currentLang = (i18n.resolvedLanguage ?? i18n.language ?? 'fr').slice(0, 2)
   const tickerItems = [...tickerBase, ...tickerBase]
 
@@ -78,26 +108,13 @@ export default function LandingPage({ profile }: { profile: LandingProfile }) {
               </Link>
             </li>
           ))}
-          <li>
-            <a href="#features" className={s.navLink} onClick={closeMenu}>
-              {t('landing.nav.features')}
-            </a>
-          </li>
-          <li>
-            <a href="#how" className={s.navLink} onClick={closeMenu}>
-              {t('landing.nav.how')}
-            </a>
-          </li>
-          <li>
-            <a href="#try" className={s.navLink} onClick={closeMenu}>
-              {t('landing.nav.try')}
-            </a>
-          </li>
-          <li>
-            <a href="#download" className={s.navLink} onClick={closeMenu}>
-              {t('landing.nav.download')}
-            </a>
-          </li>
+          {NAV.filter((n) => !n.section || show(n.section)).map((n) => (
+            <li key={n.href}>
+              <a href={n.href} className={s.navLink} onClick={closeMenu}>
+                {t(n.label)}
+              </a>
+            </li>
+          ))}
           <li className={s.langItem}>
             <div className={s.langSwitch} role="group" aria-label={t('landing.lang_label')}>
               {LANGS.map((l) => (
@@ -133,7 +150,7 @@ export default function LandingPage({ profile }: { profile: LandingProfile }) {
         </div>
       </nav>
 
-      <HeroWow profile={profile} />
+      <HeroWow profile={profile} seeHref={show('story') ? '#app' : '#features'} />
 
       <div className={s.ticker} aria-hidden="true">
         <div className={s.tickerInner}>
@@ -159,20 +176,27 @@ export default function LandingPage({ profile }: { profile: LandingProfile }) {
 
       <ProfileHighlights profile={profile} />
 
-      <ScrollStory />
+      {show('story') && <ScrollStory screens={page.story} title={storyTitle} />}
 
-      <ProblemPairs />
+      {show('problems') && <ProblemPairs />}
 
-      <section className={s.section} id="features">
-        <p className={s.sectionTag} data-reveal>{t('landing.features_tag')}</p>
-        <h2 className={s.sectionTitle} data-reveal>
-          {t('landing.features_title_line1')}
-          <br />
-          {t('landing.features_title_line2')}
-        </h2>
-        <FeatureBento />
-      </section>
+      {show('features') && (
+        <section className={s.section} id="features">
+          <p className={s.sectionTag} data-reveal>{t('landing.features_tag')}</p>
+          <h2 className={s.sectionTitle} data-reveal>
+            {t(own('features_title_line1'))}
+            <br />
+            {t(own('features_title_line2'))}
+          </h2>
+          <FeatureBento
+            tiles={page.tiles}
+            layout={profile === 'center' ? 'center' : 'perso'}
+            chat={profile === 'perso' ? (t('landing.profiles.perso.ai_chat', { returnObjects: true }) as Array<{ from: 'me' | 'ai'; text: string }>) : undefined}
+          />
+        </section>
+      )}
 
+      {show('try') && (
       <section className={s.try} id="try">
         <p className={s.sectionTag} data-reveal>{t('landing.try.tag')}</p>
         <h2 className={s.sectionTitle} data-reveal>{t('landing.try.title')}</h2>
@@ -181,8 +205,9 @@ export default function LandingPage({ profile }: { profile: LandingProfile }) {
           <MannequinDemo />
         </Suspense>
       </section>
+      )}
 
-      <FlowSteps />
+      {show('flow') && <FlowSteps />}
 
       <section className={s.download} id="download">
         <p className={s.sectionTag} data-reveal>{t('landing.download.tag')}</p>

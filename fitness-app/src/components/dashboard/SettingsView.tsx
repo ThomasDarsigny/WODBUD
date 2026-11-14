@@ -12,10 +12,8 @@ import { applyTheme, readStoredTheme, storeTheme } from '../../lib/theme'
 import type { ThemePref, SocialLink, SocialPlatform } from '../../types'
 import { uploadAvatar } from '../../lib/avatar'
 import { previewAccountDeletion, confirmAccountDeletion, type DeletionImpact } from '../../lib/accountDeletion'
-import { clearAuthSessionCookies } from '../../lib/authSessionCookies'
 import Modal from '../ui/Modal'
-import { clearWorkoutDraft } from '../../stores/workoutStore'
-import { clearRoleCache } from '../../lib/profileRole'
+import { signOut } from '../../lib/signOut'
 import CenterSettings from '../center/CenterSettings'
 import SupportForm from '../support/SupportForm'
 import CenterSuggestionForm from '../center/CenterSuggestionForm'
@@ -176,10 +174,7 @@ export default function SettingsView() {
   // reste du compte, pour libérer la barre.
   async function logout() {
     setBusy('logout')
-    clearWorkoutDraft()
-    clearRoleCache()
-    try { await supabase.auth.signOut() } catch { /* session déjà expirée */ }
-    try { await clearAuthSessionCookies() } catch { /* ignore */ }
+    await signOut()
     navigate('/login')
   }
 
@@ -557,10 +552,7 @@ function DeleteAccountModal({ onClose }: { onClose: () => void }) {
     setError(null)
     try {
       await confirmAccountDeletion()
-      clearWorkoutDraft()
-      clearRoleCache()
-      try { await supabase.auth.signOut() } catch { /* le compte n'existe déjà plus */ }
-      try { await clearAuthSessionCookies() } catch { /* idem */ }
+      await signOut()
       navigate('/login')
     } catch (err) {
       setError(err instanceof Error ? err.message : t('errors.generic'))

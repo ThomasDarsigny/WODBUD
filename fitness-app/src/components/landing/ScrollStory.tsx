@@ -4,7 +4,7 @@ import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScro
 import PhoneFrame from './PhoneFrame'
 import s from './landing.module.css'
 
-const IMAGES = ['builder', 'session', 'rank'] as const
+const ALL_IMAGES = ['builder', 'session', 'rank'] as const
 /** Défilement accordé à chaque écran, en hauteurs d'écran : de quoi lire le texte. */
 const SCREEN_SCROLL = 160
 
@@ -13,13 +13,17 @@ const SCREEN_SCROLL = 160
  * qu'on défile, et chaque tiers du défilement change l'écran du téléphone et
  * le texte. Chaque écran dispose d'environ 1,6 hauteur d'écran de défilement :
  * à une seule, les textes défilaient trop vite pour être lus.
+ *
+ * `screens` : les écrans du profil de la page (0 créateur, 1 chrono, 2 rang).
  */
-export default function ScrollStory() {
+export default function ScrollStory({ screens: shown, title }: { screens: number[]; title: string }) {
   const { t } = useTranslation('common')
   const reduce = useReducedMotion()
   const ref = useRef<HTMLElement>(null)
   const [active, setActive] = useState(0)
-  const screens = t('landing.showcase.screens', { returnObjects: true }) as Array<{ title: string; desc: string; alt: string }>
+  const all = t('landing.showcase.screens', { returnObjects: true }) as Array<{ title: string; desc: string; alt: string }>
+  const screens = shown.map((i) => all[i])
+  const IMAGES = shown.map((i) => ALL_IMAGES[i])
 
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end end'] })
   useMotionValueEvent(scrollYProgress, 'change', (v) => {
@@ -41,7 +45,7 @@ export default function ScrollStory() {
       <div className={s.storySticky}>
         <div className={s.storyCopy}>
           <p className={s.sectionTag}>{t('landing.showcase.tag')}</p>
-          <h2 className={s.storyTitle}>{t('landing.showcase.title')}</h2>
+          <h2 className={s.storyTitle}>{title}</h2>
 
           <div className={s.storyStep} aria-live="polite">
             <AnimatePresence mode="wait" initial={false}>

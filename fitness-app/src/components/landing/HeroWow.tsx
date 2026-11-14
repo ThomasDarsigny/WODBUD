@@ -13,7 +13,8 @@ import s from './landing.module.css'
  * Haut de page : titre géant révélé mot par mot, halo qui suit le pointeur
  * et un mot fantôme en contour qui glisse au défilement.
  */
-export default function HeroWow({ profile }: { profile: LandingProfile }) {
+/** `seeHref` : « Voir l'app » mène au récit des écrans, ou aux fonctionnalités sur une page qui n'en a pas. */
+export default function HeroWow({ profile, seeHref }: { profile: LandingProfile; seeHref: string }) {
   const { t } = useTranslation('common')
   const h = (k: string) => t(`landing.profiles.${profile}.hero.${k}`)
   const reduce = useReducedMotion()
@@ -87,7 +88,7 @@ export default function HeroWow({ profile }: { profile: LandingProfile }) {
               </Link>
             </Magnetic>
             <Magnetic>
-              <a href="#app" className={s.btnGhost}>
+              <a href={seeHref} className={s.btnGhost}>
                 {t('landing.hero.see_app')}
               </a>
             </Magnetic>

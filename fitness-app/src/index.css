@@ -2835,6 +2835,7 @@ button.wb-ex-card { display: flex; align-items: center; gap: 0.85rem; padding: 0
 @media (prefers-reduced-motion: reduce) { .wb-react:active { transform: none; } }
 
 /* ─── Admin ────────────────────────────────────────────────────── */
+.wb-admin-head-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 .wb-admin-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.55rem; }
 @media (min-width: 900px) { .wb-admin-stats { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 .wb-pill--amber { background: color-mix(in srgb, var(--warn) 14%, transparent); color: var(--warn-ink); }

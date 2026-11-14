@@ -6,15 +6,20 @@ import { DEMO_MOVES, demoMoveName } from './demoMoves'
 import s from './landing.module.css'
 
 type Tile = { title: string; desc: string }
+type Message = { from: 'me' | 'ai'; text: string }
+
+/** Tuiles possibles ; chaque page n'affiche que celles de son profil. */
+export type BentoTile = 'mann' | 'lib' | 'meth' | 'vote' | 'rank' | 'ai'
 
 const METHODS = ['AMRAP', 'EMOM', 'For Time', 'Tabata', 'Rounds', 'Force']
 
 /**
  * Fonctionnalités en grille « bento » : des tuiles de tailles différentes,
  * chacune avec un petit visuel qui montre la chose plutôt qu'un paragraphe.
- * Une tuile = un titre court + une ligne.
+ * Une tuile = un titre court + une ligne. `tiles` : celles du profil de la page ;
+ * `layout` place la grille en conséquence ; `chat` remplace la conversation de l'IA.
  */
-export default function FeatureBento() {
+export default function FeatureBento({ tiles, layout, chat }: { tiles: BentoTile[]; layout: 'center' | 'perso'; chat?: Message[] }) {
   const { t, i18n } = useTranslation('common')
   const reduce = useReducedMotion()
   const b = (key: string) => t(`landing.bento.${key}`, { returnObjects: true }) as Tile & Record<string, string>
@@ -30,11 +35,13 @@ export default function FeatureBento() {
   const ai = t('landing.bento.ai', { returnObjects: true }) as Tile & {
     me: string
     bot: string
-    chat: Array<{ from: 'me' | 'ai'; text: string }>
+    chat: Message[]
   }
+  const has = (tile: BentoTile) => tiles.includes(tile)
 
   return (
-    <div className={s.bento}>
+    <div className={`${s.bento} ${layout === 'center' ? s.bentoCenter : s.bentoPerso}`}>
+      {has('mann') && (
       <TiltCard className={`${s.tile} ${s.tileMann}`} intensity={0.35}>
         <div className={s.tileMannArt} aria-hidden="true" />
         <div className={s.tileBody}>
@@ -43,7 +50,9 @@ export default function FeatureBento() {
           <a href="#try" className={s.tileLink}>{mann.cta} →</a>
         </div>
       </TiltCard>
+      )}
 
+      {has('lib') && (
       <TiltCard className={`${s.tile} ${s.tileLib}`} intensity={0.5}>
         <div className={s.marquee} aria-hidden="true">
           <div className={s.marqueeRow}>{rowA.map((n, i) => <span key={`a${i}`}>{n}</span>)}</div>
@@ -54,7 +63,9 @@ export default function FeatureBento() {
           <p>{lib.desc}</p>
         </div>
       </TiltCard>
+      )}
 
+      {has('meth') && (
       <TiltCard className={`${s.tile} ${s.tileMeth}`} intensity={0.5}>
         <div className={s.methods} aria-hidden="true">
           {METHODS.map((m, i) => (
@@ -66,7 +77,9 @@ export default function FeatureBento() {
           <p>{meth.desc}</p>
         </div>
       </TiltCard>
+      )}
 
+      {has('vote') && (
       <TiltCard className={`${s.tile} ${s.tileVote}`} intensity={0.5}>
         <div className={s.voteArt} aria-hidden="true">
           {[{ label: votes.a, pct: 64 }, { label: votes.b, pct: 36 }].map((o, i) => (
@@ -90,7 +103,9 @@ export default function FeatureBento() {
           <p>{votes.desc}</p>
         </div>
       </TiltCard>
+      )}
 
+      {has('rank') && (
       <TiltCard className={`${s.tile} ${s.tileRank}`} intensity={0.5}>
         <div className={s.rankArt} aria-hidden="true">
           {/* Le vrai insigne du 7e rang (Bulldozer), comme dans l'app. */}
@@ -114,14 +129,17 @@ export default function FeatureBento() {
           <p>{ranks.desc}</p>
         </div>
       </TiltCard>
+      )}
 
+      {has('ai') && (
       <TiltCard className={`${s.tile} ${s.tileAi}`} intensity={0.15}>
-        <AiChat messages={ai.chat} meLabel={ai.me} botLabel={ai.bot} />
+        <AiChat messages={chat ?? ai.chat} meLabel={ai.me} botLabel={ai.bot} />
         <div className={s.tileBody}>
           <h3>{ai.title}</h3>
           <p>{ai.desc}</p>
         </div>
       </TiltCard>
+      )}
     </div>
   )
 }
