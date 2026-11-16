@@ -1,5 +1,8 @@
 import { supabase } from './supabase'
 import { getLocalUser } from './currentUser'
+import { isNetworkError } from './network'
+import { loadOffline, saveOffline } from './offlineCache'
+import { prefetchSessionPacks } from './sessionPack'
 
 /**
  * Volet « à venir » du journal.
@@ -59,41 +62,84 @@ export function localDate(d = new Date()): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
 }
 
+/** Premier jour encore affiché : `OVERDUE_DAYS` jours avant `now`. */
+function overdueFrom(now: Date): string {
+  const from = new Date(now)
+  from.setDate(from.getDate() - OVERDUE_DAYS)
+  return localDate(from)
+}
+
+/**
+ * Ce que montre « à venir » un jour donné : les plans à partir d'aujourd'hui,
+ * plus ceux des `OVERDUE_DAYS` derniers jours pas encore faits. Refait sur la
+ * liste gardée quand le réseau manque, peut-être lue un autre jour.
+ */
+export function visibleUpcoming(entries: ScheduledEntry[], now = new Date()): ScheduledEntry[] {
+  const today = localDate(now)
+  const from = overdueFrom(now)
+  return entries.filter((e) => e.scheduled_date >= from && (e.scheduled_date >= today || e.session_id === null))
+}
+
+/** Jours à venir dont le contenu des WODs est gardé sur l'appareil (A5). */
+const PACK_DAYS = 7
+
+/** WODs des séances pas encore faites d'aujourd'hui à `PACK_DAYS` jours. */
+export function workoutsToPack(entries: ScheduledEntry[], now = new Date()): string[] {
+  const today = localDate(now)
+  const until = new Date(now)
+  until.setDate(until.getDate() + PACK_DAYS)
+  const last = localDate(until)
+  return [...new Set(entries
+    .filter((e) => e.session_id === null && e.workout_id && e.scheduled_date >= today && e.scheduled_date <= last)
+    .map((e) => e.workout_id as string))]
+}
+
 /**
  * Plans à venir, plus ceux des `OVERDUE_DAYS` derniers jours pas encore
  * faits. Un plan passé et fait n'apparaît plus ici : il est dans le journal.
+ *
+ * Sans réseau : la dernière liste lue sur cet appareil (A5). En ligne, le
+ * contenu des WODs des prochains jours est lu à l'avance, pour que « Faire
+ * ce WOD » marche au sous-sol.
  */
 export async function fetchUpcoming(limit = 50): Promise<ScheduledEntry[]> {
-  const today = localDate()
-  const from = new Date()
-  from.setDate(from.getDate() - OVERDUE_DAYS)
+  const now = new Date()
   const { data: auth } = await getLocalUser()
   if (!auth.user) return []
+  const offlineKey = `upcoming:${auth.user.id}`
+  const saved = loadOffline<ScheduledEntry[]>(offlineKey)
 
   // Filtre explicite : un coach lit aussi les copies de ses athlètes
   // (pour le suivi, migration 037), elles n'ont rien à faire dans SON journal.
+  // Avec une liste gardée, pas de nouvel essai (1 s, 2 s, 4 s) : sans réseau,
+  // elle s'affiche tout de suite.
   const { data, error } = await supabase
     .from('scheduled_workouts')
     .select('id, scheduled_date, title, notes, workout_id, session_id, class_plan_id, workouts(title), class_plans(classes(name))')
     .eq('user_id', auth.user.id)
-    .gte('scheduled_date', localDate(from))
+    .gte('scheduled_date', overdueFrom(now))
     .order('scheduled_date', { ascending: true })
     .limit(limit)
-  if (error) throw error
+    .retry(saved === null)
+  if (error) {
+    if (saved && isNetworkError(error)) return visibleUpcoming(saved.value, now)
+    throw error
+  }
 
-  return ((data ?? []) as unknown as Row[])
-    .filter((row) => row.scheduled_date >= today || row.session_id === null)
-    .map((row) => ({
-      id: row.id,
-      scheduled_date: row.scheduled_date,
-      title: row.title,
-      notes: row.notes,
-      workout_id: row.workout_id,
-      workout_title: first(row.workouts)?.title ?? null,
-      session_id: row.session_id,
-      class_name: first(first(row.class_plans)?.classes ?? null)?.name ?? null,
-      class_plan_id: row.class_plan_id
-    }))
+  const entries: ScheduledEntry[] = ((data ?? []) as unknown as Row[]).map((row) => ({
+    id: row.id,
+    scheduled_date: row.scheduled_date,
+    title: row.title,
+    notes: row.notes,
+    workout_id: row.workout_id,
+    workout_title: first(row.workouts)?.title ?? null,
+    session_id: row.session_id,
+    class_name: first(first(row.class_plans)?.classes ?? null)?.name ?? null,
+    class_plan_id: row.class_plan_id
+  }))
+  saveOffline(offlineKey, entries)
+  void prefetchSessionPacks(workoutsToPack(entries, now))
+  return visibleUpcoming(entries, now)
 }
 
 /**

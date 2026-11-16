@@ -1294,6 +1294,7 @@
     "synced_other": "{{count}} offline sessions saved.",
     "rejected_one": "{{count}} offline session refused: over 12 h without network, it does not count.",
     "rejected_other": "{{count}} offline sessions refused: over 12 h without network, they do not count.",
+    "no_pack": "No network, and this WOD hasn't been opened on this phone yet: its content isn't available. The timer still works.",
     "done_title": "Session kept on this phone",
     "done_hint": "No network: the session is kept here and will be sent as soon as you are back online (within 12 h). Your minutes, rank and badges will update then."
   },

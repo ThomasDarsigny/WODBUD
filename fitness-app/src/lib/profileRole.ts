@@ -1,5 +1,7 @@
 import { supabase } from './supabase'
 import { getLocalUser } from './currentUser'
+import { isNetworkError } from './network'
+import { loadOffline, saveOffline } from './offlineCache'
 
 /**
  * Profil choisi à l'inscription (048) : centre, membre d'un centre ou perso.
@@ -26,9 +28,17 @@ export async function fetchMyRole(): Promise<{ userId: string; role: ProfileRole
   const user = data.user
   if (!user) return null
   if (cache?.userId === user.id) return cache
-  const { data: row, error } = await supabase.from('profiles').select('role').eq('id', user.id).maybeSingle()
-  if (error) throw error
+  // Sans réseau, le dernier profil lu sur cet appareil (A5), sans les
+  // nouveaux essais de supabase-js : l'app s'ouvre au sous-sol.
+  const key = `role:${user.id}`
+  const saved = loadOffline<ProfileRole | null>(key)
+  const { data: row, error } = await supabase.from('profiles').select('role').eq('id', user.id).maybeSingle().retry(saved === null)
+  if (error) {
+    if (saved && isNetworkError(error)) return { userId: user.id, role: saved.value }
+    throw error
+  }
   cache = { userId: user.id, role: (row?.role as ProfileRole | null) ?? null }
+  saveOffline(key, cache.role)
   return cache
 }
 
@@ -47,11 +57,13 @@ export async function saveMyRole(role: ProfileRole, answers: OnboardingAnswers, 
     .eq('id', user.id)
   if (error) throw error
   cache = { userId: user.id, role }
+  saveOffline(`role:${user.id}`, role)
 }
 
 /** Après une invitation acceptée ou un centre créé, la base a fixé le profil. */
 export function rememberRole(userId: string, role: ProfileRole): void {
   cache = { userId, role }
+  saveOffline(`role:${userId}`, role)
 }
 
 export async function fetchMyEquipment(): Promise<string[]> {

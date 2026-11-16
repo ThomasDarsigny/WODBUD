@@ -1297,6 +1297,7 @@
     "synced_other": "{{count}} sesiones sin conexión guardadas.",
     "rejected_one": "{{count}} sesión sin conexión rechazada: más de 12 h sin red, no cuenta.",
     "rejected_other": "{{count}} sesiones sin conexión rechazadas: más de 12 h sin red, no cuentan.",
+    "no_pack": "Sin red, y este WOD aún no se ha abierto en este teléfono: su contenido no está disponible. El cronómetro funciona igual.",
     "done_title": "Sesión guardada en el teléfono",
     "done_hint": "Sin red: la sesión se guarda aquí y se enviará en cuanto vuelva la conexión (dentro de 12 h). Tus minutos, rango e insignias se actualizarán entonces."
   },

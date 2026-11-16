@@ -49,12 +49,37 @@ Unexpected VP exit code 4 »), le démarrer à froid avec le rendu logiciel :
 | Landing | Absente : l'app ouvre la connexion ou le compte (`WebOnlyLanding`). |
 | Liens partagés | Invitations, QR de présence, rang partagé, communautés et retour des courriels pointent vers l'adresse publique du site (`src/lib/publicUrl.ts`), jamais vers `https://localhost`. À passer à `https://wodbud.com` quand le domaine sera branché. |
 | Service worker | Aucun : les fichiers sont déjà sur le téléphone, et il servirait l'ancienne version après une mise à jour. |
+| Hors ligne | Le client Supabase garde lui-même ses lectures (`src/lib/restCache.ts`), comme le service worker du site : réseau d'abord, la copie après 4 s ou sans réseau, 200 réponses, 7 jours, une copie par compte. Voir « Séance hors ligne » plus bas. |
 | Bouton retour | Ferme d'abord la fenêtre ouverte ; sur un accueil, met l'app en arrière-plan ; ailleurs, écran précédent (`src/lib/nativeBack.ts`). |
 | Barres système | Bord à bord : la page passe sous les barres et s'en écarte avec `--safe-top` / `--safe-bottom`. Capacitor les remplit (`--safe-area-inset-*`) ; sur les WebView d'avant Chromium 140, il décale plutôt la page lui-même. Icônes claires ou foncées selon le thème de l'app. |
 | Démarrage | Logo sur le fond de l'app (clair ou sombre comme le téléphone), retiré au premier rendu. |
 | Apple / Google | Masqués : ils refusent la connexion dans une page intégrée. Reviennent avec l'unité A2. |
 | Notifications | Les notifications web n'existent pas dans un WebView : les réglages annoncent qu'elles arrivent dans une prochaine version (unité A4). |
 | Sauvegarde Android | Désactivée (`allowBackup="false"`) : les jetons de session ne partent pas dans les sauvegardes Google. |
+
+## Séance hors ligne (A5)
+
+Au sous-sol d'une box, le réseau tombe. Sur le site comme dans l'app :
+
+- **Séances programmées** : la dernière liste lue est gardée par compte et
+  refiltrée pour le jour où on l'ouvre (`fetchUpcoming`, `visibleUpcoming`).
+- **Contenu des WODs** : mouvements, séries, charges, repos et format du chrono
+  de chaque séance pas encore faite des 7 prochains jours sont lus à l'avance
+  dès que la liste arrive (`src/lib/sessionPack.ts`), puis à chaque séance. Au
+  lancement, le contenu gardé s'affiche tout de suite et le réseau le met à jour
+  s'il répond.
+- **Garde des routes** : la dernière réponse sur le rôle et l'administration
+  sert si le réseau manque (affichage seulement : la base décide toujours).
+- **Pas d'attente** : supabase-js réessaie trois fois (1 s, 2 s, 4 s) une
+  lecture qui échoue ; quand une copie existe, ces lectures ne réessaient pas.
+- **Séance terminée** : file d'attente déjà en place (`sessionUpload.ts`),
+  envoyée au retour du réseau, dans les 12 h.
+- **Déconnexion** : tout le hors-ligne est effacé (`clearOffline`,
+  `clearRestCache`), sauf les séances pas encore envoyées.
+
+Limite : les photos d'exercices ne sont pas gardées dans l'app (le service worker
+du site les garde) ; un WOD jamais ouvert ni programmé n'a pas de contenu hors
+ligne, et la séance le dit.
 
 ## Icônes et démarrage
 
@@ -86,6 +111,4 @@ sera choisi, changer `MARK` et les couleurs du script, relancer, et construire.
   `assetlinks.json` publié sur le site, empreinte de la clé de signature).
 - **A4** Notifications natives (projet Firebase à créer, jetons d'appareil,
   envoi par la fonction `push`).
-- **A5** Séance hors ligne : garder sur le téléphone les données qu'utilisait le
-  service worker (bibliothèque, WODs, records).
 - **A6** Version signée et fiche Google Play, test fermé avec le gym.

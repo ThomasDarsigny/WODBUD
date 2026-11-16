@@ -1294,6 +1294,7 @@
     "synced_other": "{{count}} séances hors ligne enregistrées.",
     "rejected_one": "{{count}} séance hors ligne refusée : plus de 12 h sans réseau, elle ne compte pas.",
     "rejected_other": "{{count}} séances hors ligne refusées : plus de 12 h sans réseau, elles ne comptent pas.",
+    "no_pack": "Pas de réseau, et ce WOD n'a pas encore été ouvert sur ce téléphone : son contenu n'est pas disponible. Le chrono marche quand même.",
     "done_title": "Séance gardée sur le téléphone",
     "done_hint": "Pas de réseau : la séance est gardée ici et sera envoyée dès le retour du réseau (dans les 12 h). Tes minutes, ton rang et tes badges se mettront à jour à ce moment-là."
   },

@@ -15,7 +15,7 @@ import {
 import type { WorkoutFormat } from '../lib/workoutClock'
 import type { ResultInput } from '../lib/records'
 import { enqueue, isNetworkError, uploadSession, type FinishedSession, type SessionSummary } from '../lib/sessionUpload'
-import type { WorkoutMethod } from '../types'
+import { cachedSessionPack, fetchSessionPack } from '../lib/sessionPack'
 
 const STORAGE_KEY = 'wodbud_active_session'
 
@@ -311,72 +311,22 @@ export const useSessionStore = create<SessionState>((set, get) => ({
   },
 
   loadItems: async (workoutId) => {
-    set({ loadingItems: true })
-    // Le format passe à part : une erreur ici (WOD d'une communauté quittée,
-    // par exemple) laisse simplement le chrono simple.
-    void supabase
-      .from('workouts')
-      .select('method, duration_minutes')
-      .eq('id', workoutId)
-      .maybeSingle()
-      .then(({ data }) => {
-        if (!data || get().workoutId !== workoutId) return
-        set({ format: { method: data.method as WorkoutMethod, durationMinutes: data.duration_minutes ?? null } })
-      })
+    // Le contenu gardé du WOD (lu une fois, ou à l'avance pour une séance
+    // programmée) s'affiche tout de suite ; le réseau le met à jour s'il
+    // répond. Au sous-sol, la séance démarre sans attendre (A5).
+    const saved = cachedSessionPack(workoutId)
+    set(saved ? { items: saved.items, format: saved.format, loadingItems: false } : { loadingItems: true })
     try {
-      const { data: rows, error } = await supabase
-        .from('workout_exercises')
-        .select('id, exercise_id, position, sets, reps, weight, rest_seconds')
-        .eq('workout_id', workoutId)
-        .order('position', { ascending: true })
-      if (error) throw error
-
-      const list = (rows ?? []) as Array<{
-        id: string
-        exercise_id: string
-        position: number
-        sets: number | null
-        reps: string | null
-        weight: string | null
-        rest_seconds: number | null
-      }>
-
-      if (list.length === 0) {
-        set({ items: [], loadingItems: false })
-        return
-      }
-
-      // Deux requêtes plutôt qu'une jointure imbriquée : c'est le patron déjà
-      // utilisé dans workoutStore, et ça ne dépend pas du nommage PostgREST
-      // des clés étrangères.
-      const ids = Array.from(new Set(list.map((r) => r.exercise_id)))
-      const { data: exRows, error: exError } = await supabase
-        .from('exercises')
-        .select('id, name')
-        .in('id', ids)
-      if (exError) throw exError
-
-      const names = new Map(
-        ((exRows ?? []) as Array<{ id: string; name: string }>).map((e) => [e.id, e.name])
-      )
-
-      set({
-        items: list.map((r) => ({
-          id: r.id,
-          exerciseId: r.exercise_id,
-          name: names.get(r.exercise_id) ?? '—',
-          position: r.position,
-          sets: r.sets,
-          reps: r.reps,
-          weight: r.weight,
-          rest_seconds: r.rest_seconds
-        })),
-        loadingItems: false
-      })
+      const pack = await fetchSessionPack(workoutId, { retry: !saved })
+      if (get().workoutId !== workoutId) return
+      set({ items: pack.items, format: pack.format, loadingItems: false })
     } catch (err: unknown) {
+      if (saved) return
       set({
         loadingItems: false,
-        error: err instanceof Error ? err.message : i18n.t('errors.generic', { ns: 'common' })
+        error: isNetworkError(err)
+          ? i18n.t('offline.no_pack', { ns: 'common' })
+          : err instanceof Error ? err.message : i18n.t('errors.generic', { ns: 'common' })
       })
     }
   },

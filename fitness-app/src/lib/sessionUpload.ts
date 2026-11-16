@@ -2,6 +2,7 @@ import { supabase } from './supabase'
 import { recalcBadges } from './badges'
 import { linkSessionToPlan, localDate } from './scheduledWorkouts'
 import { addResults, fetchMyResults, isNewRecord, type ExerciseResult, type ResultInput } from './records'
+import { isNetworkError } from './network'
 
 /**
  * Enregistrement d'une séance terminée — en ligne tout de suite, ou plus tard.
@@ -52,11 +53,7 @@ export interface SessionSummary {
   workoutId: string | null
 }
 
-export function isNetworkError(err: unknown): boolean {
-  if (typeof navigator !== 'undefined' && !navigator.onLine) return true
-  const message = typeof err === 'object' && err && 'message' in err ? String((err as { message: unknown }).message) : String(err)
-  return /failed to fetch|networkerror|load failed|network request failed|fetch failed/i.test(message)
-}
+export { isNetworkError }
 
 /** Refus définitif du serveur (séance trop ancienne, durée impossible). */
 function isRejected(err: unknown): boolean {

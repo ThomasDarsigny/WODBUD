@@ -179,7 +179,7 @@ Les boutiques sont la plateforme principale (décision du 14 novembre) ; branche
 - [ ] A2 Connexion Apple et Google par le navigateur du système, retour dans l'app.
 - [ ] A3 Liens d'invitation et QR qui ouvrent l'app (App Links).
 - [ ] A4 Notifications natives (Firebase).
-- [ ] A5 Séance hors ligne sans service worker.
+- [x] A5 Séance hors ligne, sur le site comme dans l'app : lectures Supabase gardées par le client dans l'app (`restCache.ts` : réseau d'abord, copie après 4 s ou sans réseau, 200 réponses, 7 jours, une copie par compte) ; séances programmées gardées par compte et refiltrées pour le jour ; contenu des WODs des 7 prochains jours lu à l'avance et affiché tout de suite au lancement ; rôle et administration gardés pour la garde des routes (affichage seulement) ; plus d'attente des nouveaux essais de supabase-js (7 s) quand une copie existe ; message clair si un WOD n'a pas de contenu gardé ; tout effacé à la déconnexion sauf les séances à envoyer. Parcours e2e (app rouverte sans réseau : WOD du jour et séance en moins de 3 s ; vrai Cache Storage) et tests unitaires.
 - [ ] A6 Version signée, fiche Google Play, test fermé avec le gym (12 testeurs, 14 jours, si compte personnel).
 
 ## À définir avec le client

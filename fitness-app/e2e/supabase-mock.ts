@@ -96,6 +96,8 @@ export class MockSupabase {
   /** Erreur à renvoyer pour un chemin d'authentification, comme GoTrue (ex. invalid_credentials). */
   authErrors: Record<string, { status: number; code: string; message: string }> = {}
   signedIn: boolean
+  /** Plus de réseau : chaque requête vers Supabase échoue comme sans connexion. */
+  offline = false
   readonly user: MockUser
   private seq = 0
 
@@ -148,6 +150,7 @@ export class MockSupabase {
   private async handle(route: Route, url: URL) {
     const req = route.request()
     const method = req.method()
+    if (this.offline) return route.abort('internetdisconnected')
     if (method === 'OPTIONS') return route.fulfill({ status: 204, headers: CORS })
     const path = url.pathname
 
