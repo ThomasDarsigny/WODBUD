@@ -64,11 +64,14 @@ function sdkOutput(dir, name, cmdArgs) {
 
 function build() {
   const sha = output('git', ['rev-parse', '--short=7', 'HEAD']) || 'local'
+  // Notifications (A4) : seulement si le fichier du projet Firebase est là,
+  // sinon demander un jeton ferait planter le plugin (docs/android.md).
+  const push = existsSync(join(ANDROID, 'app', 'google-services.json'))
   // Suivi des erreurs (4.5) : « android-<commit> » distingue l'app du site.
-  const env = { ...process.env, WODBUD_APP_VERSION: `android-${sha}` }
+  const env = { ...process.env, WODBUD_APP_VERSION: `android-${sha}`, VITE_NATIVE_PUSH: push ? 'on' : 'off' }
   run('npx', ['vite', 'build', ...(staging ? ['--mode', 'staging'] : [])], { env })
   run('npx', ['cap', 'sync', 'android'])
-  console.log(`\n✓ Site recopié dans android/ (${staging ? 'préproduction' : 'production'}, android-${sha}).`)
+  console.log(`\n✓ Site recopié dans android/ (${staging ? 'préproduction' : 'production'}, android-${sha}, notifications ${push ? 'actives' : 'absentes : pas de google-services.json'}).`)
 }
 
 function apk() {

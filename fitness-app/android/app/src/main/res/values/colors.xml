@@ -2,4 +2,6 @@
 <resources>
     <!-- Fond du thème clair de l'app (variable black du thème clair, index.css). -->
     <color name="wb_background">#FAF8F5</color>
+    <!-- Couleur de la marque (provisoire, refonte à venir) : teinte des notifications. -->
+    <color name="wb_accent">#FF5A1F</color>
 </resources>

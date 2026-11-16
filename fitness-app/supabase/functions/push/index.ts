@@ -1,5 +1,18 @@
 import { createClient, type SupabaseClient } from 'npm:@supabase/supabase-js@2'
 import webpush from 'npm:web-push@3.6.7'
+import { parseServiceAccount, sendFcm } from './fcm.ts'
+
+// App des boutiques (073, A4) : compte de service Firebase, secret facultatif.
+// Sans lui, seules les notifications web partent, comme avant.
+const fcmAccount = parseServiceAccount(Deno.env.get('FCM_SERVICE_ACCOUNT'))
+
+// Notifications web : clés VAPID. Absentes (préproduction), seules les
+// notifications de l'app partent, au lieu d'une erreur à chaque appel.
+const vapidSubject = Deno.env.get('VAPID_SUBJECT')
+const vapidPublic = Deno.env.get('VAPID_PUBLIC_KEY')
+const vapidPrivate = Deno.env.get('VAPID_PRIVATE_KEY')
+const webPushReady = Boolean(vapidSubject && vapidPublic && vapidPrivate)
+if (webPushReady) webpush.setVapidDetails(vapidSubject!, vapidPublic!, vapidPrivate!)
 
 /**
  * Envoi des notifications push (migration 039).
@@ -26,6 +39,10 @@ import webpush from 'npm:web-push@3.6.7'
  *
  * Un abonnement que le service push déclare expiré (404/410) est supprimé :
  * c'est un téléphone désinstallé ou une permission retirée.
+ *
+ * App des boutiques (073) : les mêmes messages partent aussi aux jetons
+ * `device_tokens` par Firebase Cloud Messaging (fcm.ts), si le secret
+ * FCM_SERVICE_ACCOUNT existe ; un jeton périmé est supprimé de même.
  */
 
 const cors = {
@@ -60,14 +77,33 @@ async function sendToUsers(
   const userIds = [...build.keys()]
   if (userIds.length === 0) return { sent: 0, removed: 0 }
 
-  const [{ data: subs }, { data: profiles }] = await Promise.all([
-    admin.from('push_subscriptions').select('id, user_id, endpoint, p256dh, auth').in('user_id', userIds),
+  const [{ data: subs }, { data: devices }, { data: profiles }] = await Promise.all([
+    webPushReady
+      ? admin.from('push_subscriptions').select('id, user_id, endpoint, p256dh, auth').in('user_id', userIds)
+      : Promise.resolve({ data: [] as Array<{ id: string; user_id: string; endpoint: string; p256dh: string; auth: string }> }),
+    // App des boutiques (073) : seulement si Firebase est configuré.
+    fcmAccount
+      ? admin.from('device_tokens').select('id, user_id, token').in('user_id', userIds)
+      : Promise.resolve({ data: [] as Array<{ id: string; user_id: string; token: string }> }),
     admin.from('profiles').select('id, language').in('id', userIds)
   ])
   const langOf = new Map((profiles ?? []).map((p) => [p.id as string, lang(p.language as string | null)]))
 
   let sent = 0
   let removed = 0
+  await Promise.all((devices ?? []).map(async (d) => {
+    const payload = build.get(d.user_id as string)!(langOf.get(d.user_id as string) ?? 'fr')
+    try {
+      const result = await sendFcm(fcmAccount!, d.token as string, payload)
+      if (result === 'sent') sent++
+      if (result === 'gone') {
+        await admin.from('device_tokens').delete().eq('id', d.id)
+        removed++
+      }
+    } catch (err) {
+      console.error('FCM échoué', (err as Error).message)
+    }
+  }))
   await Promise.all((subs ?? []).map(async (s) => {
     const payload = build.get(s.user_id as string)!(langOf.get(s.user_id as string) ?? 'fr')
     try {
@@ -261,9 +297,12 @@ async function libraryUpdate(admin: SupabaseClient) {
   const total = (published ?? 0) + (created ?? 0)
   if (total === 0) return json({ exercises: 0, sent: 0, removed: 0 })
 
-  const { data: subs } = await admin.from('push_subscriptions').select('user_id')
+  const [{ data: subs }, { data: devices }] = await Promise.all([
+    admin.from('push_subscriptions').select('user_id'),
+    admin.from('device_tokens').select('user_id')
+  ])
   const build = new Map<string, (l: Lang) => Payload>()
-  for (const s of subs ?? []) {
+  for (const s of [...(subs ?? []), ...(devices ?? [])]) {
     build.set(s.user_id as string, (l) => ({
       title: { fr: 'Nouveautés dans la base d’exercices', en: 'New in the exercise library', es: 'Novedades en la base de ejercicios' }[l],
       body: {
@@ -285,11 +324,6 @@ Deno.serve(async (req) => {
   const admin = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!, {
     auth: { persistSession: false }
   })
-  webpush.setVapidDetails(
-    Deno.env.get('VAPID_SUBJECT')!,
-    Deno.env.get('VAPID_PUBLIC_KEY')!,
-    Deno.env.get('VAPID_PRIVATE_KEY')!
-  )
 
   const body = await req.json().catch(() => ({}))
 

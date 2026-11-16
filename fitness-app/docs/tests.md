@@ -6,7 +6,7 @@
 npm test
 ```
 
-Les calculs sans réseau : scores, semaines et cycles, horaire, présences, menu, accueil coach… Fichiers `src/**/*.test.ts`.
+Les calculs sans réseau : scores, semaines et cycles, horaire, présences, menu, accueil coach, lectures gardées hors ligne… Fichiers `src/**/*.test.ts`, plus `supabase/functions/push/fcm.test.ts` (signature et envoi Firebase de la fonction `push`, sans réseau : vraie paire de clés générée pour le test).
 
 ## De bout en bout (Playwright)
 

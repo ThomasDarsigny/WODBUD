@@ -48,15 +48,32 @@ const FILES = [
   { name: 'splash-dark.png', size: 2732, background: SPLASH_DARK, scale: 0.22 }
 ]
 
+/**
+ * Petite icône des notifications (barre d'état) : Android n'en garde que la
+ * silhouette, en blanc sur transparent. 24 dp, à chaque densité.
+ */
+const STATUS_ICON = { name: 'ic_stat_wodbud.png', densities: { mdpi: 24, hdpi: 36, xhdpi: 48, xxhdpi: 72, xxxhdpi: 96 } }
+const RES = resolve(ROOT, 'android/app/src/main/res')
+
 mkdirSync(OUT, { recursive: true })
 const browser = await chromium.launch({ channel: 'chrome' })
 const page = await browser.newPage({ deviceScaleFactor: 1 })
+async function render(size, body, path, transparent) {
+  await page.setViewportSize({ width: size, height: size })
+  await page.setContent(`<html><body style="margin:0;background:transparent">${body}</body></html>`)
+  await page.locator('svg').screenshot({ path, omitBackground: transparent })
+}
 for (const f of FILES) {
   const body = f.scale === 0 ? svg(f.size, { background: f.background, scale: 0.0001 }) : svg(f.size, f)
-  await page.setViewportSize({ width: f.size, height: f.size })
-  await page.setContent(`<html><body style="margin:0;background:transparent">${body}</body></html>`)
-  await page.locator('svg').screenshot({ path: resolve(OUT, f.name), omitBackground: !f.background })
+  await render(f.size, body, resolve(OUT, f.name), !f.background)
   console.log(`assets/${f.name} (${f.size}×${f.size})`)
+}
+for (const [density, size] of Object.entries(STATUS_ICON.densities)) {
+  const dir = resolve(RES, `drawable-${density}`)
+  mkdirSync(dir, { recursive: true })
+  const white = svg(size, { background: null, scale: 1.15 }).replace(`stroke="${MARK_COLOR}"`, 'stroke="#FFFFFF"')
+  await render(size, white, resolve(dir, STATUS_ICON.name), true)
+  console.log(`res/drawable-${density}/${STATUS_ICON.name} (${size}×${size})`)
 }
 await browser.close()
 

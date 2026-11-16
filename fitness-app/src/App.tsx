@@ -46,6 +46,7 @@ const TvModeView = lazy(() => import('./pages/TvModeView'))
 const CenterJoinPage = lazy(() => import('./pages/CenterJoinPage'))
 import { useSessionStore } from './stores/sessionStore'
 import { isInstalledApp } from './lib/platform'
+import NativePushBanner from './components/ui/NativePushBanner'
 import { fetchMyRole, homeFor } from './lib/profileRole'
 import { readPendingInvite } from './lib/center'
 import { readPendingCheckIn } from './lib/attendance'
@@ -233,6 +234,7 @@ function App() {
 
   return (
     <BrowserRouter>
+      <NativePushBanner />
       <Suspense fallback={<RouteFallback />}>
       <Routes>
         <Route path="/" element={<WebOnlyLanding />} />

@@ -829,6 +829,33 @@ export type Database = {
         }
         Relationships: []
       }
+      device_tokens: {
+        Row: {
+          created_at: string
+          id: string
+          last_seen_at: string
+          platform: string
+          token: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          last_seen_at?: string
+          platform: string
+          token: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          last_seen_at?: string
+          platform?: string
+          token?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       exercise_links: {
         Row: {
           center_id: string | null
@@ -2613,6 +2640,10 @@ export type Database = {
           code: string
           expires_at: string
         }[]
+      }
+      register_device_token: {
+        Args: { p_platform: string; p_token: string }
+        Returns: undefined
       }
       review_center_exercise: {
         Args: { p_decision: string; p_exercise: string }

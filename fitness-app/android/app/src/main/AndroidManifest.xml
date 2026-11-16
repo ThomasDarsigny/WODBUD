@@ -27,6 +27,22 @@
             android:grantUriPermissions="true">
             <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths" />
         </provider>
+
+        <!-- Notifications (A4) : petite icône blanche, couleur de la marque et
+             canal « WODBUD » (créé par lib/nativePush.ts) pour celles que
+             Firebase affiche quand l'app est fermée. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_stat_wodbud"
+        />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/wb_accent"
+        />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="wodbud"
+        />
     </application>
 
     <!-- Permissions -->

@@ -54,7 +54,7 @@ Unexpected VP exit code 4 »), le démarrer à froid avec le rendu logiciel :
 | Barres système | Bord à bord : la page passe sous les barres et s'en écarte avec `--safe-top` / `--safe-bottom`. Capacitor les remplit (`--safe-area-inset-*`) ; sur les WebView d'avant Chromium 140, il décale plutôt la page lui-même. Icônes claires ou foncées selon le thème de l'app. |
 | Démarrage | Logo sur le fond de l'app (clair ou sombre comme le téléphone), retiré au premier rendu. |
 | Apple / Google | Masqués : ils refusent la connexion dans une page intégrée. Reviennent avec l'unité A2. |
-| Notifications | Les notifications web n'existent pas dans un WebView : les réglages annoncent qu'elles arrivent dans une prochaine version (unité A4). |
+| Notifications | Firebase Cloud Messaging au lieu des notifications web (absentes d'un WebView) : voir « Notifications » plus bas. Sans `google-services.json` à la construction, les réglages annoncent qu'elles arrivent dans une prochaine version. |
 | Sauvegarde Android | Désactivée (`allowBackup="false"`) : les jetons de session ne partent pas dans les sauvegardes Google. |
 
 ## Séance hors ligne (A5)
@@ -80,6 +80,39 @@ Au sous-sol d'une box, le réseau tombe. Sur le site comme dans l'app :
 Limite : les photos d'exercices ne sont pas gardées dans l'app (le service worker
 du site les garde) ; un WOD jamais ouvert ni programmé n'a pas de contenu hors
 ligne, et la séance le dit.
+
+## Notifications (A4)
+
+Les mêmes messages que les notifications web (vote ouvert, séance programmée,
+rappel du matin, invitation, exercice publié, nouveautés), envoyés par la
+fonction Edge `push` :
+
+- **Inscription** : dans les réglages, « Activer » demande la permission
+  (Android 13+), crée le canal « WODBUD », obtient le jeton Firebase et
+  l'enregistre par `register_device_token` (migration 073, `device_tokens`).
+  Le compte connecté sur le téléphone devient propriétaire du jeton ; 10
+  appareils au plus par compte. Le jeton est réinscrit à chaque ouverture
+  (Firebase le renouvelle parfois) et retiré à la déconnexion.
+- **Envoi** : `supabase/functions/push/fcm.ts` (API HTTP v1, compte de service,
+  jeton OAuth gardé une heure), testé par `fcm.test.ts`. Un jeton que FCM
+  déclare périmé est supprimé.
+- **Affichage** : app fermée ou en arrière-plan, Android affiche la
+  notification (petite icône blanche `ic_stat_wodbud`, couleur de la marque) ;
+  la toucher ouvre sa page. App ouverte, une bannière en haut de l'écran
+  (`NativePushBanner`) la montre 6 s.
+
+**À faire une fois (Thomas)** :
+
+1. Créer un projet sur https://console.firebase.google.com (gratuit), y ajouter
+   une app Android avec le nom de package `com.wodbud.app`.
+2. Télécharger `google-services.json` et le poser dans
+   `fitness-app/android/app/` (ignoré par git : il ne va pas dans le dépôt
+   public). La construction suivante active les notifications.
+3. Paramètres du projet → Comptes de service → « Générer une nouvelle clé
+   privée » : un fichier JSON. Le coller tel quel comme secret
+   `FCM_SERVICE_ACCOUNT` des fonctions Edge (tableau de bord Supabase → Edge
+   Functions → Secrets), d'abord en préproduction, puis en production. Ne pas
+   le mettre dans le dépôt ni l'envoyer par courriel.
 
 ## Icônes et démarrage
 
@@ -109,6 +142,4 @@ sera choisi, changer `MARK` et les couleurs du script, relancer, et construire.
   (adresse de retour à ajouter à Supabase Auth : préproduction d'abord).
 - **A3** Liens d'invitation et QR qui ouvrent l'app (App Links : fichier
   `assetlinks.json` publié sur le site, empreinte de la clé de signature).
-- **A4** Notifications natives (projet Firebase à créer, jetons d'appareil,
-  envoi par la fonction `push`).
 - **A6** Version signée et fiche Google Play, test fermé avec le gym.

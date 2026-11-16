@@ -22,7 +22,7 @@ export type PushState =
   | 'ios-install'
   /** Navigateur sans push, ou app servie sans service worker (dev local). */
   | 'unsupported'
-  /** App des boutiques : les notifications natives viennent plus tard (docs/android.md, A4). */
+  /** App des boutiques construite sans Firebase (google-services.json absent, docs/android.md). */
   | 'app-soon'
 
 function isIos(): boolean {
@@ -43,9 +43,9 @@ async function registration(): Promise<ServiceWorkerRegistration | null> {
 }
 
 export async function getPushState(): Promise<PushState> {
-  // Un WebView n'a pas les notifications du web : celles de l'app passeront
-  // par Firebase (Android) et Apple.
-  if (isNativeApp()) return 'app-soon'
+  // Un WebView n'a pas les notifications du web : celles de l'app passent
+  // par Firebase (nativePush.ts).
+  if (isNativeApp()) return (await import('./nativePush')).nativePushState()
   // Safari iOS n'expose PushManager qu'une fois l'app ajoutée à l'écran
   // d'accueil (iOS 16.4+) : avant, c'est la seule chose à lui dire.
   if (isIos() && !isInstalledApp()) return 'ios-install'
@@ -58,6 +58,7 @@ export async function getPushState(): Promise<PushState> {
 
 /** Demande la permission, abonne l'appareil et l'enregistre. */
 export async function enablePush(): Promise<PushState> {
+  if (isNativeApp()) return (await import('./nativePush')).enableNativePush()
   const permission = await Notification.requestPermission()
   if (permission === 'denied') return 'denied'
   if (permission !== 'granted') return 'off'
@@ -89,6 +90,7 @@ export async function enablePush(): Promise<PushState> {
 
 /** Désabonne cet appareil (les autres appareils du compte restent abonnés). */
 export async function disablePush(): Promise<PushState> {
+  if (isNativeApp()) return (await import('./nativePush')).disableNativePush()
   const reg = await registration()
   const sub = await reg?.pushManager.getSubscription()
   if (sub) {

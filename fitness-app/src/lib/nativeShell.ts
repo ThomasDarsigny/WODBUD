@@ -2,6 +2,7 @@ import { SystemBars, SystemBarsStyle } from '@capacitor/core'
 import { App } from '@capacitor/app'
 import { SplashScreen } from '@capacitor/splash-screen'
 import { backAction } from './nativeBack'
+import { initNativePush } from './nativePush'
 
 /**
  * Ce que l'app des boutiques ajoute autour de la page (Capacitor). Chargé
@@ -29,6 +30,10 @@ export function initNativeShell(): void {
   }
   syncBars()
   new MutationObserver(syncBars).observe(root, { attributes: true, attributeFilter: ['data-theme'] })
+
+  // Notifications Firebase (A4) : toucher mène à la page, reçues app ouverte
+  // → bannière, jeton tenu à jour.
+  initNativePush()
 
   // L'écran de démarrage reste jusqu'au premier rendu, au lieu d'un écran
   // vide le temps que React démarre (filet : il se retire seul après 3 s).

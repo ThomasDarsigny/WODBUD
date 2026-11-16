@@ -62,8 +62,9 @@ keystore.properties
 .externalNativeBuild
 .cxx/
 
-# Google Services (e.g. APIs or Firebase)
-# google-services.json
+# Google Services (e.g. APIs or Firebase) : fichier du projet Firebase,
+# posé à la main (docs/android.md, notifications), pas dans le dépôt public.
+google-services.json
 
 # Freeline
 freeline.py

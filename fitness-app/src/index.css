@@ -2235,6 +2235,13 @@ button.wb-row:active, a.wb-row:active { background: var(--surface); }
 .wb-set-hint.is-after { margin: 0.5rem 0 0; }
 .wb-review-actions.is-start { justify-content: flex-start; }
 .wb-boot { display: grid; min-height: 100vh; place-items: center; background: var(--black); color: var(--muted); }
+
+/* App des boutiques : notification reçue app ouverte (NativePushBanner, A4). */
+.wb-push-banner { position: fixed; z-index: 1000; top: calc(var(--safe-top, 0px) + 0.5rem); left: 0.75rem; right: 0.75rem; max-width: 34rem; margin: 0 auto; display: flex; align-items: stretch; background: var(--dark); color: var(--white); border: 1px solid var(--border); border-left: 3px solid var(--orange); border-radius: 12px; box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35); }
+.wb-push-banner-main { flex: 1; min-height: 44px; display: grid; gap: 0.15rem; padding: 0.7rem 0.9rem; text-align: left; background: none; border: 0; color: inherit; font: inherit; cursor: pointer; }
+.wb-push-banner-main strong { font-size: 0.95rem; }
+.wb-push-banner-main span { font-size: 0.875rem; color: var(--muted); }
+.wb-push-banner-close { width: 44px; flex: none; background: none; border: 0; color: var(--muted); font-size: 1rem; cursor: pointer; }
 .wb-boot--brand { font-family: var(--font-d); font-size: 0.8125rem; letter-spacing: 0.15em; text-transform: uppercase; }
 .wb-unbutton { padding: 0; border: none; background: none; cursor: pointer; }
 .wb-inline-field { display: flex; gap: 0.5rem; }
