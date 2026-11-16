@@ -21,6 +21,25 @@ test('le mode TV affiche le WOD, le QR, les arrivées, puis le tableau blanc', a
   await expect(page.locator('.wb-tv-title')).toHaveText('Fran')
 })
 
+test.describe('appareil du coach en thème clair', () => {
+  test.use({ colorScheme: 'light' })
+
+  /** Constat 12 : l'écran de salle reste sombre, le WOD domine le QR. */
+  test('le mode TV reste sombre, et le WOD prend plus de place que le QR', async ({ page, isMobile }) => {
+    test.skip(isMobile, 'Un écran de salle, pas un téléphone.')
+    const db = coachDb()
+    await db.install(page)
+    await page.goto(`/tv/${CLASS_ID}`)
+    await expect(page.locator('.wb-tv-title')).toHaveText('Fran')
+
+    expect(await page.evaluate(() => document.documentElement.getAttribute('data-theme'))).toBe('clair')
+    expect(await page.locator('.wb-tv').evaluate((el) => getComputedStyle(el).backgroundColor)).toBe('rgb(13, 12, 11)')
+    const wod = await page.locator('.wb-tv-main').boundingBox()
+    const qr = await page.locator('.wb-tv-qr').boundingBox()
+    expect(wod!.width * wod!.height).toBeGreaterThan(3 * qr!.width * qr!.height)
+  })
+})
+
 test('le coach réagit à un score sur le tableau blanc', async ({ page }) => {
   const db = coachDb()
   await db.install(page)

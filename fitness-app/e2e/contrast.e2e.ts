@@ -20,7 +20,10 @@ const COACH_PAGES: [string, string][] = [
   ['séance', '/dashboard/session'],
   ['connexion', '/login'],
   ['inscription', '/signup'],
-  ['confidentialité', '/confidentialite']
+  ['confidentialité', '/confidentialite'],
+  ['groupes', '/dashboard/groups'],
+  // Toujours sombre, même quand l'appareil est en clair (constat 12).
+  ['mode TV', `/tv/${CLASS_ID}`]
 ]
 
 for (const scheme of ['light', 'dark'] as const) {
