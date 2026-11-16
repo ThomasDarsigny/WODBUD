@@ -1,5 +1,6 @@
 import { PushNotifications, type PushNotificationSchema } from '@capacitor/push-notifications'
 import { supabase } from './supabase'
+import { openInApp } from './nativeLinks'
 import type { PushState } from './push'
 
 /**
@@ -110,12 +111,6 @@ export const FOREGROUND_PUSH_EVENT = 'wodbud:push'
 function foreground(n: PushNotificationSchema): ForegroundPush {
   const url = typeof n.data?.url === 'string' && n.data.url.startsWith('/') ? n.data.url : null
   return { title: n.title ?? 'WODBUD', body: n.body ?? '', url }
-}
-
-/** Mène à une page de l'app, avant comme après le démarrage du routeur. */
-export function openInApp(path: string): void {
-  window.history.pushState({}, '', path)
-  window.dispatchEvent(new PopStateEvent('popstate'))
 }
 
 /** À l'ouverture de l'app (nativeShell.ts). */

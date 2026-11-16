@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.wodbud.app",
+      "sha256_cert_fingerprints": [
+        "E9:C8:13:CB:13:A4:4C:98:A5:51:28:35:45:50:E1:0C:81:F0:E9:89:D7:35:10:82:3C:04:F1:B2:AE:23:D6:55"
+      ]
+    }
+  }
+]

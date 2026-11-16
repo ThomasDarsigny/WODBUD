@@ -3,6 +3,7 @@ import { App } from '@capacitor/app'
 import { SplashScreen } from '@capacitor/splash-screen'
 import { backAction } from './nativeBack'
 import { initNativePush } from './nativePush'
+import { inAppPath, openInApp } from './nativeLinks'
 
 /**
  * Ce que l'app des boutiques ajoute autour de la page (Capacitor). Chargé
@@ -30,6 +31,14 @@ export function initNativeShell(): void {
   }
   syncBars()
   new MutationObserver(syncBars).observe(root, { attributes: true, attributeFilter: ['data-theme'] })
+
+  // Lien du site ouvert dans l'app (A3) : invitation, communauté, QR de
+  // présence. Aussi au démarrage : Capacitor garde le lien jusqu'à ce qu'on
+  // l'écoute.
+  void App.addListener('appUrlOpen', ({ url }) => {
+    const path = inAppPath(url)
+    if (path) openInApp(path)
+  })
 
   // Notifications Firebase (A4) : toucher mène à la page, reçues app ouverte
   // → bannière, jeton tenu à jour.

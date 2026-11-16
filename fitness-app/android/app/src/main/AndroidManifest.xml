@@ -18,6 +18,22 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+            <!-- Liens du site ouverts dans l'app (A3, App Links) : invitation à
+                 un cours ou à un centre, communauté, QR de présence. Android
+                 le vérifie avec /.well-known/assetlinks.json du site ; le
+                 domaine vient de build.gradle (appLinksHost). -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" />
+                <data android:host="${appLinksHost}" />
+                <data android:pathPrefix="/join/" />
+                <data android:pathPrefix="/rejoindre/" />
+                <data android:pathPrefix="/communities/" />
+                <data android:pathPrefix="/presence/" />
+            </intent-filter>
         </activity>
 
         <provider

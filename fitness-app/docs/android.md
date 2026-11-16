@@ -81,6 +81,34 @@ Limite : les photos d'exercices ne sont pas gardées dans l'app (le service work
 du site les garde) ; un WOD jamais ouvert ni programmé n'a pas de contenu hors
 ligne, et la séance le dit.
 
+## Liens qui ouvrent l'app (A3)
+
+Invitation à un cours (`/join/…`) ou à un centre (`/rejoindre/…`), lien de
+communauté (`/communities/…`) et QR de présence (`/presence/…`) : sur un
+téléphone qui a l'app, Android les ouvre **dans l'app**, sur la même page et
+avec sa session ; sans l'app, le site s'ouvre comme avant.
+
+- **Android** : filtre d'intention `autoVerify` dans `AndroidManifest.xml` ; le
+  domaine vient de `appLinksHost` (`android/app/build.gradle`), le même que
+  `PUBLIC_SITE_URL` (`src/lib/publicUrl.ts`).
+- **Site** : `public/.well-known/assetlinks.json` prouve que le site et l'app
+  vont ensemble. Android le lit à l'installation de l'app : il doit être **en
+  ligne sur le site de production**, donc sur `main`. Il contient l'empreinte
+  SHA-256 de la clé qui signe l'app : pour l'instant la clé de développement de
+  l'ordinateur de Thomas (`gradlew signingReport`) ; à la publication, ajouter
+  celle de Google Play (Play Console → Intégrité de l'app → Signature).
+- **App** : `appUrlOpen` (Capacitor) → `inAppPath` (`src/lib/nativeLinks.ts`)
+  n'accepte que les liens https du site (ou de wodbud.com plus tard) et ouvre la
+  page ; aussi au démarrage de l'app par un lien.
+- **wodbud.com** : le jour où il est branché, l'ajouter à `appLinksHost` (une
+  deuxième balise `<data android:host>`) ; le fichier y sera servi pareil.
+
+Vérifier sur un téléphone : `adb shell pm get-app-links com.wodbud.app`
+(« verified » pour le domaine). Pour essayer avant que le fichier soit en
+ligne : `adb shell pm set-app-links-user-selection --user cur --package
+com.wodbud.app true <domaine>`, puis
+`adb shell am start -a android.intent.action.VIEW -d "https://<domaine>/join/<code>"`.
+
 ## Notifications (A4)
 
 Les mêmes messages que les notifications web (vote ouvert, séance programmée,
@@ -140,6 +168,4 @@ sera choisi, changer `MARK` et les couleurs du script, relancer, et construire.
 
 - **A2** Apple et Google : navigateur du système, puis retour dans l'app
   (adresse de retour à ajouter à Supabase Auth : préproduction d'abord).
-- **A3** Liens d'invitation et QR qui ouvrent l'app (App Links : fichier
-  `assetlinks.json` publié sur le site, empreinte de la clé de signature).
 - **A6** Version signée et fiche Google Play, test fermé avec le gym.
