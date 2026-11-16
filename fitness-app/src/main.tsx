@@ -5,7 +5,7 @@ import { registerSW } from 'virtual:pwa-register'
 import App from './App'
 import './index.css'
 import { initTheme, readStoredTheme } from './lib/theme'
-import { markPlatform } from './lib/platform'
+import { isNativeApp, markPlatform } from './lib/platform'
 import { initErrorReporting } from './lib/errorReporting'
 import ErrorBoundary from './components/ui/ErrorBoundary'
 
@@ -13,7 +13,11 @@ initTheme(readStoredTheme())
 markPlatform()
 initErrorReporting()
 
-if (import.meta.env.PROD) {
+// Dans l'app des boutiques, les fichiers sont déjà sur le téléphone : pas de
+// service worker, qui servirait l'ancienne version après une mise à jour.
+const native = isNativeApp()
+
+if (import.meta.env.PROD && !native) {
   const updateSW = registerSW({
     onNeedRefresh() {
       updateSW(true)
@@ -37,3 +41,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     </ErrorBoundary>
   </React.StrictMode>
 )
+
+if (native) {
+  void import('./lib/nativeShell').then((m) => m.initNativeShell())
+}

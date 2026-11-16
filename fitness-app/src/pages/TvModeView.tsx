@@ -12,6 +12,7 @@ import { readUnit } from '../lib/records'
 import { formatSlotTime, nextOccurrence, type ClassSlot } from '../lib/classSlots'
 import { useClassStore } from '../stores/classStore'
 import { useClassSlotStore } from '../stores/classSlotStore'
+import { publicOrigin } from '../lib/publicUrl'
 import { METHOD_I18N_KEYS, type ClassMember, type WorkoutMethod } from '../types'
 
 interface Line { position: number; sets: number | null; reps: string | null; weight: string | null; name: string }
@@ -183,7 +184,7 @@ export default function TvModeView() {
   const dateLabel = now.toLocaleDateString(lang, { weekday: 'long', day: 'numeric', month: 'long' })
   const title = plan ? (plan.title || plan.workout_title || t('tv.wod')) : null
   const lineText = (l: Line) => [l.sets && l.reps ? `${l.sets} × ${l.reps}` : l.reps].filter(Boolean).join('')
-  const qrUrl = qr && qr !== 'denied' ? `${window.location.origin}${checkInPath(classId, qr.code)}` : ''
+  const qrUrl = qr && qr !== 'denied' ? `${publicOrigin()}${checkInPath(classId, qr.code)}` : ''
 
   if (className === null) {
     return (

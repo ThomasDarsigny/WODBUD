@@ -325,8 +325,10 @@ label {
    l'en-tête passe sous l'encoche / la Dynamic Island une fois l'app
    ajoutée à l'écran d'accueil. */
 :root {
-  --safe-top: env(safe-area-inset-top, 0px);
-  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  /* App des boutiques sur Android : Capacitor pose --safe-area-inset-* (les
+     WebView d'avant Chromium 140 ne donnent pas env() correctement). */
+  --safe-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px));
+  --safe-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));
   --tabbar-h: 58px;
   /* Barre du haut sur téléphone : hauteur fixe pour que les écrans plein
      cadre (créateur de WOD) puissent se caler entre elle et les onglets. */
@@ -2058,7 +2060,7 @@ button.wb-row:active, a.wb-row:active { background: var(--surface); }
 .wb-auth-links { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1.25rem; }
 .wb-oauth-slot { min-height: 48px; }
 .wb-oauth-list { display: grid; gap: 0.6rem; }
-.wb-legal { min-height: 100vh; padding: 3rem 1.5rem; background: var(--black); color: var(--white); }
+.wb-legal { min-height: 100vh; padding: calc(3rem + var(--safe-top, 0px)) 1.5rem calc(3rem + var(--safe-bottom, 0px)); background: var(--black); color: var(--white); }
 .wb-legal-inner { max-width: 760px; margin: 0 auto; }
 .wb-legal-back { display: inline-flex; align-items: center; min-height: 44px; color: var(--muted); font-family: var(--font-d); font-size: var(--t-label); letter-spacing: 0.14em; text-decoration: none; text-transform: uppercase; }
 .wb-legal-back:hover, .wb-legal-back:focus-visible { color: var(--white); }

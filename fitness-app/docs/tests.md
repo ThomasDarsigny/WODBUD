@@ -46,4 +46,6 @@ Vingt et un fichiers de parcours, chacun lancé sur ordinateur (1440 × 900) et 
 
 **Navigateur.** Les tests utilisent Chrome tel qu'il est installé sur la machine (`channel: 'chrome'`), donc aucun navigateur à télécharger. Sur GitHub, le job « Parcours de bout en bout » du workflow CI les lance à chaque push sur `main` ou `dev`. En cas d'échec, le rapport (captures et traces) est joint au run.
 
+**App Android.** Le job « App Android » du même workflow construit l'APK de développement (Java 21, fausses valeurs Supabase, aucun secret) : le projet `android/` doit toujours compiler. L'essai sur émulateur se fait à la main (docs/android.md).
+
 **Ajouter un parcours.** Partir de `coachDb()` ou `athleteDb()`, compléter les tables au besoin, appeler `await db.install(page)` avant la première navigation, puis vérifier l'écran et `db.writes` / `db.calls`. Toute erreur JavaScript dans la page fait échouer le test.

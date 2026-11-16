@@ -1,6 +1,6 @@
 import { supabase } from './supabase'
 import { getLocalUser } from './currentUser'
-import { isInstalledApp } from './platform'
+import { isInstalledApp, isNativeApp } from './platform'
 
 /**
  * Notifications push sur cet appareil (migration 039, fonction Edge `push`).
@@ -22,6 +22,8 @@ export type PushState =
   | 'ios-install'
   /** Navigateur sans push, ou app servie sans service worker (dev local). */
   | 'unsupported'
+  /** App des boutiques : les notifications natives viennent plus tard (docs/android.md, A4). */
+  | 'app-soon'
 
 function isIos(): boolean {
   return /iphone|ipad|ipod/i.test(navigator.userAgent)
@@ -41,6 +43,9 @@ async function registration(): Promise<ServiceWorkerRegistration | null> {
 }
 
 export async function getPushState(): Promise<PushState> {
+  // Un WebView n'a pas les notifications du web : celles de l'app passeront
+  // par Firebase (Android) et Apple.
+  if (isNativeApp()) return 'app-soon'
   // Safari iOS n'expose PushManager qu'une fois l'app ajoutée à l'écran
   // d'accueil (iOS 16.4+) : avant, c'est la seule chose à lui dire.
   if (isIos() && !isInstalledApp()) return 'ios-install'

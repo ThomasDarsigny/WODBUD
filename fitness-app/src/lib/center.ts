@@ -1,6 +1,7 @@
 import { supabase } from './supabase'
 import { getLocalUser } from './currentUser'
 import { cleanEquipment, type EquipmentId } from './equipment'
+import { publicOrigin } from './publicUrl'
 
 /**
  * Centres (048) : le côté business. Les droits viennent du rôle dans
@@ -93,7 +94,7 @@ export async function removeMember(centerId: string, userId: string): Promise<vo
 
 // ─── Invitations ───────────────────────────────────────────────────
 
-export const inviteUrl = (token: string) => `${window.location.origin}/rejoindre/${token}`
+export const inviteUrl = (token: string) => `${publicOrigin()}/rejoindre/${token}`
 
 /** Le lien permanent des membres (créé avec le centre ; recréé s'il a été révoqué). */
 export async function memberInviteToken(centerId: string): Promise<string> {

@@ -48,6 +48,47 @@ jobs:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
 
+  # App des boutiques (Capacitor) : le projet Android doit toujours se
+  # construire. APK de développement jamais distribué : fausses valeurs
+  # Supabase, aucun secret, aucune clé de signature.
+  android:
+    name: App Android (APK de développement)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: fitness-app
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+          cache-dependency-path: fitness-app/package-lock.json
+
+      - name: Setup Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: gradle
+
+      - name: Installer les dépendances
+        run: npm ci
+
+      - name: Site recopié dans android/
+        run: npx vite build && npx cap sync android
+        env:
+          VITE_SUPABASE_URL: http://supabase.test
+          VITE_SUPABASE_ANON_KEY: test
+
+      - name: APK de développement
+        working-directory: fitness-app/android
+        run: ./gradlew assembleDebug --console=plain
+
   e2e:
     name: Parcours de bout en bout (Playwright)
     runs-on: ubuntu-latest

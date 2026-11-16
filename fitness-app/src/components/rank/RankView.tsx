@@ -10,6 +10,7 @@ import { useSearchParams } from 'react-router-dom'
 import BadgeGrid from '../badges/BadgeGrid'
 import { useNotificationStore } from '../../stores/notificationStore'
 import { AnimatedNumber } from '../ui/motion'
+import { publicOrigin } from '../../lib/publicUrl'
 
 export default function RankView() {
   // Ouvrir cet écran, c'est avoir vu ses badges et son rang : les pastilles
@@ -34,7 +35,7 @@ export default function RankView() {
   const previewTo = previewKey ? ranks.find((r) => r.key === previewKey) ?? null : null
   const previewFrom = previewTo ? ranks.find((r) => r.position === previewTo.position - 1) ?? null : null
 
-  const shareUrl = shareToken ? `${window.location.origin}/rang/${shareToken}` : null
+  const shareUrl = shareToken ? `${publicOrigin()}/rang/${shareToken}` : null
 
   async function handleCopy() {
     if (!shareUrl) return

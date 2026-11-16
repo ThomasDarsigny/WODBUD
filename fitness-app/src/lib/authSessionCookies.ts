@@ -1,6 +1,13 @@
 import type { Session } from '@supabase/supabase-js'
+import { isNativeApp } from './platform'
 
 function canSyncAuthCookies(): boolean {
+  // Les cookies servent au site (fonction Vercel /api) ; l'app des boutiques
+  // n'a pas de serveur derrière `https://localhost`.
+  if (isNativeApp()) {
+    return false
+  }
+
   if (import.meta.env.PROD) {
     return true
   }

@@ -5,9 +5,10 @@ import { VitePWA } from 'vite-plugin-pwa'
 import { fileURLToPath, URL } from 'node:url'
 
 export default defineConfig({
-  // Version affichée dans le suivi des erreurs (4.5) : le commit déployé sur Vercel.
+  // Version affichée dans le suivi des erreurs (4.5) : le commit déployé sur
+  // Vercel, ou celle que pose scripts/android.mjs (« android-<commit> »).
   define: {
-    __APP_VERSION__: JSON.stringify((process.env.VERCEL_GIT_COMMIT_SHA ?? 'dev').slice(0, 7))
+    __APP_VERSION__: JSON.stringify(process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 7) ?? process.env.WODBUD_APP_VERSION ?? 'dev')
   },
   resolve: {
     alias: {

@@ -7,10 +7,20 @@
  */
 export function isInstalledApp(): boolean {
   if (typeof window === 'undefined') return false
-  const capacitor = (window as Window & { Capacitor?: { isNativePlatform?: () => boolean } }).Capacitor
-  if (capacitor?.isNativePlatform?.()) return true
+  if (isNativeApp()) return true
   return window.matchMedia?.('(display-mode: standalone)').matches
     || (navigator as Navigator & { standalone?: boolean }).standalone === true
+}
+
+/**
+ * App des boutiques (Capacitor), et non le site ni la PWA. Le pont natif pose
+ * `window.Capacitor` avant les scripts de la page : pas besoin d'importer
+ * `@capacitor/core` dans le site pour le savoir.
+ */
+export function isNativeApp(): boolean {
+  if (typeof window === 'undefined') return false
+  const capacitor = (window as Window & { Capacitor?: { isNativePlatform?: () => boolean } }).Capacitor
+  return capacitor?.isNativePlatform?.() === true
 }
 
 /**

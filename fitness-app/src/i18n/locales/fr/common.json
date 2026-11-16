@@ -219,6 +219,7 @@
   },
   "auth_ui": {
     "login_subtitle": "Connecte-toi avec ton email ou ton compte Google.",
+    "login_subtitle_email": "Connecte-toi avec ton email.",
     "login_loading": "Connexion en cours...",
     "login_submit": "Se connecter",
     "google_redirect": "Redirection vers Google...",
@@ -228,6 +229,7 @@
     "password_mismatch": "Les mots de passe ne correspondent pas.",
     "signup_success": "Compte créé. Vérifie ton email pour confirmer ton inscription si nécessaire.",
     "signup_subtitle": "Crée ton compte avec ton email ou Google.",
+    "signup_subtitle_email": "Crée ton compte avec ton email.",
     "full_name": "Ton nom",
     "full_name_placeholder": "Prénom Nom",
     "confirm_password": "Confirmer le mot de passe",
@@ -1028,6 +1030,7 @@
     "push_denied": "Les notifications sont bloquées pour WODBUD. Autorise-les dans les réglages du navigateur ou du téléphone, puis reviens ici.",
     "push_ios_install": "Sur iPhone, ajoute d'abord WODBUD à l'écran d'accueil (bouton Partager → « Sur l'écran d'accueil »), puis ouvre l'app depuis cette icône pour activer les notifications.",
     "push_unsupported": "Ce navigateur ne prend pas en charge les notifications. Utilise Chrome sur Android, ou WODBUD ajouté à l'écran d'accueil sur iPhone.",
+    "push_app_soon": "Les notifications arrivent dans une prochaine version de l'app.",
     "current_email": "Courriel actuel",
     "new_email": "Nouveau courriel",
     "change_email": "Changer le courriel",

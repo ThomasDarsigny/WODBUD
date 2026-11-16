@@ -7,6 +7,7 @@
     "dev": "vite",
     "dev:staging": "vite --mode staging",
     "staging": "node scripts/staging.mjs",
+    "android": "node scripts/android.mjs",
     "build": "vite build && node scripts/prerender.mjs",
     "type-check": "tsc -b",
     "test": "vitest run",
@@ -16,6 +17,10 @@
     "mannequin": "node scripts/build-mannequin.mjs"
   },
   "dependencies": {
+    "@capacitor/android": "^8.6.2",
+    "@capacitor/app": "^8.1.2",
+    "@capacitor/core": "^8.6.2",
+    "@capacitor/splash-screen": "^8.0.2",
     "@react-pdf/renderer": "^4.5.1",
     "@supabase/supabase-js": "^2.105.4",
     "@tanstack/react-query": "^5.100.10",
@@ -33,6 +38,7 @@
     "zustand": "^5.0.14"
   },
   "devDependencies": {
+    "@capacitor/cli": "^8.6.2",
     "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.56.1",
     "@tailwindcss/vite": "^4.3.0",

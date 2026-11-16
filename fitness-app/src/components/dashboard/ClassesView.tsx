@@ -24,8 +24,8 @@ import ClassScheduleEditor from './ClassScheduleEditor'
 import ClassAttendance from './ClassAttendance'
 import { useClassSlotStore } from '../../stores/classSlotStore'
 import { summarizeSlots } from '../../lib/classSlots'
+import { publicOrigin } from '../../lib/publicUrl'
 
-const BASE_URL = window.location.origin
 
 export default function ClassesView() {
   const { t, i18n } = useTranslation(['common', 'exercises'])
@@ -88,7 +88,7 @@ export default function ClassesView() {
     }
   }, [selectedClass, fetchMembers, fetchVoteSessions])
 
-  const inviteUrl = selectedClass ? `${BASE_URL}/join/${selectedClass.invite_token}` : ''
+  const inviteUrl = selectedClass ? `${publicOrigin()}/join/${selectedClass.invite_token}` : ''
 
   function handleSelectClass(cls: Class) {
     setSelectedClass(cls)

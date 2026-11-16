@@ -2,6 +2,7 @@ import { supabase } from './supabase'
 import { getLocalUser } from './currentUser'
 import { startOfMonthLocal, startOfWeekLocal } from './leaderboard'
 import { localDate } from './scheduledWorkouts'
+import { publicOrigin } from './publicUrl'
 
 /**
  * Vie d'une communauté (migration 043) : défis, fil d'activité et
@@ -236,5 +237,5 @@ export async function removeMember(communityId: string, userId: string): Promise
 
 /** Lien d'invitation : passe par /communities/:id, qui choisit l'espace. */
 export function inviteLink(communityId: string): string {
-  return `${window.location.origin}/communities/${communityId}`
+  return `${publicOrigin()}/communities/${communityId}`
 }

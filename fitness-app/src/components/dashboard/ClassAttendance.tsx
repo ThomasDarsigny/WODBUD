@@ -9,6 +9,7 @@ import { slotsOn, formatSlotTime, type ClassSlot } from '../../lib/classSlots'
 import { checkInPath, expectedSessions, fetchAttendanceBetween, markPresent, openCheckIn, removeAttendance, type Attendance } from '../../lib/attendance'
 import type { ClassMember } from '../../types'
 import { Avatar } from '../community/communityUi'
+import { publicOrigin } from '../../lib/publicUrl'
 
 const NO_MEMBERS: ClassMember[] = []
 const NO_SLOTS: ClassSlot[] = []
@@ -83,7 +84,7 @@ export default function ClassAttendance({ classId }: { classId: string }) {
     }
   }
 
-  const url = qr ? `${window.location.origin}${checkInPath(classId, qr.code)}` : ''
+  const url = qr ? `${publicOrigin()}${checkInPath(classId, qr.code)}` : ''
   const expires = qr ? new Date(qr.expires_at) : null
   const until = expires ? formatSlotTime(`${expires.getHours()}:${expires.getMinutes()}`, lang) : ''
 

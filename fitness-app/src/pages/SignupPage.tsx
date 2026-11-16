@@ -5,7 +5,8 @@ import { useTranslation } from 'react-i18next'
 import { supabase } from '../lib/supabase'
 import { authErrorMessage } from '../lib/authErrors'
 import { usePageMeta } from '../hooks/usePageMeta'
-import { isInstalledApp } from '../lib/platform'
+import { isInstalledApp, isNativeApp } from '../lib/platform'
+import { publicOrigin } from '../lib/publicUrl'
 import OAuthButtons from '../components/auth/OAuthButtons'
 import Field from '../components/ui/Field'
 
@@ -43,7 +44,7 @@ export default function SignupPage() {
       email: email.trim(),
       password,
       options: {
-        emailRedirectTo: `${window.location.origin}/entraineur_dashboard`,
+        emailRedirectTo: `${publicOrigin()}/entraineur_dashboard`,
         // Lu par le déclencheur handle_new_user pour remplir profiles.full_name.
         data: { full_name: fullName.trim() }
       }
@@ -71,7 +72,7 @@ export default function SignupPage() {
     const { error: resendError } = await supabase.auth.resend({
       type: 'signup',
       email: sentTo,
-      options: { emailRedirectTo: `${window.location.origin}/entraineur_dashboard` }
+      options: { emailRedirectTo: `${publicOrigin()}/entraineur_dashboard` }
     })
     if (resendError) setError(authErrorMessage(resendError, t))
     else setResent(true)
@@ -107,7 +108,7 @@ export default function SignupPage() {
         <div className="wb-auth-logo" aria-hidden="true">WOD<span>BUD</span></div>
         <section className="wb-auth-card" aria-labelledby="signup-title">
           <h1 id="signup-title" className="wb-auth-title">{t('auth.signup')}</h1>
-          <p className="wb-auth-sub">{t('auth_ui.signup_subtitle')}</p>
+          <p className="wb-auth-sub">{t(isNativeApp() ? 'auth_ui.signup_subtitle_email' : 'auth_ui.signup_subtitle')}</p>
 
           {error && <p className="wb-rec-error wb-auth-error" role="alert">{error}</p>}
 
@@ -164,10 +165,15 @@ export default function SignupPage() {
             </button>
           </form>
 
-          <div className="wb-auth-alt">
-            <div className="wb-auth-rule" />
-            <OAuthButtons disabled={isSubmitting} onError={setError} />
-          </div>
+          {/* App des boutiques : Apple et Google refusent la connexion dans
+              une page intégrée, et leur retour viserait le site. Les boutons
+              reviendront avec le navigateur du système et le retour à l'app. */}
+          {!isNativeApp() && (
+            <div className="wb-auth-alt">
+              <div className="wb-auth-rule" />
+              <OAuthButtons disabled={isSubmitting} onError={setError} />
+            </div>
+          )}
 
           <div className="wb-auth-links">
             <Link to="/login" className="wb-auth-link">

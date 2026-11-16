@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { supabase } from '../lib/supabase'
 import { authErrorMessage } from '../lib/authErrors'
 import { usePageMeta } from '../hooks/usePageMeta'
-import { isInstalledApp } from '../lib/platform'
+import { isInstalledApp, isNativeApp } from '../lib/platform'
 import OAuthButtons from '../components/auth/OAuthButtons'
 import Field from '../components/ui/Field'
 
@@ -44,7 +44,7 @@ export default function LoginPage() {
         <div className="wb-auth-logo" aria-hidden="true">WOD<span>BUD</span></div>
         <section className="wb-auth-card" aria-labelledby="login-title">
           <h1 id="login-title" className="wb-auth-title">{t('auth.login')}</h1>
-          <p className="wb-auth-sub">{t('auth_ui.login_subtitle')}</p>
+          <p className="wb-auth-sub">{t(isNativeApp() ? 'auth_ui.login_subtitle_email' : 'auth_ui.login_subtitle')}</p>
 
           {error && <p className="wb-rec-error wb-auth-error" role="alert">{error}</p>}
 
@@ -74,10 +74,13 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <div className="wb-auth-alt">
-            <div className="wb-auth-rule" />
-            <OAuthButtons disabled={isSubmitting} onError={setError} />
-          </div>
+          {/* App des boutiques : voir SignupPage (Apple et Google, plus tard). */}
+          {!isNativeApp() && (
+            <div className="wb-auth-alt">
+              <div className="wb-auth-rule" />
+              <OAuthButtons disabled={isSubmitting} onError={setError} />
+            </div>
+          )}
 
           <div className="wb-auth-links">
             <Link to="/signup" className="wb-auth-link">

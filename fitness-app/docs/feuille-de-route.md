@@ -173,6 +173,15 @@ Rapport : audit produit publié le 12 novembre. Branche de travail : `sprint`. U
 - [x] 4.5 Suivi des erreurs, sans service tiers : table `client_errors` (migration 070) écrite seulement par `log_client_error` (validation, troncature, 20 par heure et par compte, 300 par heure sans compte, purge à 90 jours), lisible par les administrateurs ; côté app, erreurs non attrapées et promesses rejetées signalées une fois chacune (10 au plus par visite), page sans paramètres et jetons masqués, version du commit déployé ; bruit écarté (extensions, « Script error. », ResizeObserver). Filet `ErrorBoundary` : un écran qui plante affiche « Cet écran a planté » avec Recharger / Accueil au lieu d'une page blanche, les menus restent utilisables ; section « Erreurs des utilisateurs » dans le tableau de bord admin. Parcours e2e (signalement unique, écran dont le code ne se télécharge pas, administration).
 - [x] 4.6 Préproduction : projet Supabase gratuit séparé, `wodbud-staging` (Canada), reconstruit et tenu à jour par `npm run staging` (`scripts/staging.mjs`, CLI Supabase, la production n'est jamais écrite). Schéma de référence + migrations 039 à 070 + catalogue recopié (rangs, badges, exercices de la base commune, 13 benchmarks), aucune donnée de compte ; `staging -- diff` compare les deux structures (identiques, 1007 objets) et les réponses à un visiteur sans compte sont les mêmes. `npm run dev:staging` fait tourner l'app contre la préproduction ; fonctions Edge déployées sans leurs secrets. Trouvé en route : le déclencheur `ensure_rls` (RLS automatique sur toute nouvelle table) manquait au schéma versionné, et `verify_jwt = false` de `push` et `ai-coach` n'était écrit nulle part (un déploiement l'aurait réactivé et cassé la tâche du matin). Reste à faire dans Vercel : variables « Preview » vers la préproduction (voir `docs/preproduction.md`).
 
+### Phase 5 · Apps des boutiques (Android d'abord)
+Les boutiques sont la plateforme principale (décision du 14 novembre) ; branche `android`. Mode d'emploi : docs/android.md.
+- [x] A1 Projet Android Capacitor 8 (`com.wodbud.app`, Android 7 à 16, cible API 36) qui démarre l'app : `npm run android -- build | apk | run | emulator | open | assets` (production ou `--staging`), version `android-<commit>` dans le suivi des erreurs. Liens partagés (invitations, QR de présence et mode TV, rang, communautés, retour des courriels) sur l'adresse publique du site et non `https://localhost` ; pas de service worker ; bouton retour (fenêtre, puis écran précédent, arrière-plan depuis un accueil) ; bord à bord avec `--safe-top` / `--safe-bottom` alimentés par Capacitor ; icônes des barres selon le thème ; démarrage avec le logo sur le fond de l'app, clair ou sombre comme le téléphone ; icônes à toutes les densités (logo provisoire) ; Apple et Google masqués (refusés dans une page intégrée) ; sauvegarde Android désactivée ; job CI qui construit l'APK. Vérifié sur émulateur (Android 14, thèmes clair et sombre).
+- [ ] A2 Connexion Apple et Google par le navigateur du système, retour dans l'app.
+- [ ] A3 Liens d'invitation et QR qui ouvrent l'app (App Links).
+- [ ] A4 Notifications natives (Firebase).
+- [ ] A5 Séance hors ligne sans service worker.
+- [ ] A6 Version signée, fiche Google Play, test fermé avec le gym (12 testeurs, 14 jours, si compte personnel).
+
 ## À définir avec le client
 - [ ] **Facturation** : qui paie et comment (par membre, par entraîneur, prix fixe).
 - [ ] **Forfaits d'abonnement** (« balancer les bundles ») : ce qui est inclus dans chaque palier.
@@ -184,7 +193,7 @@ Rapport : audit produit publié le 12 novembre. Branche de travail : `sprint`. U
 ## Toujours en suspens (technique)
 - [ ] Supabase : activer « Confirm email » et « Leaked password protection ».
 - [ ] Clés : `ANTHROPIC_API_KEY` (assistant IA et lecture des feuilles — Gemini n'est plus utilisé), clés R2 (vidéos).
-- [ ] Emballage App Store / Play Store avec Capacitor, et notifications natives (Apple, Firebase).
+- [ ] Emballage App Store / Play Store avec Capacitor, et notifications natives (Apple, Firebase) : Android commencé, voir Phase 5.
 - [ ] Logo officiel d'Apple sur le bouton « Continuer avec Apple ».
 - [x] Suivi des erreurs : fait en 4.5 (sans service tiers).
 - [ ] Statistiques d'usage.
