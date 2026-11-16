@@ -86,7 +86,7 @@ export default function ExercisesView() {
         (e.secondary_movements ?? []).includes(movementFilter)
       const matchMethod = methodFilter === 'all' || (e.methods ?? []).includes(methodFilter)
       const matchRegion = regionFilter === 'all' || e.body_region === regionFilter
-      const matchEquipment = !onlyDoable || !available || missingEquipment(e.equipment, available.equipment).length === 0
+      const matchEquipment = !onlyDoable || !available?.known || missingEquipment(e.equipment, available.equipment).length === 0
       return matchSearch && matchCat && matchMove && matchMethod && matchRegion && matchEquipment
     })
   }, [exercises, search, categoryFilter, movementFilter, methodFilter, regionFilter, onlyDoable, available, t])
@@ -223,7 +223,7 @@ export default function ExercisesView() {
             />
           ))}
         </FilterGroup>
-        {available && (
+        {available?.known && (
           <FilterGroup label={t('fields.equipment', { ns: 'exercises' })}>
             <FilterChip
               active={onlyDoable}
@@ -263,7 +263,7 @@ export default function ExercisesView() {
             <ExerciseCard
               key={exercise.id}
               exercise={exercise}
-              missing={available ? missingEquipment(exercise.equipment, available.equipment) : []}
+              missing={available?.known ? missingEquipment(exercise.equipment, available.equipment) : []}
               onClick={() => setDetailExercise(exercise)}
             />
           ))}

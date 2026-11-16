@@ -1,4 +1,4 @@
-import { test, expect, coachDb, COACH } from './fixtures'
+import { test, expect, coachDb, COACH, CLASS_ID } from './fixtures'
 
 /** Fenêtre de création d'un cours (composant Modal partagé, 4.2) : accessible au clavier, et le cours est créé. */
 test('le coach crée un cours depuis la fenêtre « Créer un cours »', async ({ page }) => {
@@ -24,4 +24,23 @@ test('le coach crée un cours depuis la fenêtre « Créer un cours »', async (
   await expect(dialog).toHaveCount(0)
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Haltéro du samedi')
   expect(db.writesTo('classes', 'POST')).toEqual([expect.objectContaining({ name: 'Haltéro du samedi', coach_id: COACH.id })])
+})
+
+/** Constat 10 : le suivi du cours vient tout de suite ; l'invitation est avec les membres, l'horaire avec le planning. */
+test('la fiche d’un cours ouvre sur le suivi ; inviter dans Membres, horaire dans Planning', async ({ page }) => {
+  const db = coachDb()
+  await db.install(page)
+  await page.goto(`/dashboard/classes?c=${CLASS_ID}`)
+
+  await expect(page.getByRole('tab', { name: 'Suivi' })).toHaveAttribute('aria-selected', 'true')
+  await expect(page.locator('.wb-cinvite')).toHaveCount(0)
+  await expect(page.locator('.wb-sched')).toHaveCount(0)
+
+  await page.getByRole('tab', { name: 'Membres' }).click()
+  await expect(page.locator('.wb-cinvite')).toBeVisible()
+  await expect(page.locator('.wb-sched')).toHaveCount(0)
+
+  await page.getByRole('tab', { name: 'Planning' }).click()
+  await expect(page.locator('.wb-sched')).toBeVisible()
+  await expect(page.locator('.wb-cinvite')).toHaveCount(0)
 })

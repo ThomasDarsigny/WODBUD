@@ -8,6 +8,12 @@ export interface AvailableEquipment {
   /** D'où vient la liste : l'inventaire du centre, ou celui du compte (maison). */
   source: 'center' | 'home'
   centerName: string | null
+  /**
+   * Une liste vide veut dire « pas encore renseigné », pas « rien sous la
+   * main » (le poids du corps se coche). Sans elle, rien n'est marqué
+   * « équipement manquant » (constat 09 de l'audit).
+   */
+  known: boolean
 }
 
 /**
@@ -21,8 +27,9 @@ export function useAvailableEquipment(): AvailableEquipment | null {
     let alive = true
     ;(async () => {
       const mine = await fetchMyCenter()
-      if (mine) return { equipment: mine.center.equipment, source: 'center' as const, centerName: mine.center.name }
-      return { equipment: cleanEquipment(await fetchMyEquipment()), source: 'home' as const, centerName: null }
+      if (mine) return { equipment: mine.center.equipment, source: 'center' as const, centerName: mine.center.name, known: mine.center.equipment.length > 0 }
+      const equipment = cleanEquipment(await fetchMyEquipment())
+      return { equipment, source: 'home' as const, centerName: null, known: equipment.length > 0 }
     })()
       .then((v) => { if (alive) setValue(v) })
       .catch(() => { if (alive) setValue(null) })

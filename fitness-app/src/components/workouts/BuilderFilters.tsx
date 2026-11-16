@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import type { ExerciseCategory, MuscleGroup } from '../../types'
 import { CATEGORY_I18N_KEYS, CATEGORY_LABELS, MUSCLE_GROUP_I18N_KEYS, MUSCLE_GROUP_LABELS } from '../../types'
 
-interface Available { source: 'center' | 'home'; centerName: string | null; equipment: string[] }
+interface Available { source: 'center' | 'home'; centerName: string | null; equipment: string[]; known: boolean }
 
 /**
  * Filtres du créateur, repliés derrière un bouton : sur téléphone, ils
@@ -46,7 +46,13 @@ export default function BuilderFilters({
 
       {open && (
         <div id="builder-filters" className="wb-bfilters-panel">
-          {available && (
+          {available && !available.known && (
+            <p className="wb-builder-equip">
+              <span>{t('builder.equipment_unknown')}</span>
+              <Link to={editEquipmentTo}>{t('builder.equipment_fill')}</Link>
+            </p>
+          )}
+          {available?.known && (
             <div className="wb-bfilters-group">
               <p className="wb-builder-equip">
                 <span>

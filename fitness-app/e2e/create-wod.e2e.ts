@@ -78,3 +78,28 @@ test('la fiche d’un exercice se ferme avec Échap', async ({ page }) => {
   await expect(dialog).toHaveCount(0)
   await expect(open).toBeFocused()
 })
+
+/** Constat 09 : filtres repliés ; « Équipement manquant » seulement quand l'équipement est connu. */
+test('créateur : filtres repliés, pas d’« Équipement manquant » tant que l’équipement n’est pas renseigné', async ({ page }) => {
+  const db = coachDb()
+  await db.install(page)
+  await page.goto('/dashboard/workout')
+
+  await expect(page.locator('.wb-pick-name, .wb-picker-name, [class*="wb-pick"]').filter({ hasText: 'Thruster' }).first()).toBeVisible()
+  await expect(page.locator('.wb-missing-equip')).toHaveCount(0)
+  const toggle = page.locator('button[aria-controls="builder-filters"]')
+  await expect(toggle).toHaveAttribute('aria-expanded', 'false')
+  await toggle.click()
+  await expect(page.getByText('Équipement pas encore renseigné', { exact: false })).toBeVisible()
+  await expect(page.getByRole('button', { name: 'Seulement ce que j’ai' }).or(page.getByRole('button', { name: "Seulement ce que j'ai" }))).toHaveCount(0)
+})
+
+test('créateur : équipement renseigné, « Équipement manquant » sur ce qui en demande', async ({ page }) => {
+  const db = coachDb()
+  db.tables.profiles[0].equipment = ['pullup_bar']
+  await db.install(page)
+  await page.goto('/dashboard/workout')
+
+  await expect(page.locator('.wb-missing-equip').first()).toBeVisible()
+  await expect(page.locator('.wb-missing-equip').first()).toContainText('Équipement manquant')
+})

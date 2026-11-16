@@ -80,7 +80,8 @@ export default function WorkoutBuilderView() {
   const base = useSpaceBase()
   const [onlyDoable, setOnlyDoable] = useState(false)
   // Filtres repliés sur téléphone (ils prenaient le premier écran), ouverts sur grand écran.
-  const [filtersOpen, setFiltersOpen] = useState(() => !isMobile)
+  // Repliés partout : la liste d'exercices passe devant (constat 09).
+  const [filtersOpen, setFiltersOpen] = useState(false)
   // Ajout direct par « + » : un exercice à la fois, et un retour bref.
   const [addingId, setAddingId] = useState<string | null>(null)
   const [toast, setToast] = useState<string | null>(null)
@@ -114,11 +115,11 @@ export default function WorkoutBuilderView() {
   // chaque groupe). Sans équipement connu, la liste reste telle quelle.
   const missingById = useMemo(() => {
     const map = new Map<string, EquipmentId[]>()
-    if (!available) return map
+    if (!available?.known) return map
     for (const e of exercises) map.set(e.id, missingEquipment(e.equipment, available.equipment))
     return map
   }, [exercises, available])
-  const sortedExercises = available
+  const sortedExercises = available?.known
     ? [...filteredExercises].filter((e) => !onlyDoable || (missingById.get(e.id)?.length ?? 0) === 0).sort(
         (a, b) => Number((missingById.get(a.id)?.length ?? 0) > 0) - Number((missingById.get(b.id)?.length ?? 0) > 0)
       )

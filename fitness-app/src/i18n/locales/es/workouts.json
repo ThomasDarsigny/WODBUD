@@ -64,7 +64,9 @@
     "pdf_loading": "PDF…",
     "slot_details": "Detalles de {{name}}",
     "slot_hide": "Ocultar detalles de {{name}}",
-    "slot_remove": "Quitar {{name}} del WOD"
+    "slot_remove": "Quitar {{name}} del WOD",
+    "equipment_unknown": "Equipamiento aún sin indicar: añádelo para ver lo que puedes hacer.",
+    "equipment_fill": "Indicar"
   },
   "reminders": {
     "theme_inactive": "No has hecho una sesión de {{theme}} desde hace {{days}} días"

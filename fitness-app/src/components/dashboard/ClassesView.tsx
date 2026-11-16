@@ -176,9 +176,33 @@ export default function ClassesView() {
               </div>
             </div>
 
-            <ClassScheduleEditor key={`sched-${selectedClass.id}`} classId={selectedClass.id} legacyText={selectedClass.schedule} />
+            {/* Tabs */}
+            {/* Cinq onglets en puces : elles défilent sur téléphone plutôt que de déborder. */}
+            <div className="wb-chips wb-class-tabs" role="tablist" aria-label={t('classes.title')}>
+              {(['followup', 'members', 'planning', 'leaderboard', 'votes'] as const).map((tab) => (
+                <button
+                  key={tab}
+                  type="button"
+                  role="tab"
+                  aria-selected={activeTab === tab}
+                  className={`wb-chip${activeTab === tab ? ' is-on' : ''}`}
+                  onClick={() => setActiveTab(tab)}
+                >
+                  {t(`classes.tab_${tab}`)}
+                </button>
+              ))}
+            </div>
 
-            {/* Invitation */}
+            {activeTab === 'followup' && (
+              <>
+                <ClassAttendance key={`att-${selectedClass.id}`} classId={selectedClass.id} />
+                <ClassFollowup classId={selectedClass.id} />
+              </>
+            )}
+
+            {/* Members tab */}
+            {/* Inviter : avec les membres, plus au-dessus de tout (constat 10). */}
+            {activeTab === 'members' && (
             <section className="wb-cinvite" aria-labelledby="class-invite-label">
               <p id="class-invite-label" className="wb-cinvite-label">{t('classes.invite_label')}</p>
               <div className="wb-cinvite-row">
@@ -211,31 +235,7 @@ export default function ClassesView() {
               )}
               <InviteByEmail key={selectedClass.id} kind="class" targetId={selectedClass.id} />
             </section>
-            {/* Tabs */}
-            {/* Cinq onglets en puces : elles défilent sur téléphone plutôt que de déborder. */}
-            <div className="wb-chips wb-class-tabs" role="tablist" aria-label={t('classes.title')}>
-              {(['followup', 'members', 'planning', 'leaderboard', 'votes'] as const).map((tab) => (
-                <button
-                  key={tab}
-                  type="button"
-                  role="tab"
-                  aria-selected={activeTab === tab}
-                  className={`wb-chip${activeTab === tab ? ' is-on' : ''}`}
-                  onClick={() => setActiveTab(tab)}
-                >
-                  {t(`classes.tab_${tab}`)}
-                </button>
-              ))}
-            </div>
-
-            {activeTab === 'followup' && (
-              <>
-                <ClassAttendance key={`att-${selectedClass.id}`} classId={selectedClass.id} />
-                <ClassFollowup classId={selectedClass.id} />
-              </>
             )}
-
-            {/* Members tab */}
             {activeTab === 'members' && (
               <MembersTab
                 classId={selectedClass.id}
@@ -244,8 +244,12 @@ export default function ClassesView() {
               />
             )}
 
+            {/* Horaire : avec le planning, plus au-dessus de tout (constat 10). */}
             {activeTab === 'planning' && (
-              <ClassPlanningTab classId={selectedClass.id} />
+              <>
+                <ClassScheduleEditor key={`sched-${selectedClass.id}`} classId={selectedClass.id} legacyText={selectedClass.schedule} />
+                <ClassPlanningTab classId={selectedClass.id} />
+              </>
             )}
 
             {/* Classement — la donnée était déjà lisible via la policy
