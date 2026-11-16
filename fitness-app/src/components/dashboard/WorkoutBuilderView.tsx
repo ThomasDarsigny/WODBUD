@@ -19,6 +19,8 @@ import { useSpaceBase } from '../../hooks/useSpaceBase'
 import AdaptPanel from '../workouts/AdaptPanel'
 import PickerExerciseRow from '../workouts/PickerExerciseRow'
 import BuilderFilters from '../workouts/BuilderFilters'
+import ScheduleSavedWod from '../workouts/ScheduleSavedWod'
+import { primaryMuscles } from '../../lib/weekVolume'
 
 export default function WorkoutBuilderView() {
   const { t, i18n } = useTranslation(['workouts', 'common'])
@@ -54,6 +56,8 @@ export default function WorkoutBuilderView() {
   const [selectedMuscles, setSelectedMuscles] = useState<MuscleGroup[]>([])
   const [pickerExercise, setPickerExercise] = useState<Exercise | undefined>()
   const [savedSuccess, setSavedSuccess] = useState(false)
+  // Juste enregistré : proposer de le programmer (parcours de l'audit, étape 4).
+  const [toSchedule, setToSchedule] = useState<{ id: string; name: string; muscles: MuscleGroup[] } | null>(null)
   // Ce qui manque pour enregistrer : dit à voix haute plutôt qu'un bouton
   // grisé muet (le nom vide passait inaperçu).
   const [missing, setMissing] = useState<string | null>(null)
@@ -152,8 +156,11 @@ export default function WorkoutBuilderView() {
       return
     }
     setMissing(null)
+    // Les muscles avant l'enregistrement : le brouillon est vidé ensuite.
+    const muscles = primaryMuscles(workoutExercises.map((we) => we.exercise))
     try {
-      await saveWorkout()
+      const saved = await saveWorkout()
+      setToSchedule({ id: saved.id, name: saved.name, muscles })
       setSavedSuccess(true)
       setTimeout(() => setSavedSuccess(false), 3000)
     } catch {
@@ -489,6 +496,7 @@ export default function WorkoutBuilderView() {
                   : t('builder.save', { ns: 'workouts' })}
             </button>
           </div>
+          {toSchedule && <ScheduleSavedWod workout={toSchedule} base={base} onClose={() => setToSchedule(null)} />}
         </div>
       </div>
 

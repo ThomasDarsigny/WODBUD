@@ -206,7 +206,6 @@ export default function ClassesView() {
             <section className="wb-cinvite" aria-labelledby="class-invite-label">
               <p id="class-invite-label" className="wb-cinvite-label">{t('classes.invite_label')}</p>
               <div className="wb-cinvite-row">
-                <code className="wb-cinvite-url">{inviteUrl}</code>
                 <button
                   type="button"
                   className="wb-btn wb-btn--primary wb-btn--sm"
@@ -228,6 +227,7 @@ export default function ClassesView() {
                   {showQR ? t('classes.hide_qr') : t('classes.show_qr')}
                 </button>
               </div>
+              <p className="wb-cinvite-url" title={inviteUrl}>{inviteUrl}</p>
               {showQR && (
                 <div className="wb-cinvite-qr">
                   <QRCodeSVG value={inviteUrl} size={160} />

@@ -737,14 +737,17 @@ label {
   color: var(--orange);
 }
 
+/* Même famille que les cartes de l'app (rayon, pas d'ombre portée) : elle
+   était la seule à angles vifs et lourde ombre (parcours de l'audit, étape 2). */
 .wb-auth-card {
   position: relative;
   width: 100%;
   max-width: 560px;
   padding: var(--page-pad);
   border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
   background: var(--dark);
-  box-shadow: 0 40px 80px -40px rgba(0, 0, 0, 0.8);
 }
 
 .wb-auth-card::before {
@@ -2363,7 +2366,8 @@ button.wb-row:active, a.wb-row:active { background: var(--surface); }
 .wb-cinvite { margin-bottom: 1.5rem; padding: 1.25rem; border-radius: var(--r-md); border: 1px solid var(--border); background: var(--dark); }
 .wb-cinvite-label { margin: 0 0 0.75rem; font-family: var(--font-d); font-size: var(--t-label); letter-spacing: 0.2em; text-transform: uppercase; color: var(--orange); }
 .wb-cinvite-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; }
-.wb-cinvite-url { flex: 1; min-width: 0; padding: 0.5rem 0.75rem; border-radius: var(--r-md); border: 1px solid var(--border); background: var(--black); color: var(--muted); font-family: monospace; font-size: 0.8125rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* L'adresse en petit sous les boutons, plus comme un champ à recopier (parcours, étape 5). */
+.wb-cinvite-url { margin: 0 0 0.75rem; color: var(--muted); font-size: 0.8125rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; user-select: all; }
 .wb-cinvite-qr { display: inline-block; padding: 0.75rem; background: #fff; line-height: 0; }
 .wb-cmembers { list-style: none; margin: 0; padding: 0; border-radius: var(--r-md); border: 1px solid var(--border); background: var(--dark); }
 .wb-cmember-row { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); }
@@ -3031,3 +3035,14 @@ em[data-rarity='legendaire'] { color: #f4c652; } em[data-rarity='mythique'] { co
 .is-android .wb-tabbar,
 .is-android .wb-sheet { background: var(--dark); }
 .is-android .wb-mobile-top { background: var(--black); }
+
+/* Programmer le WOD qu'on vient d'enregistrer (parcours de l'audit, étape 4). */
+.wb-schedwod { display: grid; gap: 0.75rem; margin-top: 0.9rem; padding: 1rem; border-radius: var(--r-lg); border: 1px solid color-mix(in srgb, var(--orange) 40%, transparent); background: color-mix(in srgb, var(--orange) 6%, var(--dark)); }
+.wb-schedwod.is-done { border-color: color-mix(in srgb, var(--ok) 40%, transparent); background: color-mix(in srgb, var(--ok) 6%, var(--dark)); }
+.wb-schedwod-title { margin: 0; font-weight: 700; }
+.wb-schedwod.is-done .wb-schedwod-title { color: var(--ok-ink); }
+.wb-schedwod-fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); gap: 0.6rem; }
+.wb-schedwod-field { display: grid; gap: 0.3rem; font-size: var(--t-label); font-weight: 700; color: var(--muted); }
+.wb-schedwod-warn { margin: 0; padding: 0; list-style: none; display: grid; gap: 0.25rem; color: var(--warn-ink); font-size: 0.875rem; }
+.wb-schedwod-error { margin: 0; color: var(--danger-ink); font-size: 0.875rem; }
+.wb-schedwod-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }

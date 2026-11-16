@@ -227,7 +227,8 @@ interface WorkoutBuilderState {
   /** Remplace l'exercice d'une ligne (variante plus dure, adaptation) en gardant séries, reps, repos et notes. */
   replaceExercise: (id: string, exercise: Exercise) => void
   resetDraft: () => void
-  saveWorkout: () => Promise<void>
+  /** Enregistre le brouillon et rend le WOD créé (pour le programmer tout de suite). */
+  saveWorkout: () => Promise<Workout>
   fetchWorkouts: () => Promise<void>
 }
 
@@ -501,6 +502,7 @@ export const useWorkoutStore = create<WorkoutBuilderState>((set, get) => ({
         saveToCache('workouts', updated)
         return { savedWorkouts: updated, loadingSave: false, ...DEFAULT_DRAFT, draftRestoredAt: null }
       })
+      return saved
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : i18n.t('errors.generic', { ns: 'common' })
       set({ error: message, loadingSave: false })

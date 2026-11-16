@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { fetchOnboarding, hide, isHidden, STEPS, type OnboardingArea, type OnboardingState, type StepKey } from '../../lib/onboarding'
+import { fetchOnboarding, hide, isHidden, stepsFor, type OnboardingArea, type OnboardingState, type StepKey } from '../../lib/onboarding'
 
 const TARGETS: Record<OnboardingArea, Partial<Record<StepKey, string>>> = {
-  coach: { wod: '/dashboard/workout', class: '/dashboard/classes', session: '/dashboard/session', photo: '/dashboard/settings' },
+  coach: { wod: '/dashboard/workout', class: '/dashboard/classes', team: '/dashboard/settings#equipe', session: '/dashboard/session', photo: '/dashboard/settings' },
   athlete: { session: '/athlete/session', community: '/athlete/communities', photo: '/athlete/settings' }
 }
 
@@ -26,7 +26,7 @@ export default function OnboardingCard({ area }: { area: OnboardingArea }) {
   }, [])
 
   if (!state || hidden) return null
-  const steps = STEPS[area]
+  const steps = stepsFor(area, state)
   const doneCount = steps.filter((k) => state.done[k]).length
   if (doneCount === steps.length) return null
   const next = steps.find((k) => !state.done[k])

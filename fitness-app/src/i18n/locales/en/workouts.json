@@ -66,7 +66,17 @@
     "slot_hide": "Hide details for {{name}}",
     "slot_remove": "Remove {{name}} from the WOD",
     "equipment_unknown": "Equipment not set yet: add it to see what you can do.",
-    "equipment_fill": "Set it up"
+    "equipment_fill": "Set it up",
+    "schedule_prompt": "“{{name}}” is saved. Schedule it?",
+    "schedule_where": "Where",
+    "schedule_when": "When",
+    "schedule_journal": "My journal",
+    "schedule_action": "Schedule",
+    "schedule_later": "Later",
+    "schedule_done": "“{{name}}” scheduled: {{where}}, {{day}}.",
+    "schedule_see_planning": "See the planning",
+    "schedule_see_journal": "See the journal",
+    "schedule_guard": "Volume guard"
   },
   "reminders": {
     "theme_inactive": "You haven't done a {{theme}} session in {{days}} days"

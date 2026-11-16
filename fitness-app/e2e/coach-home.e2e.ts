@@ -34,3 +34,22 @@ test('le coach se connecte et voit la salle du jour', async ({ page, isMobile })
     await expect(menu.getByRole('link')).toHaveText([/Aujourd/i, /Groupes/i, /Programmer/i, /Mon entraînement/i, /Plus/i])
   }
 })
+
+/** Parcours de l'audit, étape 3 : qui dirige un centre a « Invite ton équipe » dans ses premiers pas. */
+test('premiers pas : « Invite ton équipe » pour le propriétaire d’un centre, cochée dès qu’un lien existe', async ({ page }) => {
+  const center = { id: 'ce000000-0000-4000-8000-000000000001', name: 'Box Limoilou', owner_id: COACH.id, equipment: [], venue: 'box', group_size: '11-30' }
+  const db = coachDb({ tables: {
+    centers: [center],
+    center_members: [{ center_id: center.id, user_id: COACH.id, role: 'owner', joined_at: '2026-01-01T00:00:00Z', centers: center }],
+    center_invites: []
+  } })
+  await db.install(page)
+  await page.goto('/dashboard/today')
+
+  const step = page.getByRole('link', { name: /Invite ton équipe/ })
+  await expect(step).toHaveAttribute('href', '/dashboard/settings#equipe')
+
+  db.table('center_invites').push({ token: 'abc', center_id: center.id, role: 'member', created_by: COACH.id })
+  await page.reload()
+  await expect(page.locator('.wb-onb-step.is-done').filter({ hasText: 'Invite ton équipe' })).toBeVisible()
+})

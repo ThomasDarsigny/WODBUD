@@ -66,7 +66,17 @@
     "slot_hide": "Masquer les détails de {{name}}",
     "slot_remove": "Retirer {{name}} du WOD",
     "equipment_unknown": "Équipement pas encore renseigné : indique-le pour voir ce que tu peux faire.",
-    "equipment_fill": "Renseigner"
+    "equipment_fill": "Renseigner",
+    "schedule_prompt": "« {{name}} » est enregistré. Le programmer ?",
+    "schedule_where": "Où",
+    "schedule_when": "Quand",
+    "schedule_journal": "Mon journal",
+    "schedule_action": "Programmer",
+    "schedule_later": "Plus tard",
+    "schedule_done": "« {{name}} » programmé : {{where}}, {{day}}.",
+    "schedule_see_planning": "Voir le planning",
+    "schedule_see_journal": "Voir le journal",
+    "schedule_guard": "Garde-fou de volume"
   },
   "reminders": {
     "theme_inactive": "Tu n'as pas fait de séance {{theme}} depuis {{days}} jours"

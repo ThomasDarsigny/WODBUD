@@ -1235,7 +1235,9 @@
     "join_title": "Rejoins le cours de ton coach",
     "join_desc": "Ouvre le lien d'invitation qu'il t'a envoyé.",
     "community_title": "Rejoins une communauté",
-    "community_desc": "Défis, classements et WODs partagés."
+    "community_desc": "Défis, classements et WODs partagés.",
+    "team_title": "Invite ton équipe",
+    "team_desc": "Partage le lien du centre avec tes coachs et tes membres."
   },
   "records": {
     "tag": "Progression",

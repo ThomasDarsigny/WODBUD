@@ -52,6 +52,11 @@ export default function CenterSettings({ onNotice }: { onNotice: Notice }) {
     return () => { alive = false }
   }, [fetchState, apply])
 
+  // « Invite ton équipe » (premiers pas) mène ici : on arrive sur la section.
+  useEffect(() => {
+    if (mine && window.location.hash === '#equipe') document.getElementById('equipe')?.scrollIntoView({ block: 'start' })
+  }, [mine])
+
   const fail = (err: unknown) => onNotice({ kind: 'err', text: err instanceof Error ? err.message : t('errors.generic') })
 
   async function share(token: string, title: string) {
@@ -159,7 +164,7 @@ export default function CenterSettings({ onNotice }: { onNotice: Notice }) {
         {equipmentBlock(lead, BOX_PRESET, t('equipment.preset_box'), () => updateCenter(center.id, { equipment }))}
       </Section>
 
-      <Section title={t('center.team')}>
+      <Section title={t('center.team')} id="equipe">
         <Row label={t('center.invite_members')} hint={t('center.invite_members_hint')}>
           <button
             type="button"
@@ -235,9 +240,9 @@ export default function CenterSettings({ onNotice }: { onNotice: Notice }) {
   )
 }
 
-function Section({ title, children }: { title: string; children: ReactNode }) {
+function Section({ title, children, id }: { title: string; children: ReactNode; id?: string }) {
   return (
-    <section className="wb-home-sec">
+    <section className="wb-home-sec" id={id}>
       <div className="wb-sec"><h2>{title}</h2></div>
       <div className="wb-card wb-set-card">{children}</div>
     </section>

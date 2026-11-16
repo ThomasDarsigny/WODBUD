@@ -1,4 +1,4 @@
-import { test, expect, coachDb, EXERCISES, NOW } from './fixtures'
+import { test, expect, coachDb, EXERCISES, NOW, CLASS_ID, TODAY } from './fixtures'
 
 /** Parcours 2 : créer un WOD dans le créateur en un écran (2.1) et l'enregistrer. */
 test('le coach crée un WOD et l’enregistre', async ({ page, isMobile }) => {
@@ -102,4 +102,33 @@ test('créateur : équipement renseigné, « Équipement manquant » sur ce qui 
 
   await expect(page.locator('.wb-missing-equip').first()).toBeVisible()
   await expect(page.locator('.wb-missing-equip').first()).toContainText('Équipement manquant')
+})
+
+/** Parcours de l'audit, étape 4 : après « Sauvegarder », programmer le WOD dans un cours sans changer de section. */
+test('après l’enregistrement, le WOD se programme dans un cours, avec le garde-fou de volume', async ({ page, isMobile }) => {
+  const db = coachDb()
+  await db.install(page)
+  await page.goto('/dashboard/workout')
+
+  await page.getByRole('searchbox').first().fill('squat')
+  await page.getByRole('button', { name: 'Ajouter Back squat au WOD' }).click()
+  if (isMobile) await page.locator('.wb-builder-tray').click()
+  await page.locator('#builder-name').fill('Force du jeudi')
+  await page.getByRole('button', { name: /Sauvegarder la séance/i }).click()
+
+  const panel = page.locator('.wb-schedwod')
+  await expect(panel).toContainText('« Force du jeudi » est enregistré. Le programmer ?')
+  // Le cours du coach, et le prochain jour de cours (mercredi 18, ce matin).
+  await expect(panel.getByLabel('Où')).toHaveValue(CLASS_ID)
+  await expect(panel.getByLabel('Quand')).toHaveValue(TODAY)
+
+  // Jeudi : Fran (thrusters) est programmé mercredi, les quadriceps enchaîneraient.
+  await panel.getByLabel('Quand').fill('2026-11-19')
+  await expect(panel.locator('.wb-schedwod-warn')).toContainText('Quadriceps déjà travaillé')
+  await panel.getByRole('button', { name: 'Programmer' }).click()
+
+  await expect(panel).toContainText('« Force du jeudi » programmé')
+  const [workout] = db.writesTo('workouts', 'POST')
+  expect(db.writesTo('class_plans', 'POST')).toEqual([expect.objectContaining({ class_id: CLASS_ID, scheduled_date: '2026-11-19', workout_id: workout.id })])
+  await expect(panel.getByRole('link', { name: 'Voir le planning' })).toHaveAttribute('href', `/dashboard/classes?c=${CLASS_ID}&tab=planning`)
 })
