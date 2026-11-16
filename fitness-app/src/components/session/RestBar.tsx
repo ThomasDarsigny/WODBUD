@@ -5,15 +5,14 @@ import { formatClock } from '../../lib/sessionTimer'
 import { playCue, readSoundPref } from '../../lib/gymCues'
 
 /**
- * Repos entre deux séries : un compte à rebours collé au-dessus de la barre
- * d'onglets, réglable de 15 s en 15 s. Bip au 3-2-1 et à la fin, puis il
- * disparaît : la série suivante commence.
+ * Compte à rebours du repos en cours : secondes restantes, avancement, et les
+ * signaux (bip au 3-2-1, fin du repos). Monté une seule fois à la fois : par
+ * la barre de repos, ou par le mode salle quand il est ouvert.
  */
-export default function RestBar() {
-  const { t } = useTranslation(['workouts', 'common'])
+export function useRestTimer() {
   const rest = useSessionStore((s) => s.rest)
   const items = useSessionStore((s) => s.items)
-  const { adjustRest, skipRest } = useSessionStore()
+  const skipRest = useSessionStore((s) => s.skipRest)
   const [now, setNow] = useState(() => Date.now())
 
   useEffect(() => {
@@ -41,16 +40,32 @@ export default function RestBar() {
     }
   }, [second, rest, skipRest])
 
+  return {
+    rest,
+    second,
+    item: rest ? items.find((i) => i.id === rest.itemId) : undefined,
+    progress: rest ? Math.min(1, Math.max(0, 1 - left / rest.totalMs)) : 0
+  }
+}
+
+/**
+ * Repos entre deux séries : un compte à rebours collé au-dessus de la barre
+ * d'onglets, réglable de 15 s en 15 s. Bip au 3-2-1 et à la fin, puis il
+ * disparaît : la série suivante commence.
+ */
+export default function RestBar() {
+  const { t } = useTranslation(['workouts', 'common'])
+  const { adjustRest, skipRest } = useSessionStore()
+  const { rest, second, item, progress } = useRestTimer()
+
   if (!rest) return null
-  const item = items.find((i) => i.id === rest.itemId)
-  const progress = 1 - left / rest.totalMs
 
   return (
     <>
     {/* Réserve la place de la barre : la fin de la page reste atteignable. */}
     <div className="wb-rest-spacer" aria-hidden="true" />
     <div className="wb-rest wb-above-tabbar" role="timer" aria-live="off" aria-label={t('session.rest_label')}>
-      <div className="wb-rest-bar" aria-hidden="true"><span style={{ transform: `scaleX(${Math.min(1, Math.max(0, progress))})` }} /></div>
+      <div className="wb-rest-bar" aria-hidden="true"><span style={{ transform: `scaleX(${progress})` }} /></div>
       <div className="wb-rest-body">
         <div className="wb-rest-text">
           <span>{t('session.rest')}{item ? ` · ${item.name}` : ''}</span>

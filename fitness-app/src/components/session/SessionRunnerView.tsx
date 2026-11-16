@@ -16,6 +16,7 @@ import { useRankStore } from '../../stores/rankStore'
 import BadgeToken from '../badges/BadgeToken'
 import WorkoutMannequin from '../mannequin/WorkoutMannequin'
 import { GymOverlay, clockText, useClockLabels, useGymClock } from './GymClock'
+import NextMove from './NextMove'
 import ResultSheet from '../records/ResultSheet'
 import RestBar from './RestBar'
 import NavIcon from '../navigation/NavIcon'
@@ -180,7 +181,13 @@ function RunnerPanel() {
   const heading = activityName || workoutName
 
   const [confirmDiscard, setConfirmDiscard] = useState(false)
-  const [gymOpen, setGymOpen] = useState(false)
+  // Sur un téléphone, le mode salle s'ouvre de lui-même au départ de la
+  // séance : le chrono et le prochain mouvement prennent l'écran (constat 06).
+  // Revenir plus tard sur une séance en cours ne le rouvre pas.
+  const startedAt = useSessionStore((s) => s.timer.startedAt)
+  const [gymOpen, setGymOpen] = useState(() =>
+    startedAt !== null && Date.now() - Date.parse(startedAt) < 10_000 && window.matchMedia('(max-width: 768px)').matches
+  )
   const closeGym = useCallback(() => setGymOpen(false), [])
 
   const gym = useGymClock()
@@ -215,19 +222,11 @@ function RunnerPanel() {
         {!running && <p className="wb-run-note">{t('session.paused_note')}</p>}
         {active < 30000 && <p className="wb-run-note">{t('session.zero_warning')}</p>}
 
-        <button type="button" className="wb-run-gym" onClick={() => { unlockAudio(); setGymOpen(true) }}>
-          <span aria-hidden="true">⛶</span> {t('session.gym_mode')}
-          <small>{t('session.gym_hint')}</small>
-        </button>
-        <button
-          type="button"
-          className="wb-run-sound"
-          onClick={() => setSound(!sound)}
-          aria-pressed={sound}
-        >
-          {sound ? `🔊 ${t('session.sound_on')}` : `🔇 ${t('session.sound_off')}`}
-        </button>
+        {/* Le mouvement à faire, sous le chrono (constat 06). */}
+        <NextMove variant="card" />
 
+        {/* Commandes par ordre d'importance : terminer, mettre en pause ;
+            abandonner reste à part, en deux temps (constat 06). */}
         <div className="wb-run-actions">
           <ActionButton onClick={toggle} variant="ghost">
             {running ? `❚❚ ${t('session.pause')}` : `▶ ${t('session.resume')}`}
@@ -235,14 +234,24 @@ function RunnerPanel() {
           <ActionButton onClick={() => { void finish() }} variant="primary" disabled={saving}>
             {saving ? t('session.saving') : `■ ${t('session.finish')}`}
           </ActionButton>
-          <ActionButton
+        </div>
+
+        <div className="wb-run-tools">
+          <button type="button" className="wb-run-tool" onClick={() => { unlockAudio(); setGymOpen(true) }} title={t('session.gym_hint')}>
+            <span aria-hidden="true">⛶</span> {t('session.gym_mode')}
+          </button>
+          <button type="button" className="wb-run-tool" onClick={() => setSound(!sound)} aria-pressed={sound}>
+            {sound ? `🔊 ${t('session.sound_on')}` : `🔇 ${t('session.sound_off')}`}
+          </button>
+          <button
+            type="button"
+            className={`wb-run-tool wb-run-discard${confirmDiscard ? ' is-armed' : ''}`}
             onClick={() => { if (confirmDiscard) { discard(); setConfirmDiscard(false) } else setConfirmDiscard(true) }}
-            variant={confirmDiscard ? 'danger' : 'ghost'}
           >
             {confirmDiscard ? t('session.discard_confirm') : t('session.discard')}
-          </ActionButton>
+          </button>
         </div>
-        {confirmDiscard && <p className="wb-run-note">{t('session.discard_hint')}</p>}
+        {confirmDiscard && <p className="wb-run-note" role="status">{t('session.discard_hint')}</p>}
       </div>
 
       {workoutId && (<div className="wb-card">

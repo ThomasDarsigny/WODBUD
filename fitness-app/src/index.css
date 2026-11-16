@@ -979,59 +979,32 @@ label {
 .wb-run-phase[data-phase='done'] { color: var(--ok-ink); }
 .wb-run-phase[data-phase='paused'] { color: var(--muted); }
 
-.wb-run-gym {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 0.25rem 0.5rem;
-  width: 100%;
-  min-height: 56px;
-  margin-top: 1.2rem;
-  padding: 0.8rem 1rem;
-  border: 1px solid var(--orange);
-  background: var(--orange);
-  color: var(--black);
-  font-family: var(--font-d);
-  font-size: 1.15rem;
-  font-weight: 900;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  text-align: left;
-  cursor: pointer;
-}
-.wb-run-gym small {
-  flex-basis: 100%;
-  font-family: var(--font-b, inherit);
-  font-size: 0.78rem;
-  font-weight: 500;
-  letter-spacing: 0;
-  text-transform: none;
-  opacity: 0.8;
-}
-
-.wb-run-sound {
-  margin-top: 0.6rem;
-  min-height: 40px;
-  padding: 0.4rem 0.2rem;
-  border: none;
-  background: none;
-  color: var(--muted);
-  font-size: 0.85rem;
-  cursor: pointer;
-}
-
+/* Séance (constat 06) : terminer prend la place, pause à côté ; mode salle,
+   son et abandon dans une rangée d'outils discrète. */
 .wb-run-actions {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
   gap: 0.6rem;
-  margin-top: 0.8rem;
+  margin-top: 1rem;
 }
-.wb-run-actions > button:last-child { grid-column: 1 / -1; }
+.wb-run-actions > button { min-height: 52px; }
+.wb-run-tools { display: flex; flex-wrap: wrap; gap: 0.25rem 0.5rem; margin-top: 0.6rem; }
+.wb-run-tool {
+  display: inline-flex; align-items: center; gap: 0.35rem; min-height: 44px; padding: 0.4rem 0.6rem;
+  border: none; border-radius: var(--r-md); background: none; color: var(--muted); font: inherit; font-size: 0.875rem; cursor: pointer;
+}
+.wb-run-tool:hover { color: var(--white); }
+.wb-run-discard { margin-left: auto; }
+.wb-run-discard.is-armed { color: var(--danger-ink); font-weight: 700; }
 
-@media (min-width: 640px) {
-  .wb-run-gym { width: auto; }
-  .wb-run-actions { display: flex; flex-wrap: wrap; }
-}
+/* Prochain mouvement, sous le chrono et dans le mode salle. */
+.wb-next { display: grid; gap: 0.15rem; margin-top: 1rem; padding: 0.9rem 1rem; border-radius: var(--r-lg); border: 1px solid var(--border); background: var(--black); }
+.wb-next-label { margin: 0; display: flex; justify-content: space-between; font-size: var(--t-label); font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--orange-ink); }
+.wb-next-label span { color: var(--muted); letter-spacing: 0; font-variant-numeric: tabular-nums; }
+.wb-next-name { margin: 0; font-family: var(--font-d); font-size: clamp(1.6rem, 7vw, 2.2rem); font-weight: 900; line-height: 1.05; text-transform: uppercase; overflow-wrap: anywhere; }
+.wb-next-detail { margin: 0; font-size: 1.05rem; font-weight: 600; color: var(--white); font-variant-numeric: tabular-nums; }
+.wb-next-done { justify-self: start; min-height: 48px; margin-top: 0.5rem; padding: 0.5rem 1.1rem; border-radius: 999px; border: 1px solid var(--ok-ink); background: transparent; color: var(--ok-ink); font: inherit; font-weight: 700; cursor: pointer; }
+.wb-next.is-done { color: var(--ok-ink); font-weight: 700; }
 
 .wb-gym {
   --gym-bg: #ff5a1f;
@@ -1156,6 +1129,18 @@ label {
   cursor: pointer;
 }
 .wb-gym[data-phase='paused'] .wb-gym-main { background: #ff5a1f; color: #0b0a09; }
+.wb-gym-actions { display: grid; gap: 0.6rem; }
+.wb-gym-finish { min-height: 56px; border: 2px solid var(--gym-ink); border-radius: 18px; background: transparent; color: var(--gym-ink); font-family: var(--font-d); font-size: 1.2rem; font-weight: 900; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; }
+.wb-next--gym { margin: 0 0 0.75rem; border: none; background: color-mix(in srgb, var(--gym-ink) 10%, transparent); color: var(--gym-ink); text-align: center; justify-items: center; }
+.wb-next--gym .wb-next-label, .wb-next--gym .wb-next-label span, .wb-next--gym .wb-next-detail { color: var(--gym-ink); }
+.wb-next--gym .wb-next-label { gap: 0.6em; justify-content: center; opacity: 0.85; }
+.wb-next--gym .wb-next-name { font-size: clamp(2rem, 9vw, 3.4rem); }
+.wb-next--gym .wb-next-detail { font-size: clamp(1.15rem, 5vw, 1.6rem); }
+.wb-next--gym .wb-next-done { justify-self: center; min-height: 56px; padding: 0.6rem 1.6rem; border: 2px solid var(--gym-ink); color: var(--gym-ink); font-size: 1.1rem; }
+.wb-next--gym.is-done { justify-items: center; padding: 1rem; }
+.wb-gym-rest { display: flex; align-items: center; justify-content: center; gap: 0.75rem; margin: 0 0 0.75rem; padding: 0.6rem 0.9rem; border-radius: 14px; background: color-mix(in srgb, var(--gym-ink) 14%, transparent); font-weight: 700; }
+.wb-gym-rest strong { font-family: var(--font-d); font-size: 1.8rem; font-weight: 900; font-variant-numeric: tabular-nums; }
+.wb-gym-rest button { min-height: 44px; padding: 0.3rem 0.9rem; border-radius: 999px; border: 1px solid currentColor; background: transparent; color: inherit; font: inherit; cursor: pointer; }
 
 /* Téléphone couché : le chrono prend la largeur, le bouton passe à droite. */
 @media (orientation: landscape) and (max-height: 520px) {
@@ -2461,11 +2446,10 @@ button.wb-pick-free { display: flex; align-items: center; gap: 1rem; padding: 1.
 .wb-run-main.is-running { border-color: color-mix(in srgb, var(--orange) 40%, transparent); background: radial-gradient(130% 100% at 100% 0%, color-mix(in srgb, var(--orange) 12%, transparent), transparent 60%), var(--dark); }
 .wb-run-head { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; }
 .wb-run-title { margin: 0; font-family: var(--font-d); font-size: 1.3rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.02em; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.wb-run-clock { font-family: var(--font-d); font-size: clamp(4rem, 22vw, 6.5rem); font-weight: 900; line-height: 0.95; font-variant-numeric: tabular-nums; margin: 0.4rem 0 0.1rem; color: var(--muted); }
+.wb-run-clock { font-family: var(--font-d); font-size: clamp(5rem, 30vw, 9rem); font-weight: 900; line-height: 0.95; font-variant-numeric: tabular-nums; margin: 0.4rem 0 0.1rem; color: var(--muted); }
 .wb-run-main.is-running .wb-run-clock { color: var(--white); }
 .wb-run-meta { margin: 0; font-size: 0.8rem; color: var(--muted); font-variant-numeric: tabular-nums; }
 .wb-run-note { margin: 0.6rem 0 0; font-size: 0.8125rem; color: var(--muted); line-height: 1.45; }
-.wb-run-gym { border-radius: var(--r-lg); }
 .wb-run-result { border-radius: var(--r-md); }
 .wb-run-items { display: grid; gap: 0.5rem; }
 .wb-run-check {
@@ -2479,7 +2463,6 @@ button.wb-pick-free { display: flex; align-items: center; gap: 1rem; padding: 1.
 .wb-run-name { flex: 1; min-width: 0; font-weight: 600; font-size: 0.98rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .wb-run-check[aria-pressed='true'] .wb-run-name { text-decoration: line-through; }
 .wb-run-detail { flex-shrink: 0; color: var(--muted); font-size: 0.85rem; font-variant-numeric: tabular-nums; }
-.wb-run-actions { margin-top: 1rem; }
 .wb-btn--danger.is-armed { background: var(--danger); border-color: var(--danger); color: #0b0a09; }
 .wb-run-prs { border-radius: var(--r-lg); }
 

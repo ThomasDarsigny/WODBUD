@@ -131,7 +131,12 @@
     "set_done": "Serie {{n}}/{{total}} hecha",
     "set_undo": "Deshacer la última serie",
     "sets_progress": "{{done}} de {{total}} series",
-    "rankup_continue": "Continuar"
+    "rankup_continue": "Continuar",
+    "next_up": "Siguiente",
+    "all_moves_done": "Todos los movimientos hechos.",
+    "move_done": "Hecho",
+    "move_done_for": "Hecho — {{name}}",
+    "set_done_for": "Serie {{n}}/{{total}} hecha — {{name}}"
   },
   "alerts": {
     "cardio_title": "Alternancia de cardio",

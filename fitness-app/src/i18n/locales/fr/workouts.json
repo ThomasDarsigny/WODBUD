@@ -131,7 +131,12 @@
     "set_done": "Série {{n}}/{{total}} faite",
     "set_undo": "Annuler la dernière série",
     "sets_progress": "{{done}} séries sur {{total}}",
-    "rankup_continue": "Continuer"
+    "rankup_continue": "Continuer",
+    "next_up": "À faire",
+    "all_moves_done": "Tous les mouvements sont faits.",
+    "move_done": "Fait",
+    "move_done_for": "Fait — {{name}}",
+    "set_done_for": "Série {{n}}/{{total}} faite — {{name}}"
   },
   "alerts": {
     "cardio_title": "Alternance cardio",

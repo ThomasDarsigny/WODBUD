@@ -14,7 +14,7 @@ Les calculs sans réseau : scores, semaines et cycles, horaire, présences, menu
 npm run test:e2e
 ```
 
-Vingt-quatre fichiers de parcours, chacun lancé sur ordinateur (1440 × 900) et sur téléphone (Pixel 7) :
+Vingt-cinq fichiers de parcours, chacun lancé sur ordinateur (1440 × 900) et sur téléphone (Pixel 7) :
 
 | Fichier | Parcours |
 |---|---|
@@ -42,6 +42,7 @@ Vingt-quatre fichiers de parcours, chacun lancé sur ordinateur (1440 × 900) et
 | `e2e/offline.e2e.ts` | Séance au sous-sol : l'app rouverte sans réseau montre le WOD du jour et lance la séance avec ses mouvements en moins de 3 s ; sans contenu gardé, message clair ; lectures gardées dans le vrai Cache Storage (app des boutiques) ; la déconnexion efface le hors-ligne. Sans réseau = `db.offline = true` (Supabase injoignable) : le mode hors ligne de Playwright couperait aussi le serveur de Vite |
 | `e2e/auth-callback.e2e.ts` | Retour de connexion (Google / Apple dans l’app, lien du courriel) : le code devient une session avec son secret, puis l’accueil ; connexion annulée ; lien du courriel sans le secret → « adresse confirmée » ; retour Google sans le secret → erreur. Le faux Supabase refuse, comme GoTrue, un code PKCE sans secret |
 | `e2e/trust.e2e.ts` | Adresse inconnue → « Page introuvable » ; landing : « Connexion » pour un visiteur, « Mon espace » pour un compte ouvert |
+| `e2e/session.e2e.ts` | Séance : prochain mouvement sous le chrono, « Fait » passe au suivant, « Terminer » en action principale, abandon en deux temps (ordinateur) ; mode salle ouvert seul au départ sur téléphone, prochain mouvement, terminer depuis le mode salle |
 
 **Rien ne sort de la machine.** L'app est servie sur le port 5174 avec une fausse adresse Supabase (`http://supabase.test`) et le suivi des erreurs actif (`VITE_ERROR_REPORTING=on`), pour que les parcours puissent le vérifier. `e2e/supabase-mock.ts` intercepte chaque requête et répond comme PostgREST, à partir d'une petite base en mémoire. Il gère les filtres `eq`, `in`, `gte`…, le tri, les lignes uniques, les comptes, les écritures, les fonctions RPC et la connexion. Chaque test vérifie ensuite ce qui a été écrit (`db.writesTo('class_plans', 'POST')`). Côté authentification, `db.authCalls` garde chaque appel (connexion, inscription, renvoi) et `db.authErrors` fait répondre une erreur GoTrue à un chemin donné (`invalid_credentials`, `over_email_send_rate_limit`…). Le dépôt est public : aucun identifiant réel n'est utilisé.
 

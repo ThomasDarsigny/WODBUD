@@ -131,7 +131,12 @@
     "set_done": "Set {{n}}/{{total}} done",
     "set_undo": "Undo last set",
     "sets_progress": "{{done}} of {{total}} sets",
-    "rankup_continue": "Continue"
+    "rankup_continue": "Continue",
+    "next_up": "Up next",
+    "all_moves_done": "All movements done.",
+    "move_done": "Done",
+    "move_done_for": "Done — {{name}}",
+    "set_done_for": "Set {{n}}/{{total}} done — {{name}}"
   },
   "alerts": {
     "cardio_title": "Cardio alternation",

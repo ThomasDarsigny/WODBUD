@@ -7,6 +7,7 @@ import { countdownSecond, hasFormatClock, workoutClock, type ClockState } from '
 import { holdScreenAwake, playCue, readSoundPref, unlockAudio, writeSoundPref } from '../../lib/gymCues'
 import { METHOD_I18N_KEYS } from '../../types'
 import { useBackToClose } from '../../hooks/useBackToClose'
+import NextMove, { GymRest } from './NextMove'
 
 /**
  * Horloge vivante de la séance : rafraîchit l'affichage, déclenche les bips
@@ -103,6 +104,12 @@ export function GymOverlay({ gym, title, onClose, onToggle }: OverlayProps) {
   useBackToClose(true, onClose)
   const { t } = useTranslation(['workouts', 'common'])
   const format = useSessionStore((s) => s.format)
+  const items = useSessionStore((s) => s.items)
+  const doneIds = useSessionStore((s) => s.doneExerciseIds)
+  const saving = useSessionStore((s) => s.saving)
+  const finish = useSessionStore((s) => s.finish)
+  // Tous les mouvements cochés : on peut terminer sans quitter le mode salle.
+  const allDone = items.length > 0 && items.every((i) => doneIds.includes(i.id))
   const { clock, running, withFormat, sound, setSound } = gym
   const labels = useClockLabels(clock)
   const closeRef = useRef<HTMLButtonElement>(null)
@@ -166,13 +173,24 @@ export function GymOverlay({ gym, title, onClose, onToggle }: OverlayProps) {
         )}
       </div>
 
-      <button
-        type="button"
-        className="wb-gym-main"
-        onClick={() => { unlockAudio(); onToggle() }}
-      >
-        {running ? `❚❚ ${t('session.pause')}` : `▶ ${t('session.resume')}`}
-      </button>
+      {/* Le prochain mouvement et le repos, lisibles du sol (constat 06). */}
+      <GymRest />
+      <NextMove variant="gym" />
+
+      <div className="wb-gym-actions">
+        <button
+          type="button"
+          className="wb-gym-main"
+          onClick={() => { unlockAudio(); onToggle() }}
+        >
+          {running ? `❚❚ ${t('session.pause')}` : `▶ ${t('session.resume')}`}
+        </button>
+        {allDone && (
+          <button type="button" className="wb-gym-finish" disabled={saving} onClick={() => { onClose(); void finish() }}>
+            ■ {t('session.finish')}
+          </button>
+        )}
+      </div>
     </div>,
     document.body
   )
