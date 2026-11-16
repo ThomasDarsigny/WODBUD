@@ -7,8 +7,18 @@ import { authErrorMessage } from '../lib/authErrors'
 import { usePageMeta } from '../hooks/usePageMeta'
 import { isInstalledApp, isNativeApp } from '../lib/platform'
 import { publicOrigin } from '../lib/publicUrl'
+import { AUTH_CALLBACK_PATH } from '../lib/authCallback'
 import OAuthButtons from '../components/auth/OAuthButtons'
 import Field from '../components/ui/Field'
+
+/**
+ * Où mène le lien du courriel de confirmation. App des boutiques : la page de
+ * retour du site, que les App Links ouvrent dans l'app, qui y échange le code
+ * contre une session (A2). Site : l'accueil du compte, comme avant.
+ */
+function emailReturnUrl(): string {
+  return `${publicOrigin()}${isNativeApp() ? AUTH_CALLBACK_PATH : '/entraineur_dashboard'}`
+}
 
 export default function SignupPage() {
   const { t } = useTranslation('common')
@@ -44,7 +54,7 @@ export default function SignupPage() {
       email: email.trim(),
       password,
       options: {
-        emailRedirectTo: `${publicOrigin()}/entraineur_dashboard`,
+        emailRedirectTo: emailReturnUrl(),
         // Lu par le déclencheur handle_new_user pour remplir profiles.full_name.
         data: { full_name: fullName.trim() }
       }
@@ -72,7 +82,7 @@ export default function SignupPage() {
     const { error: resendError } = await supabase.auth.resend({
       type: 'signup',
       email: sentTo,
-      options: { emailRedirectTo: `${publicOrigin()}/entraineur_dashboard` }
+      options: { emailRedirectTo: emailReturnUrl() }
     })
     if (resendError) setError(authErrorMessage(resendError, t))
     else setResent(true)
@@ -108,7 +118,7 @@ export default function SignupPage() {
         <div className="wb-auth-logo" aria-hidden="true">WOD<span>BUD</span></div>
         <section className="wb-auth-card" aria-labelledby="signup-title">
           <h1 id="signup-title" className="wb-auth-title">{t('auth.signup')}</h1>
-          <p className="wb-auth-sub">{t(isNativeApp() ? 'auth_ui.signup_subtitle_email' : 'auth_ui.signup_subtitle')}</p>
+          <p className="wb-auth-sub">{t('auth_ui.signup_subtitle')}</p>
 
           {error && <p className="wb-rec-error wb-auth-error" role="alert">{error}</p>}
 
@@ -165,15 +175,10 @@ export default function SignupPage() {
             </button>
           </form>
 
-          {/* App des boutiques : Apple et Google refusent la connexion dans
-              une page intégrée, et leur retour viserait le site. Les boutons
-              reviendront avec le navigateur du système et le retour à l'app. */}
-          {!isNativeApp() && (
-            <div className="wb-auth-alt">
-              <div className="wb-auth-rule" />
-              <OAuthButtons disabled={isSubmitting} onError={setError} />
-            </div>
-          )}
+          <div className="wb-auth-alt">
+            <div className="wb-auth-rule" />
+            <OAuthButtons disabled={isSubmitting} onError={setError} />
+          </div>
 
           <div className="wb-auth-links">
             <Link to="/login" className="wb-auth-link">

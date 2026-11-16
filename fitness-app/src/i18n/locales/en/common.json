@@ -219,7 +219,6 @@
   },
   "auth_ui": {
     "login_subtitle": "Log in with your email or Google account.",
-    "login_subtitle_email": "Log in with your email.",
     "login_loading": "Signing in...",
     "login_submit": "Log in",
     "google_redirect": "Redirecting to Google...",
@@ -229,7 +228,6 @@
     "password_mismatch": "Passwords do not match.",
     "signup_success": "Account created. Check your email to confirm your signup if needed.",
     "signup_subtitle": "Create your account with email or Google.",
-    "signup_subtitle_email": "Create your account with your email.",
     "full_name": "Your name",
     "full_name_placeholder": "First Last",
     "confirm_password": "Confirm password",
@@ -1773,5 +1771,15 @@
     "err_network": "The message didn’t go through: check your connection, then try again.",
     "inbox_title": "Website messages",
     "inbox_empty": "No messages."
+  },
+  "auth_callback": {
+    "title": "Sign in",
+    "working": "Signing you in…",
+    "confirmed_title": "Email confirmed",
+    "confirmed_text": "Your email address is confirmed. Log in with your email and password.",
+    "error_title": "Could not sign in",
+    "error_text": "Sign-in did not complete: the link may have expired or already been used. Try again from the login screen.",
+    "cancelled_text": "Sign-in was cancelled.",
+    "to_login": "Go to login"
   }
 }

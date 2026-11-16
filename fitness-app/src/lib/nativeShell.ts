@@ -4,6 +4,8 @@ import { SplashScreen } from '@capacitor/splash-screen'
 import { backAction } from './nativeBack'
 import { initNativePush } from './nativePush'
 import { inAppPath, openInApp } from './nativeLinks'
+import { authCallbackPath } from './authCallback'
+import { closeBrowser } from './nativeAuth'
 
 /**
  * Ce que l'app des boutiques ajoute autour de la page (Capacitor). Chargé
@@ -35,8 +37,11 @@ export function initNativeShell(): void {
   // Lien du site ouvert dans l'app (A3) : invitation, communauté, QR de
   // présence. Aussi au démarrage : Capacitor garde le lien jusqu'à ce qu'on
   // l'écoute.
+  // Retour de Google ou d'Apple (A2) : com.wodbud.app://auth/callback.
   void App.addListener('appUrlOpen', ({ url }) => {
-    const path = inAppPath(url)
+    const oauth = authCallbackPath(url)
+    if (oauth) void closeBrowser()
+    const path = oauth ?? inAppPath(url)
     if (path) openInApp(path)
   })
 

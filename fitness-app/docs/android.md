@@ -53,7 +53,7 @@ Unexpected VP exit code 4 »), le démarrer à froid avec le rendu logiciel :
 | Bouton retour | Ferme d'abord la fenêtre ouverte ; sur un accueil, met l'app en arrière-plan ; ailleurs, écran précédent (`src/lib/nativeBack.ts`). |
 | Barres système | Bord à bord : la page passe sous les barres et s'en écarte avec `--safe-top` / `--safe-bottom`. Capacitor les remplit (`--safe-area-inset-*`) ; sur les WebView d'avant Chromium 140, il décale plutôt la page lui-même. Icônes claires ou foncées selon le thème de l'app. |
 | Démarrage | Logo sur le fond de l'app (clair ou sombre comme le téléphone), retiré au premier rendu. |
-| Apple / Google | Masqués : ils refusent la connexion dans une page intégrée. Reviennent avec l'unité A2. |
+| Apple / Google | Dans Chrome (onglet personnalisé) et retour à l'app : voir « Connexion Google et Apple » plus bas. |
 | Notifications | Firebase Cloud Messaging au lieu des notifications web (absentes d'un WebView) : voir « Notifications » plus bas. Sans `google-services.json` à la construction, les réglages annoncent qu'elles arrivent dans une prochaine version. |
 | Sauvegarde Android | Désactivée (`allowBackup="false"`) : les jetons de session ne partent pas dans les sauvegardes Google. |
 
@@ -80,6 +80,31 @@ Au sous-sol d'une box, le réseau tombe. Sur le site comme dans l'app :
 Limite : les photos d'exercices ne sont pas gardées dans l'app (le service worker
 du site les garde) ; un WOD jamais ouvert ni programmé n'a pas de contenu hors
 ligne, et la séance le dit.
+
+## Connexion Google et Apple (A2)
+
+Google et Apple refusent une page intégrée : dans l'app, le bouton ouvre leur
+page dans Chrome (onglet personnalisé, `@capacitor/browser`), puis Supabase
+renvoie vers **`com.wodbud.app://auth/callback?code=…`**, une adresse que seule
+l'app ouvre (filtre d'intention `custom_url_scheme`). L'app échange le code
+contre une session sur la page `/auth/callback` (`AuthCallbackPage`).
+
+- **PKCE** : dans l'app, le client Supabase utilise le flux PKCE
+  (`src/lib/supabase.ts`). Le code de retour ne vaut rien sans le secret gardé
+  par l'app au départ : une autre app qui intercepterait l'adresse n'en ferait
+  rien. Le site garde le flux par défaut.
+- **Abandon** : onglet fermé sans revenir → les boutons reviennent
+  (`browserFinished`) ; refus chez le fournisseur → « La connexion a été
+  annulée ».
+- **Courriel de confirmation** (quand « Confirm email » sera activé) : le lien
+  ramène à `https://<site>/auth/callback`, ouvert dans l'app par les App Links
+  (A3) ; ouvert ailleurs (autre appareil, navigateur), la page dit que
+  l'adresse est confirmée et invite à se connecter.
+- **Supabase Auth → URL Configuration → Redirect URLs** : y ajouter
+  `com.wodbud.app://auth/callback` et `https://<site>/auth/callback` (fait en
+  préproduction par `npm run staging -- auth`).
+- WebView d'avant Chrome 130 : une adresse à schéma propre y est mal découpée
+  par `new URL` ; `authCallbackPath` la lit donc sans lui.
 
 ## Liens qui ouvrent l'app (A3)
 
@@ -166,6 +191,4 @@ sera choisi, changer `MARK` et les couleurs du script, relancer, et construire.
 
 ## Suite prévue
 
-- **A2** Apple et Google : navigateur du système, puis retour dans l'app
-  (adresse de retour à ajouter à Supabase Auth : préproduction d'abord).
 - **A6** Version signée et fiche Google Play, test fermé avec le gym.

@@ -33,6 +33,17 @@
                 <data android:pathPrefix="/rejoindre/" />
                 <data android:pathPrefix="/communities/" />
                 <data android:pathPrefix="/presence/" />
+                <!-- Lien de confirmation du courriel (A2, page /auth/callback). -->
+                <data android:pathPrefix="/auth/" />
+            </intent-filter>
+
+            <!-- Retour de Google et d'Apple (A2) : com.wodbud.app://auth/callback,
+                 une adresse que seule l'app ouvre (code PKCE inutile sans elle). -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="@string/custom_url_scheme" android:host="auth" />
             </intent-filter>
         </activity>
 

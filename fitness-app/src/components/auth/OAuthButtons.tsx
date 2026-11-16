@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { supabase } from '../../lib/supabase'
 import { fetchAuthProviders, type AuthProviders } from '../../lib/authProviders'
 import { authErrorMessage } from '../../lib/authErrors'
+import { isNativeApp } from '../../lib/platform'
 
 type Provider = 'apple' | 'google'
 
@@ -25,8 +26,30 @@ export default function OAuthButtons({ disabled, onError }: { disabled?: boolean
     return () => { mounted = false }
   }, [])
 
+  // App des boutiques : onglet fermé sans revenir → les boutons reviennent.
+  useEffect(() => {
+    if (!isNativeApp()) return
+    let stop: (() => void) | undefined
+    let alive = true
+    void import('../../lib/nativeAuth').then((m) => {
+      if (alive) stop = m.onBrowserClosed(() => setPending(null))
+    })
+    return () => { alive = false; stop?.() }
+  }, [])
+
   async function signIn(provider: Provider) {
     setPending(provider)
+    if (isNativeApp()) {
+      // Google et Apple refusent une page intégrée : Chrome, puis retour à
+      // l'app par com.wodbud.app://auth/callback (A2).
+      try {
+        await (await import('../../lib/nativeAuth')).nativeOAuth(provider)
+      } catch (error) {
+        setPending(null)
+        onError(authErrorMessage(error as Error, t))
+      }
+      return
+    }
     const { error } = await supabase.auth.signInWithOAuth({
       provider,
       options: { redirectTo: `${window.location.origin}/entraineur_dashboard` }

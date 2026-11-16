@@ -12,4 +12,8 @@ additional_redirect_urls = [
   "http://localhost:5173/**",
   "http://127.0.0.1:5173/**",
   "https://fitness-*-thomasdarsignys-projects.vercel.app/**",
+  # App des boutiques (A2, src/lib/authCallback.ts) : retour de Google / Apple,
+  # et lien du courriel de confirmation ouvert dans l'app par les App Links.
+  "com.wodbud.app://auth/callback",
+  "https://fitness-ruddy-three.vercel.app/auth/callback",
 ]

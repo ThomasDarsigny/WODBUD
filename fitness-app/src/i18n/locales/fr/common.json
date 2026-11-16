@@ -219,7 +219,6 @@
   },
   "auth_ui": {
     "login_subtitle": "Connecte-toi avec ton email ou ton compte Google.",
-    "login_subtitle_email": "Connecte-toi avec ton email.",
     "login_loading": "Connexion en cours...",
     "login_submit": "Se connecter",
     "google_redirect": "Redirection vers Google...",
@@ -229,7 +228,6 @@
     "password_mismatch": "Les mots de passe ne correspondent pas.",
     "signup_success": "Compte créé. Vérifie ton email pour confirmer ton inscription si nécessaire.",
     "signup_subtitle": "Crée ton compte avec ton email ou Google.",
-    "signup_subtitle_email": "Crée ton compte avec ton email.",
     "full_name": "Ton nom",
     "full_name_placeholder": "Prénom Nom",
     "confirm_password": "Confirmer le mot de passe",
@@ -1773,5 +1771,15 @@
     "err_network": "Le message n’est pas parti : vérifie ta connexion, puis réessaie.",
     "inbox_title": "Messages du site",
     "inbox_empty": "Aucun message."
+  },
+  "auth_callback": {
+    "title": "Connexion",
+    "working": "Connexion en cours…",
+    "confirmed_title": "Adresse confirmée",
+    "confirmed_text": "Ton adresse courriel est confirmée. Connecte-toi avec ton courriel et ton mot de passe.",
+    "error_title": "Connexion impossible",
+    "error_text": "La connexion n’a pas abouti : le lien a peut-être expiré ou déjà servi. Réessaie depuis l’écran de connexion.",
+    "cancelled_text": "La connexion a été annulée.",
+    "to_login": "Aller à la connexion"
   }
 }

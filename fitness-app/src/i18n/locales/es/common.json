@@ -219,7 +219,6 @@
   },
   "auth_ui": {
     "login_subtitle": "Inicia sesión con tu correo o con Google.",
-    "login_subtitle_email": "Inicia sesión con tu correo.",
     "login_loading": "Iniciando sesión...",
     "login_submit": "Iniciar sesión",
     "google_redirect": "Redirigiendo a Google...",
@@ -229,7 +228,6 @@
     "password_mismatch": "Las contraseñas no coinciden.",
     "signup_success": "Cuenta creada. Revisa tu correo para confirmar el registro si es necesario.",
     "signup_subtitle": "Crea tu cuenta con correo o Google.",
-    "signup_subtitle_email": "Crea tu cuenta con tu correo.",
     "full_name": "Tu nombre",
     "full_name_placeholder": "Nombre Apellido",
     "confirm_password": "Confirmar contraseña",
@@ -1776,5 +1774,15 @@
     "err_network": "El mensaje no se envió: revisa tu conexión y vuelve a intentarlo.",
     "inbox_title": "Mensajes del sitio",
     "inbox_empty": "Ningún mensaje."
+  },
+  "auth_callback": {
+    "title": "Inicio de sesión",
+    "working": "Iniciando sesión…",
+    "confirmed_title": "Correo confirmado",
+    "confirmed_text": "Tu correo está confirmado. Inicia sesión con tu correo y tu contraseña.",
+    "error_title": "No se pudo iniciar sesión",
+    "error_text": "El inicio de sesión no terminó: puede que el enlace haya caducado o ya se haya usado. Vuelve a intentarlo desde la pantalla de inicio de sesión.",
+    "cancelled_text": "El inicio de sesión se canceló.",
+    "to_login": "Ir al inicio de sesión"
   }
 }

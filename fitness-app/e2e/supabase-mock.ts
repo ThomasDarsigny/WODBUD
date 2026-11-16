@@ -175,6 +175,11 @@ export class MockSupabase {
     const fail = this.authErrors[path]
     if (fail) return this.reply(route, fail.status, { code: fail.status, error_code: fail.code, msg: fail.message })
     if (path === '/auth/v1/token') {
+      // Comme GoTrue : un code PKCE sans son secret (code verifier) est refusé.
+      const body = (req.postDataJSON() ?? {}) as Row
+      if (url.searchParams.get('grant_type') === 'pkce' && !body.code_verifier) {
+        return this.reply(route, 400, { code: 400, error_code: 'validation_failed', msg: 'invalid request: both auth code and code verifier should be non-empty' })
+      }
       this.signedIn = true
       return this.reply(route, 200, session(this.user))
     }

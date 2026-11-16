@@ -15,10 +15,20 @@ if (!supabaseUrl || !supabaseAnonKey) {
 // le client lui-même (restCache.ts). Sur le site, le service worker s'en charge.
 const nativeCaches = isNativeApp() && typeof caches !== 'undefined' ? caches : null
 
+// App des boutiques : connexions Google / Apple et liens de courriel en PKCE
+// (A2, authCallback.ts) : le code de retour ne vaut rien sans le secret gardé
+// ici. Le site garde le flux par défaut.
+const native = isNativeApp()
+
 export const supabase = createClient<Database>(
   supabaseUrl,
   supabaseAnonKey,
-  nativeCaches ? { global: { fetch: createCachedFetch({ restPrefix: `${supabaseUrl}/rest/v1/`, caches: nativeCaches }) } } : undefined
+  native
+    ? {
+        auth: { flowType: 'pkce' },
+        ...(nativeCaches ? { global: { fetch: createCachedFetch({ restPrefix: `${supabaseUrl}/rest/v1/`, caches: nativeCaches }) } } : {})
+      }
+    : undefined
 )
 
 // Déconnexion (ou session perdue) : rien de ce compte ne reste sur l'appareil
