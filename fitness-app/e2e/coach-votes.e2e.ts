@@ -25,6 +25,16 @@ test('thématiques : choisir une autre thématique', async ({ page }) => {
   await db.install(page)
   await page.goto('/dashboard/vote')
 
+  // Repliée par défaut, sous les votes du coach (constat 11) : le titre et le choix fait restent visibles.
+  await expect(page.getByText('Ton choix : Suivi du sommeil', { exact: false })).toBeVisible()
+  await expect(page.getByRole('button', { name: 'Choisir — Suivi du sommeil' })).toHaveCount(0)
+  const toggle = page.locator('button[aria-controls="topics-body"]')
+  await expect(toggle).toHaveText(/Voir les thématiques \(\d\)/)
+  await expect(toggle).toHaveAttribute('aria-expanded', 'false')
+  await toggle.click()
+  await expect(toggle).toHaveAttribute('aria-expanded', 'true')
+  await expect(toggle).toHaveText('Masquer')
+
   await expect(page.getByRole('button', { name: 'Choisir — Suivi du sommeil' })).toHaveAttribute('aria-pressed', 'true')
   const emom = page.getByRole('button', { name: 'Choisir — Minuterie EMOM' })
   await expect(emom).toHaveAttribute('aria-pressed', 'false')

@@ -182,6 +182,16 @@ Les boutiques sont la plateforme principale (décision du 14 novembre) ; branche
 - [x] A5 Séance hors ligne, sur le site comme dans l'app : lectures Supabase gardées par le client dans l'app (`restCache.ts` : réseau d'abord, copie après 4 s ou sans réseau, 200 réponses, 7 jours, une copie par compte) ; séances programmées gardées par compte et refiltrées pour le jour ; contenu des WODs des 7 prochains jours lu à l'avance et affiché tout de suite au lancement ; rôle et administration gardés pour la garde des routes (affichage seulement) ; plus d'attente des nouveaux essais de supabase-js (7 s) quand une copie existe ; message clair si un WOD n'a pas de contenu gardé ; tout effacé à la déconnexion sauf les séances à envoyer. Parcours e2e (app rouverte sans réseau : WOD du jour et séance en moins de 3 s ; vrai Cache Storage) et tests unitaires.
 - [ ] A6 Version signée, fiche Google Play, test fermé avec le gym (12 testeurs, 14 jours, si compte personnel).
 
+### Phase 6 · Constats de l'audit (hors identité visuelle)
+Les 15 constats de l'audit du 14 novembre. Ceux qui touchent l'identité attendent la palette et le logo (refonte) : 01 mise en page sur ordinateur, 02 navigation, 03 hiérarchie typographique, 04 deux marques selon le thème, 07 landing qui montre le produit, 15 jetons. Contenu à fournir : 05 vidéos (tournées par l'équipe), 13 blocs « À COMPLÉTER » de la politique de confidentialité (nom de l'entreprise, NEQ, responsable des renseignements personnels).
+- [x] C1 Ruptures de confiance et promesses : adresse inconnue → « Page introuvable » (au lieu d'un retour muet à l'accueil) ; landing : « Connexion » pour un visiteur, « Mon espace » pour un compte ouvert (au lieu de « Accéder au dashboard ») ; « Vidéos d'exercices » retiré des bandeaux (aucune vidéo en ligne ; bandeau espagnol remis à jour) ; fiche d'exercice sans le grand panneau « Aucune vidéo disponible » ; sondage « Quelle thématique ajouter ? » replié (sauf pour l'admin) et sous les votes du coach. Parcours e2e.
+- [ ] C2 Mode TV : toujours sombre, WOD plus grand, QR plus petit, commandes lisibles (constat 12).
+- [ ] C3 Séance : chrono plein écran, prochain mouvement, commandes hiérarchisées (constat 06).
+- [ ] C4 Cours sur téléphone : suivi et présences d'abord, invitation repliée (constat 10) ; créateur : filtres repliés, « Équipement manquant » seulement quand l'équipement est connu (constat 09).
+- [ ] C5 Vocabulaire : WOD, séance, entraînement ; « dashboard », « backoffice » (constat 14).
+- [ ] C6 Cibles tactiles de 44 px (bascules, réactions) (constat 15).
+- [ ] C7 Données dessinées : semaine, fréquentation d'un cours, charge par groupe musculaire (constat 08).
+
 ## À définir avec le client
 - [ ] **Facturation** : qui paie et comment (par membre, par entraîneur, prix fixe).
 - [ ] **Forfaits d'abonnement** (« balancer les bundles ») : ce qui est inclus dans chaque palier.

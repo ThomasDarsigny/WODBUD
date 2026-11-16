@@ -1,6 +1,5 @@
 import { useId, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import NavIcon from '../navigation/NavIcon'
 import type { Exercise } from '../../types'
 import { CATEGORY_I18N_KEYS, MUSCLE_GROUP_I18N_KEYS } from '../../types'
 import { useDialog } from '../../hooks/useDialog'
@@ -60,14 +59,9 @@ export default function ExerciseDetailModal({
           <button type="button" onClick={onClose} className="wb-exd-close" aria-label={t('actions.close', { ns: 'common' })}>✕</button>
         </div>
 
-        {exercise.video_url ? (
-          <video src={exercise.video_url} controls className="wb-exd-video" />
-        ) : (
-          <div className="wb-exd-novideo">
-            <span aria-hidden="true"><NavIcon name="video" size={38} /></span>
-            <p>{t('detail.no_video', { ns: 'exercises' })}</p>
-          </div>
-        )}
+        {/* Pas de vidéo : rien plutôt qu'un grand panneau vide (constat 05 ;
+            les vidéos viendront, tournées par l'équipe). */}
+        {exercise.video_url && <video src={exercise.video_url} controls className="wb-exd-video" />}
 
         <div className="wb-exd-body">
           <div>

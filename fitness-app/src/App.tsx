@@ -38,6 +38,7 @@ const WelcomePage = lazy(() => import('./pages/WelcomePage'))
 const PrivacyPolicyPage = lazy(() => import('./pages/PrivacyPolicyPage'))
 const ContactPage = lazy(() => import('./pages/ContactPage'))
 const AuthCallbackPage = lazy(() => import('./pages/AuthCallbackPage'))
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage'))
 const SharedRankPage = lazy(() => import('./pages/SharedRankPage'))
 const AthleteHomeView = lazy(() => import('./components/athlete/AthleteHomeView'))
 const AthleteVoteView = lazy(() => import('./components/athlete/AthleteVoteView'))
@@ -630,7 +631,7 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
       </Suspense>
     </BrowserRouter>

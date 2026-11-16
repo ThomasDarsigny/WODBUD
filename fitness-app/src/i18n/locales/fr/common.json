@@ -253,7 +253,7 @@
       "how": "Comment ça marche",
       "demo": "Démo",
       "try": "Essaie-le",
-      "access_dashboard": "Accéder au dashboard",
+      "access_dashboard": "Mon espace",
       "login": "Connexion",
       "download": "Télécharger",
       "menu_open": "Ouvrir le menu",
@@ -269,7 +269,6 @@
       "Méthodes AMRAP · EMOM · For Time",
       "Suggestions IA",
       "Export PDF",
-      "Vidéos d'exercices",
       "Règles d'entraînement",
       "CrossFit · Haltérophilie · Gymnastics"
     ],
@@ -1214,7 +1213,9 @@
     "delete": "Supprimer",
     "delete_confirm": "Confirmer",
     "votes_one": "{{count}} vote",
-    "votes_other": "{{count}} votes"
+    "votes_other": "{{count}} votes",
+    "show": "Voir les thématiques ({{count}})",
+    "hide": "Masquer"
   },
   "onboarding": {
     "tag": "Premiers pas",
@@ -1781,5 +1782,10 @@
     "error_text": "La connexion n’a pas abouti : le lien a peut-être expiré ou déjà servi. Réessaie depuis l’écran de connexion.",
     "cancelled_text": "La connexion a été annulée.",
     "to_login": "Aller à la connexion"
+  },
+  "not_found": {
+    "title": "Page introuvable",
+    "text": "Cette adresse ne mène à aucune page de WODBUD. Le lien est peut-être incomplet ou périmé.",
+    "home": "Retour à l’accueil"
   }
 }

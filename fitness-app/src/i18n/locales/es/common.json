@@ -253,7 +253,7 @@
       "how": "Cómo funciona",
       "demo": "Demo",
       "try": "Pruébalo",
-      "access_dashboard": "Acceder",
+      "access_dashboard": "Mi espacio",
       "login": "Entrar",
       "download": "Descargar",
       "menu_open": "Abrir el menú",
@@ -269,12 +269,13 @@
       "coaches_label": "Entrenadores certificados"
     },
     "ticker": [
-      "WOD Builder",
-      "Seguimiento de rendimiento",
-      "Gestión de atletas",
-      "Programación semanal",
-      "Historial completo",
-      "Multi-box"
+      "Biblioteca de ejercicios",
+      "Programación de grupo",
+      "Métodos AMRAP · EMOM · For Time",
+      "Sugerencias de IA",
+      "Exportación PDF",
+      "Reglas de entrenamiento",
+      "CrossFit · Halterofilia · Gimnasia"
     ],
     "problem": {
       "tag": "El problema",
@@ -1217,7 +1218,9 @@
     "delete": "Eliminar",
     "delete_confirm": "Confirmar",
     "votes_one": "{{count}} voto",
-    "votes_other": "{{count}} votos"
+    "votes_other": "{{count}} votos",
+    "show": "Ver las temáticas ({{count}})",
+    "hide": "Ocultar"
   },
   "onboarding": {
     "tag": "Primeros pasos",
@@ -1784,5 +1787,10 @@
     "error_text": "El inicio de sesión no terminó: puede que el enlace haya caducado o ya se haya usado. Vuelve a intentarlo desde la pantalla de inicio de sesión.",
     "cancelled_text": "El inicio de sesión se canceló.",
     "to_login": "Ir al inicio de sesión"
+  },
+  "not_found": {
+    "title": "Página no encontrada",
+    "text": "Esta dirección no lleva a ninguna página de WODBUD. Puede que el enlace esté incompleto o caducado.",
+    "home": "Volver al inicio"
   }
 }

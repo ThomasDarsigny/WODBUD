@@ -253,7 +253,7 @@
       "how": "How it works",
       "demo": "Demo",
       "try": "Try it",
-      "access_dashboard": "Open dashboard",
+      "access_dashboard": "My account",
       "login": "Log in",
       "download": "Download",
       "menu_open": "Open menu",
@@ -269,7 +269,6 @@
       "AMRAP · EMOM · For Time methods",
       "AI suggestions",
       "PDF export",
-      "Exercise videos",
       "Training rules",
       "CrossFit · Weightlifting · Gymnastics"
     ],
@@ -1214,7 +1213,9 @@
     "delete": "Delete",
     "delete_confirm": "Confirm",
     "votes_one": "{{count}} vote",
-    "votes_other": "{{count}} votes"
+    "votes_other": "{{count}} votes",
+    "show": "See the topics ({{count}})",
+    "hide": "Hide"
   },
   "onboarding": {
     "tag": "Getting started",
@@ -1781,5 +1782,10 @@
     "error_text": "Sign-in did not complete: the link may have expired or already been used. Try again from the login screen.",
     "cancelled_text": "Sign-in was cancelled.",
     "to_login": "Go to login"
+  },
+  "not_found": {
+    "title": "Page not found",
+    "text": "This address doesn’t lead to any WODBUD page. The link may be incomplete or out of date.",
+    "home": "Back to home"
   }
 }

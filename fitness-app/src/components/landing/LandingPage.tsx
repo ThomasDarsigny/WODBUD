@@ -134,8 +134,8 @@ export default function LandingPage({ profile }: { profile: LandingProfile }) {
         </ul>
         <div className={s.navRight}>
           <Link to={appEntry} viewTransition className={s.btnNav}>
-            <span className={s.labelShort}>{t('landing.nav.login')}</span>
-            <span className={s.labelLong}>{t('landing.nav.access_dashboard')}</span>
+            {/* Visiteur : se connecter ; compte déjà ouvert : son espace (constat 13). */}
+            {t(appEntry === "/login" ? "landing.nav.login" : "landing.nav.access_dashboard")}
           </Link>
           <button
             type="button"

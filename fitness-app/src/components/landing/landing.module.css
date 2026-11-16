@@ -204,11 +204,6 @@
   background: var(--orange);
 }
 
-/* Libellé court sur téléphone, long à partir de la tablette. */
-.labelLong {
-  display: none;
-}
-
 .menuBtn {
   width: 44px;
   height: 44px;
@@ -221,16 +216,6 @@
   font-size: 1.25rem;
   line-height: 1;
   cursor: pointer;
-}
-
-@media (min-width: 640px) {
-  .labelShort {
-    display: none;
-  }
-
-  .labelLong {
-    display: inline;
-  }
 }
 
 @media (min-width: 960px) {

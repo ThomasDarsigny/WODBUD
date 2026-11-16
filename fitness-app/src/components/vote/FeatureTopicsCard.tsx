@@ -22,6 +22,9 @@ import ConfirmButton from '../ui/ConfirmButton'
  */
 export default function FeatureTopicsCard({ admin = false }: { admin?: boolean }) {
   const { t } = useTranslation('common')
+  // Une question sur la suite du produit, pas le contenu de l'écran : repliée
+  // pour les membres et les coachs (constat 11 de l'audit), dépliée pour l'admin.
+  const [expanded, setExpanded] = useState(admin)
   const [topics, setTopics] = useState<FeatureTopic[] | null>(null)
   const [busy, setBusy] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -90,6 +93,20 @@ export default function FeatureTopicsCard({ admin = false }: { admin?: boolean }
             : t('feature_topics.subtitle')}
       </p>
 
+      {!admin && (
+        <button
+          type="button"
+          className="wb-btn wb-btn--secondary wb-btn--sm wb-topics-toggle"
+          aria-expanded={expanded}
+          aria-controls="topics-body"
+          onClick={() => setExpanded((v) => !v)}
+        >
+          {expanded ? t('feature_topics.hide') : t('feature_topics.show', { count: visible.length })}
+        </button>
+      )}
+
+      {expanded && (
+      <div id="topics-body">
       {admin && (
         <form className="wb-topics-form" onSubmit={(e) => { void submit(e) }}>
           <input
@@ -136,6 +153,8 @@ export default function FeatureTopicsCard({ admin = false }: { admin?: boolean }
             />
           ))}
         </div>
+      )}
+      </div>
       )}
     </section>
   )

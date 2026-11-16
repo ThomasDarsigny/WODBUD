@@ -78,8 +78,6 @@ export default function VoteView() {
         </div>
       </header>
 
-      <FeatureTopicsCard />
-
       {allSessions.length === 0 ? (
         <EmptyState
           icon="vote"
@@ -106,6 +104,9 @@ export default function VoteView() {
           ))}
         </div>
       )}
+
+      {/* Question sur la suite du produit : sous les votes du coach (constat 11). */}
+      <FeatureTopicsCard />
     </div>
   )
 }
