@@ -1912,6 +1912,24 @@ export type Database = {
         }
         Relationships: []
       }
+      usage_days: {
+        Row: {
+          day: string
+          platform: string
+          user_id: string
+        }
+        Insert: {
+          day: string
+          platform: string
+          user_id: string
+        }
+        Update: {
+          day?: string
+          platform?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_badges: {
         Row: {
           badge_key: string
@@ -2316,6 +2334,7 @@ export type Database = {
           role: string
         }[]
       }
+      admin_usage_stats: { Args: { p_weeks?: number }; Returns: Json }
       assign_class_coach: {
         Args: { p_class: string; p_coach: string }
         Returns: undefined
@@ -2665,6 +2684,7 @@ export type Database = {
         Returns: undefined
       }
       shares_center_staff: { Args: { p_user: string }; Returns: boolean }
+      touch_usage: { Args: { p_platform: string }; Returns: undefined }
       wodbud_check_push_cron_secret: {
         Args: { p_secret: string }
         Returns: boolean

@@ -1799,5 +1799,31 @@
     "week_of": "Semaine du {{date}}",
     "col_week": "Semaine",
     "show_table": "Voir les chiffres"
+  },
+  "usage": {
+    "title": "Statistiques d’usage",
+    "hint": "Les comptes qui ont ouvert WODBUD, au plus une fois par jour, sans service d’analyse externe. Ni page vue ni clic ; gardé 13 mois.",
+    "unavailable": "Statistiques indisponibles pour l’instant.",
+    "active_7d": "Comptes actifs (7 jours)",
+    "active_30d": "Comptes actifs (30 jours)",
+    "new_accounts_30d": "Nouveaux comptes (30 jours)",
+    "accounts": "Comptes au total",
+    "sessions_7d": "Séances faites (7 jours)",
+    "checkins_7d": "Présences (7 jours)",
+    "wods_30d": "WODs créés (30 jours)",
+    "plans_30d": "WODs programmés (30 jours)",
+    "platforms_title": "Où, sur 30 jours",
+    "platforms_hint": "Un compte est compté une fois par plateforme où il a ouvert l’app.",
+    "platform_web": "navigateur",
+    "platform_pwa": "app installée",
+    "platform_android": "Android",
+    "platform_ios": "iPhone",
+    "weekly_title": "Comptes actifs par semaine",
+    "weekly_value_one": "{{count}} compte actif",
+    "weekly_value_other": "{{count}} comptes actifs",
+    "centers_title": "Par centre",
+    "col_center": "Centre",
+    "col_members": "Membres",
+    "col_active_7d": "Actifs (7 j)"
   }
 }

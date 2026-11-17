@@ -2835,6 +2835,20 @@ button.wb-ex-card { display: flex; align-items: center; gap: 0.85rem; padding: 0
 .wb-admin-head-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 .wb-admin-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.55rem; }
 @media (min-width: 900px) { .wb-admin-stats { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+/* Statistiques d'usage (074) : tuiles, plateformes, semaines, centres. */
+.wb-usage-platforms { display: grid; gap: 0.4rem; margin-top: 1rem; }
+.wb-usage-platforms h3, .wb-usage-centers caption { font-size: 0.875rem; font-weight: 700; text-align: left; margin: 0; }
+.wb-usage-platforms ul { display: flex; flex-wrap: wrap; gap: 0.4rem 1.25rem; list-style: none; margin: 0; padding: 0; font-size: 0.875rem; color: var(--muted); }
+.wb-usage-platforms strong { color: var(--white); font-variant-numeric: tabular-nums; margin-right: 0.15rem; }
+.wb-usage-trend { margin-top: 1rem; }
+.wb-usage-centers { margin-top: 1rem; overflow-x: auto; }
+.wb-usage-centers caption { padding-bottom: 0.4rem; }
+.wb-usage-centers table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+.wb-usage-centers th, .wb-usage-centers td { padding: 0.45rem 0.5rem; border-bottom: 1px solid var(--border); text-align: left; font-variant-numeric: tabular-nums; }
+.wb-usage-centers thead th { color: var(--muted); font-weight: 600; }
+.wb-usage-centers tbody th { font-weight: 600; }
+.wb-usage-centers td { text-align: right; width: 7rem; }
+.wb-usage-centers thead th + th { text-align: right; }
 .wb-pill--amber { background: color-mix(in srgb, var(--warn) 14%, transparent); color: var(--warn-ink); }
 .wb-admin-row { display: flex; align-items: center; gap: 0.75rem; padding: 0.85rem 0.9rem; flex-wrap: wrap; }
 .wb-admin-main { flex: 1 1 220px; min-width: 0; display: grid; gap: 0.25rem; }

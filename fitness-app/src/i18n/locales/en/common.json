@@ -1799,5 +1799,31 @@
     "week_of": "Week of {{date}}",
     "col_week": "Week",
     "show_table": "Show the numbers"
+  },
+  "usage": {
+    "title": "Usage statistics",
+    "hint": "Accounts that opened WODBUD, at most once a day, with no outside analytics service. No page views or clicks; kept 13 months.",
+    "unavailable": "Statistics are unavailable for now.",
+    "active_7d": "Active accounts (7 days)",
+    "active_30d": "Active accounts (30 days)",
+    "new_accounts_30d": "New accounts (30 days)",
+    "accounts": "Total accounts",
+    "sessions_7d": "Sessions done (7 days)",
+    "checkins_7d": "Check-ins (7 days)",
+    "wods_30d": "WODs created (30 days)",
+    "plans_30d": "WODs scheduled (30 days)",
+    "platforms_title": "Where, over 30 days",
+    "platforms_hint": "An account is counted once per platform where it opened the app.",
+    "platform_web": "browser",
+    "platform_pwa": "installed app",
+    "platform_android": "Android",
+    "platform_ios": "iPhone",
+    "weekly_title": "Active accounts per week",
+    "weekly_value_one": "{{count}} active account",
+    "weekly_value_other": "{{count}} active accounts",
+    "centers_title": "By center",
+    "col_center": "Center",
+    "col_members": "Members",
+    "col_active_7d": "Active (7 d)"
   }
 }

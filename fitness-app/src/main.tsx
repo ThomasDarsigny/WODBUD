@@ -7,11 +7,13 @@ import './index.css'
 import { initTheme, readStoredTheme } from './lib/theme'
 import { isNativeApp, markPlatform } from './lib/platform'
 import { initErrorReporting } from './lib/errorReporting'
+import { initUsage } from './lib/usage'
 import ErrorBoundary from './components/ui/ErrorBoundary'
 
 initTheme(readStoredTheme())
 markPlatform()
 initErrorReporting()
+initUsage()
 
 // Dans l'app des boutiques, les fichiers sont déjà sur le téléphone : pas de
 // service worker, qui servirait l'ancienne version après une mise à jour.

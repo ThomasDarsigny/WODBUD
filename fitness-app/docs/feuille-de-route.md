@@ -207,7 +207,7 @@ Les 15 constats de l'audit du 14 novembre. Ceux qui touchent l'identité attende
 - [ ] Emballage App Store / Play Store avec Capacitor, et notifications natives (Apple, Firebase) : Android commencé, voir Phase 5.
 - [ ] Logo officiel d'Apple sur le bouton « Continuer avec Apple ».
 - [x] Suivi des erreurs : fait en 4.5 (sans service tiers).
-- [ ] Statistiques d'usage.
+- [x] Statistiques d'usage, sans service tiers (migration 074) : une ligne par compte, par jour et par plateforme (navigateur, app installée, Android, iPhone), envoyée au plus une fois par jour et par appareil ; ni page vue, ni clic, ni durée ; gardée 13 mois. Section « Statistiques d'usage » de l'administration : comptes actifs (7 et 30 jours), nouveaux comptes, séances, présences, WODs créés et programmés, plateformes, comptes actifs par semaine (8 semaines) et tableau par centre. Totaux seulement, réservés aux administrateurs. Politique de confidentialité mise à jour (statistiques, rapports d'erreur, formulaire de contact, et leurs durées). Essayée en préproduction ; la production attend l'accord pour 074.
 - [ ] Essai d'une invitation avec deux vrais comptes (membre et entraîneur).
 - [ ] Essai de la lecture de feuilles réelles avec Claude, une fois la clé ajoutée.
 - [ ] Unité 2.4 « Proposer un WOD » par l'IA dans le créateur, une fois la clé `ANTHROPIC_API_KEY` posée : sortie structurée, exercices de la bibliothèque seulement, garde-fou de volume appliqué.

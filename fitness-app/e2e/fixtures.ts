@@ -171,3 +171,22 @@ export function voteDb(): MockSupabase {
   db.rpc.get_feature_topics = () => FEATURE_TOPICS.map((t) => ({ ...t }))
   return db
 }
+
+/** Statistiques d'usage (074) : ce que rend admin_usage_stats, en totaux seulement. */
+export function usageStats() {
+  const weeks = ['2026-09-28', '2026-10-05', '2026-10-12', '2026-10-19', '2026-10-26', '2026-11-02', '2026-11-09', '2026-11-16']
+  const users = [0, 0, 2, 3, 5, 9, 12, 14]
+  return {
+    active_7d: 14,
+    active_30d: 21,
+    platforms_30d: { web: 9, pwa: 4, android: 11 },
+    new_accounts_30d: 17,
+    accounts: 26,
+    sessions_7d: 38,
+    checkins_7d: 52,
+    wods_30d: 23,
+    plans_30d: 31,
+    weekly_active: weeks.map((week, i) => ({ week, users: users[i] })),
+    centers: [{ name: 'Box Limoilou', members: 19, active_7d: 12 }, { name: 'CrossFit Sainte-Foy', members: 4, active_7d: 1 }]
+  }
+}

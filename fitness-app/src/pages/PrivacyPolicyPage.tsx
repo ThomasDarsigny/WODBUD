@@ -13,7 +13,7 @@ import { usePageMeta } from '../hooks/usePageMeta'
  * politique incomplète est pire que ne rien publier.
  */
 
-const DERNIERE_MAJ = '3 septembre 2026'
+const DERNIERE_MAJ = '17 novembre 2026'
 
 type Bloc = { t: string; p: (string | string[])[] }
 
@@ -37,7 +37,10 @@ const SECTIONS: Bloc[] = [
         'Appartenance : les cours ou gyms auxquels vous êtes rattaché, et vos votes sur les entraînements proposés.',
         'Suivi corporel, si vous choisissez de l’utiliser : poids corporel, aliments consommés et valeurs nutritionnelles associées.',
         'Contenu que vous téléversez : vidéos de démonstration d’exercices.',
-        'Données techniques : journaux de connexion et d’erreurs générés automatiquement par nos hébergeurs.'
+        'Données techniques : journaux de connexion et d’erreurs générés automatiquement par nos hébergeurs.',
+        'Rapports d’erreur de l’application : le message d’erreur, la page concernée (sans ses paramètres) et la version de l’application, lorsqu’un écran ne fonctionne pas.',
+        'Statistiques d’usage : les jours où votre compte a ouvert WODBUD, et sur quelle plateforme (navigateur, application installée, Android, iPhone). Ni page vue, ni clic, ni durée, et aucun outil d’analyse externe.',
+        'Formulaire de contact : le nom, l’adresse courriel, l’organisation et le message que vous nous envoyez.'
       ]
     ]
   },
@@ -59,7 +62,9 @@ const SECTIONS: Bloc[] = [
         'Faire fonctionner les cours de groupe : votes, présence, classement de la classe.',
         'Calculer votre rang et votre série de jours, et les partager uniquement si vous activez vous-même un lien de partage.',
         'Afficher l’interface dans votre langue et selon votre thème.',
-        'Détecter les pannes et les abus, et respecter nos obligations légales.'
+        'Détecter les pannes et les abus, et respecter nos obligations légales.',
+        'Mesurer l’utilisation de l’application en chiffres globaux (nombre de comptes actifs, plateformes utilisées), pour l’améliorer. Ces chiffres ne servent jamais à établir un profil de vous.',
+        'Répondre aux messages envoyés par le formulaire de contact.'
       ]
     ]
   },
@@ -103,6 +108,9 @@ SECTIONS.push(
         'Compte supprimé : vos renseignements personnels sont détruits ou anonymisés dans les 30 jours.',
         'Compte inactif depuis 24 mois : nous vous prévenons par courriel, puis nous supprimons le compte si vous ne réagissez pas.',
         'Journaux techniques : conservés au maximum 12 mois.',
+        'Rapports d’erreur de l’application : 90 jours.',
+        'Statistiques d’usage : 13 mois.',
+        'Messages du formulaire de contact : 12 mois.',
         'Données que la loi nous oblige à garder (comptabilité, fiscalité) : conservées pour la durée prescrite, puis détruites.'
       ],
       'Une fois la finalité atteinte, les renseignements sont détruits ou anonymisés. Anonymisé veut dire qu’il devient impossible, de façon irréversible, de vous identifier.'
@@ -127,7 +135,7 @@ SECTIONS.push(
     t: '10. Témoins et stockage local',
     p: [
       'WODBUD n’utilise aucun témoin publicitaire ni aucun outil de suivi comportemental à des fins de marketing.',
-      'Nous utilisons le stockage local de votre navigateur pour garder votre session ouverte, mémoriser votre langue et votre thème, et permettre à l’application de fonctionner hors ligne. Vous pouvez effacer ce stockage à partir des réglages de votre navigateur : vous serez alors déconnecté.',
+      'Nous utilisons le stockage local de votre navigateur pour garder votre session ouverte, mémoriser votre langue et votre thème, permettre à l’application de fonctionner hors ligne et ne compter qu’une fois par jour votre utilisation de l’application. Vous pouvez effacer ce stockage à partir des réglages de votre navigateur : vous serez alors déconnecté.',
       'Nous n’utilisons aucune technologie de géolocalisation, d’identification ou de profilage.'
     ]
   },

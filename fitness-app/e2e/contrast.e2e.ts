@@ -1,4 +1,4 @@
-import { test, expect, coachDb, athleteDb, voteDb, communityDb, CLASS_ID, COMMUNITY_ID, FEATURE_TOPICS, COACH } from './fixtures'
+import { test, expect, coachDb, athleteDb, voteDb, communityDb, CLASS_ID, COMMUNITY_ID, FEATURE_TOPICS, COACH, usageStats } from './fixtures'
 import { lowContrast } from './contrast'
 
 /**
@@ -103,13 +103,16 @@ for (const scheme of ['light', 'dark'] as const) {
       await asAccount(athleteDb({ checkIn: 'ok' }), [['présence', `/presence/${CLASS_ID}?code=482913`]])
 
       const center = { id: 'ce000000-0000-4000-8000-000000000001', name: 'Box Limoilou', owner_id: COACH.id, equipment: ['barbell', 'plates'], venue: 'box', group_size: '11-30' }
-      await asAccount(coachDb({ tables: {
+      const admin = coachDb({ tables: {
         admin_users: [{ user_id: COACH.id }],
         centers: [center],
         center_members: [{ center_id: center.id, user_id: COACH.id, role: 'owner', joined_at: '2026-01-01T00:00:00Z', centers: center }],
         center_invites: [],
         contact_messages: [{ id: 1, created_at: '2026-11-17T14:00:00Z', name: 'Julie Martin', email: 'julie@exemple.com', topic: 'center', organization: 'CrossFit Limoilou', message: 'On aimerait essayer WODBUD.', locale: 'fr', status: 'new' }]
-      } }), [
+      } })
+      // Les statistiques d'usage avec des chiffres : tuiles, semaines et centres affichés.
+      admin.rpc.admin_usage_stats = () => usageStats()
+      await asAccount(admin, [
         ['administration', '/dashboard/admin'],
         ['centre (réglages)', '/dashboard/settings#equipe'],
         ['assistant IA', '/dashboard/ai']

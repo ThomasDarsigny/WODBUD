@@ -13,6 +13,7 @@ import VideoPriorities from './VideoPriorities'
 import SupportInbox from '../support/SupportInbox'
 import ClientErrors from './ClientErrors'
 import ContactInbox from './ContactInbox'
+import UsageStats from './UsageStats'
 import FeatureTopicsCard from '../vote/FeatureTopicsCard'
 import Skeleton from '../ui/Skeleton'
 
@@ -106,6 +107,8 @@ export default function AdminDashboardView() {
           emphasize
         />
       </div>
+
+      <UsageStats />
 
       <SupportInbox />
 

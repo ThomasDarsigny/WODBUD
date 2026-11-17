@@ -34,10 +34,10 @@ Vingt-six fichiers de parcours, chacun lancé sur ordinateur (1440 × 900) et su
 | `e2e/menus.e2e.ts` | Barre latérale (ordinateur) : replier et déplier, page courante annoncée, chez le coach et chez l'athlète |
 | `e2e/journal.e2e.ts` | Journal : programmer une séance au clavier, retirer une séance (en deux temps) |
 | `e2e/rank.e2e.ts` | Rang lisible en thème clair ; classement d'un cours (liste ordonnée, changer de période) |
-| `e2e/contrast.e2e.ts` | Garde-fou de contraste : chaque texte de 20 écrans, en thème clair et sombre, atteint 4,5:1 (3:1 en grand) ; aide `e2e/contrast.ts` |
+| `e2e/contrast.e2e.ts` | Garde-fou de contraste : chaque texte de 28 vues (dont présence, administration, réglages du centre, bienvenue et assistant IA, chacune vérifiée comme réellement affichée), en thème clair et sombre, atteint 4,5:1 (3:1 en grand) ; aide `e2e/contrast.ts` |
 | `e2e/landing.e2e.ts` | Accueil : « C'est pour qui ? » (trois colonnes, leurs fonctionnalités, profil retenu ; immobile en animation réduite) ; chaque page de profil n'a que ses sections et son menu |
 | `e2e/contact.e2e.ts` | Page Contact : le lien du pied de page l'ouvre, envoi, refus trop fréquent annoncé (formulaire gardé), champ piège sans envoi ; l'administration lit et traite les messages |
-| `e2e/admin.e2e.ts` | L'administration se déconnecte depuis son en-tête |
+| `e2e/admin.e2e.ts` | L'administration se déconnecte depuis son en-tête ; statistiques d'usage (tuiles, plateformes, semaines, centres ; sans la fonction en base, un message au lieu d'un plantage) ; l'ouverture de l'app comptée une seule fois par jour, même après rechargement, et jamais sans session |
 | `e2e/errors.e2e.ts` | Suivi des erreurs : signalement unique et page masquée, écran qui plante (menu toujours utilisable), section d'administration |
 | `e2e/offline.e2e.ts` | Séance au sous-sol : l'app rouverte sans réseau montre le WOD du jour et lance la séance avec ses mouvements en moins de 3 s ; sans contenu gardé, message clair ; lectures gardées dans le vrai Cache Storage (app des boutiques) ; la déconnexion efface le hors-ligne. Sans réseau = `db.offline = true` (Supabase injoignable) : le mode hors ligne de Playwright couperait aussi le serveur de Vite |
 | `e2e/auth-callback.e2e.ts` | Retour de connexion (Google / Apple dans l’app, lien du courriel) : le code devient une session avec son secret, puis l’accueil ; connexion annulée ; lien du courriel sans le secret → « adresse confirmée » ; retour Google sans le secret → erreur. Le faux Supabase refuse, comme GoTrue, un code PKCE sans secret |
