@@ -81,8 +81,8 @@
     "equipment_required": "Indica el equipamiento, o «Peso corporal» si no hace falta ninguno."
   },
   "admin": {
-    "title": "Panel de administración",
-    "backoffice": "Backoffice",
+    "title": "Administración",
+    "backoffice": "Equipo WODBUD",
     "subtitle": "Gestiona descripciones y videos de todos los ejercicios.",
     "total": "Total de ejercicios",
     "with_video": "Con video",
@@ -103,7 +103,7 @@
   "detail": {
     "muscles_targeted": "Músculos trabajados",
     "tech_instructions": "Indicaciones técnicas",
-    "add_to_workout": "Agregar al entrenamiento",
+    "add_to_workout": "Agregar al WOD",
     "delete_confirm": "¿Eliminar \"{{name}}\"? Esta acción no se puede deshacer.",
     "delete_confirm_action": "Eliminar definitivamente",
     "deleting": "Eliminando…",
@@ -118,7 +118,7 @@
     "video_admin_required": "Solo una cuenta admin puede subir un vídeo.",
     "video_upload_network": "La transferencia al almacenamiento falló. Si persiste, revisa la política CORS del bucket R2."
   },
-  "empty_hint": "Añade tus ejercicios una vez: luego alimentan todos tus workouts.",
+  "empty_hint": "Añade tus ejercicios una vez: luego alimentan todos tus WODs.",
   "empty_filtered_hint": "Ningún ejercicio cumple todos estos filtros. Quita uno para ampliar.",
   "warnings": {
     "video_upload_skipped": "Ejercicio guardado, pero el vídeo no se subió. {{reason}}"

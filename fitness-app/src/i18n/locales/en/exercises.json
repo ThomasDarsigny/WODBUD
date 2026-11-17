@@ -81,8 +81,8 @@
     "equipment_required": "Choose the equipment, or “Bodyweight” if none is needed."
   },
   "admin": {
-    "title": "Admin dashboard",
-    "backoffice": "Backoffice",
+    "title": "Admin",
+    "backoffice": "WODBUD team",
     "subtitle": "Manage descriptions and videos for all exercises.",
     "total": "Total exercises",
     "with_video": "With video",
@@ -103,7 +103,7 @@
   "detail": {
     "muscles_targeted": "Targeted muscles",
     "tech_instructions": "Technical instructions",
-    "add_to_workout": "Add to workout",
+    "add_to_workout": "Add to WOD",
     "delete_confirm": "Delete \"{{name}}\"? This action cannot be undone.",
     "delete_confirm_action": "Delete permanently",
     "deleting": "Deleting…",
@@ -118,7 +118,7 @@
     "video_admin_required": "Only an admin account can upload a video.",
     "video_upload_network": "The transfer to storage failed. If it keeps happening, check the R2 bucket's CORS policy."
   },
-  "empty_hint": "Add your exercises once — they feed every workout you build after that.",
+  "empty_hint": "Add your exercises once — they feed every WOD you build after that.",
   "empty_filtered_hint": "No exercise matches all these filters. Drop one to widen the search.",
   "warnings": {
     "video_upload_skipped": "Exercise saved, but the video wasn't uploaded. {{reason}}"

@@ -23,7 +23,7 @@ test('le coach crée un WOD et l’enregistre', async ({ page, isMobile }) => {
   if (isMobile) await page.locator('.wb-builder-tray').click()
 
   await page.locator('#builder-name').fill('Force du mercredi')
-  await page.getByRole('button', { name: /Sauvegarder la séance/i }).click()
+  await page.getByRole('button', { name: /Enregistrer le WOD/i }).click()
   await expect(page.getByRole('button', { name: /Enregistré/i })).toBeVisible()
 
   const [workout] = db.writesTo('workouts', 'POST')
@@ -114,7 +114,7 @@ test('après l’enregistrement, le WOD se programme dans un cours, avec le gard
   await page.getByRole('button', { name: 'Ajouter Back squat au WOD' }).click()
   if (isMobile) await page.locator('.wb-builder-tray').click()
   await page.locator('#builder-name').fill('Force du jeudi')
-  await page.getByRole('button', { name: /Sauvegarder la séance/i }).click()
+  await page.getByRole('button', { name: /Enregistrer le WOD/i }).click()
 
   const panel = page.locator('.wb-schedwod')
   await expect(panel).toContainText('« Force du jeudi » est enregistré. Le programmer ?')

@@ -10,10 +10,10 @@
     "tab_classes": "Cours",
     "tab_rank": "Rang",
     "exercises": "Exercices",
-    "workouts": "Entraînements",
+    "workouts": "WODs",
     "history": "Historique",
     "settings": "Paramètres",
-    "admin": "Dashboard admin",
+    "admin": "Administration",
     "ai": "Assistant IA",
     "vote": "Votes",
     "classes": "Mes cours",
@@ -40,16 +40,15 @@
     "expand_menu": "Agrandir le menu"
   },
   "library": {
-    "title": "Bibliothèque de workouts",
-    "subtitle": "{{count}} workout(s) disponible(s)",
+    "title": "Bibliothèque de WODs",
     "search_placeholder": "Rechercher par nom ou type…",
     "all_types": "Tous",
     "from_cache": "Données en cache (hors-ligne)",
-    "empty": "Aucun workout pour le moment.",
-    "no_results": "Aucun workout ne correspond à la recherche.",
+    "empty": "Aucun WOD pour le moment.",
+    "no_results": "Aucun WOD ne correspond à la recherche.",
     "badge_template": "Modèle",
-    "badge_mine": "Mon workout",
-    "empty_hint": "Crée ta première séance dans le constructeur, puis retrouve-la ici pour la relancer.",
+    "badge_mine": "Mon WOD",
+    "empty_hint": "Crée ton premier WOD dans le créateur, puis retrouve-le ici pour le refaire.",
     "no_results_hint": "Essaie un autre mot-clé, ou enlève le filtre de type.",
     "source": "Provenance",
     "source_all": "Tous",
@@ -58,7 +57,9 @@
     "source_wodbud": "WODBUD",
     "badge_team": "Équipe · {{name}}",
     "benchmarks": "Benchmarks",
-    "badge_benchmark": "Benchmark"
+    "badge_benchmark": "Benchmark",
+    "subtitle_one": "{{count}} WOD disponible",
+    "subtitle_other": "{{count}} WODs disponibles"
   },
   "vote_view": {
     "title": "Tous les votes",
@@ -260,7 +261,7 @@
       "menu_close": "Fermer le menu"
     },
     "hero": {
-      "open_dashboard": "Ouvrir le dashboard coach",
+      "open_dashboard": "Ouvrir mon espace",
       "see_app": "Voir l'app"
     },
     "ticker": [
@@ -924,7 +925,7 @@
   "athlete": {
     "role_label": "Athlète",
     "nav_home": "Accueil",
-    "welcome_tag": "Dashboard athlète",
+    "welcome_tag": "Espace athlète",
     "welcome_title": "Bonjour !",
     "section_today": "Aujourd'hui",
     "section_votes": "Votes actifs",
@@ -946,7 +947,7 @@
     "success_label": "Inscription réussie",
     "success_title": "Bienvenue !",
     "success_subtitle": "Tu as rejoint le cours avec succès.",
-    "go_dashboard": "Accéder au dashboard",
+    "go_dashboard": "Aller à mon espace",
     "invited_tag": "Invitation",
     "create_account": "Créer un compte",
     "create_subtitle": "Crée ton compte pour rejoindre le cours.",
@@ -1050,8 +1051,8 @@
     "delete_account": "Supprimer mon compte",
     "delete_account_hint": "Efface définitivement ton compte et tout ce qui y est relié. Aucune récupération possible.",
     "delete_warning": "Cette action est irréversible et supprime immédiatement :",
-    "delete_impact_workouts_one": "{{count}} workout créé",
-    "delete_impact_workouts_other": "{{count}} workouts créés",
+    "delete_impact_workouts_one": "{{count}} WOD créé",
+    "delete_impact_workouts_other": "{{count}} WODs créés",
     "delete_impact_sessions_one": "{{count}} séance dans ton journal",
     "delete_impact_sessions_other": "{{count}} séances dans ton journal",
     "delete_impact_classes_one": "{{count}} classe que tu coaches",
@@ -1104,9 +1105,9 @@
     "name": "SonIA",
     "speak": "Écouter",
     "stop": "Arrêter",
-    "subtitle": "Pose tes questions sur les exercices et séances d'entraînement",
-    "intro": "Ton assistant coach. Il connaît tous les exercices de ta bibliothèque et peut t'aider à construire des séances.",
-    "placeholder": "Pose une question sur les exercices ou séances...",
+    "subtitle": "Pose tes questions sur les exercices et les WODs",
+    "intro": "Ton assistant coach. Il connaît tous les exercices de ta bibliothèque et peut t’aider à construire des WODs.",
+    "placeholder": "Pose une question sur les exercices ou les WODs…",
     "send": "Envoyer",
     "suggestions": [
       "Propose une séance full body pour débutants",

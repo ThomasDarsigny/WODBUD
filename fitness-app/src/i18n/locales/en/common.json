@@ -10,10 +10,10 @@
     "tab_classes": "Classes",
     "tab_rank": "Rank",
     "exercises": "Exercises",
-    "workouts": "Workouts",
+    "workouts": "WODs",
     "history": "History",
     "settings": "Settings",
-    "admin": "Admin dashboard",
+    "admin": "Admin",
     "ai": "AI assistant",
     "vote": "Votes",
     "classes": "My classes",
@@ -40,16 +40,15 @@
     "expand_menu": "Expand menu"
   },
   "library": {
-    "title": "Workout library",
-    "subtitle": "{{count}} workout(s) available",
+    "title": "WOD library",
     "search_placeholder": "Search by name or type…",
     "all_types": "All",
     "from_cache": "Cached data (offline)",
-    "empty": "No workouts yet.",
-    "no_results": "No workout matches your search.",
+    "empty": "No WODs yet.",
+    "no_results": "No WOD matches your search.",
     "badge_template": "Template",
-    "badge_mine": "My workout",
-    "empty_hint": "Build your first workout in the builder, then find it here to run it again.",
+    "badge_mine": "My WOD",
+    "empty_hint": "Build your first WOD in the builder, then find it here to do it again.",
     "no_results_hint": "Try another keyword, or clear the type filter.",
     "source": "Source",
     "source_all": "All",
@@ -58,7 +57,9 @@
     "source_wodbud": "WODBUD",
     "badge_team": "Team · {{name}}",
     "benchmarks": "Benchmarks",
-    "badge_benchmark": "Benchmark"
+    "badge_benchmark": "Benchmark",
+    "subtitle_one": "{{count}} WOD available",
+    "subtitle_other": "{{count}} WODs available"
   },
   "vote_view": {
     "title": "All votes",
@@ -260,7 +261,7 @@
       "menu_close": "Close menu"
     },
     "hero": {
-      "open_dashboard": "Open coach dashboard",
+      "open_dashboard": "Open my account",
       "see_app": "See the app"
     },
     "ticker": [
@@ -924,7 +925,7 @@
   "athlete": {
     "role_label": "Athlete",
     "nav_home": "Home",
-    "welcome_tag": "Athlete dashboard",
+    "welcome_tag": "Athlete space",
     "welcome_title": "Welcome!",
     "section_today": "Today",
     "section_votes": "Active votes",
@@ -946,7 +947,7 @@
     "success_label": "Joined successfully",
     "success_title": "Welcome!",
     "success_subtitle": "You have successfully joined the class.",
-    "go_dashboard": "Go to dashboard",
+    "go_dashboard": "Go to my account",
     "invited_tag": "Invitation",
     "create_account": "Create an account",
     "create_subtitle": "Create your account to join the class.",
@@ -1050,8 +1051,8 @@
     "delete_account": "Delete my account",
     "delete_account_hint": "Permanently erases your account and everything linked to it. Cannot be undone.",
     "delete_warning": "This action is irreversible and immediately deletes:",
-    "delete_impact_workouts_one": "{{count}} workout you created",
-    "delete_impact_workouts_other": "{{count}} workouts you created",
+    "delete_impact_workouts_one": "{{count}} WOD you created",
+    "delete_impact_workouts_other": "{{count}} WODs you created",
     "delete_impact_sessions_one": "{{count}} session in your journal",
     "delete_impact_sessions_other": "{{count}} sessions in your journal",
     "delete_impact_classes_one": "{{count}} class you coach",
@@ -1104,9 +1105,9 @@
     "name": "SonIA",
     "speak": "Listen",
     "stop": "Stop",
-    "subtitle": "Ask anything about exercises and training sessions",
-    "intro": "Your coaching assistant. It knows every exercise in your library and can help you build sessions.",
-    "placeholder": "Ask about exercises or sessions...",
+    "subtitle": "Ask anything about exercises and WODs",
+    "intro": "Your coaching assistant. It knows every exercise in your library and can help you build WODs.",
+    "placeholder": "Ask about exercises or WODs…",
     "send": "Send",
     "suggestions": [
       "Suggest a full body session for beginners",
