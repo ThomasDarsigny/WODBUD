@@ -1324,7 +1324,10 @@
     "streak_unit": "j",
     "empty_title": "Aucun athlète inscrit",
     "empty_hint": "Partage le lien d’invitation ci-dessus pour remplir ton cours.",
-    "privacy": "Tu vois seulement des comptes (séances, minutes, série) : le contenu des séances de tes athlètes reste privé."
+    "privacy": "Tu vois seulement des comptes (séances, minutes, série) : le contenu des séances de tes athlètes reste privé.",
+    "trend_title": "Présences · 8 semaines",
+    "trend_value_one": "{{count}} présence",
+    "trend_value_other": "{{count}} présences"
   },
   "home": {
     "title": "Aujourd'hui",
@@ -1368,7 +1371,8 @@
     "todo_votes_other": "{{count}} votes en cours",
     "todo_none": "Rien à faire pour l’instant",
     "todo_none_hint": "Les jours de cours sans WOD, les membres à relancer et les votes en cours apparaîtront ici.",
-    "my_training": "Mon entraînement"
+    "my_training": "Mon entraînement",
+    "trend_title": "Tes minutes d’entraînement · 8 semaines"
   },
   "welcome": {
     "hello": "Salut {{name}} !",
@@ -1789,5 +1793,10 @@
     "title": "Page introuvable",
     "text": "Cette adresse ne mène à aucune page de WODBUD. Le lien est peut-être incomplet ou périmé.",
     "home": "Retour à l’accueil"
+  },
+  "charts": {
+    "week_of": "Semaine du {{date}}",
+    "col_week": "Semaine",
+    "show_table": "Voir les chiffres"
   }
 }

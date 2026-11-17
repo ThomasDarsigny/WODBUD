@@ -5,6 +5,39 @@ import { Avatar } from '../community/communityUi'
 import Skeleton from '../ui/Skeleton'
 import EmptyState from '../ui/EmptyState'
 import { AnimatedNumber } from '../ui/motion'
+import WeeklyColumns from '../charts/WeeklyColumns'
+import { fetchAttendanceBetween } from '../../lib/attendance'
+import { localDate } from '../../lib/scheduledWorkouts'
+import { lastWeeks, totalsByWeek } from '../../lib/weekly'
+
+const TREND_WEEKS = 8
+
+/** Présences du cours sur 8 semaines (constat 08) : rien tant qu'il n'y en a aucune. */
+function AttendanceTrend({ classId }: { classId: string }) {
+  const { t } = useTranslation('common')
+  const [values, setValues] = useState<{ weeks: string[]; totals: number[] } | null>(null)
+  useEffect(() => {
+    let alive = true
+    const today = localDate()
+    const weeks = lastWeeks(TREND_WEEKS, today)
+    fetchAttendanceBetween(classId, weeks[0], today)
+      .then((rows) => { if (alive) setValues({ weeks, totals: totalsByWeek(rows.map((r) => ({ date: r.session_date, value: 1 })), weeks) }) })
+      .catch(() => { /* la tendance est un bonus */ })
+    return () => { alive = false }
+  }, [classId])
+  if (!values || values.totals.every((v) => v === 0)) return null
+  return (
+    <div className="wb-card wb-fu-trend">
+      <WeeklyColumns
+        title={t('followup.trend_title')}
+        weeks={values.weeks}
+        values={values.totals}
+        format={(n) => t('followup.trend_value', { count: n })}
+        short={(n) => String(Math.round(n))}
+      />
+    </div>
+  )
+}
 
 interface Row {
   athlete_id: string
@@ -77,6 +110,8 @@ export default function ClassFollowup({ classId }: { classId: string }) {
         <div data-tone={idle ? 'warn' : undefined}><strong><AnimatedNumber value={idle} /></strong><span>{t('followup.stat_idle')}</span></div>
         <div><strong><AnimatedNumber value={minutes7} /></strong><span>{t('followup.stat_minutes')}</span></div>
       </div>
+
+      <AttendanceTrend classId={classId} />
 
       <div className="wb-segmented wb-fu-filter" role="tablist" aria-label={t('followup.filter')}>
         {(['all', 'idle', 'active'] as Filter[]).map((f) => (

@@ -4,6 +4,9 @@ import { supabase } from '../../lib/supabase'
 import { getLocalUser } from '../../lib/currentUser'
 import { formatMinutes } from '../../lib/ranks'
 import { AnimatedNumber } from '../ui/motion'
+import WeeklyColumns from '../charts/WeeklyColumns'
+import { localDate } from '../../lib/scheduledWorkouts'
+import { lastWeeks, totalsByWeek } from '../../lib/weekly'
 
 export interface MyWeek {
   firstName: string
@@ -40,6 +43,41 @@ export function useMyWeek(): MyWeek | null {
     return () => { mounted = false }
   }, [])
   return me
+}
+
+/** Tes minutes actives sur 8 semaines (constat 08) : rien tant qu'il n'y en a aucune. */
+export function MyMinutesTrend() {
+  const { t } = useTranslation('common')
+  const [values, setValues] = useState<{ weeks: string[]; totals: number[] } | null>(null)
+  useEffect(() => {
+    let alive = true
+    ;(async () => {
+      const { data: auth } = await getLocalUser()
+      if (!auth.user) return
+      const weeks = lastWeeks(8, localDate())
+      const { data, error } = await supabase
+        .from('workout_sessions')
+        .select('performed_at, active_minutes')
+        .eq('user_id', auth.user.id)
+        .gte('performed_at', `${weeks[0]}T00:00:00`)
+      if (error || !alive) return
+      const rows = (data ?? []).map((r) => ({ date: localDate(new Date(r.performed_at)), value: r.active_minutes ?? 0 }))
+      setValues({ weeks, totals: totalsByWeek(rows, weeks) })
+    })().catch(() => { /* la tendance est un bonus */ })
+    return () => { alive = false }
+  }, [])
+  if (!values || values.totals.every((v) => v === 0)) return null
+  return (
+    <div className="wb-card wb-home-trend">
+      <WeeklyColumns
+        title={t('home.trend_title')}
+        weeks={values.weeks}
+        values={values.totals}
+        format={formatMinutes}
+        short={(n) => String(Math.round(n))}
+      />
+    </div>
+  )
 }
 
 export function MyWeekStats({ me }: { me: MyWeek | null }) {

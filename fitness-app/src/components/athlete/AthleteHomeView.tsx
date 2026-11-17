@@ -13,7 +13,7 @@ import { isVoteSessionOpen } from '../../lib/voteSessions'
 import { useSessionStore } from '../../stores/sessionStore'
 import { unlockAudio } from '../../lib/gymCues'
 import TodayWod from '../home/TodayWod'
-import { MyWeekStats, useMyWeek } from '../home/MyWeek'
+import { MyMinutesTrend, MyWeekStats, useMyWeek } from '../home/MyWeek'
 import { useClassSlotStore } from '../../stores/classSlotStore'
 import AthleteClassCard from './AthleteClassCard'
 
@@ -86,6 +86,7 @@ export default function AthleteHomeView() {
       </Link>
 
       <MyWeekStats me={me} />
+      <MyMinutesTrend />
 
       <OnboardingCard area="athlete" />
 

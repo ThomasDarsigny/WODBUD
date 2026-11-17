@@ -10,7 +10,7 @@ import NavIcon from '../navigation/NavIcon'
 import OnboardingCard from '../onboarding/OnboardingCard'
 import Skeleton from '../ui/Skeleton'
 import TodayPlans from './TodayPlans'
-import { MyWeekStats, useMyWeek } from './MyWeek'
+import { MyMinutesTrend, MyWeekStats, useMyWeek } from './MyWeek'
 import CenterSuggestionsInbox from '../center/CenterSuggestionsInbox'
 import CenterFavoriteWods from '../center/CenterFavoriteWods'
 import CoachGymToday from './CoachGymToday'
@@ -135,6 +135,7 @@ export default function CoachTodayView() {
       </section>
 
       <MyWeekStats me={me} />
+      <MyMinutesTrend />
 
       <TodayPlans basePath="/dashboard" />
 

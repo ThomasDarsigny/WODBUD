@@ -1324,7 +1324,10 @@
     "streak_unit": "d",
     "empty_title": "No athletes yet",
     "empty_hint": "Share the invite link above to fill your class.",
-    "privacy": "You only see counts (sessions, minutes, streak): your athletes’ session details stay private."
+    "privacy": "You only see counts (sessions, minutes, streak): your athletes’ session details stay private.",
+    "trend_title": "Attendance · 8 weeks",
+    "trend_value_one": "{{count}} check-in",
+    "trend_value_other": "{{count}} check-ins"
   },
   "home": {
     "title": "Today",
@@ -1368,7 +1371,8 @@
     "todo_votes_other": "{{count}} votes in progress",
     "todo_none": "Nothing to do for now",
     "todo_none_hint": "Class days without a WOD, members to follow up and open votes will show here.",
-    "my_training": "My training"
+    "my_training": "My training",
+    "trend_title": "Your training minutes · 8 weeks"
   },
   "welcome": {
     "hello": "Hi {{name}}!",
@@ -1789,5 +1793,10 @@
     "title": "Page not found",
     "text": "This address doesn’t lead to any WODBUD page. The link may be incomplete or out of date.",
     "home": "Back to home"
+  },
+  "charts": {
+    "week_of": "Week of {{date}}",
+    "col_week": "Week",
+    "show_table": "Show the numbers"
   }
 }

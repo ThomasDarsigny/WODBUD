@@ -3046,3 +3046,33 @@ em[data-rarity='legendaire'] { color: #f4c652; } em[data-rarity='mythique'] { co
 .wb-schedwod-warn { margin: 0; padding: 0; list-style: none; display: grid; gap: 0.25rem; color: var(--warn-ink); font-size: 0.875rem; }
 .wb-schedwod-error { margin: 0; color: var(--danger-ink); font-size: 0.875rem; }
 .wb-schedwod-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+
+/* ─── Tendances par semaine (WeeklyColumns, constat 08) ──────────
+   Une série : colonnes de 24 px au plus, haut arrondi, base carrée ;
+   grille en filets d'un pas au-dessus du fond ; texte en encre, jamais
+   à la couleur des colonnes. */
+.wb-wk { margin: 0; display: grid; gap: 0.6rem; }
+.wb-wk-title { font-weight: 700; font-size: 0.95rem; }
+.wb-wk-plot { position: relative; height: 148px; margin-top: 0.4rem; }
+.wb-wk-grid { position: absolute; inset: 0 0 1.5rem 2.4rem; }
+.wb-wk-line { position: absolute; left: 0; right: 0; border-top: 1px solid var(--border); }
+.wb-wk-tick { position: absolute; right: calc(100% + 0.4rem); top: 0; transform: translateY(-50%); font-size: var(--t-label); color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.wb-wk-cols { position: absolute; inset: 0 0 0 2.4rem; display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); margin: 0; padding: 0; list-style: none; }
+.wb-wk-col { display: grid; grid-template-rows: minmax(0, 1fr) 1.5rem; justify-items: center; min-width: 0; }
+.wb-wk-slot { position: relative; width: 100%; height: 100%; display: flex; align-items: flex-end; justify-content: center; }
+.wb-wk-bar { display: block; width: min(24px, 62%); height: var(--h); border-radius: 4px 4px 0 0; background: var(--orange); cursor: default; transition: filter 0.15s ease; }
+.wb-wk-bar:focus-visible { outline: 2px solid var(--white); outline-offset: 2px; }
+.wb-wk-col:hover .wb-wk-bar, .wb-wk-bar:focus-visible { filter: brightness(1.15); }
+.wb-wk-cap { position: absolute; bottom: calc(var(--h) + 0.25rem); font-size: var(--t-label); font-weight: 700; color: var(--white); font-variant-numeric: tabular-nums; }
+.wb-wk-tip { position: absolute; z-index: 2; bottom: calc(var(--h) + 0.4rem); display: grid; gap: 0.1rem; padding: 0.4rem 0.6rem; border-radius: var(--r-md); background: var(--white); color: var(--black); font-size: var(--t-label); white-space: nowrap; text-align: center; pointer-events: none; box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25); }
+.wb-wk-tip strong { font-size: 0.875rem; }
+.wb-wk-col:first-child .wb-wk-tip { left: 0; }
+.wb-wk-col:last-child .wb-wk-tip { right: 0; }
+.wb-wk-x { align-self: end; font-size: var(--t-label); color: var(--muted); white-space: nowrap; }
+.wb-wk-col.is-current .wb-wk-x { color: var(--white); font-weight: 700; }
+/* Étroit : une semaine sur deux en remontant depuis la semaine en cours. */
+@media (max-width: 480px) { .wb-wk-col.is-odd .wb-wk-x { visibility: hidden; } }
+.wb-wk-table summary { width: fit-content; min-height: 44px; display: flex; align-items: center; font-size: 0.8125rem; color: var(--muted); cursor: pointer; }
+.wb-wk-table table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+.wb-wk-table th, .wb-wk-table td { padding: 0.35rem 0.5rem; border-bottom: 1px solid var(--border); text-align: left; font-variant-numeric: tabular-nums; }
+.wb-wk-table th { color: var(--muted); font-weight: 600; }
